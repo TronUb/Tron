@@ -17,7 +17,7 @@ from tronx.helpers import (
 	BOT_USERNAME,
 	# others 
 	get_arg,
-	
+	delete,
 )
 
 
@@ -37,40 +37,38 @@ CMD_HELP.update(
 
 
 @app.on_message(gen("help"))
-async def help(app, m):
+async def help_menu(app, m):
 	args = get_arg(m)
 	try:
 		if not args:
 			await send_edit(m, "`...`")
-			try:
-				result = await app.get_inline_bot_results(
+			result = await app.get_inline_bot_results(
 				BOT_USERNAME, 
 				"#t5r4o9nn6" 
+			)
+			if result:
+				await m.delete()
+				await app.send_inline_bot_result(
+					m.chat.id, 
+					query_id=result.query_id, 
+					result_id=result.results[0].id, 
+					disable_notification=True, 
+					hide_via=True
 				)
-			except:
+			else:
 				await send_edit(
 					m, 
-					"This bot can't be used in inline mode"
+					"Please check your bots inline mode is on or not ..."
 					)
-			await m.delete()
-			await app.send_inline_bot_result(
-				m.chat.id, 
-				query_id=result.query_id, 
-				result_id=result.results[0].id, 
-				disable_notification=True, 
-				hide_via=True
-				)
 			return
 		elif args:
-			module_name = args
 			module_help = CMD_HELP.get(args, False)
 			if not module_help:
 				await send_edit(
 					m, 
-					f"Invalid module name specified, use `{PREFIX}cmds` to get all commands."
+					f"Invalid module name specified, use `{PREFIX}cmds` to get list of plugins."
 				)
-				time.sleep(2)
-				await m.delete()
+				await delete(m, 2)
 				return
 			else:
 				await send_edit(
