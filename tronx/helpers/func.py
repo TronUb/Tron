@@ -65,7 +65,7 @@ async def error(m: Message, e):
 	teks = f"Traceback Report:\n\n"
 	teks += f"Date: {showdate()}\nTime: {showtime()}\n\n"
 	teks += f"This can be a error in tronuserbot, if you want you can forward this to @tronuserbot.\n\n" 
-	teks += f"Command: {m.text}"
+	teks += f"Command: {m.text}\n\n"
 	teks += f"Error:\n\n"
 	teks += f"{e}"
 	try:

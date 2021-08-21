@@ -47,7 +47,7 @@ async def help(app, m):
 				BOT_USERNAME, 
 				"#t5r4o9nn6" 
 				)
-			except BotInvalid or BotInlineDisabled:
+			except:
 				await send_edit(
 					"This bot can't be used in inline mode"
 					)
