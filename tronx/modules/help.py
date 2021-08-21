@@ -49,6 +49,7 @@ async def help(app, m):
 				)
 			except:
 				await send_edit(
+					m, 
 					"This bot can't be used in inline mode"
 					)
 			await m.delete()
