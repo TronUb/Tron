@@ -94,3 +94,8 @@ def form(cmd, info):
 	data = f"**CMD:** `{PREFIX}{cmd}` \n**INFO:** {info}\n"
 	return data
 
+
+def plug(plugin):
+	data = f"**PLUGIN:** {plugin}\n\n"
+	return data
+
