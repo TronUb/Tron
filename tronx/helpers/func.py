@@ -6,6 +6,7 @@ from pyrogram.types import Message
 from tronx import (
 	app,
 	log,
+	PREFIX,
 )
 
 from config import Config
@@ -87,3 +88,9 @@ async def delete(m: Message, sec: int = 0):
 	else:
 		log.error("maximum sleep of 10 ( 600 sec ) minutes")
 	return
+
+
+def form(cmd, info):
+	data = f"**CMD:** `{PREFIX}{cmd}` \n**INFO:** {info}\n"
+	return data
+

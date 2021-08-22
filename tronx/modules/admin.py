@@ -29,6 +29,7 @@ from tronx.helpers import (
 	gen,
 	error, 
 	send_edit,
+	form,
 )
 
 
@@ -38,16 +39,18 @@ CMD_HELP.update(
 	{
 		"admin": f"""
 **PLUGIN:** `admin`\n\n
-**COMMAND:** `{PREFIX}ban` \n**USAGE:** Ban a user\n
-**COMMAND:** `{PREFIX}unban` \n**USAGE:** Unban a user\n
-**COMMAND:** `{PREFIX}promote` \n**USAGE:** Promote a user to admin\n
-**COMMAND:** `{PREFIX}demote` \n**USAGE:** Demote a admin to user\n
-**COMMAND:** `{PREFIX}mute` \n**USAGE:** Mute a user\n
-**COMMAND:** `{PREFIX}unmute` \n**USAGE:** Unmute a user\n
-**COMMAND:** `{PREFIX}kick` \n**USAGE:** Remove a user from chat\n
-**COMMAND:** `{PREFIX}pin` \n**USAGE:** Pin any message / media\n
-**COMMAND:** `{PREFIX}unpin` \n**USAGE:** Unpin pinned message / media\n
-**COMMAND:** `{PREFIX}unpin all` \n**USAGE:** Unpin all messages / media.\n
+{
+form('ban [reply to user]', 'Ban a user\n'),
+form('unban [reply to user]', 'Unban a user'),
+form('promote [reply to user]', 'Promote a user to admin\n'),
+form('demote [reply to user]', 'Demote a admin to user\n'),
+form('mute [reply to user]', 'Mute a user\n'),
+form('unmute [reply to user]', 'Unmute a user\n'),
+form('kick [reply to user]', 'Remove a user from chat\n'),
+form('pin [reply to msg]', 'Pin any message / media\n'),
+form('unpin [reply to msg]', 'Unpin pinned message / media\n'),
+form('unpin [all]', 'Unpin all messages / media, give "all" as a suffix.\n'),
+}
 """ 
 	}
 )
