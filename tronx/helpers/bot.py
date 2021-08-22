@@ -7,17 +7,19 @@ from tronx import get_bot, bot
 
 
 
-if bot:
-	data = await get_bot()
-	BOT_ID = data[0]
-	BOT_DC = data[1]
-	BOT_NAME = data[2]
-	BOT_USERNAME = data[3]
-else:
-	BOT_ID = None
-	BOT_DC = None
-	BOT_NAME = None
-	BOT_USERNAME = None
+def bot_data():
+	if bot:
+		data = await get_bot()
+		BOT_ID = data[0]
+		BOT_DC = data[1]
+		BOT_NAME = data[2]
+		BOT_USERNAME = data[3]
+	else:
+		BOT_ID = None
+		BOT_DC = None
+		BOT_NAME = None
+		BOT_USERNAME = None
+	return
 
 
 def botname():
@@ -58,3 +60,6 @@ def botid():
 	else:
 		bid = None
 	return bid
+
+
+bot_data()
