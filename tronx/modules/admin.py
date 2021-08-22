@@ -47,7 +47,7 @@ CMD_HELP.update(
 **COMMAND:** `{PREFIX}kick` \n**USAGE:** Remove a user from chat\n
 **COMMAND:** `{PREFIX}pin` \n**USAGE:** Pin any message / media\n
 **COMMAND:** `{PREFIX}unpin` \n**USAGE:** Unpin pinned message / media\n
-**COMMAND:** `{PREFIX}unpinall` \n**USAGE:** Unpin all messages / media.\n
+**COMMAND:** `{PREFIX}unpin all` \n**USAGE:** Unpin all messages / media.\n
 """ 
 	}
 )
@@ -379,7 +379,8 @@ async def pin_message(_, m):
 
 @app.on_message(gen("unpin"))
 async def pin_message(_, m):
-	if m.reply_to_message:
+	replied = m.reply_to_message
+	if replied:
 		try:
 			await send_edit(
 				m, 
@@ -395,42 +396,27 @@ async def pin_message(_, m):
 				)
 		except Exception as e:
 			await error(m, e)
-	else:
-		await send_edit(
-			m, 
-			"`Reply to a message so that I can pin the god damned thing...`"
-			)
-		await asyncio.sleep(1)
-		await m.delete()
-
-
-
-
-@app.on_message(gen("unpinall"))
-async def unpin_all(_, m):
-	if len(m.command) == 1:
-		try:
-			if m.command == 1:
-				await send_edit(
-					m, 
-					"⏳ • Hold on..."
-					)
+	elif not replied and len(m.text.split()) > 1:
+		cmd = m.command[1]
+		if cmd == "all":
+			try:
 				await app.unpin_all_chat_messages(m.chat.id)
-				await send_edit(
-					m, 
-					"unpinned all pinned messages & media."
-					)
-			else:
-				await send_edit(
-					m, 
-					f"Usage: `{PREFIX}unpinall` or `{PREFIX}unpinall` <chat username> "
-					)
-		except Exception as e:
-			await error(m, e)
+			except Exception as e:
+				await error(m, e)
+		else:
+			await send_edit(
+				m, 
+				"Use it properly, check help menu ..."
+				)
+	elif not replied and len(m.text.split()) == 1:
+		await send_edit(
+			m, 
+			"Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message ..."
+			)
 	else:
 		await send_edit(
 			m, 
-			"There is no need to use any other word after Command"
+			"Something went wrong, please try again later ..."
 			)
 
 
