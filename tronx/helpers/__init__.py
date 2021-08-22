@@ -1,3 +1,4 @@
+from .modes import *
 from .bot import *
 from .bot_helper import *
 from .filters import *
