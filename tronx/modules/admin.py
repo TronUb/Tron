@@ -36,24 +36,43 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
+
 	{
+
 		"admin": f"""
-**PLUGIN:** `admin`\n\n
+
 {
-form('ban [reply to user]', 'Ban a user\n'),
+
+plug('admin'),
+
+form('ban [reply to user]', 'Ban a user'),
+
 form('unban [reply to user]', 'Unban a user'),
-form('promote [reply to user]', 'Promote a user to admin\n'),
-form('demote [reply to user]', 'Demote a admin to user\n'),
-form('mute [reply to user]', 'Mute a user\n'),
-form('unmute [reply to user]', 'Unmute a user\n'),
-form('kick [reply to user]', 'Remove a user from chat\n'),
-form('pin [reply to msg]', 'Pin any message / media\n'),
-form('unpin [reply to msg]', 'Unpin pinned message / media\n'),
-form('unpin [all]', 'Unpin all messages / media, give "all" as a suffix.\n'),
+
+form('promote [reply to user]', 'Promote a user to admin'),
+
+form('demote [reply to user]', 'Demote a admin to user'),
+
+form('mute [reply to user]', 'Mute a user'),
+
+form('unmute [reply to user]', 'Unmute a user'),
+
+form('kick [reply to user]', 'Remove a user from chat'),
+
+form('pin [reply to msg]', 'Pin any message / media'),
+
+form('unpin [reply to msg]', 'Unpin pinned message / media'),
+
+form('unpin [all]', 'Unpin all messages / media, give "all" as a suffix.'),
+
 }
+
 """ 
-	}
+
+}
+
 )
+
 
 
 
