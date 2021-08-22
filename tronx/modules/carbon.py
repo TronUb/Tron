@@ -72,12 +72,6 @@ colour_code = {
 
 @app.on_message(gen(["carbon", "carb"]))
 async def carb_api(_, m: Message):
-	await carbon_api(m)
-
-
-
-
-async def carbon_api(m: Message):
 	cmd = m.command
 	if len(cmd) < 2:
 		await send_edit(
