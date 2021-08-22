@@ -8,7 +8,7 @@ from tronx import get_bot, bot
 
 
 if bot:
-	data = get_bot()
+	data = await get_bot()
 	BOT_ID = data[0]
 	BOT_DC = data[1]
 	BOT_NAME = data[2]
