@@ -61,7 +61,13 @@ AFK_TIME = []
 
 
 @app.on_message(gen("afk") & filters.user(SUDO_USERS))
-async def go_offline(app, m: Message):
+async def go_off(_, m):
+	await go_offline(m)
+
+
+
+
+async def go_offline(m: Message):
 	if len(m.text.split()) >= 2:
 		try:
 			start = int(time.time())

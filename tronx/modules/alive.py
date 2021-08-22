@@ -47,7 +47,7 @@ __python_version__ = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 
 
 
-
+# commands
 @app.on_message(gen("alive"))
 async def alive(app, m: Message):
 	await alive(m)
@@ -69,6 +69,7 @@ async def inline_alive(app, m):
 
 
 
+# functions
 # normal alive
 async def alive(m: Message):
 	try:
