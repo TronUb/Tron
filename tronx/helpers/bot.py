@@ -2,20 +2,22 @@ from config import Config
 
 from tronx.helpers.utils import mention_markdown 
 
-try:
-	from tronx import (
-		BOT_ID,
-		BOT_DC,
-		BOT_NAME,
-		BOT_USERNAME
-		)
-except ImportError:
+from tronx import get_bot, bot
+
+
+
+
+if bot:
+	data = get_bot()
+	BOT_ID = data[0]
+	BOT_DC = data[1]
+	BOT_NAME = data[2]
+	BOT_USERNAME = data[3]
+else:
 	BOT_ID = None
 	BOT_DC = None
 	BOT_NAME = None
 	BOT_USERNAME = None
-
-
 
 
 def botname():
