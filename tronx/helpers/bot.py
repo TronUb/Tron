@@ -57,5 +57,3 @@ def botid():
 		bid = None
 	return bid
 
-
-bot_data()
