@@ -4,13 +4,11 @@ from tronx.helpers.utils import mention_markdown
 
 try: 
 	from tronx import (
-		BOT_DC,
 		BOT_ID,
 		BOT_NAME,
 		BOT_USERNAME
 		)
 except ImportError:
-	BOT = None
 	BOT_ID = None
 	BOT_NAME = None
 	BOT_USERNAME = Config.BOT_USERNAME
