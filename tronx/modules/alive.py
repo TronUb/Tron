@@ -112,34 +112,31 @@ async def alive(m: Message):
 
 # inline alive
 async def ialive(m: Message):
+	await send_edit(m, "`...`")
 	try:
-		await send_edit(m, "`...`")
-		try:
-			result = await app.get_inline_bot_results(BOT_USERNAME, "#i2l8v3")
-		except BotInvalid:
-			await send_edit(
-				"The bot can't be used in inline mode"
-				)
-		if result:
-			try:
-				await app.send_inline_bot_result(
-					m.chat.id, 
-					query_id=result.query_id, 
-					result_id=result.results[0].id, 
-					disable_notification=True, 
-					hide_via=True
-					)
-				await m.delete()
-			except Exception as e:
-				await error(e)
-		else:
-			await send_edit(
-				m, 
-				"Failed to get inline alive results !",
-				)
-	except Exception as e:
-		await error(m, e)
-	return
+		result = await app.get_inline_bot_results(
+			BOT_USERNAME, 
+			"#i2l8v3"
+		)
+	except BotInvalid:
+		await send_edit(
+			"The bot can't be used in inline mode"
+		)
+		return
+	if result:
+		await app.send_inline_bot_result(
+			m.chat.id, 
+			query_id=result.query_id, 
+			result_id=result.results[0].id, 
+			disable_notification=True, 
+			hide_via=True
+		)
+		await m.delete()
+	else:
+		await send_edit(
+			m, 
+			"Failed to get inline alive results !",
+		)
 
 
 
@@ -155,6 +152,7 @@ async def quote(m: Message):
 			result = await app.get_inline_bot_results(BOT_USERNAME, "#q7o5e")
 		except BotInvalid:
 			await send_edit(
+				m,
 				"This bot can't be used in inline mode."
 				)
 		if result:
