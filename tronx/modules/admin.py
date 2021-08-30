@@ -29,31 +29,28 @@ from tronx.helpers import (
 	gen,
 	error, 
 	send_edit,
-	form,
-	plug,
 )
 
 
 
 
 CMD_HELP.update(
-	{
-		"admin": f"""
-**PLUGIN:** `admin`\n\n
-**COMMAND:** `{PREFIX}ban` \n**USAGE:** Ban a user\n
-**COMMAND:** `{PREFIX}unban` \n**USAGE:** Unban a user\n
-**COMMAND:** `{PREFIX}promote` \n**USAGE:** Promote a user to admin\n
-**COMMAND:** `{PREFIX}demote` \n**USAGE:** Demote a admin to user\n
-**COMMAND:** `{PREFIX}mute` \n**USAGE:** Mute a user\n
-**COMMAND:** `{PREFIX}unmute` \n**USAGE:** Unmute a user\n
-**COMMAND:** `{PREFIX}kick` \n**USAGE:** Remove a user from chat\n
-**COMMAND:** `{PREFIX}pin` \n**USAGE:** Pin any message / media\n
-**COMMAND:** `{PREFIX}unpin` \n**USAGE:** Unpin pinned message / media\n
-**COMMAND:** `{PREFIX}unpin all` \n**USAGE:** Unpin all messages / media.\n
-""" 
+	{"admin" : (
+		"admin", 
+		{
+		"ban" : "bans a user",
+		"unban" : "unbans a user",
+		"mute" : "restricts a user from talking in groups",
+		"unmute" : "unrestricts a user from talking in groups",
+		"promote" : "promote a member to admin",
+		"demote" : "demote a admin to a member",
+		"pin" : "pin a message in group",
+		"unpin" : "unpin a pinned message in group",
+		"unpinall" : "unpin all pinned messages in one command"
+		}
+		)
 	}
 )
-
 
 
 
