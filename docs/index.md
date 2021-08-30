@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+## Welcome to tron
 
-You can use the [editor on GitHub](https://github.com/beastzx18/Tron/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Everything that you want to know about tron is here.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Introduction
 
-### Markdown
+Currently there is only one person working on this project, ofc that's me ! I started this project in December 29, 2020. 
+Its a small project for educational purpose + timepass, it is based on python language with pyrogram library, i am just a beginner in this field so the updates of this userbot must be slow and small.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+### Features & bot information
 
-# Header 1
-## Header 2
-### Header 3
+So i am not dividing my updates in different versions of my Userbots, because its incomplete and there are so many changes i do in bots every day so giving updates information and and assigning versions to my Userbot is not good right now.
+Tron is built with two clients, one is the main userbot and second one is the assistant, i have added some modules for tronuserbot and plugins for assistant.
+I have provided a inline help menu to make it easy for the beginners to look for plugins and commands.
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+### Deployment
 
-**Bold** and _Italic_ and `Code` text
+Tue userbot can be deployed in railway or heroku, both deployments have little bugs right now, we'll solve those as soon as possible.
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Contact me 
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/beastzx18/Tron/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+My telegram username: @beastzv
