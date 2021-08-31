@@ -113,3 +113,16 @@ async def data(plug):
 	except Exception as e:
 		await error(m, e)
 		return False
+async def data(plug):
+	try:
+		for x, y in zip(
+			CMD_HELP.get(plug)[1].keys(), 
+			CMD_HELP.get(plug)[1].values()
+			):
+			plugin_data.append(
+				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
+				)
+		return True
+	except Exception as e:
+		await error(m, e)
+		return False
