@@ -297,7 +297,7 @@ async def give_plugin_cmds(client, cb):
 		official = False
 	plugin_data.clear()
 	plugs = await data(plugin_name)
-	help_string = f"{plugin_name}\n\n" + "".join(plugin_data)
+	help_string = f"PLUGIN: {plugin_name}\n\n" + "".join(plugin_data)
 	await cb.edit_message_text(
 		help_string,
 		reply_markup=InlineKeyboardMarkup(
