@@ -18,6 +18,7 @@ from tronx.helpers import (
 	# others 
 	get_arg,
 	delete,
+	data,
 )
 
 
@@ -65,6 +66,7 @@ async def help_menu(app, m):
 					)
 			return
 		elif args:
+			plugin_data.clear()
 			module_help = await data(args)
 			if not module_help:
 				await send_edit(
@@ -98,31 +100,3 @@ async def all_plugins(_, m: Message):
 		"\n".join(plugs)
 		)
 
-
-
-
-async def data(plug):
-	try:
-		for x, y in zip(
-			CMD_HELP.get(plug)[1].keys(), 
-			CMD_HELP.get(plug)[1].values()
-			):
-			plugin_data.append(
-				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
-				)
-	except Exception as e:
-		await error(m, e)
-		return False
-async def data(plug):
-	try:
-		for x, y in zip(
-			CMD_HELP.get(plug)[1].keys(), 
-			CMD_HELP.get(plug)[1].values()
-			):
-			plugin_data.append(
-				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
-				)
-		return True
-	except Exception as e:
-		await error(m, e)
-		return False
