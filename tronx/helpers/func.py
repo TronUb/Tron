@@ -7,6 +7,7 @@ from tronx import (
 	app,
 	log,
 	PREFIX,
+	CMD_HELP,
 )
 
 from config import Config
@@ -103,7 +104,7 @@ async def data(plug):
 				)
 		return True
 	except Exception as e:
-		await error(m, e)
+		print(e)
 		return False
 
 
