@@ -77,7 +77,7 @@ async def help_menu(app, m):
 			else:
 				await send_edit(
 					m, 
-					f"{args}\n\n" + "".join(plugin_data)
+					f"PLUGIN: {args}\n\n" + "".join(plugin_data)
 					)
 		else:
 			await send_edit(
