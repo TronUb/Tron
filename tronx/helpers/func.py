@@ -84,7 +84,7 @@ async def error(m: Message, e):
 # delete msg
 async def delete(m: Message, sec: int = 0):
 	if not sec > 600: # 10 min
-		sleep(sec)
+		await sleep(sec)
 		await m.delete()
 	else:
 		log.error("maximum sleep of 10 ( 600 sec ) minutes")
