@@ -42,12 +42,14 @@ from tronx import (
 from tronx.helpers import (
 	helpdex,
 	build_keyboard,
+	data,
 )
 
 from tronx.database.postgres import pmpermit_sql as db
 
 
 
+plugin_data = []
 
 USER_ID = [USER_ID, 1790546938]
 
@@ -266,8 +268,9 @@ async def give_plugin_cmds(client, cb):
 	official = True
 	if cb.matches[0].group(2) == "False":
 		official = False
-	cmd_help = CMD_HELP if official else CMD_HELP
-	help_string = f"\n{cmd_help[plugin_name]}"
+	plugs = await data(plugin_name)
+	plugin_data.clear()
+	help_string = f"{plugin_name}\n\n" + "".join(plugin_data)
 	await cb.edit_message_text(
 		help_string,
 		reply_markup=InlineKeyboardMarkup(
@@ -281,6 +284,7 @@ async def give_plugin_cmds(client, cb):
 			]
 		),
 		)
+
 
 
 
