@@ -38,11 +38,21 @@ from tronx import (
 	Config,
 	uptime,
 )
+from tronx import (
+	app, 
+	CMD_HELP, 
+	version, 
+	USER_ID, 
+	USER_NAME, 
+	USER_USERNAME, 
+	Config,
+	uptime,
+	PREFIX
+)
 
 from tronx.helpers import (
 	helpdex,
 	build_keyboard,
-	data,
 )
 
 from tronx.database.postgres import pmpermit_sql as db
@@ -76,6 +86,23 @@ about = build_keyboard(([["About", "open-about-dex"]]))
 close = build_keyboard(([["Close", "close-dex"]]))
 approve = build_keyboard(([["Approve", "approve-user"]]))
 global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
+
+
+
+async def data(plug):
+	try:
+		for x, y in zip(
+			CMD_HELP.get(plug)[1].keys(), 
+			CMD_HELP.get(plug)[1].values()
+			):
+			plugin_data.append(
+				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
+				)
+		return True
+	except Exception as e:
+		print(e)
+		return False
+
 
 
 # first start 
