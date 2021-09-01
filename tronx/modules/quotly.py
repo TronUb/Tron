@@ -22,7 +22,7 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{"quotly" : {
+	{"quotly" : (
 		"quotly",
 		{
 		"q [reply to message]" : "Make Image Of Your Texts." 
