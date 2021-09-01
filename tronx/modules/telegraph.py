@@ -33,11 +33,12 @@ NAME = str(name)
 
 
 CMD_HELP.update( 
-	{
-		"telegraph": f"""
-**PLUGIN:** `telegraph`\n\n
-**COMMAND:** `{PREFIX}tgm «reply to message/media»` or `{PREFIX}telegraph «reply to message/media` \n\n**USAGE:** Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)\n\n
-"""
+	{"telegraph" : (
+		"telegraph",
+		{
+		"tgm [reply to message/media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
+		}
+		)
 	} 
 )
 

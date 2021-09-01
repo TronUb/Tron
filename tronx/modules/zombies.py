@@ -21,12 +21,13 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"zombies": f"""
-**PLUGIN:** `zombies`\n\n
-**COMMAND:** `{PREFIX}zombies` \n**USAGE:** Get number of deleted accounts in a chat.\n
-**COMMAND:** `{PREFIX}zombies clean` \n**USAGE:** Remove all deleted accounts from chat.\n
-"""
+	{"zombies" : (
+		"zombies",
+		{
+		"zombies" : "Get number of deleted accounts in a chat.",
+		"zombies clean" : "Remove all deleted accounts from chat."
+		}
+		)
 	}
 )
 

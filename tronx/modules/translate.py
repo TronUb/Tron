@@ -21,11 +21,12 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"translate": f"""
-**PLUGIN:** `translate`\n\n
-**COMMAND:** `{PREFIX}tr [ language code ] [ text ]` or `{PREFIX}tr [ language code ] [ reply to message ]` or `{PREFIX}tl` \n\n**USAGE:** Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language, For Example: `{PREFIX}tl [ en ] [ how are you ] ?\n
-"""
+	{"translate" : (
+		"translate",
+		{
+		"tr [ language code ] [ text ] or [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language."
+		}
+		)
 	}
 )
 

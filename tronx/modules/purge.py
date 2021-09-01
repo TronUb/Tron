@@ -28,13 +28,14 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"purge": f"""
-**PLUGIN:** `purge`\n\n
-**COMMAND:** `{PREFIX}purge «tag a message» or {PREFIX}p «tag a message»` \n**USAGE:** Delete All Your Messages From A Fixed Point. Just Tag Your Message and send `{PREFIX}purge`.\n
-**COMMAND:** `{PREFIX}del «reply to message»` \n**USAGE:** Delete Your Single Selected/Tagged Message.\n
-**COMMAND:** `{PREFIX}purgeme` \n**USAGE:** Delete Your Messages In Count Numbers. Example: `{PREFIX}purgeme 10` ,This Will Delete Your 10 Recent Messages.\n
-"""
+	{"purge" : (
+		"purge",
+		{
+		"purge [tag a message]" : "Delete All Your Messages From A Fixed Point.",
+		"del [reply to message]" : "Delete Your Single Selected/Tagged Message.",
+		"purgeme [number]" : "Delete Your Messages In Count Numbers."
+		}
+		)
 	}
 )
 

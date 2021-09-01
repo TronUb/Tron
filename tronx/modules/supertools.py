@@ -28,19 +28,20 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-    {
-        "supertools": f"""
-**PLUGIN:** `supertools`\n\n
-**COMMAND:** `{PREFIX}whois «reply to user» or «username»` \n**USAGE:** Get a short list of information of a specific user.\n
-**COMMAND:** `{PREFIX}id «reply to user» or «username»` \n**USAGE:** Get telegram id of a user or a chat.\n
-**COMMAND:** `{PREFIX}ud «query»` \n**USAGE:** Get The Meaning Of Any Word In Urban Dictionary.\n
-**COMMAND:** `{PREFIX}short «link»` \n**USAGE:** Shorten a link into da.gd link.\n
-**COMMAND:** `{PREFIX}unshort «shortlink»` \n**USAGE:** reverse the da.gd link to real link.\n
-**COMMAND:** `{PREFIX}tts «reply to text»` \n**USAGE:** Text To Speech, Convert Text Message To Voice | audio (mp3).\n
-**COMMAND:** `{PREFIX}wtr «city name»` or `{PREFIX}weather «city name»` \n\n**USAGE:** Type Command And Your City Name To Get Weather Details. Example: `{PREFIX}wtr New York`.\n
-**COMMAND:** `{PREFIX}ws «site link»` or `{PREFIX}webshot «site link»` \n**USAGE:** Take A Screenshot Of Any Website And Get The Image Of That Site.\n
-"""
-    }
+	{"supertools" : (
+		"supertools",
+		{
+		"whois [reply to user] or [username]" : "Get a short list of information of a specific user.",
+		"id [reply to user] or [username]" : "Get telegram id of a user or a chat.",
+		"ud [query]" : "Get The Meaning Of Any Word In Urban Dictionary.",
+		"short [link]" : "Shorten a link into da.gd link.",
+		"unshort [shortlink]" : "Reverse the da.gd link to real link.",
+		"tts [reply to text]" : "Text To Speech, Convert Text Message To Voice | audio (mp3).",
+		"wtr [city name]" : "Type Command And Your City Name To Get Weather Details.",
+		"ws [site link]" : "Take A Screenshot Of Any Website And Get The Image Of That Site.",
+		}
+		)
+	}
 )
 
 

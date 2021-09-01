@@ -27,16 +27,18 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"fun": f"""
-**PLUGIN:** `fun`\n\n
-**COMMAND:** `{PREFIX}sw «text»` or `{PREFIX}switch «text»` \n**USAGE:** Mix words or Sentence Into Japanese Alphabets.\n
-**COMMAND:** `{PREFIX}slap «reply to user»` \n**USAGE:** Slap your friends with amazing items.\n
-**COMMAND:** `{PREFIX}type «text»` \n**USAGE:**  Retype words with animation, just try and understand, Don't Use too much.\n
-**COMMAND:** `{PREFIX}score «firstname» «secondname»` \n**USAGE:** Check love bond between two users.\n
-**COMMAND:** `{PREFIX}morse «reply to message»` \n**USAGE:**  Convert English text messages in morse codes.\n
-**COMMAND:** `{PREFIX}demorse «reply to message»` \n**USAGE:**  Convert morse codes into English text messages.\n
-"""
+	{"fun" : (
+		"fun",
+		{
+		"sw [text]" : "Switch words or sentences into japanese alphabets",
+		"switch [text]" : "Switch words or Sentence Into Japanese Alphabets.",
+		"slap [reply to user]" : "Slap your friends with amazing items.",
+		"type [text]" : "Retype words with animation, just try and understand, Don't Use too much.",
+		"score [firstname] [secondname]" : "Check love bond between two users.",
+		"morse [reply to message]" : "Convert English text messages in morse codes.",
+		"demorse [reply to message]" : "Convert morse codes into English text messages."
+		}
+		)
 	}
 )
 

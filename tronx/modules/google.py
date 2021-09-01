@@ -30,15 +30,18 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"google": f"""
-**PLUGIN:** `google`\n\n
-**COMMAND:** `{PREFIX}gs «query»` `{PREFIX}google «query»` \n**USAGE:** Search Something On Google, Don't Use For Restricted Queries.\n
-**COMMAND:** `{PREFIX}pic «query»` \n**USAGE:** Get Images from @bing bot. Type `{PREFIX}pic cat` Or Any Other Query.\n
-**COMMAND:** `{PREFIX}reverse «reply to image»` \n**USAGE:** Search Image Source On Google By This Command, Just Reply To A Image.\n
-"""
+	{"google" : (
+		"google",
+		{
+		"gs [query]" : "Search something on google, don't use for restricted queries",
+		"google [query]" : "Search Something On Google, Don't Use For Restricted Queries.",
+		"pic [query]" : "Get Images from @bing bot.",
+		"reverse [reply to image]" : "Search Image Source On Google By This Command, Just Reply To A Image." 
+		}
+		)
 	}
 )
+
 
 
 

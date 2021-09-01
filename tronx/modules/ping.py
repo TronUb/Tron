@@ -34,11 +34,13 @@ pings = []
 
 
 CMD_HELP.update(
-    {
-        "ping": f"""
-**COMMAND:** `{PREFIX}ping` \n**USAGE:** Shows you the response speed of the bot.\n\n
-"""
-    }
+	{"ping" : (
+		"ping",
+		{
+		"ping" : "Shows you the response speed of the bot."
+		}
+		)
+	}
 )
 
 # custom name first, or real tg name

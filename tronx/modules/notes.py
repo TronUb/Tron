@@ -33,15 +33,16 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-    {
-        "notes": f"""
-『 **Notes**』
-**COMMAND:** `{PREFIX}save` \n**USAGE:** Save A Note Of Any Type Of Media In Your Database, Just Reply Or Type `{PREFIX}save <notename> <your text>\n\n 
-**COMMAND:** `>' \n**USAGE:** Get Your Note. Example: `>mynote`, Where mynote is note name and command ( >)\n\n
-**COMMAND:** `{PREFIX}notes` \n**USAGE:** Get Your Saved Note List.\n\n
-**COMMAND:** `{PREFIX}clear` \n**USAGE:** Delete A Note. Example: `{PREFIX}clear notename`\n\n
-"""
-    }
+	{"notes" : (
+		"notes",
+		{
+		"save [note mame ] [reply to message]" : "Save A Note Of Any Type Of Media In Your Database.", 
+		">" : "Get Your Note. Example: `>mynote`, Where mynote is note name and command ( >)",
+		"notes" : "Get Your Saved Note List.",
+		"clear" : "Delete A Note."
+		}
+		)
+	}
 )
 
 

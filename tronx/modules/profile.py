@@ -38,21 +38,22 @@ date_dict = []
 
 
 CMD_HELP.update(
-    {
-        "profile":f"""
-**PLUGIN:** `profile`\n\n
-**COMMAND:** `{PREFIX}block «username» or «reply to user»` \n**USAGE:** Block a user from sending message in your pm.\n
-**COMMAND:** `{PREFIX}unblock «username» or «reply to user»` \n**USAGE:** Unblock a user and allow him to send messages in your pm.\n
-**COMMAND:** `{PREFIX}repo` \n**USAGE:** Tron Userbot official repository link.\n
-**COMMAND:** `{PREFIX}rem` `«lname»` or `«username` \n**USAGE:** Remove last name or username from profile, For Example: {PREFIX}rem username.\n
-**COMMAND:** `{PREFIX}set` `«fname»`/`«lname»`/`«username»`/`«bio»`| `«text»` \n**USAGE:** Choose a option from command and set anything in your profile, For Example: `{PREFIX}set fname BEAST`\n
-**COMMAND:** `{PREFIX}uinfo «reply to user»` \n**USAGE:** Get Full Info Of A Specific User.\nThis Command Includes More Details.\n
-**COMMAND:** `{PREFIX}sc «reply to user»` \n**USAGE:**  Find Out Groups Of A Specific User, Reply To That User.\n
-**COMMAND:** `{PREFIX}sang` \n**USAGE:** Get name & username history of a particular user in groups or private chats.\n
-**COMMAND:** `{PREFIX}men «username» «text»` \n**USAGE:** Mention a user in a specific text.\n
-**COMMAND:** `{PREFIX}mention «username» «text»` \n**USAGE:** Mention a user in a specific text, alternative command.\n
-"""
-    }
+	{"profile" : (
+		"profile",
+		{
+		"block [username] or [reply to user]" : "Block a user from sending message in your pm.",
+		"unblock [username] or [reply to user]" : "Unblock a user and allow him to send messages in your pm.",
+		"repo" : "Get Tron Userbot official repository link.",
+		"rem [lname] or [username]" : "Remove last name or username from profile.",
+		"set [fname] or [lname ] or [username] or [bio] and [text]" : "Choose a option from command and set anything in your profile.",
+		"uinfo [reply to user]" : "Get Full Info Of A Specific User.\nThis Command Includes More Details.",
+		"sc [reply to user]" : "Find Out Groups Of A Specific User, Reply To That User.",
+		"sang [reply to user]" : "Get name & username history of a particular user in groups or private chats.",
+		"men [username] [text]" : "Mention a user in a specific text.",
+		"mention [username] [text]" : "Mention a user in a specific text, alternative command."
+		}
+		)
+	}
 )
 
 

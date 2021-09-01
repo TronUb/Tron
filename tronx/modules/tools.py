@@ -35,20 +35,23 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"tools": f"""
-**PLUGIN:** `tools`\n\n
-**COMMAND:** `{PREFIX}cur «amount» «from currency» «to currency»` or `{PREFIX}currency` \n**USAGE:** Converts Other Money value In Your Currency value. Just Use The Right Currency Code, For Example: `{PREFIX}cur 10 USD INR`\n
-**COMMAND:** `{PREFIX}temp «10 c»` or `{PREFIX}temperature` \n**USAGE:**  Get temperature or farenheight, For Example: `{PREFIX}temp 10 c` => Results: 10°C = 50.0°F\n
-**COMMAND:** `{PREFIX}json` \n**USAGE:** Use This Command To Get Deep Details Of Any Media Or Text.\n
-**COMMAND:** `{PREFIX}ilink` \n**USAGE:** Use this to inline or url button message containing links.\n
-**COMMAND:** `{PREFIX}mlink` \n**USAGE:** Use this to get message links. both private and public groups.\n
-**COMMAND:** `{PREFIX}saved` \n**USAGE:** Save Media To Your Telegram Cloud Storage \ Saved Messages.\n
-**COMMAND:** `{PREFIX}fwd` \n**USAGE:** forward messages to same group or other groups.\n
-**COMMAND:** `{PREFIX}spt` or `{PREFIX}speed` or `{PREFIX}speedtest` \n**USAGE:** Check Server Speed.\n
-"""
+	{"tools" : (
+		"tools",
+		{
+		"cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
+		"temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
+		"json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.", 
+		"ilink [reply to inline button message]" : "Use this to inline or url button message containing links.",
+		"mlink [reply to message]" : "Use this to get message links. both private and public groups.",
+		"saved [reply to message]" : "Save Media To Your Telegram Cloud Storage \ Saved Messages.",
+		"fwd [reply to message]" : "Forward messages to same group or other groups.",
+		"spt" : "Check Hosted Server Speed, use [pic] after command to get image of speedtest."
+		}
+		)
 	}
 )
+
+
 
 
 c = CurrencyConverter()

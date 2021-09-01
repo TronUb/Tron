@@ -22,11 +22,12 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"quotly": f"""
-**PLUGIN:** `quotly`\n\n
-**COMMAND:** `{PREFIX}q «reply to message»` or `{PREFIX}quote` \n**USAGE:** Make Image Of Your Texts.\n
-"""
+	{"quotly" : {
+		"quotly",
+		{
+		"q [reply to message]" : "Make Image Of Your Texts." 
+		}
+		)
 	}
 )
 

@@ -21,11 +21,12 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"nekobin": f"""
-**PLUGIN:** `nekobin`\n\n
-**COMMAND:** `{PREFIX}neko [ reply to text ]` or `{PREFIX}bin [ reply to text ]` \n**USAGE:** Paste Texts To Nekobin Site, You Can Easily Read The Texts Without Downloading The file.\n
-"""
+	{"nekobin" : (
+		"nekobin",
+		{
+		"bin [reply to text]" : "Paste Texts To Nekobin Site, You Can Easily Read The Texts Without Downloading The file." 
+		}
+		)
 	}
 )
 

@@ -31,14 +31,15 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-    {
-        "share": f"""
-**PLUGIN:** `share`\n\n
-**COMMAND:** `{PREFIX}send` \n**USAGE:** Send official plugin files from userbot to telegram chat.\n\n
-**COMMAND:** `{PREFIX}install` \n**USAGE:** Reply to a .py file to install it in external modules directory.\n\n
-**COMMAND:** `{PREFIX}uninstall «name of local plugin»` \nUSAGE:**  Uninstall Local installed modules.\n\n
-"""
-    }
+	{"share" : (
+		"share",
+		{
+		"send [plugin name]" : "Send official plugin files from userbot to telegram chat.",
+		"install [reply to plugin]" : "Reply to a .py file to install it in external modules directory.",
+		"uninstall [name of local plugin]" : "Uninstall Local installed modules."
+		}
+		)
+	}
 )
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -23,14 +23,19 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"zip": f"""
-**PLUGIN:** `zip`\n\n
-**COMMAND:** `{PREFIX}zip «reply to file»` \n**USAGE:** Zip a file and save it in your local directories.\n
-**COMMAND:** `{PREFIX}unzip «reply to file»` \n**USAGE:** Unzip a file and save it in your local directories.\n
-"""
+	{"zip" : (
+		"zip",
+		{
+		"zip [reply to file]" : "Zip a file and save it in your local directories.",
+		"unzip [file path]" : "Unzip a file and save it in your local directories."
+		}
+		)
 	}
 )
+
+
+
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def zipdir(dirName):

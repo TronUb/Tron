@@ -27,15 +27,16 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-    {
-        "image": f"""
-**PLUGIN:** `image`\n\n
-**COMMAND:** `{PREFIX}uns [ query ]` \n**USAGE:** Search Images On Unsplash.\n
-**COMMAND:** `{PREFIX}stoi [ reply to sticker ]` \n**USAGE:** Converts the replied sticker into image.\n
-**COMMAND:** `{PREFIX}itos [ reply to image ]` \n**USAGE:** Converts the replied image into sticker.\n
-**COMMAND:** `{PREFIX}qc [ text ]` \n**USAGE:** Creates a qr code image.\n
-**COMMAND:** `{PREFIX}colour [ colour name ] [ text ] \n**USAGE:** Creates a colour background image.\n
-"""
+	{"image" : (
+		"image",
+		{
+		"uns [ query ]" : "Search Images On Unsplash.",
+		"stoi [ reply to sticker ]" : "Converts the replied sticker into image.",
+		"itos [ reply to image ]" : "Converts the replied image into sticker.",
+		"qc [ text ]" : "Creates a qr code image.",
+		"colour [ colour name ] [ text ]" : "Creates a colour background image."
+		}
+		)
     }
 )
 

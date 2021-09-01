@@ -21,14 +21,17 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"wikipedia": f"""
-**PLUGIN:** `wikipedia`\n\n
-**COMMAND:** `{PREFIX}wiki [ query ]` \n**USAGE:** Get info about anything on Wikipedia.\n
-"""
+	{"wikipedia" : (
+		"wikipedia",
+		{
+		"wiki [ query ]" : "Get info about anything on Wikipedia."
+		}
+		)
 	}
 )
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 @app.on_message(gen("wiki"))

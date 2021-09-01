@@ -32,12 +32,13 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"stickers": f"""
-**PLUGIN:** `stickers`\n\n
-**COMMAND:** `{PREFIX}kang or {PREFIX}kang [emoji ]` \n**USAGE:** adds stickers to your pack or creates new sticker pack.\n\n
-**COMMAND:** `{PREFIX}stinfo [ reply to sticker ]` \n**USAGE:** Get sticker pack info.\n\n
-"""
+	{"stickers" : (
+		"stickers",
+		{
+		"kang [reply to sticker]" : "Adds sticker to your pack or creates new sticker pack.", 
+		"stinfo [ reply to sticker ]" : "Get sticker pack info."
+		}
+		)
 	}
 )
 

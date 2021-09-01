@@ -27,6 +27,20 @@ from tronx.helpers import (
 
 
 
+CMD_HELP.update(
+	{"pmpermit" : (
+		"pmpermit",
+		{
+		"a" : "approve a user when pmpermit is on",
+		"da" : "disapprove a user when pmpermit is on"
+		}
+		)
+	}
+)
+
+
+
+
 users = []
 
 

@@ -28,17 +28,18 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"heroku":f"""
-**PLUGIN:** `heroku`\n\n
-**COMMAND:** `{PREFIX}shutdown` \n**USAGE:** Turn off your userbot by turning off the dynos.\n\n
-**COMMAND:** `{PREFIX}restart` \n**USAGE:** Restart your userbot.\n\n
-**COMMAND:** `{PREFIX}usage` \n**USAGE:** Check your heroku dyno usage.\n\n
-**COMMAND:** `{PREFIX}vars` \n**USAGE:** Get a list of enabled vars in your heroku account.\n\n
-**COMMAND:** `{PREFIX}setvar «key» «value»` \n**USAGE:** Set config vars of heroku through a command.\n\n
-**COMMAND:** `{PREFIX}logs` \n**USAGE:** Get heroku logs as a file (Extension: .txt).\n\n
-**COMMAND:** `{PREFIX}textlogs` \n**USAGE:** Get logs pasted in nekobin, not as a file.\n\n
-"""
+	{"heroku" : (
+		"heroku",
+		{
+		"shutdown" : "Turn off your userbot by turning off the dynos.",
+		"restart" : "Restart your userbot.",
+		"usage" : "Check your heroku dyno usage.",
+		"vars" : "Get a list of enabled vars in your heroku account.",
+		"setvar [key] [value]" : "Set config vars of heroku through a command.",
+		"logs" : "Get heroku logs as a file (Extension: .txt).",
+		"textlogs" : "Get logs pasted in nekobin, not as a file."
+		}
+		)
 	}
 )
 

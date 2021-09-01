@@ -2,7 +2,7 @@ import os
 
 from pyrogram.types import Message
 
-from tronx import app
+from tronx import app, CMD_HELP
 
 from tronx.helpers import (
 	gen,
@@ -10,6 +10,20 @@ from tronx.helpers import (
 	types,
 	send_edit,
 )
+
+
+
+
+CMD_HELP.update(
+	{"info" : (
+		"info",
+		{
+		"minfo [reply to media]" : "Check media info including text information.", 
+		"chatinfo" : "Get chats information."
+		}
+		)
+	}
+) 
 
 
 

@@ -27,12 +27,13 @@ plugin_data = []
 
 
 CMD_HELP.update(
-	{ 
-		"help": f"""
-**PLUGIN:** `help`\n\n
-**COMMAND:** {PREFIX}help [ module name ] \n**USAGE:** Get commands info of that plugin.\n
-**COMMAND:** {PREFIX}help \n**USAGE:** get your inline help dex.\n
-"""
+	{"help" : (
+		"help",
+		{
+		"help [ module name ]" : "Get commands info of that plugin.",
+		"help" : "Get your inline help dex.",
+		}
+		)
 	}
 )
 

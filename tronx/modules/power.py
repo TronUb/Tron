@@ -13,6 +13,19 @@ from tronx.helpers import (
 
 
 
+CMD_HELP.update(
+	{"power" : (
+		"power",
+		{
+		"restart" : "restart userbot through sys.",
+		"sleep [second]" : "sleep your userbot for a short duration.", 
+		}
+		)
+	}
+)
+
+
+
 
 @app.on_message(gen("restart"))
 async def restart_userbot(_, m: Message):

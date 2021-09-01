@@ -29,15 +29,18 @@ owner_name = name.replace("@", "")
 
 
 CMD_HELP.update(
-    {
-        "song": f"""
-**PLUGIN:** `song`\n\n
-**COMMAND:** `{PREFIX}lyrics «song title»` or `{PREFIX}ly «song title»` \n**USAGE:** Get Song Lyrics [ Japanese Songs Doesn't Work For Now.]"\n\n
-**COMMAND:** `{PREFIX}song «song name»` or `{PREFIX}music «song name»` \n**USAGE:** Get songs in mp3 format.\n\n
-**COMMAND:** `{PREFIX}dz «song name»` or `{PREFIX}deezer «song name»` \n**USAGE:**  Get songs from deezer bot in mp3 format.\n\n
-"""
-    }
+	{"song" : (
+		"song",
+		{
+		"ly [song title]" : "Get Song Lyrics [ Japanese Songs Doesn't Work For Now.]",
+		"song [song name]" : "Get songs in mp3 format.",
+		"dz [song name]" : "Get songs from deezer bot in mp3 format."
+		}
+		)
+	}
 )
+
+
 
 
 @app.on_message(gen(["song", "music"]))

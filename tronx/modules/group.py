@@ -24,13 +24,14 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"group":f"""
-**PLUGIN:** `group`\n\n
-**COMMAND:** `{PREFIX}group «group name»` \n**USAGE:** Create a basic group.\n
-**COMMAND:** `{PREFIX}sgroup «group name»` \n**USAGE:** Create a super group.\n
-**COMMAND:** `{PREFIX}unread` \n**USAGE:** Mark a chat as unread in your telegram folders.\n
-"""
+	{"group" : (
+		"group",
+		{
+		"group [group name]" : "Creates a basic group.",
+		"sgroup [group name]" : "Creates a super group.",
+		"unread" : "Mark a chat as unread in your telegram folders."
+		}
+		)
 	}
 )
 

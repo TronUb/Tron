@@ -26,12 +26,14 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"spam": f"""
-**PLUGIN:** `spam`\n\n
-**COMMAND:** `{PREFIX}spam «number» «text»` \n**USAGE:** You Know The Use Of This Command.\n
-"""
-	} 
+	{"spam" : (
+		"spam",
+		{
+		"spam [number] [text]" : "You Know The Use Of This Command.", 
+		"dspam [delay] [count] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
+		}
+		)
+	}
 )
 
 

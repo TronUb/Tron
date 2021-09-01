@@ -25,14 +25,18 @@ from tronx.helpers import (
 
 
 CMD_HELP.update( 
-    {
-       "time": f"""
-**PLUGIN:** `time`\n\n
-**COMMAND:** `{PREFIX}today` \n**USAGE:** Get date & time information, set your `TIME_ZONE` to get correct time & date.\n\n
-**COMMAND:** `{PREFIX}time` \n**USAGE:** Get time information of your city.\n\n
-**COMMAND:** `{PREFIX}date` \n**USAGE:** Get date information of your city.\n\n
-"""} 
+	{"time" : (
+		"time",
+		{
+		"today" : "Get date & time information, set your `TIME_ZONE` to get correct time & date.", 
+		"time" : "Get time information of your city.",
+		"date" : "Get date information of your city."
+		}
+		)
+	}
 )
+
+
 
 
 @app.on_message(gen("today"))

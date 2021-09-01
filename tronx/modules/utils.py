@@ -35,18 +35,19 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"utils":f"""
-**PLUGIN:** `utils`\n\n
-**COMMAND:** `{PREFIX}settitle [ @username ] [ title ]`  \n**USAGE:** set title of an admin.\n
-**COMMAND:** `{PREFIX}invite [ @username ]` \n**USAGE:** invite a user in your chat.\n
-**COMMAND:** `{PREFIX}admins` \n**USAGE:** get list of admins.\n
-**COMMAND:** `{PREFIX}report [ reply to user ]` \n**USAGE:** [ report a spammer or idiot.\n
-**COMMAND:** `{PREFIX}all` \n **USAGE:** tag recent 100 members, use carefully.\n
-**COMMAND:** `{PREFIX}bots` \n **USAGE:** get list os bots in a chat.\n
-**COMMAND:** `{PREFIX}kickme` \n **USAGE:** leave a chat, use it carefully.\n
-**COMMAND:** `{PREFIX}members [ @username ]` \n **USAGE:** get number of members in  a chat.\n
-"""
+	{"utils" : (
+		"utils",
+		{
+		"settitle [ @username ] [ title ]" : "Set title of an admin.",
+		"invite [ @username ]" : "Invite a user in your chat.",
+		"admins" : "Get list of admins.",
+		"report [ reply to user ]" : "report a spammer or idiot.",
+		"all" : "Tag recent 100 members, use carefully.",
+		"bots" : "Get list of bots in a chat.",
+		"kickme" : "leave a chat, use it carefully.",
+		"members [ @username ]" : "Get number of members in  a chat."
+		}
+		)
 	}
 )
 

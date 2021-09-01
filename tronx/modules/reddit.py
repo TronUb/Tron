@@ -17,11 +17,12 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"reddit":f"""
-**PLUGIN:** `reddit`\n\n
-**COMMAND:** `{PREFIX}r or {PREFIX}reddit` \n\n**USAGE:** Get link of queries related reddit results.\n\n
-"""
+	{"reddit" : (
+		"reddit",
+		{
+		"r [query]" : "Get link of queries related reddit results."
+		}
+		)
 	}
 )
 
