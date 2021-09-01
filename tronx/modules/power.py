@@ -2,7 +2,7 @@ import os, sys, time
 
 from pyrogram.types import Message
 
-from tronx import app
+from tronx import app, CMD_HELP
 
 from tronx.helpers import (
 	gen, 
