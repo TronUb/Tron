@@ -110,3 +110,24 @@ async def data(plug):
 
 
 
+async def private(m : Message, arg=True):
+	if m.chat.type == "private":
+		await send_edit(
+			m, 
+			"Please use this command in group . . ."
+			)
+		if arg:
+			return
+		else:
+			pass
+	else:
+		pass
+
+
+
+
+async def code(my_codes):
+	try:
+		my_codes
+	except Exception as e:
+		await error(m, e)
