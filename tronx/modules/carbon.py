@@ -33,11 +33,13 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"carbon": f"""
-**PLUGIN:** `carbon`\n\n
-**COMMAND:** `{PREFIX}car «text»` or `{PREFIX}carbon «text»` \n**USAGE:** Get a carbon image with written text on it.\n
-"""
+	{"carbon" : (
+		"carbon",
+		{
+		"car [text]" : "Get a carbon imagw with written text on it.",
+		"carbon [text]" : "Get a carbon image with written text on it"
+		}
+		)
 	}
 )
 

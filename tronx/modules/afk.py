@@ -36,13 +36,16 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"afk": f"""
-**PLUGIN:** `afk`\n\n
-**COMMAND:** `{PREFIX}afk` \n**USAGE:** leave your chats untouchable, stop yourself from chatting...\n\n
-"""
+	{"afk": (
+		"afk",
+		{
+		"afk" : "leave your chats untouchable, stop yourself from chatting . . ."
+		}
+		)
 	}
 )
+
+
 
 
 # mentioned users

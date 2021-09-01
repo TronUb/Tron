@@ -30,12 +30,13 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"alive":f"""
-**PLUGIN:** `alive`\n\n
-**COMMAND:** `{PREFIX}alive` \n**USAGE:** Normal alive, in which you will get userbot status without inline buttons.\n\n
-**COMMAND:** `{PREFIX}ialive` \n**USAGE:** Inline alive that contains your & your userbot status.\n\n
-"""
+	{"alive" : (
+		"alive",
+		{
+		"alive" : "Normal alive, in which you will get userbot status without inline buttons.",
+		"ialive" : "Inline alive that contains your & your userbot status."
+		}
+		)
 	}
 )
 

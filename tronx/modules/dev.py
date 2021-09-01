@@ -25,13 +25,14 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"dev": f"""
-**PLUGIN:** `dev`\n\n
-**COMMAND:** `{PREFIX}eval` \n**USAGE:** A nice tool to test python codes.\n
-**COMMAND:** `{PREFIX}term` \n**USAGE:** Run commands in shell.\n
-"""
-    }
+	{"dev" : (
+		"dev",
+		{
+		"eval print('cat')" : "A nice tool to test python codes.",
+		"term pip3 install pyrogram" : "Run commands in shell."
+		}
+		)
+	}
 )
 
 

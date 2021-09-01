@@ -25,12 +25,13 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-    {
-        "dict": f"""
-**PLUGIN:** `dict`\n\n
-**COMMAND:** `{PREFIX}new «text»` \n**USAGE** Create a python file with your codes.\n
-"""
-    }
+	{"dict" : (
+		"dict",
+		{
+		"new [file name]" : "Create a python file with your codes."
+		}
+		)
+	}
 )
 
 

@@ -38,16 +38,21 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{
-		"download": f"""
-**PLUGIN:** `download`\n\n
-**COMMAND:** `{PREFIX}ls` \n**USAGE:** Find file location in the local directories.\n\n
-**COMMAND:** `{PREFIX}download «Reply to media»` or `{PREFIX}dl «reply to file»` \n**USAGE:** Downloads media files in local server.\n\n
-**COMMAND:** `{PREFIX}upload «path»` or `{PREFIX}ul «path»` \n**USAGE:** Upload files from local server to telegram.\n\n
-**COMMAND:** `{PREFIX}batchup «path»` \n**USAGE:** Upload batch files from a local directories.\n\n
-"""
+	{"download" : (
+		"download",
+		{
+		"ls" : "Find file location in the local directories.",
+		"download [Reply to media]" : "Downloads media files in local server.",
+		"dl [reply to file]" : "Downloads media files in local server.",
+		"upload [path]" : "Upload files from local server to telegram",
+		"ul [path]" : "Upload files from local server to telegram.",
+		"batchup [path]" : "Upload batch files from a local directories."
+		}
+		)
 	}
 )
+
+
 
 
 MAX_MESSAGE_LENGTH = 4096
