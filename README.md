@@ -29,11 +29,15 @@
 ---
 &nbsp;
 
-### **DEPLOYMENT**
+### **DEPLOYMENT [ 2 methods ]**
 
 <p>
 
-2. Deploy on Railway [ Press the icon below]
+1. Deploy on heroku [ press rhe icon below ]
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+2. Deploy on Railway [ Press the icon below ]
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Frailwayapp%2Fexamples%2Ftree%2Fmaster%2Fexamples%2Fflask)
 
