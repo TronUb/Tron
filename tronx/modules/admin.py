@@ -62,7 +62,6 @@ async def ban_hammer(_, m):
 	await private(m)
 	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		await code(
 			# replies without suffix
 		if reply and (len(m.command) == 1 or len(m.command) > 1):
 			user = reply.from_user
@@ -112,7 +111,6 @@ async def ban_hammer(_, m):
 			await send_edit(
 				m, 
 				"I can't ban this user . . ."
-				)
 		)
 	else:
 		await send_edit(
@@ -128,7 +126,6 @@ async def unban(_, m):
 	await private(m)
 	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		await code(
 		if reply and (len(m.command) == 1 or len(m.command) > 1):
 			user = reply.from_user
 			if not user:
@@ -179,7 +176,6 @@ async def unban(_, m):
 					"Please provide a user id or username to unban ..."
 					)
 				return
-		)
 	else:
 		await send_edit(
 			m, 
