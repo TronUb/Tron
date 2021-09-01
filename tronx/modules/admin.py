@@ -101,7 +101,7 @@ async def ban_hammer(_, m):
 						m, 
 						f"Banned {get_user.first_name} from the chat !"
 						)
-			elif len(m.command) > 4096
+			elif len(m.command) > 4096:
 				await send_edit(
 					m, 
 					"Minimum message length 4096 characters ..."
