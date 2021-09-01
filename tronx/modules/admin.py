@@ -64,56 +64,56 @@ async def ban_hammer(_, m):
 	if await CheckAdmin(m) is True:
 		await code(
 			# replies without suffix
-			if reply and (len(m.command) == 1 or len(m.command) > 1):
-				user = reply.from_user
+		if reply and (len(m.command) == 1 or len(m.command) > 1):
+			user = reply.from_user
+			await send_edit(
+				m, 
+				"⏳ • Hold on..."
+				)
+			await app.kick_chat_member(
+				m.chat.id,
+				user.id
+				)
+			await send_edit(
+				m, 
+				f"Banned {user.first_name} in this chat ..."
+				)
+			# not replies 
+		elif not reply:
+			if len(m.command) == 1:
+				await send_edit(
+					m, 
+					"Give me user id or username of that member you want to ban ..."
+					)
+				return
+			elif len(m.command) > 1:
+				user = m.command[1]
+				user = await app.get_users(user)
 				await send_edit(
 					m, 
 					"⏳ • Hold on..."
+				)
+				done = await app.kick_chat_member(
+					chat_id=m.chat.id,
+					user_id=get_user.id,
 					)
-				await app.kick_chat_member(
-					m.chat.id,
-					user.id
-					)
+				if done:
+					await send_edit(
+						m, 
+						f"Banned {get_user.first_name} from the chat !"
+						)
+			elif len(m.command) > 4096
 				await send_edit(
 					m, 
-					f"Banned {user.first_name} in this chat ..."
+					"Minimum message length 4096 characters ..."
 					)
-			# not replies 
-			elif not reply:
-				if len(m.command) == 1:
-					await send_edit(
-						m, 
-						"Give me user id or username of that member you want to ban ..."
-						)
-					return
-				elif len(m.command) > 1:
-					user = m.command[1]
-					user = await app.get_users(user)
-					await send_edit(
-						m, 
-						"⏳ • Hold on..."
-					)
-					done = await app.kick_chat_member(
-						chat_id=m.chat.id,
-						user_id=get_user.id,
-						)
-					if done:
-						await send_edit(
-							m, 
-							f"Banned {get_user.first_name} from the chat !"
-							)
-				elif len(m.command) > 4096
-					await send_edit(
-						m, 
-						"Minimum message length 4096 characters ..."
-						)
-			# reason not found
-			else:
-				await send_edit(
-					m, 
-					"I can't ban this user . . ."
-					)
-			)
+		# reason not found
+		else:
+			await send_edit(
+				m, 
+				"I can't ban this user . . ."
+				)
+		)
 	else:
 		await send_edit(
 			m, 
@@ -129,31 +129,37 @@ async def unban(_, m):
 	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
 		await code(
-			if reply and len(m.command) == 1:
-				if reply:
-					user = reply.from_user
-				elif not reply:
-					user = get_arg(m)
-				else:
-					user = False
-				if not user:
-					await send_edit(
-						m, 
-						"I can't unban ghosts, can i ?"
-						)
-					return
-				else:
-					await app.unban_chat_member(
-						chat_id=m.chat.id,
-						user_id=user.id
-						)
+		if reply and (len(m.command) == 1 or len(m.command) > 1):
+			user = reply.from_user
+			if not user:
+				await send_edit(
+					m, 
+					"I can't unban ghosts, can i ?"
+					)
+				return
+			else:
+				await send_edit(
+					m, 
+					"⏳ • Hold on..."
+					)
+				done = await app.unban_chat_member(
+					chat_id=m.chat.id,
+					user_id=user.id
+					)
+				if done:
 					await send_edit(
 						m, 
 						f"Unbanned {user.first_name} in the current chat."
 						)
-			elif not reply and len(m.command) > 1:
+				elif not done:
+					await send_edit(
+						m, 
+						"I'm not able to unban this member ..."
+						)
+					return
+		elif not reply:
+			if len(m.command) > 1:
 				user = m.command[1]
-			try:
 				await send_edit(
 					m, 
 					"⏳ • Hold on..."
@@ -167,12 +173,13 @@ async def unban(_, m):
 					m, 
 					f"Unbanned {get_user.first_name} from the chat."
 					)
-			except:
+			elif len(m.command) == 1:
 				await send_edit(
-					m, 
-					"I can't unban this user."
+					m,
+					"Please provide a user id or username to unban ..."
 					)
-			)
+				return
+		)
 	else:
 		await send_edit(
 			m, 
