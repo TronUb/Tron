@@ -452,7 +452,7 @@ async def demote(client, m):
 					can_post_messages=False,
 					)
 				if done:
-					await send_edit(m, f"{mention_markdown(user.id, user.first_name} is now removed from admin status !")
+					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} is now removed from admin status !")
 			else: 
 				await send_edit(m, "Please try again later . . .")
 
