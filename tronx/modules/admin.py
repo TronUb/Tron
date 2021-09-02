@@ -286,7 +286,7 @@ async def kick_user(_, m):
 					user_id=user.id,
 					)
 				if done:
-					await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name} from this chat.")
+					await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name)} from this chat.")
 				else:
 					await send_edit(m, "I can't kick this user.")
 			else:
