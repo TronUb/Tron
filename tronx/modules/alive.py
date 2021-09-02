@@ -143,8 +143,8 @@ async def inline_alive(_, m: Message):
 				m, 
 				"Failed to get inline alive results !"
 				)
-				time.sleep(3)
-				await m.delete()
+			time.sleep(3)
+			await m.delete()
 	except Exception as e:
 		await error(m, e)
 
