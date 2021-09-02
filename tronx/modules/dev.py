@@ -11,14 +11,13 @@ from pyrogram import filters
 from tronx import (
 	app, 
 	CMD_HELP,
-	Config,
-	PREFIX
-	)
+)
 
 from tronx.helpers import (
 	error,
 	gen,
 	send_edit,
+	long,
 )
 
 
@@ -50,10 +49,6 @@ async def aexec(code, app, m):
 
 @app.on_message(gen(["eval", "e"]))
 async def evaluate(app, m):
-	await send_edit(
-		m, 
-		"`Running ...`"
-		)
 	try:
 		cmd = m.text.split(" ", maxsplit=1)[1]
 	except IndexError:
@@ -62,6 +57,7 @@ async def evaluate(app, m):
 			"Give me some code to execute ..."
 			)
 		return
+	await send_edit(m, "`Running ...`")
 	reply_to_id = m.message_id
 	if m.reply_to_message:
 		reply_to_id = m.reply_to_message.message_id
@@ -114,9 +110,7 @@ async def terminal(app, m):
 	if len(m.text.split()) == 1:
 		await send_edit(m, "Use: `.term pip3 install pyrogram`")
 		return
-	await send_edit(m, 
-		"`Running ...`"
-		)
+	await send_edit(m, "`Running ...`")
 	args = m.text.split(None, 1)
 	teks = args[1]
 	if "\n" in teks:
@@ -172,3 +166,5 @@ async def terminal(app, m):
 		await send_edit(m, f"**Output:**\n```{output}```")
 	else:
 		await send_edit(m, "**Output:**\n`No Output`")
+
+

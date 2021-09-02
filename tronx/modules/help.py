@@ -92,12 +92,12 @@ async def help_menu(app, m):
 
 
 # get all plugins name
-@app.on_message(gen("cmds"))
+@app.on_message(gen("plugs"))
 async def all_plugins(_, m: Message):
 	plugs = list(CMD_HELP.keys())
 	await send_edit(
 		m, 
-		"\n".join(plugs)
+		"\n".join(f"`{plugs}`")
 		)
 
 

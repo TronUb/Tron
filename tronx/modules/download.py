@@ -55,8 +55,6 @@ CMD_HELP.update(
 
 
 
-MAX_MESSAGE_LENGTH = 4096
-
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 @app.on_message(gen("ls"))
@@ -84,7 +82,7 @@ async def list_directories(c: app, m: Message):
 		return
 	for file in files:
 		OUTPUT += f"• `{file}` ({get_directory_size(os.path.abspath(location+file))})\n"
-	if len(OUTPUT) > MAX_MESSAGE_LENGTH:
+	if len(OUTPUT) > 4096:
 		OUTPUT = clear_string(OUTPUT)  # Remove the html elements using regex
 		with BytesIO(str.encode(OUTPUT)) as f:
 			f.name = "dict.txt"

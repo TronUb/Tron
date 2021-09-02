@@ -4,19 +4,14 @@ import shutil
 import urllib
 
 from requests import post
-from io import BytesIO
-from time import sleep
 
-from pyrogram import filters, Client
+from pyrogram import Client
 from pyrogram.types import Message
 
 from tronx import (
 	app, 
 	CMD_HELP, 
-	USER_NAME, 
-	USER_ID,
-	Config,
-	PREFIX
+	PREFIX,
 	)
 
 from tronx.helpers import (
@@ -25,7 +20,6 @@ from tronx.helpers import (
 	gen,
 	send_edit,
 	# others 
-	clear_string, 
 	ReplyCheck,
 )
 

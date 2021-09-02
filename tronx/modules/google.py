@@ -33,10 +33,9 @@ CMD_HELP.update(
 	{"google" : (
 		"google",
 		{
-		"gs [query]" : "Search something on google, don't use for restricted queries",
-		"google [query]" : "Search Something On Google, Don't Use For Restricted Queries.",
+		"img [number of pic] [query]" : "Search something on google ans get the photo of that query",
+		"sauce [reply to pic]" : "Get the source link of that image",
 		"pic [query]" : "Get Images from @bing bot.",
-		"reverse [reply to image]" : "Search Image Source On Google By This Command, Just Reply To A Image." 
 		}
 		)
 	}

@@ -57,9 +57,6 @@ AFK_RESTRICT = {}
 # a delay for restricted users
 DELAY_TIME = 60 # seconds
 
-# stored time
-AFK_TIME = []
-
 
 
 
@@ -69,19 +66,15 @@ async def go_offline(_, m: Message):
 		try:
 			start = int(time.time())
 			set_afk(True, m.text.split(None, 1)[1], start) # with reason
-			AFK_TIME.append(start)
 			await send_edit(
 				m, 
 				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1]))
-			AFK_TIME.clear()
 		except Exception as e:
 			await error(m, e)
 	else:
 		try:
 			start = int(time.time())
 			set_afk(True, "", start) # without reason
-			AFK_TIME.append(start)
-			AFK_TIME.clear()
 			await send_edit(
 				m, 
 				"{} is now offline.".format(mymention())
@@ -176,7 +169,6 @@ async def back_online(app, m: Message):
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			set_afk(False, "", 0)
-			AFK_TIME.clear()
 		else:
 			return
 
