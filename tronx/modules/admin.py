@@ -344,7 +344,7 @@ async def pin_message(_, m):
 					await send_edit(m, "Unpinned all pinned messages . . .")
 				else:
 					await send_edit(m, "Failed to unpin all messages . . .")
-			elif cmd != "all"
+			elif cmd != "all":
 				await send_edit(m, "Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message . . .")
 			else:
 				await send_edit(m, "Failed to unpin messages . . .")
