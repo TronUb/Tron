@@ -15,7 +15,7 @@ from tronx import (
 	Config,
 	)
 
-from tronx.helpers. import (
+from tronx.helpers import (
 	get_arg, 
 	get_args, 
 	GetUserMentionable, 
