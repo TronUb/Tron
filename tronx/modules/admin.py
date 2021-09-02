@@ -14,7 +14,8 @@ from tronx import (
 	PREFIX,
 	Config,
 	)
-from tronx.helpers.utils import (
+
+from tronx.helpers. import (
 	get_arg, 
 	get_args, 
 	GetUserMentionable, 
@@ -23,14 +24,12 @@ from tronx.helpers.utils import (
 	CheckAdmin, 
 	CheckReplyAdmin, 
 	RestrictFailed,
-	)
-
-from tronx.helpers import ( 
 	gen,
 	error, 
 	send_edit,
 	private,
 	code,
+	long,
 )
 
 
@@ -61,62 +60,37 @@ async def ban_hammer(_, m):
 	# return if used in private
 	await private(m)
 	reply = m.reply_to_message
+	# check that you're admin or not
 	if await CheckAdmin(m) is True:
-			# replies without suffix
-		if reply and (len(m.command) == 1 or len(m.command) > 1):
+		if reply and (long(m) == 1 or long(m) > 1):
 			user = reply.from_user
-			await send_edit(
-				m, 
-				"⏳ • Hold on..."
-				)
+			await send_edit(m, "⏳ • Hold on...")
 			await app.kick_chat_member(
 				m.chat.id,
 				user.id
 				)
-			await send_edit(
-				m, 
-				f"Banned {user.first_name} in this chat ..."
-				)
+			await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} in this chat ...")
 			# not replies 
 		elif not reply:
-			if len(m.command) == 1:
-				await send_edit(
-					m, 
-					"Give me user id or username of that member you want to ban ..."
-					)
+			if long(m) == 1:
+				await send_edit(m, "Give me user id or username of that member you want to ban ...")
 				return
 			elif len(m.command) > 1:
-				user = m.command[1]
-				user = await app.get_users(user)
-				await send_edit(
-					m, 
-					"⏳ • Hold on..."
-				)
+				user = await app.get_users(m.command[1])
+				await send_edit(m, "⏳ • Hold on...")
 				done = await app.kick_chat_member(
 					chat_id=m.chat.id,
-					user_id=get_user.id,
+					user_id=user.id,
 					)
 				if done:
-					await send_edit(
-						m, 
-						f"Banned {get_user.first_name} from the chat !"
-						)
-			elif len(m.command) > 4096:
-				await send_edit(
-					m, 
-					"Minimum message length 4096 characters ..."
-					)
-		# reason not found
+					await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} from the chat !")
+			else:
+				await send_edit(m, "Please try again later . . .")
+		# used on admin or owner
 		else:
-			await send_edit(
-				m, 
-				"I can't ban this user . . ."
-		)
+			await send_edit(m, "I can't ban this user . . .")
 	else:
-		await send_edit(
-			m, 
-			"Sorry, Your Are Not An Admin Here !"
-			)
+		await send_edit(m, "Sorry, Your Are Not An Admin Here !")
 
 
 
@@ -126,61 +100,38 @@ async def unban(_, m):
 	await private(m)
 	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		if reply and (len(m.command) == 1 or len(m.command) > 1):
+
+		if reply and (long(m) == 1 or long(m) > 1):
 			user = reply.from_user
-			if not user:
-				await send_edit(
-					m, 
-					"I can't unban ghosts, can i ?"
-					)
+			await send_edit(m, "⏳ • Hold on...")
+			done = await app.unban_chat_member(
+				chat_id=m.chat.id,
+				user_id=user.id
+				)
+			if done:
+				await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} in the current chat.") 
+			elif not done:
+				await send_edit(m, "I'm not able to unban this user . . .")
 				return
-			else:
-				await send_edit(
-					m, 
-					"⏳ • Hold on..."
-					)
+
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Please give me some id or username . . .")
+				return
+			elif long(m) > 1:
+				await send_edit(m, "⏳ • Hold on...")
+				user = await app.get_users(m.command[1])
 				done = await app.unban_chat_member(
-					chat_id=m.chat.id,
+					chat_id=m.chat.id, 
 					user_id=user.id
 					)
 				if done:
-					await send_edit(
-						m, 
-						f"Unbanned {user.first_name} in the current chat."
-						)
-				elif not done:
-					await send_edit(
-						m, 
-						"I'm not able to unban this member ..."
-						)
-					return
-		elif not reply:
-			if len(m.command) > 1:
-				user = m.command[1]
-				await send_edit(
-					m, 
-					"⏳ • Hold on..."
-					)
-				get_user = await app.get_users(user)
-				await app.unban_chat_member(
-					chat_id=m.chat.id, 
-					user_id=get_user.id
-					)
-				await send_edit(
-					m, 
-					f"Unbanned {get_user.first_name} from the chat."
-					)
-			elif len(m.command) == 1:
-				await send_edit(
-					m,
-					"Please provide a user id or username to unban ..."
-					)
-				return
+					await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} from this chat . . .")
+				else:
+					await send_edit(m, "I'm not able to unban this user . . .")
+
 	else:
-		await send_edit(
-			m, 
-			"Sorry, You Are Not An Admin Here !"
-			)
+		await send_edit(m, "Sorry, You Are Not An Admin Here !")
 
 
 
@@ -191,7 +142,7 @@ mute_permission = ChatPermissions(
 	can_send_media_messages=False,
 	can_send_stickers=False,
 	can_send_animations=False,
-	can_send_games=False,
+	can_send_games=True,
 	can_use_inline_bots=False,
 	can_add_web_page_previews=False,
 	can_send_polls=False,
@@ -205,52 +156,43 @@ mute_permission = ChatPermissions(
 
 @app.on_message(gen("mute"))
 async def mute_hammer(_, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
+	await private(m)
+	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		if (m.reply_to_message) and (len(m.command) == 1):
-			reply = m.reply_to_message
-			if reply:
-				user = reply.from_user["id"]
-			else:
-				user = get_arg(m)
-				if not user:
-					await send_edit(
-						m, 
-						"I Can't Mute A Ghost !!"
-						)
-					return
-		elif not (m.reply_to_message) and (len(m.command) > 1):
-			user = m.command[1]
-		try:
-			await send_edit(
-				m, 
-				"⏳ • Hold on...")
-				
-			get_user = await app.get_users(user)
-			await app.restrict_chat_member(
-				chat_id=m.chat.id,
-				user_id=get_user.id,
+		if reply and (long(m) == 1 or long(m) > 1):
+			user = reply.from_user
+			done = await app.restrict_chat_member(
+				m.chat.id,
+				user.id,
 				permissions=mute_permission,
-			)
-			await send_edit(
-				m, 
-				f"{get_user.first_name} has been muted."
 				)
-		except:
-			await send_edit(
-				m, 
-				"I can't mute this user."
-				)
+			if done:
+				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} has been muted")
+			else:
+				await send_edit(m, "Sorry, I am unable to mite this user . . .")
+
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Please give me some id or username . . .")
+				return
+
+			elif long(m) > 1:
+				await send_edit(m, "⏳ • Hold on...")
+				user = await app.get_users(m.command[1])
+				done = await app.restrict_chat_member(
+					m.chat.id,
+					user.id,
+					permissions=mute_permission,
+					)
+				if done:
+					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} has been muted.")
+				else:
+					await send_edit(m, "Sorry, I can't mute this user . . .")
+			else:
+				await send_edit(m, "Please try again later . . .")
+
 	else:
-		await send_edit(
-			m, 
-			"Sorry, You Are Not An Admin Here !"
-			)
+		await send_edit(m, "Sorry, You Are Not An Admin Here !")
 
 
 
@@ -275,282 +217,243 @@ unmute_permissions = ChatPermissions(
 
 @app.on_message(gen("unmute"))
 async def unmute(_, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
+	await private(m)
+	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		if (m.reply_to_message) and (len(m.command) == 1):
-			reply = m.reply_to_message
-			if reply:
-				user = reply.from_user["id"]
+		if reply and (long(m) == 1 or long(m) > 1):
+			user = reply.from_user
+			await send_edit(m, "⏳ • Hold on...")
+			done = await app.restrict_chat_member(
+				m.chat.id,
+				user.id,
+				permissions=unmute_permissions,
+				)
+			if done:
+				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was unmuted !")
 			else:
-				user = get_arg(m)
-				if not user:
-					await send_edit(
-						m, 
-						"Whom should I unmute ?"
-						)
-					return
-		elif not (m.reply_to_message) and (len(m.command) > 1):
-			user = m.command[1]
-		try:
-			await send_edit(
-				m, 
-				"⏳ • Hold on..."
-				)
-			get_user = await app.get_users(user)
-			await app.restrict_chat_member(
-			chat_id=m.chat.id,
-			user_id=get_user.id,
-			permissions=unmute_permissions,
-			)
-			await send_edit(
-				m, 
-				f"{get_user.first_name} was unmuted."
-				)
-		except:
-			await send_edit(
-				m, 
-				"I can't unmute this user."
-				)
+				await send_edit(m, "I can't unmute this user . . .")
+
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Please give me some id or username . . .")
+				return
+			elif long(m) > 1:
+				await send_edit(m, "⏳ • Hold on...")
+				user = await app.get_users(m.command[1])
+				done = await app.restrict_chat_member(
+					chat_id=m.chat.id,
+					user_id=user.id,
+					permissions=unmute_permissions,
+					)
+				if done:
+					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was unmuted.")
+				else:
+					await send_edit(m, "I can't unmute this user . . .")
+			else:
+				await send_edit(m, "Please try again later . . .")
 	else:
-		await send(
-			m, 
-			"Sorry, Your Are Not An Admin Here ! "
-			)
+		await send(m, "Sorry, Your Are Not An Admin Here ! ")
 
 
 
 
 @app.on_message(gen("kick"))
 async def kick_user(_, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
+	await private(m)
+	reply = m.reply_to_message
 	if await CheckAdmin(m) is True:
-		reply = m.reply_to_message
-		if reply:
-			user = reply.from_user["id"]
-		else:
-			user = get_arg(m)
-			if not user:
-				await send_edit(
-					m, 
-					"Whom should I kick ?"
-					)
-				return
-		try:
-			await send_edit(
-				m, 
-				"⏳ • Hold on...")
-				
-			get_user = await app.get_users(user)
-			await app.kick_chat_member(
+		if reply and (long(m) == 1 or long(m) > 1):
+			user = reply.from_user
+			await send_edit(m, "⏳ • Hold on...")
+			done = await app.kick_chat_member(
 				chat_id=m.chat.id,
-				user_id=get_user.id,
+				user_id=user.id,
 				)
-			await send_edit(
-				m, 
-				f"Kicked {get_user.first_name} from the chat."
-				)
-		except:
-			await send_edit(
-				m, 
-				"I can't kick this user."
-				)
+			if done:
+				await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name)} from the chat.")
+			else:
+				await send_edit(m, "I can't kick this user . . .")
+
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Give me some id or username . . .")
+				return
+			elif long(m) > 1:
+				await send_edit(m, "⏳ • Hold on...")
+				user = await app.get_users(m.command[1])
+				done = await app.kick_chat_member(
+					chat_id=m.chat.id,
+					user_id=user.id,
+					)
+				if done:
+					await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name} from this chat.")
+				else:
+					await send_edit(m, "I can't kick this user.")
+			else:
+				await send_edit(m, "Please try again later . . .")
+
 	else:
-		await send_edit(
-			m, 
-			"Sorry, Your Are Not An Admin Here !"
-			)
+		await send_edit(m, "Sorry, Your Are Not An Admin Here !")
 
 
 
 
 @app.on_message(gen("pin"))
 async def pin_message(_, m):
-	if m.reply_to_message:
-		try:
-			await send_edit(
-				m, 
-				"⏳ • Hold on..."
-				)
-			await app.pin_chat_message(
+	try:
+		reply = m.reply_to_message
+		if reply:
+			await send_edit(m, "⏳ • Hold on...")
+			done = await app.pin_chat_message(
 				m.chat.id,
-				m.reply_to_message.message_id,
+				reply.message_id,
 				)
-			await send_edit(
-				m, 
-				"`Pinned message!`"
-				)
-		except Exception as e:
-			await error(m, e)
-	else:
-		await send_edit(
-			m, 
-			"`Reply to a message so that I can pin that thing...`"
-			)     
-		await asyncio.sleep(1)
-		await m.delete()
+			if done:
+				await send_edit(m, "`Pinned message!`")
+			else:
+				await send_edit(m, "Failed to pin message")
+		elif not reply:
+			await send_edit(m, "`Reply to a message so that I can pin that message ...`")     
+			time.sleep(2)
+			await m.delete()
+	except Exception as e:
+		await error(m, e)
 
 
 
 
 @app.on_message(gen("unpin"))
 async def pin_message(_, m):
-	replied = m.reply_to_message
-	if replied:
-		try:
-			await send_edit(
-				m, 
-				"⏳ • Hold on..."
-				)
-			await app.unpin_chat_message(
+	try:
+		reply = m.reply_to_message
+		if reply and long(m) == 1:
+			await send_edit(m, "⏳ • Hold on...")
+			done = await app.unpin_chat_message(
 				m.chat.id,
 				m.reply_to_message.message_id
 				)
-			await send_edit(
-				m, 
-				"`Unpinned message!`"
-				)
-		except Exception as e:
-			await error(m, e)
-	elif not replied and len(m.text.split()) > 1:
-		cmd = m.command[1]
-		if cmd == "all":
-			try:
-				await app.unpin_all_chat_messages(m.chat.id)
-			except Exception as e:
-				await error(m, e)
-		else:
-			await send_edit(
-				m, 
-				"Use it properly, check help menu ..."
-				)
-	elif not replied and len(m.text.split()) == 1:
-		await send_edit(
-			m, 
-			"Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message ..."
-			)
-	else:
-		await send_edit(
-			m, 
-			"Something went wrong, please try again later ..."
-			)
+			if done:
+				await send_edit(m, "`Unpinned message !`")
+			else:
+				await send_edit(m, "Failed to unpin message . . .")
+		elif (reply or not reply) and long(m) > 1:
+			cmd = m.command[1]
+			if cmd == "all":
+				done = await app.unpin_all_chat_messages(m.chat.id)
+				if done:
+					await send_edit(m, "Unpinned all pinned messages . . .")
+				else:
+					await send_edit(m, "Failed to unpin all messages . . .")
+			elif cmd != "all"
+				await send_edit(m, "Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message . . .")
+			else:
+				await send_edit(m, "Failed to unpin messages . . .")
+	except Exception as e:
+		await error(m, e)
 
 
 
 
 @app.on_message(gen("promote"))
 async def promote(_, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	if await CheckAdmin(m) is False:
-		await send_edit(
-			m, 
-			"Sorry, You Are Not An Admin Here !"
-			)
-		return
-	await send_edit(
-		m, 
-		"⏳ • Hold on..."
-		)
-	title = ""
+	await private(m)
 	reply = m.reply_to_message
-	if reply:
-		user = reply.from_user["id"]
-		title = str(get_arg(m))
-	else:
-		args = get_args(m)
-		if not args:
-			await send_edit(
-				m, 
-				"Am I Supposed To Promote A Ghost ?!"
+	if await CheckAdmin(m) is True:
+		if reply:
+			if long(m) > 1:
+				title = m.command[1]
+				await app.set_administrator_title(m.chat.id, user.id, title)
+			else:
+				pass
+			await send_edit(m, "⏳ • Hold on...")
+			user = reply.from_user
+			done = await app.promote_chat_member(
+				m.chat.id, 
+				user.id,
+				can_pin_messages=True, 
+				can_invite_users=True,
 				)
-			return
-		user = args[0]
-		if len(args) > 1:
-			title = " ".join(args[1:])
-	get_user = await app.get_users(user)
-	try:
-		await app.promote_chat_member(
-			m.chat.id, user, 
-			can_pin_messages=True, 
-			can_invite_users=True,
-			)
-		await send_edit(
-			m, 
-			f"{get_user.first_name} is now powered with admin rights with `{title}` as title!"
-		)
-	except Exception as e:
-		await error(m, e)
-	if title:
-		try:
-			await app.set_administrator_title(m.chat.id, user, title)
-		except:
-			pass
+			if done:
+				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was promoted to admin !")
+			else:
+				await send_edit(m, "Failed to promote the user . . .")
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Please give me some id or username . . .")
+				return
+			elif long(m) > 1:
+				user = await app.get_users(m.command[1])
+				await send_edit(m, "⏳ • Hold on...")
+				if long(m) > 2:
+					title = m.command[2]
+					await app.set_administrator_title(m.chat.id, user.id, title)
+				else:
+					pass
+				done = await app.promote_chat_member(
+					m.chat.id, 
+					user.id,
+					can_pin_messages=True, 
+					can_invite_users=True,
+					)
+				if done:
+					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was promoted to admin !")
+				else:
+					await send_edit(m, "Failed to promote the user . . .")
+			else:
+				await send_edit(m, "Failed to promote user . . .")
+	else:
+		await send_edit(m, "Sorry, you are not an admin here . . .")
 
 
 
 
 @app.on_message(gen("demote"))
 async def demote(client, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	if await CheckAdmin(m) is False:
-		await send_edit(
-			m, 
-			"Sorry, Your Are Not An Admin Here !"
-			)
-		return
-	await send_edit(
-		m, 
-		"⏳ • Hold on..."
-		)
+	await private(m)
 	reply = m.reply_to_message
-	if reply:
-		user = reply.from_user["id"]
-	else:
-		user = get_arg(m)
-		if not user:
-			await send_edit(
-				"Tag A Person's Message to Demote !"
+	if await CheckAdmin(m) is True:
+		if reply:
+			await send_edit(m, "⏳ • Hold on...")
+			user = reply.from_user
+			done = await app.promote_chat_member(
+				m.chat.id,
+				user.id,
+				is_anonymous=False,
+				can_change_info=False,
+				can_delete_messages=False,
+				can_edit_messages=False,
+				can_invite_users=False,
+				can_promote_members=False,
+				can_restrict_members=False,
+				can_pin_messages=False,
+				can_post_messages=False,
 				)
-			return
-	get_user = await app.get_users(user)
-	try:
-		await app.promote_chat_member(
-			m.chat.id,
-			user,
-			is_anonymous=False,
-			can_change_info=False,
-			can_delete_messages=False,
-			can_edit_messages=False,
-			can_invite_users=False,
-			can_promote_members=False,
-			can_restrict_members=False,
-			can_pin_messages=False,
-			can_post_messages=False,
-			)
-		await send_edit(
-			m, 
-			f"{get_user.first_name} is now stripped from their admin status !"
-		)
-	except Exception as e:
-		await error(m, e)
+			if done:
+				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} now removed from admin status !")
+			else:
+				await send_edit(m, "Failed to promote the user . . .")
+		elif not reply:
+			if long(m) == 1:
+				await send_edit(m, "Please give me some id or reply to that admin . . .")
+				return
+			elif long(m) > 1:
+				user = m.command[1]
+				done = await app.promote_chat_member(
+					m.chat.id,
+					user.id,
+					is_anonymous=False,
+					can_change_info=False,
+					can_delete_messages=False,
+					can_edit_messages=False,
+					can_invite_users=False,
+					can_promote_members=False,
+					can_restrict_members=False,
+					can_pin_messages=False,
+					can_post_messages=False,
+					)
+				if done:
+					await send_edit(m, f"{mention_markdown(user.id, user.first_name} is now removed from admin status !")
+			else: 
+				await send_edit(m, "Please try again later . . .")
 
 

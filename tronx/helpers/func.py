@@ -131,3 +131,13 @@ async def code(my_codes):
 		my_codes
 	except Exception as e:
 		await error(m, e)
+
+
+
+
+def long(m: Message):
+	text = len(m.command)
+	if text:
+		return text
+	else:
+		return 0
