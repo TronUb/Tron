@@ -163,33 +163,55 @@ async def add_user(userid: int, chatid: str):
 
 
 
+async def exists(user_id, chat_id):
+	_data.clear()
+	_data = []
+	lime = await app.get_chat_members(LOG_CHAT)
+
+	for x in lime:
+		_data.append(x.user.id)
+	if user_id in _data:
+		return True
+	else:
+		return False
+
+
+
+
 async def userlise():
-	await app.start()
-	await get_self()
 	try:
-		await app.resolve_peer(
-			Config.LOG_CHAT
-			)
-		await add_user(
-			Config.LOG_CHAT,
-			BOT_ID
-			)
+		if app:
+			await app.start()
+			await get_self()
+			await app.stop()
+		else:
+			pass
 	except Exception as e:
 		print(e)
-		pass
-	await app.stop()
 
 
 
 
 async def botlise():
-	if bot:
-		await bot.start()
-		await get_bot()
-		await bot.stop()
-	else:
-		pass
-		await get_bot()
+	try:
+		if bot:
+			await bot.start()
+			await get_bot()
+			await app.resolve_peer(
+				LOG_CHAT
+				)
+			if exists(BOT_ID, LOG_CHAT) == True:
+				await add_user(
+					LOG_CHAT,
+					BOT_ID
+				)
+			else:
+				pass
+			await bot.stop()
+		else:
+			await get_bot()
+	except Exception as e:
+		print(e)
 
 
 
