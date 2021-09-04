@@ -13,6 +13,8 @@ from tronx import (
 	add_user,
 	botlise,
 	userlise,
+	LOG_CHAT,
+	BOT_ID,
 )
 
 
@@ -77,13 +79,7 @@ async def start_assistant():
 
 
 
-# second startup
-async def start_bot():
-	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	print("initialising ...\n\n")
-	await userlise() # first app start
-	await botlise() # first bot start
-	await start_assistant()
+async def start_userbot():
 	if app:
 		await app.start()
 		print("Userbot activated, startup in progress ...\n")
@@ -91,6 +87,18 @@ async def start_bot():
 	else:
 		print("Userbot startup unsuccessful, please check everything again ...")
 		print("Could,nt load modules of userbot")
+
+
+
+
+# second startup
+async def start_bot():
+	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
+	print("initialising ...\n\n")
+	await userlise() # first startups
+	await botlise() # first startups
+	await start_assistant()
+	await start_userbot()
 
 
 
