@@ -198,14 +198,15 @@ async def botlise():
 		if bot:
 			await bot.start()
 			await get_bot()
+			print("Checking presence of bot in log chat . . .")
 			if await exists(BOT_ID, LOG_CHAT) == True:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
 				)
-				print(f"{BOT_NAME} is already in log chat . . .")
+				print(f"Bot is present in log chat . . .")
 			else:
-				print(f"Added {BOT_NAME} in log chat . . .")
+				print(f"Bot is not present in log chat, adding bot in log chat . . .")
 			await bot.stop()
 		else:
 			await get_bot()
