@@ -63,7 +63,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 
 
 # to log errors, mentions, etc
-if not Config.LOG_CHAT:
+if not LOG_CHAT:
 	log.warning(
 		"LOG_CHAT is important for bots normal working, please fill it."
 		)
