@@ -13,8 +13,6 @@ from tronx import (
 	add_user,
 	botlise,
 	userlise,
-	LOG_CHAT,
-	BOT_ID,
 )
 
 
