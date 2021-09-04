@@ -165,8 +165,8 @@ async def add_user(userid: int, chatid: str):
 
 # check if the bot is in log chat 
 async def exists(user_id, chat_id):
-	_data.clear()
 	_data = []
+	_data.clear()
 	lime = await app.get_chat_members(chat_id)
 
 	for x in lime:
@@ -198,17 +198,14 @@ async def botlise():
 		if bot:
 			await bot.start()
 			await get_bot()
-			await app.resolve_peer(
-				LOG_CHAT
-				)
 			if exists(BOT_ID, LOG_CHAT) == True:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
 				)
-				print("Bot is already in log chat . . .")
+				print(f"{BOT_NAME} is already in log chat . . .")
 			else:
-				print("Added bot in log chat . . .")
+				print(f"Added {BOT_NAME} in log chat . . .")
 			await bot.stop()
 		else:
 			await get_bot()
