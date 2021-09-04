@@ -67,7 +67,6 @@ async def load_modules():
 # start assistant client
 async def start_assistant():
 	if bot:
-		await bot.stop()
 		await bot.start()
 		print("Assistant activated, startup in progress ...\n")
 		load_plugins() 
