@@ -198,7 +198,7 @@ async def botlise():
 		if bot:
 			await bot.start()
 			await get_bot()
-			if exists(BOT_ID, LOG_CHAT) == True:
+			if await exists(BOT_ID, LOG_CHAT) == True:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
