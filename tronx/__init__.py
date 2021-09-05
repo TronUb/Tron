@@ -154,7 +154,7 @@ async def add_user(userid: int, chatid: str):
 	try:
 		await app.add_chat_members(
 			chatid, 
-			userids
+			userid
 			)
 	except Exception as e:
 		print(e)
