@@ -45,7 +45,8 @@ CMD_HELP.update(
 		"all" : "Tag recent 100 members, use carefully.",
 		"bots" : "Get list of bots in a chat.",
 		"kickme" : "leave a chat, use it carefully.",
-		"members [ @username ]" : "Get number of members in  a chat."
+		"members [ @username ]" : "Get number of members in  a chat.",
+		"join [chat username or id]" : "Join a chat with just a command.",
 		}
 		)
 	}
@@ -451,3 +452,23 @@ async def get_member_count(client, m):
 			m, 
 			f"Usage: `{PREFIX}members` or `{PREFIX}members <chat username>` "
 			)
+
+
+
+
+@app.on_message(gen("join"))
+async def join_chats(_, m: Message):
+	if long(m) == 1:
+		await send_edit(m, "Give me some chat id / username after command . . .")
+		return
+	elif long(m) > 1:
+		chat = m.command[1]
+		try:
+			data = await app.get_chat(chat)
+			done = await app.join_chat(chat)
+			if data and done:
+				await send_edit(m, f"Successfully joined `{data.title}`")
+			else:
+				await send_edit(m, "Couldn't join chat !")
+	elif long(m) > 4096:
+		await send_edit(m, "Maximum 4096 characters . . .")
