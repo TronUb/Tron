@@ -29,6 +29,8 @@ from tronx.helpers import (
 	CheckAdmin, 
 	CheckReplyAdmin, 
 	RestrictFailed,
+	private,
+	long,
 )
 
 
@@ -470,5 +472,30 @@ async def join_chats(_, m: Message):
 				await send_edit(m, f"Successfully joined `{data.title}`")
 			else:
 				await send_edit(m, "Couldn't join chat !")
+		except Exception as e:
+			await error(m, e)
 	elif long(m) > 4096:
 		await send_edit(m, "Maximum 4096 characters . . .")
+
+
+
+
+@app.on_message(gen("slowmo"))
+async def slow_mode(_, m: Message):
+	await private(m)
+	if CheckAdmin(m) is True:
+		if long(m) == 1:
+			sec = 5:
+		elif long(m) > 1:
+			sec = m.command[1]
+			if not sec.isdigit() and sec != "off":
+				await send_edit(m, "Sir, please give me some seconds in numbers after command . . .")
+				return
+			if sec == "off":
+				sec = None
+		try:
+			await app.set_slow_mode(m.chat.id, sec)
+		except Exception as e:
+			await error(m, e)
+	else:
+		await send_edit(m, "Sorry, you are not an admin here . . .")
