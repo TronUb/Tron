@@ -12,7 +12,7 @@ from tronx import (
 
 from config import Config
 
-from tronx.helpers import mymention
+from .user import mymention
 
 
 
