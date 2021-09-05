@@ -488,21 +488,16 @@ async def slow_mode(_, m: Message):
 		if long(m) == 1:
 			sec = 5
 		elif long(m) > 1:
-			try:
-				sec = m.command[1]
-				if not sec.isdigit() and sec != "off":
-					await send_edit(m, "Sir, please give me some seconds in numbers after command . . .")
-					return
-				if sec == "off":
-					sec = None
-					await app.set_slow_mode(m.chat.id, sec)
-					await send_edit(m, "Slow mode is now turned off.")
-				else:
-					await app.set_slow_mode(m.chat.id, sec)
-					await send_edit(m, f"Updated slow mode to {sec} seconds.")
-			except Exception as e:
-				await error(m, e)
-		else:
-			return
+			sec = m.command[1]
+		try:
+			if sec == "off":
+				sec = None
+				await app.set_slow_mode(m.chat.id, sec)
+				await send_edit(m, "Slow mode is now turned off.")
+			else:
+				await app.set_slow_mode(m.chat.id, sec)
+				await send_edit(m, f"Updated slow mode to {sec} seconds.")
+		except Exception as e:
+			await error(m, e)
 	else:
 		await send_edit(m, "Sorry, you are not an admin here . . .")
