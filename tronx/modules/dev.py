@@ -168,3 +168,23 @@ async def terminal(app, m):
 		await send_edit(m, "**Output:**\n`No Output`")
 
 
+
+
+@app.on_message(gen("py"))
+async def py_helper(_, m: Message):
+	try:
+		if long(m) == 1:
+			await send_edit(m, "Please give me some input after command . . .")
+		elif long(m) > 1 and long(m) < 4096:
+			text = m.text.split(None, 1)[1]
+			await send_edit(m, f"Getting py info for {text}")
+			search = help(text)
+			if search:
+				await send_edit(m, search)
+			else:
+				await send_edit(m, "No results found !")
+		elif long(m) > 4096:
+			await send_edit(m, "maximum input characters 4096 . . .")
+			
+	except Exception as e:
+		await error(m, e)
