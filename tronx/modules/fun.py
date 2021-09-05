@@ -1,6 +1,10 @@
-import time
-import random
-import asyncio
+import ( 
+	time, 
+	random,
+	asyncio,
+	requests,
+	json,
+)
 
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
@@ -21,6 +25,7 @@ from tronx.helpers import (
 	send_edit,
 	# others 
 	mention_markdown,
+	long,
 )
 
 
