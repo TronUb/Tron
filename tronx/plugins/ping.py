@@ -10,7 +10,7 @@ from tronx import (
 
 
 
-@bot.on_message(filters.command(["ping"]) & filters.incoming)
+@bot.on_message(filters.command(["ping"]))
 async def bot_ping(bot, m):
 	start = datetime.now()
 	end = datetime.now()

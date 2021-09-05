@@ -106,7 +106,7 @@ async def data(plug):
 
 
 # first start 
-@bot.on_message(filters.command(["start"]) & filters.incoming & filters.user(USER_ID))
+@bot.on_message(filters.command(["start"]) & filters.user(USER_ID))
 async def start(bot, m: Message):
 	if USER_ID:
 		if Config.BOT_BIO:
@@ -126,7 +126,7 @@ async def start(bot, m: Message):
 
 
 # start for global users
-@bot.on_message(filters.command(["start"]) & filters.incoming)
+@bot.on_message(filters.command(["start"]))
 async def start(bot, message):
 	await bot.send_photo(
 		message.chat.id,
