@@ -483,7 +483,7 @@ async def join_chats(_, m: Message):
 @app.on_message(gen("slowmo"))
 async def slow_mode(_, m: Message):
 	await private(m)
-	if CheckAdmin(m) is True:
+	if await CheckAdmin(m) is True:
 		if long(m) == 1:
 			sec = 5
 		elif long(m) > 1:
