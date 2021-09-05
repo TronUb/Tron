@@ -184,6 +184,7 @@ async def userlise():
 		if app:
 			await app.start()
 			await get_self()
+			await botlise()
 			await app.stop()
 		else:
 			pass

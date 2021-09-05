@@ -67,7 +67,6 @@ async def load_modules():
 # start assistant client
 async def start_assistant():
 	if bot:
-		await bot.stop()
 		await bot.start()
 		print("Assistant activated, startup in progress ...\n")
 		load_plugins() 
@@ -95,7 +94,6 @@ async def start_bot():
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	print("initialising ...\n\n")
 	await userlise() # first startups
-	await botlise() # first startups
 	await start_assistant()
 	await start_userbot()
 
