@@ -110,6 +110,9 @@ async def ban_all(_, m):
 							m.chat.id,
 							x.user.id
 						)
+						for x in range(0, len(data)):
+							await send_edit(m, f"Banned members: `{x}`")
+				await send_edit(m, "Banned all members !")
 			elif long(m) > 1 and m.command[1] != "confirm":
 				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .")
 		except Exception as e:
