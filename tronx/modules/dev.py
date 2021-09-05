@@ -90,10 +90,7 @@ async def evaluate(app, m):
 		os.remove(filename)
 		await m.delete()
 	else:
-		await send_edit(
-			m,
-			final_output
-			)
+		await send_edit(m, final_output)
 
 
 
@@ -171,7 +168,7 @@ async def py_helper(_, m: Message):
 		elif long(m) > 1 and long(m) < 4096:
 			text = m.text.split(None, 1)[1]
 			await send_edit(m, f"Getting py info for {text}")
-			search = help(text)
+			search = aexec(text, app, m)
 			if search:
 				await send_edit(m, search)
 			else:
