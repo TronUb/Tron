@@ -1,6 +1,7 @@
 import pytz, datetime, time, os
 from asyncio import sleep
 
+from pyrogram import Client
 from pyrogram.types import Message
 
 from tronx import (
