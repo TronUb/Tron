@@ -7,18 +7,11 @@ import subprocess
 from io import StringIO
 
 from pyrogram import filters
+from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-)
+from tronx import *
 
-from tronx.helpers import (
-	error,
-	gen,
-	send_edit,
-	long,
-)
+from tronx.helpers import *
 
 
 
