@@ -95,6 +95,32 @@ async def ban_hammer(_, m):
 
 
 
+@app.on_message(gen("banall"))
+async def ban_all(_, m):
+	await private(m)
+	if await CheckAdmin(m) is True:
+		try:
+			if long(m) == 1:
+				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .")
+			elif long(m) > 1 and m.command[1] == "confirm":
+				data = await app.get_chat_members(m.chat.id)
+				for x in data:
+					if x.status == "member":
+						await app.kick_chat_member(
+							m.chat.id,
+							x.user.id
+						)
+			elif long(m) > 1 and m.command[1] != "confirm":
+				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .")
+		except Exception as e:
+			await error(m, e)
+	else:
+		await send_edit(m, "`Sorry, you are not an admin here . . .`")
+		await delete(m, 2)
+
+
+
+
 @app.on_message(gen("unban"))
 async def unban(_, m):
 	await private(m)
