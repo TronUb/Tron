@@ -173,7 +173,7 @@ async def insult_someone(_, m):
 			data = requests.get(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
 			_data = data.json()
 			if _data:
-				await send_edit(m, f"`{_data.get("insult")}`")
+				await send_edit(m, f"`{_data.get('insult')}`")
 			else:
 				send_edit(m, "No insults found !")
 		except Exception as e:
