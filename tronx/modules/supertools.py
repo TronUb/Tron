@@ -325,7 +325,7 @@ async def undelete_msg(_, m: Message):
 	collect.clear()
 	if long(m) == 1:
 		count = 5
-	elif long(m) > 1
+	elif long(m) > 1:
 		count = m.command[1]
 	try:
 		data = await app.get_history(m.chat.id)
