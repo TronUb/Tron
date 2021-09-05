@@ -1,10 +1,4 @@
-import ( 
-	time, 
-	random,
-	asyncio,
-	requests,
-	json,
-)
+import time, random,asyncio,requests, json
 
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
