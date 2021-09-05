@@ -194,12 +194,12 @@ async def userlise():
 
 
 async def botlise():
-	try:
-		if bot:
-			await bot.start()
-			await get_bot()
-			print("Checking presence of bot in log chat . . .")
-			if await exists(BOT_ID, LOG_CHAT) == True:
+	if bot:
+		await bot.start()
+		await get_bot()
+		print("Checking presence of bot in log chat . . .")
+		try:
+			if await exists(BOT_ID, LOG_CHAT) is True:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
@@ -207,11 +207,12 @@ async def botlise():
 				print(f"Bot is present in log chat . . .")
 			else:
 				print(f"Bot is not present in log chat, adding bot in log chat . . .")
-			await bot.stop()
-		else:
-			await get_bot()
-	except Exception as e:
-		print(e)
+		except PeerIdInvalid:
+			print("Peer id is invalid, Manually send a message in log chat . . .")
+			pass
+		await bot.stop()
+	else:
+		await get_bot()
 
 
 
