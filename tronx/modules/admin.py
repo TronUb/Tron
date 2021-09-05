@@ -40,6 +40,7 @@ CMD_HELP.update(
 		"admin", 
 		{
 		"ban" : "bans a user",
+		"banall [confirm]" : "Ban all members in by one command",
 		"unban" : "unbans a user",
 		"mute" : "restricts a user from talking in groups",
 		"unmute" : "unrestricts a user from talking in groups",

@@ -35,7 +35,8 @@ CMD_HELP.update(
 		"type [text]" : "Retype words with animation, just try and understand, Don't Use too much.",
 		"score [firstname] [secondname]" : "Check love bond between two users.",
 		"morse [reply to message]" : "Convert English text messages in morse codes.",
-		"demorse [reply to message]" : "Convert morse codes into English text messages."
+		"demorse [reply to message]" : "Convert morse codes into English text messages.",
+		"insult [reply to message]" : "Use it to insult idiots & fools"
 		}
 		)
 	}

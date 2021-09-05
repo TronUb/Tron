@@ -22,6 +22,7 @@ from tronx.helpers import (
 	send_edit,
 	# others 
 	AioHttp,
+	long,
 )
 
 
@@ -314,3 +315,28 @@ async def webshot(_, m: Message):
 			m, 
 			"Something went wrong ..."
 			)
+
+
+
+
+@app.on_message(gen("undlt"))
+async def undelete_msg(_, m: Message):
+	collect = []
+	collect.clear()
+	if long(m) == 1:
+		count = 5
+	elif long(m) > 1
+		count = m.command[1]
+	try:
+		data = await app.get_history(m.chat.id)
+		if data:
+			for x in data:
+				collect.append(f"Message: `{x.text}`")
+			await send_edit(m, "\n\n".join(collect))
+		else:
+			await send_edit(m, "No history found !")
+	except Exception as e:
+		await error(m, e)
+
+
+
