@@ -485,7 +485,7 @@ async def slow_mode(_, m: Message):
 	await private(m)
 	if CheckAdmin(m) is True:
 		if long(m) == 1:
-			sec = 5:
+			sec = 5
 		elif long(m) > 1:
 			sec = m.command[1]
 			if not sec.isdigit() and sec != "off":
