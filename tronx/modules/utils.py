@@ -49,6 +49,7 @@ CMD_HELP.update(
 		"kickme" : "leave a chat, use it carefully.",
 		"members [ @username ]" : "Get number of members in  a chat.",
 		"join [chat username or id]" : "Join a chat with just a command.",
+		"slowmo [seconds]" : "Set slow mode in a chat, use 'off' as suffix to turn off slow mode . . .",
 		}
 		)
 	}
@@ -487,15 +488,21 @@ async def slow_mode(_, m: Message):
 		if long(m) == 1:
 			sec = 5
 		elif long(m) > 1:
-			sec = m.command[1]
-			if not sec.isdigit() and sec != "off":
-				await send_edit(m, "Sir, please give me some seconds in numbers after command . . .")
-				return
-			if sec == "off":
-				sec = None
-		try:
-			await app.set_slow_mode(m.chat.id, sec)
-		except Exception as e:
-			await error(m, e)
+			try:
+				sec = m.command[1]
+				if not sec.isdigit() and sec != "off":
+					await send_edit(m, "Sir, please give me some seconds in numbers after command . . .")
+					return
+				if sec == "off":
+					sec = None
+					await app.set_slow_mode(m.chat.id, sec)
+					await send_edit(m, "Slow mode is now turned off.")
+				else:
+					await app.set_slow_mode(m.chat.id, sec)
+					await send_edit(m, f"Updated slow mode to {sec} seconds.")
+			except Exception as e:
+				await error(m, e)
+		else:
+			return
 	else:
 		await send_edit(m, "Sorry, you are not an admin here . . .")
