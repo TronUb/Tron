@@ -155,3 +155,29 @@ async def type(_, m):
 				time.sleep(e.x) # continue
 	except IndexError:
 		pass
+
+
+
+
+@app.on_message(gen("insult"))
+async def insult_someone(_, m):
+	reply = m.reply_to_message
+	if not reply:
+		await send_edit(m, "Please reply to someone, so that i can insult them . . .")
+	elif reply:
+		try:
+			await send_edit(m, "Insulting . . .")
+			if long(m) == 1:
+				lang = "en"
+			elif long(m) > 1:
+				lang = m.command[1]
+			data = requests.get(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
+			_data = data.json()
+			if _data:
+				await send_edit(m, f"`{_data.get("insult")}`")
+			else:
+				send_edit(m, "No insults found !")
+		except Exception as e:
+			await error(m, e)
+	else:
+		return
