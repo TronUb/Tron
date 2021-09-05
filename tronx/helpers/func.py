@@ -1,4 +1,4 @@
-import pytz, datetime, time
+import pytz, datetime, time, os
 from asyncio import sleep
 
 from pyrogram.types import Message
@@ -11,6 +11,9 @@ from tronx import (
 )
 
 from config import Config
+
+from tronx.helpers import mymention
+
 
 
 
@@ -141,3 +144,25 @@ def long(m: Message):
 		return text
 	else:
 		return 0
+
+
+
+
+# file creator
+async def create_file(m: Message, app: Client, filename, text):
+	try:
+		name = filename
+		content = text
+		file = open(name, "w+")
+		file.write(content)
+		file.close()
+		await app.send_document(
+			m.chat.id,
+			name,
+			caption = f"**Uploaded By:** {mymention()}"
+			)
+		os.remove(name)
+		await m.delete()
+	except Exception as e:
+		await error(m, e)
+	return

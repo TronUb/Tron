@@ -23,6 +23,7 @@ from tronx.helpers import (
 	# others 
 	AioHttp,
 	long,
+	create_file,
 )
 
 
@@ -40,6 +41,7 @@ CMD_HELP.update(
 		"tts [reply to text]" : "Text To Speech, Convert Text Message To Voice | audio (mp3).",
 		"wtr [city name]" : "Type Command And Your City Name To Get Weather Details.",
 		"ws [site link]" : "Take A Screenshot Of Any Website And Get The Image Of That Site.",
+		"undlt [count]" : "Get deleted messages from recent history of group . . .",
 		}
 		)
 	}
@@ -51,7 +53,7 @@ lang_code = os.getenv("LANG_CODE", "en")
 
 
 def replace_text(text):
-    return text.replace('"', "").replace("\\r", "").replace("\\n", "").replace("\\", "")
+	return text.replace('"', "").replace("\\r", "").replace("\\n", "").replace("\\", "")
 
 
 
@@ -332,7 +334,10 @@ async def undelete_msg(_, m: Message):
 		if data:
 			for x in data:
 				collect.append(f"Message: `{x.text}`")
-			await send_edit(m, "\n\n".join(collect))
+			try:
+				await send_edit(m, "\n\n".join(collect))
+			except:
+				await create_file(m, app, "undlete.txt", "\n\n".join(collect))
 		else:
 			await send_edit(m, "No history found !")
 	except Exception as e:
