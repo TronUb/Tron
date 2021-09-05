@@ -3,9 +3,9 @@ import sys
 import time
 import logging
 
-from pyrogram import Client
+from pyrogram import Client, filters
 from pyrogram.filters import Filter
-from pyrogram import filters
+from pyrogram.errors import PeerIdInvalid
 
 from telegraph import Telegraph
 
@@ -164,7 +164,7 @@ async def add_user(userid: int, chatid: str):
 
 
 # check if the bot is in log chat 
-async def exists(user_id, chat_id):
+async def exists(user_id: int, chat_id: str):
 	_data = []
 	_data.clear()
 	lime = await app.get_chat_members(chat_id)
