@@ -36,7 +36,8 @@ CMD_HELP.update(
 		"score [firstname] [secondname]" : "Check love bond between two users.",
 		"morse [reply to message]" : "Convert English text messages in morse codes.",
 		"demorse [reply to message]" : "Convert morse codes into English text messages.",
-		"insult [reply to message]" : "Use it to insult idiots & fools"
+		"insult [reply to message]" : "Use it to insult idiots & fools",
+		"advice [reply to message]" : "get a random advice for someone.",
 		}
 		)
 	}
@@ -177,6 +178,32 @@ async def insult_someone(_, m):
 				await send_edit(m, f"`{_data.get('insult')}`")
 			else:
 				send_edit(m, "No insults found !")
+		except Exception as e:
+			await error(m, e)
+	else:
+		return
+
+
+
+
+@app.on_message(gen("advice"))
+async def insult_someone(_, m):
+	reply = m.reply_to_message
+	if not reply:
+		await send_edit(m, "Please reply to someone, so that i can give them a advice . . .")
+	elif reply:
+		try:
+			await send_edit(m, "Insulting . . .")
+			if long(m) == 1:
+				lang = "en"
+			elif long(m) > 1:
+				lang = m.command[1]
+			data = requests.get(f"https://api.adviceslip.com/advice")
+			_data = data.json().get("slip").get("advice")
+			if _data:
+				await send_edit(m, f"`{_data}`")
+			else:
+				send_edit(m, "No advice found !")
 		except Exception as e:
 			await error(m, e)
 	else:
