@@ -59,33 +59,33 @@ def remove(duplicate):
 	return userlist
 
 
+async def old_msg(app: Client, m: Message, user_id):
+	if bool(db.get_msgid(user_id)) is True:
+		old_msg = db.get_msgid(user_id)
+			await app.delete_messages(
+				chat_id=m.chat.id, 
+				message_ids=old_msg
+			)
+	else:
+		pass
+
+
 
 
 #autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
-async def auto_block(app, m: Message):
+async def auto_block(_, m: Message):
 	if not Config.PMPERMIT:
 		return
-	elif m.from_user.is_verified:
+	if m.from_user.is_verified:
 		return
-	if m.chat.type == "private":
-		user_id = m.chat.id
-	else:
-		print("Couldn't get user id !")
-		return
+	user_id = m.chat.id
 	guest = await app.get_users(user_id)
 	try:
-		if db.get_whitelist(user_id):
+		if db.get_whitelist(user_id) is True:
 			return
 		else:
-			if db.get_msgid(user_id):
-				old_msg= db.get_msgid(user_id)
-				await app.delete_messages(
-					chat_id=m.chat.id, 
-					message_ids=old_msg
-				)
-			else:
-				pass
+			await old_msg(app, m, user_id)
 			if Config.PMPERMIT_TEXT:
 				msg = await app.send_message(
 						m.chat.id,
@@ -100,8 +100,7 @@ async def auto_block(app, m: Message):
 					disable_web_page_preview=True
 				)
 			else:
-				print("Failed to send pmpermit warning !")
-				return
+				pass
 			users.append(user_id)
 			db.set_msgid(m.chat.id, msg.message_id)
 			if m.from_user:
@@ -192,7 +191,7 @@ async def approve_pm(app, m: Message):
 @app.on_message(gen(["da", "disapprove", "nopm"]))
 async def revoke_pm_block(app, m:Message):
 	reply = m.reply_to_message
-	cmd = m.command[1]
+	cmd = m.command
 	if m.chat.type == "private":
 		user_id = m.chat.id
 	elif m.chat.type != "private":
