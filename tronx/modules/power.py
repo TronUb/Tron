@@ -27,7 +27,7 @@ CMD_HELP.update(
 
 
 
-@app.on_message(gen("restart"))
+@app.on_message(gen("reboot"))
 async def restart_userbot(_, m: Message):
 	try:
 		msg = await send_edit(
