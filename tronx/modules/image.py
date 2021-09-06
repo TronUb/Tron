@@ -34,7 +34,8 @@ CMD_HELP.update(
 		"stoi [ reply to sticker ]" : "Converts the replied sticker into image.",
 		"itos [ reply to image ]" : "Converts the replied image into sticker.",
 		"qc [ text ]" : "Creates a qr code image.",
-		"colour [ colour name ] [ text ]" : "Creates a colour background image."
+		"colour [ colour name ] [ text ]" : "Creates a colour background image.",
+		"cat" : "Get random cat images.",
 		}
 		)
     }
@@ -230,3 +231,17 @@ async def colour_templates(app, m: Message):
 				m, 
 				"Only 4096 charactes are allowed ! ..."
 				)
+
+
+
+
+@app.on_message(gen("cat"))
+async def get_cat_image(_, m):
+	try: 
+		await app.send_photo(
+			m.chat.id, 
+			"https://cataas.com/cat"
+			)
+	except Exception as e:
+		await print(e)
+		await send_edit(m, "Sorry, No cats found !")
