@@ -220,14 +220,33 @@ async def insult_someone(_, m):
 			question = data.json()[0].get("question")
 			answer = data.json()[0].get("answer")
 			if question and answer:
-				await send_edit(m, f"Question: `{question}`")
-				await app.send_message("me", f"Answer: `{answer}`") # answer in saved messages
+				await send_edit(m, f"Question:\n\n`{question}`")
+				await app.send_message("me", f"Answer:\n\n`{answer}`") # answer in saved messages
 			else:
 				send_edit(m, "No question found !")
 		except Exception as e:
 			await error(m, e)
 	else:
 		return
+
+
+
+
+@app.on_message(gen("wtd"))
+async def insult_someone(_, m):
+	reply = m.reply_to_message
+	try:
+		await send_edit(m, "Finding a activity . . .")
+		data = requests.get(f"http://www.boredapi.com/api/activity/")
+		act = data.json().get("activity")
+		typ = data.json().get("type")
+		if act:
+			await send_edit(m, f"Activity: `{act}`\n\nType: `{typ}`") 
+		else:
+			send_edit(m, "No Activity found !")
+	except Exception as e:
+		await error(m, e)
+
 
 
 
