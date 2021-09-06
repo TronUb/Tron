@@ -217,11 +217,11 @@ async def insult_someone(_, m):
 		try:
 			await send_edit(m, "Finding a question . . .")
 			data = requests.get(f"http://jservice.io/api/random")
-			question = a.json()[0].get("question")
-			answer = a.json()[0].get("answer")
+			question = data.json()[0].get("question")
+			answer = data.json()[0].get("answer")
 			if question and answer:
 				await send_edit(m, f"Question: `{question}`")
-				await app.send_message(m.chat.id, f"Answer: `{answer}`")
+				await app.send_message("me", f"Answer: `{answer}`") # answer in saved messages
 			else:
 				send_edit(m, "No question found !")
 		except Exception as e:
