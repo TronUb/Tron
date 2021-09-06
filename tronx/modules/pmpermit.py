@@ -79,8 +79,8 @@ async def auto_block(_, m: Message):
 		return
 	if m.from_user.is_verified:
 		return
+	user_id = m.chat.id
 	if not db.get_whitelist(user_id) is True:
-		user_id = m.chat.id
 		guest = await app.get_users(user_id)
 		try:
 			await old_msg(app, m, user_id)
