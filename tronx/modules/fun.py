@@ -180,7 +180,7 @@ async def insult_someone(_, m):
 			if _data:
 				await send_edit(m, f"`{_data.get('insult')}`")
 			else:
-				send_edit(m, "No insults found !")
+				await send_edit(m, "No insults found !")
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -202,7 +202,7 @@ async def insult_someone(_, m):
 			if _data:
 				await send_edit(m, f"`{_data}`")
 			else:
-				send_edit(m, "No advice found !")
+				await send_edit(m, "No advice found !")
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -226,7 +226,7 @@ async def insult_someone(_, m):
 				await send_edit(m, f"Question:\n\n`{question}`")
 				await app.send_message("me", f"Answer:\n\n`{answer}`") # answer in saved messages
 			else:
-				send_edit(m, "No question found !")
+				await send_edit(m, "No question found !")
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -245,7 +245,7 @@ async def insult_someone(_, m):
 		if act:
 			await send_edit(m, f"Activity: `{act}`\n\nType: `{typ}`") 
 		else:
-			send_edit(m, "No Activity found !")
+			await send_edit(m, "No Activity found !")
 	except Exception as e:
 		await error(m, e)
 
@@ -263,7 +263,7 @@ async def insult_someone(_, m):
 		if qt and role and show:
 			await send_edit(m, f"Quote: `{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
 		else:
-			send_edit(m, "No movie quotes found !")
+			await send_edit(m, "No movie quotes found !")
 	except Exception as e:
 		await error(m, e)
 
@@ -280,7 +280,7 @@ async def insult_someone(_, m):
 		if one and two:
 			await send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
 		else:
-			send_edit(m, "No jokes found !")
+			await send_edit(m, "No jokes found !")
 	except Exception as e:
 		await error(m, e)
 

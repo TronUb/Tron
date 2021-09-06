@@ -37,6 +37,7 @@ CMD_HELP.update(
 		"qc [ text ]" : "Creates a qr code image.",
 		"colour [ colour name ] [ text ]" : "Creates a colour background image.",
 		"cat" : "Get random cat images.",
+		"waifu" : "Get random waifu images.",
 		}
 		)
     }
@@ -258,3 +259,38 @@ async def get_cat_image(_, m):
 	except Exception as e:
 		await print(e)
 		await send_edit(m, "Sorry, No cats found !")
+
+
+
+
+@app.on_message(gen("waifu"))
+async def insult_someone(_, m):
+	try:
+		await send_edit(m, "Finding a waifu . . .")
+		if long(m) == 1:
+			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
+			photo = data.json().get("url")
+			if photo:
+				await app.send_photo(m.chat.id, photo)
+				await m.delete()
+			else:
+				await send_edit(m, "No waifu found !")
+		elif long(m) > 1 and m.command[1] == "nsfw":
+			data = requests.get(f"https://api.waifu.pics/nsfw/waifu")
+			photo = data.json().get("url")
+			if photo:
+				await app.send_photo("me", photo)
+				await send_edit(m, "The pic was sent in your saved message . . .")
+			else:
+				await send_edit(m, "No waifu found !")
+		elif long(m) > 1 and m.command[1] != "nsfw":
+			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
+			photo = data.json().get("url")
+			if photo:
+				await app.send_photo(m.chat.id, photo)
+				await m.delete()
+			else:
+				await send_edit(m, "No jokes found !")
+	except Exception as e:
+		await error(m, e)
+
