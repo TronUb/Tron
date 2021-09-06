@@ -238,6 +238,7 @@ async def colour_templates(app, m: Message):
 @app.on_message(gen("cat"))
 async def get_cat_image(_, m):
 	try:
+		await m.delete()
 		if long(m) == 1:
 			await app.send_photo(
 				m.chat.id, 

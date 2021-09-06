@@ -250,5 +250,26 @@ async def insult_someone(_, m):
 
 
 
+@app.on_message(gen("mqt"))
+async def insult_someone(_, m):
+	reply = m.reply_to_message
+	try:
+		await send_edit(m, "Finding a movie quotes . . .")
+		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
+		qt = data.json().get("quote")
+		role = data.json().get("role")
+		show = data.json().get("show")
+		if qt and role and show:
+			await send_edit(m, f"Quote: `{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
+		else:
+			send_edit(m, "No movie quotes found !")
+	except Exception as e:
+		await error(m, e)
+
+
+
+
+
+
 
 
