@@ -237,10 +237,21 @@ async def colour_templates(app, m: Message):
 
 @app.on_message(gen("cat"))
 async def get_cat_image(_, m):
-	try: 
-		await app.send_photo(
-			m.chat.id, 
-			"https://cataas.com/cat"
+	try:
+		if long(m) == 1:
+			await app.send_photo(
+				m.chat.id, 
+				"https://cataas.com/cat"
+			)
+		elif long(m) > 1 and m.command[1] == "gif":
+			await app.send_animation(
+				m.chat.id, 
+				"https://cataas.com/cat/gif"
+			)
+		elif long(m) > 1 and m.command[1] != "gif":
+			await app.send_photo(
+				m.chat.id, 
+				"https://cataas.com/cat"
 			)
 	except Exception as e:
 		await print(e)
