@@ -79,62 +79,56 @@ async def auto_block(_, m: Message):
 		return
 	if m.from_user.is_verified:
 		return
-	user_id = m.chat.id
-	guest = await app.get_users(user_id)
-	try:
-		if db.get_whitelist(user_id) is True:
-			return
-		else:
+	if not db.get_whitelist(user_id) is True:
+		user_id = m.chat.id
+		guest = await app.get_users(user_id)
+		try:
 			await old_msg(app, m, user_id)
-			if Config.PMPERMIT_TEXT:
-				msg = await app.send_message(
-						m.chat.id,
-						Config.PMPERMIT_TEXT,
-						disable_web_page_preview=True
-					)
-			elif (Config.PMPERMIT_PIC) and (Config.PMPERMIT_TEXT):
+			if Config.PMPERMIT_PIC:
 				msg = await app.send_video(
 					m.chat.id,
 					Config.PMPERMIT_PIC,
 					caption=Config.PMPERMIT_TEXT,
 					disable_web_page_preview=True
 				)
+			elif not Config.PMPERMIT_PIC:
+				msg = await app.send_message(
+					m.chat.id,
+					Config.PMPERMIT_TEXT,
+					disable_web_page_preview=True
+				)
 			else:
-				pass
+				return print("The bot didn't send pmpermit warning message . . .")
 			users.append(user_id)
 			db.set_msgid(m.chat.id, msg.message_id)
-			if m.from_user:
-				msg = "#pmpermit\n\n"
-				msg += f"Name: `{m.from_user.first_name}`\n"
-				msg += f"Id: `{m.from_user.id}`\n"
-				if m.from_user.username:
-					msg += f"Username: `@{m.from_user.username}`\n"
-				else:
-					msg += f"Username: `None`\n"
-				msg += f"Message: `{m.text}`\n"
-				if users.count(user_id) == Config.PM_LIMIT:
-					await app.block_user(user_id)
+			msg = "#pmpermit\n\n"
+			msg += f"Name: `{m.from_user.first_name}`\n"
+			msg += f"Id: `{m.from_user.id}`\n"
+			if m.from_user.username:
+				msg += f"Username: `@{m.from_user.username}`\n"
+			else:
+				msg += f"Username: `None`\n"
+			msg += f"Message: `{m.text}`\n"
+			if users.count(user_id) == Config.PM_LIMIT:
+				await app.block_user(user_id)
+				await app.send_message(
+					Config.LOG_CHAT,
+					f"{m.from_user.first_name} is now blocked !"
+				)
+			else:
+				try:
 					await app.send_message(
 						Config.LOG_CHAT,
-						f"{m.from_user.first_name} is now blocked !"
-						)
-				else:
-					try:
-						await app.send_message(
-							Config.LOG_CHAT,
-							msg
-						)
-					except PeerIdInvalid:
-						pass
-			else:
-				return
+						msg
+					)
+				except PeerIdInvalid:
+					pass
+	else:
+		return 
 	except Exception as e:
 		await error(m, e)
 
 
-
-# allow 
-#--------------------------------------------------------------------------------------------------------------------
 
 
 @app.on_message(gen(["a", "approve", "pm"]))
@@ -215,10 +209,10 @@ async def revoke_pm_block(app, m:Message):
 	user_name = info.first_name
 	if user_name:
 		db.del_whitelist(user_id)
-		await send_edit(m, f"[{u_name}](tg://user?id={user_id}) has been disapproved for pm!")
+		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) has been disapproved for pm!")
 		await app.send_message(
 			Config.LOG_CHAT, 
-			f"#disallow\n\n[{u_name}](tg://user?id={user_id}) has been disapproved for pm !"
+			f"#disallow\n\n[{user_name}](tg://user?id={user_id}) has been disapproved for pm !"
 		)
 	else:
 		print("Can't disallow this user . . .")
