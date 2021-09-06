@@ -193,11 +193,7 @@ async def insult_someone(_, m):
 		await send_edit(m, "Please reply to someone, so that i can give them a advice . . .")
 	elif reply:
 		try:
-			await send_edit(m, "Insulting . . .")
-			if long(m) == 1:
-				lang = "en"
-			elif long(m) > 1:
-				lang = m.command[1]
+			await send_edit(m, "Finding a good advice . . .")
 			data = requests.get(f"https://api.adviceslip.com/advice")
 			_data = data.json().get("slip").get("advice")
 			if _data:
@@ -208,3 +204,32 @@ async def insult_someone(_, m):
 			await error(m, e)
 	else:
 		return
+
+
+
+
+@app.on_message(gen("qs"))
+async def insult_someone(_, m):
+	reply = m.reply_to_message
+	if not reply:
+		await send_edit(m, "Please reply to someone, so that i can give them a question . . .")
+	elif reply:
+		try:
+			await send_edit(m, "Finding a question . . .")
+			data = requests.get(f"http://jservice.io/api/random")
+			question = a.json()[0].get("question")
+			answer = a.json()[0].get("answer")
+			if question and answer:
+				await send_edit(m, f"Question: `{question}`")
+				await app.send_message(m.chat.id, f"Answer: `{answer}`")
+			else:
+				send_edit(m, "No question found !")
+		except Exception as e:
+			await error(m, e)
+	else:
+		return
+
+
+
+
+
