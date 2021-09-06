@@ -1,7 +1,4 @@
-import os
-import time
-import asyncio
-import qrcode
+import os, time, asyncio, qrcode, requests
 
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
