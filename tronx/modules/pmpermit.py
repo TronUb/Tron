@@ -123,10 +123,10 @@ async def auto_block(_, m: Message):
 					)
 				except PeerIdInvalid:
 					pass
+		except Exception as e:
+			await error(m, e)
 	else:
 		return 
-	except Exception as e:
-		await error(m, e)
 
 
 
