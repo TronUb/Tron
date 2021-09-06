@@ -11,22 +11,21 @@ from tronx import (
 	get_self, 
 	get_bot,
 	add_user,
-	botlise,
 	userlise,
 )
 
 
 
 
-# run until complete
+# create a loop
 loop = asyncio.get_event_loop()
 
 
 
 
 def load_plugins():
+	""" assistant modules """
 	from tronx.plugins import PLUGINS
-	# load assistant modules 
 	print("Loading plugins of [ assistant ], Please wait...\n")
 	for plug in PLUGINS:
 		imported_plugin = importlib.import_module("tronx.plugins." + plug)
@@ -44,8 +43,9 @@ def load_plugins():
 
 
 async def load_modules():
+	""" Userbot modules """
 	from tronx.modules import MODULES
-	# load userbot modules
+
 	print("Loading modules of [ Userbot ], Please wait ...\n")
 	for plug in MODULES:
 		imported_module = importlib.import_module("tronx.modules." + plug)
@@ -64,8 +64,8 @@ async def load_modules():
 
 
 
-# start assistant client
 async def start_assistant():
+	""" Start assistant """
 	if bot:
 		await bot.start()
 		print("Assistant activated, startup in progress ...\n")
@@ -78,6 +78,7 @@ async def start_assistant():
 
 
 async def start_userbot():
+	""" Start userbot """
 	if app:
 		await app.start()
 		print("Userbot activated, startup in progress ...\n")
@@ -89,8 +90,8 @@ async def start_userbot():
 
 
 
-# second startup
 async def start_bot():
+	""" Main startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	print("initialising ...\n\n")
 	await userlise() # first startups
@@ -100,6 +101,6 @@ async def start_bot():
 
 
 
-# run the __main__ file
 if __name__ == '__main__':
+	""" Run as '__main__' """
 	loop.run_until_complete(start_bot())

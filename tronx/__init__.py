@@ -7,6 +7,8 @@ from pyrogram import Client, filters
 from pyrogram.filters import Filter
 from pyrogram.errors import PeerIdInvalid
 
+from typing import Union, List
+
 from telegraph import Telegraph
 
 from config import Config
@@ -52,18 +54,18 @@ StartTime = time.time()
 
 
 
-# This bot is only compatiable with python versions >= 3.9.0
 if sys.version_info[0] < 3 or sys.version_info[1] < 9:
+	""" lower version will produce errors in bot """
 	log.error(
-		"python version 3.9.0 or greater is required, bot quitting !"
+		"python version 3.9.0 or greater is required, bot is quitting !"
 		)
 	quit(1)
 
 
 
 
-# to log errors, mentions, etc
 if not LOG_CHAT:
+	""" log chat are required """
 	log.warning(
 		"LOG_CHAT is important for bots normal working, please fill it."
 		)
@@ -72,8 +74,8 @@ if not LOG_CHAT:
 
 
 
-# time converter 
 def get_readable_time(seconds: int) -> str:
+	""" seconds to readable time converter """
 	count = 0
 	ping_time = ""
 	time_list = []
@@ -100,8 +102,8 @@ def get_readable_time(seconds: int) -> str:
 
 
 
-# get some required information of user
 async def get_self():
+	""" Get self information for later use """
 	global USER_ID, USER_NAME, USER_USERNAME
 	getself = await app.get_me()
 	if getself:
@@ -127,8 +129,8 @@ async def get_self():
 
 
 
-# get some required information of bot
 async def get_bot():
+	""" Get bot information for later use """
 	global BOT_ID, BOT_NAME, BOT_USERNAME
 	if bot:
 		getbot = await bot.get_me()
@@ -149,12 +151,12 @@ async def get_bot():
 
 
 
-# add users
-async def add_user(userid: int, chatid: str):
+async def add_user(user_id: Union[int, List[int]], chat_id: str):
+	""" Add users in groups/channels """
 	try:
 		await app.add_chat_members(
-			chatid, 
-			userid
+			chat_id, 
+			user_id
 			)
 	except Exception as e:
 		print(e)
@@ -218,16 +220,16 @@ async def botlise():
 
 
 
-# userbot active time
 def uptime():
+	""" Bot active time """
 	mytime = get_readable_time(time.time() - StartTime)
 	return mytime
 
 
 
 
-# Userbot
 class tron(Client):
+	""" Userbot """
 	def __init__(self):
 		super().__init__(
 		session_name=Config.SESSION,
@@ -240,8 +242,8 @@ class tron(Client):
 
 
 
-# Assistant
 class lara(Client):
+	""" Assistant """
 	def __init__(self):
 		super().__init__(
 		session_name="lara",
@@ -253,8 +255,8 @@ class lara(Client):
 
 
 
-# assigning decorators
 if Config.SESSION:
+	""" Decorator assignment """
 	app = tron()
 else:
 	app = False
@@ -264,6 +266,7 @@ else:
 
 
 if Config.TOKEN:
+	""" Decorator assignment """
 	bot = lara()
 else:
 	bot = False
