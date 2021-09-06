@@ -38,6 +38,9 @@ CMD_HELP.update(
 		"demorse [reply to message]" : "Convert morse codes into English text messages.",
 		"insult [reply to message]" : "Use it to insult idiots & fools",
 		"advice [reply to message]" : "get a random advice for someone.",
+		"wtd" : "what to do when you are bored ?, finds a activity for you.",
+		"mqt" : "Finds some movie quotes for you.",
+		"joke" : "Get some daddy jokes.",
 		}
 		)
 	}
@@ -234,7 +237,6 @@ async def insult_someone(_, m):
 
 @app.on_message(gen("wtd"))
 async def insult_someone(_, m):
-	reply = m.reply_to_message
 	try:
 		await send_edit(m, "Finding a activity . . .")
 		data = requests.get(f"http://www.boredapi.com/api/activity/")
@@ -252,9 +254,8 @@ async def insult_someone(_, m):
 
 @app.on_message(gen("mqt"))
 async def insult_someone(_, m):
-	reply = m.reply_to_message
 	try:
-		await send_edit(m, "Finding a movie quotes . . .")
+		await send_edit(m, "Finding a movie quote . . .")
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
 		qt = data.json().get("quote")
 		role = data.json().get("role")
@@ -269,7 +270,17 @@ async def insult_someone(_, m):
 
 
 
-
-
-
+@app.on_message(gen("joke"))
+async def insult_someone(_, m):
+	try:
+		await send_edit(m, "Finding a joke . . .")
+		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
+		one = data.json().get("setup")
+		two = data.json().get("punchline")
+		if one and two:
+			await send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
+		else:
+			send_edit(m, "No jokes found !")
+	except Exception as e:
+		await error(m, e)
 
