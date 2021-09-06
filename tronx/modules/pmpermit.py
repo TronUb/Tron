@@ -73,7 +73,7 @@ async def old_msg(app: Client, m: Message, user_id):
 
 
 #autoblock
-@app.on_message(filters.private & (~filters.me & ~filters.bot), group=3)
+@app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
 	if not Config.PMPERMIT:
 		return
