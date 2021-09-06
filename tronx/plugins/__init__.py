@@ -7,7 +7,7 @@ def __list_all_plugins():
 	""" load plugins """
 	from os.path import dirname, basename, isfile
 	import glob
-.
+
 	mod_paths = glob.glob(dirname(__file__) + "/*.py")
 	all_plugins = [
 		basename(f)[:-3]
