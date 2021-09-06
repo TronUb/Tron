@@ -25,3 +25,4 @@ search-engine-parser
 opencv-python
 qrcode
 git+https://github.com/Joeclinton1/google-images-download.git
+pokemontcgsdk
