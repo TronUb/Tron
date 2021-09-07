@@ -138,7 +138,7 @@ async def auto_block(_, m: Message):
 					try:
 						await app.send_message(
 							Config.LOG_CHAT,
-							f"{user.first_name} is now blocked for spamming !")
+							f"{user.first_name} is now blocked for spamming !"
 						)
 					except PeerIdInvalid:
 						pass
