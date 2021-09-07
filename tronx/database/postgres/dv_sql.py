@@ -17,7 +17,7 @@ from . import SESSION, BASE
 class data(BASE):
 	__tablename__ = "database_var"
 	
-	keys = Column(String)
+	keys = Column(String, primary_key=True)
 	values = Column(String)
 	
 	def __init__(self, keys, values):
