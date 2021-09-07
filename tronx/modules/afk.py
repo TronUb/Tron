@@ -30,7 +30,10 @@ from tronx.helpers import (
 	Types, 
 	get_message_type,
 	get_readable_time,
+	long,
 )
+
+from tronx.database.postgres import dv_sql as db
 
 
 
@@ -62,7 +65,7 @@ DELAY_TIME = 60 # seconds
 
 @app.on_message(gen("afk") & filters.user(SUDO_USERS))
 async def go_offline(_, m: Message):
-	if len(m.text.split()) >= 2:
+	if long(m) >= 2:
 		try:
 			start = int(time.time())
 			set_afk(True, m.text.split(None, 1)[1], start) # with reason
@@ -74,7 +77,16 @@ async def go_offline(_, m: Message):
 	else:
 		try:
 			start = int(time.time())
-			set_afk(True, "", start) # without reason
+			if db.getdv("AFK_TEXT")
+				reason = db.getdv("AFK_TEXT")
+			elif Config.AFK_TEXT:
+				reason = Config.AFK_TEXT
+			else:
+				reason = False
+			if reason:
+				set_afk(True, reason, start)
+			elif not reason:
+				set_afk(True, "", start) # without reason
 			await send_edit(
 				m, 
 				"{} is now offline.".format(mymention())
@@ -87,7 +99,7 @@ async def go_offline(_, m: Message):
 
 # notify mentioned users
 @app.on_message(filters.mentioned & filters.incoming & ~filters.chat(str(Config.LOG_CHAT)) & ~filters.bot, group=12)
-async def offline_mention(app, m: Message):
+async def offline_mention(_, m: Message):
 	try:
 		if m.chat.id == Config.LOG_CHAT:
 			return
@@ -151,7 +163,7 @@ async def offline_mention(app, m: Message):
 
 # come back online
 @app.on_message(filters.me & ~filters.chat(Config.LOG_CHAT), group=13)
-async def back_online(app, m: Message):
+async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
 		if m.text:

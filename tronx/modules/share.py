@@ -27,6 +27,8 @@ from tronx.helpers import (
 	mention_markdown,
 )
 
+from tronx.database.postgres import dv_sql as dv
+
 
 
 
@@ -60,6 +62,8 @@ async def send_modules(app, m: Message):
 				)
 			if thumb_image:
 				thumb_pic = thumb_image
+			elif not thumb_image and dv.getdv("THUMB_PIC"):
+				thumb_pic = dv.getdv("THUMB_PIC")
 			else:
 				thumb_pic = Config.THUMB_PIC
 			start = time.time()

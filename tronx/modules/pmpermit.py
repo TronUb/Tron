@@ -18,8 +18,6 @@ from tronx import (
 	PREFIX
 	)
 
-from tronx.database.postgres import pmpermit_sql as db
-
 from tronx.helpers import (
 	gen,
 	error,
@@ -28,6 +26,10 @@ from tronx.helpers import (
 	mention_markdown, 
 	extract_user,
 )
+
+from tronx.database.postgres import dv_sql as dv
+
+from tronx.database.postgres import pmpermit_sql as db
 
 
 
@@ -75,18 +77,28 @@ async def old_msg(app: Client, m: Message, user_id):
 
 
 async def send_warn(app: Client, m: Message, user):
-	global msg
-	if Config.PMPERMIT_PIC:
+	""" Send warning messages """
+	if dv.getdv("PMPERMIT_PIC"):
+		pic = dv.getdv("PMPERMIT_PIC")
+	elif Config.PMPERMIT_PIC:
+		pic = Config.PMPERMIT_PIC
+
+	if dv.getdv("PMPERMIT_TEXT"):
+		text = dv.getdv("PMPERMIT_TEXT")
+	elif Config.PMPERMIT_TEXT:
+		text = Config.PMPERMIT_TEXT
+
+	if pic:
 		msg = await app.send_video(
 			m.chat.id,
-			Config.PMPERMIT_PIC,
+			text,
 			caption=Config.PMPERMIT_TEXT,
 			disable_web_page_preview=True
 		)
-	elif not Config.PMPERMIT_PIC:
+	elif not pic:
 		msg = await app.send_message(
 			m.chat.id,
-			Config.PMPERMIT_TEXT,
+			text,
 			disable_web_page_preview=True
 			)
 	else:
@@ -108,6 +120,11 @@ async def auto_block(_, m: Message):
 	if bool(db.get_whitelist(m.chat.id)) is False:
 		user = await app.get_users(m.chat.id)
 		try:
+			if dv.getdv("PM_LIMIT"):
+				pmlimit = dv.getdv("PM_LIMIT")
+			elif Config.PM_LIMIT:
+				pmlimit = Config.PM_LIMIT
+
 			await old_msg(app, m, user.id)
 			# log user info to log chat
 			msg = "#pmpermit\n\n"
@@ -125,7 +142,7 @@ async def auto_block(_, m: Message):
 				await send_warn(app, m, user.id)
 			elif (
 				bool(warn) is True 
-				and int(warn) < Config.PM_LIMIT
+				and int(warn) < pmlimit
 				):
 				db.set_warn(user.id, int(warn) + 1)
 				await send_warn(app, m, user.id)

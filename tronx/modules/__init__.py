@@ -6,16 +6,6 @@ from tronx import USER_ID
 
 
 
-# -----
-GUEST = int(os.environ.get("SUDO_USERS", USER_ID))
-
-if len(str(GUEST)) == 1 and GUEST == USER_ID:
-	SUDO_USERS = [USER_ID]
-else:
-	SUDO_USERS = [GUEST] + [USER_ID]
-# -----
-
-
 
 # -----
 def __list_all_plugins():
@@ -35,6 +25,14 @@ MODULES = sorted(__list_all_plugins())
 __all__ = MODULES + ["MODULES"]
 # -----
 
+
+
+if bool(dv.getdv("SUDO_USERS")):
+	SUDO_USERS = dv.getdv("SUDO_USERS")
+elif Config.SUDO_USERS is not None:
+	SUDO_USERS = Config.SUDO_USERS
+elif bool(dv.getdv("SUDO_USERS")) is False:
+	SUDO_USERS = None
 
 
 

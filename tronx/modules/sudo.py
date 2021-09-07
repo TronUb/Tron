@@ -12,6 +12,10 @@ from tronx.helpers import (
 	send_edit,
 )
 
+from . import SUDO_USERS
+
+from tronx.database.postgres import dv_sql as dv
+
 
 
 
@@ -25,9 +29,18 @@ async def add_sudo(_, m: Message):
 			)
 		return
 	else:
-		sudos = os.environ.get("SUDO_USERS")
-		if sudos == None:
-			os.environ["SUDO_USERS"] = str([replied.from_user.id])
+		if SUDO_USERS is None:
+			sudo_id = [replied.id]
+			done = dv.setdv("SUDO_USERS", sudo_id)
+			if done:
+				await send_edit(m, f"Added {replied.first_name} in sudo list."
+				)  
+		elif SUDO_USERS != None:
+			sudo_id = [dv.getdv("SUDO_USERS")] + [replied.id]
+			done = dv.setdb("SUDO_USERS", sudo_id)
+			if done:
+				await send_edit(m, f"Added {replied.first_name} in sudo list."
+				)
 		else:
-			os.environ["SUDO_USERS"] = str([sudos, replied.from_user.id])
-		await send_edit(m, f"Added {replied.from_user.first_name} as sudo !")
+			await send_edit(m, "Currently i am unable to add this user in list . . ." 
+			)

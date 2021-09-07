@@ -169,3 +169,8 @@ async def create_file(m: Message, app: Client, filename, text):
 	return
 
 
+
+
+def rem_dual(one, two):
+	data = list(set(one) - set(two))
+	return data

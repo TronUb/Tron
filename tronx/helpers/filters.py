@@ -20,6 +20,7 @@ from pyrogram.types import (
 )
 
 from tronx.modules import SUDO_USERS
+
 from tronx import (
 	PREFIX
 )
@@ -85,6 +86,7 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 		# works only for you 
 		if ( message.from_user 
 			and message.from_user.id in SUDO_USERS
+			and message.from_user.is_self
 			and not message.forward_date
 			#and not message.chat.type == "channel"
 			):
