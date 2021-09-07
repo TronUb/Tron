@@ -70,14 +70,14 @@ async def alive(app, m: Message):
 		if (pic) and (pic.endswith(".mp4" or ".mkv" or ".gif")):
 			await app.send_video(
 				m.chat.id, 
-				Config.USER_PIC, 
+				pic, 
 				caption=alive_msg, 
 				parse_mode="markdown"
 				)
 		elif (pic) and (pic.endswith(".jpg" or ".jpeg" or ".png")):
 			await app.send_photo(
 				m.chat.id, 
-				Config.USER_PIC, 
+				pic, 
 				caption=alive_msg, 
 				parse_mode="markdown"
 				)
