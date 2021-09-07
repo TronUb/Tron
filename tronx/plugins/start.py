@@ -63,9 +63,9 @@ from tronx.database.postgres import dv_sql as dv
 
 def _ialive_pic():
 	if dv.getdv("USER_PIC"):
-		pic = db.getdv("USER_PIC")
-	elif Config.USER_PIC:
 		pic = dv.getdv("USER_PIC")
+	elif Config.USER_PIC:
+		pic = Config.USER_PIC
 	return pic
 
 
