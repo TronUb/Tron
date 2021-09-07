@@ -77,7 +77,7 @@ async def go_offline(_, m: Message):
 	else:
 		try:
 			start = int(time.time())
-			if db.getdv("AFK_TEXT")
+			if db.getdv("AFK_TEXT"):
 				reason = db.getdv("AFK_TEXT")
 			elif Config.AFK_TEXT:
 				reason = Config.AFK_TEXT
