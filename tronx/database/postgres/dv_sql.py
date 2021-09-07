@@ -40,10 +40,10 @@ def setdv(keys, values):
 		mydata = SESSION.query(data).get(keys)
 		try:
 			if not mydata:
-				user = data(keys, values)
+				mydata = data(keys, values)
 			else:
-				user.values = str(values)
-			SESSION.add(user)
+				mydata.values = values
+			SESSION.merge(mydata)
 			SESSION.commit()
 		finally:
 			SESSION.close()
@@ -70,7 +70,7 @@ def getdv(keys):
 	mydata = SESSION.query(data).get(keys)
 	rep = ""
 	if mydata:
-		rep = str(mydata.value)
+		rep = str(mydata.values)
 	SESSION.close()
 	return rep
 
