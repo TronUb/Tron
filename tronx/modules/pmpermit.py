@@ -117,6 +117,7 @@ async def auto_block(_, m: Message):
 			elif db.get_warn != None and db.get_warn(user_id) >= 0:
 				warn = int(db.get_warn(user_id)) + 1
 				db.set_warn(user_id, warn)
+			print("Reached at the warn line")
 			try:
 				await app.send_message(
 					Config.LOG_CHAT,
