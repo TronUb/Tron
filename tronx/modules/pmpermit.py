@@ -59,6 +59,8 @@ def remove(duplicate):
 	return userlist
 
 
+
+
 async def old_msg(app: Client, m: Message, user_id):
 	if bool(db.get_msgid(user_id)) is True:
 		old_msgs = db.get_msgid(user_id)
@@ -72,59 +74,79 @@ async def old_msg(app: Client, m: Message, user_id):
 
 
 
+async def send_warn(app: Client, m: Message, user):
+	global msg
+	if Config.PMPERMIT_PIC:
+		msg = await app.send_video(
+			m.chat.id,
+			Config.PMPERMIT_PIC,
+			caption=Config.PMPERMIT_TEXT,
+			disable_web_page_preview=True
+		)
+	elif not Config.PMPERMIT_PIC:
+		msg = await app.send_message(
+			m.chat.id,
+			Config.PMPERMIT_TEXT,
+			disable_web_page_preview=True
+			)
+	else:
+		return print("The bot didn't send pmpermit warning message . . .")
+	db.set_msgid(user, msg.id)
+
+
+
+
 #autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
-	if not Config.PMPERMIT or m.from_user.is_verified:
+	if (
+		not Config.PMPERMIT 
+		or m.from_user.is_verified
+		or m.from_user.is_bot
+		):
 		return
-	user_id = m.chat.id
-	if db.get_whitelist(user_id) is False:
-		guest = await app.get_users(user_id)
+	if bool(db.get_whitelist(m.chat.id)) is False:
+		user = await app.get_users(m.chat.id)
 		try:
-			await old_msg(app, m, user_id)
-			if Config.PMPERMIT_PIC:
-				msg = await app.send_video(
-					m.chat.id,
-					Config.PMPERMIT_PIC,
-					caption=Config.PMPERMIT_TEXT,
-					disable_web_page_preview=True
-				)
-			elif not Config.PMPERMIT_PIC:
-				msg = await app.send_message(
-					m.chat.id,
-					Config.PMPERMIT_TEXT,
-					disable_web_page_preview=True
-				)
-			else:
-				return print("The bot didn't send pmpermit warning message . . .")
-			db.set_msgid(m.chat.id, msg.message_id)
+			await old_msg(app, m, user.id)
+			# log user info to log chat
 			msg = "#pmpermit\n\n"
-			msg += f"Name: `{m.from_user.first_name}`\n"
-			msg += f"Id: `{m.from_user.id}`\n"
-			if m.from_user.username:
-				msg += f"Username: `@{m.from_user.username}`\n"
+			msg += f"Name: `{user.first_name}`\n"
+			msg += f"Id: `{user.id}`\n"
+			if user.username:
+				msg += f"Username: `@{user.username}`\n"
 			else:
 				msg += f"Username: `None`\n"
 			msg += f"Message: `{m.text}`\n"
-			if int(db.get_warn(user_id)) > Config.PM_LIMIT:
-				await app.block_user(user_id)
-				await app.send_message(
-					Config.LOG_CHAT,
-					f"{m.from_user.first_name} is now blocked !"
-				)
-			elif db.get_warn(user_id) == None:
-				db.set_warn(user_id, 1)
-			elif db.get_warn != None and db.get_warn(user_id) >= 0:
-				warn = int(db.get_warn(user_id)) + 1
-				db.set_warn(user_id, warn)
-			print("Reached at the warn line")
-			try:
-				await app.send_message(
-					Config.LOG_CHAT,
-					msg
-				)
-			except PeerIdInvalid:
-				pass
+
+			warn = db.get_warn(user.id)
+			if bool(warn) is False or True:
+				db.set_warn(user.id, 1)
+				await send_warn(app, m, user.id)
+			elif (
+				bool(warn) is True 
+				and int(warn) < Config.PM_LIMIT
+				):
+				db.set_warn(user.id, int(warn) + 1)
+				await send_warn(app, m, user.id)
+			elif (
+				bool(warn) is True 
+				and int(warn) > Config.PM_LIMIT
+				):
+				done = await app.block_user(user.id)
+				if done:
+					try:
+						await app.send_message(
+							Config.LOG_CHAT,
+							f"{user.first_name} is now blocked for spamming !")
+						)
+					except PeerIdInvalid:
+						pass
+				else:
+					print("Failed to block user in private chat.")
+			else:
+				return
+
 		except Exception as e:
 			await error(m, e)
 	else:

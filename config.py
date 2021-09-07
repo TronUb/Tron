@@ -39,7 +39,7 @@ class Config(object):
 	# add True to enable (default: False)
 	PMPERMIT = os.getenv("PMPERMIT", False)
 	# pmpermit pic 
-	PMPERMIT_PIC = os.getenv("PMPERMIT_PIC", None)
+	PMPERMIT_PIC = os.getenv("PMPERMIT_PIC", False)
 	# custom  pmpermit security text (optional)
 	PMPERMIT_TEXT = os.getenv("PMPERMIT_TEXT", "Hey ! This is [Tron Userbot](https://t.me/tronuserbot) Security System.\n**You will be blocked if you spammed my owner's pm**\nCurrently My Owner is busy! So Wait Until He Arrives. 👍🏻\nAnd Better Not To Spam His here!")
 	# pmpermit warn limit
