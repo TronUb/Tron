@@ -21,7 +21,7 @@ from tronx.database.postgres import dv_sql as dv
 
 @app.on_message(gen("addsudo"))
 async def add_sudo(_, m: Message):
-	replied = m.reply_to_message
+	replied = m.reply_to_message.from_user
 	if not replied:
 		await send_edit(
 			m, 
