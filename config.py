@@ -37,7 +37,7 @@ class Config(object):
 	AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Now !")
 # ------------------
 	# add True to enable (default: False)
-	PMPERMIT = os.getenv("PMPERMIT", True)
+	PMPERMIT = os.getenv("PMPERMIT", False)
 	# pmpermit pic 
 	PMPERMIT_PIC = os.getenv("PMPERMIT_PIC", None)
 	# custom  pmpermit security text (optional)

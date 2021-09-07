@@ -75,9 +75,7 @@ async def old_msg(app: Client, m: Message, user_id):
 #autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
-	if not Config.PMPERMIT:
-		return
-	if m.from_user.is_verified:
+	if not Config.PMPERMIT or m.from_user.is_verified:
 		return
 	user_id = m.chat.id
 	if not db.get_whitelist(user_id) is True:
