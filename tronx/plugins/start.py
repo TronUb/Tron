@@ -55,7 +55,7 @@ from tronx.helpers import (
 	build_keyboard,
 )
 
-from tronx.database.postgres import pmpermit_sql as db, 
+from tronx.database.postgres import pmpermit_sql as db
 from tronx.database.postgres import dv_sql as dv
 
 
