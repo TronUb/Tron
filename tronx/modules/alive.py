@@ -22,6 +22,8 @@ from tronx.helpers import (
 	BOT_USERNAME,
 )
 
+from tronx.database.postgres import dv_sql as db
+
 
 
 
@@ -47,7 +49,12 @@ async def alive(app, m: Message):
 	try:
 		await send_edit(m, "...")
 
-		alive_msg = f"⦿ {Config.USER_BIO}\n\n"
+		if db.getdv("USER_BIO"):
+			BIO = db.getdv("USER_BIO")
+		elif Config.USER_BIO:
+			BIO = Config.USER_BIO
+
+		alive_msg = f"⦿ {BIO}\n\n"
 		alive_msg += f"⟜ **Owner:** {mymention()}\n"
 		alive_msg += f"⟜ **Tron:** `{version}`\n"
 		alive_msg += f"⟜ **Python:** `{__python_version__}`\n"

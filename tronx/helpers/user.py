@@ -8,13 +8,16 @@ from tronx import (
 
 from tronx.helpers.utils import mention_markdown
 
+from tronx.database.postgres import dv_sql as db
 
 
 
 
 # my name
 def myname():
-	if Config.USER_NAME:
+	if db.getdv("USER_NAME"):
+		name = db.getdv("USER_NAME")
+	elif Config.USER_NAME:
 		name = Config.USER_NAME
 	elif USER_NAME:
 		name = USER_NAME
