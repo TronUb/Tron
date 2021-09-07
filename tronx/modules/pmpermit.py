@@ -78,7 +78,7 @@ async def auto_block(_, m: Message):
 	if not Config.PMPERMIT or m.from_user.is_verified:
 		return
 	user_id = m.chat.id
-	if not db.get_whitelist(user_id) is True:
+	if db.get_whitelist(user_id) is False:
 		guest = await app.get_users(user_id)
 		try:
 			await old_msg(app, m, user_id)
@@ -97,7 +97,6 @@ async def auto_block(_, m: Message):
 				)
 			else:
 				return print("The bot didn't send pmpermit warning message . . .")
-			users.append(user_id)
 			db.set_msgid(m.chat.id, msg.message_id)
 			msg = "#pmpermit\n\n"
 			msg += f"Name: `{m.from_user.first_name}`\n"
@@ -107,20 +106,24 @@ async def auto_block(_, m: Message):
 			else:
 				msg += f"Username: `None`\n"
 			msg += f"Message: `{m.text}`\n"
-			if users.count(user_id) == Config.PM_LIMIT:
+			if int(db.get_warn(user_id)) > Config.PM_LIMIT:
 				await app.block_user(user_id)
 				await app.send_message(
 					Config.LOG_CHAT,
 					f"{m.from_user.first_name} is now blocked !"
 				)
-			else:
-				try:
-					await app.send_message(
-						Config.LOG_CHAT,
-						msg
-					)
-				except PeerIdInvalid:
-					pass
+			elif db.get_warn(user_id) == None:
+				db.set_warn(user_id, 1)
+			elif db.get_warn != None and db.get_warn(user_id) >= 0:
+				warn = int(db.get_warn(user_id)) + 1
+				db.set_warn(user_id, warn)
+			try:
+				await app.send_message(
+					Config.LOG_CHAT,
+					msg
+				)
+			except PeerIdInvalid:
+				pass
 		except Exception as e:
 			await error(m, e)
 	else:
