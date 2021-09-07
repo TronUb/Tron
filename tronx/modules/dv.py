@@ -56,16 +56,10 @@ async def del_dv_var(_, m: Message):
 	elif long(m) > 1:
 		key = m.command[1]
 		done = db.deldv(key)
-		if done:
-			await send_edit(
-				m, 
-				f"Successfully deleted key = `{key}`"
-				)   
-		elif not done:
-			await send_edit(
-				m, 
-				"Failed to a delete key & value from database var . . ."
-				)
+		await send_edit(
+			m, 
+			f"Successfully deleted key = `{key}`"
+		)   
 	else:
 		await send_edit(
 			m, 
@@ -93,7 +87,7 @@ async def get_dv_var(_, m: Message):
 		elif not done:
 			await send_edit(
 				m, 
-				"Failed to a get key & value from database var . . ."
+				"This var doesn't exist in my database . . ."
 				)
 	else:
 		await send_edit(
