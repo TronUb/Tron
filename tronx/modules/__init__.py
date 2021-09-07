@@ -4,6 +4,8 @@ from pyrogram.types import Message
 
 from tronx import USER_ID
 
+from tronx.database.postgres import dv_sql as dv
+
 
 
 
