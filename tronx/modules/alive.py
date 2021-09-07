@@ -55,9 +55,9 @@ async def alive(app, m: Message):
 		alive_msg += f"⟜ **Uptime:** {uptime()}\n\n"
 
 		await m.delete()
-		if db.getdv("USER_PIC")
+		if db.getdv("USER_PIC"):
 			pic = db.getdv("USER_PIC")
-		elif Config.USER_PIC
+		elif Config.USER_PIC:
 			pic = Config.USER_PIC
 
 		if (pic) and (pic.endswith(".mp4" or ".mkv" or ".gif")):
