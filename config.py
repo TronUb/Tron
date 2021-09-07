@@ -67,7 +67,7 @@ class Config(object):
 # ---------------------
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
 	# sudo users can use your bot too
-	SUDO_USERS = os.getenv("SUDO_USERS")
+	SUDO_USERS = os.getenv("SUDO_USERS", None)
 
 
 
