@@ -55,7 +55,19 @@ from tronx.helpers import (
 	build_keyboard,
 )
 
-from tronx.database.postgres import pmpermit_sql as db
+from tronx.database.postgres import pmpermit_sql as db, 
+from tronx.database.postgres import dv_sql as dv
+
+
+
+
+def _ialive_pic():
+	if dv.getdv("USER_PIC"):
+		pic = db.getdv("USER_PIC")
+	elif Config.USER_PIC:
+		pic = dv.getdv("USER_PIC")
+	return pic
+
 
 
 
@@ -180,7 +192,7 @@ def answer(client, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=Config.BOT_PIC,
+				photo_url=_ialive_pic(),
 				title="Ialive query",
 				description="Tron helpdex",
 				caption=f"⛊  Inline Status:\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{version}`\n**⟜ Python:** `{__python_version__}`\n⟜ **Pyrogram:** `{__pyro_version__}`\n⟜ **uptime:** `{uptime()}\n\n",
