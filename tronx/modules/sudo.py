@@ -36,7 +36,7 @@ async def add_sudo(_, m: Message):
 				await send_edit(m, f"Added {replied.first_name} in sudo list."
 				)  
 		elif SUDO_USERS != None:
-			sudo_id = [dv.getdv("SUDO_USERS")] + [int(replied.id)]
+			sudo_id = [int(dv.getdv("SUDO_USERS"))] + [int(replied.id)]
 			done = dv.setdv("SUDO_USERS", sudo_id)
 			if done:
 				await send_edit(m, f"Added {replied.first_name} in sudo list."
