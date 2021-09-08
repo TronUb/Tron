@@ -31,11 +31,11 @@ __all__ = MODULES + ["MODULES"]
 
 
 
-if dv.getdv("SUDO_USERS") is True:
+if bool(dv.getdv("SUDO_USERS")) is True:
 	SUDO_USERS = [int(dv.getdv("SUDO_USERS"))] + [USER_ID]
 elif Config.SUDO_USERS is not None:
 	SUDO_USERS = [Config.SUDO_USERS] + [USER_ID]
-elif dv.getdv("SUDO_USERS") is False:
+elif bool(dv.getdv("SUDO_USERS")) is False:
 	SUDO_USERS = [USER_ID]
 
 
