@@ -94,7 +94,6 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 		# works only for you 
 		if ( message.from_user 
 			and message.from_user.id == USER_ID
-			or message.from_user.id in SUDO_USERS
 			and not message.forward_date
 			#and not message.chat.type == "channel"
 			):
