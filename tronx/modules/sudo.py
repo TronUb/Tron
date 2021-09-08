@@ -29,18 +29,12 @@ async def add_sudo(_, m: Message):
 			)
 		return
 	else:
-		if SUDO_USERS is None:
+		if SUDO_USERS != None:
 			sudo_id = [int(replied.id)]
 			done = dv.setdv("SUDO_USERS", sudo_id)
 			if done:
-				await send_edit(m, f"Added {replied.first_name} in sudo list."
-				)  
-		elif SUDO_USERS != None:
-			sudo_id = [int(dv.getdv("SUDO_USERS"))] + [int(replied.id)]
-			done = dv.setdv("SUDO_USERS", sudo_id)
-			if done:
-				await send_edit(m, f"Added {replied.first_name} in sudo list."
-				)
-		else:
-			await send_edit(m, "Currently i am unable to add this user in list . . ." 
-			)
+				await send_edit(
+					m, f"Added {replied.first_name} to sudo !"
+					)
+			elif not done:
+				await send_edit(m, "Failed to add sudo !")
