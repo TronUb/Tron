@@ -20,6 +20,7 @@ from pyrogram.types import (
 )
 
 from tronx.modules import SUDO_USERS
+from tronx import USER_ID
 
 from tronx import (
 	PREFIX
