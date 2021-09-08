@@ -85,40 +85,43 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 		# Username shared among all commands; used for mention commands, e.g.: /start@username
 		global username
 		# works only for you 
-		if ( message.from_user 
+		if ( message.from_user
 			and message.from_user.id == USER_ID
-			or message.from_user.id in SUDO_USERS
 			and not message.forward_date
 			#and not message.chat.type == "channel"
 			):
-
-			text = message.text or message.caption
-			message.command = None
-
-			if not text:
-				return False
-
-			for prefix in flt.prefixes:
-				if not text.startswith(prefix):
-					continue
-
-				without_prefix = text[len(prefix):]
-
-				username = None
-
-				for cmd in flt.commands:
-					if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
-						flags=re.IGNORECASE if not flt.case_sensitive else 0):
+			if (message.from_user.id != None 
+				and message.from_user.id in SUDO_USERS
+				):
+				text = message.text or message.caption
+				message.command = None
+	
+				if not text:
+					return False
+	
+				for prefix in flt.prefixes:
+					if not text.startswith(prefix):
 						continue
-
-					without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
-
-					message.command = [cmd] + [
-						re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
-						for m in command_re.finditer(without_command)
-					]
-					return True
-			return False
+	
+					without_prefix = text[len(prefix):]
+	
+					username = None
+	
+					for cmd in flt.commands:
+						if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
+							flags=re.IGNORECASE if not flt.case_sensitive else 0):
+							continue
+	
+						without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
+	
+						message.command = [cmd] + [
+							re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
+							for m in command_re.finditer(without_command)
+						]
+						return True
+				return False
+			else:
+				return
 		else:
 			return
 
