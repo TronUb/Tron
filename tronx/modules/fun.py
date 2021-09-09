@@ -29,8 +29,7 @@ CMD_HELP.update(
 	{"fun" : (
 		"fun",
 		{
-		"sw [text]" : "Switch words or sentences into japanese alphabets",
-		"switch [text]" : "Switch words or Sentence Into Japanese Alphabets.",
+		"cap [text]" : "Convert a paragraph into capital.",
 		"slap [reply to user]" : "Slap your friends with amazing items.",
 		"type [text]" : "Retype words with animation, just try and understand, Don't Use too much.",
 		"score [firstname] [secondname]" : "Check love bond between two users.",

@@ -49,6 +49,7 @@ async def evaluate(app, m):
 			m, 
 			"Give me some code to execute ..."
 			)
+		await delete(m, 3)
 		return
 	await send_edit(m, "`Running ...`")
 	reply_to_id = m.message_id
@@ -98,7 +99,7 @@ async def evaluate(app, m):
 @app.on_message(gen("term"))
 async def terminal(app, m):
 	if len(m.text.split()) == 1:
-		await send_edit(m, "Use: `.term pip3 install pyrogram`")
+		await send_edit(m, "Use: `.term pip3 install colorama`")
 		return
 	await send_edit(m, "`Running ...`")
 	args = m.text.split(None, 1)

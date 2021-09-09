@@ -43,7 +43,8 @@ async def send_edit(
 	m: Message, 
 	text, 
 	parse_mode="markdown", 
-	disable_web_page_preview=False
+	disable_web_page_preview=False,
+	delme : int = 0
 	):
 	try:
 		await m.edit(text)
@@ -52,6 +53,14 @@ async def send_edit(
 			m.chat.id,
 			text
 			)
+	try:
+		if delme and deleme != 0:
+			time.sleep(delme)
+			await m.delete()
+		else:
+			pass
+	except Exception as e:
+		await error(m, e)
 
 
 # send msg
@@ -118,8 +127,9 @@ async def private(m : Message, arg=True):
 	if m.chat.type == "private":
 		await send_edit(
 			m, 
-			"Please use this command in group . . ."
+			"Please use these commands in groups . . ."
 			)
+		await delete(m, 3)
 		if arg:
 			return
 		else:

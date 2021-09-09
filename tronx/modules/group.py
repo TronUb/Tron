@@ -18,6 +18,7 @@ from tronx.helpers import (
 	error,
 	gen,
 	send_edit,
+	long,
 )
 
 
@@ -39,12 +40,9 @@ CMD_HELP.update(
 
 
 @app.on_message(gen("bgroup"))
-async def create_basicgroup(_, m: Message):
-	if len(m.command) < 2:
-		await send_edit(
-			m, 
-			f"`Usage: {PREFIX}group [group name]`"
-			)
+async def create_basic_group(_, m: Message):
+	if long(m) < 2:
+		await send_edit(m, f"`Usage: {PREFIX}group [group name]`", delme=3)
 		return
 	args = m.text.split(None, 1)
 	grpname = args[1]
@@ -61,10 +59,7 @@ async def create_basicgroup(_, m: Message):
 			except Exception as e:
 				await error(m, e)
 				return
-			await send_edit(
-				m, 
-				f"**Created new Basic group:** `{grpname}`"
-				)
+			await send_edit(m, f"**Created new Basic group:** `{grpname}`")
 	except Exception as e:
 		await error(m, e)
 
@@ -74,10 +69,7 @@ async def create_basicgroup(_, m: Message):
 @app.on_message(gen("sgroup"))
 async def create_supergroup(_, m: Message):
 	if len(m.command) < 1:
-		await send_edit(
-			m, 
-			f"`Usage: {PREFIX}sgroup [group name]`"
-			)
+		await send_edit(m, f"`Usage: {PREFIX}sgroup [group name]`", delme=3)
 		return
 	args = m.text.split(None, 1)
 	grpname = args[1]
@@ -86,10 +78,7 @@ async def create_supergroup(_, m: Message):
 	try:
 		if grptype == "super":
 			try:
-				await send_edit(
-					m, 
-					f"Creating a Super Group: `{grpname}`"
-					)
+				await send_edit(m, f"Creating a Super Group: `{grpname}`")
 				await app.create_group(
 					f"{grpname}", user_id
 					)
@@ -113,9 +102,11 @@ async def mark_chat_unread(_, m: Message):
 			m.delete(),
 			app.send(
 				functions.messages.MarkDialogUnread(
-					peer=await app.resolve_peer(m.chat.id), unread=True
+					peer=await app.resolve_peer(m.chat.id), 
+					unread=True
 				)
 			),
 		)
 	except Exception as e:
 		await error(m, e)
+	

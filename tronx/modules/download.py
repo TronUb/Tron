@@ -32,6 +32,7 @@ from tronx.helpers import (
 	is_thumb_image_exists, 
 	clear_string, 
 	get_directory_size,
+	delete,
 )
 
 
@@ -273,6 +274,7 @@ async def covid(c: app, m: Message):
 			m, 
 			"`Give me a location to upload files from the directory ...`"
 			)
+		await delete(m, 3)
 		return
 	elif len(m.text.split()) >= 2:
 		temp_dir = m.text.split(None, 1)[1]

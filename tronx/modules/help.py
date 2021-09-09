@@ -60,31 +60,18 @@ async def help_menu(app, m):
 					hide_via=True
 				)
 			else:
-				await send_edit(
-					m, 
-					"Please check your bots inline mode is on or not ..."
-					)
+				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3)
 			return
 		elif args:
 			plugin_data.clear()
 			module_help = await data(args)
 			if not module_help:
-				await send_edit(
-					m, 
-					f"Invalid module name specified, use `{PREFIX}cmds` to get list of plugins."
-				)
-				await delete(m, 2)
+				await send_edit(m, f"Invalid module name specified, use `{PREFIX}cmds` to get list of plugins.", delme=3)
 				return
 			else:
-				await send_edit(
-					m, 
-					f"PLUGIN: {args}\n\n" + "".join(plugin_data)
-					)
+				await send_edit(m, f"PLUGIN: {args}\n\n" + "".join(plugin_data))
 		else:
-			await send_edit(
-				m, 
-				"Failed to get help menu !"
-				)
+			await send_edit(m, "Failed to get help menu !", delme=3)
 	except Exception as e:
 		await error(m, e)
 
@@ -99,6 +86,7 @@ async def all_plugins(_, m: Message):
 		m, 
 		"\n".join(f"`{plugs}`")
 		)
+
 
 
 

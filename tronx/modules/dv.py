@@ -6,6 +6,7 @@ from pyrogram.types import Message
 
 from tronx import (
 	app,
+	CMD_HELP,
 )
 
 from tronx.helpers import (
@@ -15,6 +16,20 @@ from tronx.helpers import (
 	error,
 )
 
+
+
+
+CMD_HELP.update(
+	{"download" : (
+		"download",
+		{
+		"setdv [varname] [value]" : "Set any database vars, for ex: .setdv [USER_NAME] [BEAST]",
+		"getdv [varname]" : "Get a existing database vars value.",
+		"deldv [varname]" : "Delete a existing database var with its value.",
+		}
+		)
+	}
+)
 
 
 

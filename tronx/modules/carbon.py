@@ -21,6 +21,7 @@ from tronx.helpers import (
 	send_edit,
 	# others 
 	ReplyCheck,
+	long,
 )
 
 
@@ -69,14 +70,14 @@ colour_code = {
 @app.on_message(gen(["carbon", "carb"]))
 async def carb_api(_, m: Message):
 	cmd = m.command
-	if len(cmd) < 2:
+	if long(m) < 2:
 		await send_edit(
 			m, 
 			f"Usage:\n\n1) `{PREFIX}carbon [colour] [text]`\n2) `{PREFIX}carbon [text]`\n\n**Note:** Default colour aqua"
 			)
 		return
 
-	elif len(cmd) <= 4096:
+	elif long(m) <= 4096:
 		try:
 			await send_edit(
 				m, 
@@ -97,7 +98,7 @@ async def carb_api(_, m: Message):
 					)
 		except Exception as e:
 			await error(m, e)
-	else:
+	elif long(m) > 4096:
 		await send_edit(
 			m, 
 			"Something went wrong !"
@@ -141,7 +142,7 @@ async def create_carbon(app: Client, m: Message, text, colour):
 	else:
 		await send_edit(
 			m, 
-			"Image Couldn't be retreived"
+			"Image Couldn't be retreived . . ."
 			)
 		time.sleep(2)
 		await m.delete()

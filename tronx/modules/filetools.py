@@ -17,6 +17,8 @@ from tronx.helpers import (
 	gen,
 	error,
 	send_edit,
+	delete,
+	long,
 )
 
 
@@ -59,15 +61,16 @@ async def unzipfiles(zippath):
 
 
 @app.on_message(gen("zip"))
-async def zipit(c: app, m: Message):
-	if not m.reply_to_message:
+async def zipit(_, m: Message):
+	reply = m.reply_to_message
+	if not reply:
 		await send_edit(
 			m, 
 			f"Reply to some media file ..."
 			)
 		return
-	elif m.reply_to_message:
-		doc = m.reply_to_message
+	elif reply:
+		doc = reply
 		if doc.document:
 			name = doc.document.file_name
 		elif doc.photo:
@@ -84,7 +87,7 @@ async def zipit(c: app, m: Message):
 				"The file does not have a name, please give a name after command ..."
 				)
 			return
-		if m.reply_to_message:
+		if reply:
 			if not os.path.isdir(Config.TEMP_DICT):
 				os.makedirs("tronx/downloads/")
 			dl = await app.download_media(
@@ -114,9 +117,9 @@ async def zipit(c: app, m: Message):
 
 
 @app.on_message(gen("unzip"))
-async def unzipit(c: app, m: Message):
-	if len(m.command) == 2:
-		if len(m.command) <= 4096:
+async def unzipit(_, m: Message):
+	if long(m) == 2:
+		if long(m) <= 4096:
 			loc = m.text.split(None, 1)[1]
 			await send_edit(
 				m, 
@@ -133,12 +136,10 @@ async def unzipit(c: app, m: Message):
 				m, 
 				"The path length exceeds 4096 character, please check again ..."
 				)
-			time.sleep(2.5)
-			await m.delete()
+			await delete(m, 3)
 	else:
 		await send_edit(
 			m, 
 			"Give me the file path to unzip the file ..."
 			)
-		time.sleep(2.5)
-		await m.delete()
+		await delete(m, 3)

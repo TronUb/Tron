@@ -20,6 +20,8 @@ from tronx.helpers import (
 	gen,
 	send_edit,
 	create_file,
+	long,
+	delete,
 )
 
 
@@ -40,13 +42,11 @@ CMD_HELP.update(
 
 @app.on_message(gen("new"))
 async def create_anyfile(app, m:Message):
-	await send_edit(
-		m, 
-		"making file ..."
-		)
+	reply = m.reply_to_message
+	await send_edit(m, "making file ...")
 	cmd = m.command
-	if (len(cmd) < 4096) and (len(cmd) > 2):
-		try:
+	try:
+		if long(m) < 4096 and long(m) > 2:
 			data = " ".join(cmd[1:])
 			givename = cmd[1]
 			await create_file(
@@ -54,42 +54,36 @@ async def create_anyfile(app, m:Message):
 				app, 
 				filename=givename, 
 				text=data
-				)
+			)
 			return
-		except Exception as e:
-			await error(m, e)
-	# if replied to text without file name
-	elif (len(cmd) == 1) and m.reply_to_message:
-		try:
-			data = m.reply_to_message.text
+		# if replied to text without file name
+		elif long(m) == 1 and reply:
+			data = reply.text
 			await create_file(
 				m, 
 				app, 
 				filename="file.py", 
 				text=data
-				)
+			)
 			return
-		except Exception as e:
-			await error(m, e)
-	# if replied to text with file name
-	elif (len(cmd) == 2) and m.reply_to_message:
-		try:
+		# if replied to text with file name
+		elif long(m) > 1 and reply:
 			givename = cmd[1]
-			data = m.reply_to_message.text
+			data = reply.text
 			await create_file(
 				m, 
 				app, 
 				filename=givename, 
 				text=data
-				)
-			return
-		except Exception as e:
-			await error(m, e)
-	else:
-		await send_edit(
-			m, 
-			f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py"
 			)
-
+			return
+		else:
+			await send_edit(
+				m, 
+				f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py"
+				)
+			await delete(m, 3)
+	except Exception as e:
+		await error(m, e)
 
 

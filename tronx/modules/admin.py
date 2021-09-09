@@ -69,8 +69,8 @@ async def ban_hammer(_, m):
 			await app.kick_chat_member(
 				m.chat.id,
 				user.id
-				)
-			await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} in this chat ...")
+			)
+			await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} in this chat . . .")
 			# not replies 
 		elif not reply:
 			if long(m) == 1:
