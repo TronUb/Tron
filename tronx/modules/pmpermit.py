@@ -141,8 +141,10 @@ async def auto_block(_, m: Message):
 	else:
 		msg += f"Username: `None`\n"
 	msg += f"Message: `{m.text}`\n"
-
-	warn = int(db.get_warn(user.id))
+	if db.get_warn(user.id) is not None or False:
+		warn = int(db.get_warn(user.id))
+	else:
+		return
 	if bool(warn) is True:
 		if warn > 0 and int(warn) < pmlimit:
 			maximum = int(db.get_warn(m.chat.id)) + 1
