@@ -105,7 +105,7 @@ async def inline_alive(app, m: Message):
 	except BotInvalid:
 		await send_edit(
 			m, 
-			"The bot can't be used in inline mode"
+			"The bot can't be used in inline mode",
 			delme=2
 		)
 		return
