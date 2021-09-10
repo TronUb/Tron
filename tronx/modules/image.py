@@ -269,11 +269,11 @@ async def get_photos(_, m):
 			if long(m) > 1:
 				if cmd[1] == "all":
 					for x in p_id:
-						await app.send_cached_media(m.chat.id, x[0].file_id)
+						await app.send_cached_media(m.chat.id, x["file_id"])
 						time.sleep(0.30)
 				if cmd[1] != "all":
 					for x in p_id:
-						photo.append(x[0].file_id)
+						photo.append(x["file_id"])
 						if len(photo) == 5:
 							break
 						else:
@@ -282,7 +282,7 @@ async def get_photos(_, m):
 						await app.send_cached_media(m.chat.id, x)
 			if long(m) == 1:
 				for x in p_id:
-					photo.append(x[0].file_id)
+					photo.append(x["file_id"])
 					if len(photo) == 5:
 						break
 					else:
@@ -296,7 +296,7 @@ async def get_photos(_, m):
 			user = await app.get_users(cmd[1])
 			p_id = user.id
 			for x in p_id:
-				photo.append(x[0].file_id)
+				photo.append(x["file_id"])
 				if len(photo) == 5:
 					break
 				else:
@@ -306,7 +306,7 @@ async def get_photos(_, m):
 		elif long(m) == 1:
 			p_id = m.from_user.id
 			for x in p_id:
-				photo.append(x[0].file_id)
+				photo.append(x["file_id"])
 				if len(photo) == 5:
 					break
 				else:
