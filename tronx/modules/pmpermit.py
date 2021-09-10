@@ -130,7 +130,7 @@ async def auto_block(_, m: Message):
 		if dv.getdv("PM_LIMIT"):
 			pmlimit = int(dv.getdv("PM_LIMIT"))
 		elif Config.PM_LIMIT:
-			pmlimit = int(Config.PM_LIMIT
+			pmlimit = int(Config.PM_LIMIT)
 
 		await old_msg(app, m, user.id)
 			# log user info to log chat
