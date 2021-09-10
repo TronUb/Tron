@@ -106,6 +106,7 @@ async def inline_alive(app, m: Message):
 		await send_edit(
 			m, 
 			"The bot can't be used in inline mode"
+			delme=2
 		)
 		return
 	if result:
@@ -121,9 +122,8 @@ async def inline_alive(app, m: Message):
 		await send_edit(
 			m, 
 			"Something went wrong, please try again later . . .",
+			delme=2
 		)
-		time.sleep(3)
-		await m.delete()
 
 
 
@@ -135,7 +135,8 @@ async def inline_alive(_, m: Message):
 		try:
 			result = await app.get_inline_bot_results(BOT_USERNAME, "#q7o5e")
 		except BotInvalid:
-			await send_edit(m,"This bot can't be used in inline mode.")
+			await send_edit(m,"This bot can't be used in inline mode.", delme=2)
+			return
 		if result:
 			try:
 				await app.send_inline_bot_result(
@@ -151,10 +152,9 @@ async def inline_alive(_, m: Message):
 		else:
 			await send_edit(
 				m, 
-				"Failed to get inline alive results !"
+				"Failed to get inline alive results !",
+				delme=2
 				)
-			time.sleep(3)
-			await m.delete()
 	except Exception as e:
 		await error(m, e)
 
