@@ -130,7 +130,7 @@ async def auto_block(_, m: Message):
 		if dv.getdv("PM_LIMIT"):
 			pmlimit = int(dv.getdv("PM_LIMIT"))
 		elif Config.PM_LIMIT:
-			pmlimit = int(Config.PM_LIMIT)
+			pmlimit = int(Config.PM_LIMIT
 
 		await old_msg(app, m, user.id)
 			# log user info to log chat
@@ -143,10 +143,10 @@ async def auto_block(_, m: Message):
 			msg += f"Username: `None`\n"
 		msg += f"Message: `{m.text}`\n"
 
-		warn = int(db.get_warn(user.id))
+		warn = db.get_warn(user.id)
 		if bool(warn) is True:
-			if warn > 0 and warn < pmlimit:
-				maximum = db.get_warn(m.chat.id) + 1
+			if warn > 0 and int(warn) < pmlimit:
+				maximum = int(db.get_warn(m.chat.id)) + 1
 				db.set_warn(user.id, maximum)
 				await send_warn(app, m, user.id)
 			elif warn > 0 and warn > pmlimit:
