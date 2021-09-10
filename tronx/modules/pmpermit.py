@@ -113,59 +113,55 @@ async def send_warn(app: Client, m: Message, user):
 #autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
-	try:
-		if bool(dv.getdv("PMPERMIT")) is False:
-			return
-		else:
-			pass
-		if (m.from_user.is_verified
-			or m.from_user.is_bot
-			):
-			return
-		if bool(db.get_whitelist(m.chat.id)) is False:
-			user = await app.get_users(m.chat.id)
-		else:
-			return
+	if bool(dv.getdv("PMPERMIT")) is False:
+		return
+	else:
+		pass
+	if (m.from_user.is_verified
+		or m.from_user.is_bot
+		):
+		return
+	if bool(db.get_whitelist(m.chat.id)) is False:
+		user = await app.get_users(m.chat.id)
+	else:
+		return
 
-		#if dv.getdv("PM_LIMIT"):
-			#pmlimit = int(dv.getdv("PM_LIMIT"))
-		if Config.PM_LIMIT:
-			pmlimit = int(Config.PM_LIMIT)
+	if dv.getdv("PM_LIMIT"):
+		pmlimit = int(dv.getdv("PM_LIMIT"))
+	if Config.PM_LIMIT:
+		pmlimit = int(Config.PM_LIMIT)
 
-		await old_msg(app, m, user.id)
-			# log user info to log chat
-		msg = "#pmpermit\n\n"
-		msg += f"Name: `{user.first_name}`\n"
-		msg += f"Id: `{user.id}`\n"
-		if user.username:
-			msg += f"Username: `@{user.username}`\n"
-		else:
-			msg += f"Username: `None`\n"
-		msg += f"Message: `{m.text}`\n"
+	await old_msg(app, m, user.id)
+	# log user info to log chat
+	msg = "#pmpermit\n\n"
+	msg += f"Name: `{user.first_name}`\n"
+	msg += f"Id: `{user.id}`\n"
+	if user.username:
+		msg += f"Username: `@{user.username}`\n"
+	else:
+		msg += f"Username: `None`\n"
+	msg += f"Message: `{m.text}`\n"
 
-		warn = db.get_warn(user.id)
-		if bool(warn) is True:
-			if warn > 0 and int(warn) < pmlimit:
-				maximum = int(db.get_warn(m.chat.id)) + 1
-				db.set_warn(user.id, maximum)
-				await send_warn(app, m, user.id)
-			elif warn > 0 and warn > pmlimit:
-				done = await app.block_user(user.id)
-				if done:
-					try:
-						await app.send_message(
-							Config.LOG_CHAT,
-							f"{user.first_name} is now blocked for spamming !"
-						)
-					except PeerIdInvalid:
-						pass
-				else:
-					print("Failed to block user because of spamming in pm")
-		elif bool(warn) is False:
-			return 
-
-	except Exception as e:
-			await error(m, e)
+	warn = db.get_warn(user.id)
+	if bool(warn) is True:
+		if warn > 0 and int(warn) < pmlimit:
+			maximum = int(db.get_warn(m.chat.id)) + 1
+			db.set_warn(user.id, maximum)
+			await send_warn(app, m, user.id)
+		elif warn > 0 and warn > pmlimit:
+			done = await app.block_user(user.id)
+			if done:
+				try:
+					await app.send_message(
+						Config.LOG_CHAT,
+						f"{user.first_name} is now blocked for spamming !"
+					)
+				except PeerIdInvalid:
+					pass
+			else:
+				print("Failed to block user because of spamming in pm")
+	elif bool(warn) is False:
+		return 
 
 
 
