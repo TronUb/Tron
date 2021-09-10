@@ -112,8 +112,11 @@ async def send_warn(app: Client, m: Message, user):
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
 	try:
-		if Config.PMPERMIT is False:
+		if (bool(dv.getdv("PMPERMIT")) is False 
+			or Config.PMPERMIT is False):
 			return
+		else:
+			pass
 		if (m.from_user.is_verified
 			or m.from_user.is_bot
 			):
