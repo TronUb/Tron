@@ -115,11 +115,7 @@ async def send_warn(app: Client, m: Message, user):
 async def auto_block(_, m: Message):
 	if bool(dv.getdv("PMPERMIT")) is False:
 		return
-	else:
-		pass
-	if (m.from_user.is_verified
-		or m.from_user.is_bot
-		):
+	if m.from_user.is_verified:
 		return
 	if bool(db.get_whitelist(m.chat.id)) is False:
 		user = await app.get_users(m.chat.id)
@@ -131,8 +127,8 @@ async def auto_block(_, m: Message):
 	if Config.PM_LIMIT:
 		pmlimit = int(Config.PM_LIMIT)
 
-	await old_msg(app, m, user.id)
 	# log user info to log chat
+
 	msg = "#pmpermit\n\n"
 	msg += f"Name: `{user.first_name}`\n"
 	msg += f"Id: `{user.id}`\n"
@@ -142,13 +138,17 @@ async def auto_block(_, m: Message):
 		msg += f"Username: `None`\n"
 	msg += f"Message: `{m.text}`\n"
 
-	if bool(db.get_warn(user.id)) is True:
+	if bool(db.get_warn(user.id)) is False:
+		db.set_warn(user.id, 1)
+
+	elif bool(db.get_warn(user.id)) is True:
 		warn = int(db.get_warn(user.id))
-		if warn > 0 and int(warn) < pmlimit:
-			maximum = int(db.get_warn(m.chat.id)) + 1
+		if warn < pmlimit:
+			maximum = warn + 1
 			db.set_warn(user.id, maximum)
-			await send_warn(app, m, user.id)
-		elif warn > 0 and warn > pmlimit:
+			await old_msg(app, m, user.id) # delete old warns
+			await send_warn(app, m, user.id) # send new warns
+		elif warn > pmlimit:
 			done = await app.block_user(user.id)
 			if done:
 				try:
@@ -160,8 +160,8 @@ async def auto_block(_, m: Message):
 					pass
 			else:
 				print("Failed to block user because of spamming in pm")
-	elif bool(db.get_warn(user.id)) is False:
-		db.set_warn(user.id, 1)
+		else:
+			print("Can't block user in pm")
 
 
 
