@@ -82,6 +82,8 @@ async def send_warn(app: Client, m: Message, user):
 		pic = dv.getdv("PMPERMIT_PIC")
 	elif Config.PMPERMIT_PIC:
 		pic = Config.PMPERMIT_PIC
+	else:
+		pic = False
 
 	if dv.getdv("PMPERMIT_TEXT"):
 		text = dv.getdv("PMPERMIT_TEXT")
