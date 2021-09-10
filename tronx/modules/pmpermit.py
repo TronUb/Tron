@@ -140,6 +140,7 @@ async def auto_block(_, m: Message):
 
 	if bool(db.get_warn(user.id)) is False:
 		db.set_warn(user.id, 1)
+		await send_warn(app, m, user.id)
 
 	elif bool(db.get_warn(user.id)) is True:
 		warn = int(db.get_warn(user.id))
@@ -199,6 +200,7 @@ async def approve_pm(app, m: Message):
 		db.set_whitelist(user_id, True)
 		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.")
 
+		db.del_warn(user_id)
 		if db.get_msgid(user_id):
 			old_msg = db.get_msgid(user_id)
 			await app.delete_messages(

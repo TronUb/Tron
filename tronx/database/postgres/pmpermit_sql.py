@@ -161,3 +161,16 @@ def get_warn(user_id):
 	SESSION.close()
 	return rep
 
+
+
+
+def del_warn(user_id):
+	with INSERTION_LOCK:
+		user = SESSION.query(Disapprove).get(user_id)
+		try:
+			if user:
+				SESSION.delete(user)
+				SESSION.commit()
+		finally:
+			SESSION.close()
+		return False
