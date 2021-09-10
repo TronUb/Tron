@@ -120,7 +120,6 @@ async def auto_block(_, m: Message):
 			pass
 		if (m.from_user.is_verified
 			or m.from_user.is_bot
-			or m.from_user.is_contact
 			):
 			return
 		if bool(db.get_whitelist(m.chat.id)) is False:
@@ -180,9 +179,10 @@ async def approve_pm(app, m: Message):
 	elif m.chat.type != "private":
 		if reply:
 			user_id = reply.from_user.id
-		elif not reply and len(cmd) == 1:
-			await send_edit(m, "Whom should i approve, piro ?")
-		elif not reply and len(cmd) > 1:
+		elif not reply and long(m) == 1:
+			await send_edit(m, "Whom should i approve, piro ?", delme=3)
+			return
+		elif not reply and long(m) > 1:
 			try:
 				data = await app.get_users(cmd[1])
 				user_id = data.id
@@ -192,7 +192,7 @@ async def approve_pm(app, m: Message):
 				UsernameNotOccupied, 
 				UsernameInvalid
 				):
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=3)
 				return
 		else:
 			return
@@ -203,7 +203,6 @@ async def approve_pm(app, m: Message):
 		db.set_whitelist(user_id, True)
 		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.")
 
-		list(set(users) - set([user_id]))
 		if db.get_msgid(user_id):
 			old_msg = db.get_msgid(user_id)
 			await app.delete_messages(
@@ -211,7 +210,7 @@ async def approve_pm(app, m: Message):
 				message_ids=old_msg
 			)
 		else:
-			time.sleep(1)
+			pass
 	except Exception as e:
 		await error(m, e)
 		await send_edit(m, f"Failed to approve [{user_name}](tg://user?id={user_id})")
@@ -229,7 +228,7 @@ async def revoke_pm_block(app, m:Message):
 		if reply:
 			user_id = reply.from_user.id
 		elif not reply and len(cmd) == 1:
-			await send_edit(m, "Whom should i disapprove, piro ?")
+			await send_edit(m, "Whom should i disapprove, piro ?", delme=3)
 		elif not reply and len(cmd) > 1:
 			try:
 				data = await app.get_users(cmd[1])
@@ -240,7 +239,7 @@ async def revoke_pm_block(app, m:Message):
 				UsernameNotOccupied, 
 				UsernameInvalid
 				):
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=3)
 				return
 		else:
 			return
@@ -250,11 +249,15 @@ async def revoke_pm_block(app, m:Message):
 	if user_name:
 		db.del_whitelist(user_id)
 		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) has been disapproved for pm!")
-		await app.send_message(
-			Config.LOG_CHAT, 
-			f"#disallow\n\n[{user_name}](tg://user?id={user_id}) has been disapproved for pm !"
-		)
+		try:
+			await app.send_message(
+				Config.LOG_CHAT, 
+				f"#disallow\n\n[{user_name}](tg://user?id={user_id}) has been disapproved for pm !"
+			)
+		except Exception as e:
+			print(e)
+			pass
 	else:
-		print("Can't disallow this user . . .")
+		print("Can't disallow this user . . .", delme=3)
 
                 
