@@ -254,3 +254,62 @@ async def insult_someone(_, m):
 	except Exception as e:
 		await error(m, e)
 
+
+
+
+@app.on_message(gen("poto"))
+async def get_photos(_, m):
+	reply = m.reply_to_message
+	cmd = m.command
+	photo = []
+	await send_edit(m, "Sending profile photos . . .")
+	if reply:
+		try:
+			p_id = await app.get_profile_photos(reply.from_user.id)
+			if long(m) > 1:
+				if cmd[1] == "all":
+					for x in p_id:
+						await app.send_cached_media(m.chat.id, x[0].file_id)
+						time.sleep(0.30)
+				if cmd[1] != "all":
+					for x in p_id:
+						photo.append(x[0].file_id)
+						if len(photo) == 5:
+							break
+						else:
+							pass
+					for x in photo:
+						await app.send_cached_media(m.chat.id, x)
+			if long(m) == 1:
+				for x in p_id:
+					photo.append(x[0].file_id)
+					if len(photo) == 5:
+						break
+					else:
+						pass
+				for x in photo:
+					await app.send_cached_media(m.chat.id, x)
+		except Exception as e:
+			await error(m, e)
+	elif not reply:
+		if long(m) > 1:
+			user = await app.get_users(cmd[1])
+			p_id = user.id
+			for x in p_id:
+				photo.append(x[0].file_id)
+				if len(photo) == 5:
+					break
+				else:
+					pass
+			for x in photo:
+				await app.send_cached_media(m.chat.id, x)
+		elif long(m) == 1:
+			p_id = m.from_user.id
+			for x in p_id:
+				photo.append(x[0].file_id)
+				if len(photo) == 5:
+					break
+				else:
+					pass
+			for x in photo:
+				await app.send_cached_media(m.chat.id, x)

@@ -109,4 +109,26 @@ async def mark_chat_unread(_, m: Message):
 		)
 	except Exception as e:
 		await error(m, e)
-	
+
+
+
+
+@app.on_message(gen("channel"))
+async def create_channel(_, m: Message):
+	if long(m) < 2:
+		await send_edit(m, f"`Usage: {PREFIX}channel [channel name]`", delme=3)
+		return
+	chname = m.text.split(None, 1)[1]
+	try:
+		if chname:
+			await send_edit(m, f"Creating a Basic group: `{chname}`")
+			done = await app.create_channel(f"{chname}")
+			if done:
+				await send_edit(m, f"**Created new Basic group:** `{chname}`")
+			else:
+				await send_edit(m, "Couldn't create a channel . . .")
+	except Exception as e:
+		await error(m, e)
+		
+		
+		

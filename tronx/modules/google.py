@@ -46,6 +46,7 @@ CMD_HELP.update(
 
 
 search_url = "http://www.google.com"
+
 headers = {
 	"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
@@ -116,7 +117,7 @@ async def yandex_images(_, m: Message):
 				hide_via=True
 			)
 		else:
-			await send_edit(m, "Failed to get the image, try again later !", deleme=3)
+			await send_edit(m, "Failed to get the image, try again later !", delme=3)
 	except Exception as e:
 		await error(m, e)
 

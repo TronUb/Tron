@@ -52,14 +52,11 @@ CMD_HELP.update(
 async def insult_friends(app, m):
 	if m.reply_to_message:
 		try:
-			await send_edit(
-				m,
-				"..."
-				)
+			await send_edit(m,"...")
+
 			my_info = mymention()
-			user_ids = m.reply_to_message.from_user.id
-			user = await app.get_users(user_ids)
-			user_info = mention_markdown(user_ids, user.first_name)
+			user = m.reply_to_message.from_user
+			user_info = mention_markdown(user.id, user.first_name)
 			TASK = (
 				f"{my_info} slaps {user_info} with a bunch of cardboards",
 				f"{my_info} hits {user_info} in the face with cows",
@@ -75,19 +72,12 @@ async def insult_friends(app, m):
 				f"{my_info} pats {user_info} on head",
 				f"{my_info} kicks {user_info}'s out of the conversation",
 			)
-			await send_edit(
-				m, 
-				f"{random.choice(TASK)}"
-				)
+			await send_edit(m, f"{random.choice(TASK)}")
+
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(
-			m, 
-			"`Reply to a friend to use harsh words to insult him`"
-			)
-		time.sleep(1)
-		await m.delete()
+		await send_edit(m, "`Reply to a friend to use harsh words to insult him`", delme=2)
 		return
 
 
@@ -95,31 +85,19 @@ async def insult_friends(app, m):
 
 @app.on_message(gen(["cap", "capital"]))
 async def switch(_, m):
-	ja_keys = """`abcdefghijklmnopqrstuvwxyz1234567890`"""
-	en_keys = """`ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`"""
 	try:
-		if m.reply_to_message:
-			reply_text = m.reply_to_message.text
-			change = str.maketrans(ja_keys + en_keys, en_keys + ja_keys)
-			reply_text = str.translate(reply_text, change)
-			await send_edit(
-				m, 
-				reply_text
-				)
-		elif len(m.text) > 1:
-			text = m.text.split(None, 1)[1]
-			change = str.maketrans(ja_keys + en_keys, en_keys + ja_keys)
-			text = str.translate(text, change)
-			await send_edit(
-				m, 
-				text
-				)
-			await asyncio.sleep(1)
+		reply = m.reply_to_message
+		if reply:
+			text = reply.text.capitalize()
+			await send_edit(m, text)
+		elif not reply:
+			if long(m) > 1:
+				text = m.text.split(None, 1)[1]
+				await send_edit(m, text)
+			elif long(m) == 1:
+				await send_edit(m, "Please give me some text after command . . .", delme= 2)
 		else:
-			await send_edit(
-				m, 
-				f"Reply to a message or type `{PREFIX}sw [this is a text]`"
-				)
+			return print("error in cap command")
 	except Exception as e:
 		await error(m, e)
 
@@ -132,12 +110,7 @@ async def type(_, m):
 		if len(m.text) > 1:
 			text = " ".join(m.command[1:])
 		else:
-			await send_edit(
-				m, 
-				"Some text is required to show in typing animation"
-				)
-			asyncio.sleep(2)
-			await m.delete()
+			await send_edit(m, "Some text is required to show in typing animation", delme=2)
 			return
 		tbp = "" 
 		typing_symbol = "▒"
@@ -166,7 +139,7 @@ async def type(_, m):
 async def insult_someone(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can insult them . . .")
+		await send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2)
 	elif reply:
 		try:
 			await send_edit(m, "Insulting . . .")
@@ -179,7 +152,7 @@ async def insult_someone(_, m):
 			if _data:
 				await send_edit(m, f"`{_data.get('insult')}`")
 			else:
-				await send_edit(m, "No insults found !")
+				await send_edit(m, "No insults found !", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -189,10 +162,10 @@ async def insult_someone(_, m):
 
 
 @app.on_message(gen("advice"))
-async def insult_someone(_, m):
+async def give_advice(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can give them a advice . . .")
+		await send_edit(m, "Please reply to someone, so that i can give them a advice . . .", delme=2)
 	elif reply:
 		try:
 			await send_edit(m, "Finding a good advice . . .")
@@ -201,7 +174,7 @@ async def insult_someone(_, m):
 			if _data:
 				await send_edit(m, f"`{_data}`")
 			else:
-				await send_edit(m, "No advice found !")
+				await send_edit(m, "No advice found !", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -214,7 +187,7 @@ async def insult_someone(_, m):
 async def insult_someone(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can give them a question . . .")
+		await send_edit(m, "Please reply to someone, so that i can give them a question . . .", delme=2)
 	elif reply:
 		try:
 			await send_edit(m, "Finding a question . . .")
@@ -225,7 +198,7 @@ async def insult_someone(_, m):
 				await send_edit(m, f"Question:\n\n`{question}`")
 				await app.send_message("me", f"Answer:\n\n`{answer}`") # answer in saved messages
 			else:
-				await send_edit(m, "No question found !")
+				await send_edit(m, "No question found !", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -235,7 +208,7 @@ async def insult_someone(_, m):
 
 
 @app.on_message(gen("wtd"))
-async def insult_someone(_, m):
+async def what_to_do(_, m):
 	try:
 		await send_edit(m, "Finding a activity . . .")
 		data = requests.get(f"http://www.boredapi.com/api/activity/")
@@ -244,7 +217,7 @@ async def insult_someone(_, m):
 		if act:
 			await send_edit(m, f"Activity: `{act}`\n\nType: `{typ}`") 
 		else:
-			await send_edit(m, "No Activity found !")
+			await send_edit(m, "No Activity found !", delme=2)
 	except Exception as e:
 		await error(m, e)
 
@@ -252,7 +225,7 @@ async def insult_someone(_, m):
 
 
 @app.on_message(gen("mqt"))
-async def insult_someone(_, m):
+async def movie_quotes(_, m):
 	try:
 		await send_edit(m, "Finding a movie quote . . .")
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
@@ -262,7 +235,7 @@ async def insult_someone(_, m):
 		if qt and role and show:
 			await send_edit(m, f"Quote: `{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
 		else:
-			await send_edit(m, "No movie quotes found !")
+			await send_edit(m, "No movie quotes found !", delme=2)
 	except Exception as e:
 		await error(m, e)
 
@@ -270,7 +243,7 @@ async def insult_someone(_, m):
 
 
 @app.on_message(gen("joke"))
-async def insult_someone(_, m):
+async def tell_me_a_joke(_, m):
 	try:
 		await send_edit(m, "Finding a joke . . .")
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
@@ -279,7 +252,7 @@ async def insult_someone(_, m):
 		if one and two:
 			await send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
 		else:
-			await send_edit(m, "No jokes found !")
+			await send_edit(m, "No jokes found !", delme=2)
 	except Exception as e:
 		await error(m, e)
 
