@@ -141,11 +141,9 @@ async def auto_block(_, m: Message):
 	else:
 		msg += f"Username: `None`\n"
 	msg += f"Message: `{m.text}`\n"
-	if db.get_warn(user.id) is not None or False:
+
+	if bool(db.get_warn(user.id)) is True:
 		warn = int(db.get_warn(user.id))
-	else:
-		return
-	if bool(warn) is True:
 		if warn > 0 and int(warn) < pmlimit:
 			maximum = int(db.get_warn(m.chat.id)) + 1
 			db.set_warn(user.id, maximum)
@@ -162,7 +160,7 @@ async def auto_block(_, m: Message):
 					pass
 			else:
 				print("Failed to block user because of spamming in pm")
-	elif bool(warn) is False:
+	elif bool(db.get_warn(user.id)) is False:
 		return 
 
 
