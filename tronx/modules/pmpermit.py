@@ -128,9 +128,9 @@ async def auto_block(_, m: Message):
 			return
 
 		if dv.getdv("PM_LIMIT"):
-			pmlimit = dv.getdv("PM_LIMIT")
+			pmlimit = int(dv.getdv("PM_LIMIT"))
 		elif Config.PM_LIMIT:
-			pmlimit = Config.PM_LIMIT
+			pmlimit = int(Config.PM_LIMIT)
 
 		await old_msg(app, m, user.id)
 			# log user info to log chat
@@ -219,7 +219,7 @@ async def approve_pm(app, m: Message):
 
 
 @app.on_message(gen(["da", "disapprove", "nopm"]))
-async def revoke_pm_block(app, m:Message):
+async def revoke_pm_block(_, m:Message):
 	reply = m.reply_to_message
 	cmd = m.command
 	if m.chat.type == "private":
@@ -227,9 +227,9 @@ async def revoke_pm_block(app, m:Message):
 	elif m.chat.type != "private":
 		if reply:
 			user_id = reply.from_user.id
-		elif not reply and len(cmd) == 1:
+		elif not reply and long(m) == 1:
 			await send_edit(m, "Whom should i disapprove, piro ?", delme=3)
-		elif not reply and len(cmd) > 1:
+		elif not reply and long(m) > 1:
 			try:
 				data = await app.get_users(cmd[1])
 				user_id = data.id
