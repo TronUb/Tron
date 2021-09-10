@@ -33,6 +33,7 @@ from tronx.helpers import (
 	clear_string, 
 	get_directory_size,
 	delete,
+	long,
 )
 
 
@@ -59,15 +60,13 @@ CMD_HELP.update(
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 @app.on_message(gen("ls"))
-async def list_directories(c: app, m: Message):
+async def list_directories(_, m: Message):
 	if len(m.text.split()) == 1:
 		location = "."
 	elif len(m.text.split()) >= 2:
 		location = m.text.split(None, 1)[1]
-	await send_edit(
-		m, 
-		"Fetching files..."
-		)
+	await send_edit(m, "Fetching files...")
+
 	location = os.path.abspath(location)
 	if not location.endswith("/"):
 		location += "/"
@@ -76,10 +75,7 @@ async def list_directories(c: app, m: Message):
 		files = os.listdir(location)
 		files.sort()  # Sort the files
 	except FileNotFoundError:
-		await send_edit(
-			m, 
-			f"No such file or directory {location}"
-			)
+		await send_edit(m, f"No such file or directory {location}", delme=2)
 		return
 	for file in files:
 		OUTPUT += f"• `{file}` ({get_directory_size(os.path.abspath(location+file))})\n"
@@ -87,38 +83,30 @@ async def list_directories(c: app, m: Message):
 		OUTPUT = clear_string(OUTPUT)  # Remove the html elements using regex
 		with BytesIO(str.encode(OUTPUT)) as f:
 			f.name = "dict.txt"
-			await m.reply_document(
+			await app.send_document(
+				m.chat.id,
 				document=f,
 				caption=f"`{location} ({get_directory_size(os.path.abspath(location))})`",
 			)
 		await m.delete()
 	else:
 		if OUTPUT.endswith("\n\n"):
-			await send_edit(
-				m, 
-				f"No files in {location}"
-				)
+			await send_edit(m, f"No files in {location}", delme=2)
 			return
-		await send_edit(
-			m, 
-			OUTPUT
-			)
+		await send_edit(m, OUTPUT)
 	return
 
 
 
 
 @app.on_message(gen(["download", "dl"]))
-async def down_load_media(c: app, m: Message):
-	await send_edit(
-		m, 
-		"⏳ •Downloading..."
-		)
+async def download_media(_, m: Message):
+	await send_edit(m, "⏳ •Downloading...")
 	if m.reply_to_message is not None:
 		try:
 			start_t = datetime.now()
 			c_time = time.time()
-			the_real_download_location = await c.download_media(
+			the_real_download_location = await app.download_media(
 				message=m.reply_to_message,
 				file_name="/app/tronx/downloads/",
 				progress=progress_for_pyrogram,
@@ -128,17 +116,14 @@ async def down_load_media(c: app, m: Message):
 			ms = (end_t - start_t).seconds
 			await send_edit(
 				m, 
-				f"Downloaded to •>\n\n<code>{the_real_download_location}</code>\n\nTime: <u>{ms}</u> seconds",
-				parse_mode="html",
+				f"**Downloaded to •>**\n\n```{the_real_download_location}```\n\n**Time:** `{ms}` **seconds**",
+				parse_mode="markdown",
 			)
 		except Exception:
 			exc = traceback.format_exc()
-			await send_edit(
-				m, 
-				f"Failed To Download!\n{exc}"
-				)
+			await send_edit(m, f"Failed To Download!\n{exc}")
 			return
-	elif len(m.command) > 1:
+	elif long(m) > 1:
 		try:
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
@@ -184,7 +169,7 @@ async def down_load_media(c: app, m: Message):
 							text=current_message
 						)
 						display_message = current_message
-						await asyncio.sleep(10)
+						await asyncio.sleep(2)
 				except errors.MessageNotModified:  # Don't log error if Message is not modified
 					pass
 				except Exception as e:
@@ -205,9 +190,7 @@ async def down_load_media(c: app, m: Message):
 				)
 			return
 	else:
-		await send_edit(
-			"`Reply to a Telegram Media to download it to local server.`"
-			)
+		await send_edit("`Reply to a Telegram Media to download it to local server.`", delme=2)
 	return
 
 
@@ -215,12 +198,10 @@ async def down_load_media(c: app, m: Message):
 
 
 @app.on_message(gen(["upload", "ul"]))
-async def upload_as_document(c: app, m: Message):
-	await send_edit(
-		m, 
-		"`...`"
-		)
-	if len(m.command) > 1:
+async def upload_as_document(_, m: Message):
+	await send_edit(m, "`...`")
+
+	if long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
 			await send_edit(
@@ -230,10 +211,8 @@ async def upload_as_document(c: app, m: Message):
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
-			await send_edit(
-				m,
-				f"Uploading __{doc_caption}__..."
-				)
+			await send_edit(m,f"Uploading __{doc_caption}__...")
+
 			await m.reply_document(
 				document=local_file_name,
 				caption=doc_caption,
@@ -243,24 +222,17 @@ async def upload_as_document(c: app, m: Message):
 				progress=progress_for_pyrogram,
 				progress_args=("Uploading file...", m, c_time),
 			)
+
 			end_t = datetime.now()
 			ms = (end_t - start_t).seconds
-			await m.delete()
-			await m.edit_text(f"**Uploaded in {ms} seconds**")
-			time.sleep(5)
-			await m.delete()
+			await send_edit(m, f"**Uploaded in {ms} seconds**", delme=2)
 		else:
 			await send_edit(
 				m, 
 				"404: media not found ..."
 				)
 	else:
-		await send_edit(
-			m, 
-			f"`{PREFIX}upload [file path ]` to upload to current Telegram chat"
-			)
-	time.sleep(8)
-	await m.delete()
+		await send_edit(m, f"`{PREFIX}upload [file path ]` to upload to current Telegram chat", delme=2)
 	return
 
 
@@ -268,22 +240,17 @@ async def upload_as_document(c: app, m: Message):
 
 
 @app.on_message(gen("batchup"))
-async def covid(c: app, m: Message):
+async def covid(_, m: Message):
 	if len(m.text.split()) == 1:
-		await send_edit(
-			m, 
-			"`Give me a location to upload files from the directory ...`"
-			)
-		await delete(m, 3)
+		await send_edit(m, "`Give me a location to upload files from the directory ...`", delme=2)
 		return
+
 	elif len(m.text.split()) >= 2:
 		temp_dir = m.text.split(None, 1)[1]
 		if not temp_dir.endswith("/"):
 			temp_dir += "/"
-	await send_edit(
-		m, 
-		"`Uploading Files to Telegram...`"
-		)
+	await send_edit(m, "`Uploading Files to Telegram...`")
+
 	if os.path.exists(temp_dir):
 		try:
 			files = os.listdir(temp_dir)
@@ -297,7 +264,7 @@ async def covid(c: app, m: Message):
 					log.info(
 						f"Uploading <i>{required_file_name}</i> from {temp_dir} to Telegram."
 					)
-					await c.send_document(
+					await app.send_document(
 						chat_id=m.chat.id,
 						document=required_file_name,
 						thumb=thumb_image_path,
@@ -313,15 +280,8 @@ async def covid(c: app, m: Message):
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(
-			m, 
-			"Directory Not Found ..."
-			)
+		await send_edit(m, "Directory Not Found ...", delme=2)
 		return
-	await m.delete()
-	await send_edit(
-		m, 
-		f"Uploaded all files from Directory `{temp_dir}`"
-		)
+	await send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
 	log.info("Uploaded all files in batch !!")
 	return

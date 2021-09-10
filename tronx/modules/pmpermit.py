@@ -25,6 +25,7 @@ from tronx.helpers import (
 	# others 
 	mention_markdown, 
 	extract_user,
+	long,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -192,6 +193,7 @@ async def approve_pm(app, m: Message):
 				await send_edit(m, "Please try again later . . .", delme=3)
 				return
 		else:
+			await send_edit(m, "Failed to approve user . . .", delme=2)
 			return
 
 	info = await app.get_users(user_id)
@@ -201,12 +203,9 @@ async def approve_pm(app, m: Message):
 		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.")
 
 		db.del_warn(user_id)
+
 		if db.get_msgid(user_id):
-			old_msg = db.get_msgid(user_id)
-			await app.delete_messages(
-				chat_id=m.chat.id,
-				message_ids=old_msg
-			)
+			await old_msg(app, m, user_id)
 		else:
 			pass
 	except Exception as e:
