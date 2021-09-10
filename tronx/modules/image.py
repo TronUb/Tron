@@ -294,7 +294,8 @@ async def get_photos(_, m):
 	elif not reply:
 		if long(m) > 1:
 			user = await app.get_users(cmd[1])
-			p_id = user.id
+			p_id = await app.get_profile_photos(user.id)
+			
 			for x in p_id:
 				photo.append(x["file_id"])
 				if len(photo) == 5:
@@ -304,7 +305,8 @@ async def get_photos(_, m):
 			for x in photo:
 				await app.send_cached_media(m.chat.id, x)
 		elif long(m) == 1:
-			p_id = m.from_user.id
+			user = m.from_user
+			p_id = await app.get_profile_photos(user.id)
 			for x in p_id:
 				photo.append(x["file_id"])
 				if len(photo) == 5:
