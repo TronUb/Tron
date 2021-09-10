@@ -148,7 +148,7 @@ async def auto_block(_, m: Message):
 			db.set_warn(user.id, maximum)
 			await old_msg(app, m, user.id) # delete old warns
 			await send_warn(app, m, user.id) # send new warns
-		elif warn > pmlimit:
+		elif warn >= pmlimit:
 			done = await app.block_user(user.id)
 			if done:
 				try:
