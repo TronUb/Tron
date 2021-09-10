@@ -161,7 +161,7 @@ async def auto_block(_, m: Message):
 			else:
 				print("Failed to block user because of spamming in pm")
 	elif bool(db.get_warn(user.id)) is False:
-		return 
+		db.set_warn(user.id, 1)
 
 
 
