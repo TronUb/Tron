@@ -121,9 +121,9 @@ async def install_module(_, m: Message):
 async def uninstall_module(_, m: Message):
 	try:
 		if long(m) > 1:
-			if m.command[1].endswith(".py")
+			if m.command[1].endswith(".py"):
 				module_loc = f"/app/tronx/modules/{m.command[1]}"
-			elif not m.command[1].endswith(".py")
+			elif not m.command[1].endswith(".py"):
 				module_loc = f"/app/tronx/modules/{m.command[1]}.py"
 			if os.path.exists(module_loc):
 				os.remove(module_loc)
