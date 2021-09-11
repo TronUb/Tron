@@ -43,6 +43,8 @@ OWNER_USERNAME = "@BEASTZX"
 
 version = "v.0.0.3"
 
+lara_version = "v.0.0.1"
+
 CMD_HELP = {}
 
 HELP = {}
@@ -50,6 +52,16 @@ HELP = {}
 REPO = "https://github.com/beastzx18/Tron"
 
 StartTime = time.time()
+
+__python_version__ = f"{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}"
+
+
+
+
+if Config.DB_URI:
+	db_status = "Available"
+else:
+	db_status = "Not Available"
 
 
 

@@ -38,6 +38,7 @@ from tronx import (
 	Config,
 	uptime,
 )
+
 from tronx import (
 	app, 
 	CMD_HELP, 
@@ -47,7 +48,10 @@ from tronx import (
 	USER_USERNAME, 
 	Config,
 	uptime,
-	PREFIX
+	PREFIX,
+	__python_version__,
+	db_status,
+	lara_version,
 )
 
 from tronx.helpers import (
@@ -61,34 +65,14 @@ from tronx.database.postgres import dv_sql as dv
 
 
 
-def _ialive_pic():
-	if dv.getdv("USER_PIC"):
-		pic = dv.getdv("USER_PIC")
-	elif Config.USER_PIC:
-		pic = Config.USER_PIC
-	return pic
-
-
-
-
+# variables
 plugin_data = []
 
 USER_ID = [USER_ID, 1790546938]
 
-
-__python_version__ = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
-
-
-# database available check
-if Config.DB_URI:
-	status = "Available"
-else:
-	status = "Not Available"
-
-
-# check bot active time
-LARA_VERSION = "v.0.0.1"
 PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
+
+
 
 
 # buttons
@@ -101,6 +85,8 @@ global_command = build_keyboard(([["• Global commands •", "global-commands"]
 
 
 
+
+# get information of plugins
 async def data(plug):
 	try:
 		for x, y in zip(
@@ -117,44 +103,89 @@ async def data(plug):
 
 
 
-# first start 
-@bot.on_message(filters.command(["start"]) & filters.user(USER_ID))
-async def start(bot, m: Message):
-	if USER_ID:
-		if Config.BOT_BIO:
-			msg = Config.BOT_BIO + "\n\nCatagory: "
-		else:
-			msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
-		await bot.send_photo(
-			m.chat.id,
-			Config.BOT_PIC,
-			msg,
-			reply_markup=InlineKeyboardMarkup(
-				[ settings, extra, about, close ]
-				),
-		)
+
+# inline quotes
+def quote():
+	results = requests.get("https://animechan.vercel.app/api/random").json()
+	msg = f"❝ {results.get('quote')}❞"
+	msg += f" [ {results.get('anime')} ]\n\n"
+	msg += f"- {results.get('character')}\n\n"
+	return msg
 
 
 
 
-# start for global users
+# inline alive pic
+def _ialive_pic():
+	if dv.getdv("USER_PIC"):
+		pic = dv.getdv("USER_PIC")
+	elif Config.USER_PIC:
+		pic = Config.USER_PIC
+	return pic
+
+
+
+
+# /start command for bot
 @bot.on_message(filters.command(["start"]))
-async def start(bot, message):
-	await bot.send_photo(
-		message.chat.id,
-		PIC,
-		f"Hey {message.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
-		reply_markup=InlineKeyboardMarkup(
-			[global_command]
-		),
-	)
+async def start(_, m: Message):
+	if m.from_user:
+		if m.from_user.id in USER_ID:
+			# bot bio
+			if bool(dv.getdv("BOT_BIO")):
+				msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
+			elif Config.BOT_BIO:
+				msg = Config.BOT_BIO + "\n\nCatagory: "
+			else:
+				msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
+
+			# bot pic
+			if bool(dv.getdv("BOT_PIC")):
+				bot_pic = dv.getdv("BOT_PIC")
+			elif Config.BOT_PIC:
+				bot_pic = Config.BOT_PIC
+			else:
+				bot_pic = False
+
+			if bot_pic:
+				if bot_pic.endswith(".jpg" or "png" or "jpeg"):
+					await bot.send_photo(
+						m.chat.id,
+						bot_pic,
+						msg,
+						reply_markup=InlineKeyboardMarkup(
+							[ settings, extra, about, close ]
+						),
+					)
+				elif bot_pic.endswitg(".mp4" or ".gif"):
+					await bot.send_photo(
+						m.chat.id,
+						bot_pic,
+						msg,
+						reply_markup=InlineKeyboardMarkup(
+							[ settings, extra, about, close ]
+						),
+					)
+			else:
+				return print("Failed to send /start message in pm")
+		elif m.from_user.id not in USER_ID:
+			await bot.send_photo(
+				m.chat.id,
+				PIC,
+				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
+				reply_markup=InlineKeyboardMarkup(
+					[global_command]
+				),
+			)
+	else:
+		return
 
 
 
 
-# inline setup
+# via bot messages
 @bot.on_inline_query(filters.user(USER_ID))
-def answer(client, inline_query):
+def answer(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
 		inline_query.answer(
@@ -169,10 +200,10 @@ def answer(client, inline_query):
 					[approve]
 				)
 			)
-		],
-	cache_time=1
-	)
-	if query.startswith("#t5r4o9nn6"):
+			],
+		cache_time=1
+		)
+	elif query.startswith("#t5r4o9nn6"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
@@ -185,10 +216,10 @@ def answer(client, inline_query):
 					[settings, extra, about, close]
 				)
 			)
-		],
-	cache_time=1
-	)
-	if query.startswith("#i2l8v3"):
+			],
+		cache_time=1
+		)
+	elif query.startswith("#i2l8v3"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
@@ -210,10 +241,10 @@ def answer(client, inline_query):
 					]
 				)
 			)
-		],
-	cache_time=1
-	)
-	if query.startswith("#q7o5e"):
+			],
+		cache_time=1
+		)
+	elif query.startswith("#q7o5e"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultArticle(
@@ -255,7 +286,7 @@ async def modules(_, cb):
 
 # next page
 @bot.on_callback_query(filters.regex(pattern="helpme_next\((.+?)\)_(True|False)") & filters.user(USER_ID))
-async def give_next_page(client, cb):
+async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
 	official = True
 	if cb.matches[0].group(2) == "False":
@@ -271,7 +302,7 @@ async def give_next_page(client, cb):
 
 # previous page
 @bot.on_callback_query(filters.regex(pattern="helpme_prev\((.+?)\)_(True|False)") & filters.user(USER_ID))
-async def give_old_page(client, cb):
+async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
 	official = True
 	if cb.matches[0].group(2) == "False":
@@ -287,7 +318,7 @@ async def give_old_page(client, cb):
 
 # back from modules dex to home
 @bot.on_callback_query(filters.regex(pattern="backme_(.*)_(True|False)") & filters.user(USER_ID))
-async def get_back(client, cb):
+async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
 	official = True
 	if cb.matches[0].group(2) == "False":
@@ -302,7 +333,7 @@ async def get_back(client, cb):
 
 # modules plugin page information
 @bot.on_callback_query(filters.regex(pattern="modulelist_(.*)_(True|False)") & filters.user(USER_ID))
-async def give_plugin_cmds(client, cb):
+async def give_plugin_cmds(_, cb):
 	plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
 	official = True
 	if cb.matches[0].group(2) == "False":
@@ -333,7 +364,7 @@ async def give_plugin_cmds(client, cb):
 async def _stats(_, cb):
 	if filters.regex("open-stats-dex"):
 		await cb.edit_message_text(
-			text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {LARA_VERSION}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
+			text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
 			reply_markup=InlineKeyboardMarkup(
 				[
 					[
@@ -660,17 +691,6 @@ async def _back_to_info(_, cb):
 				]
 			),
 		)
-
-
-
-
-# inline quotes
-def quote():
-	results = requests.get("https://animechan.vercel.app/api/random").json()
-	msg = f"❝ {results.get('quote')}❞"
-	msg += f" [ {results.get('anime')}]\n\n"
-	msg += f"- {results.get('character')}\n\n"
-	return msg
 
 
 
