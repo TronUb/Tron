@@ -14,19 +14,18 @@ from tronx.helpers import (
 	error,
 	gen,
 	long,
+	private,
 )
+
+from . import get_file_id
 
 
 
 
 @app.on_message(filters.new_chat_members)
 async def send_welcome(_, m: Message):
-	if str(m.chat.id).startswith("-100"):
-		chat_id = str(m.chat.id)[4:]
-	else:
-		chat_id = m.chat.id
-	if bool(dw.get_welcome(chat_id)) is True:
-		media_id = dw.get_welcome(chat_id)
+	if bool(dw.get_welcome(m.chat.id)) is True:
+		media_id = dw.get_welcome(m.chat.id)
 		try:
 			app.send_cached_media(
 				m.chat.id,
@@ -34,7 +33,7 @@ async def send_welcome(_, m: Message):
 				)
 		except:
 			await send_edit(m, media_id)
-	elif bool(dw.get_welcome(chat_id)) is False:
+	elif bool(dw.get_welcome(m.chat.id)) is False:
 		return
 
 
@@ -42,25 +41,27 @@ async def send_welcome(_, m: Message):
 
 @app.on_message(gen("setwelcome"))
 async def save_welcome(_, m: Message):
+	await private(m)
+	await send_edit(m, "Setting this media as a welcome message . . .")
 	reply = m.reply_to_message
 	if reply:
 		try:
-			if str(m.chat.id).startswith("-100"):
-				chat_id = str(m.chat.id)[4:]
-			else:
-				chat_id = m.chat.id
-			dw.set_welcome(int(chat_id), types(m))
+			dw.set_welcome(int(m.chat.id), get_file_id(m))
+			await send_edit(m, "Added this media/text to welcome message . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Please reply to some media or text to set welcome . . .")      
+		await send_edit(m, "Please reply to some media or text to set welcome . . .", delme=2)      
 
 
 
 
 @app.on_message(gen("delwelcome"))
 async def delete_welcome(_, m: Message):
+	await private(m)
 	try:
+		await send_edit(m, "Checking welcome message . . .")
 		dw.del_welcome(m.chat.id)
+		await send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2)
 	except Exception as e:
 		await error(m, e)
