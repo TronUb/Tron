@@ -34,7 +34,7 @@ async def send_welcome(_, m: Message):
 				)
 		except:
 			await send_edit(m, media_id)
-	elif bool(dw.get_welcome(chat_id) is False:
+	elif bool(dw.get_welcome(chat_id)) is False:
 		return
 
 
