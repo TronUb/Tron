@@ -25,6 +25,7 @@ from tronx.helpers import (
 	# others 
 	is_thumb_image_exists, 
 	mention_markdown,
+	long,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -49,10 +50,7 @@ CMD_HELP.update(
 
 @app.on_message(gen("send"))
 async def send_modules(app, m: Message):
-	await send_edit(
-		m, 
-		"`Checking...`"
-		)
+	await send_edit(m, "`Checking...`")
 	if len(m.command) > 1:
 		filename = m.text.split(None, 1)[1]
 		modulename = f"tronx/modules/{filename}.py"
@@ -60,80 +58,59 @@ async def send_modules(app, m: Message):
 			thumb_image = await is_thumb_image_exists(
 				modulename
 				)
+
 			if thumb_image:
 				thumb_pic = thumb_image
-			elif not thumb_image and dv.getdv("THUMB_PIC"):
+			elif dv.getdv("THUMB_PIC"):
 				thumb_pic = dv.getdv("THUMB_PIC")
 			else:
 				thumb_pic = Config.THUMB_PIC
+
 			start = time.time()
 			module_caption = os.path.basename(modulename)
-			await send_edit(
-				m, 
-				f"Uploading {module_caption} ..."
-				)
+			await send_edit(m, f"Uploading {module_caption} . . .")
+
 			try:
 				await app.send_document(
 					m.chat.id,
 					document=modulename,
 					thumb=thumb_pic,
-					caption=(f"File name: `{module_caption}`\nUploaded By: `{mymention()}`"),
-					parse_mode="markdown"
+					caption=(f"File name: `{module_caption}`\n\nUploaded By: {mymention()}")
 					)
 			except Exception as e:
 				await error(m, e)
-				await send_edit(
-					m, 
-					"Look your Log chat for occurred error ..."
-					)
-			await m.delete()
+				await send_edit(m, "Try again later, check log chat . . .", delme=2)
 		else:
-			await send_edit(
-				m, 
-				"404: plugin not found ..."
-				)
+			await send_edit(m, "`404: plugin not found . . .`", delme=2)
 	else:
-		await send_edit(
-			m, 
-			f"`{PREFIX}send <plugin name>`  to upload plugin file."
-			)
-		return
+		await send_edit(m, f"`{PREFIX}send <plugin name>`  to upload plugin file.", delme=2)
+	return
 
 
 
 
 @app.on_message(gen("install"))
-async def install_module(c: app, m: Message):
-	if len(m.command) == 1 and m.reply_to_message.document:
-		if m.reply_to_message.document.file_name.split(".")[-1] != "py":
-			await send_edit(
-				m, 
-				"`Only (.py) modules can be installed !!`"
-				)
+async def install_module(_, m: Message):
+	if long(m) == 1 and m.reply_to_message.document:
+		if not m.reply_to_message.document.file_name.endswith(".py"):
+			await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
 			return
 		module_loc = (
 			f"/app/tronx/modules/{m.reply_to_message.document.file_name}"
 		)
-		await send_edit(
-			m, 
-			"`Installing module...`"
-			)
+		await send_edit(m, "`Installing module...`", delme=2)
 		if os.path.exists(module_loc):
-			await send_edit(
-				m, 
-				f"`Module **{m.reply_to_message.document.file_name}** already exists!`"
-			)
+			await send_edit(m, f"`Module `{m.reply_to_message.document.file_name}` already exists!`")
 			return
+
 		try:
-			download_loc = await c.download_media(
-				message=m.reply_to_message, file_name=module_loc
+			download_loc = await app.download_media(
+				message=m.reply_to_message, 
+				file_name=module_loc
 			)
 			if download_loc:
-				await send_edit(
-					m, 
-					f"**Installed module:** `{m.reply_to_message.document.file_name}`"
-				)
-		except Exception as fail:
+				await send_edit(m, f"**Installed module:** `{m.reply_to_message.document.file_name}`")
+		except Exception as e:
 			await error(m, e)
 	return
 
@@ -141,25 +118,22 @@ async def install_module(c: app, m: Message):
 
 
 @app.on_message(gen("uninstall"))
-async def uninstall_module(c: app, m: Message):
-	if len(m.command) == 2:
-		module_loc = f"/app/tronx/modules/{m.command[1]}.py"
-		if os.path.exists(module_loc):
-			os.remove(module_loc)
-			await send_edit(
-				m, 
-				f"**Uninstalled module** {m.command[1]}"
-				)
-			return
+async def uninstall_module(_, m: Message):
+	try:
+		if long(m) > 1:
+			if m.command[1].endswith(".py")
+				module_loc = f"/app/tronx/modules/{m.command[1]}"
+			elif not m.command[1].endswith(".py")
+				module_loc = f"/app/tronx/modules/{m.command[1]}.py"
+			if os.path.exists(module_loc):
+				os.remove(module_loc)
+				await send_edit(m, f"**Uninstalled module** {m.command[1]}")
+				return
+			else:
+				await send_edit(m,"`Module does not exist!`", delme=2)
+				return
 		else:
-			await send_edit(
-				m,
-				"`Module does not exist!`"
-				)
+			await send_edit(m, "`Give me a module name . . .`")
 			return
-	else:
-		await send_edit(
-			m, 
-			"`Enter a valid module name!`"
-			)
-		return
+	except Exception as e:
+		await error(m, e)

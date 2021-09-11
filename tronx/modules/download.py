@@ -110,7 +110,7 @@ async def download_media(_, m: Message):
 				message=m.reply_to_message,
 				file_name="/app/tronx/downloads/",
 				progress=progress_for_pyrogram,
-				progress_args=("**__Trying to download...__**", sm, c_time),
+				progress_args=("**__Trying to download . . .__**", c_time),
 			)
 			end_t = datetime.now()
 			ms = (end_t - start_t).seconds
