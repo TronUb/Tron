@@ -46,7 +46,7 @@ async def save_welcome(_, m: Message):
 	reply = m.reply_to_message
 	if reply:
 		try:
-			dw.set_welcome(int(m.chat.id), get_file_id(m))
+			dw.set_welcome(m.chat.id, get_file_id(m))
 			await send_edit(m, "Added this media/text to welcome message . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
