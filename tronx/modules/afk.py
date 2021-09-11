@@ -71,7 +71,9 @@ async def go_offline(_, m: Message):
 			set_afk(True, m.text.split(None, 1)[1], start) # with reason
 			await send_edit(
 				m, 
-				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1]))
+				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1])
+				delme=2
+				)
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -90,6 +92,7 @@ async def go_offline(_, m: Message):
 			await send_edit(
 				m, 
 				"{} is now offline.".format(mymention())
+				delme=2
 				)
 		except Exception as e:
 			await error(m, e)
@@ -117,15 +120,19 @@ async def offline_mention(_, m: Message):
 			if get["reason"] and get["afktime"]:
 				if m.from_user.id in MENTIONED:
 					return
-				await m.reply(
+				msg = await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
 					)
+				time.sleep(2)
+				await msg.delete()
 			elif get["afktime"] and not get["reason"]:
 				if m.from_user.id in MENTIONED:
 					return
-				await m.reply(
+				msg = await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
 					)
+				time.sleep(2)
+				await msg.delete()
 			content, message_type = get_message_type(m)
 			if message_type == Types.TEXT:
 				if m.text:
@@ -167,19 +174,23 @@ async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
 		if m.text:
-			if m.text.startswith(f"{PREFIX}afk") or m.text.startswith("brb"):
+			if m.text.startswith(f"{PREFIX}afk"):
+				return
+			elif "#afk" in m.text:
 				return
 		elif m.media:
-			return
+			pass
 
 		get = get_afk()
 		if get and get['afk'] and filters.outgoing:
 			end = int(time.time())
 			afk_time = get_readable_time(end - get["afktime"])
-			await app.send_message(
+			msg = await app.send_message(
 				m.chat.id, 
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
+			time.sleep(2)
+			await msg.delete()
 			set_afk(False, "", 0)
 		else:
 			return

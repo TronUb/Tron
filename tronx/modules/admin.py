@@ -86,12 +86,12 @@ async def ban_hammer(_, m):
 				if done:
 					await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} from the chat !")
 			else:
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=2)
 		# used on admin or owner
 		else:
-			await send_edit(m, "I can't ban this user . . .")
+			await send_edit(m, "I can't ban this user . . .", delme=2)
 	else:
-		await send_edit(m, "Sorry, Your Are Not An Admin Here !")
+		await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2)
 
 
 
@@ -102,7 +102,7 @@ async def ban_all(_, m):
 	if await CheckAdmin(m) is True:
 		try:
 			if long(m) == 1:
-				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .")
+				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .", delme=2)
 			elif long(m) > 1 and m.command[1] == "confirm":
 				data = await app.get_chat_members(m.chat.id)
 				for x in data:
@@ -111,14 +111,14 @@ async def ban_all(_, m):
 							m.chat.id,
 							x.user.id
 						)
-						await send_edit(m, f"Banned {x.user.first_name}")
+						await send_edit(m, f"Banned `{x.user.first_name}`")
 				await send_edit(m, "Banned all members !")
 			elif long(m) > 1 and m.command[1] != "confirm":
-				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .")
+				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "`Sorry, you are not an admin here . . .`")
+		await send_edit(m, "`Sorry, you are not an admin here . . .`", delme=2)
 		await delete(m, 2)
 
 
@@ -140,12 +140,12 @@ async def unban(_, m):
 			if done:
 				await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} in the current chat.") 
 			elif not done:
-				await send_edit(m, "I'm not able to unban this user . . .")
+				await send_edit(m, "I'm not able to unban this user . . .", delme=2)
 				return
 
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Please give me some id or username . . .")
+				await send_edit(m, "Please give me some id or username . . .", delme=2)
 				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
@@ -157,10 +157,10 @@ async def unban(_, m):
 				if done:
 					await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} from this chat . . .")
 				else:
-					await send_edit(m, "I'm not able to unban this user . . .")
+					await send_edit(m, "I'm not able to unban this user . . .", delme=2)
 
 	else:
-		await send_edit(m, "Sorry, You Are Not An Admin Here !")
+		await send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1)
 
 
 
@@ -198,11 +198,11 @@ async def mute_hammer(_, m):
 			if done:
 				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} has been muted")
 			else:
-				await send_edit(m, "Sorry, I am unable to mite this user . . .")
+				await send_edit(m, "Sorry, I am unable to mite this user . . .", delme=2)
 
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Please give me some id or username . . .")
+				await send_edit(m, "Please give me some id or username . . .", delme=2)
 				return
 
 			elif long(m) > 1:
@@ -216,12 +216,12 @@ async def mute_hammer(_, m):
 				if done:
 					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} has been muted.")
 				else:
-					await send_edit(m, "Sorry, I can't mute this user . . .")
+					await send_edit(m, "Sorry, I can't mute this user . . .", delme=2)
 			else:
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . ." , delme=2)
 
 	else:
-		await send_edit(m, "Sorry, You Are Not An Admin Here !")
+		await send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1)
 
 
 
@@ -260,11 +260,11 @@ async def unmute(_, m):
 			if done:
 				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was unmuted !")
 			else:
-				await send_edit(m, "I can't unmute this user . . .")
+				await send_edit(m, "I can't unmute this user . . .", delme=2)
 
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Please give me some id or username . . .")
+				await send_edit(m, "Please give me some id or username . . .", delme=2)
 				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
@@ -277,11 +277,11 @@ async def unmute(_, m):
 				if done:
 					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was unmuted.")
 				else:
-					await send_edit(m, "I can't unmute this user . . .")
+					await send_edit(m, "I can't unmute this user . . .", delme=2)
 			else:
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=2)
 	else:
-		await send(m, "Sorry, Your Are Not An Admin Here ! ")
+		await send(m, "Sorry, Your Are Not An Admin Here ! ", delme=2
 
 
 
@@ -301,11 +301,11 @@ async def kick_user(_, m):
 			if done:
 				await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name)} from the chat.")
 			else:
-				await send_edit(m, "I can't kick this user . . .")
+				await send_edit(m, "I can't kick this user . . .", delme=2)
 
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Give me some id or username . . .")
+				await send_edit(m, "Give me some id or username . . .", delme=2)
 				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
@@ -317,12 +317,12 @@ async def kick_user(_, m):
 				if done:
 					await send_edit(m, f"Kicked {mention_markdown(user.id, user.first_name)} from this chat.")
 				else:
-					await send_edit(m, "I can't kick this user.")
+					await send_edit(m, "I can't kick this user.", delme=2)
 			else:
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=2)
 
 	else:
-		await send_edit(m, "Sorry, Your Are Not An Admin Here !")
+		await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2)
 
 
 
@@ -340,9 +340,9 @@ async def pin_message(_, m):
 			if done:
 				await send_edit(m, "`Pinned message!`")
 			else:
-				await send_edit(m, "Failed to pin message")
+				await send_edit(m, "Failed to pin message", delme=2)
 		elif not reply:
-			await send_edit(m, "`Reply to a message so that I can pin that message ...`")     
+			await send_edit(m, "`Reply to a message so that I can pin that message ...`", delme=2)     
 			time.sleep(2)
 			await m.delete()
 	except Exception as e:
@@ -364,7 +364,7 @@ async def pin_message(_, m):
 			if done:
 				await send_edit(m, "`Unpinned message !`")
 			else:
-				await send_edit(m, "Failed to unpin message . . .")
+				await send_edit(m, "Failed to unpin message . . .", delme=2)
 		elif (reply or not reply) and long(m) > 1:
 			cmd = m.command[1]
 			if cmd == "all":
@@ -372,11 +372,11 @@ async def pin_message(_, m):
 				if done:
 					await send_edit(m, "Unpinned all pinned messages . . .")
 				else:
-					await send_edit(m, "Failed to unpin all messages . . .")
+					await send_edit(m, "Failed to unpin all messages . . .", delme=2)
 			elif cmd != "all":
-				await send_edit(m, "Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message . . .")
+				await send_edit(m, "Reply to a pinned message to unpin or use 'all' after unpin command to unpin all pinned message . . .", delme=2)
 			else:
-				await send_edit(m, "Failed to unpin messages . . .")
+				await send_edit(m, "Failed to unpin messages . . .", delme=2)
 	except Exception as e:
 		await error(m, e)
 
@@ -405,10 +405,10 @@ async def promote(_, m):
 			if done:
 				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was promoted to admin !")
 			else:
-				await send_edit(m, "Failed to promote the user . . .")
+				await send_edit(m, "Failed to promote the user . . .", delme=2)
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Please give me some id or username . . .")
+				await send_edit(m, "Please give me some id or username . . .", delme=2)
 				return
 			elif long(m) > 1:
 				user = await app.get_users(m.command[1])
@@ -427,11 +427,11 @@ async def promote(_, m):
 				if done:
 					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} was promoted to admin !")
 				else:
-					await send_edit(m, "Failed to promote the user . . .")
+					await send_edit(m, "Failed to promote the user . . .", delme=2)
 			else:
-				await send_edit(m, "Failed to promote user . . .")
+				await send_edit(m, "Failed to promote user . . .", delme=2)
 	else:
-		await send_edit(m, "Sorry, you are not an admin here . . .")
+		await send_edit(m, "Sorry, you are not an admin here . . .", delme=2)
 
 
 
@@ -460,10 +460,10 @@ async def demote(client, m):
 			if done:
 				await send_edit(m, f"{mention_markdown(user.id, user.first_name)} now removed from admin status !")
 			else:
-				await send_edit(m, "Failed to promote the user . . .")
+				await send_edit(m, "Failed to promote the user . . .", delme=2)
 		elif not reply:
 			if long(m) == 1:
-				await send_edit(m, "Please give me some id or reply to that admin . . .")
+				await send_edit(m, "Please give me some id or reply to that admin . . .", delme=2)
 				return
 			elif long(m) > 1:
 				user = m.command[1]
@@ -483,6 +483,6 @@ async def demote(client, m):
 				if done:
 					await send_edit(m, f"{mention_markdown(user.id, user.first_name)} is now removed from admin status !")
 			else: 
-				await send_edit(m, "Please try again later . . .")
+				await send_edit(m, "Please try again later . . .", delme=2)
 
 

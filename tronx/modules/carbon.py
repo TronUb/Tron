@@ -74,7 +74,7 @@ async def carb_api(_, m: Message):
 		await send_edit(
 			m, 
 			f"Usage:\n\n1) `{PREFIX}carbon [colour] [text]`\n2) `{PREFIX}carbon [text]`\n\n**Note:** Default colour aqua"
-			)
+			delme=2)
 		return
 
 	elif long(m) <= 4096:
@@ -102,6 +102,7 @@ async def carb_api(_, m: Message):
 		await send_edit(
 			m, 
 			"Something went wrong !"
+			delme=2
 			)
 
 
@@ -143,6 +144,7 @@ async def create_carbon(app: Client, m: Message, text, colour):
 		await send_edit(
 			m, 
 			"Image Couldn't be retreived . . ."
+			delme=2
 			)
 		time.sleep(2)
 		await m.delete()
