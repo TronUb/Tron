@@ -281,7 +281,7 @@ async def unmute(_, m):
 			else:
 				await send_edit(m, "Please try again later . . .", delme=2)
 	else:
-		await send(m, "Sorry, Your Are Not An Admin Here ! ", delme=2
+		await send(m, "Sorry, Your Are Not An Admin Here ! ", delme=2)
 
 
 
