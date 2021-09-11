@@ -73,11 +73,8 @@ async def paster(_, m: Message):
 					reply_text, 
 					disable_web_page_preview=True
 				),
-				try:
-					await reply.delete(),
-					await m.delete()
-				except Exception as e:
-					print(e)
+				await reply.delete(),
+				await m.delete()
 			)
 		else:
 			await send_edit(
