@@ -102,7 +102,7 @@ async def carb_api(_, m: Message):
 	elif long(m) > 4096:
 		await send_edit(
 			m, 
-			"Something went wrong !"
+			"Something went wrong !",
 			delme=2
 			)
 
