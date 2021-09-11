@@ -21,8 +21,12 @@ from tronx.helpers import (
 
 @app.on_message(filters.new_chat_members)
 async def send_welcome(_, m: Message):
-	if bool(dw.get_welcome(m.chat.id)) is True:
-		media_id = dw.get_welcome(m.chat.id)
+	if str(m.chat.id).startswith("-100"):
+		chat_id = str(m.chat.id)[4:]
+	else:
+		chat_id = m.chat.id
+	if bool(dw.get_welcome(chat_id)) is True:
+		media_id = dw.get_welcome(chat_id)
 		try:
 			app.send_cached_media(
 				m.chat.id,
@@ -30,7 +34,7 @@ async def send_welcome(_, m: Message):
 				)
 		except:
 			await send_edit(m, media_id)
-	elif bool(dw.get_welcome(m.chat.id) is False:
+	elif bool(dw.get_welcome(chat_id) is False:
 		return
 
 
