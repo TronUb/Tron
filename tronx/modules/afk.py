@@ -71,7 +71,7 @@ async def go_offline(_, m: Message):
 			set_afk(True, m.text.split(None, 1)[1], start) # with reason
 			await send_edit(
 				m, 
-				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1])
+				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1]),
 				delme=2
 				)
 		except Exception as e:
@@ -91,7 +91,7 @@ async def go_offline(_, m: Message):
 				set_afk(True, "", start) # without reason
 			await send_edit(
 				m, 
-				"{} is now offline.".format(mymention())
+				"{} is now offline.".format(mymention()),
 				delme=2
 				)
 		except Exception as e:

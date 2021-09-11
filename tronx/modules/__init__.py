@@ -49,28 +49,40 @@ def types(m: Message):
 	elif reply.photo:
 		cast = "photo"
 		name = reply.photo.file_name
+		file_id = reply.photo.file_id
 	elif reply.video:
 		cast = "video"
 		name = reply.video.file_name
+		file_id = reply.video.file_id
 	elif reply.document:
 		cast = "document"
 		name = reply.document.file_name
+		file_id = reply.document.file_id
 	elif reply.contact:
 		cast = "contact"
 	elif reply.audio:
 		cast = "audio"
 		name = reply.audio.file_name
+		file_id = reply.audio.file_id
 	elif reply.sticker:
 		cast = "sticker"
 		name = reply.sticker.file_name
+		file_id = reply.sticker.file_id
 	elif reply.animation:
 		cast = "animation"
 		name = reply.animation.file_name
+		file_id = reply.animation.file_id
 	elif reply.poll:
 		cast = "poll"
 	else:
 		cast = "unknown"
-	return cast, name
+		name = None
+		file_id = None
+	return (
+		{"cast" :cast, 
+		"name" : name,
+		"file_id" : file_id
+		})
 
 
 
