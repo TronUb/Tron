@@ -75,17 +75,6 @@ infotext = (
 
 
 
-def ReplyCheck(m: Message):
-	reply_id = None
-	if m.reply_to_message:
-		reply_id = m.reply_to_message.message_id
-	elif not m.from_user.is_self:
-		reply_id = m.message_id
-	return reply_id
-
-
-
-
 def FullName(user: User):
 	return user.first_name + " " + user.last_name if user.last_name else user.first_name
 
@@ -145,7 +134,7 @@ async def whois(_, m: Message):
 
 
 @app.on_message(gen("id"))
-async def id(app, m: Message):
+async def id(_, m: Message):
 	cmd = m.command
 	chat_id = m.chat.id
 	reply = m.reply_to_message
@@ -172,7 +161,7 @@ async def id(app, m: Message):
 
 
 @app.on_message(gen(["men", "mention"]))
-async def mention(app, m: Message):
+async def mention(_, m: Message):
 	if len(m.command) < 3:
 		await m.edit("Incorrect input.\n\n**Example** : `.men @tronuserbot CTO`")
 		await asyncio.sleep(2)
@@ -192,7 +181,7 @@ async def mention(app, m: Message):
 
 
 @app.on_message(gen("uinfo"))
-async def get_full_user_info(app, m: Message):
+async def get_full_user_info(_, m: Message):
 	await m.edit('scrapping info...')
 	reply = m.reply_to_message
 
@@ -200,32 +189,45 @@ async def get_full_user_info(app, m: Message):
 		user = reply.from_user
 	elif not reply:
 		user = m.from_user
+
+	pfp = await app.get_profile_photos(user.id)
+	if pfp:
+		p_id = pfp[0].file_id
+	else:
+		p_id = False
+
 	try:
+		duo = f"• ID: `{user.id}`\n"
+		duo += f"• NAME: `{user.first_name}`\n"
+		duo += f"• DC ID: `{user.dc_id}`\n"
+		duo += f"• BOT: `{user.is_bot}`\n"
+		duo += f"• FAKE: `{user.is_fake}`\n"
+		duo += f"• SCAM: `{user.is_scam}`\n"
+		duo += f"• NAME: `{user.first_name}`\n"
+		duo += f"• STATUS: `{user.status}`\n"
+		duo += f"• IS IT ME: `{user.is_self}`\n"
+		duo += f"• DELETED: `{user.is_deleted}`\n"
+		duo += f"• CONTACT: `{user.is_contact}`\n"
+		duo += f"• VERIFIED: `{user.is_verified}`\n"
+		duo += f"• RESTRICTED: `{user.is_restricted}`\n"
 
-		duo = f"ID: `{user.id}`"
-		duo += f"NAME: `{user.first_name}`"
-		duo += f"DC ID: `{user.dc_id}`"
-		duo += f"BOT: `{user.is_bot}`"
-		duo += f"FAKE: `{user.is_fake}`"
-		duo += f"SCAM: `{user.is_scam}`"
-		duo += f"NAME: `{user.first_name}`"
-		duo += f"STATUS: `{user.status}`"
-		duo += f"ITS ME: `{user.is_self}`"
-		duo += f"DELETED: `{user.is_deleted}`"
-		duo += f"CONTACT: `{user.is_contact}`"
-		duo += f"VERIFIED: `{user.is_verified}`"
-		duo += f"RESTRICTED: `{user.is_restricted}`"
-
-		await send_edit(m, duo)
+		if p_id:
+			await app.send_cached_media(
+				m.chat.id, 
+				file_id=p_id, 
+				caption=duo
+			)
+		elif p_id is False:
+			await send_edit(m, duo)
 	except Exception as e:
-		print(e)
 		await send_edit(m, "Try again later . . .")
+		await error(m, e)
 
 
 
 
 @app.on_message(gen(["sc", "scan"]))
-async def tg_scanner(app, m: Message):
+async def tg_scanner(_, m: Message):
 	if m.reply_to_message:
 		await m.edit("Checking database . . .")
 		await app.forward_messages(
@@ -254,7 +256,7 @@ async def tg_scanner(app, m: Message):
 
 
 @app.on_message(gen("block"))
-async def block_pm(app, m: Message):
+async def block_pm(_, m: Message):
 	if len(m.command) >= 2:
 		user = m.text.split(None, 1)[1]
 		try:
@@ -274,7 +276,7 @@ async def block_pm(app, m: Message):
 
 
 @app.on_message(gen("unblock"))
-async def unblock_pm(app, m: Message):
+async def unblock_pm(_, m: Message):
 	if len(m.command) >= 2:
 		user = m.text.split(None, 1)[1]
 		try:
