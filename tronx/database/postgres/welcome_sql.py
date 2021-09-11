@@ -14,7 +14,7 @@ from . import SESSION, BASE
 
 
 # save user ids in whitelists
-class welcome(BASE):
+class whole(BASE):
 	__tablename__ = "welcome"
 	
 	keys = Column(String, primary_key=True)
@@ -27,7 +27,7 @@ class welcome(BASE):
 
 
 
-welcome.__table__.create(checkfirst=True)
+whole.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
@@ -37,10 +37,10 @@ INSERTION_LOCK = threading.RLock()
 # set, del, get keys & values
 def set_welcome(keys, values):
 	with INSERTION_LOCK:
-		mydata = SESSION.query(welcome).get(keys)
+		mydata = SESSION.query(whole).get(keys)
 		try:
 			if not mydata:
-				mydata = welcome(keys, values)
+				mydata = whole(keys, values)
 			else:
 				mydata.values = values
 			SESSION.merge(mydata)
@@ -54,7 +54,7 @@ def set_welcome(keys, values):
 
 def del_welcome(keys):
 	with INSERTION_LOCK:
-		mydata = SESSION.query(welcome).get(keys)
+		mydata = SESSION.query(whole).get(keys)
 		try:
 			if mydata:
 				SESSION.delete(mydata)
@@ -67,7 +67,7 @@ def del_welcome(keys):
 
 
 def get_welcome(keys):
-	mydata = SESSION.query(welcome).get(keys)
+	mydata = SESSION.query(whole).get(keys)
 	rep = ""
 	if mydata:
 		rep = str(mydata.values)
