@@ -30,19 +30,17 @@ CMD_HELP.update(
 @app.on_message(gen("reboot"))
 async def restart_userbot(_, m: Message):
 	try:
-		msg = await send_edit(
-			m, 
-			"`Restarting bot ...`"
-			)
+		msg = await send_edit(m, "`Restarting bot ...`")
+
 		os.execv(sys.executable, ['python'] + sys.argv)
-		await msg.edit(
+		await app.edit_message_text(
+			msg.chat.id,
+			msg.message_id,
 			"Restart completed !\nBot is alive now !"
-			)
+		)
 	except Exception as e:
+		await m.edit("`Failed to re-start userbot !`", delme=2)
 		await error(m, e)
-		await m.edit(
-			"`Failed to re-start userbot !`"
-			)
 
 
 
@@ -50,23 +48,27 @@ async def restart_userbot(_, m: Message):
 # sleep 
 @app.on_message(gen("sleep"))
 async def sleep_userbot(_, m: Message):
-	cmd = m.command[1]
-	sleep = int(m.command[1])
-	if cmd.isdigit() and sleep > 60 and sleep < 86400:
-		one = int(cmd)
-		sleeptime = int(one/60)
-		suf = "minutes"
-	else:
-		sleeptime = cmd
-		suf = "seconds"
+	if long(m) == 1:
+		await send_edit(m, "Give me some seconds after command . . .")
+		return
+	elif long(m) > 1:
+		cmd = m.command[1]
 	if cmd.isdigit():
-		msg = await send_edit(
-			m, 
-			f"Sleeping for {sleeptime} {suf} ...")
-		time.sleep(sleep)
-		msg.delete()
+		if int(cmd) > 60: and int(cmd) < 86400:
+			sleeptime = int(cmd//60)
+			sec = "minutes"
+		elif int(cmd) < 60:
+			sleeptime = int(cmd)
+			sec = "seconds"
+		elif int(cmd) > 3600:
+			sleeptime = int(cmd//3600)
+			sec = "hours"
+		elif int(cmd) > 86400:
+			await send_edit(m, "Sorry you can't sleep bot for more than 24 hours . . .", delme=3)
+			return
+		else:
+			return
+
+		await send_edit(m, f"Sleeping for {sleeptime} {sec} ...", delme=int(cmd))
 	else:
-		await send_edit(
-			m, 
-			"Please give me a number not text ..."
-			)
+		await send_edit(m, "Please give me a number not text ...", delme=2)

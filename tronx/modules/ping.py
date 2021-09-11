@@ -85,20 +85,14 @@ async def pingme(_, m: Message):
 			f"**Pöng !**\n`{m_s} ms`\n⧑ {mention_markdown(USER_ID, name)}", 
 			disable_web_page_preview=True
 			)
-	elif len(m.command) == 2:
+	elif long(m) == 2:
 		count = m.command[1]
 		text = int(m.command[1])
 		if text == 1:
-			await send_edit(
-				m, 
-				"If you need one ping use only `.ping`"
-				)
+			await send_edit(m, "If you need one ping use only `.ping`", delme=2)
 			return
 		elif text == 0:
-			await send_edit(
-				m, 
-				"try a greater number like 2."
-				)
+			await send_edit(m, "try a greater number like 2.", delme=2)
 			return
 		else:
 			try:
@@ -118,17 +112,14 @@ async def pingme(_, m: Message):
 			except Exception as e:
 				await error(m, e)
 	else:
-		await send_edit(
-			m, 
-			"Something went wrong in ping module."
-			)
+		await send_edit(m, "Something went wrong in ping module.", delme=2)
 		return
 
 
 
 
 # function to create pings
-async def infinite(m:Message):
+async def infinite(m: Message):
 	start = datetime.now()
 	mid = await send_edit(
 		m, 

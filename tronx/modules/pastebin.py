@@ -15,6 +15,7 @@ from tronx.helpers import (
 	gen,
 	error,
 	send_edit,
+	long,
 )
 
 
@@ -35,20 +36,17 @@ CMD_HELP.update(
 
 @app.on_message(gen(["neko", "bin"]))
 async def paster(_, m: Message):
-	await send_edit(
-		m, 
-		"`Pasting to nekobin ...`"
-		)
-	if m.reply_to_message:
-		text = m.reply_to_message.text
-	elif not m.reply_to_message and (len(m.text)) > 1:
+	reply = m.reply_to_message
+	await send_edit(m, "`Pasting to nekobin ...`")
+
+	if reply:
+		text = reply.text
+	elif not reply and long(m) > 1:
 		text = m.text.split(None, 1)[1]
 	else:
-		await send_edit(
-			m, 
-			"Please reply to a message or give some text after command."
-			)
+		await send_edit(m, "Please reply to a message or give some text after command.", delme=2)
 		return
+
 	try:
 		async with aiohttp.ClientSession() as session:
 			async with session.post(
@@ -56,12 +54,8 @@ async def paster(_, m: Message):
 			) as response:
 				key = (await response.json())["result"]["key"]
 	except Exception:
-		await send_edit(
-			m, 
-			"`Pasting failed, Try again ...`"
-			)
-		await asyncio.sleep(1)
-		await m.delete()
+		await send_edit(m, "`Pasting failed, Try again ...`", delme=2)
+		return
 	else:
 		url = f"https://nekobin.com/{key}"
 		reply_text = f"**Nekobin** : [Here]({url})"
@@ -69,7 +63,7 @@ async def paster(_, m: Message):
 			True
 			if len(m.command) > 1
 			and m.command[1] in ["d", "del"]
-			and m.reply_to_message.from_user.is_self
+			and reply.from_user.is_self
 			else False
 		)
 		if delete:
@@ -79,8 +73,11 @@ async def paster(_, m: Message):
 					reply_text, 
 					disable_web_page_preview=True
 				),
-				m.reply_to_message.delete(),
-				m.delete(),
+				try:
+					await reply.delete(),
+					await m.delete()
+				except Exception as e:
+					print(e)
 			)
 		else:
 			await send_edit(

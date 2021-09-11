@@ -26,7 +26,9 @@ from tronx import (
 
 from tronx.helpers import (
 	gen,
+	send_edit,
 	error,
+	long,
 )
 
 
@@ -55,18 +57,6 @@ CMD_HELP.update(
 		)
 	}
 )
-
-
-
-
-def form(text):
-	if type(text) == type(int()):
-		result = int
-	elif type(text) == type(str()):
-		result == str
-	elif type(text) == type(bool()):
-		result = bool
-	return result
 
 
 
@@ -103,37 +93,31 @@ def FullName(user: User):
 
 
 @app.on_message(gen("whois"))
-async def whois(app, m: Message):
+async def whois(_, m: Message):
 	reply = m.reply_to_message
-	await m.edit("...")
 	cmd = m.command
-	if reply and len(cmd) == 1:
-		get_user = m.reply_to_message.id
-	elif not reply and len(cmd) == 1:
+	await m.edit("...")
+
+	if reply and long(m) == 1:
+		get_user = reply.id
+	elif not reply and long(m) == 1:
 		get_user = m.from_user.id
-	elif len(cmd) > 1:
+	elif long(m) > 1:
 		get_user = cmd[1]
-		if form(get_user) == int:
-			users = get_user
-		elif form(get_user) == str:
-			users = f"@{get_user}"
-		elif form(get_user) == bool:
-			await m.edit(
-				"Please give a valid id or username."
-				)
-			return
-		else:
-			await m.edit(
-				"Something went wrong!"
-				)
+	else:
+		get_user = False
+
 	try:
-		user = await app.get_users(users)
+		if get_user:
+			user = await app.get_users(get_user)
 	except PeerIdInvalid:
 		await m.reply("I don't know that User.")
 		return
+
 	pfp = await app.get_profile_photos(user.id)
 	if not pfp:
-		await m.edit(
+		await send_edit(
+			m.chat.id,
 			infotext.format(
 				full_name=FullName(user),
 				user_id=user.id,
@@ -144,21 +128,18 @@ async def whois(app, m: Message):
 		disable_web_page_preview=True,
 		)
 	else:
-		dls = await app.download_media(pfp[0]["file_id"], file_name=f"{user.id}.png")
-		await m.delete()
-		await app.send_document(
-			message.chat.id,
-			dls,
+		await app.send_cached_media(
+			m.chat.id, 
+			file_id = pfp[0].file_id,
 			caption=infotext.format(
 				full_name=FullName(user),
 				user_id=user.id,
 				first_name=user.first_name,
 				username=user.username or "",
 				dc_id=user.dc_id
-			),
-			reply_to_message_id=reply.message_id if reply else None,
+			)
 		)
-		os.remove(dls)
+		
 
 
 
@@ -168,6 +149,7 @@ async def id(app, m: Message):
 	cmd = m.command
 	chat_id = m.chat.id
 	reply = m.reply_to_message
+
 	if not reply and len(cmd) == 1:
 		get_user = m.from_user.id
 	elif reply and len(cmd) == 1:
