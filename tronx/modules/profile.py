@@ -203,14 +203,18 @@ async def get_full_user_info(app, m: Message):
 	try:
 
 		duo = f"ID: `{user.id}`"
+		duo += f"NAME: `{user.first_name}`"
+		duo += f"DC ID: `{user.dc_id}`"
 		duo += f"BOT: `{user.is_bot}`"
+		duo += f"FAKE: `{user.is_fake}`"
 		duo += f"SCAM: `{user.is_scam}`"
 		duo += f"NAME: `{user.first_name}`"
+		duo += f"STATUS: `{user.status}`"
+		duo += f"ITS ME: `{user.is_self}`"
 		duo += f"DELETED: `{user.is_deleted}`"
 		duo += f"CONTACT: `{user.is_contact}`"
-		duo += f"RESTRICTED: `{user.is_restricted}`"
 		duo += f"VERIFIED: `{user.is_verified}`"
-		duo += f"BLOCKED:` {user.is_blocked}`"
+		duo += f"RESTRICTED: `{user.is_restricted}`"
 
 		await send_edit(m, duo)
 	except Exception as e:
@@ -223,7 +227,7 @@ async def get_full_user_info(app, m: Message):
 @app.on_message(gen(["sc", "scan"]))
 async def tg_scanner(app, m: Message):
 	if m.reply_to_message:
-		await m.edit("Checking database...")
+		await m.edit("Checking database . . .")
 		await app.forward_messages(
 			"@tgscanrobot", 
 			m.chat.id, 
@@ -245,6 +249,26 @@ async def tg_scanner(app, m: Message):
 		await m.edit("reply to someone's message...")
 		time.sleep(3)
 		await m.delete()
+
+
+
+
+@app.on_message(gen("block"))
+async def block_pm(app, m: Message):
+	if len(m.command) >= 2:
+		user = m.text.split(None, 1)[1]
+		try:
+			await app.unblock_user(user)
+			await m.edit_text("`Blocked User`")
+		except Exception as e:
+			await error(m, e)
+	elif m.reply_to_message:
+		user = m.reply_to_message.from_user.id
+		try:
+			await app.unblock_user(user)
+			await m.edit_text("`Blocked User`")
+		except Exception as e:
+			await error(m, e)
 
 
 
@@ -271,7 +295,7 @@ async def unblock_pm(app, m: Message):
 
 
 @app.on_message(gen("sg"))
-async def check_name_history(app, m: Message):
+async def check_name_history(_, m: Message):
 	if m.reply_to_message:
 		await m.edit("Checking History...")
 		await app.forward_messages(
@@ -287,7 +311,7 @@ async def check_name_history(app, m: Message):
 				limit=3
 				)
 			if msg[0].text == "No records found":
-				await message.edit("No records found")
+				await send_edit(m, "No records found")
 				is_no_record = True
 				await app.read_history("@SangMataInfo_bot")
 				break
@@ -301,134 +325,105 @@ async def check_name_history(app, m: Message):
 			return
 		history_name = "1. " + msg[2].text.split("\n\n1. ")[1]
 		username_history = "1. " + msg[1].text.split("\n\n1. ")[1]
-		text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(message.reply_to_message.from_user.first_name, message.reply_to_message.from_user.id, message.reply_to_message.from_user.id) + history_name
-		if len(text) <= 4096 and len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906:
+		text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(m.reply_to_message.from_user.first_name, m.reply_to_message.from_user.id, m.reply_to_message.from_user.id) + history_name
+		if long(m) <= 4096 and len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906:
 			text += "\n\n**Username History**\n\n" + username_history
-			await m.edit(text)
+			await send_edit(m, text)
 		else:
-			await m.edit(text)
+			await send_edit(m, text)
 			await m.reply("\n\n**Username History**\n\n" + username_history)
 		return
 	else:
-		await m.edit("Reply to a user to get history of name / username."
-		)
-
-
-
-
-@app.on_message(gen("block"))
-async def block_pm(app, m: Message):
-	if len(m.command) >= 2:
-		user = m.text.split(None, 1)[1]
-		try:
-			await app.unblock_user(user)
-			await m.edit_text("`Blocked User`")
-		except Exception as e:
-			await error(m, e)
-	elif m.reply_to_message:
-		user = m.reply_to_message.from_user.id
-		try:
-			await app.unblock_user(user)
-			await m.edit_text("`Blocked User`")
-		except Exception as e:
-			await error(m, e)
+		await send_edit(m, "Reply to a user to get history of name / username.", delme=2)
 
 
 
 
 @app.on_message(gen("set"))
-async def update_profile(app, m: Message):
-	custom = m.command[1]
+async def update_profile(_, m: Message):
+	custom = m.command
 	text = m.text.split(None, 2)[2]
 
-	if len(m.command) < 2:
+	if long(m) < 3:
 		await m.edit("Please use text and suffix after command ...")
 		return
 	# set -> fname, lname & bio
-	if custom:
-		if custom == "fname" or "lname" or "bio":
+	if long(m) > 2:
+		if custom[1] in ["fname", "lname", "bio"]:
 			await setprofile(
 				m, 
 				custom, 
 				f"{text}"
-				)
-		elif custom == "uname":
+			)
+		elif custom[1] == "uname":
 			app.update_username(
 				f"{text}"
-				)
-	else:
-		await m.edit(
-			f"Please specify a correct suffix."
 			)
-	return
+	else:
+		await m.edit(f"Please specify a correct suffix.", delme=2)
+		return
 
 
 
 
 @app.on_message(gen("rem"))
-async def remove_profile(app, m: Message):
+async def remove_profile(_, m: Message):
 	if len(m.text) > 1:
 		cmd = m.command[1]
 	else:
-		await m.edit(
-			"what do you want to remove ?"
-			)
+		await send_edit(m,"what do you want to remove ?", delme=2)
+		return
 	try:
 		if cmd in ["lname", "bio", "pfp", "uname"]:
 			await rmprofile(m, cmd)
 		else:
-			await m.edit(
-				"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`"
-				)
+			await send_edit(m,"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=2)
 	except Exception as e:
 		await error(m, e)
 
 
 
 
-@app.on_message(filters.command("repo", PREFIX) & filters.me)
-async def remove_pfp(_, m: Message):
-	await m.edit_text("[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
-
-
-
-
 # set your profile stuffs 
 async def setprofile(m: Message, args, kwargs):
+	# set first name
 	if args == "fname":
 		try:
 			await app.update_profile(
 				first_name = f"{kwargs}"
 				)
-			await m.edit(
+			await send_edit(
+				m, 
 				f"✅ Updated first name to [ {kwargs} ]"
 				)
 		except Exception as e:
 			await error(m, e)
+	# set last name
 	elif args == "lname":
 		try:
 			await app.update_profile(
 				last_name = f"{kwargs}"
 			)
-			await m.edit(
+			await send_edit(
+				m, 
 				f"✅ Updated last name to [ {kwargs} ]"
 				)
 		except Exception as e:
 			await error(m, e)
+	# set bio
 	elif args == "bio":
 		try:
 			await app.update_profile(
 				bio = f"{kwargs}"
 				)
-			await m.edit(
+			await send_edit(
+				m, 
 				f"✅ Updated bio to [ {kwargs}]"
 				)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await m.edit(
-			"Please give correct format."
-			)
+		await send_edit(m, "Please give correct format.", delme=2)
 	return
 
 
@@ -436,40 +431,50 @@ async def setprofile(m: Message, args, kwargs):
 
 # lost everything
 async def rmprofile(m: Message, args):
+	# delete last name
 	if args == "lname":
 		await app.update_profile(
 			last_name = ""
 			)
-		await m.edit(
+		await send_edit(
+			m, 
 			"✅ Removed last name from profile."
 			)
+	# delete bio
 	elif args == "bio":
 		await app.update_profile(
 			bio = "")
-		await m.edit(
+		await send_edit(
+			m, 
 			"✅ Removed bio from profile."
 			)
+	# delete profile picture
 	elif args == "pfp":
 		photos = await app.get_profile_photos("me")
 		if photos:
 			await app.delete_profile_photos([p.file_id for p in photos[1:]])
-			await m.edit(
+			await send_edit(
+				m, 
 				"✅ Deleted all photos from profile."
 				)
 		else:
-			await m.edit(
-				"❌ There are no photos in your profile."
-				)
+			await send_edit(m, "❌ There are no photos in your profile.")
+	# delete username
 	elif args == "uname":
 		await app.update_username("")
-		await m.edit(
+		await send_edit(
+			m, 
 			"✅ Removed username from profile."
 			)
 	else:
-		await m.edit(
-			"Give correct format."
-			)
+		await m.edit("Give correct format.", delme=2)
 	return
 
+
+
+
+@app.on_message(filters.command("repo", PREFIX) & filters.me)
+async def remove_pfp(_, m: Message):
+	await send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
 
 

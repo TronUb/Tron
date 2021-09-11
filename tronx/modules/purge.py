@@ -54,9 +54,14 @@ async def purge_all(app, m:Message):
 		from_user = None
 		start_message = m.reply_to_message.message_id
 		end_message = m.message_id
-		list_of_messages = await app.get_messages(chat_id=m.chat.id,
-													message_ids=range(start_message, end_message),
-													replies=0)
+		list_of_messages = await app.get_messages(
+			chat_id=m.chat.id,
+			message_ids=range(
+				start_message, 
+				end_message
+				),
+				replies=0
+		)
 		del_msg = []
 		purge_count = 0
 		for msg in list_of_messages:
@@ -71,20 +76,17 @@ async def purge_all(app, m:Message):
 					del_msg.append(msg.message_id)
 			else:
 				del_msg.append(msg.message_id)
-		await app.delete_messages(chat_id=m.chat.id,
-									message_ids=del_msg,
-									revoke=True)
+		await app.delete_messages(
+			chat_id=m.chat.id,
+			message_ids=del_msg,
+			revoke=True
+		)
 		purge_count += len(del_msg)
 		end_t = datetime.now()
 		time_taken_s = (end_t - start_t).seconds
 		await m.delete()
 	else:
-		await send_edit(
-			m, 
-			"Reply to a message to delete all from up to bottom"
-			)
-		time.sleep(2.5)
-		await m.delete()
+		await send_edit(m, "Reply to a message to delete all from up to bottom", delme=2)
 
 
 
@@ -94,10 +96,8 @@ async def purge_myself(app, m:Message):
 	if len(m.text.split()) >= 2 and m.text.split()[1].isdigit():
 		target = int(m.text.split()[1])
 	else:
-		await send_edit(
-			m, 
-			"Give some number after to delete messages ..."
-			)
+		await send_edit(m, "Give some number after to delete messages ...", delme=2)
+		return
 	lim = target if target < 101 else 100
 	get_msg = await app.get_history(m.chat.id, limit=lim) # max 100 messages
 	listall = []
@@ -140,21 +140,17 @@ async def purge_myself(app, m:Message):
 
 
 @app.on_message(gen("del"))
-async def delete_tag(app, m:Message):
+async def delete_tag(_, m: Message):
+	reply = m.reply_to_message
+	if reply:
+		msg_id = [m.message_id, reply.message_id]
+	elif not reply:
+		msg_id = m.message_id
+
 	try:
-		msg_ids = [m.message_id]
-		if m.reply_to_message:
-			msg_ids.append(m.reply_to_message.message_id)
 		await app.delete_messages(
-			m.chat.id, 
-			msg_ids
+			chat_id=m.chat.id, 
+			message_ids=msg_id
 			)
 	except Exception as e:
-		await app.send_message(
-			Config.LOG_CHAT,
-			f"#error:\n\n{e}"
-			)
-		await send_edit(
-			m, 
-			"Check this error in your log chat."
-			)
+		await error(m, e)
