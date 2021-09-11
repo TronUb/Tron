@@ -257,61 +257,59 @@ async def insult_someone(_, m):
 
 
 
+async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
+	reply = m.reply_to_message 
+	if p_id:
+		p_id = p_id
+	elif not p_id:
+		p_id = await app.get_profile_photos(reply.from_user.id)
+	photo = []
+	photo.clear()
+	if not arg:
+		for x in p_id:
+			await app.send_cached_media(m.chat.id, x["file_id"])
+			time.sleep(0.30)
+	elif arg:
+		for x in p_id:
+			photo.append(x["file_id"])
+				if len(photo) == 5:
+					break
+				else:
+					pass
+		for x in photo:
+			await app.send_cached_media(m.chat.id, x)
+	else:
+		print("failed to send Profile photo")
+
+
+
+
 @app.on_message(gen("poto"))
 async def get_photos(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
-	photo = []
 	await send_edit(m, "Sending profile photos . . .")
 	if reply:
 		try:
-			p_id = await app.get_profile_photos(reply.from_user.id)
 			if long(m) > 1:
 				if cmd[1] == "all":
-					for x in p_id:
-						await app.send_cached_media(m.chat.id, x["file_id"])
-						time.sleep(0.30)
+					await send_profile_pic(app, m, False)
 				if cmd[1] != "all":
-					for x in p_id:
-						photo.append(x["file_id"])
-						if len(photo) == 5:
-							break
-						else:
-							pass
-					for x in photo:
-						await app.send_cached_media(m.chat.id, x)
+					await send_profile_pic(app, m)
+
 			if long(m) == 1:
-				for x in p_id:
-					photo.append(x["file_id"])
-					if len(photo) == 5:
-						break
-					else:
-						pass
-				for x in photo:
-					await app.send_cached_media(m.chat.id, x)
+				await send_profile_pic(app, m)
 		except Exception as e:
 			await error(m, e)
+
 	elif not reply:
 		if long(m) > 1:
 			user = await app.get_users(cmd[1])
 			p_id = await app.get_profile_photos(user.id)
-			
-			for x in p_id:
-				photo.append(x["file_id"])
-				if len(photo) == 5:
-					break
-				else:
-					pass
-			for x in photo:
-				await app.send_cached_media(m.chat.id, x)
+			await send_profile_pic(app, m, p_id=p_id)
+
 		elif long(m) == 1:
 			user = m.from_user
 			p_id = await app.get_profile_photos(user.id)
-			for x in p_id:
-				photo.append(x["file_id"])
-				if len(photo) == 5:
-					break
-				else:
-					pass
-			for x in photo:
-				await app.send_cached_media(m.chat.id, x)
+			await send_profile_pic(app, m, p_id=p_id)
+	await m.delete()

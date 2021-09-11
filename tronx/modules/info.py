@@ -166,12 +166,17 @@ async def get_chatinfo(_, m: Message):
 			chat = await app.get_chat(chat_u)
 		else:
 			if m.chat.type == "private":
-				await send_edit(m, "Please use it in groups or use .chatinfo [group username or id]")
+				await send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
 				return
 			else:
 				chat_v = m.chat.id
 				chat = await app.get_chat(chat_v)
-	
+
+		if bool(await app.get_profile_photos(m.chat.id)) is True:
+			poto = await app.get_profile_photos(m.chat.id)
+		else:
+			poto = False
+
 		await send_edit(m, "Processing ...")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
@@ -197,12 +202,15 @@ async def get_chatinfo(_, m: Message):
 		data += f"**Change Group Info:** `{neel.can_change_info}`\n"
 		data += f"**Invite Users:** `{neel.can_invite_users}`\n"
 		data += f"**Pin Messages:** `{neel.can_pin_messages}`\n"
-		if data:
+		if poto and data:
+			await app.send_cached_media(
+				m.chat.id, 
+				file_id=poto[0].file_id, 
+				caption=data
+			)
+		elif not poto:
 			await send_edit(m, data)
 		else:
-			await send_edit(
-				m, 
-				"Failed to get information of this group ..."
-				)
+			await send_edit(m, "Failed to get information of this group . . .", delme=2)
 	except Exception as e:
 		await error(m, e)
