@@ -41,7 +41,7 @@ OWNER_ID = 1790546938
 
 OWNER_USERNAME = "@BEASTZX"
 
-version = "v.0.0.2"
+version = "v.0.0.3"
 
 CMD_HELP = {}
 
