@@ -46,43 +46,35 @@ def types(m: Message):
 	reply = m.reply_to_message
 	if reply.text:
 		cast = "text" 
+		name = None
 	elif reply.photo:
 		cast = "photo"
 		name = reply.photo.file_name
-		file_id = reply.photo.file_id
 	elif reply.video:
 		cast = "video"
 		name = reply.video.file_name
-		file_id = reply.video.file_id
 	elif reply.document:
 		cast = "document"
 		name = reply.document.file_name
-		file_id = reply.document.file_id
 	elif reply.contact:
 		cast = "contact"
+		name = None
 	elif reply.audio:
 		cast = "audio"
 		name = reply.audio.file_name
-		file_id = reply.audio.file_id
 	elif reply.sticker:
 		cast = "sticker"
 		name = reply.sticker.file_name
-		file_id = reply.sticker.file_id
 	elif reply.animation:
 		cast = "animation"
 		name = reply.animation.file_name
-		file_id = reply.animation.file_id
 	elif reply.poll:
 		cast = "poll"
+		name = None
 	else:
 		cast = "unknown"
 		name = None
-		file_id = None
-	return (
-		{"cast" :cast, 
-		"name" : name,
-		"file_id" : file_id
-		})
+return cast, name
 
 
 
@@ -99,3 +91,29 @@ def chattype(m: Message):
 	else:
 		chat_type = "unknown chat type"
 	return chat_type
+
+
+
+
+def get_file_id(m: Message):
+	reply = m.reply_to_message
+	if reply:
+		if reply.text:
+			data = "text"
+		elif reply.photo:
+			data = reply.photo.file_id
+		elif reply.video:
+			data = reply.video.file_id
+		elif reply.document:
+			data = reply.document.file_id
+		elif reply.sticker:
+			data = reply.sticker.file_id
+		elif reply.animation:
+			data = reply.animation.file_id
+		elif reply.audio:
+			data = reply.audio.file_id
+		else:
+			data = None
+		return data
+	else:
+		False

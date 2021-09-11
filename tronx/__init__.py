@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import logging
+import platform
 
 from pyrogram import Client, filters
 from pyrogram.filters import Filter
@@ -53,7 +54,7 @@ REPO = "https://github.com/beastzx18/Tron"
 
 StartTime = time.time()
 
-__python_version__ = f"{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}"
+__python_version__ = f"{platform.python_version()}"
 
 
 
