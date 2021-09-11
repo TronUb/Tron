@@ -2,7 +2,7 @@ import os, time, asyncio, qrcode, requests
 
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
-from pyrogram import filters
+from pyrogram import filters, Client
 from pyrogram.types import Message
 
 from tronx import (
