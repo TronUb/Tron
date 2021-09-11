@@ -54,7 +54,7 @@ async def sleep_userbot(_, m: Message):
 	elif long(m) > 1:
 		cmd = m.command[1]
 	if cmd.isdigit():
-		if int(cmd) > 60: and int(cmd) < 86400:
+		if int(cmd) > 60:
 			sleeptime = int(cmd//60)
 			sec = "minutes"
 		elif int(cmd) < 60:
