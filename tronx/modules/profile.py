@@ -194,43 +194,28 @@ async def mention(app, m: Message):
 @app.on_message(gen("uinfo"))
 async def get_full_user_info(app, m: Message):
 	await m.edit('scrapping info...')
+	reply = m.reply_to_message
+
+	if reply:
+		user = reply.from_user
+	elif not reply:
+		user = m.from_user
 	try:
-		user = m.reply_to_message.from_user.id
-	except:
-		user = m.from_user.id
-	try:
-		await app.send_message("@creationdatebot", f"/start")
-		await asyncio.sleep(1)
-		date_dict.clear()
-		msg = await app.send_message("@creationdatebot", f"/id {user}")
-		await asyncio.sleep(1)
-		await app.send(functions.messages.DeleteHistory(peer=await app.resolve_peer(747653812), max_id=msg.chat.id))
-		user_info = await app.send(
-			functions.users.GetFullUser(id=await app.resolve_peer(user)))
-		if user_info.user.username == None:
-			username = 'None'
-		else:
-			username = f'@{user_info.user.username}'
-		if user_info.about == None:
-			about = 'None'
-		else:
-			about = user_info.about
-		user_info = (f'''USERNAME: {username}
-ID: `{user_info.user.id}`
-BOT: `{user_info.user.bot}`
-SCAM: `{user_info.user.scam}`
-NAME: `{user_info.user.first_name}`
-DELETED: `{user_info.user.deleted}`
-BIO: `{about}`
-CONTACT: `{user_info.user.contact}`
-RESTRICTED: `{user_info.user.restricted}`
-VERIFIED: `{user_info.user.verified}`
-PHONE CALLS AVAILABLE:` {user_info.phone_calls_available}`
-BLOCKED:` {user_info.blocked}`''')
-		date_dict.clear()
-		await message.edit(user_info)
-	except:
-		await message.edit('Error !! Please Try Again Later...')
+
+		duo = f"ID: `{user.id}`"
+		duo += f"BOT: `{user.is_bot}`"
+		duo += f"SCAM: `{user.is_scam}`"
+		duo += f"NAME: `{user.first_name}`"
+		duo += f"DELETED: `{user.is_deleted}`"
+		duo += f"CONTACT: `{user.is_contact}`"
+		duo += f"RESTRICTED: `{user.is_restricted}`"
+		duo += f"VERIFIED: `{user.is_verified}`"
+		duo += f"BLOCKED:` {user.is_blocked}`"
+
+		await send_edit(m, duo)
+	except Exception as e:
+		print(e)
+		await send_edit(m, "Try again later . . .")
 
 
 

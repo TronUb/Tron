@@ -272,10 +272,10 @@ async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
 	elif arg:
 		for x in p_id:
 			photo.append(x["file_id"])
-				if len(photo) == 5:
-					break
-				else:
-					pass
+			if len(photo) == 5:
+				break
+			else:
+				pass
 		for x in photo:
 			await app.send_cached_media(m.chat.id, x)
 	else:
