@@ -271,7 +271,9 @@ class lara(Client):
 if Config.SESSION:
 	""" Decorator assignment """
 	app = tron()
-else:
+elif not Config.SESSION and list(platform.uname())[1] == "localhost":
+	app = Client(config_file="./config.ini")
+elif not Config.SESSION and list(platform.uname())[1] != "localhost":
 	app = False
 	log.warning("String session is missing, please fill this requirement !")
 
@@ -281,7 +283,9 @@ else:
 if Config.TOKEN:
 	""" Decorator assignment """
 	bot = lara()
-else:
+elif not Config.TOKEN and list(platform.uname())[1] == "localhost":
+	bot = Client("lara", config_file="./config.ini")
+elif not Config.TOKEN and list(platform.uname())[1] != "localhost":
 	bot = False
 	log.warning("Bot token is missing, please fill this requirement !")
 

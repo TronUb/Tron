@@ -91,6 +91,8 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 	async def func(flt, client: Client, message: Message):
 		# Username shared among all commands; used for mention commands, e.g.: /start@username
 		global username
+
+		username = ""
 		# works only for you 
 		if ( message.from_user 
 			and message.from_user.id == USER_ID
