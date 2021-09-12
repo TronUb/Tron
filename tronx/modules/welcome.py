@@ -27,8 +27,8 @@ async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
 		media_id = dw.get_welcome(str(m.chat.id))
 		try:
-			file_id = media_id["file_id"] if media_id["file_id"] else file_id = False
-			caption = media_id["caption"] if media_id["caption"] else caption = False
+			file_id = media_id["file_id"] if media_id["file_id"] else False
+			caption = media_id["caption"] if media_id["caption"] else False
 			if caption:
 				await app.send_cached_media(
 					m.chat.id,
@@ -58,8 +58,8 @@ async def save_welcome(_, m: Message):
 	if reply:
 		try:
 			fall = get_file_id(m)
-			file_id = fall["data"] if fall["data"] else file_id = None
-			caption = fall["text"] if fall["text"] else caption = None
+			file_id = fall["data"] if fall["data"] else None
+			caption = fall["text"] if fall["text"] else None
 
 			if caption:
 				dw.set_welcome(str(m.chat.id), file_id, caption)
