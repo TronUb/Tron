@@ -27,7 +27,7 @@ from . import get_file_id
 @app.on_message(filters.new_chat_members & filters.group)
 async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
-		if filters.chat(int(dw.get_welcome(str(m.chat.id))))
+		if filters.chat(int(dw.get_welcome(str(m.chat.id)))):
 			pass
 		else:
 			return
