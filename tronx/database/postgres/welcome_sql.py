@@ -17,7 +17,7 @@ from . import SESSION, BASE
 class whole(BASE):
 	__tablename__ = "welcome"
 	
-	keys = Column(Integer, primary_key=True)
+	keys = Column(String, primary_key=True)
 	values = Column(String)
 	
 	def __init__(self, keys, values):

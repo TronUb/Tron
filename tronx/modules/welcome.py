@@ -24,7 +24,7 @@ from . import get_file_id
 
 @app.on_message(filters.new_chat_members)
 async def send_welcome(_, m: Message):
-	if bool(dw.get_welcome(m.chat.id)) is True:
+	if bool(dw.get_welcome(str(m.chat.id))) is True:
 		media_id = dw.get_welcome(m.chat.id)
 		try:
 			app.send_cached_media(
@@ -33,7 +33,7 @@ async def send_welcome(_, m: Message):
 				)
 		except:
 			await send_edit(m, media_id)
-	elif bool(dw.get_welcome(m.chat.id)) is False:
+	elif bool(dw.get_welcome(str(m.chat.id))) is False:
 		return
 
 
@@ -46,7 +46,7 @@ async def save_welcome(_, m: Message):
 	reply = m.reply_to_message
 	if reply:
 		try:
-			dw.set_welcome(m.chat.id, get_file_id(m))
+			dw.set_welcome(str(m.chat.id), get_file_id(m))
 			await send_edit(m, "Added this media/text to welcome message . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
@@ -61,7 +61,7 @@ async def delete_welcome(_, m: Message):
 	await private(m)
 	try:
 		await send_edit(m, "Checking welcome message . . .")
-		dw.del_welcome(m.chat.id)
+		dw.del_welcome(str(m.chat.id))
 		await send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2)
 	except Exception as e:
 		await error(m, e)
