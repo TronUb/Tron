@@ -45,6 +45,7 @@ def set_welcome(user_id, file_id, text=None):
 				mydata = whole(user_id, file_id, text)
 			else:
 				mydata.file_id = file_id
+				mydata.text = text
 			SESSION.merge(mydata)
 			SESSION.commit()
 		finally:
@@ -61,6 +62,8 @@ def del_welcome(user_id):
 			if mydata:
 				SESSION.delete(mydata)
 				SESSION.commit()
+			else:
+				return False
 		finally:
 			SESSION.close()
 		return False
@@ -73,9 +76,11 @@ def get_welcome(user_id):
 	rep = ""
 	if mydata:
 		rep = str(mydata.file_id)
-		repx = str(mydata.text)
+		repx = mydata.text
+	else:
+		return {"file_id" : None, "caption" : None}
 	SESSION.close()
-	return rep, repx
+	return {"file_id" : rep, "caption" : repx}
 
 
 
