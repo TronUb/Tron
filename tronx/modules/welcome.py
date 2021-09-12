@@ -29,7 +29,7 @@ async def send_welcome(_, m: Message):
 		try:
 			await app.send_cached_media(
 				m.chat.id,
-				file_id=media_id
+				file_id=media_id,
 				reply_to_message_id=m.from_user.id
 			)
 		except:
