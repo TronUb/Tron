@@ -73,7 +73,7 @@ def get_welcome(user_id):
 	rep = ""
 	if mydata:
 		rep = str(mydata.file_id)
-		repx str(mydata.text)
+		repx = str(mydata.text)
 	SESSION.close()
 	return rep, repx
 
