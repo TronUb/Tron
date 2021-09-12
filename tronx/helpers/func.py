@@ -54,7 +54,7 @@ async def send_edit(
 			text
 			)
 	try:
-		if delme and deleme != 0:
+		if delme and delme != 0:
 			time.sleep(delme)
 			await m.delete()
 		else:

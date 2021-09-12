@@ -27,10 +27,11 @@ async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
 		media_id = dw.get_welcome(str(m.chat.id))
 		try:
-			app.send_cached_media(
+			await app.send_cached_media(
 				m.chat.id,
 				file_id=media_id
-				)
+				reply_to_message_id=m.from_user.id
+			)
 		except:
 			await send_edit(m, media_id)
 	elif bool(dw.get_welcome(str(m.chat.id))) is False:
