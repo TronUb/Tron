@@ -5,6 +5,7 @@ from pyrogram import filters
 
 from tronx import (
 	app,
+	LOG_CHAT,
 )
 
 from tronx.database.postgres import filters_sql as df  
@@ -15,7 +16,6 @@ from tronx.helpers import (
 	gen,
 	long,
 	private,
-	LOG_CHAT,
 )
 
 from . import get_file_id
