@@ -580,32 +580,11 @@ def time_formatter(milliseconds: int) -> str:
 
 
 
-def time_parser(start, end):
-	time_end = end - start
-	month = time_end // 2678400
-	days = time_end // 86400
-	hours = time_end // 3600 % 24
-	minutes = time_end // 60 % 60
-	seconds = time_end % 60
-	times = ""
-	if month:
-		times += "{} month, ".format(month)
-	if days:
-		times += "{} days, ".format(days)
-	if hours:
-		times += "{} hours, ".format(hours)
-	if minutes:
-		times += "{} minutes, ".format(minutes)
-	if seconds:
-		times += "{} seconds".format(seconds)
-	if times == "":
-		times = "{} miliseconds".format(time_end)
-	return times
-
-
-
-
-def time_parser_int(time_end):
+def time_parser(start, end=None) -> int:
+	if end is None:
+		time_end = start
+	else:
+		time_end = end - start
 	month = time_end // 2678400
 	days = time_end // 86400
 	hours = time_end // 3600 % 24

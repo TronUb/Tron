@@ -49,7 +49,8 @@ async def send_welcome(_, m: Message):
 					file_id=file_id,
 					reply_to_message_id=m.from_user.id
 				)
-		except:
+		except Exception as e:
+			print(e)
 			await print(media_id)
 	elif bool(dw.get_welcome(str(m.chat.id))) is False:
 		return

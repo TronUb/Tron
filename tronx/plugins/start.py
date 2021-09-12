@@ -37,17 +37,6 @@ from tronx import (
 	USER_USERNAME, 
 	Config,
 	uptime,
-)
-
-from tronx import (
-	app, 
-	CMD_HELP, 
-	version, 
-	USER_ID, 
-	USER_NAME, 
-	USER_USERNAME, 
-	Config,
-	uptime,
 	PREFIX,
 	__python_version__,
 	db_status,

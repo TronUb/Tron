@@ -97,6 +97,8 @@ def chattype(m: Message):
 
 def get_file_id(m: Message):
 	reply = m.reply_to_message
+	data = None
+	text = None
 	if reply:
 		if reply.text:
 			data = m.text
@@ -128,6 +130,6 @@ def get_file_id(m: Message):
 		else:
 			data = False
 			text = False
-		return {"data": data, "text" : text}
 	else:
-		False
+		return {"data": data, "text" : text}
+	return {"data": data, "text" : text}

@@ -97,7 +97,7 @@ async def save_welcome(_, m: Message):
 			df.set_filter(chat_id=str(m.chat.id), file_id=file_id, trigger=cmd[1], caption=caption)
 		elif not caption:
 			df.set_filter(str(m.chat.id), file_id=file_id, trigger=cmd[1])
-		await send_edit(m, "Added `{cmd[1]}` as a filter trigger to replied media/text . . .", delme=2)
+		await send_edit(m, f"Added `{cmd[1]}` as a filter trigger to replied media/text . . .", delme=2)
 	else:
 		await send_edit(m, "Please reply to some media or text with filter name to set filter . . .", delme=2)      
 
@@ -114,7 +114,7 @@ async def delete_welcome(_, m: Message):
 			await send_edit(m, "Give me the filter name, piro !")
 		await send_edit(m, "Checking existence of filter . . .")
 		df.del_filter(cmd[1])
-		await send_edit(m, "Successfully deleted `{cmd[1]}` for this chat . . .", delme=2)
+		await send_edit(m, f"Successfully deleted `{cmd[1]}` for this chat . . .", delme=2)
 	except Exception as e:
 		await error(m, e)
 

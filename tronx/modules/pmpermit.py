@@ -1,4 +1,6 @@
-import os, time, asyncio
+import os
+import time
+import asyncio
 
 from sys import platform
 
@@ -253,7 +255,6 @@ async def revoke_pm_block(_, m:Message):
 			)
 		except Exception as e:
 			print(e)
-			pass
 	else:
 		print("Can't disallow this user . . .", delme=3)
 
