@@ -90,7 +90,7 @@ async def save_welcome(_, m: Message):
 			await send_edit(m, "Please give me the filter name . . .")
 			return
 		fall = get_file_id(m)
-		file_id = fall["file_id"] if fall["file_id"] else False
+		file_id = fall["data"] if fall["data"] else False
 		caption = fall["text"] if fall["text"] else False
 
 		if caption:
