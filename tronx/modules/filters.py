@@ -127,7 +127,7 @@ async def delete_welcome(_, m: Message):
 	try:
 		if long(m) > 1:
 			cmd = str(m.command)
-		elss:
+		else:
 			await send_edit(m, "Give me the filter name, piro !")
 		await send_edit(m, "Getting filter . . .")
 		data = df.get_filter(str(cmd[1]))
