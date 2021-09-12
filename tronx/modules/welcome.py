@@ -22,6 +22,11 @@ from . import get_file_id
 
 
 
+if bool(dw.get_welcome(str(m.chat.id))) is True:
+	chat = dw.get_welcome(str(m.chat.id))
+
+
+
 @app.on_message(filters.new_chat_members)
 async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
@@ -43,7 +48,7 @@ async def send_welcome(_, m: Message):
 					reply_to_message_id=m.from_user.id
 				)
 		except:
-			await send_edit(m, media_id)
+			await print(media_id)
 	elif bool(dw.get_welcome(str(m.chat.id))) is False:
 		return
 
