@@ -43,9 +43,9 @@ async def send_welcome(_, m: Message):
 		return
 
 	if filters.regex(trigger) and filters.chat(chat):
-			pass
-		else:
-			return
+		pass
+	else:
+		return
 
 	if bool(df.get_filter(m.text)) is True:
 		data = df.get_filter(m.text)
