@@ -41,12 +41,10 @@ def set_welcome(user_id, file_id, text=None):
 	with INSERTION_LOCK:
 		mydata = SESSION.query(whole).get(user_id)
 		try:
-			if not mydata:
-				mydata = whole(user_id, file_id, text)
-			else:
-				mydata.file_id = file_id
-				mydata.text = text
-			SESSION.merge(mydata)
+			if mydata:
+				SESSION.delete(mydata)
+			mydata = whole(user_id, file_id, text)
+			SESSION.add(mydata)
 			SESSION.commit()
 		finally:
 			SESSION.close()
@@ -62,8 +60,6 @@ def del_welcome(user_id):
 			if mydata:
 				SESSION.delete(mydata)
 				SESSION.commit()
-			else:
-				return False
 		finally:
 			SESSION.close()
 		return False
@@ -73,12 +69,11 @@ def del_welcome(user_id):
 
 def get_welcome(user_id):
 	mydata = SESSION.query(whole).get(user_id)
-	rep = ""
+	rep = None
+	repx = None
 	if mydata:
 		rep = str(mydata.file_id)
 		repx = mydata.text
-	else:
-		return {"file_id" : None, "caption" : None}
 	SESSION.close()
 	return {"file_id" : rep, "caption" : repx}
 
