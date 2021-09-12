@@ -5,7 +5,7 @@ from pyrogram import filters
 
 from tronx import (
 	app,
-	LOG_CHAT,
+	LOG_CHAT,	
 )
 
 from tronx.database.postgres import filters_sql as df  
@@ -89,18 +89,15 @@ async def save_welcome(_, m: Message):
 		else:
 			await send_edit(m, "Please give me the filter name . . .")
 			return
-		try:
-			fall = get_file_id(m)
-			file_id = fall["file_id"] if fall["file_id"] else False
-			caption = fall["text"] if fall["text"] else False
+		fall = get_file_id(m)
+		file_id = fall["file_id"] if fall["file_id"] else False
+		caption = fall["text"] if fall["text"] else False
 
-			if caption:
-				df.set_filter(chat_id=str(m.chat.id), file_id=file_id, trigger=cmd[1], caption=caption)
-			elif not caption:
-				df.set_filter(str(m.chat.id), file_id=file_id, trigger=cmd[1])
-			await send_edit(m, "Added `{cmd[1]}` as a filter trigger to replied media/text . . .", delme=2)
-		except Exception as e:
-			await error(m, e)
+		if caption:
+			df.set_filter(chat_id=str(m.chat.id), file_id=file_id, trigger=cmd[1], caption=caption)
+		elif not caption:
+			df.set_filter(str(m.chat.id), file_id=file_id, trigger=cmd[1])
+		await send_edit(m, "Added `{cmd[1]}` as a filter trigger to replied media/text . . .", delme=2)
 	else:
 		await send_edit(m, "Please reply to some media or text with filter name to set filter . . .", delme=2)      
 
