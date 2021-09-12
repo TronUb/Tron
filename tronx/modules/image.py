@@ -172,7 +172,6 @@ async def make_qr(app, m):
 async def colour_templates(_, m: Message):
 	if len(m.command) < 2:
 		await send_edit(m, "Please give some colour name after command ...", delme=3)
-		return
 	elif len(m.command) > 1:
 		if len(m.command) < 4096:
 			try:

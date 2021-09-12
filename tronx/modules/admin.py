@@ -146,7 +146,6 @@ async def unban(_, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Please give me some id or username . . .", delme=2)
-				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
 				user = await app.get_users(m.command[1])
@@ -203,7 +202,6 @@ async def mute_hammer(_, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Please give me some id or username . . .", delme=2)
-				return
 
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
@@ -265,7 +263,6 @@ async def unmute(_, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Please give me some id or username . . .", delme=2)
-				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
 				user = await app.get_users(m.command[1])
@@ -306,7 +303,6 @@ async def kick_user(_, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Give me some id or username . . .", delme=2)
-				return
 			elif long(m) > 1:
 				await send_edit(m, "⏳ • Hold on...")
 				user = await app.get_users(m.command[1])
@@ -409,7 +405,6 @@ async def promote(_, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Please give me some id or username . . .", delme=2)
-				return
 			elif long(m) > 1:
 				user = await app.get_users(m.command[1])
 				await send_edit(m, "⏳ • Hold on...")
@@ -464,7 +459,6 @@ async def demote(client, m):
 		elif not reply:
 			if long(m) == 1:
 				await send_edit(m, "Please give me some id or reply to that admin . . .", delme=2)
-				return
 			elif long(m) > 1:
 				user = m.command[1]
 				done = await app.promote_chat_member(
