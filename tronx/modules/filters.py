@@ -22,12 +22,17 @@ from . import get_file_id
 
 
 
-if m.chat.type == "supergroup":
-	if m.from_user:
-		if df.get_filter(m.text):
-			if  df.get_filter(m.text)["chat_id"] == str(m.chat.id):
-				trigger = m.text
-				chat = m.chat.id
+@app.on_message(filters.group)
+async def send_welcome(_, m: Message):
+	if m.chat.type == "supergroup":
+		if m.from_user:
+			if df.get_filter(m.text):
+				if  df.get_filter(m.text)["chat_id"] == str(m.chat.id):
+					trigger = m.text
+					chat = m.chat.id
+				else:
+					trigger = ""
+					chat = ""
 			else:
 				trigger = ""
 				chat = ""
@@ -35,16 +40,13 @@ if m.chat.type == "supergroup":
 			trigger = ""
 			chat = ""
 	else:
-		trigger = ""
-		chat = ""
+		return
 
+	if filters.regex(trigger) and filters.chat(chat):
+			pass
+		else:
+			return
 
-
-
-
-
-@app.on_message(filters.regex(trigger) & filters.chat(chat))
-async def send_welcome(_, m: Message):
 	if bool(df.get_filter(m.text)) is True:
 		data = df.get_filter(m.text)
 		try:

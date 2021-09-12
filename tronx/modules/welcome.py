@@ -22,14 +22,15 @@ from . import get_file_id
 
 
 
-if bool(dw.get_welcome(str(m.chat.id))) is True:
-	chat = dw.get_welcome(str(m.chat.id))
-
 
 
 @app.on_message(filters.new_chat_members)
 async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
+		if filters.chat(int(dw.get_welcome(str(m.chat.id))))
+			pass
+		else:
+			return
 		media_id = dw.get_welcome(str(m.chat.id))
 		try:
 			file_id = media_id["file_id"] if media_id["file_id"] else False
