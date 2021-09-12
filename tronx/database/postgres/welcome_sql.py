@@ -17,12 +17,14 @@ from . import SESSION, BASE
 class whole(BASE):
 	__tablename__ = "welcome"
 	
-	keys = Column(String, primary_key=True)
-	values = Column(String)
+	user_id = Column(String, primary_key=True)
+	file_id = Column(String)
+	text = Column(String)
 	
-	def __init__(self, keys, values):
-		self.keys = keys
-		self.values = values
+	def __init__(self, user_id, file_id, text):
+		self.user_id = user_id
+		self.file_id = file_id
+		self.text = text
 
 
 
@@ -34,27 +36,27 @@ INSERTION_LOCK = threading.RLock()
 
 
 
-# set, del, get keys & values
-def set_welcome(keys, values):
+# set, del, get user_id & file_id
+def set_welcome(user_id, file_id, text=None):
 	with INSERTION_LOCK:
-		mydata = SESSION.query(whole).get(keys)
+		mydata = SESSION.query(whole).get(user_id)
 		try:
 			if not mydata:
-				mydata = whole(keys, values)
+				mydata = whole(user_id, file_id, text)
 			else:
-				mydata.values = values
+				mydata.file_id = file_id
 			SESSION.merge(mydata)
 			SESSION.commit()
 		finally:
 			SESSION.close()
-	return keys
+	return user_id
 
 
 
 
-def del_welcome(keys):
+def del_welcome(user_id):
 	with INSERTION_LOCK:
-		mydata = SESSION.query(whole).get(keys)
+		mydata = SESSION.query(whole).get(user_id)
 		try:
 			if mydata:
 				SESSION.delete(mydata)
@@ -66,13 +68,14 @@ def del_welcome(keys):
 
 
 
-def get_welcome(keys):
-	mydata = SESSION.query(whole).get(keys)
+def get_welcome(user_id):
+	mydata = SESSION.query(whole).get(user_id)
 	rep = ""
 	if mydata:
-		rep = str(mydata.values)
+		rep = str(mydata.file_id)
+		repx str(mydata.text)
 	SESSION.close()
-	return rep
+	return rep, repx
 
 
 
