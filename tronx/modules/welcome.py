@@ -15,6 +15,7 @@ from tronx.helpers import (
 	gen,
 	long,
 	private,
+	lOG_CHAT,
 )
 
 from . import get_file_id
@@ -24,7 +25,7 @@ from . import get_file_id
 
 
 
-@app.on_message(filters.new_chat_members & filters.group)
+@app.on_message(filters.new_chat_members & filters.group & filters.chat(LOG_CHAT))
 async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
 		if filters.chat(int(dw.get_welcome(str(m.chat.id)))):
