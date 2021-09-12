@@ -19,7 +19,7 @@ from . import SESSION, BASE
 
 
 class SelfNotes(BASE):
-	__tablename__ = "self_notes"
+	__tablename__ = "notes"
 
 	user_id = Column(Integer, primary_key=True)
 	name = Column(UnicodeText, primary_key=True)

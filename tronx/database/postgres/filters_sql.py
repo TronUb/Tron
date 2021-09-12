@@ -15,7 +15,7 @@ from . import SESSION, BASE
 
 # save user ids in whitelists
 class filters(BASE):
-	__tablename__ = "welcome"
+	__tablename__ = "filters"
 	
 	trigger = Column(String, primary_key=True)
 	chat_id = Column(String)

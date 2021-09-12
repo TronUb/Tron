@@ -15,7 +15,7 @@ from . import SESSION, BASE
 
 # save user ids in whitelists
 class data(BASE):
-	__tablename__ = "database_var"
+	__tablename__ = "database var"
 	
 	keys = Column(String, primary_key=True)
 	values = Column(String)

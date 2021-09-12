@@ -28,7 +28,7 @@ class PMTable(BASE):
 
 # save warn msg ids
 class MsgID(BASE):
-	__tablename__ = "msgid_pm"
+	__tablename__ = "pm msg id"
 
 	user_id = Column(Integer, primary_key=True)
 	msg_id = Column(Integer)
