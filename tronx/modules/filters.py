@@ -26,53 +26,63 @@ from . import get_file_id
 @app.on_message(filters.group & filters.chat(LOG_CHAT))
 async def send_welcome(_, m: Message):
 	if m.chat.type == "supergroup":
+		pass
+	else:
+		return
+
+		if m.text:
+			if bool(df.get_filter(m.text)) is True:
+				text = df.get_filter(m.text)
+			else:
+				return
+		else:
+			return
+
 		if m.from_user:
-			if df.get_filter(m.text):
-				if  df.get_filter(m.text)["chat_id"] == str(m.chat.id):
+			if text["chat_id"] == str(m.chat.id):
 					trigger = m.text
 					chat = m.chat.id
-				else:
-					trigger = ""
-					chat = ""
 			else:
 				trigger = ""
 				chat = ""
 		else:
 			trigger = ""
 			chat = ""
-	else:
-		return
 
 	if filters.regex(trigger) and filters.chat(chat):
 		pass
 	else:
 		return
 
-	if bool(df.get_filter(m.text)) is True:
-		data = df.get_filter(m.text)
-		try:
-			trigger = data["trigger"] if data["trigger"] else False
-			file_id = data["file_id"] if data["file_id"] else False
-			chat_id = data["chat_id"] if data["chat_id"] else False
-			caption = data["caption"] if data["caption"] else False
-			
+	try:
+		trigger = data["trigger"] if data["trigger"] else False
+		file_id = data["file_id"] if data["file_id"] else False
+		chat_id = data["chat_id"] if data["chat_id"] else False
+		caption = data["caption"] if data["caption"] else False
+
+		if file_id and not file_id.startswith("#"):
+			await app.send_message(
+				m.chat.id, 
+				file_id
+				)
+			return
+		elif file_id and file_id.startswith("#"):
+			file_id = file_id.replace("#", "")
 			if caption:
 				await app.send_cached_media(
-					m.chat.id,
+					chat_id=chat_id,
 					file_id=file_id,
 					caption=caption,
 					reply_to_message_id=m.from_user.id
 				)
 			elif not caption:
 				await app.send_cached_media(
-					m.chat.id,
+					chat_id=chat_id,
 					file_id=file_id,
 					reply_to_message_id=m.from_user.id
 				)
-		except:
-			await send_edit(m, data)
-	elif bool(df.get_filter(m.chat.id)) is False:
-		return
+	except Exception as e:
+		print(e)
 
 
 
@@ -93,10 +103,14 @@ async def save_welcome(_, m: Message):
 		file_id = fall["data"] if fall["data"] else False
 		caption = fall["text"] if fall["text"] else False
 
-		if caption:
-			df.set_filter(chat_id=str(m.chat.id), file_id=file_id, trigger=cmd[1], caption=caption)
-		elif not caption:
-			df.set_filter(str(m.chat.id), file_id=file_id, trigger=cmd[1])
+		if bool(reply.media) is True:
+				if caption:
+					df.set_filter(chat_id=str(m.chat.id), file_id="#" + file_id, trigger=cmd[1], caption=caption)
+				else:
+					df.set_filter(chat_id=str(m.chat.id), file_id="#" + file_id, trigger=cmd[1], caption=False)
+		else:
+			await send_edit(m, "Reply to media only . . .")
+
 		await send_edit(m, f"Added `{cmd[1]}` as a filter trigger to replied media/text . . .", delme=2)
 	else:
 		await send_edit(m, "Please reply to some media or text with filter name to set filter . . .", delme=2)      
@@ -131,7 +145,7 @@ async def delete_welcome(_, m: Message):
 			await send_edit(m, "Give me the filter name, piro !")
 			return
 		await send_edit(m, "Getting filter . . .")
-		data = df.get_filter(str(cmd[1]))
+		data = df.get_filter(cmd[1])
 		await send_edit(m, data)
 	except Exception as e:
 		await error(m, e)
