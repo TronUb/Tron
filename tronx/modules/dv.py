@@ -97,7 +97,7 @@ async def get_dv_var(_, m: Message):
 			m, 
 			"Provide me a suffix to do some work\n\nSuffix: `on` & `off`"
 			)
-	elif long(m) is > 1 and arg[1] = "on":
+	elif long(m) > 1 and arg[1] = "on":
 		if bool(dv.getdv("PMPERMIT")) is True:
 			await send_edit(
 				m, 
