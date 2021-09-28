@@ -110,10 +110,30 @@ async def delete_welcome(_, m: Message):
 	try:
 		await send_edit(m, "Getting welcome message . . .")
 		data = dw.get_welcome(str(m.chat.id))
-		if data[0] is None:
+		text = data["file_id"]
+		cap = data["caption"]
+
+		if (text and cap) is None :
 			await send_edit(m, "No welcome message was assigned to this group.")
-		else:
-			await send_edit(m, data)
+		elif text is not None and cap is None:
+			if text.startswith("#"):
+				await app.send_cached_media(
+					m.chat.id,
+					file_id=text,
+					reply_to_message_id=m.from_user.id
+					)
+			else:
+				await send_edit(m, text)
+		elif (text and cap) is not None:
+			if text.startswith("#"):
+				await app.send_cached_media(
+					m.chat.id,
+					file_id=text,
+					caption=cap,
+					reply_to_message_id=m.from_user.id
+					)
+			else:
+				pass
 	except Exception as e:
 		print(e)
 		await error(m, e)
