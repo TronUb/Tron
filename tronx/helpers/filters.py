@@ -29,7 +29,7 @@ from tronx import (
 
 
 
-if SUDO_USERS == None:
+if SUDO_USERS is None:
 	SUDO_USERS = [USER_ID]
 
 
