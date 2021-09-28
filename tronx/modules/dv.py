@@ -85,3 +85,38 @@ async def get_dv_var(_, m: Message):
 			await send_edit(m, "This var doesn't exist in my database . . .", delme=2)
 	else:
 		await send_edit(m, "Maximum 4096 characters in one message . . .", delme=2)
+
+
+
+
+@app.on_message(gen("pm"))
+async def get_dv_var(_, m: Message):
+	arg = m.command
+	if long(m) < 2:
+		await send_edit(
+			m, 
+			"Provide me a suffix to do some work\n\nSuffix: `on` & `off`"
+			)
+	elif long(m) is > 1 and arg[1] = "on":
+		if bool(dv.getdv("PMPERMIT")) is True:
+			await send_edit(
+				m, 
+				"Pmguard is already active !"
+				)
+		elif bool(dv.getdv("PMPERMIT")) is False:
+			dv.setdv("PMPERMIT", "True")
+			await send_edit(
+				m, 
+				"Pmguard is now turned on !"
+				)
+	elif long(m) > 1 and arg[1] == "off":
+		dv.deldv("PMPERMIT")
+		await send_edit(
+			m, 
+			"Pmguard is now turned off !"
+			)
+	elif long(m) > 1 and arg[1] not in ["on", "off"]:
+		await send_edit(
+			m, 
+			"Use `on` or `off` after command to turn on & off pmguard !"
+			)

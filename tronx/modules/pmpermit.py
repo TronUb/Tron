@@ -170,7 +170,7 @@ async def auto_block(_, m: Message):
 
 
 
-@app.on_message(gen(["a", "approve", "pm"]))
+@app.on_message(gen(["a", "approve"]))
 async def approve_pm(app, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
@@ -217,7 +217,7 @@ async def approve_pm(app, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove", "nopm"]))
+@app.on_message(gen(["da", "disapprove"]))
 async def revoke_pm_block(_, m:Message):
 	reply = m.reply_to_message
 	cmd = m.command
