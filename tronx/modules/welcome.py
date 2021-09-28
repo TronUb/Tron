@@ -106,6 +106,7 @@ async def delete_welcome(_, m: Message):
 		else:
 			await send_edit(m, data)
 	except Exception as e:
+		print(e)
 		await error(m, e)
 
 
