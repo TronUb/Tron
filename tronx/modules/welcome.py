@@ -74,11 +74,18 @@ async def save_welcome(_, m: Message):
 			file_id = fall["data"] if fall["data"] else None
 			caption = fall["text"] if fall["text"] else None
 
-			if caption:
-				dw.set_welcome(str(m.chat.id), "#" + file_id, caption)
-			else:
-				dw.set_welcome(str(m.chat.id), "#" + file_id)
-			await send_edit(m, "Added this media/text to welcome message . . .", delme=2)
+			if bool(reply.media) is True:
+				if caption:
+					dw.set_welcome(str(m.chat.id), "#" + file_id, caption)
+				else:
+					dw.set_welcome(str(m.chat.id), "#" + file_id)
+				await send_edit(m, "Added this media to welcome message . . .", delme=2)
+			elif bool(reply.media) is False:
+				if caption:
+					dw.set_welcome(str(m.chat.id), file_id, caption)
+				else:
+					dw.set_welcome(str(m.chat.id), file_id)
+				await send_edit(m, "Added this text to welcome message . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
 	else:
