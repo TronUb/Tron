@@ -194,10 +194,10 @@ async def adminlist(client, m):
 			user_info = a.user.first_name + " " + a.user.last_name
 		except:
 			user_info = a.user.first_name
-		if user_info == None:
+		if user_info is None:
 			user_info = "💀 Deleted account"
 		if a.status == "administrator":
-			if a.user.is_bot == True:
+			if a.user.is_bot is True:
 				badmin.append(mention_markdown(a.user.id, user_info))
 			else:
 				admin.append(mention_markdown(a.user.id, user_info))
@@ -273,14 +273,14 @@ async def report_admin(_, m: Message):
 	admin = []
 	async for a in alladmins:
 		if a.status == "administrator" or a.status == "creator":
-			if a.user.is_bot == False:
+			if a.user.is_bot is False:
 				admin.append(mention_html(a.user.id, "\u200b"))
 	if m.reply_to_message:
 		await send_edit(
 			m, 
 			"⏳ • Hold on...")
 			
-		if text != None:
+		if text is not None:
 			teks = '{} is reported to admins.\n**Reason:** {}'.format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name), text)
 		else:
 			teks = '{} is reported to admins.'.format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name))
@@ -330,7 +330,7 @@ async def tag_all_users(app, m: Message):
 		
 	tip = app.iter_chat_members(m.chat.id)
 	async for a in tip:
-		if a.user.is_bot == False:
+		if a.user.is_bot is False:
 			text += mention_html(a.user.id, "\u200b")
 	if m.reply_to_message:
 		await app.send_message(
@@ -374,9 +374,9 @@ async def get_list_bots(_, m: Message):
 			bot_info = a.user.first_name + " " + a.user.last_name
 		except:
 			bot_info = a.user.first_name
-		if bot_info == None:
+		if bot_info is None:
 			bot_info = "💀 Deleted account"
-		if a.user.is_bot == True:
+		if a.user.is_bot is True:
 			bots.append(mention_markdown(a.user.id, bot_info))
 	teks = "**Bots in `{}`**\n\n".format(grp.title)
 	for x in bots:
@@ -463,7 +463,6 @@ async def get_member_count(client, m):
 async def join_chats(_, m: Message):
 	if long(m) == 1:
 		await send_edit(m, "Give me some chat id / username after command . . .")
-		return
 	elif long(m) > 1:
 		chat = m.command[1]
 		try:
