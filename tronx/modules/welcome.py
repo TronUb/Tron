@@ -37,6 +37,11 @@ async def send_welcome(_, m: Message):
 		try:
 			file_id = media_id["file_id"] if media_id["file_id"] else False
 			caption = media_id["caption"] if media_id["caption"] else False
+			if file_id and not file_id.startswith("#"):
+				await app.send_message(m.chat.id, file_id)
+				return
+			elif file_id:
+				file_id = file_id.replace("#", "")
 			if caption:
 				await app.send_cached_media(
 					m.chat.id,
@@ -51,8 +56,7 @@ async def send_welcome(_, m: Message):
 					reply_to_message_id=m.from_user.id
 				)
 		except Exception as e:
-			print(e)
-			await print(media_id)
+			await error(m, e)
 	elif bool(chat) is False:
 		return
 
@@ -71,9 +75,9 @@ async def save_welcome(_, m: Message):
 			caption = fall["text"] if fall["text"] else None
 
 			if caption:
-				dw.set_welcome(str(m.chat.id), file_id, caption)
+				dw.set_welcome(str(m.chat.id), "#" + file_id, caption)
 			else:
-				dw.set_welcome(str(m.chat.id), file_id)
+				dw.set_welcome(str(m.chat.id), "#" + file_id)
 			await send_edit(m, "Added this media/text to welcome message . . .", delme=2)
 		except Exception as e:
 			await error(m, e)
