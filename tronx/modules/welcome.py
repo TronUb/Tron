@@ -27,12 +27,13 @@ from . import get_file_id
 
 @app.on_message(filters.new_chat_members & filters.group)
 async def send_welcome(_, m: Message):
-	if bool(dw.get_welcome(str(m.chat.id))) is True:
-		if filters.chat(int(dw.get_welcome(str(m.chat.id)))):
+	chat = dw.get_welcome(str(m.chat.id))
+	if bool(chat) is True:
+		if chat["file_id"] is not None:
 			pass
 		else:
-			return print("Welcome group false")
-		media_id = dw.get_welcome(str(m.chat.id))
+			return 
+		media_id = chat
 		try:
 			file_id = media_id["file_id"] if media_id["file_id"] else False
 			caption = media_id["caption"] if media_id["caption"] else False
@@ -52,7 +53,7 @@ async def send_welcome(_, m: Message):
 		except Exception as e:
 			print(e)
 			await print(media_id)
-	elif bool(dw.get_welcome(str(m.chat.id))) is False:
+	elif bool(chat) is False:
 		return
 
 
