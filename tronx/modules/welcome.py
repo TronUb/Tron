@@ -31,7 +31,7 @@ async def send_welcome(_, m: Message):
 		if filters.chat(int(dw.get_welcome(str(m.chat.id)))):
 			pass
 		else:
-			return
+			return print("Welcome group false")
 		media_id = dw.get_welcome(str(m.chat.id))
 		try:
 			file_id = media_id["file_id"] if media_id["file_id"] else False
