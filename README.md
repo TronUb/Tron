@@ -25,6 +25,8 @@
 
 ><p>6. TIME_ZONE</p>
 
+><p>7. TOKEN</p>
+
 &nbsp;
 ---
 &nbsp;
