@@ -55,7 +55,7 @@
 
 1. Repl method:
 
-*  Tap Below On Icon
+*  Tap Below On logo
 
 </p>
 
