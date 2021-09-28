@@ -20,8 +20,8 @@ from tronx.helpers import (
 
 
 CMD_HELP.update(
-	{"download" : (
-		"download",
+	{"dv" : (
+		"dv",
 		{
 		"setdv [varname] [value]" : "Set any database vars, for ex: .setdv [USER_NAME] [BEAST]",
 		"getdv [varname]" : "Get a existing database vars value.",

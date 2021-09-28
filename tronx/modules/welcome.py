@@ -25,7 +25,7 @@ from . import get_file_id
 
 
 
-@app.on_message(filters.new_chat_members & filters.group & filters.chat(LOG_CHAT))
+@app.on_message(filters.new_chat_members & filters.group)
 async def send_welcome(_, m: Message):
 	if bool(dw.get_welcome(str(m.chat.id))) is True:
 		if filters.chat(int(dw.get_welcome(str(m.chat.id)))):
@@ -101,7 +101,10 @@ async def delete_welcome(_, m: Message):
 	try:
 		await send_edit(m, "Getting welcome message . . .")
 		data = dw.get_welcome(str(m.chat.id))
-		await send_edit(m, data)
+		if data[0] is None:
+			await send_edit(m, "No welcome message was assigned to this group.")
+		else:
+			await send_edit(m, data)
 	except Exception as e:
 		await error(m, e)
 
