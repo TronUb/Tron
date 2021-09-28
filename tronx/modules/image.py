@@ -76,7 +76,6 @@ async def unsplash(_, m: Message):
 			for img in images:
 				await app.send_photo(m.chat.id, str(img))
 			await m.delete()
-			return
 		else:
 			await send_edit(
 				m, 
