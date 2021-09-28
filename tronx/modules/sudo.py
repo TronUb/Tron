@@ -29,7 +29,7 @@ async def add_sudo(_, m: Message):
 			)
 		return
 	else:
-		if SUDO_USERS != None and bool(dv.getdv("SUDO_USERS")) is True:
+		if SUDO_USERS is not None and bool(dv.getdv("SUDO_USERS")) is True:
 			sudo_id = [int(replied.id)] + [int(dv.getdv("SUDO_USERS"))]
 			done = dv.setdv("SUDO_USERS", sudo_id)
 			if done:
