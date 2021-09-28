@@ -26,6 +26,7 @@ CMD_HELP.update(
 		"setdv [varname] [value]" : "Set any database vars, for ex: .setdv [USER_NAME] [BEAST]",
 		"getdv [varname]" : "Get a existing database vars value.",
 		"deldv [varname]" : "Delete a existing database var with its value.",
+		"pm [on | off]" : "Turn on & off your pmguard",
 		}
 		)
 	}
@@ -98,19 +99,19 @@ async def get_dv_var(_, m: Message):
 			"Provide me a suffix to do some work\n\nSuffix: `on` & `off`"
 			)
 	elif long(m) > 1 and arg[1] == "on":
-		if bool(dv.getdv("PMPERMIT")) is True:
+		if bool(db.getdv("PMPERMIT")) is True:
 			await send_edit(
 				m, 
 				"Pmguard is already active !"
 				)
-		elif bool(dv.getdv("PMPERMIT")) is False:
-			dv.setdv("PMPERMIT", "True")
+		elif bool(db.getdv("PMPERMIT")) is False:
+			db.setdv("PMPERMIT", "True")
 			await send_edit(
 				m, 
 				"Pmguard is now turned on !"
 				)
 	elif long(m) > 1 and arg[1] == "off":
-		dv.deldv("PMPERMIT")
+		db.deldv("PMPERMIT")
 		await send_edit(
 			m, 
 			"Pmguard is now turned off !"
