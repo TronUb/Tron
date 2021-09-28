@@ -113,7 +113,7 @@ async def delete_welcome(_, m: Message):
 		text = data["file_id"]
 		cap = data["caption"]
 
-		if (text and cap) is None :
+		if text is None and cap is None :
 			await send_edit(m, "No welcome message was assigned to this group.")
 		elif text is not None and cap is None:
 			if text.startswith("#"):
@@ -124,7 +124,7 @@ async def delete_welcome(_, m: Message):
 					)
 			else:
 				await send_edit(m, text)
-		elif (text and cap) is not None:
+		elif text is not None and cap is not None:
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
@@ -134,6 +134,8 @@ async def delete_welcome(_, m: Message):
 					)
 			else:
 				pass
+		else:
+			pass
 	except Exception as e:
 		print(e)
 		await error(m, e)
