@@ -24,13 +24,6 @@ log = logging.getLogger(__name__)
 
 
 
-# /app/tronx/modules/telegraph.py
-telegraph = Telegraph()
-telegraph.create_account(short_name='Tron Userbot') 
-
-
-
-
 # variables
 PREFIX = Config.PREFIX
 
@@ -199,6 +192,8 @@ async def userlise():
 		if app:
 			await app.start()
 			await get_self()
+			telegraph = Telegraph()
+			telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot") 
 			await botlise()
 			await app.stop()
 		else:

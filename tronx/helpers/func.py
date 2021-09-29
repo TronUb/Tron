@@ -47,11 +47,11 @@ async def send_edit(
 	delme : int = 0
 	):
 	try:
-		await m.edit(text)
+		await m.edit(f"`{text}`")
 	except:
 		await app.send_message(
 			m.chat.id,
-			text
+			f"`{text}`"
 			)
 	try:
 		if delme and delme != 0:

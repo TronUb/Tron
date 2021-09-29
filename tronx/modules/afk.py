@@ -101,7 +101,7 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(filters.mentioned & filters.incoming & ~filters.chat(str(Config.LOG_CHAT)) & ~filters.bot, group=12)
+@app.on_message(filters.mentioned & filters.incoming & ~filters.chat(Config.LOG_CHAT) & ~filters.bot, group=12)
 async def offline_mention(_, m: Message):
 	try:
 		if m.chat.id == Config.LOG_CHAT:

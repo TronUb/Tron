@@ -61,7 +61,7 @@ colour_code = {
 	"olive": "rgba(128, 128, 0, 100)",
 	"teal": "rgba(0, 128, 128, 100)",
 	"navy": "rgba(0, 128, 128, 100)",
-	"choclate": "rgba(210, 105, 30, 100)",
+	"chocolate": "rgba(210, 105, 30, 100)",
 }
 
 

@@ -23,6 +23,19 @@ from . import get_file_id
 
 
 
+CMD_HELP.update(
+	{"welcome": (
+		"welcome",
+		{
+		"setwc [reply to media/text]" : "Set welcome message for group.",
+		"getwc" : "Use it in group to get saved welcome message.",
+		"delwc" : "Use ut in group to delete saved welcome message.",
+		}
+		)
+	}
+)
+
+
 
 
 @app.on_message(filters.new_chat_members & filters.group)
@@ -63,7 +76,7 @@ async def send_welcome(_, m: Message):
 
 
 
-@app.on_message(gen("setwelcome"))
+@app.on_message(gen(["setwelcome", "setwc"]))
 async def save_welcome(_, m: Message):
 	await private(m)
 	await send_edit(m, "Setting this media as a welcome message . . .")
@@ -91,7 +104,7 @@ async def save_welcome(_, m: Message):
 
 
 
-@app.on_message(gen("delwelcome"))
+@app.on_message(gen(["delwelcome", "delwc"]))
 async def delete_welcome(_, m: Message):
 	await private(m)
 	try:
@@ -104,7 +117,7 @@ async def delete_welcome(_, m: Message):
 
 
 
-@app.on_message(gen("getwelcome"))
+@app.on_message(gen(["getwelcome", "getwc"]))
 async def delete_welcome(_, m: Message):
 	await private(m)
 	try:

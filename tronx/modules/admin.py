@@ -47,6 +47,7 @@ CMD_HELP.update(
 		"promote" : "promote a member to admin",
 		"demote" : "demote a admin to a member",
 		"pin" : "pin a message in group",
+		"kick" : "kick a user out of your group."
 		"unpin" : "unpin a pinned message in group",
 		"unpin all" : "unpin all pinned messages in one command"
 		}
@@ -154,7 +155,7 @@ async def unban(_, m):
 					user_id=user.id
 					)
 				if done:
-					await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} from this chat . . .")
+					await send_edit(m, f"Unbanned {mention_markdown(user.id, user.first_name)} in the current chat.")
 				else:
 					await send_edit(m, "I'm not able to unban this user . . .", delme=2)
 

@@ -24,7 +24,7 @@ loop = asyncio.get_event_loop()
 
 
 def load_plugins():
-	""" assistant modules """
+	""" Assistant modules """
 	from tronx.plugins import PLUGINS
 	print("Loading plugins of [ assistant ], Please wait...\n")
 	for plug in PLUGINS:
@@ -102,5 +102,5 @@ async def start_bot():
 
 
 if __name__ == '__main__':
-	""" Run as '__main__' """
+	""" Run as '__main__.py' """
 	loop.run_until_complete(start_bot())
