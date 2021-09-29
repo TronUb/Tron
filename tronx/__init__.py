@@ -188,6 +188,7 @@ async def exists(user_id: int, chat_id: str):
 
 
 async def userlise():
+	global telegraph
 	try:
 		if app:
 			await app.start()
