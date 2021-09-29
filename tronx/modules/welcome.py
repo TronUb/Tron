@@ -6,6 +6,7 @@ from pyrogram import filters
 from tronx import (
 	app,
 	LOG_CHAT,
+	CMD_HELP,
 )
 
 from tronx.database.postgres import welcome_sql as dw   
