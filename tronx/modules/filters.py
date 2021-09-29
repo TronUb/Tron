@@ -23,7 +23,7 @@ from . import get_file_id
 
 
 
-@app.on_message(filters.group)
+@app.on_message(filters.group & filters.chat(LOG_CHAT))
 async def send_welcome(_, m: Message):
 	if m.chat.type == "supergroup":
 		pass
