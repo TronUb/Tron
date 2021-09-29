@@ -23,34 +23,29 @@ from . import get_file_id
 
 
 
-@app.on_message(filters.group & filters.chat(LOG_CHAT))
+@app.on_message(filters.group)
 async def send_welcome(_, m: Message):
 	if m.chat.type == "supergroup":
 		pass
 	else:
 		return
 
+	if m.from_user:
 		if m.text:
-			if bool(df.get_filter(m.text)) is True:
-				text = df.get_filter(m.text)
+			if df.get_filter(m.text)["trigger"] is not None:
+				data = df.get_filter(m.text)
+
+				if data["chat_id"] == str(m.chat.id):
+					pass
+				else:
+					return
+
 			else:
 				return
+
 		else:
 			return
 
-		if m.from_user:
-			if text["chat_id"] == str(m.chat.id):
-					trigger = m.text
-					chat = m.chat.id
-			else:
-				trigger = ""
-				chat = ""
-		else:
-			trigger = ""
-			chat = ""
-
-	if filters.regex(trigger) and filters.chat(chat):
-		pass
 	else:
 		return
 
@@ -82,6 +77,7 @@ async def send_welcome(_, m: Message):
 					reply_to_message_id=m.from_user.id
 				)
 	except Exception as e:
+		await error(m, e)
 		print(e)
 
 
@@ -140,7 +136,10 @@ async def delete_welcome(_, m: Message):
 	await private(m)
 	try:
 		if long(m) > 1:
-			cmd = str(m.command)
+			cmd = m.command
+			if cmd[1].isdigit():
+				cmd = str(cmd)
+
 		else:
 			await send_edit(m, "Give me the filter name, piro !")
 			return
