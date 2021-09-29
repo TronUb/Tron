@@ -47,7 +47,7 @@ CMD_HELP.update(
 		"promote" : "promote a member to admin",
 		"demote" : "demote a admin to a member",
 		"pin" : "pin a message in group",
-		"kick" : "kick a user out of your group."
+		"kick" : "kick a user out of your group.",
 		"unpin" : "unpin a pinned message in group",
 		"unpin all" : "unpin all pinned messages in one command"
 		}
