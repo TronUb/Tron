@@ -485,9 +485,12 @@ async def slow_mode(_, m: Message):
 	await private(m)
 	if await CheckAdmin(m) is True:
 		if long(m) == 1:
-			sec = 5
+			sec = 10
 		elif long(m) > 1:
-			sec = m.command[1]
+			if int(m.command[1]) not in [10, 30, 60, 300, 900, 3600]:
+				await send_edit(m, "Please give seconds from here: [10, 30, 60, 300, 900, 3600]")
+				return
+			sec = int(m.command[1])
 		try:
 			if sec == "off":
 				sec = None
