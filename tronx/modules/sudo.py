@@ -70,7 +70,7 @@ async def get_sudos(_, m):
 		users = dv.getdv("SUDO_USERS")
 		stored = []
 		for user in users:
-			data = await app.get_users(int(user))
+			data = await app.get_users(user)
 			stored.append(data.first_name)
 
 		await send_edit(m, "\n".join(stored))
@@ -88,8 +88,8 @@ async def delete_sudo(_, m):
 		await send_edit(m, "Atleast reply the sudo user to remove from sudo users . . .", mono=True)  
 	elif reply:
 		if bool(users) is True:
-			if reply.id in [users]:
-				users.remove(reply.id)
+			if reply.from_user.id in [users]:
+				users.remove(reply.from_user.id)
 				dv.setdv("SUDO_USERS", users)
 				await send_edit(m, f"{reply.first_name} is now removed from sudo list.", mono=True)
 			else:
