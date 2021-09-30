@@ -32,7 +32,7 @@ from tronx import (
 if bool(SUDO_USERS) is False or SUDO_USERS is None:
 	USERS = [USER_ID]
 else:
-	USERS = [USER_ID] + [SUDO_USERS]
+	USERS = [USER_ID] + SUDO_USERS
 
 
 
