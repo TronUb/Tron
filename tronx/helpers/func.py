@@ -44,17 +44,36 @@ async def send_edit(
 	text, 
 	parse_mode="markdown", 
 	disable_web_page_preview=False,
-	delme : int = 0
+	delme : int = 0,
+	mono = False,
+	bold = False
 	):
+	if mono:
+		try:
+			await m.edit(f"`{text}`")
+		except:
+			await app.send_message(
+				m.chat.id,
+				f"`{text}`"
+				)
+	elif bold:
+		try:
+			await m.edit(text)
+		except:
+			await app.send_message(
+				m.chat.id,
+				text
+				)
+	else:
+		try:
+			await m.edit(text)
+		except:
+			await app.send_message(
+				m.chat.id,
+				text
+				)
 	try:
-		await m.edit(text)
-	except:
-		await app.send_message(
-			m.chat.id,
-			text
-			)
-	try:
-		if delme and delme != 0:
+		if delme != 0:
 			time.sleep(delme)
 			await m.delete()
 		else:

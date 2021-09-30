@@ -80,7 +80,7 @@ async def send_welcome(_, m: Message):
 @app.on_message(gen(["setwelcome", "setwc"]))
 async def save_welcome(_, m: Message):
 	await private(m)
-	await send_edit(m, "Setting this media as a welcome message . . .")
+	await send_edit(m, "Setting this media as a welcome message . . .", mono=True)
 	reply = m.reply_to_message
 	if reply:
 		try:
@@ -93,14 +93,14 @@ async def save_welcome(_, m: Message):
 					dw.set_welcome(str(m.chat.id), "#" + file_id, caption)
 				else:
 					dw.set_welcome(str(m.chat.id), "#" + file_id)
-				await send_edit(m, "Added this media to welcome message . . .", delme=2)
+				await send_edit(m, "Added this media to welcome message . . .", delme=2, mono=True)
 			elif bool(reply.media) is False:
 				dw.set_welcome(str(m.chat.id), reply.text)
-				await send_edit(m, "Added this text to welcome message . . .", delme=2)
+				await send_edit(m, "Added this text to welcome message . . .", delme=2, mono=True)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Please reply to some media or text to set welcome . . .", delme=2)      
+		await send_edit(m, "Please reply to some media or text to set welcome . . .", delme=2, mono=True)      
 
 
 
@@ -109,9 +109,9 @@ async def save_welcome(_, m: Message):
 async def delete_welcome(_, m: Message):
 	await private(m)
 	try:
-		await send_edit(m, "Checking welcome message . . .")
+		await send_edit(m, "Checking welcome message . . .", mono=True)
 		dw.del_welcome(str(m.chat.id))
-		await send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2)
+		await send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2, mono=True)
 	except Exception as e:
 		await error(m, e)
 
@@ -128,7 +128,7 @@ async def delete_welcome(_, m: Message):
 		cap = data["caption"]
 
 		if text is None and cap is None :
-			await send_edit(m, "No welcome message was assigned to this group.")
+			await send_edit(m, "No welcome message was assigned to this group.", mono=True)
 		elif text is not None and cap is None:
 			if text.startswith("#"):
 				await app.send_cached_media(
@@ -136,8 +136,9 @@ async def delete_welcome(_, m: Message):
 					file_id=text,
 					reply_to_message_id=m.from_user.id
 					)
+				await m.delete()
 			else:
-				await send_edit(m, text)
+				await send_edit(m, text, mono=True)
 		elif text is not None and cap is not None:
 			if text.startswith("#"):
 				await app.send_cached_media(
@@ -146,6 +147,7 @@ async def delete_welcome(_, m: Message):
 					caption=cap,
 					reply_to_message_id=m.from_user.id
 					)
+				await m.delete()
 			else:
 				pass
 		else:
