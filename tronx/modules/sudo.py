@@ -22,7 +22,7 @@ from tronx.database.postgres import dv_sql as dv
 @app.on_message(gen("addsudo"))
 async def add_sudo(_, m: Message):
 	replied = m.reply_to_message.from_user
-	if not replied:
+	if not m.reply_to_message:
 		await send_edit(
 			m, 
 			"Please reply to someone's message to add them in sudo list ..."
