@@ -36,7 +36,7 @@ if bool(dv.getdv("SUDO_USERS")) is True:
 elif Config.SUDO_USERS:
 	SUDO_USERS = [int(Config.SUDO_USERS)]
 elif bool(dv.getdv("SUDO_USERS")) is False:
-	SUDO_USERS = [USER_ID]
+	SUDO_USERS = []
 
 
 
