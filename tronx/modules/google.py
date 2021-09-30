@@ -64,21 +64,21 @@ async def image_sauce(_, m: Message):
 		if reply.photo:
 			await send_edit(m, "⏳ • Hold on ...")
 			universe = "photo_{}_{}.png".format(
-				m.reply.photo.file_id, 
-				m.reply.photo.date
+				reply.photo.file_id, 
+				reply.photo.date
 				)
 			await app.download_media(
-				m.reply.photo,
+				reply.photo,
 				file_name="tronx/downloads/" + universe
 				)
-		elif m.reply.animation:
+		elif reply.animation:
 			await send_edit(m, "⏳ • Hold on ...")
 			universe = "giphy_{}-{}.gif".format(
-				m.reply.animation.date,
-				m.reply.animation.file_size
+				reply.animation.date,
+				reply.animation.file_size
 				)
 			await app.download_media(
-				m.reply.animation,
+				reply.animation,
 				file_name="tronx/downloads/" + universe
 				)
 		else:
