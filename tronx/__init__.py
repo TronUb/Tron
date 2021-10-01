@@ -49,13 +49,7 @@ StartTime = time.time()
 
 __python_version__ = f"{platform.python_version()}"
 
-
-
-
-if Config.DB_URI:
-	db_status = "Available"
-else:
-	db_status = "Not Available"
+db_status = "Available" if Config.DB_URI else "Not Available"
 
 
 
@@ -174,13 +168,12 @@ async def add_user(user_id: Union[int, List[int]], chat_id: str):
 			)
 	except Exception as e:
 		print(e)
-		pass
 
 
 
 
 # check if the bot is in log chat 
-async def exists(user_id: int, chat_id: str):
+async def exists(user_id: int, chat_id):
 	_data = []
 	_data.clear()
 	lime = await app.get_chat_members(chat_id)
@@ -219,14 +212,14 @@ async def botlise():
 		await get_bot()
 		print("Checking presence of bot in log chat . . .\n")
 		try:
-			if await exists(BOT_ID, LOG_CHAT) is True:
+			if await exists(BOT_ID, LOG_CHAT) is False:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
 				)
-				print(f"Bot is present in log chat . . .\n")
+				print(f"Added bot in log chat . . .\n")
 			else:
-				print(f"Bot is not present in log chat, adding bot in log chat . . .\n")
+				print(f"Bot is present in log chat . . .\n")
 		except PeerIdInvalid:
 			print("Peer id is invalid, Manually send a message in log chat . . .\n")
 			pass
