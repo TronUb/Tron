@@ -124,7 +124,11 @@ async def get_self():
 		USER_ID = getself.id
 		USER_DC = getself.dc_id
 	else:
-		pass
+		log.warning("Failed to get user information (USER_ID, USER_DC, USER_NAME, USER_USERNAME)")  
+		USER_ID = None
+		USER_DC = None
+		USER_NAME = None
+		USER_NAME = None
 	return (
 		USER_ID, 
 		USER_DC,
@@ -146,7 +150,11 @@ async def get_bot():
 		BOT_NAME = getbot.first_name
 		BOT_USERNAME = "@" + getbot.username
 	else:
-		pass
+		log.warning("Failed to get bot information (BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME)") 
+		BOT_ID = None
+		BOT_DC = None
+		BOT_NAME = None
+		BOT_USERNAME = None
 	return (
 		BOT_ID, 
 		BOT_DC, 
@@ -198,7 +206,7 @@ async def userlise():
 			await botlise()
 			await app.stop()
 		else:
-			pass
+			log.warning("App client is not available, please check your (SESSION, API_ID, API_HASH)")
 	except Exception as e:
 		print(e)
 
@@ -209,22 +217,23 @@ async def botlise():
 	if bot:
 		await bot.start()
 		await get_bot()
-		print("Checking presence of bot in log chat . . .")
+		print("Checking presence of bot in log chat . . .\n")
 		try:
 			if await exists(BOT_ID, LOG_CHAT) is True:
 				await add_user(
 					LOG_CHAT,
 					BOT_ID
 				)
-				print(f"Bot is present in log chat . . .")
+				print(f"Bot is present in log chat . . .\n")
 			else:
-				print(f"Bot is not present in log chat, adding bot in log chat . . .")
+				print(f"Bot is not present in log chat, adding bot in log chat . . .\n")
 		except PeerIdInvalid:
-			print("Peer id is invalid, Manually send a message in log chat . . .")
+			print("Peer id is invalid, Manually send a message in log chat . . .\n")
 			pass
 		await bot.stop()
 	else:
 		await get_bot()
+		log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
 
 
 
@@ -267,9 +276,9 @@ class lara(Client):
 if Config.SESSION:
 	""" Decorator assignment """
 	app = tron()
-elif not Config.SESSION and list(platform.uname())[1] == "localhost":
+elif list(platform.uname())[1] == "localhost" and not Config.SESSION:
 	app = Client(config_file="./config.ini")
-elif not Config.SESSION and list(platform.uname())[1] != "localhost":
+elif list(platform.uname())[1] != "localhost" and not Config.SESSION:
 	app = False
 	log.warning("String session is missing, please fill this requirement !")
 
@@ -279,9 +288,9 @@ elif not Config.SESSION and list(platform.uname())[1] != "localhost":
 if Config.TOKEN:
 	""" Decorator assignment """
 	bot = lara()
-elif not Config.TOKEN and list(platform.uname())[1] == "localhost":
+elif list(platform.uname())[1] == "localhost" and not Config.TOKEN:
 	bot = Client("lara", config_file="./config.ini")
-elif not Config.TOKEN and list(platform.uname())[1] != "localhost":
+elif list(platform.uname())[1] != "localhost" and not Config.TOKEN:
 	bot = False
 	log.warning("Bot token is missing, please fill this requirement !")
 
