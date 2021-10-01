@@ -22,7 +22,7 @@ class sudolist(BASE):
 	__tablename__ = "sudolist"
 
 	index = Column(Integer, primary_key=True)
-	user_id = Column(Integer)
+	user_id = Column(String)
 
 	def __init__(self, user_id, index):
 		self.user_id = user_id
