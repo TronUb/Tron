@@ -54,7 +54,7 @@ db_status = "Available" if Config.DB_URI else "Not Available"
 
 
 
-if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 	""" lower version will produce errors in bot """
 	log.error(
 		"python version 3.9.0 or greater is required, bot is quitting !"
