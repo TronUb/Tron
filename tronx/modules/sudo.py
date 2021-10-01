@@ -27,7 +27,7 @@ async def add_sudo(_, m: Message):
 	if not m.reply_to_message:
 		await send_edit(
 			m, 
-			"Please reply to someone's message to add them in sudo list ...",
+			"Please reply to someone's message to add them in sudo list . . .",
 			mono=True
 			)
 	else:
@@ -35,14 +35,15 @@ async def add_sudo(_, m: Message):
 			sudo_id = [int(reply.id)] + [int(users)]
 			done = dv.setdv("SUDO_USERS", sudo_id)
 			if done:
-				await send_edit(
+				msg = await send_edit(
 					m, 
 					f"Added {reply.first_name} to sudo, bot is rebooting wait a minute . . . ",
 					mono=True
 					)
 				os.execv(sys.executable, ['python'] + sys.argv)
-				await send_edit(
-					m, 
+				await app.edit_message_text(
+					m.chat.id, 
+					msg.message_id,
 					f"Reboot completed !"
 					)
 			elif not done:
