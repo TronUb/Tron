@@ -85,7 +85,7 @@ async def start_userbot():
 		await load_modules()
 	else:
 		print("Userbot startup unsuccessful, please check everything again ...")
-		print("Could,nt load modules of userbot")
+		print("Couldn't load modules of userbot")
 
 
 
@@ -94,7 +94,7 @@ async def start_bot():
 	""" Main startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	print("initialising ...\n\n")
-	await userlise() # first startups
+	await userlise() # first startup
 	await start_assistant()
 	await start_userbot()
 

@@ -24,7 +24,7 @@ CMD_HELP.update(
 	{"translate" : (
 		"translate",
 		{
-		"tr [ language code ] [ text ] or [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language."
+		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language."
 		}
 		)
 	}
@@ -36,15 +36,17 @@ CMD_HELP.update(
 @app.on_message(gen(["tr", "tl"]))
 async def translate(_, m: Message):
 	replied = m.reply_to_message
-	await send_edit(
-		m, 
-		f"Translating in `{lang}` ..."
-		)
+	cmd = m.command
 	try:
-		if len(m.command) > 1:
+		if long(m) > 1:
 			lang = m.command[1]
 		else:
 			lang = "en"
+
+		await send_edit(
+			m, 
+			f"Translating in `{lang}` ..."
+			)
 		if (replied 
 			and len(m.text) > 1 
 			and len(m.text) <= 4096
@@ -67,10 +69,7 @@ async def translate(_, m: Message):
 				f"**Translated to:** `{lang}`\n\n**Text:** `{output}`"
 				)
 		else:
-			await send_edit(
-				m, 
-				"Invalid language code specified !"
-				)
+			await send_edit(m, "Invalid language code specified !")
 	except Exception as e:
 		await error(m, e)
 
