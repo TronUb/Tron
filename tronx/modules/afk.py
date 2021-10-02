@@ -17,8 +17,6 @@ from tronx.database import (
 	get_afk,
 	)
 
-from . import SUDO_USERS
-
 from tronx.helpers import (
 	error,
 	send_edit,
@@ -63,7 +61,7 @@ DELAY_TIME = 60 # seconds
 
 
 
-@app.on_message(gen("afk") & filters.user(SUDO_USERS))
+@app.on_message(gen("afk"))
 async def go_offline(_, m: Message):
 	if long(m) >= 2:
 		try:
