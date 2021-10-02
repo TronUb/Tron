@@ -33,7 +33,7 @@ USER_ID = str(USER_ID)
 if bool(SUDO_USERS) is False or SUDO_USERS is None:
 	_USERS = [USER_ID]
 else:
-	_USERS = [USER_ID] + SUDO_USERS
+	_USERS = [USER_ID] + [SUDO_USERS]
 
 
 
