@@ -29,7 +29,7 @@ class sudolist(BASE):
 		self.index = index
 
 	def __repr__(self):
-		return "<Sudo %s>" % self.name
+		return "<Sudo %s>" % self.index
 
 sudolist.__table__.create(checkfirst=True)
 
