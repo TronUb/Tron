@@ -19,26 +19,11 @@ from pyrogram.types import (
 	Update
 )
 
-from tronx.modules import SUDO_USERS
 from tronx import USER_ID
 
 from tronx import (
 	PREFIX
 )
-
-
-
-
-if not str(SUDO_USERS).startswith("["):
-	SUDO_USERS = [SUDO_USERS]
-
-USER_ID = str(USER_ID)
-
-if bool(SUDO_USERS) is False or SUDO_USERS is None:
-	_USERS = [USER_ID]
-else:
-	_USERS = [USER_ID] + SUDO_USERS
-
 
 
 
@@ -102,7 +87,7 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 		username = ""
 		# works only for you 
 		if ( message.from_user 
-			and str(message.from_user.id) in _USERS
+			and message.from_user.is_self
 			and not message.forward_date
 			#and not message.chat.type == "channel"
 			):
