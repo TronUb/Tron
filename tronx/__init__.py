@@ -196,7 +196,7 @@ async def exists(user_id: int, chat_id):
 
 	for x in lime:
 		_data.append(x.user.id)
-	stat = True if user_id in _data else False:
+	stat = True if user_id in _data else False
 	return stat
 
 
