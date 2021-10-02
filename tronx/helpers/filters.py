@@ -19,8 +19,6 @@ from pyrogram.types import (
 	Update
 )
 
-from tronx import USER_ID
-
 from tronx import (
 	PREFIX
 )
@@ -36,7 +34,7 @@ def regex(
 
 	async def func(flt, _, update: Update):
 		if ( update.from_user 
-			and str(update.from_user.id) in SUDO_USERS
+			and update.from_user.is_self
 			and not update.forward_date
 			#and not message.chat.type == "channel"
 			):

@@ -45,6 +45,7 @@ async def send_edit(
 	parse_mode="markdown", 
 	disable_web_page_preview=False,
 	delme : int = 0,
+	prefix = PREFIX,
 	mono = False,
 	bold = False
 	):

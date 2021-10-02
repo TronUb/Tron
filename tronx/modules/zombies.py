@@ -8,13 +8,15 @@ from tronx import (
 	app, 
 	CMD_HELP,
 	Config,
-	PREFIX
+	PREFIX,
 	)
 
 from tronx.helpers import (
 	gen, 
 	error, 
 	send_edit,
+	private,
+	long,
 )
 
 
@@ -36,34 +38,33 @@ CMD_HELP.update(
 
 @app.on_message(gen("zombies"))
 async def zombies_clean(_, m: Message):
-	if m.chat.type == "private":
-		await send_edit(m, "Please use this command in group ...")
-		return
-	if len(m.text.split()) != 2:
+	await private(m)
+	if long(m) != 2:
 		await send_edit(
 			m, 
-			"`Checking deleted accounts ...`"
+			"Checking deleted accounts ...",
+			mono=True
 			)
 		del_users = []
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
 				del_users.append(x.user.id)
-		if del_users:
+		if bool(del_users) is True:
 			await send_edit(
 				m, 
-				f"`Found {len(del_users)} Deleted accounts found!` Use `{PREFIX}zombies clean` to remove them from group."
+				f"Found {len(del_users)} Deleted accounts found! Use `{PREFIX}zombies clean` to remove them from group."
 			)
 		else:
 			await send_edit(
 				m, 
-				"`No deleted accounts found!\nGroup is clean as Hell!`"
+				"`No deleted accounts found!\nGroup is clean as Hell!`",
+				delme=2
 				)
-			await asyncio.sleep(1)
-			await m.delete()
-	elif len(m.text.split()) == 2 and m.text.split(None, 1)[1] == "clean":
+	elif long(m) == 2 and m.command[1] == "clean":
 		await send_edit(
 			m, 
-			"`Cleaning deleted accounts....`"
+			"Cleaning deleted accounts . . .",
+			mono=True
 			)
 		del_users = []
 		u = 0
@@ -83,16 +84,18 @@ async def zombies_clean(_, m: Message):
 			m, 
 			f"Group clean-up done !\n`Removed {u} deleted accounts`"
 			)
-		await c.send_message(
-			Config.LOG_CHAT,
-			f"#ZOMBIES\nCleaned {len(del_users)} accounts from **{m.chat.title}** - `{m.chat.id}`",
-		)
+		try:
+			await app.send_message(
+				Config.LOG_CHAT,
+				f"#ZOMBIES\nCleaned {len(del_users)} accounts from **{m.chat.title}** - `{m.chat.id}`",
+			)
+		except:
+			pass
 	else:
 		await send_edit(
 			m, 
 			f"Check `{PREFIX}help zombies` to see how it works!"
 		)
-	return
 
 
 
