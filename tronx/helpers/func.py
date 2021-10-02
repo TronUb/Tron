@@ -42,17 +42,21 @@ def showtime():
 async def send_edit(
 	m: Message, 
 	text, 
-	parse_mode="markdown", 
+	parse_mode="html", 
 	disable_web_page_preview=False,
-	delme : int = 0,
+	delme : int=0,
 	mono=False,
 	bold=False,
 	italic=False,
+	strike=False,
+	underline=False
 	):
 
-	mono_text = f"`{text}`"
-	bold_text = f"**{text}**"
-	italic_text = f"__{text}__"
+	mono_text = f"<code>{text}</code>"
+	bold_text = f"<b>{text}</b>"
+	italic_text = f"<i>{text}</i>"
+	strike_through_text = f"<s>{text}</s>"
+	underline_text = f"<u>{text}</u>"
 
 	if mono:
 		await edit_text(m, mono_text)
@@ -60,14 +64,13 @@ async def send_edit(
 		await edit_text(m, bold_text)
 	elif italic:
 		await edit_text(m, italic_text)
+	elif strike:
+		await edit_text(m, strike_through_text)
+	elif underline:
+		await edit_text(m, underline_text)
 	else:
-		try:
-			await m.edit(text)
-		except:
-			await app.send_message(
-				m.chat.id,
-				text
-				)
+		await edit_text(m, text)
+
 	try:
 		if delme != 0:
 			time.sleep(delme)
@@ -183,7 +186,7 @@ def long(m: Message):
 	if text:
 		return text
 	else:
-		return 0
+		return False
 
 
 

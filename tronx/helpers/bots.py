@@ -11,7 +11,7 @@ try:
 except ImportError:
 	BOT_ID = None
 	BOT_NAME = None
-	BOT_USERNAME = Config.BOT_USERNAME
+	BOT_USERNAME = Config.BOT_USERNAME if Config.BOT_USERNAME else None     
 
 
 
