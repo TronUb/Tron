@@ -1,5 +1,9 @@
 import os
-    
+
+
+
+
+location = os.path.abspath(".") + "/tronx/downloads/"
 
 
 #-------------------------------------------------------------------------------------------------------------
@@ -12,7 +16,7 @@ class Config(object):
 	SESSION = os.getenv("SESSION", None)
 # ------------------
 	# to download files
-	TEMP_DICT = os.getenv("TEMP_DICT", "/workspace/tronx/downloads/")
+	TEMP_DICT = os.getenv("TEMP_DICT", location)
 	# official repo for updates
 	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO, ""https://github.com/beastzx18/Tron.git")
 # ------------------

@@ -36,6 +36,8 @@ from tronx.helpers import (
 	long,
 )
 
+from tronx.modules import types
+
 
 
 
@@ -102,28 +104,33 @@ async def list_directories(_, m: Message):
 @app.on_message(gen(["download", "dl"]))
 async def download_media(_, m: Message):
 	await send_edit(m, "⏳ •Downloading...")
-	if m.reply_to_message is not None:
+	replied = m.reply_to_message
+	if replied and replied.media:
 		try:
 			start_t = datetime.now()
 			c_time = time.time()
-			the_real_download_location = await app.download_media(
-				message=m.reply_to_message,
-				file_name="/app/tronx/downloads/",
+			location = Config.TEMP_DICT + types(m)[1]
+
+			download_location = await app.download_media(
+				message=replied,
+				file_name=location,
 				progress=progress_for_pyrogram,
 				progress_args=("**__Trying to download . . .__**", c_time),
 			)
+
 			end_t = datetime.now()
 			ms = (end_t - start_t).seconds
+
 			await send_edit(
 				m, 
-				f"**Downloaded to •>**\n\n```{the_real_download_location}```\n\n**Time:** `{ms}` **seconds**",
+				f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{ms}` **seconds**",
 				parse_mode="markdown",
 			)
 		except Exception:
 			exc = traceback.format_exc()
 			await send_edit(m, f"Failed To Download!\n{exc}")
-			return
-	elif long(m) > 1:
+
+	elif long(m) > 1 and replied and replied.media:
 		try:
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
@@ -178,7 +185,8 @@ async def download_media(_, m: Message):
 			if os.path.exists(download_file_path):
 				end_t = datetime.now()
 				ms = (end_t - start_t).seconds
-				await sm.edit(
+				await send_edit(
+					m,
 					f"Downloaded to •> <code>{download_file_path}</code> in <u>{ms}</u> seconds.\nDownload Speed: {round((total_length/ms), 2)}",
 					parse_mode="html",
 				)
