@@ -23,6 +23,7 @@ from tronx.database.postgres import dv_sql as dv
 async def add_sudo(_, m: Message):
 	reply = m.reply_to_message.from_user
 	users = dv.getdv("SUDO_USERS")
+	user_id = str(reply.id)
 
 	if not m.reply_to_message:
 		await send_edit(
@@ -32,7 +33,9 @@ async def add_sudo(_, m: Message):
 			)
 	else:
 		if bool(users) is True:
-			sudo_id = [int(reply.id)] + [int(users)]
+			if not str(users).startswith("["):
+				users = [users]
+			sudo_id = [user_id] + users
 			done = dv.setdv("SUDO_USERS", sudo_id)
 			if done:
 				msg = await send_edit(
@@ -49,7 +52,7 @@ async def add_sudo(_, m: Message):
 			elif not done:
 				await send_edit(m, "Failed to add sudo !", mono=True)
 		else:
-			dv.setdv("SUDO_USERS", [reply.id])
+			dv.setdv("SUDO_USERS", [user_id])
 			await send_edit(
 				m, 
 				f"Added {reply.first_name} to sudo, bot is rebooting wait a minute . . . ",

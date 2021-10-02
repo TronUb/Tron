@@ -28,11 +28,12 @@ from tronx import (
 
 
 
+USER_ID = str(USER_ID)
 
 if bool(SUDO_USERS) is False or SUDO_USERS is None:
-	USERS = [USER_ID]
+	_USERS = [USER_ID]
 else:
-	USERS = [USER_ID] + SUDO_USERS
+	_USERS = [USER_ID] + SUDO_USERS
 
 
 
@@ -97,7 +98,7 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 		username = ""
 		# works only for you 
 		if ( message.from_user 
-			and message.from_user.id in USERS
+			and str(message.from_user.id) in _USERS
 			and not message.forward_date
 			#and not message.chat.type == "channel"
 			):
