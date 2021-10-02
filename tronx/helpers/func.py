@@ -45,26 +45,21 @@ async def send_edit(
 	parse_mode="markdown", 
 	disable_web_page_preview=False,
 	delme : int = 0,
-	prefix = PREFIX,
-	mono = False,
-	bold = False
+	mono=False,
+	bold=False,
+	italic=False,
 	):
+
+	mono_text = f"`{text}`"
+	bold_text = f"**{text}**"
+	italic_text = f"__{text}__"
+
 	if mono:
-		try:
-			await m.edit(f"`{text}`")
-		except:
-			await app.send_message(
-				m.chat.id,
-				f"`{text}`"
-				)
+		await edit_text(m, mono_text)
 	elif bold:
-		try:
-			await m.edit(text)
-		except:
-			await app.send_message(
-				m.chat.id,
-				text
-				)
+		await edit_text(m, bold_text)
+	elif italic:
+		await edit_text(m, italic_text)
 	else:
 		try:
 			await m.edit(text)
@@ -82,6 +77,20 @@ async def send_edit(
 	except Exception as e:
 		await error(m, e)
 
+
+
+
+async def edit_text(m: Message, text):
+	try:
+		await m.edit(text)
+	except:
+		await app.send_message(
+			m.chat.id,
+			text
+		)
+
+
+	
 
 # send msg
 async def sendmsg(m: Message, text):
