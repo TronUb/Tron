@@ -27,7 +27,19 @@ log = logging.getLogger(__name__)
 # variables
 PREFIX = Config.PREFIX
 
+API_ID = Config.API_ID
+
+API_HASH = Config.API_HASH
+
+SESSION = Config.SESSION
+
 LOG_CHAT = Config.LOG_CHAT
+
+DB_URI = Config.DB_URI
+
+TOKEN = Config.TOKEN
+
+WORKERS = Config.WORKERS
 
 OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
 
@@ -49,7 +61,7 @@ StartTime = time.time()
 
 __python_version__ = f"{platform.python_version()}"
 
-db_status = "Available" if Config.DB_URI else "Not Available"
+db_status = "Available" if DB_URI else "Not Available"
 
 
 
@@ -75,7 +87,7 @@ if not LOG_CHAT:
 
 
 def get_readable_time(seconds: int) -> str:
-	""" seconds to readable time converter """
+	""" seconds to readable time """
 	count = 0
 	ping_time = ""
 	time_list = []
@@ -108,13 +120,13 @@ async def get_self():
 	getself = await app.get_me()
 	if getself:
 		if getself.last_name and getself.username:
-			# sometimes users don't have the last name 
+			# sometimes users don't have the last name & username
 			USER_NAME = f"{getself.first_name} {getself.last_name}"
 			USER_USERNAME = f"@{getself.username}"
 		else:
 			# use first name 
 			USER_NAME = getself.first_name
-			USER_USERNAME = None
+			USER_USERNAME = "No Username"
 		USER_ID = getself.id
 		USER_DC = getself.dc_id
 	else:
@@ -124,10 +136,12 @@ async def get_self():
 		USER_NAME = None
 		USER_NAME = None
 	return (
-		USER_ID, 
-		USER_DC,
-		USER_NAME, 
-		USER_USERNAME
+		{
+			"USER_ID" : USER_ID, 
+			"USER_DC" : USER_DC,
+			"USER_NAME" : USER_NAME, 
+			"USER_USERNAME" : USER_USERNAME
+		}
 		)
 
 
@@ -150,17 +164,19 @@ async def get_bot():
 		BOT_NAME = None
 		BOT_USERNAME = None
 	return (
-		BOT_ID, 
-		BOT_DC, 
-		BOT_NAME, 
-		BOT_USERNAME
+		{
+			"BOT_ID" : BOT_ID, 
+			"BOT_DC" : BOT_DC, 
+			"BOT_NAME" : BOT_NAME, 
+			"BOT_USERNAME" : BOT_USERNAME
+		}
 		)
 
 
 
 
 async def add_user(user_id: Union[int, List[int]], chat_id: str):
-	""" Add users in groups/channels """
+	""" Add users in groups / channels """
 	try:
 		await app.add_chat_members(
 			chat_id, 
@@ -180,10 +196,8 @@ async def exists(user_id: int, chat_id):
 
 	for x in lime:
 		_data.append(x.user.id)
-	if user_id in _data:
-		return True
-	else:
-		return False
+	stat = True if user_id in _data else False:
+	return stat
 
 
 
@@ -194,6 +208,7 @@ async def userlise():
 		if app:
 			await app.start()
 			await get_self()
+			# telegraph account
 			telegraph = Telegraph()
 			telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot") 
 			await botlise()
@@ -207,26 +222,29 @@ async def userlise():
 
 
 async def botlise():
-	if bot:
-		await bot.start()
-		await get_bot()
-		print("Checking presence of bot in log chat . . .\n")
-		try:
-			if await exists(BOT_ID, LOG_CHAT) is False:
-				await add_user(
-					LOG_CHAT,
-					BOT_ID
-				)
-				print(f"Added bot in log chat . . .\n")
-			else:
-				print(f"Bot is present in log chat . . .\n")
-		except PeerIdInvalid:
-			print("Peer id is invalid, Manually send a message in log chat . . .\n")
-			pass
-		await bot.stop()
-	else:
-		await get_bot()
-		log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+	try:
+		if bot:
+			await bot.start()
+			await get_bot()
+			print("Checking presence of bot in log chat . . .\n")
+			try:
+				if await exists(BOT_ID, LOG_CHAT) is False:
+					await add_user(
+						LOG_CHAT,
+						BOT_ID
+					)
+					print(f"Added bot in log chat . . .\n")
+				else:
+					print(f"Bot is present in log chat . . .\n")
+			except PeerIdInvalid:
+				print("Peer id is invalid, Manually send a message in log chat . . .\n")
+				pass
+			await bot.stop()
+		else:
+			await get_bot()
+			log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+	except Exception as e:
+		print(e)
 
 
 
@@ -243,11 +261,11 @@ class tron(Client):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
-		session_name=Config.SESSION,
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
+		session_name=SESSION,
+		api_id=API_ID,
+		api_hash=API_HASH,
 		app_version=version,
-		workers=Config.WORKERS,
+		workers=WORKERS,
 		)
 
 
@@ -258,34 +276,34 @@ class lara(Client):
 	def __init__(self):
 		super().__init__(
 		session_name="lara",
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
-		bot_token=Config.TOKEN,
+		api_id=API_ID,
+		api_hash=API_HASH,
+		bot_token=TOKEN,
 		)
 
 
 
 
-if Config.SESSION:
+if SESSION:
 	""" Decorator assignment """
 	app = tron()
-elif list(platform.uname())[1] == "localhost" and not Config.SESSION:
+elif list(platform.uname())[1] == "localhost" and not SESSION:
 	app = Client(config_file="./config.ini")
-elif list(platform.uname())[1] != "localhost" and not Config.SESSION:
+elif list(platform.uname())[1] != "localhost" and not SESSION:
 	app = False
-	log.warning("String session is missing, please fill this requirement !")
+	log.warning("Failed to create (app) client, please recheck your credentials.")
 
 
 
 
-if Config.TOKEN:
+if TOKEN:
 	""" Decorator assignment """
 	bot = lara()
-elif list(platform.uname())[1] == "localhost" and not Config.TOKEN:
+elif list(platform.uname())[1] == "localhost" and not TOKEN:
 	bot = Client("lara", config_file="./config.ini")
-elif list(platform.uname())[1] != "localhost" and not Config.TOKEN:
+elif list(platform.uname())[1] != "localhost" and not TOKEN:
 	bot = False
-	log.warning("Bot token is missing, please fill this requirement !")
+	log.warning("Failed to create (bot) client, please recheck your credentials.")
 
 
 
