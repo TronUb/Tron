@@ -111,9 +111,8 @@ async def download_media(_, m: Message):
 			c_time = time.time()
 			location = Config.TEMP_DICT + types(m)[1]
 
-			download_location = await app.download_media(
+			await app.download_media(
 				message=replied,
-				file_name=location,
 				progress=progress_for_pyrogram,
 				progress_args=("**__Trying to download . . .__**", c_time),
 			)
@@ -177,7 +176,7 @@ async def download_media(_, m: Message):
 						)
 						display_message = current_message
 						await asyncio.sleep(2)
-				except errors.MessageNotModified:  # Don't log error if Message is not modified
+				except errors.MessageNotModified: 
 					pass
 				except Exception as e:
 					log.info(str(e))
@@ -198,8 +197,7 @@ async def download_media(_, m: Message):
 				)
 			return
 	else:
-		await send_edit("`Reply to a Telegram Media to download it to local server.`", delme=2)
-	return
+		await send_edit(m, "`Reply to a Telegram Media to download it to local server.`", delme=2)
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

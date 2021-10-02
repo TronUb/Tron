@@ -3,7 +3,7 @@ import os
 
 
 
-location = os.path.abspath(".") + "/tronx/downloads/"
+location = os.path.abspath(".") + "/downloads/"
 
 
 #-------------------------------------------------------------------------------------------------------------
