@@ -28,8 +28,6 @@ class sudolist(BASE):
 		self.user_id = user_id
 		self.index = index
 
-	def __repr__(self):
-		return "<Sudo %s>" % self.index
 
 sudolist.__table__.create(checkfirst=True)
 
