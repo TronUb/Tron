@@ -47,7 +47,7 @@ def regex(
 
 	async def func(flt, _, update: Update):
 		if ( update.from_user 
-			and update.from_user.id in SUDO_USERS
+			and str(update.from_user.id) in SUDO_USERS
 			and not update.forward_date
 			#and not message.chat.type == "channel"
 			):
