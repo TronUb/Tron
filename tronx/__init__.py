@@ -4,6 +4,7 @@ import time
 import logging
 import platform
 
+from pyrogram.types import Message
 from pyrogram import Client, filters
 from pyrogram.filters import Filter
 from pyrogram.errors import PeerIdInvalid
