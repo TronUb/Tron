@@ -31,16 +31,6 @@ else:
 
 
 
-if not LOG_CHAT:
-	""" log chats are required """
-	log.warning(
-		"LOG_CHAT is important for bots normal working, please fill it."
-		)
-	quit(1)
-
-
-
-
 # variables
 PREFIX = Config.PREFIX
 
@@ -89,6 +79,16 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 	""" lower version will produce errors in bot """
 	log.error(
 		"python version 3.9.0 or greater is required, bot is quitting !"
+		)
+	quit(1)
+
+
+
+
+if not LOG_CHAT:
+	""" log chats are required """
+	log.warning(
+		"LOG_CHAT is important for bots normal working, please fill it."
 		)
 	quit(1)
 
