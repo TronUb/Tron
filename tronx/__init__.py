@@ -77,7 +77,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 
 
 if not LOG_CHAT:
-	""" log chat are required """
+	""" log chats are required """
 	log.warning(
 		"LOG_CHAT is important for bots normal working, please fill it."
 		)
@@ -267,6 +267,8 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
+	async def edit(m: Message, text):
+		await m.edit(text)
 
 
 
