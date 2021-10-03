@@ -13,14 +13,30 @@ from typing import Union, List
 
 from telegraph import Telegraph
 
-from config import Config
-
 
 
 
 # debugging
 logging.basicConfig(level=logging.WARNING)
 log = logging.getLogger(__name__)
+
+
+
+
+if list(platform.uname())[1] == "localhost":
+	from demo_config import Config
+else:
+	from config import Config
+
+
+
+
+if not LOG_CHAT:
+	""" log chats are required """
+	log.warning(
+		"LOG_CHAT is important for bots normal working, please fill it."
+		)
+	quit(1)
 
 
 
@@ -41,6 +57,8 @@ DB_URI = Config.DB_URI
 TOKEN = Config.TOKEN
 
 WORKERS = Config.WORKERS
+
+# -x -x -x -x
 
 OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
 
@@ -71,16 +89,6 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 	""" lower version will produce errors in bot """
 	log.error(
 		"python version 3.9.0 or greater is required, bot is quitting !"
-		)
-	quit(1)
-
-
-
-
-if not LOG_CHAT:
-	""" log chats are required """
-	log.warning(
-		"LOG_CHAT is important for bots normal working, please fill it."
 		)
 	quit(1)
 
@@ -288,21 +296,16 @@ class lara(Client):
 if SESSION:
 	""" Decorator assignment """
 	app = tron()
-elif list(platform.uname())[1] == "localhost" and not SESSION:
-	app = Client(config_file="./config.ini")
-elif list(platform.uname())[1] != "localhost" and not SESSION:
+elif not SESSION:
 	app = False
 	log.warning("Failed to create (app) client, please recheck your credentials.")
-
 
 
 
 if TOKEN:
 	""" Decorator assignment """
 	bot = lara()
-elif list(platform.uname())[1] == "localhost" and not TOKEN:
-	bot = Client("lara", config_file="./config.ini")
-elif list(platform.uname())[1] != "localhost" and not TOKEN:
+elif not TOKEN:
 	bot = False
 	log.warning("Failed to create (bot) client, please recheck your credentials.")
 

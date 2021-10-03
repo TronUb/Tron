@@ -3,34 +3,31 @@ import os
 
 
 
-location = os.path.abspath(".") + "/downloads/"
-
-
 #-------------------------------------------------------------------------------------------------------------
 class Config(object):
 	# required
-	API_ID = os.getenv("API_ID", None)
+	API_ID = os.getenv("API_ID")
 	# required
-	API_HASH = os.getenv("API_HASH", None)
+	API_HASH = os.getenv("API_HASH")
 	# access Session from your account
-	SESSION = os.getenv("SESSION", None)
+	SESSION = os.getenv("SESSION")
 # ------------------
 	# to download files
-	TEMP_DICT = os.getenv("TEMP_DICT", location)
+	TEMP_DICT = os.getenv("TEMP_DICT", os.path.abspath(".") + "/downloads/")
 	# official repo for updates
-	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO, ""https://github.com/beastzx18/Tron.git")
+	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO", "https://github.com/beastzx18/Tron.git")
 # ------------------
 	# heroku api key 
-	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY", None)
+	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
 	# heroku app name
-	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME", None)
+	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
 	# database url
-	DB_URI = os.getenv("DATABASE_URL", None)
+	DB_URI = os.getenv("DATABASE_URL")
 # ------------------
-	# only integers
-	SUDO_USERS = os.getenv("SUDO_USERS", None)
+	# sudo users can user your bot too
+	SUDO_USERS = os.getenv("SUDO_USERS")
 	# log mentioned and other messages
-	LOG_CHAT = os.getenv("LOG_CHAT", None)
+	LOG_CHAT = os.getenv("LOG_CHAT")
 	 # Insert command prefix, if you insert "!" then you can do !ping
 	PREFIX = os.getenv("PREFIX", ".")
 	# must be int (number)
@@ -52,9 +49,9 @@ class Config(object):
 	TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
 # -------------------
 	# for time plugin (default : Asia/Kolkata)
-	USER_NAME = os.getenv("USER_NAME", None)
+	USER_NAME = os.getenv("USER_NAME")
 	# for alive plugin (optional)
-	USER_BIO = os.getenv("USER_BIO", "A blue whale is beautiful")
+	USER_BIO = os.getenv("USER_BIO")
 	# for alive plugin (optional)
 	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/1073e200f9d8e70b91f0d.jpg")
 # --------------------
@@ -65,13 +62,11 @@ class Config(object):
 	# your aassistants alive pic (optional)
 	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/4d93e5fa480b5e53d898f.jpg")
 	# bot username for bot
-	BOT_USERNAME = os.getenv("BOT_USERNAME", None)
+	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# token of your bot if you want to use assistant
-	TOKEN = os.getenv("TOKEN", None)
+	TOKEN = os.getenv("TOKEN")
 # ---------------------
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
-	# sudo users can use your bot too
-	SUDO_USERS = os.getenv("SUDO_USERS")
 
 
 
