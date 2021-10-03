@@ -9,7 +9,7 @@ import os
 #-------------------------------------------------------------------------------------------------------------
 class Config(object):
 	# required
-	API_ID = 
+	API_ID = 1234567
 	# required
 	API_HASH = ""
 	# access Session from your account
