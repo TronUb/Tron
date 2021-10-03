@@ -12,6 +12,7 @@ from tronx import (
 	version, 
 	uptime,
 	Config,
+	__python_version__,
 	)
 
 from tronx.helpers import (
@@ -39,9 +40,6 @@ CMD_HELP.update(
 )
 
 
-
-
-__python_version__ = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 
 
 @app.on_message(gen("alive"))

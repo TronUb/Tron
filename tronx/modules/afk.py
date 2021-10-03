@@ -187,8 +187,6 @@ async def back_online(_, m: Message):
 				m.chat.id, 
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
-			time.sleep(2)
-			await msg.delete()
 			set_afk(False, "", 0)
 		else:
 			return
