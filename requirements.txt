@@ -22,6 +22,5 @@ wikipedia
 youtube_dl
 speedtest-cli==2.1.3
 search-engine-parser
-opencv-python
 qrcode
 git+https://github.com/Joeclinton1/google-images-download.git
