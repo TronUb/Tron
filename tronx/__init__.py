@@ -268,8 +268,8 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
-	async def edit(m: Message, text):
-		await m.edit(text)
+	async def sleep(seconds):
+		time.sleep(seonds)
 
 
 
