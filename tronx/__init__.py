@@ -268,8 +268,6 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
-	async def sleep(seconds):
-		time.sleep(seonds)
 
 
 
