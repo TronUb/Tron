@@ -7,7 +7,7 @@ from pyrogram.errors import PeerIdInvalid
 from tronx import (
 	bot, 
 	app,
-	Config,
+	LOG_CHAT,
 )
 
 from tronx.helpers import mention_markdown  
