@@ -34,6 +34,7 @@ from tronx.helpers import (
 	get_directory_size,
 	delete,
 	long,
+	create_file
 )
 
 from tronx.modules import types
@@ -63,40 +64,52 @@ CMD_HELP.update(
 
 @app.on_message(gen("ls"))
 async def list_directories(_, m: Message):
-	if len(m.text.split()) == 1:
+	if long(m) == 1:
 		location = "."
-	elif len(m.text.split()) >= 2:
-		location = m.text.split(None, 1)[1]
-	await send_edit(m, "Fetching files...")
+	elif long(m) >= 2:
+		location = m.command[1]
 
 	location = os.path.abspath(location)
 	if not location.endswith("/"):
 		location += "/"
 	OUTPUT = f"Files in `{location}`:\n\n"
+
+	await send_edit(m, "Fetching files . . .")
+
 	try:
 		files = os.listdir(location)
 		files.sort()  # Sort the files
 	except FileNotFoundError:
 		await send_edit(m, f"No such file or directory {location}", delme=2)
 		return
+	collect = []
+	collect.clear()
+
 	for file in files:
-		OUTPUT += f"• `{file}` ({get_directory_size(os.path.abspath(location+file))})\n"
+		if not file.endswith(".session"):
+			if not file in ["__pycache__", ".git", ".github"]:
+				if os.path.isfile(f"{location}/{file}"):
+					collect.append(f"📑 `{file}` ({get_directory_size(os.path.abspath(location+file))})")
+				if os.path.isdir(f"{location}/{file}"):
+					collect.append(f"🗂️ `{file}` ({get_directory_size(os.path.abspath(location+file))})")
+					
+	collect.sort()
+	file = "".join(collect)
+	OUTPUT += f"{file}"
+
 	if len(OUTPUT) > 4096:
-		OUTPUT = clear_string(OUTPUT)  # Remove the html elements using regex
-		with BytesIO(str.encode(OUTPUT)) as f:
-			f.name = "dict.txt"
-			await app.send_document(
-				m.chat.id,
-				document=f,
-				caption=f"`{location} ({get_directory_size(os.path.abspath(location))})`",
+		await create_file(
+				m, 
+				app, 
+				filename="dict.txt", 
+				text=OUTPUT
 			)
 		await m.delete()
-	else:
-		if OUTPUT.endswith("\n\n"):
-			await send_edit(m, f"No files in {location}", delme=2)
-			return
-		await send_edit(m, OUTPUT)
-	return
+	elif OUTPUT.endswith("\n\n"):
+		await send_edit(m, f"No files in {location}", delme=2)
+		return
+	await send_edit(m, OUTPUT)
+
 
 
 
@@ -126,7 +139,7 @@ async def download_media(_, m: Message):
 				parse_mode="markdown",
 			)
 		except Exception:
-			exc = traceback.format_exc()
+			await error(m, e)
 			await send_edit(m, f"Failed To Download!\n{exc}")
 
 	elif long(m) > 1 and replied and replied.media:
