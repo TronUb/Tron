@@ -43,6 +43,7 @@ CMD_HELP.update(
 	{"profile" : (
 		"profile",
 		{
+		"whois [reply to message]" : "get a small piece of information of a user.",
 		"block [username] or [reply to user]" : "Block a user from sending message in your pm.",
 		"unblock [username] or [reply to user]" : "Unblock a user and allow him to send messages in your pm.",
 		"repo" : "Get Tron Userbot official repository link.",
@@ -50,9 +51,8 @@ CMD_HELP.update(
 		"set [fname] or [lname ] or [username] or [bio] and [text]" : "Choose a option from command and set anything in your profile.",
 		"uinfo [reply to user]" : "Get Full Info Of A Specific User.\nThis Command Includes More Details.",
 		"sc [reply to user]" : "Find Out Groups Of A Specific User, Reply To That User.",
-		"sang [reply to user]" : "Get name & username history of a particular user in groups or private chats.",
+		"sg [reply to user]" : "Get name & username history of a particular user in groups or private chats.",
 		"men [username] [text]" : "Mention a user in a specific text.",
-		"mention [username] [text]" : "Mention a user in a specific text, alternative command."
 		}
 		)
 	}

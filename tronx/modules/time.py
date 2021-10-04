@@ -77,7 +77,7 @@ async def today(_, m: Message):
 async def what(_, m: Message):
 	await send_edit(
 		m, 
-		f"Today's time: {showtime()}"
+		f"Today's time: `{showtime()}`"
 		)
 
 
@@ -87,5 +87,5 @@ async def what(_, m: Message):
 async def what(_, m: Message):
 	await send_edit(
 		m, 
-		f"Today's date: {showdate()}"
+		f"Today's date: `{showdate()}`"
 		)

@@ -15,6 +15,7 @@ from tronx.helpers import (
 	gen,
 	error,
 	send_edit,
+	long,
 )
 
 

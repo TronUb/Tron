@@ -38,6 +38,7 @@ CMD_HELP.update(
 	{"tools" : (
 		"tools",
 		{
+		"wlink" : "Get message links which contain the query word.",
 		"cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
 		"temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
 		"json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.", 
@@ -75,6 +76,7 @@ def convert_c(celsius):
 @app.on_message(gen("wlink"))
 async def get_word_links(_, m: Message):
 	links = []
+	links.clear()
 	try:
 		if len(m.command) < 2:
 			await send_edit(

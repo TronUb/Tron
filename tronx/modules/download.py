@@ -94,7 +94,7 @@ async def list_directories(_, m: Message):
 					collect.append(f"🗂️ `{file}` ({get_directory_size(os.path.abspath(location+file))})")
 					
 	collect.sort()
-	file = "".join(collect)
+	file = "\n".join(collect)
 	OUTPUT += f"{file}"
 
 	if len(OUTPUT) > 4096:

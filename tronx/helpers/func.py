@@ -49,7 +49,8 @@ async def send_edit(
 	bold=False,
 	italic=False,
 	strike=False,
-	underline=False
+	underline=False,
+	back=False
 	):
 
 	mono_text = f"<code>{text}</code>"
@@ -83,14 +84,25 @@ async def send_edit(
 
 
 
-async def edit_text(m: Message, text):
+async def edit_text(m: Message, text, back=False):
 	try:
-		await m.edit(text)
+		if back:
+			await m.edit(text)
+			return
+		else:
+			await m.edit(text)
 	except:
-		await app.send_message(
-			m.chat.id,
-			text
-		)
+		if back:
+			await app.send_message(
+				m.chat.id,
+				text
+			)
+			return
+		else:
+			await app.send_message(
+				m.chat.id,
+				text
+			)
 
 
 	
@@ -159,7 +171,8 @@ async def private(m : Message, arg=True):
 	if m.chat.type == "private":
 		await send_edit(
 			m, 
-			"Please use these commands in groups . . ."
+			"Please use these commands in groups . . .",
+			mono=True
 			)
 		await delete(m, 3)
 		if arg:

@@ -33,7 +33,6 @@ CMD_HELP.update(
 	{"supertools" : (
 		"supertools",
 		{
-		"whois [reply to user] or [username]" : "Get a short list of information of a specific user.",
 		"id [reply to user] or [username]" : "Get telegram id of a user or a chat.",
 		"ud [query]" : "Get The Meaning Of Any Word In Urban Dictionary.",
 		"short [link]" : "Shorten a link into da.gd link.",
@@ -130,7 +129,7 @@ async def urban_dictionary(_, m:Message):
 		definition = response["list"][0]["definition"]
 		example = response["list"][0]["example"]
 		resp = (
-			f"**Text**: __`{replace_text(word)}`__\n"
+			f"**Text**: __`{replace_text(word)}`__\n\n"
 			f"**Meaning:**\n`{replace_text(definition)}`\n\n"
 			f"**Example:**\n`{replace_text(example)}` "
 		)
@@ -329,11 +328,13 @@ async def undelete_msg(_, m: Message):
 		count = 5
 	elif long(m) > 1:
 		count = m.command[1]
+		if not count.isdigit():
+			count = int(count)
 	try:
 		data = await app.get_history(m.chat.id, limit=count)
 		if data:
 			for x in data:
-				collect.append(f"Message: `{x.text}`")
+				collect.append(f"**Message:** `{x.text}`")
 			try:
 				await send_edit(m, "\n\n".join(collect))
 			except:

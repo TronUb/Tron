@@ -11,7 +11,6 @@ from tronx import (
 	CMD_HELP,
 	Config,
 	PREFIX,
-	USER_NAME,
 	)
 
 from tronx import telegraph as tgm
@@ -20,16 +19,10 @@ from tronx.helpers import (
 	gen,
 	error,
 	send_edit,
+	myname
 )
 
 
-
-
-if Config.USER_NAME:
-	name = Config.USER_NAME
-else:
-	name = USER_NAME
-NAME = str(name)
 
 
 CMD_HELP.update( 
@@ -63,7 +56,7 @@ async def telegraph(app, m:Message):
 				"⏳• Hold on..."
 				)
 			link = tgm.create_page(
-				NAME,
+				myname(),
 				html_content=replied.text
 				)
 			await send_edit(
