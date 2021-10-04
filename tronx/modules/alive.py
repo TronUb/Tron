@@ -51,8 +51,12 @@ async def alive(app, m: Message):
 			BIO = db.getdv("USER_BIO")
 		elif Config.USER_BIO:
 			BIO = Config.USER_BIO
+		else:
+			BIO = False
 
-		alive_msg = f"⦿ {BIO}\n\n"
+		alive_msg = f"\n"
+		if BIO:
+			alive_msg += f"⦿ {BIO}\n\n"
 		alive_msg += f"⟜ **Owner:** {mymention()}\n"
 		alive_msg += f"⟜ **Tron:** `{version}`\n"
 		alive_msg += f"⟜ **Python:** `{__python_version__}`\n"

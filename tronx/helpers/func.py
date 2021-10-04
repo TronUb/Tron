@@ -50,7 +50,6 @@ async def send_edit(
 	italic=False,
 	strike=False,
 	underline=False,
-	back=False
 	):
 
 	mono_text = f"<code>{text}</code>"
@@ -86,26 +85,15 @@ async def send_edit(
 
 async def edit_text(m: Message, text, back=False):
 	try:
-		if back:
-			await m.edit(text)
-			return
-		else:
-			await m.edit(text)
+		await m.edit(text)
 	except:
-		if back:
-			await app.send_message(
-				m.chat.id,
-				text
-			)
-			return
-		else:
-			await app.send_message(
-				m.chat.id,
-				text
-			)
+		await app.send_message(
+			m.chat.id,
+			text
+		)
 
 
-	
+
 
 # send msg
 async def sendmsg(m: Message, text):
@@ -229,3 +217,24 @@ async def create_file(m: Message, app: Client, filename, text):
 def rem_dual(one, two):
 	data = list(set(one) - set(two))
 	return data
+
+
+
+
+async def kick(chat_id, user_id):
+	await app.kick_chat_member(
+		chat_id,
+		user_id
+		)
+
+
+
+
+def back():
+	return
+
+
+
+
+def keep():
+	pass
