@@ -58,7 +58,6 @@ async def create_basic_group(_, m: Message):
 				await app.create_group(f"{grpname}", user_id)
 			except Exception as e:
 				await error(m, e)
-				return
 			await send_edit(m, f"**Created new Basic group:** `{grpname}`")
 	except Exception as e:
 		await error(m, e)
@@ -84,7 +83,6 @@ async def create_supergroup(_, m: Message):
 					)
 			except Exception as e:
 				await error(m, e)
-				return
 			await send_edit(
 				m, 
 				f"**Created new Super Group:** `{grpname}`"

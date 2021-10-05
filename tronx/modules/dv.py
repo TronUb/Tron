@@ -1,6 +1,6 @@
 import time
 
-from tronx.database.postgres import dv_sql as db
+from tronx.database.postgres import dv_sql as dv
 
 from pyrogram.types import Message
 
@@ -38,11 +38,12 @@ CMD_HELP.update(
 async def set_dv_var(_, m: Message):
 	if long(m) == 2:
 		await send_edit(m, "Please give me key with a value . . . ", delme=2)  
-		return
+
 	if long(m) > 2 and long(m) < 4096:
 		key = m.command[1]
 		value = m.text.split(None, 2)[2]
-		done = db.setdv(key, value)
+		done = dv.setdv(key, value)
+
 		if done:
 			await send_edit(m, f"Added database var with key = `{key}` and value = `{value}`")
 
@@ -62,7 +63,8 @@ async def del_dv_var(_, m: Message):
 
 	elif long(m) > 1:
 		key = m.command[1]
-		done = db.deldv(key)
+		done = dv.deldv(key)
+
 		await send_edit(m, f"Successfully deleted key = `{key}`")
 
 	else:
@@ -78,7 +80,8 @@ async def get_dv_var(_, m: Message):
 
 	elif long(m) > 1:
 		key = m.command[1]
-		done = db.getdv(key)
+		done = dv.getdv(key)
+
 		if done:
 			await send_edit(m, f"Here:\n\nkey = `{key}`\n\nvalue = `{done}`")
 
@@ -91,33 +94,22 @@ async def get_dv_var(_, m: Message):
 
 
 @app.on_message(gen("pm"))
-async def get_dv_var(_, m: Message):
+async def get_database_var(_, m: Message):
 	arg = m.command
 	if long(m) < 2:
-		await send_edit(
-			m, 
-			"Provide me a suffix to do some work\n\nSuffix: `on` & `off`"
-			)
+		await send_edit(m, "Provide me a suffix to do some work\n\nSuffix: `on` & `off`")
+
 	elif long(m) > 1 and arg[1] == "on":
-		if bool(db.getdv("PMPERMIT")) is True:
-			await send_edit(
-				m, 
-				"Pmguard is already active !"
-				)
-		elif bool(db.getdv("PMPERMIT")) is False:
-			db.setdv("PMPERMIT", "True")
-			await send_edit(
-				m, 
-				"Pmguard is now turned on !"
-				)
+		if bool(dv.getdv("PMPERMIT")) is True:
+			await send_edit(m, "Pmguard is already active !")
+
+		elif bool(dv.getdv("PMPERMIT")) is False:
+			dv.setdv("PMPERMIT", "True")
+			await send_edit(m, "Pmguard is now turned on !")
+
 	elif long(m) > 1 and arg[1] == "off":
-		db.deldv("PMPERMIT")
-		await send_edit(
-			m, 
-			"Pmguard is now turned off !"
-			)
+		dv.deldv("PMPERMIT")
+		await send_edit(m, "Pmguard is now turned off !")
+
 	elif long(m) > 1 and arg[1] not in ["on", "off"]:
-		await send_edit(
-			m, 
-			"Use `on` or `off` after command to turn on & off pmguard !"
-			)
+		await send_edit(m, "Use `on` or `off` after command to turn on & off pmguard !")

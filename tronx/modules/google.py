@@ -69,7 +69,7 @@ async def image_sauce(_, m: Message):
 				)
 			await app.download_media(
 				reply.photo,
-				file_name="tronx/downloads/" + universe
+				file_name="./downloads/" + universe
 				)
 		elif reply.animation:
 			await send_edit(m, "⏳ • Hold on ...")
@@ -79,7 +79,7 @@ async def image_sauce(_, m: Message):
 				)
 			await app.download_media(
 				reply.animation,
-				file_name="tronx/downloads/" + universe
+				file_name="./downloads/" + universe
 				)
 		else:
 			await send_edit(m, "Only photo & animation media supported.", delme=3)
@@ -137,18 +137,18 @@ async def google_img(_, m: Message):
 		response = google_images_download.googleimagesdownload()
 		arguments = {"keywords":f"{search}", "limit":f"{images}", "print_urls":True}
 		paths = response.download(arguments) # creates directory of searched keyword
-		for poto in os.listdir(f"/workspace/downloads/{search}/"):
+		for poto in os.listdir(f"./downloads/{search}/"):
 			if poto.endswith((".jpg", ".png", "jpeg")):
 				await app.send_photo(
 					m.chat.id, 
-					f"/workspace/downloads/{search}/{poto}")
+					f"./downloads/{search}/{poto}")
 			else:
 				await send_edit(
 					m, 
-					f"[ `/workspace/downloads/{search}/{poto}` ] is not a photo")
+					f"[ `./downloads/{search}/{poto}` ] is not a photo")
 			os.remove(
-				f"/workspace/downloads/{search}/{poto}" # remove files from folders
+				f"./downloads/{search}/{poto}" # remove files from folders
 			)
-		os.rmdir(f"/workspace/downloads/{search}") # remove empty folders
+		os.rmdir(f"./downloads/{search}") # remove empty folders
 	except Exception as e:
 		await error(m, e)

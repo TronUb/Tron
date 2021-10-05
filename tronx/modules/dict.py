@@ -21,7 +21,6 @@ from tronx.helpers import (
 	send_edit,
 	create_file,
 	long,
-	delete,
 )
 
 
@@ -55,7 +54,6 @@ async def create_anyfile(app, m:Message):
 				filename=givename, 
 				text=data
 			)
-			return
 		# if replied to text without file name
 		elif long(m) == 1 and reply:
 			data = reply.text
@@ -65,7 +63,6 @@ async def create_anyfile(app, m:Message):
 				filename="file.py", 
 				text=data
 			)
-			return
 		# if replied to text with file name
 		elif long(m) > 1 and reply:
 			givename = cmd[1]
@@ -76,13 +73,12 @@ async def create_anyfile(app, m:Message):
 				filename=givename, 
 				text=data
 			)
-			return
 		else:
 			await send_edit(
 				m, 
-				f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py"
+				f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py",
+				delme=2
 				)
-			await delete(m, 3)
 	except Exception as e:
 		await error(m, e)
 

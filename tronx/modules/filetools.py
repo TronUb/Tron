@@ -19,6 +19,7 @@ from tronx.helpers import (
 	send_edit,
 	delete,
 	long,
+	types,
 )
 
 
@@ -65,39 +66,28 @@ async def zipit(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
 		await send_edit(m, f"Reply to some media file ...", delme=2)
-		return
 
 	elif reply:
 		await send_edit(m, "Zipping . . .")
-		doc = reply
-		if doc.document:
-			name = doc.document.file_name
-		elif doc.photo:
-			name = doc.photo.file_name
-		elif doc.video:
-			name = doc.video.file_name
-		elif doc.sticker:
-			name = doc.sticker.file_name
-		elif doc.animation:
-			name = doc.animation.file_name
-		else:
-			await send_edit(m, "The file does not have a name, please give a name after command ...", delme=2)
-			return
+		name = types(m)[1]
 
 		if reply:
-			if not os.path.isdir(Config.TEMP_DICT):
-				os.makedirs("tronx/downloads/")
+			if Config.TEMP_DICT:
+				loc = Config.TEMP_DICT
+			else:
+				loc = "./downloads"
 			dl = await app.download_media(
-				doc,
-				Config.TEMP_DICT + name)
+				message=doc,
+				file_name=loc + name,
+				block=False
+				)
 			zipfile.ZipFile(dl + ".zip", "w", zipfile.ZIP_DEFLATED).write(dl)
-			tron = dl + ".zip"
-			await send_edit(m, f"Your file is compressed and saved here: \n`{tron}`")
-			return
+			place = loc + name + ".zip"
+			await send_edit(m, f"Your file is compressed and saved here: \n`{place}`")
 		else:
 			await send_edit(m, f"Reply to a file and give a name after cmd. \nEx: `{PREFIX}zip myfile`", delme=2)
 	else:
-		await send_edit(m, "Reply to some media please ...", delme=2)
+		await send_edit(m, "Reply to some media please ...", delme=2, mono=True)
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -113,9 +103,9 @@ async def unzipit(_, m: Message):
 			await send_edit(m, f"File unzipped and saved here: `{extract_path}`")
 			return
 		else:
-			await send_edit(m, "The path length exceeds 4096 character, please check again ...", delme=2)
+			await send_edit(m, "The path length exceeds 4096 character, please check again ...", delme=2, mono=True)
 	else:
-		await send_edit(m, "Give me the file path to unzip the file ...", delme=2)
+		await send_edit(m, "Give me the file path to unzip the file ...", delme=2, mono=True)
 
 
 

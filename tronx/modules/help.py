@@ -81,10 +81,9 @@ async def help_menu(app, m):
 # get all plugins name
 @app.on_message(gen("plugs"))
 async def all_plugins(_, m: Message):
-	plugs = list(CMD_HELP.keys())
 	await send_edit(
 		m, 
-		"\n".join(f"`{plugs}`")
+		"\n".join({CMD_HELP.keys()})
 		)
 
 
@@ -103,3 +102,5 @@ async def data(plug):
 	except Exception as e:
 		print(e)
 		return False
+
+

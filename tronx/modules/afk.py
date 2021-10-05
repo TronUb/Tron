@@ -29,6 +29,7 @@ from tronx.helpers import (
 	get_message_type,
 	get_readable_time,
 	long,
+	delete,
 )
 
 from tronx.database.postgres import dv_sql as db
@@ -45,18 +46,6 @@ CMD_HELP.update(
 		)
 	}
 )
-
-
-
-
-# mentioned users
-MENTIONED = []
-
-# restricted users
-AFK_RESTRICT = {}
-
-# a delay for restricted users
-DELAY_TIME = 60 # seconds
 
 
 
@@ -104,33 +93,25 @@ async def offline_mention(_, m: Message):
 	try:
 		if m.chat.id == Config.LOG_CHAT:
 			return
-		global MENTIONED
 		get = get_afk()
 		if get and get["afk"]: 
 			if "-" in str(m.chat.id):
 				cid = str(m.chat.id)[4:]
 			else:
 				cid = str(m.chat.id)
-			if cid == AFK_RESTRICT:
-				return
+
 			end = int(time.time())
 			otime = get_readable_time(end - get["afktime"])
 			if get["reason"] and get["afktime"]:
-				if m.from_user.id in MENTIONED:
-					return
-				msg = await m.reply(
+				await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
 					)
-				time.sleep(2)
-				await msg.delete()
+				await delete(m, 3)
 			elif get["afktime"] and not get["reason"]:
-				if m.from_user.id in MENTIONED:
-					return
-				msg = await m.reply(
+				await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
 					)
-				time.sleep(2)
-				await msg.delete()
+				await delete(m, 3)
 			content, message_type = get_message_type(m)
 			if message_type == Types.TEXT:
 				if m.text:
@@ -139,16 +120,7 @@ async def offline_mention(_, m: Message):
 					text = m.caption
 			else:
 				text = message_type.name
-			MENTIONED.append(
-				{
-					"user": m.from_user.first_name, 
-					"user_id": m.from_user.id, 
-					"chat": m.chat.title, 
-					"chat_id": cid, 
-					"text": text, 
-					"message_id": m.message_id
-				}
-				)
+
 			await app.send_message(
 				Config.LOG_CHAT, 
 				f"""#mention\n\n
