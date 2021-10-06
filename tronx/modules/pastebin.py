@@ -44,8 +44,7 @@ async def paster(_, m: Message):
 	elif not reply and long(m) > 1:
 		text = m.text.split(None, 1)[1]
 	else:
-		await send_edit(m, "Please reply to a message or give some text after command.", delme=2)
-		return
+		return await send_edit(m, "Please reply to a message or give some text after command.", delme=2)
 
 	try:
 		async with aiohttp.ClientSession() as session:
@@ -54,27 +53,20 @@ async def paster(_, m: Message):
 			) as response:
 				key = (await response.json())["result"]["key"]
 	except Exception:
-		await send_edit(m, "`Pasting failed, Try again ...`", delme=2)
-		return
+		return await send_edit(m, "Pasting failed, Try again . . .", delme=2, mono=True)
+
 	else:
 		url = f"https://nekobin.com/{key}"
 		reply_text = f"**Nekobin** : [Here]({url})"
-		delete = (
-			True
-			if len(m.command) > 1
-			and m.command[1] in ["d", "del"]
-			and reply.from_user.is_self
-			else False
-		)
+		delete = (True if len(m.command) > 1 and m.command[1] in ["d", "del"] and reply.from_user.is_self else False)
 		if delete:
 			await asyncio.gather(
-				app.send_message(
-					m.chat.id, 
+				send_edit(
+					m,  
 					reply_text, 
 					disable_web_page_preview=True
-				),
-				await reply.delete(),
-				await m.delete()
+					),
+				await reply.delete()
 			)
 		else:
 			await send_edit(

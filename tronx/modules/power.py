@@ -40,7 +40,7 @@ async def restart_userbot(_, m: Message):
 			"Restart completed !\nBot is alive now !"
 		)
 	except Exception as e:
-		await m.edit("`Failed to re-start userbot !`", delme=2)
+		await m.edit("Failed to re-start userbot !", delme=2, mono=True)
 		await error(m, e)
 
 
@@ -72,4 +72,4 @@ async def sleep_userbot(_, m: Message):
 
 		await send_edit(m, f"Sleeping for {sleeptime} {sec} ...", delme=int(cmd))
 	else:
-		await send_edit(m, "Please give me a number not text ...", delme=2)
+		await send_edit(m, "Please give me a number not text ...", delme=2, mono=True)

@@ -56,7 +56,7 @@ OWNER_ID = 1790546938
 
 OWNER_USERNAME = "@BEASTZX"
 
-version = "v.0.0.3"
+version = "v.0.0.4"
 
 lara_version = "v.0.0.1"
 

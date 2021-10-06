@@ -34,7 +34,8 @@ async def media_info(_, m: Message):
 	if not replied:
 		return await send_edit(
 			m, 
-			"Please reply to some media to get media info ..."
+			"Please reply to some media to get media info ...",
+			mono=True
 			)
 	if types(m) == "photo":
 		pie = replied.photo
@@ -186,8 +187,6 @@ async def get_chatinfo(_, m: Message):
 		data += f"**Dc Id:** `{chat.dc_id}`\n"
 		if chat.username:
 			data += f"**Username:** `@{chat.username}`\n"
-		else:
-			None
 		data += f"**Members:** `{chat.members_count}`\n"
 		data += f"**Description:** `{chat.description}`\n"
 		data += f"**Permissions:**\n\n"

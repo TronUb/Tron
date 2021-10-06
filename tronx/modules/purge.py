@@ -45,10 +45,8 @@ CMD_HELP.update(
 @app.on_message(gen(["purge", "p"]))
 async def purge_all(app, m:Message):
 	if m.reply_to_message:
-		await send_edit(
-			m, 
-			"purging..."
-			)
+		await send_edit(m, "purging . . .", mono=True)
+
 		start_t = datetime.now()
 		user_id = None
 		from_user = None

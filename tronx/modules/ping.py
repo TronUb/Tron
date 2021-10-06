@@ -23,14 +23,11 @@ from tronx.helpers import (
 	error,
 	gen,
 	send_edit,
-	# others 
-	mention_markdown,
+	mymention,
 )
 
 
 
-
-pings = []
 
 
 CMD_HELP.update(
@@ -43,16 +40,10 @@ CMD_HELP.update(
 	}
 )
 
-# custom name first, or real tg name
-if USER_NAME:
-    name = USER_NAME
-else:
-    name = Config.USER_NAME
 
 
-# To avoid message not modified error 
-# you will still get floodwait error 
-# if tried a greater number
+
+# animations
 data = [ 
 	"🕜", 
 	"🕡", 
@@ -67,51 +58,45 @@ data = [
 	"🕐"
 ]
 
+pings = []
+pings.clear()
+
+
+
 
 @app.on_message(gen("ping"))
 async def pingme(_, m: Message):
 	if len(m.command) == 1:
 		start = datetime.now()
-		await send_edit(
-			m,
-			"`...`"
-			)
+		await send_edit(m, "...", mono=True)
 		end = datetime.now()
 		m_s = (end - start).microseconds / 1000
 		await send_edit(
 			m, 
-			f"**Pöng !**\n`{m_s} ms`\n⧑ {mention_markdown(USER_ID, name)}", 
+			f"**Pöng !**\n`{m_s} ms`\n⧑ {mymention()}", 
 			disable_web_page_preview=True
 			)
 	elif long(m) == 2:
 		count = m.command[1]
 		text = int(m.command[1])
 		if text == 1:
-			await send_edit(m, "If you need one ping use only `.ping`", delme=2)
-			return
+			return await send_edit(m, "If you need one ping use only `.ping`", delme=2)
+
 		elif text == 0:
-			await send_edit(m, "try a greater number like 2.", delme=2)
-			return
+			return await send_edit(m, "try a greater number like 2.", delme=2, mono=True)
+
 		else:
 			try:
 				num = int(count) + 1
 				for x in range(1, num):
 					await infinite(m)
-					await send_edit(
-						m, 
-						"..."
-						)
+					await send_edit(m, "...", mono=True)
 					time.sleep(0.50)
-				await send_edit(
-					m, 
-					"".join(pings)
-					)
-				pings.clear()
+				await send_edit(m, "".join(pings))
 			except Exception as e:
 				await error(m, e)
 	else:
-		await send_edit(m, "Something went wrong in ping module.", delme=2)
-		return
+		return await send_edit(m, "Something went wrong in ping module.", delme=2)
 
 
 
@@ -125,7 +110,7 @@ async def infinite(m: Message):
 		)
 	end = datetime.now()
 	ms = (end - start).microseconds / 1000
-	msg = f"Pöng !\n{ms} ms\n⧑ {mention_markdown(USER_ID, name)}\n\n"
+	msg = f"Pöng !\n{ms} ms\n⧑ {mymention()}\n\n"
 	pings.append(msg)
 
 

@@ -172,16 +172,18 @@ async def auto_block(_, m: Message):
 
 @app.on_message(gen(["a", "approve"]))
 async def approve_pm(app, m: Message):
+	await send_edit(m, "approving . . .", mono=True)
 	reply = m.reply_to_message
 	cmd = m.command
+
 	if m.chat.type == "private":
 		user_id = m.chat.id
 	elif m.chat.type != "private":
 		if reply:
 			user_id = reply.from_user.id
 		elif not reply and long(m) == 1:
-			await send_edit(m, "Whom should i approve, piro ?", delme=3)
-			return
+			return await send_edit(m, "Whom should i approve, piro ?", delme=3)
+
 		elif not reply and long(m) > 1:
 			try:
 				data = await app.get_users(cmd[1])
@@ -192,11 +194,11 @@ async def approve_pm(app, m: Message):
 				UsernameNotOccupied, 
 				UsernameInvalid
 				):
-				await send_edit(m, "Please try again later . . .", delme=3)
-				return
+				return await send_edit(m, "Please check username again . . .", delme=3, mono=True)
+
 		else:
-			await send_edit(m, "Failed to approve user . . .", delme=2)
-			return
+			return await send_edit(m, "Failed to approve user . . .", delme=2)
+
 
 	info = await app.get_users(user_id)
 	user_name = info.first_name
@@ -219,6 +221,7 @@ async def approve_pm(app, m: Message):
 
 @app.on_message(gen(["da", "disapprove"]))
 async def revoke_pm_block(_, m:Message):
+	await send_edit(m, "disapproving . . .", mono=True)
 	reply = m.reply_to_message
 	cmd = m.command
 	if m.chat.type == "private":
@@ -238,8 +241,7 @@ async def revoke_pm_block(_, m:Message):
 				UsernameNotOccupied, 
 				UsernameInvalid
 				):
-				await send_edit(m, "Please try again later . . .", delme=3)
-				return
+				return await send_edit(m, "Please try again later . . .", delme=3)
 		else:
 			return
 
@@ -254,8 +256,9 @@ async def revoke_pm_block(_, m:Message):
 				f"#disallow\n\n[{user_name}](tg://user?id={user_id}) has been disapproved for pm !"
 			)
 		except Exception as e:
+			await error(m, e)
 			print(e)
 	else:
-		print("Can't disallow this user . . .", delme=3)
+		await send_edit(m, "Sorry there is no user id to disapprove . . .", mono=True)
 
                 

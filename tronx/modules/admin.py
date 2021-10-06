@@ -335,10 +335,7 @@ async def pin_message(_, m):
 		reply = m.reply_to_message
 		if reply:
 			await send_edit(m, "⏳ • Hold on...", mono=True)
-			done = await app.pin_chat_message(
-				m.chat.id,
-				reply.message_id,
-				)
+			done = await reply.pin()
 			if done:
 				await send_edit(m, "Pinned message!", mono=True)
 			else:
@@ -357,10 +354,7 @@ async def pin_message(_, m):
 		reply = m.reply_to_message
 		if reply:
 			await send_edit(m, "⏳ • Hold on...", mono=True)
-			done = await app.unpin_chat_message(
-				m.chat.id,
-				m.reply_to_message.message_id
-				)
+			done = reply.unpin()
 			if done:
 				await send_edit(m, "Unpinned message !", mono=True)
 			else:
