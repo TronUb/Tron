@@ -83,7 +83,7 @@ async def help_menu(app, m):
 async def all_plugins(_, m: Message):
 	await send_edit(
 		m, 
-		"\n".join({CMD_HELP.keys()})
+		"\n".join(CMD_HELP.keys())
 		)
 
 

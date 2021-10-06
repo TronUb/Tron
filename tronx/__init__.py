@@ -95,6 +95,12 @@ if not LOG_CHAT:
 
 
 
+if not os.path.exists("downloads"):
+	os.mkdir("downloads")
+
+
+
+
 def get_readable_time(seconds: int) -> str:
 	""" seconds to readable time """
 	count = 0

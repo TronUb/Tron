@@ -238,3 +238,33 @@ def back():
 
 def keep():
 	pass
+
+
+
+
+def is_str(element):
+	check = isinstance(element, str)
+	return check
+
+
+
+
+def is_bool(element):
+	check = isinstance(element, bool)
+	return check
+
+
+
+
+def is_float(element):
+	check = isinstance(element, float)
+	return check
+
+
+
+
+def is_int(element):
+	check = isinstance(element, int)
+	return check
+
+
