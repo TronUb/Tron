@@ -134,6 +134,7 @@ async def whois(_, m: Message):
 
 @app.on_message(gen("id"))
 async def id(_, m: Message):
+	await send_edit(m, "Getting id . . .", mono=True)
 	cmd = m.command
 	reply = m.reply_to_message
 
@@ -153,7 +154,7 @@ async def id(_, m: Message):
 	u_name = user.first_name if user.first_name else None
 	c_name = chat.first_name if chat.first_name else chat.title
 
-	await send_edit(m, f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat_id}`")
+	await send_edit(m, f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat.id}`")
 
 
 
