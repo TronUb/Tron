@@ -153,7 +153,7 @@ async def id(_, m: Message):
 	u_name = user.first_name if user.first_name else None
 	c_name = chat.first_name if chat.first_name else chat.title
 
-	await send_edit(m, f"**{u_name}:** `{}`\n**{c_name}:** `{}`".format(user.id, chat_id)
+	await send_edit(m, f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat_id}`")
 
 
 
