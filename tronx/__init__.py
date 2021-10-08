@@ -3,6 +3,7 @@ import sys
 import time
 import logging
 import platform
+import subprocess
 
 from pyrogram.types import Message
 from pyrogram import Client, filters
@@ -25,6 +26,27 @@ log = logging.getLogger(__name__)
 
 if list(platform.uname())[1] == "localhost":
 	from demo_config import Config
+	try:
+		# unable to install these packages using standard method in termux
+		# install pillow
+		os.system("apt update && apt upgrade")
+		one = os.system("pkg install python libjpeg-turbo libcrypt ndk-sysroot clang zlib")
+		two = subprocess.call(["pip3", "install", "pillow"])
+		# install lxml
+		three = os.system("pkg install libxml2 clang libxslt")
+		four = subprocess.call(["pip3", "install", "lxml"])
+		# install psycopg2
+		five = os.system("pkg install postgresql python make clang")
+		six = subprocess.call(["pip3", "install", "psycopg2"])
+		# install remaining requirements
+		seven = subprocess.call(["pip3", "install", "-r", "requirements.txt"])
+		os.system("clear")
+		if one + two + three + four + five + six + seven == 0:
+			print("\nSuccessfully installed requirements.\n")
+		else:
+			print("\nFailed to install requirements, quitting.\n")
+	except Exception as e:
+		print(e)
 else:
 	from config import Config
 

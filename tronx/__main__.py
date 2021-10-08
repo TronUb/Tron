@@ -17,7 +17,6 @@ from tronx import (
 
 
 
-# create a loop
 loop = asyncio.get_event_loop()
 
 
