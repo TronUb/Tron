@@ -40,14 +40,14 @@ CMD_HELP.update(
 
 @app.on_message(gen(["tgm", "telegraph"]))
 async def telegraph(app, m:Message):
-	replied = m.reply_to_message
+	reply = m.reply_to_message
 	filesize = 5242880
 	# if not replied
-	if not replied:
+	if not reply:
 		await send_edit(m, f"Please reply to media / text . . .", mono=True)
 	# replied to text 
-	elif replied.text:
-		if len(replied.text) <= 4096:
+	elif reply.text:
+		if len(reply.text) <= 4096:
 			await send_edit(m, "⏳• Hold on . . .", mono=True)
 			link = tgm.create_page(
 				myname(),
@@ -61,30 +61,30 @@ async def telegraph(app, m:Message):
 		else:
 			await send_edit(m, "The length text exceeds 4096 characters . . .", mono=True)
 	# replied to supported media
-	elif replied.media:
+	elif reply.media:
 		if (
-			replied.photo and replied.photo.file_size <= filesize # png, jpg, jpeg
-			or replied.video and replied.video.file_size <= filesize # mp4
-			or replied.animation and replied.animation.file_size <= filesize
-			or replied.sticker and replied.sticker.file_size <= filesize
-			or replied.document and replied.document.file_size <= filesize # [photo, video] document
+			reply.photo and reply.photo.file_size <= filesize # png, jpg, jpeg
+			or reply.video and reply.video.file_size <= filesize # mp4
+			or reply.animation and reply.animation.file_size <= filesize
+			or reply.sticker and reply.sticker.file_size <= filesize
+			or reply.document and reply.document.file_size <= filesize # [photo, video] document
 			):
 			await send_edit(m, "⏳• Hold on . . .", mono=True)
 			# change ext to png to use convert in link
-			if replied.animation or replied.sticker:
+			if reply.animation or reply.sticker:
 				loc = await app.download_media(
 					replied,
-					file_name="app/tronx/downloads/telegraph.png"
+					file_name=f"{Config.TEMP_DICT}telegraph.png"
 					)
 			else:
 				loc = await app.download_media(
 					replied, 
-					file_name="app/tronx/downloads"
+					file_name=f"{Config.TEMP_DICT}"
 					)
 			try:
 				response = upload_file(loc)
 			except Exception as e:
-				await error(m, e)
+				return await error(m, e)
 			await send_edit(
 				m, 
 				f"**Telegraph Link: [Press Here](https://telegra.ph{response[0]})**", 

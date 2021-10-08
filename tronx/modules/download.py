@@ -34,10 +34,9 @@ from tronx.helpers import (
 	get_directory_size,
 	delete,
 	long,
-	create_file
+	create_file,
+	get_readable_time,
 )
-
-from tronx.modules import types
 
 
 
@@ -117,32 +116,34 @@ async def list_directories(_, m: Message):
 @app.on_message(gen(["download", "dl"]))
 async def download_media(_, m: Message):
 	await send_edit(m, "⏳ •Downloading...")
-	replied = m.reply_to_message
-	if replied and replied.media:
+	reply = m.reply_to_message
+	if reply and reply.media:
 		try:
 			start_t = datetime.now()
 			c_time = time.time()
-			location = Config.TEMP_DICT + types(m)[1]
 
-			await app.download_media(
-				message=replied,
+			location = await app.download_media(
+				message=reply,
 				progress=progress_for_pyrogram,
-				progress_args=("**__Trying to download . . .__**", c_time),
+				progress_args=("Downloading file . . .", m, c_time),
 			)
 
 			end_t = datetime.now()
-			ms = (end_t - start_t).seconds
+			duration = get_readable_time((end_t - start_t).seconds)
 
-			await send_edit(
-				m, 
-				f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{ms}` **seconds**",
-				parse_mode="markdown",
-			)
-		except Exception:
+			if location is None:
+				await send_edit(m, "Download failed, please try again.", mono=True)
+			else:
+				await send_edit(
+					m, 
+					f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`",
+					parse_mode="markdown",
+				)
+		except Exception as e:
 			await error(m, e)
-			await send_edit(m, f"Failed To Download!\n{exc}")
+			await send_edit(m, f"Failed To Download, look in log chat for more info.")
 
-	elif long(m) > 1 and replied and replied.media:
+	elif long(m) > 1:
 		try:
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
