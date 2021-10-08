@@ -60,17 +60,11 @@ CMD_HELP.update(
 
 @app.on_message(gen("settitle"))
 async def admin_title(_, m: Message):
-	if (m.chat.type == "private") and (len(m.command) == 1):
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	if len(m.command) == 3:
+	await private(m)
+	reply = m.reply_to_message
+	if long(m) == 3:
 		try:
-			await send_edit(
-				m, 
-				"⏳ • hold on...")
+			await send_edit(m, "⏳ • hold on . . .", mono=True)
 				
 			user_data = m.command[1]
 			title = m.command[2]
@@ -80,39 +74,30 @@ async def admin_title(_, m: Message):
 			user_chat_info = await app.get_chat_member(m.chat.id, admin)
 			is_admin = user_chat_info.status
 			if "member" in is_admin:
-				await send_edit(
-					m, 
-					f"{user_name} is not an admin in this chat ..."
-					)
+				await send_edit(m, f"{user_name} is not an admin in this chat . . .")
 			else:
 				await app.set_administrator_title(m.chat.id, admin, title)
-				await send_edit(
-					m, 
-					f"**{user_name}'s** title is successfully changed to **{title}**")
+				await send_edit(m, f"**{user_name}'s** title is successfully changed to **{title}**")
+
 		except Exception as e:
 			await error(m, e)
-	elif (len(m.command) == 2) and (m.reply_to_message):
+	elif long(m) and reply:
 		try:
 			title = m.command[1]
-			user = m.reply_to_message
+			user = reply
 			admin = user.id
-			user_name = user.first_name
+			user_name = user.from_user.first_name
 			user_chat_info = await app.get_chat_member(m.chat.id, admin)
 			is_admin = user_chat_info.status
 			if "member" in is_admin:
-				await send_edit(
-					m, 
-					f"{user_name} is not an admin in this chat ..."
-					)
+				await send_edit(m, f"{user_name} is not an admin in this chat . . .")
 			else:
 				await app.set_administrator_title(m.chat.id, admin, title)
-				await send_edit(
-					m, 
-					f"{user_name}'s title is successfully changed to `{title}`"
-					)
+				await send_edit(m, f"{user_name}'s title is successfully changed to `{title}`")
 		except Exception as e:
 			await error(m, e)
 	else:
+		await send_edit(m, "Something went wrong . . .", mono=True)
 		print("Something went wrong in .settitle command in admin plugin.")
 
 
@@ -120,66 +105,43 @@ async def admin_title(_, m: Message):
 
 @app.on_message(gen("invite"))
 async def invite(_, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	await send_edit(
-		m, 
-		"⏳ • Hold on...")
+	await private(m)
+	await send_edit(m, "⏳ • Hold on . . .", mono=True)
 		
 	reply = m.reply_to_message
 	if reply:
-		user = reply.from_user["id"]
+		user = reply.from_user.id
+	elif not reply and long(m) > 1:
+		user = m.command[1]
 	else:
-		user = get_arg(m)
-		if not user:
-			await send_edit(
-				m, 
-				"I can't invite ghost, can I ?"
-				)
-			return
+		return await send_edit(m, "I can't invite ghost, can I ?", mono=True)
+
 	get_user = await app.get_users(user)
 	try:
 		await app.add_chat_members(
 			m.chat.id, 
 			get_user.id
 			)
-		await send_edit(
-			m, 
-			f"Added {get_user.first_name} to the chat!"
-			)
-	except USERNAME_NOT_OCCUPIED:
-		await send_edit(
-			m, 
-			"The user / bot does not exist, please çheck again ..."
-			)
+		await send_edit(m, f"Added {get_user.first_name} to the chat!")
+	except UsernameNotOccupied:
+		await send_edit(m, "The user / bot does not exist, please çheck again . . .", mono=True)
 
 
 
 
 @app.on_message(gen(["admins", "adminlist"]))
 async def adminlist(client, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	await send_edit(
-		m, 
-		"⏳ • Hold on...")
-		
+	await private(m)
+
+	await send_edit(m, "⏳ • Hold on. . .", mono=True)
 	replyid = None
 	toolong = False
-	if len(m.text.split()) >= 2:
+	if long(m) >= 2:
 		chat = m.text.split(None, 1)[1]
-		grup = await app.get_chat(chat)
+		group = await app.get_chat(chat)
 	else:
 		chat = m.chat.id
-		grup = await app.get_chat(chat)
+		group = await app.get_chat(chat)
 	if m.reply_to_message:
 		replyid = m.reply_to_message.message_id
 	alladmins = app.iter_chat_members(
@@ -206,7 +168,7 @@ async def adminlist(client, m):
 	admin.sort()
 	badmin.sort()
 	totaladmins = len(creator)+len(admin)+len(badmin)
-	teks = "**Admins in `{}`\n\n".format(grup.title)
+	teks = "**Admins in `{}`\n\n".format(group.title)
 	teks += "**• CREATOR:** \n"
 	for x in creator:
 		teks += "{}\n\n".format(x)
@@ -218,9 +180,9 @@ async def adminlist(client, m):
 				)
 			teks = ""
 			toolong = True
-	teks += "\n**• {} USER ADMINS:**\n".format(len(admin))
+	teks += "\n**• {} USER ADMINS:**\n\n".format(len(admin))
 	for x in admin:
-		teks += "{}\n".format(x)
+		teks += "• {}\n".format(x)
 		if len(teks) >= 4096:
 			await m.reply(
 				m.chat.id, 
@@ -255,88 +217,72 @@ async def adminlist(client, m):
 
 @app.on_message(gen("report"))
 async def report_admin(_, m: Message):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
-	if len(m.text.split()) >= 2:
+	await private(m)
+	if long(m) >= 2:
 		text = m.text.split(None, 1)[1]
 	else:
 		text = None
-	grup = await app.get_chat(m.chat.id)
-	alladmins = app.iter_chat_members(
+	group = await app.get_chat(m.chat.id)
+	admins = app.iter_chat_members(
 		m.chat.id, 
 		filter="administrators"
 		)
 	admin = []
-	async for a in alladmins:
+	async for a in admins:
 		if a.status == "administrator" or a.status == "creator":
 			if a.user.is_bot is False:
 				admin.append(mention_html(a.user.id, "\u200b"))
 	if m.reply_to_message:
-		await send_edit(
-			m, 
-			"⏳ • Hold on...")
+		await send_edit(m, "⏳ • Hold on . . .", mono=True)
 			
 		if text is not None:
-			teks = '{} is reported to admins.\n**Reason:** {}'.format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name), text)
+			teks = "{} is reported to admins.\n**Reason:** {}".format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name), text)
 		else:
-			teks = '{} is reported to admins.'.format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name))
+			teks = "{} is reported to admins.".format(mention_markdown(m.reply_to_message.from_user.id, m.reply_to_message.from_user.first_name))
 	else:
-		await send_edit(
-			m, 
-			"⏳ • Hold on...")
+		await send_edit(m, "⏳ • Hold on...")
 			
 		if text:
-			teks = '{}'.format(html.escape(text))
+			teks = "{}".format(html.escape(text))
 		else:
-			teks = "Calling admins in {}...".format(grup.title)
+			teks = "Calling admins in {}...".format(group.title)
 	teks += "".join(admin)
 	if m.reply_to_message:
 		await app.send_message(
 			m.chat.id, 
 			f"{teks}",
 			reply_to_message_id=m.reply_to_message.message_id, 
-			parse_mode="html"
+			parse_mode="markdown"
 			)
 	else:
 		await app.send_message(
 			m.chat.id, 
-			teks, 
-			parse_mode="html")
+			f"{teks}", 
+			parse_mode="markdown")
 
 
 
 
-@app.on_message(gen(["all"]) & filters.regex("@all"))
+@app.on_message(gen("all"))
 async def tag_all_users(app, m: Message):
-	if m.chat.type == "private":
-		await send_edit(
-			m,
-			"Please use it in groups ..."
-			)
-		return
-	await m.delete()
-	if len(m.text.split()) >= 2:
+	await private(m)
+	reply = m.reply_to_message
+	if long(m) >= 2:
 		text = m.text.split(None, 1)[1]
 	else:
 		text = "Hello Everyone "
-	await send_edit(
-		m,
-		"⏳ • Hold on..."
-		)
-		
+	await send_edit(m, "Wait . . .")
+
 	tip = app.iter_chat_members(m.chat.id)
 	async for a in tip:
 		if a.user.is_bot is False:
 			text += mention_html(a.user.id, "\u200b")
-	if m.reply_to_message:
+	await m.delete()
+	if reply:
 		await app.send_message(
 			m.chat.id, 
 			text, 
-			reply_to_message_id=m.reply_to_message.message_id, 
+			reply_to_message_id=reply.message_id, 
 			parse_mode="html"
 			)
 	else:
@@ -351,21 +297,17 @@ async def tag_all_users(app, m: Message):
 
 @app.on_message(gen(["bots"]))
 async def get_list_bots(_, m: Message):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
+	await private(m)
+	reply = m.reply_to_message
 	replyid = None
-	if len(m.text.split()) >= 2:
+	if long(m) >= 2:
 		chat = m.text.split(None, 1)[1]
 		grp = await app.get_chat(chat)
 	else:
 		chat = m.chat.id
 		grp = await app.get_chat(chat)
-	if m.reply_to_message:
-		replyid = m.reply_to_message.message_id
+	if reply:
+		replyid = reply.message_id
 	await m.edit("⏳ • Hold on...")
 	getbots = app.iter_chat_members(chat)
 	bots = []
@@ -396,17 +338,9 @@ async def get_list_bots(_, m: Message):
 
 @app.on_message(gen("kickme"))
 async def leave(client, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Please use it in groups ..."
-			)
-		return
+	await private(m)
 	try:
-		m = await send_edit(
-			m, 
-			f"{mymention()} left the chat ..."
-			)
+		m = await send_edit(m, f"{mymention()} left the chat . . .")
 		await asyncio.sleep(1)
 		await app.leave_chat(
 			chat_id=m.chat.id
@@ -419,24 +353,16 @@ async def leave(client, m):
 
 @app.on_message(gen("members"))
 async def get_member_count(client, m):
-	if m.chat.type == "private":
-		await send_edit(
-			m, 
-			"Try this command in groups ..."
-			)
-		return
-	if len(m.command) == 1:
+	await private(m)
+	if long(m) == 1:
 		try:
 			num = await app.get_chat_members_count(m.chat.id)
 			await send_edit(
 				m,
 				f"{num} members"
 				)
-		except USERNAME_NOT_OCCUPIED:
-			await send_edit(
-				m,
-				"The username does not exist ..."
-				)
+		except UsernameNotOccupied:
+			await send_edit(m, "The username does not exist . . .", mono=True)
 	elif len(m.command) <= 2:
 		try:
 			mid = m.command[1]
@@ -445,16 +371,10 @@ async def get_member_count(client, m):
 				m,
 				f"`{num}` members in {mid}"
 				)
-		except USERNAME_NOT_OCCUPIED:
-			await send_edit(
-				m, 
-				"The username does not exist ..."
-				)
+		except UsernameNotOccupied:
+			await send_edit(m, "The username does not exist . . .", mono=True)
 	else:
-		await send_edit(
-			m, 
-			f"Usage: `{PREFIX}members` or `{PREFIX}members <chat username>` "
-			)
+		await send_edit(m, f"Usage: `{PREFIX}members` or `{PREFIX}members [chat username / id]` ")
 
 
 
@@ -462,7 +382,7 @@ async def get_member_count(client, m):
 @app.on_message(gen("join"))
 async def join_chats(_, m: Message):
 	if long(m) == 1:
-		await send_edit(m, "Give me some chat id / username after command . . .")
+		await send_edit(m, "Give me some chat id / username after command . . .", mono=True)
 	elif long(m) > 1:
 		chat = m.command[1]
 		try:

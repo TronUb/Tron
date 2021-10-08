@@ -48,6 +48,7 @@ CMD_HELP.update(
 
 
 weather_lang_code="en"
+
 lang_code = os.getenv("LANG_CODE", "en")
 
 
@@ -58,69 +59,55 @@ def replace_text(text):
 
 @app.on_message(gen(["tts"]))
 async def voice(_, m: Message):
-	replied = m.reply_to_message
+	reply = m.reply_to_message
+
 	if not replied and len(m.command) < 2:
-		await send_edit(
-			m, 
-			"`reply to someone's text message & use only command`"
-			)
-		time.sleep(2)
-		await m.delete()
-		return
-	elif not replied and len(m.command) > 1:
+		return await send_edit(m, "reply to someone's text message & use only command", delme=True, mono=True)
+
+	elif not reply and long(m) > 1:
 		try:
-			await send_edit(
-				m, 
-				"`Converting text to voice ...`"
-				)
+			await send_edit(m, "Converting text to voice . . .", mono=True)
+
 			text = m.text.split(None, 1)[1]
 			tts = gTTS(text, lang=lang_code)
-			tts.save("tronx/downloads/voice.mp3")
+			tts.save(f"{Config.TEMP_DICT}voice.mp3")
 			await app.send_voice(
 				m.chat.id, 
-				voice="tronx/downloads/voice.mp3", 
+				voice=f"{Config.TEMP_DICT}voice.mp3", 
 				reply_to_message_id=m.message_id
 				)
 			await m.delete()
-			os.remove("tronx/downloads/voice.mp3")
+			os.remove(f"{Config.TEMP_DICT}voice.mp3")
 		except Exception as e:
 			await error(m, e)
-	elif replied:
+	elif reply:
 		try:
-			await send_edit(
-				m, 
-				"`Converting text to voice ...`"
-				)
-			text = replied.text
+			await send_edit(m, "Converting text to voice . . .", mono=True)
+			text = reply.text
 			tts = gTTS(text, lang=lang_code)
-			tts.save("tronx/downloads/voice.mp3")
+			tts.save(f"{Config.TEMP_DICT}voice.mp3")
 			await app.send_voice(
 				m.chat.id, 
-				voice="tronx/downloads/voice.mp3", 
+				voice=f"{Config.TEMP_DICT}voice.mp3", 
 				reply_to_message_id=replied.message_id
 				)
 			await m.delete()
-			os.remove("tronx/downloads/voice.mp3")
+			os.remove(f"{Config.TEMP_DICT}voice.mp3")
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(
-			m, 
-			"Something went wrong !"
-			)
+		await send_edit(m, "Something went wrong !", mono=True)
 
 
 
 
 @app.on_message(gen(["ud"]))
 async def urban_dictionary(_, m:Message):
-	if len(m.text.split()) == 1:
-		await send_edit(
-			m, 
-			f"Use: `{PREFIX}ud cats`"
-			)
-		return
+	if long(m) == 1:
+		return await send_edit(m, f"Use: `{PREFIX}ud cats`")
+
 	try:
+		await send_edit(m, f"Searching for `{m.text.split(None, 1)[1]}`")
 		text = m.text.split(None, 1)[1]
 		response = await AioHttp().get_json(
 			f"http://api.urbandictionary.com/v0/define?term={text}"
@@ -130,31 +117,23 @@ async def urban_dictionary(_, m:Message):
 		example = response["list"][0]["example"]
 		resp = (
 			f"**Text**: __`{replace_text(word)}`__\n\n"
-			f"**Meaning:**\n`{replace_text(definition)}`\n\n"
-			f"**Example:**\n`{replace_text(example)}` "
+			f"**Meaning:**\n\n`{replace_text(definition)}`\n\n"
+			f"**Example:**\n\n`{replace_text(example)}` "
 		)
 		await send_edit(m, resp)
 	except IndexError:
-		await send_edit(
-			m, 
-			"`No Results Found !`"
-			)
-		time.sleep(1.50)
-		await m.delete()
+		await send_edit(m, "No Results Found !", mono=True)
 
 
 
 
 @app.on_message(gen("short"))
 async def short_link(_, m: Message):
-	replied = m.reply_to_message
+	reply = m.reply_to_message
 	if replied or not replied and len(m.command) < 2:
-		await send_edit(
-			m, 
-			"Please give me some link or reply to a link"
-			)
-		return
-	if not replied and len(m.command) > 1:
+		return await send_edit(m, "Please give me some link or reply to a link", mono=True)
+
+	if not reply and long(m) > 1:
 		try:
 			text_url = m.text.split(None, 1)[1]
 			sample_url = f"https://da.gd/s?url={text_url}"
@@ -165,15 +144,13 @@ async def short_link(_, m: Message):
 					f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text_url}", 
 					disable_web_page_preview=True)
 			else:
-				await send_edit(
-					m, 
-					"something is wrong. please try again later."
-					)
+				await send_edit(m, "something is wrong. please try again later.", mono=True)
+
 		except Exception as e:
 			await error(m, e)
-	elif replied:
+	elif reply:
 		try:
-			text_url = replied.text
+			text_url = reply.text
 			sample_url = f"https://da.gd/s?url={text_url}"
 			response = requests.get(sample_url).text
 			if response:
@@ -182,10 +159,7 @@ async def short_link(_, m: Message):
 					f"**Generated Link:**\n\nShortened Link: {response}\nOriginal Link: {text_url}", 
 					disable_web_page_preview=True)
 			else:
-				await send_edit(
-					m, 
-					"something is wrong. please try again later."
-					)
+				await send_edit(m, "something is wrong. please try again later.", mono=True)
 		except Exception as e:
 			await error(m, e)
 
@@ -195,20 +169,14 @@ async def short_link(_, m: Message):
 async def unshort_link(_, m: Message):
 	replied = m.reply_to_message
 	if not replied and len(m.command) < 2:
-		await send_edit(
-			m, 
-			"Please give me a da.gd link to convert to orginal link"
-			)
-		return
+		return await send_edit(m, "Please give me a da.gd link to convert to orginal link", mono=True)
+
 	elif not replied and len(m.command) > 1:
 		try:
 			text_url = m.text.split(None, 1)[1]
 			if not text_url.startswith("https://da.gd/"):
-				await send_edit(
-					m, 
-					"Please Give me a valid link that starts with `https://da.gd/`"
-					)
-				return
+				return await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
+
 			else:
 				r = requests.get(
 					text_url, 
@@ -222,21 +190,14 @@ async def unshort_link(_, m: Message):
 					disable_web_page_preview=True
 					)
 				else:
-					await send_edit(
-						m, 
-						"something is wrong. please try again later."
-						)
+					await send_edit(m, "something is wrong. please try again later.", mono=True)
 		except Exception as e:
 			await error(m, e)
 	elif replied:
 		try:
 			text_url = replied.text
 			if not text_url.startswith("https://da.gd/"):
-				await send_edit(
-					m, 
-					"Please Give me a valid link that starts with `https://da.gd/`"
-					)
-				return
+				await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
 			else:
 				r = requests.get(
 					text, 
@@ -250,17 +211,11 @@ async def unshort_link(_, m: Message):
 						disable_web_page_preview=True
 						)
 				else:
-					await send_edit(
-						m,
-						"something is wrong. please try again later."
-						)
+					await send_edit(m,"something is wrong. please try again later.", mono=True)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(
-			m, 
-			"Something went wrong, try again later !"
-			)
+		await send_edit(m, "Something went wrong, try again later !", mono=True)
 
 
 
@@ -268,24 +223,15 @@ async def unshort_link(_, m: Message):
 @app.on_message(gen(["wtr", "weather"]))
 async def wtr(_, m: Message):
 	if len(m.text.split()) == 1:
-		await send_edit(
-			m, 
-			"Piro Master Atleast Give Me Some Location !!"
-			)
-		return
-	await send_edit(
-		m, 
-		"Checking weather ..."
-		)
+		return await send_edit(m, "Piro Master Atleast Give Me Some Location !", mono=True)
+
+	await send_edit(m, "Checking weather . . .", mono=True)
 	location = m.text.split(None, 1)[1]
 	h = {'user-agent': 'httpie'}
 	a = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=h)
 	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in a.text:
-		await send_edit(
-			m, 
-			"Too many requests, try again later !"
-			)
-		return
+		return await send_edit(m, "Too many requests, try again later !", mono=True)
+
 	weather = f"__{escape(a.text)}__"
 	await send_edit(
 		m, 
@@ -298,24 +244,21 @@ async def wtr(_, m: Message):
 
 @app.on_message(gen(['ws', 'webshot']))
 async def webshot(_, m: Message):
-	try:
-		user_link = m.command[1]
-		await send_edit(
-			m, 
-			"`generating pic ...`"
-			)
-		full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
-		await app.send_document(
-			m.chat.id, 
-			full_link, 
-			caption=f'{user_link}'
-			)
-		await m.delete()
-	except:
-		await send_edit(
-			m, 
-			"Something went wrong ..."
-			)
+	if long(m) > 1:
+		try:
+			user_link = m.command[1]
+			await send_edit(m, "generating pic . . .", monk=True)
+			full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
+			await app.send_document(
+				m.chat.id, 
+				full_link, 
+				caption=f'{user_link}'
+				)
+			await m.delete()
+		except Exception as e:
+			await error(m, e)
+	else:
+		await send_edit(m, "Give me the link pro . . .", mono=True)
 
 
 
@@ -332,13 +275,14 @@ async def undelete_msg(_, m: Message):
 			count = int(count)
 	try:
 		data = await app.get_history(m.chat.id, limit=count)
+		data = False
 		if data:
 			for x in data:
 				collect.append(f"**Message:** `{x.text}`")
-			try:
-				await send_edit(m, "\n\n".join(collect))
-			except:
-				await create_file(m, app, "undlete.txt", "\n\n".join(collect))
+#			try:
+#				await send_edit(m, "\n\n".join(collect))
+#			except:
+#				await create_file(m, app, "undlete.txt", "\n\n".join(collect))
 		else:
 			await send_edit(m, "No history found !")
 	except Exception as e:

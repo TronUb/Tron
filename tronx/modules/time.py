@@ -56,12 +56,10 @@ async def today(_, m: Message):
 		today = "Saturday"
 	elif weekday == 6:
 		today = "Sunday"
-	my_time = pytz.timezone(
-		Config.TIME_ZONE
-		)
-	time = datetime.datetime.now(
-		my_time
-		)
+	my_time = pytz.timezone(Config.TIME_ZONE)
+	
+	time = datetime.datetime.now(my_time)
+
 	text = f"Today is `{today}`, "
 	text += f"{time.strftime('%d %b %Y')}\n" 
 	text += f"Time: {time.strftime('%r')}"
@@ -75,17 +73,11 @@ async def today(_, m: Message):
 
 @app.on_message(gen("time"))
 async def what(_, m: Message):
-	await send_edit(
-		m, 
-		f"Today's time: `{showtime()}`"
-		)
+	await send_edit(m, f"Today's time: `{showtime()}`")
 
 
 
 
 @app.on_message(gen("date"))
 async def what(_, m: Message):
-	await send_edit(
-		m, 
-		f"Today's date: `{showdate()}`"
-		)
+	await send_edit(m, f"Today's date: `{showdate()}`")

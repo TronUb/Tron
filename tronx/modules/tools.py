@@ -77,13 +77,11 @@ def convert_c(celsius):
 async def get_word_links(_, m: Message):
 	links = []
 	links.clear()
+	await send_edit(m, "Finding word in this chat . . .", mono=True)
 	try:
 		if len(m.command) < 2:
-			await send_edit(
-				m, 
-				"Please give some text to search in chat ..."
-				)
-			return
+			return await send_edit(m, "Please give some text to search in chat ...")
+
 		else:
 			info = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
@@ -91,10 +89,7 @@ async def get_word_links(_, m: Message):
 				msg = str(ele.text)
 				if query in msg:
 					links.append(f"https://t.me/c/{str(ele.chat.id)[4:]}/{ele.message_id}")
-			await send_edit(
-				m, 
-				"\n".join(links)
-				)
+			await send_edit(m, "\n".join(links))
 	except Exception as e:
 		await error(m, e)
 
@@ -104,11 +99,8 @@ async def get_word_links(_, m: Message):
 @app.on_message(gen(["cur", "currency"]))
 async def evaluate(_, m: Message):
 	if len(m.text.split()) <= 3:
-		await send_edit(
-			m, 
-			f"Use | `{PREFIX}cur 100 USD INR` or `{PREFIX}currency 100 USD INR`"
-			)
-		return
+		return await send_edit(m, f"Use | `{PREFIX}cur 100 USD INR` or `{PREFIX}currency 100 USD INR`")
+
 	value = m.text.split(None, 3)[1]
 	cur1 = m.text.split(None, 3)[2].upper()
 	cur2 = m.text.split(None, 3)[3].upper()
@@ -125,12 +117,8 @@ async def evaluate(_, m: Message):
 @app.on_message(gen(["temp", "temperature"]))
 async def evaluate(_, m: Message):
 	if len(m.text.split()) <= 2:
-		await send(
-			m, 
-			"How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)",
-			disable_web_page_preview=True
-			)
-		return
+		return await send(m, "How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)",disable_web_page_preview=True)
+
 	temp1 = m.text.split(None, 2)[1]
 	temp2 = m.text.split(None, 2)[2]
 	try:
@@ -143,10 +131,7 @@ async def evaluate(_, m: Message):
 			text = "`{}°C` = `{}°F`".format(temp1, result)
 			await send_edit(m, text)
 		else:
-			await send_edit(
-				m, 
-				"Unknown type {}".format(temp2)
-				)
+			await send_edit(m, "Unknown type {}".format(temp2))
 	except ValueError as e:
 		await error(m, e)
 
@@ -155,28 +140,21 @@ async def evaluate(_, m: Message):
 
 @app.on_message(gen("json"))
 async def jsonify(app, m: Message):
-	the_real_message = None
-	reply_to_id = None
+	reply = m.reply_to_message
 
-	if m.reply_to_message:
-		the_real_message = m.reply_to_message
-		name = m.reply_to_message.from_user.mention
+	if reply:
+		data = reply
 	else:
-		the_real_message = m
-		name = m.from_user.mention
+		data = m
+
 	try:
-		await send_edit(
-			m, 
-			f"{the_real_message}"
-			)
-	except Exception:# message too long
-		await send_edit(
-			m, 
-			"Sending file ..."
-			)
+		await send_edit(m, f"{name}")
+	except Exception: # message too long
+		await send_edit(m, "Sending file . . .", mono=True)
+
 		file = "json.txt"
 		new = open(file, "w+")
-		new.write(str(the_real_message))
+		new.write(str(data))
 		new.close()
 		await app.send_document(
 			m.chat.id,
@@ -191,48 +169,48 @@ async def jsonify(app, m: Message):
 
 @app.on_message(gen("ulink"))
 async def get_inlinelinks(app, m: Message):
-	if m.reply_to_message:
+	reply = m.reply_to_message
+	cat = []
+	dog = []
+	cat.clear()
+	dog.clear()
+
+	if reply:
 		try:
-			raw = m.reply_to_message.reply_markup.inline_keyboard
+			raw = reply.reply_markup.inline_keyboard
 		except Exception as e:
 			await error(m, e)
-		raw_msg = raw[0]
-		msg_link = raw_msg[0]
-		msg = msg_link.url
+
+		for x in range(len(raw)):
+			cat.append(raw[x])
+
+		for y in range(len(cat)):
+			dog.append(cat[x][0].url)
+
+		msg = "\n".join(dog)
 		if msg:
 			await send_edit(m, f"`{msg}`")
 		else:
-			await send_edit(
-				m, 
-				"`There are no links in this message...`"
-				)
-			time.sleep(2.5)
-			await delete()
+			await send_edit(m, "There are no links in this message . . .", mono=True)
 	else:
-		await send_edit(
-			m, 
-			"Try this command on url button message to get info of the button..."
-			)
+		await send_edit(m, "Try this command on url button message to get info of the button . . .", mono=True)
 
 
 
 
 @app.on_message(gen("mlink"))
 async def get_messagelinks(app, m: Message):
+	reply = m.reply_to_message
+
 	if m.chat.type == "private" or "bot":
-		await send_edit(
-			m, 
-			"This is not a group, try in groups... "
-			)
-		time.sleep(2.5)
-		await m.delete()
-		return
-	elif (m.chat.type == "supergroup"):
-		if m.reply_to_message:
+		return await send_edit(m, "This is not a group, try in groups . . .", delme=2, mono=True)
+
+	elif m.chat.type == "supergroup":
+		if reply:
 			try:
 				data = await app.get_messages(
 					chat_id = m.chat.id, 
-					message_ids = m.reply_to_message.message_id
+					message_ids = reply.message_id
 					)
 				gid = str(data.chat.id)
 				if gid.startswith("-100"):
@@ -258,15 +236,9 @@ async def get_messagelinks(app, m: Message):
 				await error(m, e)
 		try:
 			group = await data.username
-			await send_edit(
-				m, 
-				f"https://t.me/{group}/{msg_id}"
-				)
+			await send_edit(m, f"https://t.me/{group}/{msg_id}")
 		except Exception:
-			await send_edit(
-				m, 
-				f"https://t.me/c/{chatid}/{msg_id}"
-				)
+			await send_edit(m, f"https://t.me/c/{chatid}/{msg_id}")
 
 
 
@@ -275,26 +247,25 @@ async def get_messagelinks(app, m: Message):
 async def to_saved(_, m: Message):
 	await m.delete()
 	await m.reply_to_message.forward("self")
-	time.sleep(0.80)
 
 
 
 
 @app.on_message(gen("fwd"))
 async def to_saved(_, m: Message):
-	replied = m.reply_to_message
+	reply = m.reply_to_message
 	try:
 		await m.delete()
-		if not replied:
+		if not reply:
 			await m.forward(
 				m.chat.id
 				)
-		elif replied and len(m.command) < 2:
-			await replied.forward(
+		elif reply and len(m.command) < 2:
+			await reply.forward(
 				m.chat.id
 				)
-		elif replied and len(m.command) > 1:
-			await replied.forward(
+		elif reply and len(m.command) > 1:
+			await reply.forward(
 				m.command[1]
 				)
 	except Exception as e:
@@ -306,10 +277,7 @@ async def to_saved(_, m: Message):
 @app.on_message(gen(["spt", "speed", "speedtest"]))
 async def sptdel(app, m: Message):
 	if len(m.command) == 1:
-		await send_edit(
-			m, 
-			"Testing speed..."
-			)
+		await send_edit(m, "Testing speed . . .", mono=True)
 		test = speedtest.Speedtest()
 		test.get_best_server()
 		test.download()
@@ -326,11 +294,9 @@ async def sptdel(app, m: Message):
 			await send_edit(m, teks)
 		else:
 			await send_edit(m, "Something went wrong !!")
-	elif ("pic" in m.command[1]) and (len(m.command) > 1):
-		await send_edit(
-			m, 
-			"Calculating Speed..."
-			)
+	elif long(m) > 1 and "pic" in m.command[1]:
+		await send_edit(m, "Calculating Speed . . .")
+
 		start = datetime.now()
 		s = speedtest.Speedtest()
 		s.get_best_server()
@@ -356,10 +322,7 @@ async def sptdel(app, m: Message):
 			)
 			await m.delete()
 		else:
-			await send_edit(
-				m, 
-				"Something went wrong !!"
-				)
+			await send_edit(m, "Something went wrong !", mono=True)
 
 
 

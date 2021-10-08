@@ -43,18 +43,16 @@ CMD_HELP.update(
 async def send_welcome(_, m: Message):
 	chat = dw.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
-		if chat["file_id"] is not None:
-			pass
-		else:
-			return 
-		media_id = chat
+		if not chat["file_id"] is not None:
+			return
+
 		try:
-			file_id = media_id["file_id"] if media_id["file_id"] else False
-			caption = media_id["caption"] if media_id["caption"] else False
+			file_id = chat["file_id"] if chat["file_id"] else False
+			caption = chat["caption"] if chat["caption"] else False
 			if file_id and not file_id.startswith("#"):
-				await app.send_message(m.chat.id, file_id)
-				return
-			elif file_id:
+				return await app.send_message(m.chat.id, file_id)
+
+			elif file_id and file_id.startswith("#"):
 				file_id = file_id.replace("#", "")
 			if caption:
 				await app.send_cached_media(
@@ -71,6 +69,7 @@ async def send_welcome(_, m: Message):
 				)
 		except Exception as e:
 			await error(m, e)
+
 	elif bool(chat) is False:
 		return
 
@@ -148,10 +147,6 @@ async def delete_welcome(_, m: Message):
 					reply_to_message_id=m.from_user.id
 					)
 				await m.delete()
-			else:
-				pass
-		else:
-			pass
 	except Exception as e:
 		print(e)
 		await error(m, e)

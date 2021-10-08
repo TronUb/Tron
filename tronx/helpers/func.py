@@ -268,3 +268,8 @@ def is_int(element):
 	return check
 
 
+
+
+async def textlen(m: Message, one: int = 1):
+	status = True if len(m.command) > one and len(m.text) <= 4096 else False
+	return status

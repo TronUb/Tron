@@ -1,4 +1,4 @@
-pyrogram==1.2.8
+pyrogram
 telegraph
 heroku3
 aiohttp

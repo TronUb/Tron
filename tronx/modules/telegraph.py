@@ -44,17 +44,11 @@ async def telegraph(app, m:Message):
 	filesize = 5242880
 	# if not replied
 	if not replied:
-		await send_edit(
-			m, 
-			f"Please reply to media / text ...")
-		return
+		await send_edit(m, f"Please reply to media / text . . .", mono=True)
 	# replied to text 
 	elif replied.text:
 		if len(replied.text) <= 4096:
-			await send_edit(
-				m, 
-				"⏳• Hold on..."
-				)
+			await send_edit(m, "⏳• Hold on . . .", mono=True)
 			link = tgm.create_page(
 				myname(),
 				html_content=replied.text
@@ -65,9 +59,7 @@ async def telegraph(app, m:Message):
 				disable_web_page_preview=True
 				)
 		else:
-			await send_edit(
-				m, 
-				"The length text exceeds 4096 characters ...")
+			await send_edit(m, "The length text exceeds 4096 characters . . .", mono=True)
 	# replied to supported media
 	elif replied.media:
 		if (
@@ -77,10 +69,7 @@ async def telegraph(app, m:Message):
 			or replied.sticker and replied.sticker.file_size <= filesize
 			or replied.document and replied.document.file_size <= filesize # [photo, video] document
 			):
-			await send_edit(
-				m, 
-				"⏳• Hold on ..."
-				)
+			await send_edit(m, "⏳• Hold on . . .", mono=True)
 			# change ext to png to use convert in link
 			if replied.animation or replied.sticker:
 				loc = await app.download_media(
@@ -103,17 +92,9 @@ async def telegraph(app, m:Message):
 				)
 			os.remove(loc)
 		else:
-			await send_edit(
-				m, 
-				"Please check the file format or file size , it must be less than 5 mb ..."
-				)
+			await send_edit(m, "Please check the file format or file size , it must be less than 5 mb . . .", mono=True)
 	else:
 		# if replied to unsupported media
-		await send_edit(
-			m, 
-			"`Sorry, The File is not supported !`"
-			)
-		time.sleep(2)
-		await m.delete()
+		await send_edit(m, "Sorry, The File is not supported !", delme=2, mono=True)
 
 

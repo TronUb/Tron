@@ -36,43 +36,35 @@ CMD_HELP.update(
 
 @app.on_message(gen(["tr", "tl"]))
 async def translate(_, m: Message):
-	replied = m.reply_to_message
+	reply = m.reply_to_message
 	cmd = m.command
+
 	try:
 		if long(m) > 1:
-			lang = m.command[1]
+			lang = cmd[1]
 		else:
 			lang = "en"
 
-		await send_edit(
-			m, 
-			f"Translating in `{lang}` ..."
-			)
-		if (replied 
-			and len(m.text) > 1 
-			and len(m.text) <= 4096
-			and replied.text 
-			or replied.caption
-			):
-			tr = GoogleTranslator(source="auto", target=lang)
-			text = replied.text or replied.caption
-			output = tr.translate(text)
-			await send_edit(
-				m, 
-				f"**Translated to:** `{lang}`\n\n**Text:** `{output}`"
-				)
-		elif not replied and len(m.text) <= 4096:
-			tr = GoogleTranslator(source="auto", target=lang)
+		if (reply and reply.text):
+			text = reply.text
+			await translate(m, lang=lang, text=text)
+
+		elif not reply and len(m.text) <= 4096:
+			if long(m) <= 2:
+				return await send_edit(m, "Give me the language code with text.", mono=True)
 			text = m.text.split(None, 2)[2]
-			output = tr.translate(text)
-			await send_edit(
-				m, 
-				f"**Translated to:** `{lang}`\n\n**Text:** `{output}`"
-				)
+			await translate(m, lang=lang, text = text)
+			await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")
 		else:
-			await send_edit(m, "Invalid language code specified !")
+			await send_edit(m, "Invalid language code specified !", mono=True)
 	except Exception as e:
 		await error(m, e)
 
 
 
+
+async def translate(m: Message, lang, text):
+	await send_edit(m, f"Translating in `{lang}` ...")
+	tr = GoogleTranslator(source="auto", target=lang)
+	output = tr.translate(text)
+	await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")

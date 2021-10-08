@@ -22,7 +22,6 @@ loop = asyncio.get_event_loop()
 
 
 
-
 def load_plugins():
 	""" Assistant modules """
 	from tronx.plugins import PLUGINS
