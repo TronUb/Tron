@@ -89,7 +89,7 @@ async def purge_all(app, m:Message):
 
 
 
-@app.on_message(gen(["purgeme", "prm"]))
+@app.on_message(gen(["purgeme", "pgm"]))
 async def purge_myself(app, m:Message):
 	if len(m.text.split()) >= 2 and m.text.split()[1].isdigit():
 		target = int(m.text.split()[1])

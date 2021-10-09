@@ -244,6 +244,8 @@ async def tell_me_a_joke(_, m):
 		data = requests.get(f"https://official-joke-api.appspot.com/random_joke")
 		one = data.json().get("setup")
 		two = data.json().get("punchline")
+		if bool(data) is False:
+			return send_edit(m, "Site is down, please try again later . . .", delme=2, mono=True)
 		if one and two:
 			await send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
 		else:

@@ -93,15 +93,14 @@ async def send_modules(app, m: Message):
 async def install_module(_, m: Message):
 	if long(m) == 1 and m.reply_to_message.document:
 		if not m.reply_to_message.document.file_name.endswith(".py"):
-			await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
-			return
+			return await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
+
 		module_loc = (
-			f"/app/tronx/modules/{m.reply_to_message.document.file_name}"
+			f"tronx/modules/{m.reply_to_message.document.file_name}"
 		)
-		await send_edit(m, "`Installing module...`", delme=2)
+		await send_edit(m, "Installing module . . .", delme=2, mono=True)
 		if os.path.exists(module_loc):
-			await send_edit(m, f"`Module `{m.reply_to_message.document.file_name}` already exists!`")
-			return
+			return await send_edit(m, f"Module `{m.reply_to_message.document.file_name}` already exists !")
 
 		try:
 			download_loc = await app.download_media(
@@ -112,28 +111,25 @@ async def install_module(_, m: Message):
 				await send_edit(m, f"**Installed module:** `{m.reply_to_message.document.file_name}`")
 		except Exception as e:
 			await error(m, e)
-	return
 
 
 
 
 @app.on_message(gen("uninstall"))
 async def uninstall_module(_, m: Message):
+	cmd = m.command
 	try:
 		if long(m) > 1:
-			if m.command[1].endswith(".py"):
-				module_loc = f"/app/tronx/modules/{m.command[1]}"
-			elif not m.command[1].endswith(".py"):
-				module_loc = f"/app/tronx/modules/{m.command[1]}.py"
+			if cmd[1].endswith(".py"):
+				module_loc = f"tronx/modules/{cmd[1]}"
+			elif not cmd[1].endswith(".py"):
+				module_loc = f"tronx/modules/{cmd[1]}.py"
 			if os.path.exists(module_loc):
 				os.remove(module_loc)
-				await send_edit(m, f"**Uninstalled module** {m.command[1]}")
-				return
+				await send_edit(m, f"**Uninstalled module** {cmd[1]}")
 			else:
-				await send_edit(m,"`Module does not exist!`", delme=2)
-				return
+				await send_edit(m,"Module does not exist!", delme=2, mono=True)
 		else:
-			await send_edit(m, "`Give me a module name . . .`")
-			return
+			await send_edit(m, "Give me a module name . . .", mono=True)
 	except Exception as e:
 		await error(m, e)

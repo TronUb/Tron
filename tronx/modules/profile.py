@@ -171,7 +171,7 @@ async def mention(_, m: Message):
 		return await error(m, e)
 
 	_men = men(user.id, " ".join(m.command[2:]))
-	await send_edit(_men)
+	await send_edit(m, _men)
 
 
 
@@ -193,19 +193,19 @@ async def get_full_user_info(_, m: Message):
 		p_id = False
 
 	try:
-		duo = f"1. ID: `{user.id}`\n"
-		duo += f"2. NAME: `{user.first_name}`\n"
-		duo += f"3. DC ID: `{user.dc_id}`\n"
-		duo += f"4. BOT: `{user.is_bot}`\n"
-		duo += f"5. FAKE: `{user.is_fake}`\n"
-		duo += f"6. SCAM: `{user.is_scam}`\n"
-		duo += f"7. NAME: `{user.first_name}`\n"
-		duo += f"8. STATUS: `{user.status}`\n"
-		duo += f"9. IS IT ME: `{user.is_self}`\n"
-		duo += f"10. DELETED: `{user.is_deleted}`\n"
-		duo += f"11. CONTACT: `{user.is_contact}`\n"
-		duo += f"12. VERIFIED: `{user.is_verified}`\n"
-		duo += f"13. RESTRICTED: `{user.is_restricted}`\n"
+		duo = f"**1. ID:** `{user.id}`\n"
+		duo += f"**2. NAME:** `{user.first_name}`\n"
+		duo += f"**3. DC ID:** `{user.dc_id}`\n"
+		duo += f"**4. BOT:** `{user.is_bot}`\n"
+		duo += f"**5. FAKE:** `{user.is_fake}`\n"
+		duo += f"**6. SCAM:** `{user.is_scam}`\n"
+		duo += f"**7. NAME:** `{user.first_name}`\n"
+		duo += f"**8. STATUS:** `{user.status}`\n"
+		duo += f"**9. IS IT ME:** `{user.is_self}`\n"
+		duo += f"**10. DELETED:** `{user.is_deleted}`\n"
+		duo += f"**11. CONTACT:** `{user.is_contact}`\n"
+		duo += f"**12. VERIFIED:** `{user.is_verified}`\n"
+		duo += f"**13. RESTRICTED:** `{user.is_restricted}`\n"
 
 		if p_id:
 			await app.send_cached_media(
@@ -237,7 +237,7 @@ async def tg_scanner(_, m: Message):
 			limit=1
 			)
 		if msg:
-			user = "⧓ " + msg[0].text.split("\n\n1. ")[0]
+			user = "**INFO: **" + msg[0].text.split("\n\n1. ")[0]
 			await send_edit(m, user)
 		else:
 			await send_edit(m, "No information found !", mono=True)

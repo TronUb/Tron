@@ -37,24 +37,23 @@ CMD_HELP.update(
 async def quote(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Reply to any users text message", delme=2)
-		return
+		return await send_edit(m, "Reply to any users text message", delme=2)
 
 	await reply.forward("@QuotLyBot")
-	is_sticker = False
+	is_sticker = True
 	progress = 0
-	while not is_sticker:
+	while is_sticker:
 		try:
 			msg = await app.get_history(
 				"@QuotLyBot", 
 				1
 				)
 			check = msg[0]["sticker"]["file_id"]
-			is_sticker = True
+			is_sticker = False
 		except:
 			await sleep(0.5)
-			await send_edit(m, "```Making a Quote```")
-	if msg_id := msg[0]['message_id']:
+	await send_edit(m, "Making a Quote . . .", mono=True)
+	if msg_id := msg[0]["message_id"]:
 		await asyncio.gather(
 			m.delete(),
 			app.forward_messages(
