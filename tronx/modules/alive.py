@@ -45,7 +45,7 @@ CMD_HELP.update(
 @app.on_message(gen("alive"))
 async def alive(app, m: Message):
 	try:
-		await send_edit(m, "...")
+		await send_edit(m, ". . .")
 
 		if db.getdv("USER_BIO"):
 			BIO = db.getdv("USER_BIO")
@@ -105,12 +105,12 @@ async def inline_alive(app, m: Message):
 			"#i2l8v3"
 		)
 	except BotInvalid:
-		await send_edit(
+		return await send_edit(
 			m, 
 			"The bot can't be used in inline mode",
 			delme=2
 		)
-		return
+
 	if result:
 		await app.send_inline_bot_result(
 			m.chat.id, 
@@ -133,12 +133,12 @@ async def inline_alive(app, m: Message):
 @app.on_message(gen(["qt"]))
 async def inline_alive(_, m: Message):
 	try:
-		await send_edit(m,"...")
+		await send_edit(m,". . .")
 		try:
 			result = await app.get_inline_bot_results(BOT_USERNAME, "#q7o5e")
 		except BotInvalid:
-			await send_edit(m,"This bot can't be used in inline mode.", delme=2)
-			return
+			return await send_edit(m,"This bot can't be used in inline mode.", delme=2)
+
 		if result:
 			try:
 				await app.send_inline_bot_result(

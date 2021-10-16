@@ -68,7 +68,7 @@ async def del_dv_var(_, m: Message):
 		await send_edit(m, f"Successfully deleted key = `{key}`")
 
 	else:
-		await send_edit(m, "Maximum 4096 characters in one message . . .", delme=2)
+		await send_edit(m, "Maximum 4096 characters in one message . . .", mono=True, delme=2)
 
 
 

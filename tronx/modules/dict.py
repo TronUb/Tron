@@ -77,7 +77,6 @@ async def create_anyfile(app, m:Message):
 			await send_edit(
 				m, 
 				f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py",
-				delme=2
 				)
 	except Exception as e:
 		await error(m, e)

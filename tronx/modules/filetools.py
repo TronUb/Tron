@@ -65,7 +65,7 @@ async def unzipfiles(zippath):
 async def zipit(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, f"Reply to some media file ...", delme=2)
+		await send_edit(m, f"Reply to some media file . . .", mono=True, delme=2)
 
 	elif reply:
 		await send_edit(m, "Zipping . . .")

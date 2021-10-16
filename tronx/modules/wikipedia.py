@@ -42,8 +42,8 @@ async def wikipedia_search(app, m:Message):
 
 	elif long(m) > 1 and long(m) < 4096:
 		try:
-			await send_edit(m, "Searching . . .", mono=True)
 			text = m.text.split(None, 1)[1]
+			await send_edit(m, f"Searching for {text} . . .", mono=True)
 			result = wikipedia.summary(text)
 			if result and len(result) < 4096:
 				if result.endswith("Try another id!"):

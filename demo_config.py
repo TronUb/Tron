@@ -72,10 +72,3 @@ class Config(object):
 	SUDO_USERS = []
 
 
-
-class Production(Config):
-	LOGGER = False
-
-# ----------------------
-class Development(Config):
-	LOGGER = True
