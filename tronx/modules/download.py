@@ -211,7 +211,7 @@ async def download_media(_, m: Message):
 				)
 			return
 	else:
-		await send_edit(m, "`Reply to a Telegram Media to download it to local server.`", delme=2)
+		await send_edit(m, "Reply to a Telegram Media to download it to local server.", delme=2)
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

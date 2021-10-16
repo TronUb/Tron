@@ -1,5 +1,8 @@
-import pytz, datetime, time, os
-from asyncio import sleep
+import pytz
+import datetime
+import time
+import os
+import asyncio
 
 from pyrogram import Client
 from pyrogram.types import Message
@@ -73,10 +76,12 @@ async def send_edit(
 
 	try:
 		if delme != 0:
-			time.sleep(delme)
-			await m.delete()
-		else:
-			pass
+			async def sleeps():
+				await asyncio.sleep(delme)
+				await m.delete()
+
+			asyncio.create_task(sleeps())
+
 	except Exception as e:
 		await error(m, e)
 
