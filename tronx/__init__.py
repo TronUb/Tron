@@ -24,13 +24,14 @@ log = logging.getLogger(__name__)
 
 
 
+# termux requirement installation
 if list(platform.uname())[1] == "localhost":
 	from demo_config import Config
 	try:
-		# unable to install these packages using standard method in termux
+		# installing these packages using standard method in termux
 		# install pillow
 		os.system("apt update && apt upgrade")
-		one = os.system("pkg install python libjpeg-turbo libcrypt ndk-sysroot clang zlib")
+		one = os.system("pkg install python libjpeg-turbo libcrypt ndk-sysroot clang zlib git")
 		two = subprocess.call(["pip3", "install", "pillow"])
 		# install lxml
 		three = os.system("pkg install libxml2 clang libxslt")
@@ -44,7 +45,7 @@ if list(platform.uname())[1] == "localhost":
 		if one + two + three + four + five + six + seven == 0:
 			print("\nSuccessfully installed requirements.\n")
 		else:
-			print("\nFailed to install requirements, quitting.\n")
+			print("\nFailed to install some requirements, it might show some errors.\n")
 	except Exception as e:
 		print(e)
 else:
@@ -98,27 +99,39 @@ db_status = "Available" if DB_URI else "Not Available"
 
 
 if sys.version_info[0] < 3 or sys.version_info[1] < 9:
-	""" lower version will produce errors in bot """
-	log.error(
-		"python version 3.9.0 or greater is required, bot is quitting !"
-		)
+	""" lower version will produce errors in userbot """
+	log.error("python version 3.9.0 or greater is required, bot is quitting !")
 	quit(1)
 
 
 
 
 if not LOG_CHAT:
-	""" log chats are required """
-	log.warning(
-		"LOG_CHAT is important for bots normal working, please fill it."
-		)
+	""" log chat is required """
+	log.warning("LOG_CHAT is important for bots normal working, please fill it, quitting.")
+	quit(1)
+
+
+
+
+if not DB_URI:
+	""" database is required """
+	log.warning("DB_URI is important please fill this requirement, quitting.")
 	quit(1)
 
 
 
 
 if not os.path.exists("downloads"):
+	""" all files are downloaded here """
 	os.mkdir("downloads")
+
+
+
+
+def clear():
+	""" clear terminal logs """
+	subprocess.call("clear" if os.name == "posix" else "cls") 
 
 
 
@@ -161,7 +174,6 @@ async def get_self():
 			USER_NAME = f"{getself.first_name} {getself.last_name}"
 			USER_USERNAME = f"@{getself.username}"
 		else:
-			# use first name 
 			USER_NAME = getself.first_name
 			USER_USERNAME = "No Username"
 		USER_ID = getself.id
@@ -171,7 +183,7 @@ async def get_self():
 		USER_ID = None
 		USER_DC = None
 		USER_NAME = None
-		USER_NAME = None
+		USER_USERNAME = None
 	return (
 		{
 			"USER_ID" : USER_ID, 
@@ -186,9 +198,9 @@ async def get_self():
 
 async def get_bot():
 	""" Get bot information for later use """
-	global BOT_ID, BOT_NAME, BOT_USERNAME
-	if bot:
-		getbot = await bot.get_me()
+	global BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME
+	getbot = await bot.get_me()
+	if getbot:
 		# bot have all permanent infos
 		BOT_ID = getbot.id
 		BOT_DC = getbot.dc_id
@@ -215,10 +227,11 @@ async def get_bot():
 async def add_user(user_id: Union[int, List[int]], chat_id: str):
 	""" Add users in groups / channels """
 	try:
-		await app.add_chat_members(
+		done = await app.add_chat_members(
 			chat_id, 
 			user_id
 			)
+		return True if done else False
 	except Exception as e:
 		print(e)
 
@@ -226,15 +239,14 @@ async def add_user(user_id: Union[int, List[int]], chat_id: str):
 
 
 # check if the bot is in log chat 
-async def exists(user_id: int, chat_id):
+async def exists(user_id: int, chat_id: str):
 	_data = []
 	_data.clear()
 	lime = await app.get_chat_members(chat_id)
 
 	for x in lime:
 		_data.append(x.user.id)
-	stat = True if user_id in _data else False
-	return stat
+	return True if user_id in _data else False
 
 
 

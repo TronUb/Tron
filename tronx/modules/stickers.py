@@ -17,7 +17,10 @@ from tronx import (
 	app, 
 	CMD_HELP,
 	Config,
-	PREFIX
+	PREFIX,
+	USER_ID,
+	USER_NAME,
+	USER_USERNAME
 	)
 
 from tronx.helpers import (
@@ -47,12 +50,12 @@ CMD_HELP.update(
 
 @app.on_message(gen("kang"))
 async def kang(_, m: Message):
-	user = await app.get_me()
 	replied = m.reply_to_message
 	photo = None
 	emoji_ = None
 	is_anim = False
 	resize = False
+
 	if replied and replied.media:
 		if replied.photo:
 			resize = True
@@ -62,32 +65,21 @@ async def kang(_, m: Message):
 			is_anim = True
 		elif replied.sticker:
 			if not replied.sticker.file_name:
-				await send_edit(
-					m, 
-					"`Sticker has no Name!`"
-					)
-				return
+				return await send_edit(m, "Sticker has no Name !", mono=True)
+
 			emoji_ = replied.sticker.emoji
 			is_anim = replied.sticker.is_animated
 			if not replied.sticker.file_name.endswith(".tgs"):
 				resize = True
 		else:
-			await send_edit(
-				m, 
-				"`Unsupported File!`"
-				)
-			return
-		await send_edit(
-			m, 
-			f"`{random.choice(KANGING_STR)}`"
-			)
+			return await send_edit(m, "Unsupported File !", mono=True)
+
+		await send_edit(m, f"{random.choice(KANGING_STR)}", mono=True)
+
 		photo = await app.download_media(message=replied)
 	else:
-		await send_edit(
-			m, 
-			"`I can't kang that...`"
-			)
-		return
+		return await send_edit(m, "I can't kang that . . .", mono=True)
+
 	if photo:
 		args = get_args(message)
 		pack = 1
@@ -106,12 +98,12 @@ async def kang(_, m: Message):
 		if not emoji_:
 			emoji_ = "😐"
 
-		u_name = user.username
-		if u_name:
-			u_name = "@" + u_name
+		if USER_USERNAME:
+			u_name = USER_USERNAME
 		else:
-			u_name = user.first_name or user.id
-		packname = f"a{user.id}_by_trom_{pack}"
+			u_name = USER_NAME or USER_ID
+
+		packname = f"a{USER_ID}_by_tron_{pack}"
 		custom_packnick = f"{u_name}'s kang pack"
 		packnick = f"{custom_packnick} Vol.{pack}"
 		cmd = "/newpack"
@@ -132,11 +124,8 @@ async def kang(_, m: Message):
 			try:
 				await app.send_message("Stickers", "/addsticker")
 			except YouBlockedUser:
-				await send_edit(
-					m, 
-					"first **unblock** @Stickers"
-					)
-				return
+				return await send_edit(m, "first Unblock @Stickers . . .")
+
 			await asyncio.sleep(0.40)
 			await app.send_message("Stickers", packname)
 			limit = "50" if is_anim else "120"
@@ -147,10 +136,8 @@ async def kang(_, m: Message):
 				if is_anim:
 					packname += "_anim"
 					packnick += " (Animated)"
-				await send_edit(
-					m, 
-					"`Switching to Pack " + str(pack) + " due to insufficient space`"
-				)
+				await send_edit(m, "Switching to Pack " + str(pack) + " due to insufficient space") 
+
 				await app.send_message("Stickers", packname)
 				if await get_response(m) == "Invalid pack selected":
 					await asyncio.sleep(0.40)
@@ -182,7 +169,7 @@ async def kang(_, m: Message):
 					await app.send_message("Stickers", packname)
 					await asyncio.sleep(0.40)
 					out = f"[kanged](t.me/addstickers/{packname})"
-					await message.edit(
+					await send_edit(m, 
 						f"**Sticker** {out} __in a Different Pack__**!**"
 					)
 					return
@@ -191,29 +178,20 @@ async def kang(_, m: Message):
 			await asyncio.sleep(0.40)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				await send_edit(
-					m, 
-					"`Failed to add sticker, use` @Stickers `bot to add the sticker manually.`"
-				)
-				return
+				return await send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", mono=True)
+
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
 			await get_response(m)
 			await app.send_message("Stickers", "/done")
 		else:
-			await send_edit(
-				m, 
-				"`Brewing a new Pack...`"
-				)
+			await send_edit(m, "Brewing a new Pack . . .")
 			try:
 				await asyncio.sleep(0.40)
 				await app.send_message("Stickers", cmd)
 			except YouBlockedUser:
-				await send_edit(
-					m, 
-					"first **unblock** @Stickers"
-					)
-				return
+				return await send_edit(m, "first **unblock** @Stickers")
+
 			await app.send_message("Stickers", packnick)
 			await asyncio.sleep(0.40)
 			await get_response(m)
@@ -222,11 +200,8 @@ async def kang(_, m: Message):
 			await get_response(m)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				await send_edit(
-					m, 
-					"`Failed to add sticker, use` @Stickers `bot to add the sticker manually.`"
-				)
-				return
+				return await send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.")
+
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
 			await get_response(m)
@@ -242,13 +217,10 @@ async def kang(_, m: Message):
 			await get_response(m)
 			await app.send_message("Stickers", packname)
 			await asyncio.sleep(0.40)
-		out = f"[kanged](t.me/addstickers/{packname})"
-		await send_edit(m, f"**Sticker {out} !**")
+		await send_edit(m, f"[kanged](t.me/addstickers/{packname})", delme=True)
 		await app.read_history("Stickers")
 		if os.path.exists(str(photo)):
 			os.remove(photo)
-		await asyncio.sleep(2)
-		await m.delete()
 
 
 
@@ -257,18 +229,19 @@ async def kang(_, m: Message):
 async def sticker_pack_info_(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		await send_edit(m, "`I can't fetch info from nothing, can I ?!`")
-		return
+		return await send_edit(m, "I can't fetch info from nothing, can I ?!", mono=True)
+
 	if not replied.sticker:
-		await send_edit(m, "`Reply to a sticker to get the pack details`")
-		return
-	await send_edit(m, "`Fetching details of the sticker pack, please wait..`")
+		return await send_edit(m, "Reply to a sticker to get the pack details.", mono=True)
+
+	await send_edit(m, "Fetching details of the sticker pack, please wait . . .", mono=True)
 	get_stickerset = await app.send(
 		GetStickerSet(
 			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
 		)
 	)
 	pack_emojis = []
+	pack_emojis.clear()
 	for document_sticker in get_stickerset.packs:
 		if document_sticker.emoticon not in pack_emojis:
 			pack_emojis.append(document_sticker.emoticon)

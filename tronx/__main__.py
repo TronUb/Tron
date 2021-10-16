@@ -1,6 +1,8 @@
+import os
 import time
 import importlib
 import asyncio
+import subprocess
 
 from pyrogram import idle
 
@@ -18,6 +20,7 @@ from tronx import (
 
 
 loop = asyncio.get_event_loop()
+
 
 
 
@@ -66,7 +69,7 @@ async def start_assistant():
 	""" Start assistant """
 	if bot:
 		await bot.start()
-		print("Assistant activated, startup in progress ...\n")
+		print("Assistant activated, startup in progress . . .\n")
 		load_plugins() 
 	else:
 		print("Assistant start unsuccessful, please check that you have given the bot token.\n")
@@ -79,7 +82,7 @@ async def start_userbot():
 	""" Start userbot """
 	if app:
 		await app.start()
-		print("Userbot activated, startup in progress ...\n")
+		print("Userbot activated, startup in progress . . .\n")
 		await load_modules()
 	else:
 		print("Userbot startup unsuccessful, please check everything again ...")
@@ -91,7 +94,7 @@ async def start_userbot():
 async def start_bot():
 	""" Main startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	print("initialising ...\n\n")
+	print("initialising . . .\n\n")
 	await userlise() # first startup
 	await start_assistant()
 	await start_userbot()
@@ -100,5 +103,5 @@ async def start_bot():
 
 
 if __name__ == '__main__':
-	""" Run as '__main__.py' """
+	""" Run as __main__.py """
 	loop.run_until_complete(start_bot())

@@ -30,6 +30,13 @@ CMD_HELP.update(
 
 
 
+# shortcuts
+p = print
+c = Config
+
+
+
+
 async def aexec(code, app, m):
 	exec(
 		f"async def __aexec(app, m): "
@@ -42,6 +49,8 @@ async def aexec(code, app, m):
 
 @app.on_message(gen(["eval", "e"]))
 async def evaluate(app, m):
+	global reply
+	reply = m.reply_to_message
 	try:
 		cmd = m.text.split(" ", maxsplit=1)[1]
 	except IndexError:
@@ -49,17 +58,19 @@ async def evaluate(app, m):
 			m, 
 			"Give me some code to execute ..."
 			)
-		await delete(m, 3)
-		return
-	await send_edit(m, "`Running ...`")
+		return await delete(m, 3)
+
+	await send_edit(m, "Running . . .", mono=True)
+
 	reply_to_id = m.message_id
-	if m.reply_to_message:
-		reply_to_id = m.reply_to_message.message_id
+	if reply:
+		reply_to_id = reply.message_id
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
 	redirected_output = sys.stdout = StringIO()
 	redirected_error = sys.stderr = StringIO()
 	stdout, stderr, exc = None, None, None
+
 	try:
 		await aexec(cmd, app, m)
 	except Exception:

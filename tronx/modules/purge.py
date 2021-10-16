@@ -13,8 +13,9 @@ from tronx import (
 	app, 
 	CMD_HELP,
 	Config,
-	PREFIX
-	)
+	PREFIX,
+	USER_ID
+)
 
 from tronx.helpers import (
 	gen,
@@ -22,6 +23,7 @@ from tronx.helpers import (
 	send_edit,
 	# others 
 	get_readable_time,
+	long,
 )
 
 
@@ -47,42 +49,29 @@ async def purge_all(app, m:Message):
 	if m.reply_to_message:
 		await send_edit(m, "purging . . .", mono=True)
 
-		start_t = datetime.now()
-		user_id = None
-		from_user = None
-		start_message = m.reply_to_message.message_id
-		end_message = m.message_id
-		list_of_messages = await app.get_messages(
-			chat_id=m.chat.id,
-			message_ids=range(
-				start_message, 
-				end_message
-				),
-				replies=0
+		start = datetime.now()
+
+		messages = await app.get_messages(
+			m.chat.id,
+			range(m.reply_to_message.message_id, m.message_id),
+			replies=0
 		)
-		del_msg = []
-		purge_count = 0
-		for msg in list_of_messages:
-			if len(del_msg) == 100:
-				await app.delete_messages(chat_id=m.chat.id,
-											message_ids=del_msg,
-											revoke=True)
-				purge_count += len(del_msg)
-				del_msg = []
-			if from_user is not None:
-				if msg.from_user == from_user:
-					del_msg.append(msg.message_id)
-			else:
-				del_msg.append(msg.message_id)
+
+		msg_id = []
+		msg_id.clear()
+
+		for x in messages:
+			msg_id.append(x.message_id)
+
 		await app.delete_messages(
-			chat_id=m.chat.id,
-			message_ids=del_msg,
-			revoke=True
-		)
-		purge_count += len(del_msg)
-		end_t = datetime.now()
-		time_taken_s = (end_t - start_t).seconds
-		await m.delete()
+			m.chat.id,
+			msg_id
+			)
+
+		end = datetime.now()
+		sec = (end - start).seconds
+
+		await send_edit(m, "Deleted {} messages in {} seconds.".format(len(msg_id), sec), mono=True, delme=2)
 	else:
 		await send_edit(m, "Reply to a message to delete all from up to bottom", delme=2)
 
@@ -91,48 +80,32 @@ async def purge_all(app, m:Message):
 
 @app.on_message(gen(["purgeme", "pgm"]))
 async def purge_myself(app, m:Message):
-	if len(m.text.split()) >= 2 and m.text.split()[1].isdigit():
-		target = int(m.text.split()[1])
+	if long(m) > 1:
+		if m.command[1].isdigit() is False:
+			return await send_edit(m, "Is that a number ? please give me a number . . .", mono=True)
+		target = int(m.command[1])
 	else:
-		await send_edit(m, "Give some number after to delete messages ...", delme=2)
-		return
-	lim = target if target < 101 else 100
-	get_msg = await app.get_history(m.chat.id, limit=lim) # max 100 messages
+		return await send_edit(m, "Give me some number after command to delete messages . . .", delme=2, mono=True)
+
+	start = datetime.now()
+	lim = target + 1 if target <= 100 else 101
+
+	count = 0
 	listall = []
-	counter = 0
-	for x in get_msg:
-		if counter == target + 1:
-			break
-		myself = await app.get_me()
-		if x.from_user.id == int(myself.id):
-			listall.append(x.message_id)
-			counter += 1
-	if len(listall) >= 101:
-		total = len(listall)
-		one = 0
-		two = 0
-		await m.edit("Purging ...")
-		for x in range(math.ceil(len(listall) / 100)):
-			if total >= 101:
-				two += 100
-				await app.delete_messages(
-					m.chat.id, 
-					message_ids=one[one:two]
-					)
-				one += 100
-				total -= 100
-			else:
-				two += total
-				await app.delete_messages(
-					m.chat.id, 
-					message_ids=one[one:two])
-				one += total
-				total -= total
-	else:
-		await app.delete_messages(
-			m.chat.id, 
-			message_ids=listall
-			)
+	listall.clear()
+	await send_edit(m, f"Deleting {target} messages . . .")
+
+	async for msg in app.iter_history(m.chat.id):
+		if msg.from_user.id == USER_ID:
+			listall.append(msg.message_id)
+			count += 1
+
+	print(count)
+	await app.delete_messages(m.chat.id, message_ids=listall[0:lim])
+	end = datetime.now()
+	sec = (end - start).seconds
+
+	await send_edit(m, "Deleted {} messages in {} seconds".format(target, sec), mono=True, delme=2)
 
 
 
@@ -140,15 +113,11 @@ async def purge_myself(app, m:Message):
 @app.on_message(gen("del"))
 async def delete_tag(_, m: Message):
 	reply = m.reply_to_message
-	if reply:
-		msg_id = [m.message_id, reply.message_id]
-	elif not reply:
-		msg_id = m.message_id
+	
+
+	msg_id = [m.message_id, reply.message_id if reply.from_user.id == USER_ID else ""] if reply else m.message_id
 
 	try:
-		await app.delete_messages(
-			chat_id=m.chat.id, 
-			message_ids=msg_id
-			)
+		await app.delete_messages(m.chat.id, msg_id)
 	except Exception as e:
 		await error(m, e)

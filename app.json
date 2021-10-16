@@ -15,7 +15,7 @@
   "success_url": "/welcome",
   "env": {
       "API_ID": {
-      "description": "Maybe You will Find Here ->  my.telegram.org",
+      "description": "Login here -> my.telegram.org to get pair of keys",
       "value": "",
       "required": true
     },
@@ -25,7 +25,7 @@
       "required": true
     },
       "SESSION": {
-      "description": "Visit Here And Tap On Green Button + Give Your Details Here ->  https://replit.com/@vs423502/Tron-Session?v=1",
+      "description": "Visit here & create https://replit.com/@vs423502/Tron-Session?v=1",
       "value": "",
       "required": true
     },
