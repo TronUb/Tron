@@ -66,7 +66,7 @@ async def zombies_clean(_, m: Message):
 					except Exception as e:
 						await error(m, e)
 						
-		await send_edit(m, f"Group clean-up done !\n`Removed {count} deleted accounts in {m.chat.title}.`")
+		await send_edit(m, f"Group clean-up done !\nRemoved `{count}` deleted accounts in {m.chat.title}.")
 	else:
 		await send_edit(m, f"Check `{PREFIX}help zombies` to see how it works!")
 

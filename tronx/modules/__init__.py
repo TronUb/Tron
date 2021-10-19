@@ -86,39 +86,36 @@ def chattype(m: Message):
 
 def get_file_id(m: Message):
 	reply = m.reply_to_message
-	data = None
-	text = None
+	data = False
+	caption = False
+
 	if reply:
 		if reply.text:
 			data = m.text
-			text = False
+			caption = False
 		elif reply.photo:
 			data = reply.photo.file_id
 			if reply.caption:
-				text = reply.caption
+				caption = reply.caption
 		elif reply.video:
 			data = reply.video.file_id
 			if reply.caption:
-				text = reply.caption
+				caption = reply.caption
 		elif reply.document:
 			data = reply.document.file_id
 			if reply.caption:
-				text = reply.caption
+				caption = reply.caption
 		elif reply.sticker:
 			data = reply.sticker.file_id
 			if reply.caption:
-				text = reply.caption
+				caption = reply.caption
 		elif reply.animation:
 			data = reply.animation.file_id
 			if reply.caption:
-				text = reply.caption
+				caption = reply.caption
 		elif reply.audio:
 			data = reply.audio.file_id
 			if reply.caption:
-				text = reply.caption
-		else:
-			data = False
-			text = False
-	else:
-		return {"data": data, "text" : text}
-	return {"data": data, "text" : text}
+				caption = reply.caption
+
+	return {"data": data, "caption" : caption}

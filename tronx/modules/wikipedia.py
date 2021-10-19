@@ -38,7 +38,7 @@ CMD_HELP.update(
 @app.on_message(gen("wiki"))
 async def wikipedia_search(app, m:Message):
 	if long(m) == 1:
-		await send_edit(m, "Need some query to search on wikipedia, try again.", mono=True)
+		await send_edit(m, "Give me some query to search on wikipedia . . .", mono=True, delme=True)
 
 	elif long(m) > 1 and long(m) < 4096:
 		try:
@@ -54,4 +54,4 @@ async def wikipedia_search(app, m:Message):
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send(m, "Something went wrong !", mono=True)
+		await send(m, "Something went wrong !", mono=True, delme=3)

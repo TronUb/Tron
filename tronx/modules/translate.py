@@ -68,3 +68,18 @@ async def translate(m: Message, lang, text):
 	tr = GoogleTranslator(source="auto", target=lang)
 	output = tr.translate(text)
 	await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")
+
+
+
+
+@app.on_message(gen("langs"))
+async def supported_language(_, m):
+	data = []
+	data.clear()
+
+	langs_list = GoogleTranslator.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english:en etc...}
+	for x, y in zip(langs_list.values(), langs_list.keys()):
+		data.append(f"`{x}` : `{y}`")
+
+	await send_edit(m, "**Total languages:\n\n**" + "\n".join(data))
+		
