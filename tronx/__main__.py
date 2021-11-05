@@ -29,8 +29,7 @@ def load_plugins():
 	from tronx.plugins import PLUGINS
 	print("Loading plugins of [ assistant ], Please wait...\n")
 	for plug in PLUGINS:
-		imported_plugin = importlib.import_module("tronx.plugins." + plug)
-		print(imported_plugin)
+		importlib.import_module("tronx.plugins." + plug)
 
 	print("-----------------------")
 	print("List of Plugins:\n\n")
@@ -49,9 +48,8 @@ async def load_modules():
 
 	print("Loading modules of [ Userbot ], Please wait ...\n")
 	for plug in MODULES:
-		imported_module = importlib.import_module("tronx.modules." + plug)
-		if hasattr(imported_module, "__MODULE__") and imported_module.__MODULE__:
-			imported_module.__MODULE__ = imported_module.__MODULE__
+		importlib.import_module("tronx.modules." + plug)
+
 	print("-----------------------")
 	print("List Of Modules:\n\n")
 	for y in MODULES:
