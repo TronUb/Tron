@@ -3,6 +3,7 @@ import datetime
 import time
 import os
 import asyncio
+import traceback
 
 from pyrogram import Client
 from pyrogram.types import Message
@@ -123,10 +124,10 @@ async def error(m: Message, e):
 	try:
 		await app.send_message(
 			Config.LOG_CHAT,
-			teks
+			teks + traceback.print_exc()
 			)
 	except:
-		print(teks)
+		print(teks + traceback.print_exc())
 	log.error("Please check your log chat for traceback error !")
 	return 
 
