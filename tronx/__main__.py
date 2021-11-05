@@ -30,8 +30,8 @@ def load_plugins():
 	print("Loading plugins of [ assistant ], Please wait...\n")
 	for plug in PLUGINS:
 		imported_plugin = importlib.import_module("tronx.plugins." + plug)
-		if hasattr(imported_plugin, "__PLUGIN__") and imported_plugin.__PLUGIN__:
-			imported_plugin.__PLUGIN__ = imported_plugin.__PLUGIN__
+		print(imported_plugin)
+
 	print("-----------------------")
 	print("List of Plugins:\n\n")
 	for x in PLUGINS:
