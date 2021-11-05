@@ -157,6 +157,9 @@ async def delete(m: Message, sec: int = 0):
 
 async def data(plug):
 	try:
+		plugin_data = []
+		plugin_data.clear()
+
 		for x, y in zip(
 			CMD_HELP.get(plug)[1].keys(), 
 			CMD_HELP.get(plug)[1].values()
@@ -164,7 +167,7 @@ async def data(plug):
 			plugin_data.append(
 				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
 				)
-		return True
+		return plugin_data
 	except Exception as e:
 		print(e)
 		return False
