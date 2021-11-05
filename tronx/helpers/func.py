@@ -124,10 +124,10 @@ async def error(m: Message, e):
 	try:
 		await app.send_message(
 			Config.LOG_CHAT,
-			teks + traceback.print_exc()
+			f"{teks}, {traceback.print_exc()}"
 			)
 	except:
-		print(teks + traceback.print_exc())
+		print(f"{teks}, {traceback.print_exc()}")
 	log.error("Please check your log chat for traceback error !")
 	return 
 
