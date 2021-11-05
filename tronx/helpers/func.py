@@ -120,23 +120,34 @@ async def error(m: Message, e):
 	teks += f"This can be a error in tronuserbot, if you want you can forward this to @tronuserbot.\n\n" 
 	teks += f"Command: {m.text}\n\n"
 	teks += f"Error:\n\n"
-	teks += f"{e}"
+	teks += f"{e}\n\n"
+	teks += traceback.print_exec()
 	try:
 		await app.send_message(
 			Config.LOG_CHAT,
-			f"{teks}, {traceback.print_exc()}"
-			)
+			teks
+		)
+		print(teks)
 	except:
-		print(f"{teks}, {traceback.print_exc()}")
-	log.error("Please check your log chat for traceback error !")
+		print(teks)
+	log.error("Please check your logs online !")
 	return 
+
+
+
+
+async def sleep(m: Message, sec):
+	asyncio.sleep(sec)
+	await m.delete()
+	return
+
+
 
 
 # delete msg
 async def delete(m: Message, sec: int = 0):
 	if not sec > 600: # 10 min
-		await sleep(sec)
-		await m.delete()
+		asyncio.create_task(sleep(m, sec))
 	else:
 		log.error("maximum sleep of 10 ( 600 sec ) minutes")
 	return
