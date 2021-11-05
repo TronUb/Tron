@@ -137,7 +137,7 @@ async def error(m: Message, e):
 
 
 async def sleep(m: Message, sec):
-	asyncio.sleep(sec)
+	await asyncio.sleep(sec)
 	await m.delete()
 	return
 
