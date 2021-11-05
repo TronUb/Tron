@@ -57,7 +57,7 @@ from tronx.database.postgres import dv_sql as dv
 # variables
 plugin_data = []
 
-USER_ID = [USER_ID}
+USER_ID = [USER_ID]
 
 PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
 
