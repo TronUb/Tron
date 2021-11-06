@@ -14,8 +14,6 @@ from typing import Union, List
 
 from telegraph import Telegraph
 
-from tronx.database import dv_sql as dv
-
 
 
 
