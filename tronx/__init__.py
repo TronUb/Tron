@@ -14,6 +14,8 @@ from typing import Union, List
 
 from telegraph import Telegraph
 
+from tronx.database import dv_sql as dv
+
 
 
 
@@ -167,6 +169,12 @@ def get_readable_time(seconds: int) -> str:
 async def get_self():
 	""" Get self information for later use """
 	global USER_ID, USER_NAME, USER_USERNAME
+	
+	USER_ID = None
+	USER_DC = None
+	USER_NAME = None
+	USER_USERNAME = None
+
 	getself = await app.get_me()
 	if getself:
 		if getself.last_name and getself.username:
@@ -180,10 +188,7 @@ async def get_self():
 		USER_DC = getself.dc_id
 	else:
 		log.warning("Failed to get user information (USER_ID, USER_DC, USER_NAME, USER_USERNAME)")  
-		USER_ID = None
-		USER_DC = None
-		USER_NAME = None
-		USER_USERNAME = None
+
 	return (
 		{
 			"USER_ID" : USER_ID, 
@@ -199,19 +204,22 @@ async def get_self():
 async def get_bot():
 	""" Get bot information for later use """
 	global BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME
+	
+	BOT_ID = None
+	BOT_DC = None
+	BOT_NAME = None
+	BOT_USERNAME = None
+	
 	getbot = await bot.get_me()
 	if getbot:
-		# bot have all permanent infos
+		# bot have all permanent information
 		BOT_ID = getbot.id
 		BOT_DC = getbot.dc_id
 		BOT_NAME = getbot.first_name
 		BOT_USERNAME = "@" + getbot.username
 	else:
 		log.warning("Failed to get bot information (BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME)") 
-		BOT_ID = None
-		BOT_DC = None
-		BOT_NAME = None
-		BOT_USERNAME = None
+		
 	return (
 		{
 			"BOT_ID" : BOT_ID, 
