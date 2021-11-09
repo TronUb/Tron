@@ -59,7 +59,7 @@ async def send_gif(m: Message, gif_data):
 
 
 
-@app.on_message(gen("giflist")
+@app.on_message(gen("giflist"))
 async def list_of_suffix(_, m):
 	await send_edit(m, anime_suffix)
 
