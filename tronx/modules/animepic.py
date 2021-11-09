@@ -28,10 +28,10 @@ CMD_HELP.update(
 
 def get_anime_gif(arg):
 	data = requests.get(f"https://nekos.best/api/v1/{arg}").text
-	img = json.loads(data)["url"], 
+	img = json.loads(data)["url"]
 	text = json.loads(data)["anime_name"]
 	if img and text:
-		return ([img, text])
+		return [img, text]
 	else:
 		return False
 
