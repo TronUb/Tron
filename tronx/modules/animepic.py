@@ -1,7 +1,8 @@
 import requests, json
 
 from tronx import (
-	app
+	app, 
+	CMD_HELP,
 )
 
 from tronx.helpers import (
