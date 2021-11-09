@@ -11,6 +11,7 @@ from tronx.helpers import (
 	gen,
 	error,
 	send_edit,
+	long,
 )
 
 
@@ -68,6 +69,7 @@ async def list_of_suffix(_, m):
 
 
 
+	
 @app.on_message(gen("neko"))
 async def baka_gif(_, m):
 	try:
