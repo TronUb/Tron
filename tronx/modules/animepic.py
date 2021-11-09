@@ -1,5 +1,7 @@
 import requests, json
 
+from pyrogram.types import Message
+
 from tronx import (
 	app, 
 	CMD_HELP,
@@ -8,6 +10,7 @@ from tronx import (
 from tronx.helpers import (
 	gen,
 	error,
+	send_edit,
 )
 
 
