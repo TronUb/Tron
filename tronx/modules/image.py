@@ -1,4 +1,4 @@
-import os, time, asyncio, qrcode, requests
+import os, time, asyncio, qrcode, requests, json
 
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
@@ -251,21 +251,10 @@ async def get_colour_templates(_, m: Message):
 async def get_cat_image(_, m):
 	try:
 		await m.delete()
-		if long(m) == 1:
-			await app.send_photo(
-				m.chat.id, 
-				"https://cataas.com/cat"
-			)
-		elif long(m) > 1 and m.command[1] == "gif":
-			await app.send_animation(
-				m.chat.id, 
-				"https://cataas.com/cat/gif"
-			)
-		elif long(m) > 1 and m.command[1] != "gif":
-			await app.send_photo(
-				m.chat.id, 
-				"https://cataas.com/cat"
-			)
+		data = requests.get("https://api.thecatapi.com/v1/images/search").text
+		data = json.loads(data)
+		img = data[0]["url"]
+		await app.send_photo(m.chat.id, img)
 	except Exception as e:
 		await print(e)
 		await send_edit(m, "Sorry, No cats found !")
