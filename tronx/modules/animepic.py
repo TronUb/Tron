@@ -46,7 +46,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("baka")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -62,7 +62,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("bite")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -78,7 +78,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("blush")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -94,7 +94,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("bored")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -110,7 +110,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("cry")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -126,7 +126,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("cuddle")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -142,7 +142,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("dance")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -158,7 +158,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("facepalm")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -174,7 +174,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("feed")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -190,7 +190,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("happy")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -206,7 +206,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("highfive")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -222,7 +222,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("hug")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -238,7 +238,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("kiss")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -254,7 +254,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("laugh")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -270,7 +270,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("pat")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -286,7 +286,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("poke")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -302,7 +302,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("pout")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -318,7 +318,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("shrug")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -334,7 +334,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("sleep")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -350,7 +350,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("slap")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -366,7 +366,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("smile")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -382,7 +382,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("smug")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -398,7 +398,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("stare")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -414,7 +414,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("think")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -430,7 +430,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("thumbsup")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -446,7 +446,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("tickle")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -462,7 +462,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("wave")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
@@ -478,7 +478,7 @@ async def baka_gif(_, m):
 		data = get_anime_gif("wink")
 		await app.send_video(
 			m.chat.id,
-			data[0]
+			data[0],
 			caption=data[1]
 			)
 	except Exception as e:
