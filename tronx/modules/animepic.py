@@ -23,9 +23,9 @@ CMD_HELP.update(
 	{"animepic": (
 		"animepic",
 		{
-		"neko" : "Get a anime neko girl image.,
+		"neko" : "Get a anime neko girl image.",
 		"gif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
-		"giflist" : "Get a list of suffix.,
+		"giflist" : "Get a list of suffix.",
 		}
 		)
 	}
