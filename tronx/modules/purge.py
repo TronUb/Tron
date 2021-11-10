@@ -88,24 +88,22 @@ async def purge_myself(app, m:Message):
 		return await send_edit(m, "Give me some number after command to delete messages . . .", delme=2, mono=True)
 
 	start = datetime.now()
-	lim = target + 1 if target <= 100 else 101
+	lim = target + 1 if target <= 100 else 101 # + command message
 
-	count = 0
-	listall = []
-	listall.clear()
 	await send_edit(m, f"Deleting {target} messages . . .")
 
-	async for msg in app.iter_history(m.chat.id):
-		if msg.from_user.id == USER_ID:
-			listall.append(msg.message_id)
-			count += 1
+	msg_id = []
+	msg_id.clear()
 
-	print(count)
-	await app.delete_messages(m.chat.id, message_ids=listall[0:lim])
-	end = datetime.now()
-	sec = (end - start).seconds
+	data = await app.get_history(m.chat.id, limit=lim) 
 
-	await send_edit(m, "Deleted {} messages in {} seconds".format(target, sec), mono=True, delme=2)
+	for x in data:
+		msg_id.append(x.message_id)
+
+	await app.delete_messages(m.chat.id, message_ids=msg_id[0:lim])
+	sec = (datetime.now() - start).seconds
+
+	await send_edit(m, "Deleted {} messages in {} seconds".format(target, sec), mono=True, delme=3)
 
 
 
