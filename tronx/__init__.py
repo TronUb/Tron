@@ -323,8 +323,8 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
-	async def sleep(duration=0):
-		asyncio.sleep(duration)
+	async def sleep(self, duration=0):
+		await asyncio.sleep(duration)
 
 
 
