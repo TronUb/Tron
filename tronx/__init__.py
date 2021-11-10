@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import logging
+import asyncio
 import platform
 import subprocess
 
@@ -322,6 +323,8 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
+	async def sleep(duration=0):
+		asyncio.sleep(duration)
 
 
 
