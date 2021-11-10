@@ -340,7 +340,7 @@ async def common_chats(_, m):
 			for x in data:
 				collect.append(x["title"] + "\n")
 
-			await send_edit(m, f"**Common chats with {reply.from_user.first_name}" + "".join())
+			await send_edit(m, f"**Common chats with: {reply.from_user.first_name}\n\n" + "".join(collect))
 		else:
 			await send_edit(m, "Please reply to someone . . .", mono=True, delme=3)
 	except Exception as e:
