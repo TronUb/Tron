@@ -336,7 +336,7 @@ async def common_chats(_, m):
 		if reply:
 			collect = []
 			collect.clear()
-			data = await app.get_common_chats(1752153222)
+			data = await app.get_common_chats(reply.from_user.id)
 			for x in data:
 				collect.append(x["title"] + "\n")
 
