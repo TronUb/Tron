@@ -46,7 +46,8 @@ CMD_HELP.update(
 		"mlink [reply to message]" : "Use this to get message links. both private and public groups.",
 		"saved [reply to message]" : "Save Media To Your Telegram Cloud Storage \ Saved Messages.",
 		"fwd [reply to message]" : "Forward messages to same group or other groups.",
-		"spt" : "Check Hosted Server Speed, use [pic] after command to get image of speedtest."
+		"spt" : "Check Hosted Server Speed, use [pic] after command to get image of speedtest.",
+		"cchats" : "Get common chats to the replied user."
 		}
 		)
 	}
@@ -325,5 +326,24 @@ async def sptdel(app, m: Message):
 			await send_edit(m, "Something went wrong !", mono=True)
 
 
+
+
+
+@app.on_message(gen(["cc", "cchats"]))
+async def common_chats(_, m):
+	try:
+		reply = m.reply_to_message
+		if reply:
+			collect = []
+			collect.clear()
+			data = await app.get_common_chats(1752153222)
+			for x in data:
+				collect.append(x["title"] + "\n")
+
+			await send_edit(m, f"**Common chats with {reply.from_user.first_name}" + "".join())
+		else:
+			await send_edit(m, "Please reply to someone . . .", mono=True, delme=3)
+	except Exception as e:
+		await error(m, e)
 
 
