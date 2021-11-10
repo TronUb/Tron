@@ -88,6 +88,31 @@
 ---
 &nbsp;
 
+### Termux deployment
+
+<p>
+
+1. Install termux app in your device ( lastest version )
+
+2. Run The code in the termux that are given below:
+
+   step 1:  ```apt update & apt upgrade```
+
+   step 2:  ```pkg install python git nano```
+
+   step 3:  ```git clone https://github.com/beastzx18/Tron```
+
+   step 4:  ```cd Tron```
+
+   step 5:  ```nano demo_config.py``` Note: Fill those required values from your value.
+
+   step 6:  ```python3 -m tronx```
+
+3. Done, Have fun using tronuserbot.
+
+
+</p>
+
 
 ### **Credits**
 
