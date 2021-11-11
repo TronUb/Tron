@@ -46,7 +46,7 @@ def showtime():
 async def send_edit(
 	m: Message, 
 	text, 
-	parse_mode="html", 
+	parse_mode="md", 
 	disable_web_page_preview=False,
 	delme : int=0,
 	mono=False,
@@ -119,7 +119,7 @@ async def send_edit(
 
 
 
-async def edit_text(m: Message, text, back=False, disable_web_page_preview=False, parse_mode="html"):
+async def edit_text(m: Message, text, back=False, disable_web_page_preview=False, parse_mode="md"):
 	try:
 		await m.edit(
 			text, 
