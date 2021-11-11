@@ -88,50 +88,52 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(filters.mentioned & filters.incoming & ~filters.chat(Config.LOG_CHAT) & ~filters.bot, group=12)
+@app.on_message(filters.incoming & ~filters.bot, group=12)
 async def offline_mention(_, m: Message):
 	try:
-		if m.chat.id == Config.LOG_CHAT:
-			return
-		get = get_afk()
-		if get and get["afk"]: 
-			if "-" in str(m.chat.id):
-				cid = str(m.chat.id)[4:]
-			else:
-				cid = str(m.chat.id)
-
-			end = int(time.time())
-			otime = get_readable_time(end - get["afktime"])
-			if get["reason"] and get["afktime"]:
-				await m.reply(
-					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
-					)
-				await delete(m, 3)
-			elif get["afktime"] and not get["reason"]:
-				await m.reply(
-					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
-					)
-				await delete(m, 3)
-			content, message_type = get_message_type(m)
-			if message_type == Types.TEXT:
-				if m.text:
-					text = m.text
+		reply = m.reply_to_message
+		if reply and reply.from_user.id == USER_ID:
+			get = get_afk()
+			if get and get["afk"]: 
+				if "-" in str(m.chat.id):
+					cid = str(m.chat.id)[4:]
 				else:
-					text = m.caption
-			else:
-				text = message_type.name
+					cid = str(m.chat.id)
 
-			await app.send_message(
-				Config.LOG_CHAT, 
-				f"""#mention\n\n
-				**User:** `{m.from_user.first_name}`\n
-				**Id:** {m.from_user.id}\n
-				**Group:** `{m.chat.title}`\n
-				**Message:** `{text[:4096]}`\n
-				[Go to message](https://t.me/c/{cid}/{m.message_id})
-				""",
-				parse_mode = "markdown"
-				)
+				end = int(time.time())
+				otime = get_readable_time(end - get["afktime"])
+				if get["reason"] and get["afktime"]:
+					msg = await m.reply(
+						"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
+						)
+					await delete(m, 3)
+				elif get["afktime"] and not get["reason"]:
+					await m.reply(
+						"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
+						)
+					await delete(m, 3)
+				content, message_type = get_message_type(m)
+				if message_type == Types.TEXT:
+					if m.text:
+						text = m.text
+					else:
+						text = m.caption
+				else:
+					text = message_type.name
+
+				await app.send_message(
+					Config.LOG_CHAT, 
+					f"""#mention\n\n
+					**User:** `{m.from_user.first_name}`\n
+					**Id:** {m.from_user.id}\n
+					**Group:** `{m.chat.title}`\n
+					**Message:** `{text[:4096]}`\n
+					[Go to message](https://t.me/c/{cid}/{m.message_id})
+					""",
+					parse_mode = "markdown"
+					)
+		else:
+			return
 	except Exception as e:
 		await error(m, e)
 
