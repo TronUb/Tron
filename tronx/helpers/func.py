@@ -56,9 +56,9 @@ async def send_edit(
 	underline=False,
 	):
 
-	mono_text = f"<code>{text}</code>"
-	bold_text = f"<b>{text}</b>"
-	italic_text = f"<i>{text}</i>"
+	mono_text = f"```{text}```"
+	bold_text = f"**{text}**"
+	italic_text = f"__{text}__"
 	strike_through_text = f"<s>{text}</s>"
 	underline_text = f"<u>{text}</u>"
 
