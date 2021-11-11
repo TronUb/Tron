@@ -11,7 +11,7 @@ from tronx import (
 	Config,
 )
 
-from tronx.helpers.pyrohelper import (
+from tronx.helpers import (
 	get_arg,
 	send_edit,
 	gen,
