@@ -63,17 +63,47 @@ async def send_edit(
 	underline_text = f"<u>{text}</u>"
 
 	if mono:
-		await edit_text(m, mono_text)
+		await edit_text(
+			m, 
+			mono_text, 
+			disable_web_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 	elif bold:
-		await edit_text(m, bold_text)
+		await edit_text(
+			m, 
+			bold_text, 
+			disable_web_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 	elif italic:
-		await edit_text(m, italic_text)
+		await edit_text(
+			m, 
+			italic_text, 
+			disable_web_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 	elif strike:
-		await edit_text(m, strike_through_text)
+		await edit_text(
+			m, 
+			strike_through_text, 
+			disable_web_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 	elif underline:
-		await edit_text(m, underline_text)
+		await edit_text(
+			m, 
+			underline_text, 
+			disable_wab_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 	else:
-		await edit_text(m, text)
+		await edit_text(
+			m, 
+			text, 
+			disable_web_page_preview=disable_web_page_preview, 
+			parse_mode=parse_mode
+		)
 
 	try:
 		if delme != 0:
@@ -89,13 +119,19 @@ async def send_edit(
 
 
 
-async def edit_text(m: Message, text, back=False):
+async def edit_text(m: Message, text, back=False, disable_web_page_preview=False, parse_mode="html"):
 	try:
-		await m.edit(text)
+		await m.edit(
+			text, 
+			parse_mode=parse_mode, 
+			disable_web_page_preview=disable_web_page_preview,
+		)
 	except:
 		await app.send_message(
 			m.chat.id,
-			text
+			text,
+			disable_web_page_preview=disable_web_page_preview,
+			parse_mode=parse_mode
 		)
 
 
