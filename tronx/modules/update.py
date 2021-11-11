@@ -145,7 +145,7 @@ async def upstream(_, m):
 	if Config.HEROKU_API_KEY is not None:
 		import heroku3
 
-		heroku = heroku3.from_key(HEROKU_API_KEY)
+		heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 		heroku_app = None
 		heroku_applications = heroku.apps()
 		if not Config.HEROKU_APP_NAME:
@@ -173,7 +173,7 @@ async def upstream(_, m):
 		ups_rem.fetch(ac_br)
 		repo.git.reset("--hard", "FETCH_HEAD")
 		heroku_git_url = heroku_app.git_url.replace(
-			"https://", "https://api:" + HEROKU_API_KEY + "@"
+			"https://", "https://api:" + Config.HEROKU_API_KEY + "@"
 		)
 		if "heroku" in repo.remotes:
 			remote = repo.remote("heroku")
