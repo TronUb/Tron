@@ -46,7 +46,7 @@ def showtime():
 async def send_edit(
 	m: Message, 
 	text, 
-	parse_mode="md", 
+	parse_mode="combined", 
 	disable_web_page_preview=False,
 	delme : int=0,
 	mono=False,
@@ -56,9 +56,9 @@ async def send_edit(
 	underline=False,
 	):
 
-	mono_text = f"```{text}```"
-	bold_text = f"**{text}**"
-	italic_text = f"__{text}__"
+	mono_text = f"<code>{text}</code>"
+	bold_text = f"<b>{text}</b>"
+	italic_text = f"<i>{text}</i>"
 	strike_through_text = f"<s>{text}</s>"
 	underline_text = f"<u>{text}</u>"
 
@@ -107,11 +107,7 @@ async def send_edit(
 
 	try:
 		if delme != 0:
-			async def sleeps():
-				await asyncio.sleep(delme)
-				await m.delete()
-
-			asyncio.create_task(sleeps())
+			asyncio.create_task(sleep(m, sec=delme, del_msg=True))
 
 	except Exception as e:
 		await error(m, e)
@@ -119,7 +115,7 @@ async def send_edit(
 
 
 
-async def edit_text(m: Message, text, back=False, disable_web_page_preview=False, parse_mode="md"):
+async def edit_text(m: Message, text, disable_web_page_preview=False, parse_mode="combined"):
 	try:
 		await m.edit(
 			text, 
@@ -143,7 +139,7 @@ async def sendmsg(m: Message, text):
 		await app.send_message(
 			m.chat.id,
 			text
-			)
+		)
 	except Exception as e:
 		await error(m, e)
 	return
@@ -171,9 +167,10 @@ async def error(m: Message, e):
 
 
 
-async def sleep(m: Message, sec):
+async def sleep(m: Message, sec, del_msg=False):
 	await asyncio.sleep(sec)
-	await m.delete()
+	if del_msg:
+		await m.delete()
 	return
 
 
@@ -182,7 +179,7 @@ async def sleep(m: Message, sec):
 # delete msg
 async def delete(m: Message, sec: int = 0):
 	if not sec > 600: # 10 min
-		asyncio.create_task(sleep(m, sec))
+		asyncio.create_task(sleep(m, sec=sec, del_msg=True))
 	else:
 		log.error("maximum sleep of 10 ( 600 sec ) minutes")
 	return
@@ -190,6 +187,7 @@ async def delete(m: Message, sec: int = 0):
 
 
 
+# plugin information (CMD_HELP)
 async def data(plug):
 	try:
 		plugin_data = []
@@ -205,25 +203,23 @@ async def data(plug):
 		return plugin_data
 	except Exception as e:
 		print(e)
-		return False
+		return None
 
 
 
 
-async def private(m : Message, arg=True):
+# disallow use of cmds in private (user) chats
+async def private(m : Message, back=True):
 	if m.chat.type == "private":
 		await send_edit(
 			m, 
 			"Please use these commands in groups . . .",
-			mono=True
-			)
-		await delete(m, 3)
-		if arg:
+			mono=True, 
+			delme=True
+		)
+		if back:
 			return
-		else:
-			pass
-	else:
-		pass
+		
 
 
 
@@ -236,19 +232,16 @@ async def code(my_codes):
 
 
 
-
+# it is equal to --> len(message.text.split())
 def long(m: Message):
 	text = len(m.command)
-	if text:
-		return text
-	else:
-		return False
+	return text if text else None
 
 
 
 
 # file creator
-async def create_file(m: Message, app: Client, filename, text):
+async def create_file(m: Message, filename, text):
 	try:
 		name = filename
 		content = text
@@ -264,68 +257,68 @@ async def create_file(m: Message, app: Client, filename, text):
 		await m.delete()
 	except Exception as e:
 		await error(m, e)
-	return
 
 
 
-
+# remove multiples of same element from a list
 def rem_dual(one, two):
 	data = list(set(one) - set(two))
 	return data
 
 
 
-
+# kick users from a chat
 async def kick(chat_id, user_id):
-	await app.kick_chat_member(
-		chat_id,
-		user_id
-		)
+	try:
+		await app.kick_chat_member(
+			chat_id,
+			user_id
+			)
+	except Exception as e:
+		print(e)
+		await error(m, e)
 
 
 
-
-def back():
-	return
-
-
-
-
-def keep():
-	pass
-
-
-
-
+# True if string else False
 def is_str(element):
 	check = isinstance(element, str)
 	return check
 
 
 
-
+# True if boolean else False
 def is_bool(element):
 	check = isinstance(element, bool)
 	return check
 
 
 
-
+# True if float else False
 def is_float(element):
 	check = isinstance(element, float)
 	return check
 
 
 
-
+# True if integer else False
 def is_int(element):
 	check = isinstance(element, int)
 	return check
 
 
 
-
+# 
 async def textlen(m: Message, one: int = 1):
-	status = True if len(m.command) > one and len(m.text) <= 4096 else False
-	return status
-
+	try:
+		cmd = True if len(m.command) > one else False
+		text = True if len(m.text) <=4096 else False
+		if cmd is False:
+			await send_edit(m, "Please give me some suffix . . .", mono=True, delme=3)
+		elif text is False:
+			await send_edit(m, "Only 4096 charactors are allowed !", mono=True, delme=3)
+		else: 
+			return False
+	except Exception as e:
+		print(e)
+		await error(m, e)
