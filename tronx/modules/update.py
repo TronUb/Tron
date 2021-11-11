@@ -6,9 +6,9 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from tronx import (
-  app, 
-	CMD_HELP
-	Config
+  	app, 
+	CMD_HELP,
+	Config,
 )
 
 from tronx.helpers.pyrohelper import (
