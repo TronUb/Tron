@@ -106,12 +106,14 @@ async def offline_mention(_, m: Message):
 					msg = await m.reply(
 						"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
 						)
-					await delete(m, 3)
+					await asyncio.create_task(asyncio.sleep(3))
+					await msg.delete()
 				elif get["afktime"] and not get["reason"]:
-					await m.reply(
+					msg = await m.reply(
 						"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
 						)
-					await delete(m, 3)
+					await asyncio.create_task(await asyncio.sleep(3))
+					await msg.delete()
 				content, message_type = get_message_type(m)
 				if message_type == Types.TEXT:
 					if m.text:
