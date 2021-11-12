@@ -88,7 +88,7 @@ async def offline_mention(_, m: Message):
 		get = get_afk()
 		if get and get["afk"]: 
 			reply = m.reply_to_message
-			if reply and reply.from_user.id == USER_ID:
+			if not reply and reply.from_user.id == USER_ID:
 				return
 
 			if "-" in str(m.chat.id):
