@@ -135,7 +135,7 @@ async def offline_mention(_, m: Message):
 
 
 # come back online
-@app.on_message(filters.me & ~filters.chat(Config.LOG_CHAT), group=13)
+@app.on_message(filters.me, group=13)
 async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
@@ -156,7 +156,6 @@ async def back_online(_, m: Message):
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			set_afk(False, "", 0)
-			await 
 		else:
 			return
 
