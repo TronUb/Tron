@@ -2,18 +2,10 @@ import os
 import sys
 import time
 import logging
-import asyncio
 import platform
 import subprocess
 
-from pyrogram.types import Message
-from pyrogram import Client, filters
-from pyrogram.filters import Filter
-from pyrogram.errors import PeerIdInvalid
-
 from typing import Union, List
-
-from telegraph import Telegraph
 
 
 
@@ -27,30 +19,37 @@ log = logging.getLogger(__name__)
 
 # termux requirement installation
 if list(platform.uname())[1] == "localhost":
-	from demo_config import Config
-	try:
-		# installing these packages using standard method in termux
-		# install pillow
-		os.system("apt update && apt upgrade")
-		one = os.system("pkg install python libjpeg-turbo libcrypt ndk-sysroot clang zlib git")
-		two = subprocess.call(["pip3", "install", "pillow"])
-		# install lxml
-		three = os.system("pkg install libxml2 clang libxslt")
-		four = subprocess.call(["pip3", "install", "lxml"])
-		# install psycopg2
-		five = os.system("pkg install postgresql python make clang")
-		six = subprocess.call(["pip3", "install", "psycopg2"])
-		# install remaining requirements
-		seven = subprocess.call(["pip3", "install", "-r", "requirements.txt"])
-		os.system("clear")
-		if one + two + three + four + five + six + seven == 0:
-			print("\nSuccessfully installed requirements.\n")
-		else:
-			print("\nFailed to install some requirements, it might show some errors.\n")
-	except Exception as e:
-		print(e)
+	counter = 0
+	if counter == 0:
+		from demo_config import Config
+		try:
+			# installing these packages using standard method in termux
+			os.system("apt update && apt upgrade")
+			# install lxml
+			one = os.system("pkg install libxml2 clang libxslt")
+			two = subprocess.call(["pip3", "install", "lxml"])
+			# install psycopg2
+			three = os.system("pkg install postgresql python make clang")
+			four = subprocess.call(["pip3", "install", "psycopg2"])
+			# install remaining requirements
+			five = subprocess.call(["pip3", "install", "-r", "requirements.txt"])
+			os.system("clear")
+			if one + two + three + four + five == 0:
+				print("\nSuccessfully installed requirements.\n")
+			else:
+				print("\nFailed to install some requirements, it might show some errors.\n")
+			counter += 1
+		except Exception as e:
+			print(e)
 else:
 	from config import Config
+
+from pyrogram.types import Message
+from pyrogram import Client, filters
+from pyrogram.filters import Filter
+from pyrogram.errors import PeerIdInvalid
+
+from telegraph import Telegraph
 
 
 
@@ -167,7 +166,7 @@ def get_readable_time(seconds: int) -> str:
 
 async def get_self():
 	""" Get self information for later use """
-	global USER_ID, USER_NAME, USER_USERNAME
+	global USER_ID, USER_NAME, USER_USERNAME, USER_DC
 	
 	USER_ID = None
 	USER_DC = None
@@ -307,8 +306,7 @@ async def botlise():
 
 def uptime():
 	""" Bot active time """
-	mytime = get_readable_time(time.time() - StartTime)
-	return mytime
+	return get_readable_time(time.time() - StartTime)
 
 
 
@@ -323,9 +321,8 @@ class tron(Client):
 		app_version=version,
 		workers=WORKERS,
 		)
-	async def sleep(self, duration=0):
-		await asyncio.sleep(duration)
-
+	async def edit_text(m: Message, text):
+		await m.edit(text)
 
 
 
