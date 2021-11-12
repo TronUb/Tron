@@ -40,7 +40,7 @@ def myid():
 	var = dv.getdv("USER_ID")
 	one = var if bool(var) is True else Config.USER_ID
 	two = one if one else USER_ID
-	return one if one else None
+	return two if two else None
 
 
 # dc id of bot owner
