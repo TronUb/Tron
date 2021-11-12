@@ -29,34 +29,49 @@ from tronx import (
 # custom regex filter
 def regex(
 	pattern: Union[str, Pattern], 
-	flags: int = 0
+	flags: int = 0,
+	only_me: bool = True,
+	allow_forward: bool = False,
+	allow_channel: bool = False,
+	allow_edit: bool = True
 	):
 
 	async def func(flt, _, update: Update):
-		if ( update.from_user 
-			and update.from_user.is_self
-			and not update.forward_date
-			#and not message.chat.type == "channel"
-			):
-			if isinstance(update, Message):
-				value = update.text or update.caption
-			elif isinstance(update, CallbackQuery):
-				value = update.data
-			elif isinstance(update, InlineQuery):
-				value = update.query
-			else:
-				raise ValueError(f"Regex filter doesn't work with {type(update)}")
+		if only_me:
+			if not (update.from_user
+				and update.from_user.is_self
+				):
+				return False
 
-			if value:
-				update.matches = list(flt.p.finditer(value)) or None
+		if allow_forward is False:
+			if update.forward_date:
+				return False
 
-			return bool(update.matches)
+		if allow_channel is False:
+			if update.chat.type == "channel":
+				return False
+
+		if allow_edit is False:
+			if update.edit_date:
+				return False
+
+		if isinstance(update, Message):
+			value = update.text or update.caption
+		elif isinstance(update, CallbackQuery):
+			value = update.data
+		elif isinstance(update, InlineQuery):
+			value = update.query
 		else:
-			return
+			raise ValueError(f"Regex filter doesn't work with {type(update)}")
+
+		if value:
+			update.matches = list(flt.p.finditer(value)) or None
+
+		return bool(update.matches)
 
 	return create(
 		func,
-		"custom_regex",
+		"RegexCommandFilter",
 		p=pattern if isinstance(pattern, Pattern) else re.compile(pattern, flags)
 	)
 
@@ -65,17 +80,21 @@ def regex(
 
 # multiple prefixes
 def myprefix():
-	if len(PREFIX.split()) > 1:
-		prelist = PREFIX.split()
-	else:
-		prelist = PREFIX
-	return prelist
+	return PREFIX.split()[0] if len(PREFIX.split()) > 1 else PREFIX
 
 
 
 
 # custom command filter
-def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = myprefix(), case_sensitive: bool = True):
+def gen(
+	commands: Union[str, List[str]], 
+	prefixes: Union[str, List[str]] = myprefix(), 
+	case_sensitive: bool = True, 
+	only_me: bool = True,
+	allow_forward: bool = False,
+	allow_channel: bool = False,
+	allow_edit: bool = True,
+	):
 	# modified func of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
@@ -84,41 +103,51 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 
 		username = ""
 		# works only for you 
-		if ( message.from_user 
-			and message.from_user.is_self
-			and not message.forward_date
-			#and not message.chat.type == "channel"
-			):
-
-			text = message.text or message.caption
-			message.command = None
-
-			if not text:
+		if only_me:
+			if not (message.from_user
+				and message.from_user.is_self
+				):
 				return False
 
-			for prefix in flt.prefixes:
-				if not text.startswith(prefix):
+		if allow_forward is False:
+			if message.forward_date:
+				return False
+
+		if allow_channel is False:
+			if message.chat.type == "channel":
+				return False
+
+		if allow_edit is False:
+			if message.edit_date:
+				return False
+
+		text = message.text or message.caption
+		message.command = None
+
+		if not text:
+			return False
+
+		for prefix in flt.prefixes:
+			if not text.startswith(prefix):
+				continue
+
+			without_prefix = text[len(prefix):]
+
+			username = None
+
+			for cmd in flt.commands:
+				if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
+					flags=re.IGNORECASE if not flt.case_sensitive else 0):
 					continue
 
-				without_prefix = text[len(prefix):]
+				without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
 
-				username = None
-
-				for cmd in flt.commands:
-					if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
-						flags=re.IGNORECASE if not flt.case_sensitive else 0):
-						continue
-
-					without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
-
-					message.command = [cmd] + [
-						re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
-						for m in command_re.finditer(without_command)
-					]
-					return True
-			return False
-		else:
-			return
+				message.command = [cmd] + [
+					re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
+					for m in command_re.finditer(without_command)
+				]
+				return True
+		return False
 
 
 	commands = commands if isinstance(commands, list) else [commands]
@@ -130,7 +159,7 @@ def gen(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = mypre
 
 	return create(
 		func,
-		"Commandfilter",
+		"MessageCommandFilter",
 		commands=commands,
 		prefixes=prefixes,
 		case_sensitive=case_sensitive
