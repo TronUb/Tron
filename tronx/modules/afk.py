@@ -1,4 +1,4 @@
-import time, asyncio
+import time
 
 from pyrogram import filters
 from pyrogram.types import Message
@@ -23,8 +23,6 @@ from tronx.helpers import (
 	mymention,
 	gen,
 	# others
-	escape_markdown,
-	mention_markdown,
 	Types, 
 	get_message_type,
 	get_readable_time,
@@ -32,7 +30,7 @@ from tronx.helpers import (
 	delete,
 )
 
-from tronx.database.postgres import dv_sql as db
+from tronx.database.postgres import dv_sql as dv
 
 
 
@@ -52,22 +50,18 @@ CMD_HELP.update(
 
 @app.on_message(gen("afk"))
 async def go_offline(_, m: Message):
-	if long(m) >= 2:
-		try:
-			start = int(time.time())
+	try:
+		start = int(time.time())
+		if long(m) >= 2:
 			set_afk(True, m.text.split(None, 1)[1], start) # with reason
 			await send_edit(
 				m, 
 				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1]),
 				delme=2
 				)
-		except Exception as e:
-			await error(m, e)
-	else:
-		try:
-			start = int(time.time())
-			if db.getdv("AFK_TEXT"):
-				reason = db.getdv("AFK_TEXT")
+		elif long(m) == 1 and long(m) < 4096:
+			if dv.getdv("AFK_TEXT"):
+				reason = dv.getdv("AFK_TEXT")
 			elif Config.AFK_TEXT:
 				reason = Config.AFK_TEXT
 			else:
@@ -81,61 +75,59 @@ async def go_offline(_, m: Message):
 				"{} is now offline.".format(mymention()),
 				delme=2
 				)
-		except Exception as e:
-			await error(m, e)
+	except Exception as e:
+		await error(m, e)
 
 
 
 
 # notify mentioned users
-@app.on_message(filters.incoming & ~filters.bot, group=12)
+@app.on_message(filters.incoming & ~filters.bot & ~filters.channel, group=12)
 async def offline_mention(_, m: Message):
 	try:
-		reply = m.reply_to_message
-		if reply and reply.from_user.id == USER_ID:
-			get = get_afk()
-			if get and get["afk"]: 
-				if "-" in str(m.chat.id):
-					cid = str(m.chat.id)[4:]
-				else:
-					cid = str(m.chat.id)
+		get = get_afk()
+		if get and get["afk"]: 
+			reply = m.reply_to_message
+			if not reply and reply.from_user.is_self:
+				return
 
-				end = int(time.time())
-				otime = get_readable_time(end - get["afktime"])
-				if get["reason"] and get["afktime"]:
-					msg = await m.reply(
-						"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
-						)
-					await asyncio.create_task(asyncio.sleep(3))
-					await msg.delete()
-				elif get["afktime"] and not get["reason"]:
-					msg = await m.reply(
-						"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
-						)
-					await asyncio.create_task(await asyncio.sleep(3))
-					await msg.delete()
-				content, message_type = get_message_type(m)
-				if message_type == Types.TEXT:
-					if m.text:
-						text = m.text
-					else:
-						text = m.caption
-				else:
-					text = message_type.name
+			if "-" in str(m.chat.id):
+				cid = str(m.chat.id)[4:]
+			else:
+				cid = str(m.chat.id)
 
-				await app.send_message(
-					Config.LOG_CHAT, 
-					f"""#mention\n\n
-					**User:** `{m.from_user.first_name}`\n
-					**Id:** {m.from_user.id}\n
-					**Group:** `{m.chat.title}`\n
-					**Message:** `{text[:4096]}`\n
-					[Go to message](https://t.me/c/{cid}/{m.message_id})
-					""",
-					parse_mode = "markdown"
+			end = int(time.time())
+			otime = get_readable_time(end - get["afktime"])
+			if get["reason"] and get["afktime"]:
+				msg = await m.reply(
+					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
 					)
-		else:
-			return
+				await delete(m, 3)
+			elif get["afktime"] and not get["reason"]:
+				await m.reply(
+					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
+					)
+				await delete(m, 3)
+			content, message_type = get_message_type(m)
+			if message_type == Types.TEXT:
+				if m.text:
+					text = m.text
+				else:
+					text = m.caption
+			else:
+				text = message_type.name
+
+			await app.send_message(
+				Config.LOG_CHAT, 
+				f"""#mention\n\n
+				**User:** `{m.from_user.first_name}`\n
+				**Id:** {m.from_user.id}\n
+				**Group:** `{m.chat.title}`\n
+				**Message:** `{text[:4096]}`\n
+				[Go to message](https://t.me/c/{cid}/{m.message_id})
+				""",
+				parse_mode = "markdown"
+				)
 	except Exception as e:
 		await error(m, e)
 
@@ -164,6 +156,7 @@ async def back_online(_, m: Message):
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			set_afk(False, "", 0)
+			await 
 		else:
 			return
 
