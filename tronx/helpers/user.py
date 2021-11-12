@@ -38,7 +38,7 @@ def mymention():
 # telegram id of bot owner
 def myid():
 	var = dv.getdv("USER_ID")
-	one = var if var else Config.USER_ID
+	one = var if bool(var) is True else Config.USER_ID
 	two = one if one else USER_ID
 	return one if one else None
 
