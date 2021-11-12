@@ -49,7 +49,7 @@ CMD_HELP.update(
 
 
 
-@app.on_message(gen("afk"))
+@app.on_message(gen("afk", allow_channel=True))
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
@@ -134,7 +134,7 @@ async def offline_mention(_, m: Message):
 
 
 # come back online
-@app.on_message(filters.me & ~filters.chat(Config.LOG_CHAT), group=13)
+@app.on_message(filters.me & ~filters.channel, group=13)
 async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
@@ -147,7 +147,7 @@ async def back_online(_, m: Message):
 			pass
 
 		get = get_afk()
-		if get and get['afk'] and filters.outgoing:
+		if get and get["afk"] and filters.outgoing:
 			end = int(time.time())
 			afk_time = get_readable_time(end - get["afktime"])
 			msg = await app.send_message(
