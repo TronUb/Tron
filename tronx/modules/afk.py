@@ -28,6 +28,7 @@ from tronx.helpers import (
 	get_readable_time,
 	long,
 	delete,
+	replied_to_me,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -82,13 +83,13 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(filters.incoming & ~filters.bot & ~filters.channel, group=12)
+@app.on_message(~filters.me & ~filters.bot & ~filters.channel & filters.mentioned | replied_to_me, group=12)
 async def offline_mention(_, m: Message):
 	try:
 		get = get_afk()
 		if get and get["afk"]: 
 			reply = m.reply_to_message
-			if not reply and reply.from_user.id == USER_ID:
+			if not (reply and reply.from_user.id == USER_ID):
 				return
 
 			if "-" in str(m.chat.id):
@@ -101,7 +102,7 @@ async def offline_mention(_, m: Message):
 			if get["reason"] and get["afktime"]:
 				msg = await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
-					)
+					) 
 				await delete(m, 3)
 			elif get["afktime"] and not get["reason"]:
 				await m.reply(
@@ -135,7 +136,7 @@ async def offline_mention(_, m: Message):
 
 
 # come back online
-@app.on_message(filters.me, group=13)
+@app.on_message(filters.me & ~filters.chat(Config.LOG_CHAT), group=13)
 async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
@@ -156,6 +157,7 @@ async def back_online(_, m: Message):
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			set_afk(False, "", 0)
+			await 
 		else:
 			return
 
