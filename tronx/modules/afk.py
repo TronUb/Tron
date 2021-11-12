@@ -89,8 +89,6 @@ async def offline_mention(_, m: Message):
 		get = get_afk()
 		if get and get["afk"]: 
 			reply = m.reply_to_message
-			if not (reply and reply.from_user.id == USER_ID):
-				return
 
 			if "-" in str(m.chat.id):
 				cid = str(m.chat.id)[4:]
@@ -103,12 +101,12 @@ async def offline_mention(_, m: Message):
 				msg = await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
 					) 
-				await delete(m, 3)
+				await delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
 				await m.reply(
 					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
 					)
-				await delete(m, 3)
+				await delete(msg, 3)
 			content, message_type = get_message_type(m)
 			if message_type == Types.TEXT:
 				if m.text:
