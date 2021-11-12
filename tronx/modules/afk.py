@@ -157,7 +157,6 @@ async def back_online(_, m: Message):
 				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			set_afk(False, "", 0)
-			await 
 		else:
 			return
 
