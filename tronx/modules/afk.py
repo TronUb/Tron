@@ -82,7 +82,7 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=12)
+@app.on_message(~filters.me & ~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=12)
 async def offline_mention(_, m: Message):
 	try:
 		get = get_afk()
