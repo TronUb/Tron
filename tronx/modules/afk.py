@@ -82,11 +82,13 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.me & ~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=12)
+@app.on_message(~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=12)
 async def offline_mention(_, m: Message):
 	try:
 		get = get_afk()
 		if get and get["afk"]: 
+			if m.from_user.id == USER_ID:
+				return
 
 			if "-" in str(m.chat.id):
 				cid = str(m.chat.id)[4:]
