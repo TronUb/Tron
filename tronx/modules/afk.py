@@ -28,7 +28,6 @@ from tronx.helpers import (
 	get_readable_time,
 	long,
 	delete,
-	replied_to_me,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -83,12 +82,11 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.me & ~filters.bot & ~filters.channel & filters.mentioned | replied_to_me, group=12)
+@app.on_message(~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=12)
 async def offline_mention(_, m: Message):
 	try:
 		get = get_afk()
 		if get and get["afk"]: 
-			reply = m.reply_to_message
 
 			if "-" in str(m.chat.id):
 				cid = str(m.chat.id)[4:]
@@ -98,13 +96,17 @@ async def offline_mention(_, m: Message):
 			end = int(time.time())
 			otime = get_readable_time(end - get["afktime"])
 			if get["reason"] and get["afktime"]:
-				msg = await m.reply(
+				msg = await app.send_message(
+					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason'])
+					reply_to_message_id=m.message_id
 					) 
 				await delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
-				await m.reply(
+				await app.send_message(
+					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime)
+					reply_to_message_id=m.message_id
 					)
 				await delete(msg, 3)
 			content, message_type = get_message_type(m)
