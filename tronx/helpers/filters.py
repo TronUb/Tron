@@ -149,7 +149,6 @@ def gen(
 				return True
 		return False
 
-
 	commands = commands if isinstance(commands, list) else [commands]
 	commands = {c if case_sensitive else c.lower() for c in commands}
 
@@ -164,3 +163,16 @@ def gen(
 		prefixes=prefixes,
 		case_sensitive=case_sensitive
 	)
+
+
+
+
+# msgs replied to me
+async def someone_replied_to_me(_, __, m: Message):
+	reply = m.reply_to_message
+	return bool(reply and reply.from_user.id == USER_ID)
+
+
+replied_to_me = create(someone_replied_to_me)
+
+
