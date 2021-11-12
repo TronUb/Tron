@@ -8,51 +8,37 @@ from tronx import (
 
 from tronx.helpers.utils import mention_markdown
 
-from tronx.database.postgres import dv_sql as db
+from tronx.database.postgres import dv_sql as dv
 
 
 
 
 # my name
 def myname():
-	if db.getdv("USER_NAME"):
-		name = db.getdv("USER_NAME")
-	elif Config.USER_NAME:
-		name = Config.USER_NAME
-	elif USER_NAME:
-		name = USER_NAME
-	else:
-		name = None
-	return name
+	uname = dv.getdv("USER_NAME")
+	one = uname if bool(uname) if True else Config.USER_NAME
+	two = one if one else USER_NAME
+	return two if two else None
 
 
 # my username
 def myusername():
-	if Config.USER_USERNAME:
-		username = Config.USER_USERNAME
-	elif USER_USERNAME:
-		username = USER_USERNAME
-	else:
-		username = None
-	return username
+	data = Config.USER_USERNAME if Config.USER_USERNAME else USER_USERNAME
+	return data if data else None
 
 
 # my mention
 def mymention():
-	user_name = myname()
-	if user_name:
-		mention = mention_markdown(USER_ID, user_name)
-	else:
-		mention = None
-	return mention
+	return mention_markdown(myid(), myname()) if myname() and myid() else None
 
 
 # my id
 def myid():
-	if Config.USER_ID:
-		userid = Config.USER_ID
-	elif USER_ID:
-		userid = USER_ID
-	else:
-		userid = None
-	return userid
+	data = Config.USER_ID if Config.USER_ID else USER_ID
+	return data if data else None
+
+
+# my dc
+def mydc():
+	data = Config.USER_DC if Config.USER_DC else USER_DC
+	return data if data else None
