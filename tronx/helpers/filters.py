@@ -20,7 +20,8 @@ from pyrogram.types import (
 )
 
 from tronx import (
-	PREFIX
+	PREFIX,
+	USER_ID,
 )
 
 
