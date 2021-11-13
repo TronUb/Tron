@@ -100,7 +100,7 @@ async def kang(_, m: Message):
 		if not emoji_:
 			emoji_ = "😐"
 
-		packname = f"a{my_id()}_by_tron_{pack}"
+		packname = f"a{myid()}_by_tron_{pack}"
 		custom_packnick = f"{myusername()}'s kang pack"
 		packnick = f"{custom_packnick} Vol.{pack}"
 		cmd = "/newpack"
