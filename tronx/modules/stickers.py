@@ -81,7 +81,7 @@ async def kang(_, m: Message):
 		return await send_edit(m, "I can't kang that . . .", mono=True)
 
 	if photo:
-		args = get_args(message)
+		args = m.command
 		pack = 1
 		if len(args) == 2:
 			emoji_, pack = args
