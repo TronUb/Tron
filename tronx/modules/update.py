@@ -25,7 +25,8 @@ CMD_HELP.update(
 	{"update" : (
 		"update",
 		{
-		"update" : "Update your userbot to latest version."
+		"update" : "To check if new update is available or not.",
+		"update now" : "To update userbot to latest version."
 		}
 		)
 	}
@@ -37,34 +38,34 @@ CMD_HELP.update(
 UPSTREAM_REPO_URL = "https://github.com/beastzx18/tron"
 
 requirements_path = path.join(
-    path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
+	path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
 )
 
 
 
 
 async def gen_chlog(repo, diff):
-    ch_log = ""
-    d_form = "On %d/%m/%y at %H:%M:%S"
-    for c in repo.iter_commits(diff):
-        ch_log += f"**#{c.count()}** : {c.committed_datetime.strftime(d_form)} : [{c.summary}]({UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}) by `{c.author}`\n"
-    return ch_log
+	ch_log = ""
+	d_form = "On %d/%m/%y at %H:%M:%S"
+	for c in repo.iter_commits(diff):
+		ch_log += f"**#{c.count()}** : {c.committed_datetime.strftime(d_form)} : [{c.summary}]({UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}) by `{c.author}`\n"
+	return ch_log
 
 
 
 
 async def updateme_requirements():
-    reqs = str(requirements_path)
-    try:
-        process = await asyncio.create_subprocess_shell(
-            " ".join([sys.executable, "-m", "pip", "install", "-r", reqs]),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-        await process.communicate()
-        return process.returncode
-    except Exception as e:
-        return repr(e)
+	reqs = str(requirements_path)
+	try:
+		process = await asyncio.create_subprocess_shell(
+			" ".join([sys.executable, "-m", "pip", "install", "-r", reqs]),
+			stdout=asyncio.subprocess.PIPE,
+			stderr=asyncio.subprocess.PIPE,
+		)
+		await process.communicate()
+		return process.returncode
+	except Exception as e:
+		return repr(e)
 
 
 
@@ -90,8 +91,6 @@ async def upstream(_, m):
 		repo.__del__()
 		return
 	except InvalidGitRepositoryError as error:
-		if cmd and cmd[1] != "now":
-			pass
 		repo = Repo.init()
 		origin = repo.create_remote("upstream", off_repo)
 		origin.fetch()
@@ -117,7 +116,7 @@ async def upstream(_, m):
 		if changelog:
 			changelog_str = f"**New UPDATE available for [[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br}):\n\nCHANGELOG**\n\n{changelog}"
 			if len(changelog_str) > 4096:
-				await send_edit(m, "`Changelog is too big, view the file to see it.`")
+				await send_edit(m, "Changelog is too big, view the file to see it.", monk=True, delme=6)
 				file = open("output.txt", "w+")
 				file.write(changelog_str)
 				file.close()
@@ -137,7 +136,7 @@ async def upstream(_, m):
 		else:
 			await send_edit(
 				m, 
-				f"\n`Your BOT is`  **up-to-date**  `with`  **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
+				f"\nYour bot is  **up-to-date**  with  **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
 				disable_web_page_preview=True,
 			)
 			repo.__del__()
@@ -151,13 +150,13 @@ async def upstream(_, m):
 		if not Config.HEROKU_APP_NAME:
 			await send_edit(
 				m, 
-                "`Please set up the HEROKU_APP_NAME variable to be able to update userbot.`"
+				"`Please set up the HEROKU_APP_NAME variable to be able to update userbot.`"
 			)
 			repo.__del__()
 			return
-		for app in heroku_applications:
+		for bars in heroku_applications:
 			if app.name == Config.HEROKU_APP_NAME:
-				heroku_app = app
+				heroku_app = bars
 				break
 		if heroku_app is None:
 			await send_edit(
@@ -166,7 +165,7 @@ async def upstream(_, m):
 			)
 			repo.__del__()
 			return
-		await send_edit(
+		msg = await send_edit(
 			m, 
 			"`Userbot dyno build in progress, please wait for it to complete.`"
 		)
@@ -184,7 +183,7 @@ async def upstream(_, m):
 			remote.push(refspec=f"HEAD:refs/heads/{ac_br}", force=True)
 		except GitCommandError as error:
 			pass
-		await send_edit(m, "`Successfully Updated!\nRestarting, please wait...`")
+		await send_edit(msg, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=8)
 	else:
 		try:
 			ups_rem.pull(ac_br)
@@ -193,7 +192,9 @@ async def upstream(_, m):
 		await updateme_requirements()
 		await send_edit(
 			m,
-			"`Successfully Updated!\nBot is restarting... Wait for a second!`",
+			"Successfully Updated!\nBot is restarting . . . Wait for a second !", 
+			mono=True, 
+			delme=8)
 		)
 
 		args = [sys.executable, "./resources/startup/deploy.sh"]
