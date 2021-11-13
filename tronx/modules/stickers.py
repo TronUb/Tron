@@ -29,6 +29,8 @@ from tronx.helpers import (
 	send_edit,
 	# others 
 	get_arg,
+	myid, 
+	myusername,
 )
 
 
@@ -98,13 +100,8 @@ async def kang(_, m: Message):
 		if not emoji_:
 			emoji_ = "😐"
 
-		if USER_USERNAME:
-			u_name = USER_USERNAME
-		else:
-			u_name = USER_NAME or USER_ID
-
-		packname = f"a{USER_ID}_by_tron_{pack}"
-		custom_packnick = f"{u_name}'s kang pack"
+		packname = f"a{my_id()}_by_tron_{pack}"
+		custom_packnick = f"{myusername()}'s kang pack"
 		packnick = f"{custom_packnick} Vol.{pack}"
 		cmd = "/newpack"
 		if resize:
