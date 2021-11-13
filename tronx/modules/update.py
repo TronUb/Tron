@@ -194,7 +194,7 @@ async def upstream(_, m):
 			m,
 			"Successfully Updated!\nBot is restarting . . . Wait for a second !", 
 			mono=True, 
-			delme=8)
+			delme=8
 		)
 
 		args = [sys.executable, "./resources/startup/deploy.sh"]
