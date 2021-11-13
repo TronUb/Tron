@@ -1,10 +1,9 @@
-from config import Config
-
 from tronx import (
 	USER_NAME,
 	USER_USERNAME,
 	USER_ID,
 	USER_DC,
+	Config,
 	)
 
 from tronx.helpers.utils import mention_markdown
