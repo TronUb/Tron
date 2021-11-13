@@ -56,6 +56,8 @@ class Config(object):
 	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/1073e200f9d8e70b91f0d.jpg")
 	# add your id if bot fails to get your id
 	USER_ID = os.getenv("USER_ID")
+	# add your username if bot fails to get your username
+	USER_USERNAME = os.getenv("USER_USERNAME")
 # --------------------
 	# your custom bot bio (optional)
 	BOT_BIO = os.getenv("BOT_BIO")
