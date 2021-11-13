@@ -14,10 +14,9 @@ from tronx.helpers import (
 	error,
 	gen,
 	send_edit,
-	# others 
-	get_arg,
+	# others
 	delete,
-	botusername(),
+	botusername,
 	data,
 )
 
@@ -40,9 +39,9 @@ CMD_HELP.update(
 
 @app.on_message(gen("help"))
 async def help_menu(app, m):
-	args = get_arg(m)
+	args = m.command
 	try:
-		if not args:
+		if not (args and args[1]):
 			msg = await send_edit(m, "...", mono=True)
 			result = await app.get_inline_bot_results(
 				botusername(), 
@@ -59,15 +58,15 @@ async def help_menu(app, m):
 				)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
-		elif args:
+		elif args and args[1]:
 			plugin_data = []
 			plugin_data.clear()
 
-			module_help = await data(args)
+			module_help = await data(args[1])
 			if not module_help:
 				await send_edit(m, f"Invalid module name specified, use `{PREFIX}mods` to get list of modules", delme=3)
 			else:
-				await send_edit(m, f"**MODULE:** {args}\n\n" + "".join(plugin_data))
+				await send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(plugin_data))
 		else:
 			await send_edit(m, "Failed to get help menu !", delme=3)
 	except Exception as e:
