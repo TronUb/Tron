@@ -183,7 +183,10 @@ async def upstream(_, m):
 			remote.push(refspec=f"HEAD:refs/heads/{ac_br}", force=True)
 		except GitCommandError as error:
 			pass
-		await send_edit(msg, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=8)
+		try:
+			await msg.edit("`Successfully Updated!\nRestarting, Please wait . . .`")
+		except Exception:
+			await send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=8)
 	else:
 		try:
 			ups_rem.pull(ac_br)
