@@ -39,9 +39,13 @@ CMD_HELP.update(
 
 @app.on_message(gen("help"))
 async def help_menu(app, m):
-	args = m.command
+	cmd = m.command
+	if len(cmd) > 1:
+		args = cmd[1]
+	else:
+		args = False
 	try:
-		if not (args and args[1]):
+		if args is False:
 			msg = await send_edit(m, "...", mono=True)
 			result = await app.get_inline_bot_results(
 				botusername(), 
@@ -58,7 +62,7 @@ async def help_menu(app, m):
 				)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
-		elif args and args[1]:
+		elif args:
 			plugin_data = []
 			plugin_data.clear()
 
