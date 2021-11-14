@@ -93,7 +93,7 @@ async def admin_title(_, m: Message):
 				user_name = user.from_user.first_name
 				user_chat_info = await app.get_chat_member(m.chat.id, admin)
 				is_admin = user_chat_info.status
-				if is_admin is "member":
+				if is_admin == "member":
 					await send_edit(m, f"{user_name} is not an admin in this chat . . .", delme=3, mono=True)
 				else:
 					await app.set_administrator_title(m.chat.id, admin, title)
@@ -158,9 +158,9 @@ async def adminlist(client, m):
 	bot_admin.clear()
 
 	async for x in app.iter_chat_members(m.chat.id, filter="administrators"):
-		if x.status is "creator":
+		if x.status == "creator":
 			creator.append("{}".format(mention_markdown(x.user.id, x.user.first_name)))
-		if x.status is "administrator":
+		if x.status == "administrator":
 			if x.user.is_bot:
 				bot_admin.append("{}".format(mention_markdown(x.user.id, x.user.first_name)))
 			else:
