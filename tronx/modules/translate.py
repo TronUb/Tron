@@ -1,14 +1,11 @@
 from deep_translator import GoogleTranslator
 
-from pyrogram import filters
 from pyrogram.types import Message
 
 
 from tronx import (
 	app, 
 	CMD_HELP,
-	Config,
-	PREFIX
 	)
 
 from tronx.helpers import (
@@ -25,7 +22,8 @@ CMD_HELP.update(
 	{"translate" : (
 		"translate",
 		{
-		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language."
+		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language.",
+		"langs" : "Get list of supported translating languages."
 		}
 		)
 	}
@@ -40,23 +38,24 @@ async def translate(_, m: Message):
 	cmd = m.command
 
 	try:
-		if long(m) > 1:
-			lang = cmd[1]
-		else:
-			lang = "en"
+		lang = cmd[1] if long(m) > 1 else "en"
+
+		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values)
+
+		if not lang in languages:
+			return await send_edit(m, "Bot doesn't support this language code, please try different one.", mono=True, delme=5)
 
 		if (reply and reply.text):
-			text = reply.text
-			await translate(m, lang=lang, text=text)
+			await translate(m, lang=lang, text=reply.text)
 
 		elif not reply and len(m.text) <= 4096:
 			if long(m) <= 2:
-				return await send_edit(m, "Give me the language code with text.", mono=True)
+				return await send_edit(m, "Give me the language code with text.", mono=True, delme=3)
 			text = m.text.split(None, 2)[2]
-			await translate(m, lang=lang, text = text)
+			await translate(m, lang=lang, text=text)
 			await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")
 		else:
-			await send_edit(m, "Invalid language code specified !", mono=True)
+			await send_edit(m, "Something went wrong, please try again later !", mono=True, delme=5)
 	except Exception as e:
 		await error(m, e)
 
@@ -77,9 +76,9 @@ async def supported_language(_, m):
 	data = []
 	data.clear()
 
-	langs_list = GoogleTranslator.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english:en etc...}
+	langs_list = GoogleTranslator.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english: en etc...}
 	for x, y in zip(langs_list.values(), langs_list.keys()):
 		data.append(f"`{x}` : `{y}`")
 
-	await send_edit(m, "**Total languages:\n\n**" + "\n".join(data))
+	await send_edit(m, "**Total languages:**\n\n" + "\n".join(data))
 		
