@@ -155,7 +155,7 @@ async def upstream(_, m):
 			repo.__del__()
 			return
 		for bars in heroku_applications:
-			if app.name == Config.HEROKU_APP_NAME:
+			if bars.name == Config.HEROKU_APP_NAME:
 				heroku_app = bars
 				break
 		if heroku_app is None:
