@@ -42,7 +42,7 @@ async def translate(_, m: Message):
 
 		await send_edit(m, f"**Translating in** `{lang}` . . .")
 
-		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values)
+		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values())
 
 		if not lang in languages:
 			return await send_edit(m, "Bot doesn't support this language code, please try different one.", mono=True, delme=5)
