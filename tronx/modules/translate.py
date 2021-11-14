@@ -40,20 +40,23 @@ async def translate(_, m: Message):
 	try:
 		lang = cmd[1] if long(m) > 1 else "en"
 
+		await send_edit(m, f"**Translating in** `{lang}` . . .")
+
 		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values)
 
 		if not lang in languages:
 			return await send_edit(m, "Bot doesn't support this language code, please try different one.", mono=True, delme=5)
 
 		if (reply and reply.text):
-			await translate(m, lang=lang, text=reply.text)
+			tdata = await translate(m, lang=lang, text=reply.text)
+			await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:**`{tdata}`")
 
 		elif not reply and len(m.text) <= 4096:
 			if long(m) <= 2:
 				return await send_edit(m, "Give me the language code with text.", mono=True, delme=3)
 			text = m.text.split(None, 2)[2]
-			await translate(m, lang=lang, text=text)
-			await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")
+			tdata = await translate(m, lang=lang, text=text)
+			await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{tdata}`")
 		else:
 			await send_edit(m, "Something went wrong, please try again later !", mono=True, delme=5)
 	except Exception as e:
@@ -63,10 +66,9 @@ async def translate(_, m: Message):
 
 
 async def translate(m: Message, lang, text):
-	await send_edit(m, f"Translating in `{lang}` ...")
 	tr = GoogleTranslator(source="auto", target=lang)
 	output = tr.translate(text)
-	await send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{output}`")
+	return output
 
 
 
