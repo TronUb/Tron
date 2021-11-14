@@ -42,7 +42,7 @@ CMD_HELP.update(
 		"cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
 		"temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
 		"json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.", 
-		"ilink [reply to inline button message]" : "Use this to inline or url button message containing links.",
+		"ulink [reply to inline button message]" : "Use this to inline or url button message containing links.",
 		"mlink [reply to message]" : "Use this to get message links. both private and public groups.",
 		"saved [reply to message]" : "Save Media To Your Telegram Cloud Storage \ Saved Messages.",
 		"fwd [reply to message]" : "Forward messages to same group or other groups.",
@@ -80,7 +80,7 @@ async def get_word_links(_, m: Message):
 	links.clear()
 	await send_edit(m, "Finding word in this chat . . .", mono=True)
 	try:
-		if len(m.command) < 2:
+		if long(m) < 2:
 			return await send_edit(m, "Please give some text to search in chat ...")
 
 		else:
@@ -99,12 +99,12 @@ async def get_word_links(_, m: Message):
 
 @app.on_message(gen(["cur", "currency"]))
 async def evaluate(_, m: Message):
-	if len(m.text.split()) <= 3:
+	if long(m) <= 3:
 		return await send_edit(m, f"Use | `{PREFIX}cur 100 USD INR` or `{PREFIX}currency 100 USD INR`")
 
-	value = m.text.split(None, 3)[1]
-	cur1 = m.text.split(None, 3)[2].upper()
-	cur2 = m.text.split(None, 3)[3].upper()
+	value = m.command[1]
+	cur1 = m.command[2].upper()
+	cur2 = m.command[3].upper()
 	try:
 		conv = c.convert(int(value), cur1, cur2)
 		text = "{} {} = {} {}".format(value, cur1, f'{conv:,.2f}', cur2)
@@ -140,7 +140,7 @@ async def evaluate(_, m: Message):
 
 
 @app.on_message(gen("json"))
-async def jsonify(app, m: Message):
+async def get_json_of_msg(app, m: Message):
 	reply = m.reply_to_message
 
 	if reply:
@@ -153,8 +153,7 @@ async def jsonify(app, m: Message):
 	except Exception: # message too long
 		await send_edit(m, "Sending file . . .", mono=True)
 
-		file = "json.txt"
-		new = open(file, "w+")
+		new = open("json.txt", "w+")
 		new.write(str(data))
 		new.close()
 		await app.send_document(
@@ -200,13 +199,13 @@ async def get_inlinelinks(app, m: Message):
 
 
 @app.on_message(gen("mlink"))
-async def get_messagelinks(app, m: Message):
+async def get_message_links(_, m: Message):
 	reply = m.reply_to_message
 
 	if m.chat.type == "private" or "bot":
 		return await send_edit(m, "This is not a group, try in groups . . .", delme=2, mono=True)
 
-	elif m.chat.type == "supergroup":
+	elif m.chat.type == "supergroup" or "group":
 		if reply:
 			try:
 				data = await app.get_messages(
@@ -214,10 +213,7 @@ async def get_messagelinks(app, m: Message):
 					message_ids = reply.message_id
 					)
 				gid = str(data.chat.id)
-				if gid.startswith("-100"):
-					chatid = int(gid.replace("-100", ""))
-				else:
-					chatid = data.chat.id
+				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
 				msg_id = data.message_id
 			except Exception as e:
 				await error(m, e)
@@ -228,10 +224,7 @@ async def get_messagelinks(app, m: Message):
 					message_ids = m.message_id
 					)
 				gid = str(data.chat.id)
-				if gid.startswith("-100"):
-					chatid = int(gid.replace("-100", ""))
-				else:
-					chatid = data.chat.id
+				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
 				msg_id = data.message_id
 			except Exception as e:
 				await error(m, e)
@@ -245,30 +238,32 @@ async def get_messagelinks(app, m: Message):
 
 
 @app.on_message(gen("saved"))
-async def to_saved(_, m: Message):
+async def save_to_cloud(_, m: Message):
 	await m.delete()
 	await m.reply_to_message.forward("self")
 
 
 
 
-@app.on_message(gen("fwd"))
-async def to_saved(_, m: Message):
+@app.on_message(gen(["fwd", "frwd"]))
+async def forward_msgs(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		await m.delete()
-		if not reply:
-			await m.forward(
-				m.chat.id
-				)
-		elif reply and len(m.command) < 2:
-			await reply.forward(
-				m.chat.id
-				)
-		elif reply and len(m.command) > 1:
-			await reply.forward(
-				m.command[1]
-				)
+		if reply and long(m) == 1:
+			await reply.forward(m.chat.id)
+
+		elif reply and long(m) > 1:
+			await reply.forward(m.command[1])
+
+		elif not reply and long(m) == 1:
+			await m.forward(m.chat.id)
+
+		elif not reply and long(m) > 1:
+			await send_edit(m, "Sir reply to yours or someone's message.", mono=True, delme=3)
+
+		else:
+			await send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
 	except Exception as e:
 		await error(m, e)
 
@@ -276,8 +271,8 @@ async def to_saved(_, m: Message):
 
 
 @app.on_message(gen(["spt", "speed", "speedtest"]))
-async def sptdel(app, m: Message):
-	if len(m.command) == 1:
+async def speed_tests(app, m: Message):
+	if long(m) == 1:
 		await send_edit(m, "Testing speed . . .", mono=True)
 		test = speedtest.Speedtest()
 		test.get_best_server()
@@ -294,9 +289,9 @@ async def sptdel(app, m: Message):
 		if teks:
 			await send_edit(m, teks)
 		else:
-			await send_edit(m, "Something went wrong !!")
+			await send_edit(m, "Something went wrong !", mono=True, delme=5)
 	elif long(m) > 1 and "pic" in m.command[1]:
-		await send_edit(m, "Calculating Speed . . .")
+		msg = await send_edit(m, "Calculating Speed . . .")
 
 		start = datetime.now()
 		s = speedtest.Speedtest()
@@ -321,9 +316,9 @@ async def sptdel(app, m: Message):
 				caption="**Time Taken:** {} ms".format(ms),
 				parse_mode="markdown"
 			)
-			await m.delete()
+			await msg.delete()
 		else:
-			await send_edit(m, "Something went wrong !", mono=True)
+			await send_edit(m, "Something went wrong !", mono=True, delme=5)
 
 
 
