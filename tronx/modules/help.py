@@ -114,7 +114,6 @@ async def all_plugins(_, m: Message):
 
 @app.on_message(gen("inline"))
 async def _toggle_inline(_, m: Message):
-	await send_edit(m, "Processing command . . .", mono=True)
 	await toggle_inline(m)
 	return
 
