@@ -156,6 +156,7 @@ async def error(m: Message, e):
 	teks += f"Error:\n\n"
 	teks += f"{e}\n\n"
 	teks += f"{sys.exc_info()}\n\n"
+	teks += f"{traceback.format_exc())"
 	try:
 		await app.send_message(
 			Config.LOG_CHAT,
