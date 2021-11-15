@@ -371,7 +371,7 @@ async def _stats(_, cb):
 # about info
 @bot.on_callback_query(filters.regex("open-about-dex") & filters.user(USER_ID))
 async def _about(_, cb):
-	await cb.m.delete()
+	print(cb)
 	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
 			text="**Dex:** About\n\n**Location:** /home/about\n\n[ Personal Info ]:\n\nAge: 19\nName: Lara\nGender: Female\n\n[ Versions ]:\n\nPython : v.3.9.4\nPyrogram: v.1.2.8\nAssistant:  v.0.0.1\n\n[ About ]:\n\nI am Lara made by ࿇•ẞᗴᗩSԵ•࿇\nFrom now on i am your friendly assistant. You can ask me for any help related to your userbot.",
