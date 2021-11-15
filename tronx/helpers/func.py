@@ -4,6 +4,7 @@ import time
 import os
 import asyncio
 import traceback
+import sys
 
 from pyrogram import Client
 from pyrogram.types import Message
