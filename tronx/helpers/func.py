@@ -4,7 +4,6 @@ import time
 import os
 import asyncio
 import traceback
-import sys
 
 from pyrogram import Client
 from pyrogram.types import Message
@@ -154,9 +153,8 @@ async def error(m: Message, e):
 	teks += f"This can be a error in tronuserbot, if you want you can forward this to @tronuserbot.\n\n" 
 	teks += f"Command: {m.text}\n\n"
 	teks += f"Error:\n\n"
-	teks += f"{e}\n\n"
-	teks += f"{sys.exc_info()}\n\n"
-	teks += f"{traceback.format_exc()}"
+	teks += f"**SHORT:** \n\n{e}\n\n"
+	teks += f"**FULL:** \n\n{traceback.format_exc()}"
 	try:
 		await app.send_message(
 			Config.LOG_CHAT,
