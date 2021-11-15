@@ -96,7 +96,7 @@ async def alive(app, m: Message):
 
 
 
-@app.on_message(gen(["ialive", "inline"]))
+@app.on_message(gen("ialive"))
 async def inline_alive(app, m: Message):
 	await send_edit(m, "`...`")
 	try:
