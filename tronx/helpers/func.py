@@ -332,7 +332,7 @@ async def get_last_msg(m: Message):
 
 
 
-async def toggle_inline(_, m: Message):
+async def toggle_inline(m: Message):
 	try:
 		await app.send_message(93372553, "/mybots")# BotFather (93372553) 
 		asyncio.sleep(1) # 
