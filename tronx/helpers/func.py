@@ -13,6 +13,7 @@ from tronx import (
 	log,
 	PREFIX,
 	CMD_HELP,
+	BOT_USERNAME,
 )
 
 from config import Config
@@ -335,7 +336,7 @@ async def get_last_msg(m: Message):
 async def toggle_inline(m: Message):
 	try:
 		await app.send_message(93372553, "/mybots")# BotFather (93372553) 
-		asyncio.sleep(1) # 
+		await asyncio.sleep(1) # 
 
 		data = await get_last_msg(m)
 		usernames = list(data[0].reply_markup.inline_keyboard)[0]
