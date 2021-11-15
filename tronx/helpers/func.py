@@ -341,9 +341,9 @@ async def toggle_inline(m: Message):
 		usernames = list(data[0].reply_markup.inline_keyboard)[0]
 
 		unames = []
-		uname.clear()
+		unames.clear()
 
-		for x in a:
+		for x in usernames:
 			unames.append(x.text)
 
 		await send_edit(m, "Choosing bot . . . ", mono=True)
