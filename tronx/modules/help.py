@@ -46,13 +46,13 @@ async def help_menu(app, m):
 		args = False
 	try:
 		if args is False:
-			msg = await send_edit(m, "...", mono=True)
+			await send_edit(m, "...", mono=True)
 			result = await app.get_inline_bot_results(
 				botusername(), 
 				"#t5r4o9nn6" 
 			)
 			if result:
-				await msg.delete()
+				await m.delete()
 				await app.send_inline_bot_result(
 					m.chat.id, 
 					query_id=result.query_id, 
