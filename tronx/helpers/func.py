@@ -322,3 +322,60 @@ async def textlen(m: Message, one: int = 1):
 	except Exception as e:
 		print(e)
 		await error(m, e)
+
+
+
+
+async def get_last_msg(m: Message):
+	return await app.get_history(93372553, limit=1)
+
+
+
+
+async def toggle_inline(_, m: Message):
+	try:
+		await app.send_message(93372553, "/mybots")# BotFather (93372553) 
+		asyncio.sleep(1) # 
+
+		data = await get_last_msg(m)
+		usernames = list(data[0].reply_markup.inline_keyboard)[0]
+
+		unames = []
+		uname.clear()
+
+		for x in a:
+			unames.append(x.text)
+
+		await send_edit(m, "Choosing bot . . . ", mono=True)
+
+		if BOT_USERNAME in unames:
+			await data[0].click(BOT_USERNAME)
+		else:
+			return await send_edit(m, "Looks like you don't have a bot please, use your own bot . . .", mono=True, delme=True)
+
+		data = await get_last_msg(m)
+
+		await send_edit(m, "Pressing Bot Settings . . . ", mono=True)
+
+		await data[0].click("Bot Settings")
+
+		data = await get_last_msg(m)
+
+		await send_edit(m, "checking whether inline mode is On or Off . . . ", mono=True)
+
+		await data[0].click("Inline Mode")
+
+		data = await get_last_msg(m)
+
+		# Turn on inline mode
+		if "Turn on" in str(data[0]):
+			await send_edit(m, "Turning Inline mode on . . . ", mono=True)
+			await data[0].click("Turn on")
+			await send_edit(m, "Inline mode is now turned On.", mono=True, delme=True)
+		# Turn inline mode off
+		elif "Turn inline mode off" in str(data[0]):
+			await send_edit(m, "Turning Inline mode Off . . .", mono=True)
+			await data[0].click("Turn inline mode off")
+			await send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
+	except Exception as e:
+		await error(m, e)
