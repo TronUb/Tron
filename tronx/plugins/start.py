@@ -175,6 +175,7 @@ async def start(_, m: Message):
 # via bot messages
 @bot.on_inline_query(filters.user(USER_ID))
 def answer(_, inline_query):
+	print(inline_query)
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
 		inline_query.answer(
