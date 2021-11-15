@@ -18,6 +18,7 @@ from tronx.helpers import (
 	delete,
 	botusername,
 	data,
+	toggle_inline,
 )
 
 
@@ -29,6 +30,7 @@ CMD_HELP.update(
 		{
 		"help [ module name ]" : "Get commands info of that plugin.",
 		"help" : "Get your inline help dex.",
+		"inline" : "Toggle inline mode to On or Off of your bot through @BotFather",
 		}
 		)
 	}
@@ -106,6 +108,16 @@ async def all_plugins(_, m: Message):
 		m,
 		"Modules of userbot:\n\n" + "".join(store)
 		)
+
+
+
+
+@app.on_message(gen("inline"))
+async def _toggle_inline(_, m: Message):
+	await toggle_inline(m)
+	return
+
+
 
 
 
