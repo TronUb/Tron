@@ -119,7 +119,7 @@ def _ialive_pic():
 
 
 
-def _bot_bio(m Message):
+def _bot_bio(m: Message):
 	if bool(dv.getdv("BOT_BIO")):
 		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
 	elif Config.BOT_BIO:
