@@ -182,7 +182,7 @@ async def start(_, m: Message):
 				m.chat.id,
 				PIC,
 				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
-				reply_markup=InineKeyboardMarkup(
+				reply_markup=InlineKeyboardMarkup(
 					[global_command]
 				),
 			)
