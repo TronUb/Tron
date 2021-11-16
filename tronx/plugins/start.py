@@ -237,10 +237,9 @@ def inline_res(_, inline_query):
 				description="Tron helpdex",
 				caption=f"⛊  Inline Status:\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{version}`\n**⟜ Python:** `{__python_version__}`\n⟜ **Pyrogram:** `{__pyro_version__}`\n⟜ **uptime:** `{uptime()}\n\n",
 				parse_mode="markdown",
-				reply_markup=InlineKeyboardMarkup(
-					[home_back]
-				)
-				],
+				reply_markup=InlineKeyboardMarkup([home_back])
+			)
+			],
 		cache_time=1
 		)
 	elif query.startswith("#q7o5e"):
