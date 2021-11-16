@@ -171,7 +171,7 @@ async def start(_, m: Message):
 			else:
 				await bot.send_message(
 					m.chat.id,
-					_bot_bio(m)
+					_bot_bio(m),
 					reply_markup=InlineKeyboardMarkup(
 					[ settings, extra, about, close ]
 					),
