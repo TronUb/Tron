@@ -56,6 +56,7 @@ from tronx.database.postgres import dv_sql as dv
 
 # variables
 plugin_data = []
+plugin_data.clear()
 
 USER_ID = [USER_ID]
 
@@ -71,6 +72,9 @@ about = build_keyboard(([["About", "open-about-dex"]]))
 close = build_keyboard(([["Close", "close-dex"]]))
 approve = build_keyboard(([["Approve", "approve-user"]]))
 global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
+home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+
+
 
 
 
@@ -96,7 +100,7 @@ async def data(plug):
 # inline quotes
 def quote():
 	results = requests.get("https://animechan.vercel.app/api/random").json()
-	msg = f"❝ {results.get('quote')}❞"
+	msg = f"❝ {results.get('quote')} ❞"
 	msg += f" [ {results.get('anime')} ]\n\n"
 	msg += f"- {results.get('character')}\n\n"
 	return msg
@@ -115,54 +119,70 @@ def _ialive_pic():
 
 
 
+def _bot_bio(m Message):
+	if bool(dv.getdv("BOT_BIO")):
+		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
+	elif Config.BOT_BIO:
+		msg = Config.BOT_BIO + "\n\nCatagory: "
+	else:
+		msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
+	return msg
+
+
+
+
+def _bot_pic():
+	if bool(dv.getdv("BOT_PIC")):
+		bot_pic = dv.getdv("BOT_PIC")
+	elif Config.BOT_PIC:
+		bot_pic = Config.BOT_PIC
+	else:
+		bot_pic = False
+	return bot_pic
+
+
+
+
 # /start command for bot
 @bot.on_message(filters.command(["start"]))
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id in USER_ID:
-			# bot bio
-			if bool(dv.getdv("BOT_BIO")):
-				msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
-			elif Config.BOT_BIO:
-				msg = Config.BOT_BIO + "\n\nCatagory: "
-			else:
-				msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
-
 			# bot pic
-			if bool(dv.getdv("BOT_PIC")):
-				bot_pic = dv.getdv("BOT_PIC")
-			elif Config.BOT_PIC:
-				bot_pic = Config.BOT_PIC
-			else:
-				bot_pic = False
-
-			if bot_pic:
-				if bot_pic.endswith(".jpg" or "png" or "jpeg"):
+			if bot_pic():
+				if bot_pic().endswith(".jpg" or "png" or "jpeg"):
 					await bot.send_photo(
 						m.chat.id,
-						bot_pic,
-						msg,
+						bot_pic(),
+						_bot_bio(m),
 						reply_markup=InlineKeyboardMarkup(
 							[ settings, extra, about, close ]
 						),
 					)
-				elif bot_pic.endswitg(".mp4" or ".gif"):
+				elif bot_pic().endswitg(".mp4" or ".gif"):
 					await bot.send_photo(
 						m.chat.id,
-						bot_pic,
-						msg,
+						bot_pic(),
+						_bot_bio(m),
 						reply_markup=InlineKeyboardMarkup(
 							[ settings, extra, about, close ]
 						),
 					)
 			else:
-				return print("Failed to send /start message in pm")
+				await bot.send_message(
+					m.chat.id,
+					_bot_bio(m)
+					reply_markup=InlineKeyboardMarkup(
+					[ settings, extra, about, close ]
+					),
+				)
+				
 		elif m.from_user.id not in USER_ID:
 			await bot.send_photo(
 				m.chat.id,
 				PIC,
 				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
-				reply_markup=InlineKeyboardMarkup(
+				reply_markup=InineKeyboardMarkup(
 					[global_command]
 				),
 			)
@@ -174,7 +194,7 @@ async def start(_, m: Message):
 
 # via bot messages
 @bot.on_inline_query(filters.user(USER_ID))
-def answer(_, inline_query):
+def inline_res(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
 		inline_query.answer(
@@ -218,19 +238,9 @@ def answer(_, inline_query):
 				caption=f"⛊  Inline Status:\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{version}`\n**⟜ Python:** `{__python_version__}`\n⟜ **Pyrogram:** `{__pyro_version__}`\n⟜ **uptime:** `{uptime()}\n\n",
 				parse_mode="markdown",
 				reply_markup=InlineKeyboardMarkup(
-					[
-						[
-							InlineKeyboardButton(
-								"Home", callback_data="close-dex"
-							),
-							InlineKeyboardButton(
-								"Back", callback_data="open-start-dex"
-							)
-						],
-					]
+					[home_back]
 				)
-			)
-			],
+				],
 		cache_time=1
 		)
 	elif query.startswith("#q7o5e"):
@@ -354,19 +364,9 @@ async def _stats(_, cb):
 	if filters.regex("open-stats-dex"):
 		await cb.edit_message_text(
 			text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
-			reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton(
-							"Home", callback_data="close-dex",
-						),
-						InlineKeyboardButton(
-							"Back", callback_data="open-start-dex"
-						)
-					],
-				]
-			),
+			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
+
 
 # about info
 @bot.on_callback_query(filters.regex("open-about-dex") & filters.user(USER_ID))
@@ -374,20 +374,9 @@ async def _about(_, cb):
 	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
 			text="**Dex:** About\n\n**Location:** /home/about\n\n[ Personal Info ]:\n\nAge: 19\nName: Lara\nGender: Female\n\n[ Versions ]:\n\nPython : v.3.9.4\nPyrogram: v.1.2.8\nAssistant:  v.0.0.1\n\n[ About ]:\n\nI am Lara made by ࿇•ẞᗴᗩSԵ•࿇\nFrom now on i am your friendly assistant. You can ask me for any help related to your userbot.",
-			reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton(
-							"Home", callback_data="close-dex",
-						),
-						InlineKeyboardButton(
-							"Back", callback_data="open-start-dex"
-						)
-					],
-				]
-			),
+			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
-	print(cb.message)
+
 
 @bot.on_callback_query(filters.regex("public-commands") & filters.user(USER_ID))
 async def _public(_, cb):
@@ -418,17 +407,11 @@ async def _extra(_, cb):
 							callback_data="public-commands"
 							)
 					],
-					[
-						InlineKeyboardButton(
-							"Home", callback_data="close-dex",
-						),
-						InlineKeyboardButton(
-							"Back", callback_data="open-start-dex",
-						)
-					],
+					[home_back],
 				]
 			),
 		)
+
 
 @bot.on_callback_query(filters.regex("close-dex") & filters.user(USER_ID))
 async def _close(_, cb):
@@ -445,6 +428,7 @@ async def _close(_, cb):
 				]
 			),
 		)
+
 
 @bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
 async def _settings(_, cb):
@@ -463,19 +447,11 @@ async def _settings(_, cb):
 							"Shutdown bot", callback_data="shutdown-tron",
 						)
 					],
-					[
-						InlineKeyboardButton(
-							"Home", callback_data="close-dex",
-						)
-					],
-					[
-						InlineKeyboardButton(
-							"Back", callback_data="open-start-dex",
-						)
-					],
+					[home_back],
 				]
 			),
 		)
+
 
 @bot.on_callback_query(filters.regex("open-start-dex") & filters.user(USER_ID))
 async def _start(_, cb):
