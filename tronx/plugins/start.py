@@ -1,6 +1,7 @@
 import time
 import heroku3
 import requests
+import asyncio
 
 from sys import (
 	version_info, 
@@ -228,6 +229,8 @@ def inline_res(_, inline_query):
 			],
 		cache_time=1
 		)
+		await asyncio.sleep(2)
+		await inline_query.delete()
 	elif query.startswith("#i2l8v3"):
 		inline_query.answer(
 		results=[
