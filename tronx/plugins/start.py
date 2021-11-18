@@ -74,6 +74,7 @@ close = build_keyboard(([["Close", "close-dex"]]))
 approve = build_keyboard(([["Approve", "approve-user"]]))
 global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
 home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+home_back_extra = build_keyboard((["• Public commands •", "public-commands"], ["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -400,15 +401,7 @@ async def _extra(_, cb):
 		await cb.edit_message_text(
 			text="**Dex:** Extra\n\nLocation: /home/extra",
 			reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton(
-							"• Public commands •",
-							callback_data="public-commands"
-							)
-					],
-					[home_back],
-				]
+				[home_back_extra]
 			),
 		)
 
