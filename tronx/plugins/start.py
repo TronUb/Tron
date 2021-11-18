@@ -229,8 +229,6 @@ def inline_res(_, inline_query):
 			],
 		cache_time=1
 		)
-		time.sleep(2)
-		inline_query.delete()
 	elif query.startswith("#i2l8v3"):
 		inline_query.answer(
 		results=[
