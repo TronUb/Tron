@@ -131,14 +131,14 @@ def _bot_bio(m: Message):
 
 
 
-def _bot_pic():
+def bot_pic():
 	if bool(dv.getdv("BOT_PIC")):
-		bot_pic = dv.getdv("BOT_PIC")
+		_pic = dv.getdv("BOT_PIC")
 	elif Config.BOT_PIC:
-		bot_pic = Config.BOT_PIC
+		_pic = Config.BOT_PIC
 	else:
-		bot_pic = False
-	return bot_pic
+		_pic = False
+	return _pic
 
 
 
