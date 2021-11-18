@@ -249,7 +249,7 @@ async def setvar(_, m: Message):
 @app.on_message(gen("getvar"))
 async def getvar(_, m: Message):
 	await not_heroku(m)
-	elif long(m) == 1:
+	if long(m) == 1:
 		return await send_edit(
 			m, 
 			f"`{PREFIX}getvar [key name]`"
