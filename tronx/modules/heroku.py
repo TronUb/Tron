@@ -281,7 +281,7 @@ async def getvar(_, m: Message):
 @app.on_message(gen("delvar"))
 async def delvar(_, m: Message):
 	await not_heroku(m)
-	elif long(m) == 1:
+	if long(m) == 1:
 		return await send_edit(
 			m, 
 			f"{PREFIX}delvar [key name]", 
