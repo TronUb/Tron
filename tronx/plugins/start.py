@@ -263,7 +263,6 @@ def inline_res(_, inline_query):
 		],
 	cache_time=1
 	)
-	print(inline_query.message)
 
 
 
@@ -437,7 +436,7 @@ async def _close(_, cb: CallbackQuery):
 				]
 			),
 		)
-	print(cb.message.chat.id)
+	print(cb.message)
 
 
 @bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
