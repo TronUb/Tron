@@ -14,11 +14,12 @@ from tronx import (
 	PREFIX,
 	CMD_HELP,
 	BOT_USERNAME,
+	Config,
 )
 
-from config import Config
-
 from .user import mymention
+
+from tronx.database.postgres import dv_sql as dv
 
 
 
@@ -382,3 +383,51 @@ async def toggle_inline(m: Message):
 			await send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
 	except Exception as e:
 		await error(m, e)
+
+
+
+
+# inline quotes
+def quote():
+	results = requests.get("https://animechan.vercel.app/api/random").json()
+	msg = f"❝ {results.get('quote')} ❞"
+	msg += f" [ {results.get('anime')} ]\n\n"
+	msg += f"- {results.get('character')}\n\n"
+	return msg
+
+
+
+
+# inline alive pic
+def ialive_pic():
+	if dv.getdv("USER_PIC"):
+		pic = dv.getdv("USER_PIC")
+	elif Config.USER_PIC:
+		pic = Config.USER_PIC
+	return pic
+
+
+
+
+# bio of bot
+def bot_bio(m: Message):
+	if bool(dv.getdv("BOT_BIO")):
+		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
+	elif Config.BOT_BIO:
+		msg = Config.BOT_BIO + "\n\nCatagory: "
+	else:
+		msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
+	return msg
+
+
+
+
+# pic of bot
+def bot_pic():
+	if bool(dv.getdv("BOT_PIC")):
+		_pic = dv.getdv("BOT_PIC")
+	elif Config.BOT_PIC:
+		_pic = Config.BOT_PIC
+	else:
+		_pic = False
+	return _pic
