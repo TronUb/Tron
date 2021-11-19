@@ -46,9 +46,6 @@ from tronx import (
 from tronx.helpers import (
 	helpdex,
 	build_keyboard,
-	bot_pic,
-	bot_bio,
-	ialive_pic,
 )
 
 from tronx.database.postgres import pmpermit_sql as db
@@ -56,6 +53,10 @@ from tronx.database.postgres import dv_sql as dv
 
 
 
+
+# variables
+plugin_data = []
+plugin_data.clear()
 
 USER_ID = [USER_ID]
 
@@ -78,10 +79,66 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
+# get information of plugins
+async def data(plug):
+	try:
+		for x, y in zip(
+			CMD_HELP.get(plug)[1].keys(), 
+			CMD_HELP.get(plug)[1].values()
+			):
+			plugin_data.append(
+				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
+				)
+		return True
+	except Exception as e:
+		print(e)
+		return False
 
 
 
 
+# inline quotes
+def quote():
+	results = requests.get("https://animechan.vercel.app/api/random").json()
+	msg = f"❝ {results.get('quote')} ❞"
+	msg += f" [ {results.get('anime')} ]\n\n"
+	msg += f"- {results.get('character')}\n\n"
+	return msg
+
+
+
+
+# inline alive pic
+def _ialive_pic():
+	if dv.getdv("USER_PIC"):
+		pic = dv.getdv("USER_PIC")
+	elif Config.USER_PIC:
+		pic = Config.USER_PIC
+	return pic
+
+
+
+
+def bot_bio(m: Message):
+	if bool(dv.getdv("BOT_BIO")):
+		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
+	elif Config.BOT_BIO:
+		msg = Config.BOT_BIO + "\n\nCatagory: "
+	else:
+		msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
+	return msg
+
+
+
+
+def bot_pic():
+	if bool(dv.getdv("BOT_PIC")):
+		_pic = dv.getdv("BOT_PIC")
+	elif Config.BOT_PIC:
+		_pic = Config.BOT_PIC
+	else:
+		_pic = False
+	return _pic
 
 
 
@@ -89,44 +146,47 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 # /start command for bot
 @bot.on_message(filters.command(["start"]))
 async def start(_, m: Message):
-	if m.from_user and m.from_user.id in USER_ID:
-		# bot pic
-		if bot_pic().endswith(".jpg" or "png" or "jpeg"):
+	if m.from_user:
+		if m.from_user.id in USER_ID:
+			# bot pic
+			if bot_pic().endswith(".jpg" or "png" or "jpeg"):
+				await bot.send_photo(
+					m.chat.id,
+					bot_pic(),
+					bot_bio(m),
+					reply_markup=InlineKeyboardMarkup(
+						[ settings, extra, about, close ]
+					),
+				)
+			elif bot_pic().endswitg(".mp4" or ".gif"):
+				await bot.send_photo(
+					m.chat.id,
+					bot_pic(),
+					bot_bio(m),
+					reply_markup=InlineKeyboardMarkup(
+						[ settings, extra, about, close ]
+					),
+				)
+			else:
+				await bot.send_message(
+					m.chat.id,
+					bot_bio(m),
+					reply_markup=InlineKeyboardMarkup(
+					[ settings, extra, about, close ]
+					),
+				)
+
+		elif m.from_user.id not in USER_ID:
 			await bot.send_photo(
 				m.chat.id,
-				bot_pic(),
-				bot_bio(m),
+				PIC,
+				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
 				reply_markup=InlineKeyboardMarkup(
-					[ settings, extra, about, close ]
+					[global_command]
 				),
 			)
-		elif bot_pic().endswith(".mp4" or ".gif"):
-			await bot.send_video(
-				m.chat.id,
-				bot_pic(),
-				bot_bio(m),
-				reply_markup=InlineKeyboardMarkup(
-					[ settings, extra, about, close ]
-				),
-			)
-		else:
-			await bot.send_message(
-				m.chat.id,
-				bot_bio(m),
-				reply_markup=InlineKeyboardMarkup(
-				[ settings, extra, about, close ]
-				),
-			)
-
-	elif m.from_user.id not in USER_ID:
-		await bot.send_photo(
-			m.chat.id,
-			PIC,
-			f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
-			reply_markup=InlineKeyboardMarkup(
-				[global_command]
-			),
-		)
+	else:
+		return
 
 
 
@@ -295,19 +355,31 @@ async def give_plugin_cmds(_, cb):
 
 
 
-@bot.on_callback_query(filters.user(USER_ID))
-async def _shutdown_tron(_, cb):
+
+# list of helpdex
+@bot.on_callback_query(filters.regex("open-stats-dex"))
+async def _stats(_, cb):
+	await alert_user(cb)
 	if filters.regex("open-stats-dex"):
 		await cb.edit_message_text(
 			text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
 			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
-	elif filters.regex("open-about-dex"):
+
+
+# about info
+@bot.on_callback_query(filters.regex("open-about-dex") & filters.user(USER_ID))
+async def _about(_, cb):
+	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
 			text="**Dex:** About\n\n**Location:** /home/about\n\n[ Personal Info ]:\n\nAge: 19\nName: Lara\nGender: Female\n\n[ Versions ]:\n\nPython : v.3.9.4\nPyrogram: v.1.2.8\nAssistant:  v.0.0.1\n\n[ About ]:\n\nI am Lara made by ࿇•ẞᗴᗩSԵ•࿇\nFrom now on i am your friendly assistant. You can ask me for any help related to your userbot.",
 			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
-	elif filters.regex("public-commands"):
+
+
+@bot.on_callback_query(filters.regex("public-commands") & filters.user(USER_ID))
+async def _public(_, cb):
+	if filters.regex("public-commands"):
 		await cb.edit_message_text(
 			text="**Dex:** Extra\n\n**Location:** /home/extra/public commands\n\nCOMMAND: /start \n**USAGE:** Check that bot is on or off.\n\n**COMMAND:** /help\n**USAGE:** Need help? Type this command.\n\n**COMMAND:** /anime\n**USAGE:** Search anime to get anime information.\n\n**COMMAND:** /manga\n**USAGE:** Search manga to get manga information.\n\n**COMMAND:** /airing\n**USAGE:** Search ongoing anime and get information.\n\n**COMMAND:** /character\n**USAGE:** Search anime character and get their information.\n\n**COMMAND:** /quote\n**USAGE:** Get random anime character quote with a “more” inline button to change random quote infinitely.\n\n**COMMAND:** /ping\n**USAGE:** Test the speed of our bot and get results.\n\n",
 			reply_markup=InlineKeyboardMarkup(
@@ -320,7 +392,10 @@ async def _shutdown_tron(_, cb):
 				]
 			),
 		)
-	elif filters.regex("open-extra-dex"):
+
+@bot.on_callback_query(filters.regex("open-extra-dex") & filters.user(USER_ID))
+async def _extra(_, cb):
+	if filters.regex("open-extra-dex"):
 		await cb.edit_message_text(
 			text="**Dex:** Extra\n\nLocation: /home/extra",
 			reply_markup=InlineKeyboardMarkup(
@@ -344,7 +419,11 @@ async def _shutdown_tron(_, cb):
 				]
 			),
 		)
-	elif filters.regex("close-dex"):
+
+
+@bot.on_callback_query(filters.regex("close-dex") & filters.user(USER_ID))
+async def _close(_, cb: CallbackQuery):
+	if filters.regex("close-dex"):
 		await cb.edit_message_text(
 			text="Welcome to Tron.\n\nThis is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA ).\n\n• Menu is closed.",
 			reply_markup=InlineKeyboardMarkup(
@@ -357,7 +436,12 @@ async def _shutdown_tron(_, cb):
 				]
 			),
 		)
-	elif filters.regex("open-settings-dex"):
+	print(cb.message)
+
+
+@bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
+async def _settings(_, cb):
+	if filters.regex("open-settings-dex"):
 		await cb.edit_message_text(
 			text="**Dex:** Settings\n\n**Location:** /home/settings",
 			reply_markup=InlineKeyboardMarkup(
@@ -372,18 +456,96 @@ async def _shutdown_tron(_, cb):
 							"Shutdown bot", callback_data="shutdown-tron",
 						)
 					],
-					[home_back],
+					home_back,
 				]
 			),
 		)
-	elif filters.regex("open-start-dex"):
+
+
+@bot.on_callback_query(filters.regex("open-start-dex") & filters.user(USER_ID))
+async def _start(_, cb):
+	if filters.regex("open-start-dex"):
 		await cb.edit_message_text(
 			text = "**Dex:** Home\n\n**Description:** This is your helpdex use to navigate in different sub dex to information.",
 			reply_markup=InlineKeyboardMarkup(
 				[settings, extra, about, close]
 			),
 		)
-	elif filters.regex("shutdown-tron"):
+
+@bot.on_callback_query(filters.regex("restart-tron") & filters.user(USER_ID))
+async def _restart_tron(_, cb):
+	if filters.regex("restart-tron"):
+		await cb.edit_message_text(
+			text="**Dex:** restart bot ( before confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\nPress the Confirm button to restart userbot...",
+			reply_markup=InlineKeyboardMarkup(
+				[ 
+					[
+						InlineKeyboardButton(
+							"Confirm", callback_data="restart-core",
+						),
+					],
+					[
+						InlineKeyboardButton(
+							"Home", callback_data="close-dex",
+						),
+						InlineKeyboardButton(
+							"Back", callback_data="open-settings-dex"
+						)
+					],
+				]
+			),
+		)
+
+@bot.on_callback_query(filters.regex("restart-core") & filters.user(USER_ID))
+async def _restart_core(_, cb):
+	if filters.regex("restart-core"):
+		await cb.edit_message_text(
+			text="**Dex:** restart bot ( after confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Restarting bot... please wait...`", 
+			reply_markup=InlineKeyboardMarkup(
+				[
+					[
+						InlineKeyboardButton(
+							text="Back", callback_data=f"open-settings-dex"
+						),
+					],
+				]
+			),
+		)
+		access = heroku3.from_key(Config.HEROKU_API_KEY)
+		application = access.apps()[Config.HEROKU_APP_NAME]
+		restart = application.restart()
+		if not restart:
+			await cb.edit_message_text(
+				"**Dex:** restart bot ( after confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Failed to restart userbot, please do it manually !!`",
+				reply_markup=InlineKeyboardMarkup(
+					[
+						[
+							InlineKeyboardButton(
+								text="Back", 
+								callback_data=f"open-settings-dex"
+							),
+						],
+					]
+				),
+			)
+		else:
+			await cb.edit_message_text(
+				"**Dex:** restart bot ( before confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Please wait 2-3 minutes to reboot userbot...`",
+				reply_markup=InlineKeyboardMarkup(
+					[
+						[
+							InlineKeyboardButton(
+								text="Back", 
+								callback_data=f"open-settings-dex"
+							),
+						],
+					]
+				),
+			)
+
+@bot.on_callback_query(filters.regex("shutdown-tron") & filters.user(USER_ID))
+async def _shutdown_tron(_, cb):
+	if filters.regex("shutdown-tron"):
 		await cb.edit_message_text(
 			text="**Dex:** shutdown bot ( before confirm )\n\n**Location:** /home/settings/shutdown bot/confirm\n\n**Process:** Press the Confirm button to shutdown the userbot...",
 			reply_markup=InlineKeyboardMarkup(
@@ -405,7 +567,11 @@ async def _shutdown_tron(_, cb):
 				]
 			),
 		)
-	elif filters.regex("shutdown-core"):
+
+@bot.on_callback_query(filters.regex("shutdown-core"))
+async def _shutdown_core(_, cb):
+	await alert_user(cb)
+	if filters.regex("shutdown-core"):
 		await cb.edit_message_text(
 			text="**Dex:** shutdown bot ( after confirm )\n\n**Location:** /home/settings/shutdown bot/confirm\n\n`Turning the userbot off, please wait...`", 
 			reply_markup=InlineKeyboardMarkup(
@@ -453,85 +619,23 @@ async def _shutdown_tron(_, cb):
 				)
 			else:
 				sys.exit(0)
-	elif filters.regex("more-anime-quotes"):
-		await cb.edit_message_text(
-			quote(),
-			reply_markup=InlineKeyboardMarkup(
+
+@bot.on_callback_query(filters.regex("more-anime-quotes"))
+async def _more_anime_quotes(_, cb):
+	await alert_user(cb)
+	await cb.edit_message_text(
+		quote(),
+		reply_markup=InlineKeyboardMarkup(
+			[
 				[
-					[
-						InlineKeyboardButton(
-							"More", 
-							callback_data="more-anime-quotes",
-						),
-					]
+					InlineKeyboardButton(
+						"More", 
+						callback_data="more-anime-quotes",
+					),
 				]
-			),
-		)
-	elif filters.regex("restart-core"):
-		await cb.edit_message_text(
-			text="**Dex:** restart bot ( after confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Restarting bot... please wait...`", 
-			reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton(
-							text="Back", callback_data=f"open-settings-dex"
-						),
-					],
-				]
-			),
-		)
-		access = heroku3.from_key(Config.HEROKU_API_KEY)
-		application = access.apps()[Config.HEROKU_APP_NAME]
-		restart = application.restart()
-		if not restart:
-			await cb.edit_message_text(
-				"**Dex:** restart bot ( after confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Failed to restart userbot, please do it manually !!`",
-				reply_markup=InlineKeyboardMarkup(
-					[
-						[
-							InlineKeyboardButton(
-								text="Back", 
-								callback_data=f"open-settings-dex"
-							),
-						],
-					]
-				),
-			)
-		else:
-			await cb.edit_message_text(
-				"**Dex:** restart bot ( before confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\n**Process:** `Please wait 2-3 minutes to reboot userbot...`",
-				reply_markup=InlineKeyboardMarkup(
-					[
-						[
-							InlineKeyboardButton(
-								text="Back", 
-								callback_data=f"open-settings-dex"
-							),
-						],
-					]
-				),
-			)
-	elif filters.regex("restart-tron"):
-		await cb.edit_message_text(
-			text="**Dex:** restart bot ( before confirm )\n\n**Location:** /home/settings/restart bot/confirm\n\nPress the Confirm button to restart userbot...",
-			reply_markup=InlineKeyboardMarkup(
-				[ 
-					[
-						InlineKeyboardButton(
-							"Confirm", callback_data="restart-core",
-						),
-					],
-					[
-						InlineKeyboardButton(
-							"Home", callback_data="close-dex",
-						),
-						InlineKeyboardButton(
-							"Back", callback_data="open-settings-dex"
-						)
-					],
-				]
-			),
-		)
+			]
+		),
+	)
 
 
 @bot.on_callback_query(filters.regex("global-commands"))
@@ -549,7 +653,11 @@ async def _global_commands(_, cb):
 				]
 			),
 		)
-	elif filters.regex("back-to-info"):
+
+
+@bot.on_callback_query(filters.regex("back-to-info"))
+async def _back_to_info(_, cb):
+	if filters.regex("back-to-info"):
 		await cb.edit_message_text(
 			f"You are a global user that's why you can use these commands, check below.",
 			reply_markup=InlineKeyboardMarkup(
@@ -569,7 +677,7 @@ async def _global_commands(_, cb):
 async def alert_user(cb, back=True):
 	if not cb.from_user.id == USER_ID:
 		await app.answer_callback_query(
-			cb.id,
+			cb.inline_message_id,
 			"Sorry you are not allowed to perform this action !",
 			show_alert=True,
 		)
@@ -577,4 +685,3 @@ async def alert_user(cb, back=True):
 			return
 
 # ---------------- The End ---------------------------------------
-
