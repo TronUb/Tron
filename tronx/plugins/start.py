@@ -567,8 +567,9 @@ async def _shutdown_tron(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("shutdown-core") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("shutdown-core"))
 async def _shutdown_core(_, cb):
+	await alert_user(cb)
 	if filters.regex("shutdown-core"):
 		await cb.edit_message_text(
 			text="**Dex:** shutdown bot ( after confirm )\n\n**Location:** /home/settings/shutdown bot/confirm\n\n`Turning the userbot off, please wait...`", 
@@ -618,22 +619,23 @@ async def _shutdown_core(_, cb):
 			else:
 				sys.exit(0)
 
-@bot.on_callback_query(filters.regex("more-anime-quotes") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("more-anime-quotes"))
 async def _more_anime_quotes(_, cb):
-	if filters.regex("more-anime-quotes"):
-		await cb.edit_message_text(
-			quote(),
-			reply_markup=InlineKeyboardMarkup(
+	await alert_user(cb)
+	await cb.edit_message_text(
+		quote(),
+		reply_markup=InlineKeyboardMarkup(
+			[
 				[
-					[
-						InlineKeyboardButton(
-							"More", 
-							callback_data="more-anime-quotes",
-						),
-					]
+					InlineKeyboardButton(
+						"More", 
+						callback_data="more-anime-quotes",
+					),
 				]
-			),
-		)
+			]
+		),
+	)
+
 
 @bot.on_callback_query(filters.regex("global-commands"))
 async def _global_commands(_, cb):
@@ -650,6 +652,7 @@ async def _global_commands(_, cb):
 				]
 			),
 		)
+
 
 @bot.on_callback_query(filters.regex("back-to-info"))
 async def _back_to_info(_, cb):
@@ -669,6 +672,16 @@ async def _back_to_info(_, cb):
 
 
 
+
+async def alert_user(cb, back=True):
+	if not cb.from_user.id == USER_ID:
+		await app.answer_callback_query(
+			cb.id,
+			"Sorry you are not allowed to perform this action !",
+			show_alert=True,
+		)
+		if back:
+			return
 
 # ---------------- The End ---------------------------------------
 
