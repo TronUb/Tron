@@ -1,7 +1,6 @@
 import time
 import heroku3
 import requests
-import asyncio
 
 from sys import (
 	version_info, 
@@ -74,7 +73,6 @@ close = build_keyboard(([["Close", "close-dex"]]))
 approve = build_keyboard(([["Approve", "approve-user"]]))
 global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
 home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
-home_back_extra = build_keyboard((["• Public commands •", "public-commands"], ["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -121,7 +119,7 @@ def _ialive_pic():
 
 
 
-def _bot_bio(m: Message):
+def bot_bio(m: Message):
 	if bool(dv.getdv("BOT_BIO")):
 		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
 	elif Config.BOT_BIO:
@@ -151,34 +149,33 @@ async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id in USER_ID:
 			# bot pic
-			if bot_pic():
-				if bot_pic().endswith(".jpg" or "png" or "jpeg"):
-					await bot.send_photo(
-						m.chat.id,
-						bot_pic(),
-						_bot_bio(m),
-						reply_markup=InlineKeyboardMarkup(
-							[ settings, extra, about, close ]
-						),
-					)
-				elif bot_pic().endswitg(".mp4" or ".gif"):
-					await bot.send_photo(
-						m.chat.id,
-						bot_pic(),
-						_bot_bio(m),
-						reply_markup=InlineKeyboardMarkup(
-							[ settings, extra, about, close ]
-						),
-					)
+			if bot_pic().endswith(".jpg" or "png" or "jpeg"):
+				await bot.send_photo(
+					m.chat.id,
+					bot_pic(),
+					bot_bio(m),
+					reply_markup=InlineKeyboardMarkup(
+						[ settings, extra, about, close ]
+					),
+				)
+			elif bot_pic().endswitg(".mp4" or ".gif"):
+				await bot.send_photo(
+					m.chat.id,
+					bot_pic(),
+					bot_bio(m),
+					reply_markup=InlineKeyboardMarkup(
+						[ settings, extra, about, close ]
+					),
+				)
 			else:
 				await bot.send_message(
 					m.chat.id,
-					_bot_bio(m),
+					bot_bio(m),
 					reply_markup=InlineKeyboardMarkup(
 					[ settings, extra, about, close ]
 					),
 				)
-				
+
 		elif m.from_user.id not in USER_ID:
 			await bot.send_photo(
 				m.chat.id,
@@ -401,13 +398,31 @@ async def _extra(_, cb):
 		await cb.edit_message_text(
 			text="**Dex:** Extra\n\nLocation: /home/extra",
 			reply_markup=InlineKeyboardMarkup(
-				[home_back_extra]
+				[
+					[
+						InlineKeyboardButton(
+							"• Public commands •",
+							callback_data="public-commands"
+							)
+					],
+					[
+						InlineKeyboardButton(
+							"Home",
+							callback_data="close-dex"
+							),
+						InlineKeyboardButton(
+							"Back",
+							callback_data="open-start-dex"
+							)
+					],
+				]
 			),
 		)
 
 
 @bot.on_callback_query(filters.regex("close-dex") & filters.user(USER_ID))
 async def _close(_, cb):
+	print(cb)
 	if filters.regex("close-dex"):
 		await cb.edit_message_text(
 			text="Welcome to Tron.\n\nThis is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA ).\n\n• Menu is closed.",
