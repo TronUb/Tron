@@ -456,7 +456,7 @@ async def _settings(_, cb):
 							"Shutdown bot", callback_data="shutdown-tron",
 						)
 					],
-					[home_back],
+					home_back,
 				]
 			),
 		)
