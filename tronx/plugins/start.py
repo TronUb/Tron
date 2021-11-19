@@ -263,6 +263,7 @@ def inline_res(_, inline_query):
 		],
 	cache_time=1
 	)
+	print(inline_query.message)
 
 
 
@@ -423,7 +424,6 @@ async def _extra(_, cb):
 
 @bot.on_callback_query(filters.regex("close-dex") & filters.user(USER_ID))
 async def _close(_, cb: CallbackQuery):
-	print(cb.message.chat.id)
 	if filters.regex("close-dex"):
 		await cb.edit_message_text(
 			text="Welcome to Tron.\n\nThis is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA ).\n\n• Menu is closed.",
@@ -437,6 +437,7 @@ async def _close(_, cb: CallbackQuery):
 				]
 			),
 		)
+	print(cb.message.chat.id)
 
 
 @bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
