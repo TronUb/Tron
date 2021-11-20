@@ -29,6 +29,7 @@ from tronx.helpers import (
 	# others 
 	clear_string, 
 	speed_convert,
+	create_file,
 )
 
 
@@ -140,29 +141,16 @@ async def evaluate(_, m: Message):
 
 
 @app.on_message(gen("json"))
-async def get_json_of_msg(app, m: Message):
+async def json_of_msg(_, m: Message):
 	reply = m.reply_to_message
 
-	if reply:
-		data = reply
-	else:
-		data = m
+	data = reply if reply else m
 
 	try:
-		await send_edit(m, f"{name}")
-	except Exception: # message too long
+		await send_edit(m, data, mono=True)
+	except MessageTooLong: # message too long
 		await send_edit(m, "Sending file . . .", mono=True)
-
-		new = open("json.txt", "w+")
-		new.write(str(data))
-		new.close()
-		await app.send_document(
-			m.chat.id,
-			new,
-			caption=f"Uploaded By: {mymention()}"
-			)
-		await m.delete()
-		os.remove(new)
+		await create_file(m, "json.txt", data)
 
 
 
