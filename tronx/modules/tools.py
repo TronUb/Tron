@@ -158,7 +158,7 @@ async def get_json_of_msg(app, m: Message):
 		new.close()
 		await app.send_document(
 			m.chat.id,
-			file,
+			new,
 			caption=f"Uploaded By: {mymention()}"
 			)
 		await m.delete()
