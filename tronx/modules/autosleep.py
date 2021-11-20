@@ -12,7 +12,7 @@ from tronx.helpers import (
 
 
 
-@app.on_user_status(filters.me)
+@app.on_user_status(filters.user("me"))
 async def sleep_when_offline(_, m):
 	await asyncio.sleep(10)
 	print("Client is sleeping for 10 seconds, because owner is offline !")
