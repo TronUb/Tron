@@ -56,7 +56,7 @@ async def quote(_, m: Message):
 	if msg_id := msg[0]["message_id"]:
 		await asyncio.gather(
 			m.delete(),
-			app.forward_messages(
+			app.copy_message(
 				m.chat.id, 
 				"@QuotLyBot", 
 				msg_id
