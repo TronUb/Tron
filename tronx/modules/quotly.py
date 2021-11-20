@@ -39,6 +39,7 @@ async def quote(_, m: Message):
 	if not reply:
 		return await send_edit(m, "Reply to any users text message", delme=2)
 
+	await send_edit(m, "Making a Quote . . .", mono=True)
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0
@@ -52,7 +53,6 @@ async def quote(_, m: Message):
 			is_sticker = False
 		except:
 			await sleep(0.5)
-	await send_edit(m, "Making a Quote . . .", mono=True)
 	if msg_id := msg[0]["message_id"]:
 		await asyncio.gather(
 			m.delete(),
