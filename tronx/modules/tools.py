@@ -147,7 +147,7 @@ async def evaluate(_, m: Message):
 async def json_of_msg(_, m: Message):
 	reply = m.reply_to_message
 
-	data = reply if reply else m
+	data = str(reply) if reply else str(m)
 
 	try:
 		await send_edit(m, data, mono=True)
