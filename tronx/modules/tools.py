@@ -13,6 +13,9 @@ from currency_converter import CurrencyConverter
 
 from pyrogram import filters, __version__, client
 from pyrogram.types import Message
+from pyrogram.errors import (
+	MessageTooLong,
+)
 
 from tronx import (
 	app, 
