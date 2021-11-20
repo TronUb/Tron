@@ -162,7 +162,7 @@ async def get_json_of_msg(app, m: Message):
 			caption=f"Uploaded By: {mymention()}"
 			)
 		await m.delete()
-		os.remove(file)
+		os.remove(new)
 
 
 
