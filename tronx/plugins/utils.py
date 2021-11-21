@@ -6,6 +6,7 @@ from tronx import (
 
 from tronx.helpers import (
 	error,
+	quote,
 )
 
 
@@ -24,3 +25,15 @@ async def id_of_user(_, m):
 			m.chat.id,
 			f"**YOUR ID:** `{m.from_user.id}`\n**CHAT ID:** `{m.chat.id}`\n**REPLIED ID:** `{reply.from_user.id}`"
 		)
+
+
+
+
+@bot.on_message(filters.command("/quote"))
+async def get_anime_quotes(_, m):
+	await bot.send_message(
+		m.chat.id,
+		quote()
+	)
+
+
