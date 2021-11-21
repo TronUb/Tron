@@ -29,7 +29,7 @@ async def id_of_user(_, m):
 
 
 
-@bot.on_message(filters.command("/quote"))
+@bot.on_message(filters.command("quote"))
 async def get_anime_quotes(_, m):
 	await bot.send_message(
 		m.chat.id,
