@@ -20,6 +20,7 @@ from tronx.helpers import (
 
 @app.on_message(gen("kbd"))
 async def create_keyboard(_, m):
+	await m.delete()
 	if m.chat.type == "bot":
 		return await send_edit(m, "Sorry you can't use it here", mono=True)
 	if long(m) >= 3:
