@@ -11,7 +11,7 @@ from tronx.helpers import (
 
 
 
-@bot.on_message(filters.regex("+1"))
+@bot.on_message(filters.command("1", "+"))
 async def increment(_, m):
 	reply = m.reply_to_message
 	if reply:
