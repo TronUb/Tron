@@ -19,7 +19,7 @@ async def increment(_, m):
 	if reply:
 		if str(reply.from_user.id) in collect:
 			data = collect.get(str(reply.from_user.id)) 
-			collect.update({str(reply.from_user.id) : str(int(data) + 1))
+			collect.update({str(reply.from_user.id) : str(int(data) + 1)})
 			await bot.send_message(
 				m.chat.id,
 				f"{reply.from_user.id}: " + str(int(data)+1) + "increment"
