@@ -63,10 +63,7 @@ CMD_HELP.update(
 
 @app.on_message(gen("ls"))
 async def list_directories(_, m: Message):
-	if long(m) == 1:
-		location = "."
-	elif long(m) >= 2:
-		location = m.command[1]
+	location = "." if long(m) == 1 else m.command[1] if long(m) >= 2 else None
 
 	location = os.path.abspath(location)
 	if not location.endswith("/"):
@@ -79,34 +76,32 @@ async def list_directories(_, m: Message):
 		files = os.listdir(location)
 		files.sort()  # Sort the files
 	except FileNotFoundError:
-		await send_edit(m, f"No such file or directory {location}", delme=2)
-		return
+		return await send_edit(m, f"No such file or directory {location}", delme=2)
+
 	collect = []
 	collect.clear()
 
 	for file in files:
-		if not file.endswith(".session"):
-			if not file in ["__pycache__", ".git", ".github"]:
-				if os.path.isfile(f"{location}/{file}"):
-					collect.append(f"📑 `{file}` ({get_directory_size(os.path.abspath(location+file))})")
-				if os.path.isdir(f"{location}/{file}"):
-					collect.append(f"🗂️ `{file}` ({get_directory_size(os.path.abspath(location+file))})")
+		if not (file.endswith(".session") and file in ["__pycache__", ".git", ".github", ".profile.d", ".heroku"]):
+			if os.path.isfile(f"{location}/{file}"):
+				collect.append(f"📑 `{file}` ({get_directory_size(os.path.abspath(location+file))})")
+			if os.path.isdir(f"{location}/{file}"):
+				collect.append(f"🗂️ `{file}` ({get_directory_size(os.path.abspath(location+file))})")
 					
 	collect.sort()
 	file = "\n".join(collect)
 	OUTPUT += f"{file}"
 
 	if len(OUTPUT) > 4096:
+		await m.delete()
 		await create_file(
 				m, 
 				app, 
 				filename="dict.txt", 
 				text=OUTPUT
 			)
-		await m.delete()
 	elif OUTPUT.endswith("\n\n"):
-		await send_edit(m, f"No files in {location}", delme=2)
-		return
+		return await send_edit(m, f"No files in {location}", delme=2)
 	await send_edit(m, OUTPUT)
 
 
@@ -115,7 +110,7 @@ async def list_directories(_, m: Message):
 
 @app.on_message(gen(["download", "dl"]))
 async def download_media(_, m: Message):
-	await send_edit(m, "⏳ •Downloading...")
+	await send_edit(m, "⏳ •Downloading . . .")
 	reply = m.reply_to_message
 	if reply and reply.media:
 		try:
@@ -137,7 +132,7 @@ async def download_media(_, m: Message):
 				await send_edit(
 					m, 
 					f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`",
-					parse_mode="markdown",
+					parse_mode="combined",
 				)
 		except Exception as e:
 			await error(m, e)
@@ -205,11 +200,10 @@ async def download_media(_, m: Message):
 				)
 		except Exception:
 			exc = traceback.format_exc()
-			await send_edit(
+			return await send_edit(
 				m, 
 				f"Failed Download!\n{exc}"
 				)
-			return
 	else:
 		await send_edit(m, "Reply to a Telegram Media to download it to local server.", delme=2)
 
@@ -219,7 +213,7 @@ async def download_media(_, m: Message):
 
 @app.on_message(gen(["upload", "ul"]))
 async def upload_as_document(_, m: Message):
-	await send_edit(m, "`...`")
+	await send_edit(m, ". . .", mono=True)
 
 	if long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
@@ -249,11 +243,12 @@ async def upload_as_document(_, m: Message):
 		else:
 			await send_edit(
 				m, 
-				"404: media not found ..."
+				"404: media not found ...",
+				mono=True
 				)
 	else:
 		await send_edit(m, f"`{PREFIX}upload [file path ]` to upload to current Telegram chat", delme=2)
-	return
+
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -261,11 +256,10 @@ async def upload_as_document(_, m: Message):
 
 @app.on_message(gen("batchup"))
 async def covid(_, m: Message):
-	if len(m.text.split()) == 1:
-		await send_edit(m, "`Give me a location to upload files from the directory ...`", delme=2)
-		return
+	if long(m) == 1:
+		return await send_edit(m, "`Give me a location to upload files from the directory ...`", delme=2)
 
-	elif len(m.text.split()) >= 2:
+	elif long(m) >= 2:
 		temp_dir = m.text.split(None, 1)[1]
 		if not temp_dir.endswith("/"):
 			temp_dir += "/"
@@ -304,4 +298,3 @@ async def covid(_, m: Message):
 		return
 	await send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
 	log.info("Uploaded all files in batch !!")
-	return
