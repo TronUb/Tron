@@ -26,7 +26,7 @@ async def increment(_, m):
 			)
 		elif str(reply.from_user.id) not in collect:
 			data = {str(reply.from_user.id) : str(1)}
-			collect.append(data)
+			collect.update(data)
 			await bot.send_message(
 				m.chat.id,
 				f"{reply.from_user.first_name}: 1 increment"
