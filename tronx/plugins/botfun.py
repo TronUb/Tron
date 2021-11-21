@@ -9,13 +9,25 @@ from tronx.helpers import (
 )
 
 
+collect = {}
+
 
 
 @bot.on_message(filters.command("1", "+"))
 async def increment(_, m):
 	reply = m.reply_to_message
 	if reply:
-		await bot.send_message(
-			m.chat.id,
-			f"{reply.from_user.first_name}: 1 increment"
-		) 
+		if str(reply.from_user.id) in collect:
+			data = collect.get(str(reply.from_user.id)) 
+			collect.update({str(reply.from_user.id) : str(int(data) + 1))
+			await bot.send_message(
+				m.chat.id,
+				f"{reply.from_user.id}: " + str(int(data)+1) + "increment"
+			)
+		elif str(reply.from_user.id) not in collect:
+			data = {str(reply.from_user.id) : str(1)}
+			collect.append(data)
+			await bot.send_message(
+				m.chat.id,
+				f"{reply.from_user.first_name}: 1 increment"
+			) 
