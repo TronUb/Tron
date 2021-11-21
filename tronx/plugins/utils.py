@@ -17,10 +17,10 @@ async def id_of_user(_, m):
 	if not reply:
 		await bot.send_message(
 			m.chat.id,
-			"**YOUR ID:** `{m.from_user.id}`\n**CHAT ID:** `{m.chat.id}`"
+			f"**YOUR ID:** `{m.from_user.id}`\n**CHAT ID:** `{m.chat.id}`"
 		)
 	elif reply:
 		await bot.send_message(
 			m.chat.id,
-			"**YOUR ID:** `{m.from_user.id}`\n**CHAT ID:** `{m.chat.id}`\n**REPLIED ID:** `{reply.from_user.id}`"
+			f"**YOUR ID:** `{m.from_user.id}`\n**CHAT ID:** `{m.chat.id}`\n**REPLIED ID:** `{reply.from_user.id}`"
 		)
