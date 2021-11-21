@@ -16,7 +16,7 @@ collect = {}
 @bot.on_message(filters.command("1", "+") & filters.group)
 async def increment(_, m):
 	reply = m.reply_to_message
-	if m.from_user.id == reply.from_user.id:
+	if (m.from_user.id == reply.from_user.id) or (reply.from_user.is_bot):
 		return
 	if reply:
 		if str(reply.from_user.id) in collect:
@@ -40,7 +40,7 @@ async def increment(_, m):
 @bot.on_message(filters.command("1", "-") & filters.group)
 async def increment(_, m):
 	reply = m.reply_to_message
-	if m.from_user.id == reply.from_user.id:
+	if (m.from_user.id == reply.from_user.id) or (reply.from_user.is_bot):
 		return
 	if reply:
 		if str(reply.from_user.id) in collect:
