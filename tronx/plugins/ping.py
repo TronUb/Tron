@@ -11,7 +11,7 @@ from tronx import (
 
 
 
-@bot.on_message(filters.command(["ping"]))
+@bot.on_message(filters.command("ping"))
 async def bot_ping(_, m: Message):
 	if m.chat.type in ["bot"]:
 		start = datetime.now()
