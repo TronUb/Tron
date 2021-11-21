@@ -13,7 +13,7 @@ from tronx import (
 
 @bot.on_message(filters.command("ping"))
 async def bot_ping(_, m: Message):
-	if m.chat.type in ["bot"]:
+	if not m.chat.type in ["supergroup", "group"]:
 		start = datetime.now()
 		end = datetime.now()
 		ms = (end - start).microseconds / 1000
