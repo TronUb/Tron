@@ -13,10 +13,10 @@ collect = {}
 
 
 
-@bot.on_message(filters.command("1", "+") & filters.group)
+@bot.on_message(filters.command("1", "+") & filters.group & ~filters.bot)
 async def increment(_, m):
 	reply = m.reply_to_message
-	if reply.from_user.is_self:
+	if m.from_user.is_self:
 		return
 	if reply:
 		if str(reply.from_user.id) in collect:
@@ -37,10 +37,10 @@ async def increment(_, m):
 
 
 
-@bot.on_message(filters.command("1", "-") & filters.group)
+@bot.on_message(filters.command("1", "-") & filters.group & ~filters.bot)
 async def increment(_, m):
 	reply = m.reply_to_message
-	if reply.from_user.is_self:
+	if m.from_user.is_self:
 		return
 	if reply:
 		if str(reply.from_user.id) in collect:
