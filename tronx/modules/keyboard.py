@@ -20,10 +20,12 @@ from tronx.helpers import (
 
 @app.on_message(gen("kbd"))
 async def create_keyboard(_, m):
+	if m.chat.type == "bot":
+		return await send_edit(m, "Sorry you can't use it here", mono=True)
 	if long(m) >= 3:
 		await bot.send_message(
 			m.chat.id, 
-			m.text.split()[3],
+			m.text.split(None, 3)[3],
         		reply_markup=InlineKeyboardMarkup(
 				[
 					[
