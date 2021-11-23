@@ -49,11 +49,18 @@ message_ids = {} # empty if program restarts
 
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
 async def delete_dex(_, cb: CallbackQuery):
-	try:
-		for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
-			await app.delete_messages(chat_id, msg_id)
-	except Exception as e:
-		print(e)
+	if bool(message_ids) is False:
+		await cb.answer(
+			"This message is expired, hence it can't be deleted !",
+			show_alert=True,
+		)
+	else:
+		try:
+			for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
+				await app.delete_messages(chat_id, msg_id)
+		except Exception as e:
+			print(e)
+
 
 
 
