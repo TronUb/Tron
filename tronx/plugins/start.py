@@ -685,7 +685,6 @@ async def alert_user(cb, back=True):
 			"Sorry you can't use this userbot , make your own userbot at @tronuserbot !",
 			show_alert=True,
 		)
-	if back:
-		return
+	return
 
 # ---------------- The End ---------------------------------------
