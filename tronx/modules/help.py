@@ -55,13 +55,14 @@ async def help_menu(app, m):
 			)
 			if result:
 				await m.delete()
-				await app.send_inline_bot_result(
+				data = await app.send_inline_bot_result(
 					m.chat.id, 
 					query_id=result.query_id, 
 					result_id=result.results[0].id, 
 					disable_notification=True, 
 					hide_via=True
 				)
+				print(data)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
