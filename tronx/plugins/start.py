@@ -682,9 +682,8 @@ async def _back_to_info(_, cb):
 
 async def alert_user(cb, back=True):
 	if not cb.from_user.id == USER_ID:
-		await app.answer_callback_query(
-			cb.id,
-			"Sorry you are not allowed to perform this action !",
+		await cb.answer(
+			"Sorry you can't use this userbot , make your own userbot at @tronuserbot !",
 			show_alert=True,
 		)
 		if back:
