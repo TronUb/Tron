@@ -2,13 +2,18 @@ from pyrogram import filters
 
 from tronx import (
 	app, 
+	bot, 
 	CMD_HELP, 
 	HELP, 
 	Config,
 	PREFIX, 
+	USER_ID,
 	)
 
-from pyrogram.types import Message
+from pyrogram.types import (
+	Message,
+	CallbackQuery,
+)
 
 from tronx.helpers import (
 	error,
@@ -39,8 +44,22 @@ CMD_HELP.update(
 
 
 
+@bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
+async def delete_dex(_, cb: CallbackQuery):
+	try:
+		await data.delete()
+	except Exception as e:
+		print(e)
+		pass
+
+
+
+
 @app.on_message(gen("help"))
 async def help_menu(app, m):
+	global data
+	data = None
+
 	cmd = m.command
 	if len(cmd) > 1:
 		args = cmd[1]
@@ -62,7 +81,6 @@ async def help_menu(app, m):
 					disable_notification=True, 
 					hide_via=True
 				)
-				print(data)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
