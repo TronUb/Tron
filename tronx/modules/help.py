@@ -55,6 +55,7 @@ async def delete_dex(_, cb: CallbackQuery):
 		for chat_id, msg_id in zip(key, value):
 			await app.delete_messages(chat_id, msg_id)
 			print(chat_id, msg_id)
+		print("working")
 	except Exception as e:
 		print(e)
 		pass
