@@ -81,6 +81,7 @@ async def help_menu(app, m):
 					disable_notification=True, 
 					hide_via=True
 				)
+				print(data)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
