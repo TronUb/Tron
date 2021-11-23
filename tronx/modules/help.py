@@ -43,7 +43,7 @@ CMD_HELP.update(
 
 
 
-message_ids = {} # becomes empty if program restarts
+message_ids = {} # empty if program restarts
 
 
 
@@ -52,11 +52,8 @@ async def delete_dex(_, cb: CallbackQuery):
 	try:
 		for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
 			await app.delete_messages(chat_id, msg_id)
-			print(chat_id, msg_id)
-		print("working")
 	except Exception as e:
 		print(e)
-		pass
 
 
 
@@ -70,7 +67,7 @@ async def help_menu(app, m):
 		args = False
 	try:
 		if args is False:
-			await send_edit(m, "...", mono=True)
+			await send_edit(m, ". . .", mono=True)
 			result = await app.get_inline_bot_results(
 				botusername(), 
 				"#t5r4o9nn6" 
@@ -84,7 +81,6 @@ async def help_menu(app, m):
 					disable_notification=True, 
 					hide_via=True
 				)
-				#print(data)
 				if m.chat.type in ["bot", "private"]:
 					message_ids.update({m.chat.id : data.updates[1].message.id})
 				else:
