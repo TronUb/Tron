@@ -47,7 +47,7 @@ CMD_HELP.update(
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
 async def delete_dex(_, cb: CallbackQuery):
 	try:
-		await data.delete()
+		await data.updates[1].message.delete()
 	except Exception as e:
 		print(e)
 		pass
