@@ -44,15 +44,13 @@ CMD_HELP.update(
 
 
 message_ids = {} # becomes empty if program restarts
-key = list(message_ids.keys())
-value = list(message_ids.values())
 
 
 
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
 async def delete_dex(_, cb: CallbackQuery):
 	try:
-		for chat_id, msg_id in zip(key, value):
+		for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
 			await app.delete_messages(chat_id, msg_id)
 			print(chat_id, msg_id)
 		print("working")
