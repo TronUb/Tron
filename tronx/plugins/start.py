@@ -433,11 +433,16 @@ async def _close(_, cb: CallbackQuery):
 						InlineKeyboardButton(
 							"Open", callback_data="open-start-dex",
 						)
+					],
+					[
+						InlineKeyboardButton(
+							"Delete", callback_data="delete-dex",
+						)
 					]
 				]
 			),
 		)
-	print(cb)
+
 
 
 @bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
