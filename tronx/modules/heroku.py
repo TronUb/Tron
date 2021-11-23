@@ -347,7 +347,7 @@ async def logs(_, m: Message):
 	data = zen.get_log()
 	if data:
 		try:
-			file = open("Tron_logs.txt", "w+")
+			file = open(f"{USER_NAME}_logs.txt", "w+")
 			file.write(data)
 			file.close()
 			await app.send_document(
