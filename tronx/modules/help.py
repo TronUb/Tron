@@ -47,7 +47,7 @@ CMD_HELP.update(
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
 async def delete_dex(_, cb: CallbackQuery):
 	try:
-		await data.updates[1].message.delete()
+		await app.delete_messages(chat_id, data.updates[1].message.id)
 	except Exception as e:
 		print(e)
 		pass
@@ -57,8 +57,9 @@ async def delete_dex(_, cb: CallbackQuery):
 
 @app.on_message(gen("help"))
 async def help_menu(app, m):
-	global data
+	global data, chat_id
 	data = None
+	chat_id = m.chat.id
 
 	cmd = m.command
 	if len(cmd) > 1:
