@@ -436,7 +436,7 @@ async def _close(_, cb: CallbackQuery):
 				]
 			),
 		)
-	print(cb.message)
+	print(cb)
 
 
 @bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
