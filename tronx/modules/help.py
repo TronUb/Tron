@@ -54,6 +54,7 @@ async def delete_dex(_, cb: CallbackQuery):
 	try:
 		for chat_id, msg_id in zip(key, value):
 			await app.delete_messages(chat_id, msg_id)
+			print(chat_id, msg_id)
 	except Exception as e:
 		print(e)
 		pass
@@ -88,7 +89,7 @@ async def help_menu(app, m):
 				if m.chat.type in ["bot", "private"]:
 					message_ids.update({m.chat.id : data.updates[1].message.id})
 				else:
-					message_ids.append({m.chat.id : data.updates[2].message.id})
+					message_ids.update({m.chat.id : data.updates[2].message.id})
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
