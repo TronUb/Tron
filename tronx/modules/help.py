@@ -43,11 +43,14 @@ CMD_HELP.update(
 
 
 
+message_ids = [] # becomes empty if program restarts
+
+
 
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
 async def delete_dex(_, cb: CallbackQuery):
 	try:
-		await app.delete_messages(chat_id, data.updates[1].message.id)
+		await app.delete_messages(chat_id, message_ids)
 	except Exception as e:
 		print(e)
 		pass
@@ -57,8 +60,7 @@ async def delete_dex(_, cb: CallbackQuery):
 
 @app.on_message(gen("help"))
 async def help_menu(app, m):
-	global data, chat_id
-	data = None
+	global chat_id
 	chat_id = m.chat.id
 
 	cmd = m.command
@@ -82,7 +84,7 @@ async def help_menu(app, m):
 					disable_notification=True, 
 					hide_via=True
 				)
-				print(data)
+				message_ids.append(data.updates[1].message.id)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
