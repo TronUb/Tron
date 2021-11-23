@@ -57,7 +57,12 @@ async def delete_dex(_, cb: CallbackQuery):
 	else:
 		try:
 			for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
-				await app.delete_messages(chat_id, msg_id)
+				done = await app.delete_messages(chat_id, msg_id)
+				if done is False:
+					await cb.answer(
+						"This message is expired, hence it can't be deleted !",
+						show_alert=True,
+					)
 		except Exception as e:
 			print(e)
 
