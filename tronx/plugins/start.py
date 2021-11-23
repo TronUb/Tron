@@ -263,6 +263,7 @@ def inline_res(_, inline_query):
 		],
 	cache_time=1
 	)
+	print(inline_query)
 
 
 
