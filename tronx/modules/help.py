@@ -85,7 +85,7 @@ async def help_menu(app, m):
 					disable_notification=True, 
 					hide_via=True
 				)
-				print(data)
+				#print(data)
 				if m.chat.type in ["bot", "private"]:
 					message_ids.update({m.chat.id : data.updates[1].message.id})
 				else:
