@@ -679,7 +679,7 @@ async def _back_to_info(_, cb):
 
 
 
-async def alert_user(cb, back=True):
+async def alert_user(cb):
 	if not cb.from_user.id == USER_ID:
 		await cb.answer(
 			"Sorry you can't use this userbot , make your own userbot at @tronuserbot !",
