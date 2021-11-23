@@ -85,7 +85,10 @@ async def help_menu(app, m):
 					hide_via=True
 				)
 				print(data)
-				message_ids.append(data.updates[1].message.id)
+				if m.chat.type in ["bot", "private"]:
+					message_ids.append(data.updates[1].message.id)
+				else:
+					message_ids.append(data.updates[3].message.id)
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
