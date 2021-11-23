@@ -361,11 +361,10 @@ async def give_plugin_cmds(_, cb):
 @bot.on_callback_query(filters.regex("open-stats-dex"))
 async def _stats(_, cb):
 	await alert_user(cb)
-	if filters.regex("open-stats-dex"):
-		await cb.edit_message_text(
-			text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
-			reply_markup=InlineKeyboardMarkup([home_back]),
-		)
+	await cb.edit_message_text(
+		text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
+		reply_markup=InlineKeyboardMarkup([home_back]),
+	)
 
 
 # about info
