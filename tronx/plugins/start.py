@@ -683,7 +683,7 @@ async def _back_to_info(_, cb):
 async def alert_user(cb, back=True):
 	if not cb.from_user.id == USER_ID:
 		await app.answer_callback_query(
-			cb.inline_message_id,
+			cb.id,
 			"Sorry you are not allowed to perform this action !",
 			show_alert=True,
 		)
