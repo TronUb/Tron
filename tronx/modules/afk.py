@@ -46,14 +46,15 @@ CMD_HELP.update(
 )
 
 
-@app.on_message(filters.command("test", "."))
-async def testing(_, m):
-	await m.edit("test completed !")
 
 
-
-
-@app.on_message(gen("afk", allow_channel=True))
+@app.on_msg(
+	gen("afk"), 
+	info = {"afk": {
+			"afk" : "leave your chats untouchable, stop yourself from chatting . . ."
+			}
+		}
+	)
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
