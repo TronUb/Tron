@@ -4,7 +4,7 @@ import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.scaffold import Scaffold
 
-from tronx import CMD_HELP
+from tronx.variable import CMD_HELP
 
 
 
