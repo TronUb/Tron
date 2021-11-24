@@ -4,7 +4,7 @@ import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.scaffold import Scaffold
 
-from tronx.variable import CMD_HELP
+from tronx.variable import CMD_HELP, PREFIX
 
 
 
@@ -34,7 +34,7 @@ class OnMessage(Scaffold):
                 The group identifier, defaults to 0.
         """
 
-        CMD_HELP.update({plug: {cmd: usage}})
+        CMD_HELP.update({plug: {PREFIX + cmd: usage}})
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
