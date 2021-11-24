@@ -1,1 +1,2 @@
 CMD_HELP = {}
+PREFIX = "."
