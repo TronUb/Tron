@@ -35,25 +35,13 @@ from tronx.database.postgres import dv_sql as dv
 
 
 
-CMD_HELP.update(
-	{"afk": (
-		"afk",
-		{
-		"afk" : "leave your chats untouchable, stop yourself from chatting . . ."
-		}
-		)
-	}
-)
-
-
-
 
 @app.on_msg(
 	gen("afk"), 
-	info = {"afk": {
+	info = ({"afk": {
 			"afk" : "leave your chats untouchable, stop yourself from chatting . . ."
 			}
-		}
+		})
 	)
 async def go_offline(_, m: Message):
 	try:
