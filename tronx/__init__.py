@@ -6,6 +6,7 @@ import platform
 import subprocess
 
 from typing import Union, List
+from tronx.methods import Methods
 
 
 
@@ -311,7 +312,7 @@ def uptime():
 
 
 
-class tron(Client):
+class tron(Client, Methods):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
