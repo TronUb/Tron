@@ -46,6 +46,11 @@ CMD_HELP.update(
 )
 
 
+@app.on_message(filters.command("test", "."))
+async def testing(_, m):
+	await m.edit("test completed !)
+
+
 
 
 @app.on_message(gen("afk", allow_channel=True))
