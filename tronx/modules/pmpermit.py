@@ -62,17 +62,17 @@ async def old_msg(m: Message, user_id):
 
 
 
-async def send_warn(app: Client, m: Message, user):
+async def send_warn(m: Message, user):
 	""" Send warning messages """
-	pic = dv.getdv("PMPERMIT_PIC") if dv.getdv("PMPERMIT_PIC") else Config.PMPERMIT_PIC if Config.PMPERMIT_PIC else False
+	pic = dv.getdv("PMPERMIT_PIC") if bool(dv.getdv("PMPERMIT_PIC")) else Config.PMPERMIT_PIC if bool(Config.PMPERMIT_PIC) else False
 
-	text = dv.getdv("PMPERMIT_TEXT") if dv.getdv("PMPERMIT_TEXT") else Config.PMPERMIT_TEXT if Config.PMPERMIT_TEXT else None
+	text = dv.getdv("PMPERMIT_TEXT") if bool(dv.getdv("PMPERMIT_TEXT")) else Config.PMPERMIT_TEXT if bool(Config.PMPERMIT_TEXT) else None
 
 	if pic:
 		msg = await app.send_video(
 			m.chat.id,
-			text,
-			caption=Config.PMPERMIT_TEXT,
+			pic,
+			caption=text,
 			disable_web_page_preview=True
 		)
 	elif not pic:
@@ -126,7 +126,7 @@ async def auto_block(_, m: Message):
 
 	if bool(db.get_warn(user.id)) is False:
 		db.set_warn(user.id, 1)
-		await send_warn(app, m, user.id)
+		await send_warn(m, user.id)
 
 	elif bool(db.get_warn(user.id)) is True:
 		warn = int(db.get_warn(user.id))
@@ -134,7 +134,7 @@ async def auto_block(_, m: Message):
 			maximum = warn + 1
 			db.set_warn(user.id, maximum)
 			await old_msg(m, user.id) # delete old warns
-			await send_warn(app, m, user.id) # send new warns
+			await send_warn(m, user.id) # send new warns
 		elif warn >= pmlimit:
 			done = await app.block_user(user.id)
 			if done:
