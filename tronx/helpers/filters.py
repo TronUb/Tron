@@ -118,9 +118,7 @@ def gen(
 
 		# works only for you 
 		if only_me:
-			if message.from_user
-				and not message.from_user.is_self
-				:
+			if message.from_user and not message.from_user.is_self:
 				return False
 
 		if allow_forward is False:
