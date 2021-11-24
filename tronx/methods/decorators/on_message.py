@@ -10,9 +10,11 @@ from tronx.variable import CMD_HELP
 
 class OnMessage(Scaffold):
     def on_msg(
-        info,
-        self=None,
-        filters=None,
+        self = None,
+        filters = None,
+        plug: str = "",
+        cmd: str = "",
+        usage: str = "",
         group: int = 0
     ) -> callable:
         """Decorator for handling messages.
@@ -32,7 +34,7 @@ class OnMessage(Scaffold):
                 The group identifier, defaults to 0.
         """
 
-        CMD_HELP.update(info)
+        CMD_HELP.update({plug: {cmd: usage}})
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
