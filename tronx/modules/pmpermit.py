@@ -25,8 +25,6 @@ from tronx.helpers import (
 	error,
 	send_edit,
 	# others 
-	mention_markdown, 
-	extract_user,
 	long,
 )
 
@@ -51,22 +49,7 @@ CMD_HELP.update(
 
 
 
-users = []
-
-
-
-
-def remove(duplicate):
-	userlist = []
-	for num in duplicate:
-		if num not in userlist:
-			userlist.append(num)
-	return userlist
-
-
-
-
-async def old_msg(app: Client, m: Message, user_id):
+async def old_msg(m: Message, user_id):
 	if bool(db.get_msgid(user_id)) is True:
 		old_msgs = db.get_msgid(user_id)
 		await app.delete_messages(
@@ -81,17 +64,9 @@ async def old_msg(app: Client, m: Message, user_id):
 
 async def send_warn(app: Client, m: Message, user):
 	""" Send warning messages """
-	if dv.getdv("PMPERMIT_PIC"):
-		pic = dv.getdv("PMPERMIT_PIC")
-	elif Config.PMPERMIT_PIC:
-		pic = Config.PMPERMIT_PIC
-	else:
-		pic = False
+	pic = dv.getdv("PMPERMIT_PIC") if dv.getdv("PMPERMIT_PIC") else Config.PMPERMIT_PIC if Config.PMPERMIT_PIC else False
 
-	if dv.getdv("PMPERMIT_TEXT"):
-		text = dv.getdv("PMPERMIT_TEXT")
-	elif Config.PMPERMIT_TEXT:
-		text = Config.PMPERMIT_TEXT
+	text = dv.getdv("PMPERMIT_TEXT") if dv.getdv("PMPERMIT_TEXT") else Config.PMPERMIT_TEXT if Config.PMPERMIT_TEXT else None
 
 	if pic:
 		msg = await app.send_video(
@@ -113,7 +88,17 @@ async def send_warn(app: Client, m: Message, user):
 
 
 
-#autoblock
+@app.on_message(filters.private & filters.outgoing)
+async def auto_allow(_, m):
+	try:
+		db.set_whitelist(m.chat.id, True)
+	except Exception as e:
+		await error(m, e)
+
+
+
+
+# incoming autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
 	if bool(dv.getdv("PMPERMIT")) is False:
@@ -125,20 +110,14 @@ async def auto_block(_, m: Message):
 	else:
 		return
 
-	if dv.getdv("PM_LIMIT"):
-		pmlimit = int(dv.getdv("PM_LIMIT"))
-	if Config.PM_LIMIT:
-		pmlimit = int(Config.PM_LIMIT)
+	pmlimit = dv.getdv("PM_LIMIT") if dv.getdv("PM_LIMIT") else int(Config.PM_LIMIT) if Config.PM_LIMIT else 4 
 
 	# log user info to log chat
 
 	msg = "#pmpermit\n\n"
 	msg += f"Name: `{user.first_name}`\n"
 	msg += f"Id: `{user.id}`\n"
-	if user.username:
-		msg += f"Username: `@{user.username}`\n"
-	else:
-		msg += f"Username: `None`\n"
+	msg += f"Username: `@{user.username}`\n" if user.username else f"Username: `None`\n"
 	msg += f"Message: `{m.text}`\n"
 
 	if bool(db.get_warn(user.id)) is False:
@@ -150,7 +129,7 @@ async def auto_block(_, m: Message):
 		if warn < pmlimit:
 			maximum = warn + 1
 			db.set_warn(user.id, maximum)
-			await old_msg(app, m, user.id) # delete old warns
+			await old_msg(m, user.id) # delete old warns
 			await send_warn(app, m, user.id) # send new warns
 		elif warn >= pmlimit:
 			done = await app.block_user(user.id)
@@ -172,17 +151,22 @@ async def auto_block(_, m: Message):
 
 @app.on_message(gen(["a", "approve"]))
 async def approve_pm(app, m: Message):
+	if m.chat.type == "bot":
+		return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
 	await send_edit(m, "approving . . .", mono=True)
 	reply = m.reply_to_message
 	cmd = m.command
 
 	if m.chat.type == "private":
 		user_id = m.chat.id
-	elif m.chat.type != "private":
+	elif m.chat.type != "private" or "bot":
 		if reply:
+			if reply.from_user.is_bot:
+				return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
+
 			user_id = reply.from_user.id
 		elif not reply and long(m) == 1:
-			return await send_edit(m, "Whom should i approve, piro ?", delme=3)
+			return await send_edit(m, "Whom should i approve, piro ?", mono=True, delme=3)
 
 		elif not reply and long(m) > 1:
 			try:
@@ -199,19 +183,17 @@ async def approve_pm(app, m: Message):
 		else:
 			return await send_edit(m, "Failed to approve user . . .", delme=2)
 
-
 	info = await app.get_users(user_id)
 	user_name = info.first_name
 	try:
 		db.set_whitelist(user_id, True)
-		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.")
+		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.", delme=5)
 
 		db.del_warn(user_id)
 
 		if db.get_msgid(user_id):
-			await old_msg(app, m, user_id)
-		else:
-			pass
+			await old_msg(m, user_id)
+
 	except Exception as e:
 		await error(m, e)
 		await send_edit(m, f"Failed to approve [{user_name}](tg://user?id={user_id})")
@@ -220,17 +202,24 @@ async def approve_pm(app, m: Message):
 
 
 @app.on_message(gen(["da", "disapprove"]))
-async def revoke_pm_block(_, m:Message):
+async def diapprove_pm(_, m:Message):
+	if m.chat.type == "bot":
+		return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
+
 	await send_edit(m, "disapproving . . .", mono=True)
 	reply = m.reply_to_message
 	cmd = m.command
+
 	if m.chat.type == "private":
 		user_id = m.chat.id
-	elif m.chat.type != "private":
+	elif m.chat.type != "private" or "bot":
 		if reply:
+			if reply.from_user.is_bot:
+				return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
+
 			user_id = reply.from_user.id
 		elif not reply and long(m) == 1:
-			await send_edit(m, "Whom should i disapprove, piro ?", delme=3)
+			await send_edit(m, "Whom should i disapprove, piro ?", mono=True, delme=3)
 		elif not reply and long(m) > 1:
 			try:
 				data = await app.get_users(cmd[1])
@@ -243,13 +232,13 @@ async def revoke_pm_block(_, m:Message):
 				):
 				return await send_edit(m, "Please try again later . . .", delme=3)
 		else:
-			return
+			await send_edit(m, "Failed to disapprove user !", mono=True, delme=3)
 
 	info = await app.get_users(user_id)
 	user_name = info.first_name
 	if user_name:
 		db.del_whitelist(user_id)
-		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) has been disapproved for pm!")
+		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) has been disapproved for pm!", delme=5)
 		try:
 			await app.send_message(
 				Config.LOG_CHAT, 
@@ -257,8 +246,7 @@ async def revoke_pm_block(_, m:Message):
 			)
 		except Exception as e:
 			await error(m, e)
-			print(e)
 	else:
-		await send_edit(m, "Sorry there is no user id to disapprove . . .", mono=True)
+		await send_edit(m, "Sorry there is no user id to disapprove . . .", mono=True, delme=3)
 
-                
+
