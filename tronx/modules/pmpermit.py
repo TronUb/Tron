@@ -159,11 +159,8 @@ async def approve_pm(app, m: Message):
 
 	if m.chat.type == "private":
 		user_id = m.chat.id
-	elif m.chat.type != "private" or "bot":
+	elif m.chat.type != "private":
 		if reply:
-			if reply.from_user.is_bot:
-				return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
-
 			user_id = reply.from_user.id
 		elif not reply and long(m) == 1:
 			return await send_edit(m, "Whom should i approve, piro ?", mono=True, delme=3)
@@ -212,11 +209,8 @@ async def diapprove_pm(_, m:Message):
 
 	if m.chat.type == "private":
 		user_id = m.chat.id
-	elif m.chat.type != "private" or "bot":
+	elif m.chat.type != "private":
 		if reply:
-			if reply.from_user.is_bot:
-				return await send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
-
 			user_id = reply.from_user.id
 		elif not reply and long(m) == 1:
 			await send_edit(m, "Whom should i disapprove, piro ?", mono=True, delme=3)
