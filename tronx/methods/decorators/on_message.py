@@ -11,7 +11,7 @@ from tronx.variable import CMD_HELP
 class OnMessage(Scaffold):
     def on_msg(
         self=None,
-        info : dict = None,
+        info : dict = "",
         filters=None,
         group: int = 0
     ) -> callable:
