@@ -109,11 +109,18 @@ def gen(
 		global username
 
 		username = ""
+
+		text = message.text or message.caption
+		message.command = None
+
+		if not text:
+			return False
+
 		# works only for you 
 		if only_me:
-			if not (message.from_user
-				and message.from_user.is_self
-				):
+			if message.from_user
+				and not message.from_user.is_self
+				:
 				return False
 
 		if allow_forward is False:
@@ -127,12 +134,6 @@ def gen(
 		if allow_edit is False:
 			if message.edit_date:
 				return False
-
-		text = message.text or message.caption
-		message.command = None
-
-		if not text:
-			return False
 
 		for prefix in flt.prefixes:
 			if not text.startswith(prefix):
