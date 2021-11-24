@@ -24,6 +24,8 @@ from tronx import (
 	USER_ID,
 )
 
+from tronx.variable import CMD_HELP
+
 
 
 
@@ -89,6 +91,7 @@ def myprefix():
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
+	info: dict = None,
 	prefixes: Union[str, List[str]] = myprefix(), 
 	case_sensitive: bool = True, 
 	only_me: bool = True,
@@ -96,6 +99,10 @@ def gen(
 	allow_channel: bool = False,
 	allow_edit: bool = True,
 	):
+
+	# update the commands and information of commands.
+	CMD_HELP.update(info)
+
 	# modified func of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
