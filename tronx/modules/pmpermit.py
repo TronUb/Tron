@@ -88,10 +88,14 @@ async def send_warn(app: Client, m: Message, user):
 
 
 
-@app.on_message(filters.private & filters.outgoing)
+@app.on_message(filters.me & filters.outgoing, group=2)
 async def auto_allow(_, m):
 	try:
-		db.set_whitelist(m.chat.id, True)
+		if m.chat.type == "private":
+			if db.get_whitelist(m.chat.id) is True:
+				return
+			else:
+				db.set_whitelist(m.chat.id, True)
 	except Exception as e:
 		await error(m, e)
 
