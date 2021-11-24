@@ -22,9 +22,8 @@ from pyrogram.types import (
 from tronx import (
 	PREFIX,
 	USER_ID,
+	CMD_HELP,
 )
-
-from tronx.variable import CMD_HELP
 
 
 
