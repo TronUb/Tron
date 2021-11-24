@@ -90,7 +90,7 @@ def myprefix():
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	info: dict = None,
+	info: dict = "",
 	prefixes: Union[str, List[str]] = myprefix(), 
 	case_sensitive: bool = True, 
 	only_me: bool = True,
