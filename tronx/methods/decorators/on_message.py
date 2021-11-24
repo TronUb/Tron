@@ -10,8 +10,8 @@ from tronx.variable import CMD_HELP
 
 class OnMessage(Scaffold):
     def on_msg(
-        self=None,
         info,
+        self=None,
         filters=None,
         group: int = 0
     ) -> callable:
