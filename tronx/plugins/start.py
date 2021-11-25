@@ -46,6 +46,7 @@ from tronx import (
 from tronx.helpers import (
 	helpdex,
 	build_keyboard,
+	quote,
 )
 
 from tronx.database.postgres import pmpermit_sql as db
@@ -93,17 +94,6 @@ async def data(plug):
 	except Exception as e:
 		print(e)
 		return False
-
-
-
-
-# inline quotes
-def quote():
-	results = requests.get("https://animechan.vercel.app/api/random").json()
-	msg = f"❝ {results.get('quote')} ❞"
-	msg += f" [ {results.get('anime')} ]\n\n"
-	msg += f"- {results.get('character')}\n\n"
-	return msg
 
 
 
