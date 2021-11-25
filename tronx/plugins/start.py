@@ -50,7 +50,7 @@ from tronx.helpers import (
 
 from tronx.database.postgres import pmpermit_sql as db
 from tronx.database.postgres import dv_sql as dv
-
+from tronx.variable import message_ids
 
 
 
@@ -150,7 +150,7 @@ async def start(_, m: Message):
 		if m.from_user.id in USER_ID:
 			# bot pic
 			if bot_pic().endswith(".jpg" or "png" or "jpeg"):
-				await bot.send_photo(
+				info = await bot.send_photo(
 					m.chat.id,
 					bot_pic(),
 					bot_bio(m),
@@ -159,7 +159,7 @@ async def start(_, m: Message):
 					),
 				)
 			elif bot_pic().endswitg(".mp4" or ".gif"):
-				await bot.send_photo(
+				info = await bot.send_photo(
 					m.chat.id,
 					bot_pic(),
 					bot_bio(m),
@@ -168,7 +168,7 @@ async def start(_, m: Message):
 					),
 				)
 			else:
-				await bot.send_message(
+				info = await bot.send_message(
 					m.chat.id,
 					bot_bio(m),
 					reply_markup=InlineKeyboardMarkup(
@@ -177,7 +177,7 @@ async def start(_, m: Message):
 				)
 
 		elif m.from_user.id not in USER_ID:
-			await bot.send_photo(
+			info = await bot.send_photo(
 				m.chat.id,
 				PIC,
 				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
@@ -185,6 +185,7 @@ async def start(_, m: Message):
 					[global_command]
 				),
 			)
+		message_ids.update({info.chat.id : info.message.id})
 	else:
 		return
 
