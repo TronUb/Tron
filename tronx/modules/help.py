@@ -10,7 +10,6 @@ from tronx import (
 	Config,
 	PREFIX, 
 	USER_ID,
-	message_ids,
 	)
 
 from pyrogram.types import (
@@ -27,6 +26,10 @@ from tronx.helpers import (
 	botusername,
 	data,
 	toggle_inline,
+)
+
+from tronx.variable import (
+	message_ids,
 )
 
 
