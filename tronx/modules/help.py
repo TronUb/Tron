@@ -101,7 +101,7 @@ async def help_menu(app, m):
 					message_ids.update({m.chat.id : info.updates[2].message.id})
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
-		elif args is True:
+		elif args:
 
 			module_help = await data(args[1])
 			if not module_help:
