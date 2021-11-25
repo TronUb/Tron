@@ -1,3 +1,5 @@
+import os
+
 from pyrogram import filters
 
 from tronx import (
@@ -8,6 +10,7 @@ from tronx import (
 	Config,
 	PREFIX, 
 	USER_ID,
+	message_ids,
 	)
 
 from pyrogram.types import (
@@ -43,12 +46,10 @@ CMD_HELP.update(
 
 
 
-message_ids = {} # empty if program restarts
-
 
 
 @bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
-async def delete_dex(_, cb: CallbackQuery):
+async def delete_helpdex(_, cb: CallbackQuery):
 	if bool(message_ids) is False:
 		await cb.answer(
 			"This message is expired, hence it can't be deleted !",
@@ -72,11 +73,8 @@ async def delete_dex(_, cb: CallbackQuery):
 
 @app.on_message(gen("help"))
 async def help_menu(app, m):
-	cmd = m.command
-	if len(cmd) > 1:
-		args = cmd[1]
-	else:
-		args = False
+	args = m.command if long(m) > 1 else False
+
 	try:
 		if args is False:
 			await send_edit(m, ". . .", mono=True)
@@ -99,24 +97,22 @@ async def help_menu(app, m):
 					message_ids.update({m.chat.id : info.updates[2].message.id})
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
-		elif args:
-			plugin_data = []
-			plugin_data.clear()
+		elif args is True:
 
 			module_help = await data(args[1])
 			if not module_help:
 				await send_edit(m, f"Invalid module name specified, use `{PREFIX}mods` to get list of modules", delme=3)
 			else:
-				await send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(plugin_data))
+				await send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
 		else:
-			await send_edit(m, "Failed to get help menu !", delme=3)
+			await send_edit(m, "Try again later !", mono=True, delme=3)
 	except Exception as e:
 		await error(m, e)
 
 
 
 
-# get all plugins name
+# get all module name
 @app.on_message(gen("mods"))
 async def all_plugins(_, m: Message):
 	store = []
@@ -132,6 +128,7 @@ async def all_plugins(_, m: Message):
 
 
 
+# get all plugins name
 @app.on_message(gen("plugs"))
 async def all_plugins(_, m: Message):
 	store = []
@@ -141,7 +138,7 @@ async def all_plugins(_, m: Message):
 
 	await send_edit(
 		m,
-		"Modules of userbot:\n\n" + "".join(store)
+		"Plugins of bot:\n\n" + "".join(store)
 		)
 
 
@@ -151,24 +148,4 @@ async def all_plugins(_, m: Message):
 async def _toggle_inline(_, m: Message):
 	await toggle_inline(m)
 	return
-
-
-
-
-
-
-#async def data(plug):
-#	try:
-#		for x, y in zip(
-#			CMD_HELP.get(plug)[1].keys(), 
-#			CMD_HELP.get(plug)[1].values()
-#			):
-#			plugin_data.append(
-#				f"CMD: `{PREFIX}{x}`\nINFO: `{y}`\n\n"
-#				)
-#		return True
-#	except Exception as e:
-#		print(e)
-#		return False
-
 
