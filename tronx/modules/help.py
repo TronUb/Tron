@@ -26,6 +26,7 @@ from tronx.helpers import (
 	botusername,
 	data,
 	toggle_inline,
+	long,
 )
 
 from tronx.variable import (
