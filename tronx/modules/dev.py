@@ -47,7 +47,7 @@ async def aexec(code, app, m):
 
 
 
-@app.on_message(gen(["eval", "e"]))
+@app.on_message(gen(["eval", "e"], allow_channel=True))
 async def evaluate(app, m):
 	global reply
 	reply = m.reply_to_message
