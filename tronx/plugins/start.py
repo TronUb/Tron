@@ -186,7 +186,7 @@ async def start(_, m: Message):
 				),
 			)
 		message_ids.update({info.chat.id : info.message_id})
-		print("These are start data: ", info.chat.id, info.message_id)
+		print(info)
 	else:
 		return
 
