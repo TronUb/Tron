@@ -107,7 +107,7 @@ async def evaluate(app, m):
 
 
 
-@app.on_message(gen("term"))
+@app.on_message(gen("term", allow_channel=True))
 async def terminal(app, m):
 	if len(m.text.split()) == 1:
 		await send_edit(m, "Use: `.term pip3 install colorama`")
