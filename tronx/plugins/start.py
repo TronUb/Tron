@@ -185,7 +185,7 @@ async def start(_, m: Message):
 					[global_command]
 				),
 			)
-		message_ids.update({info.chat.id : info.message.id})
+		message_ids.update({info.chat.id : info.message_id})
 	else:
 		return
 
