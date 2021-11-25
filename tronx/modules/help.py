@@ -86,7 +86,7 @@ async def help_menu(app, m):
 			)
 			if result:
 				await m.delete()
-				data = await app.send_inline_bot_result(
+				info = await app.send_inline_bot_result(
 					m.chat.id, 
 					query_id=result.query_id, 
 					result_id=result.results[0].id, 
@@ -94,9 +94,9 @@ async def help_menu(app, m):
 					hide_via=True
 				)
 				if m.chat.type in ["bot", "private"]:
-					message_ids.update({m.chat.id : data.updates[1].message.id})
+					message_ids.update({m.chat.id : info.updates[1].message.id})
 				else:
-					message_ids.update({m.chat.id : data.updates[2].message.id})
+					message_ids.update({m.chat.id : info.updates[2].message.id})
 			else:
 				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
