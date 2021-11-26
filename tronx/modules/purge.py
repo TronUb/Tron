@@ -44,7 +44,7 @@ CMD_HELP.update(
 
 
 
-@app.on_message(gen(["purge", "p"]))
+@app.on_message(gen(["purge", "p"], allow_channel=True))
 async def purge_all(app, m:Message):
 	if m.reply_to_message:
 		await send_edit(m, "purging . . .", mono=True)
