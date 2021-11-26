@@ -64,7 +64,7 @@ pings.clear()
 
 
 
-@app.on_message(gen("ping"))
+@app.on_message(gen("ping", allow_channel=True))
 async def pingme(_, m: Message):
 	if len(m.command) == 1:
 		start = datetime.now()
