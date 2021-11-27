@@ -154,7 +154,7 @@ async def unban(_, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
+					return await send_edit(m, "You can't Unban yourself !", mono=True)
 				elif user.status == "administrator":
 					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
 				elif user.status == "creator":
@@ -197,11 +197,11 @@ async def mute_user(_, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
+					return await send_edit(m, "You can't mute yourself !", mono=True)
 				elif user.status == "administrator":
-					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+					return await send_edit(m, "How am i supposed to mute an admin ?", mono=True)
 				elif user.status == "creator":
-					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+					return await send_edit(m, "How am i supposed to mute a creator of a group ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
 
@@ -255,11 +255,11 @@ async def unmute(_, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
+					return await send_edit(m, "You can't Unmute yourself !", mono=True)
 				elif user.status == "administrator":
-					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+					return await send_edit(m, "How do i unmute an admin ?", mono=True)
 				elif user.status == "creator":
-					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+					return await send_edit(m, "How do i unmute a creator ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
 
@@ -313,16 +313,16 @@ async def kick_user(_, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
+					return await send_edit(m, "You can't kick yourself !", mono=True)
 				elif user.status == "administrator":
-					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+					return await send_edit(m, "How am i supposed to kick an admin ?", mono=True)
 				elif user.status == "creator":
-					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+					return await send_edit(m, "How am i supposed to kick a creator of a group ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
 
 			await kick(m.chat.id, user.user.id)
-			await send_edit(m, f"Unbanned {user.user.mention} in this chat !")
+			await send_edit(m, f"Kicked {user.user.mention} in this chat !")
 		else:
 			return await send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
 
@@ -372,6 +372,8 @@ async def pin_message(_, m):
 				await send_edit(m, "Reply to a pinned message to unpin or use 'all' as suffix to unpin all pinned messages . . .", delme=2, mono=True)
 			else:
 				await send_edit(m, "Failed to unpin messages . . .", delme=2, mono=True)
+		elif not reply and long(m) == 1:
+			await send_edit(m, "Reply to the pinned message to unpin it !", mono=True, delme=5)
 	except Exception as e:
 		await error(m, e)
 
@@ -397,11 +399,11 @@ async def promote(_, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
+					return await send_edit(m, "You can't promote yourself !", mono=True)
 				elif user.status == "administrator":
-					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+					return await send_edit(m, "How am i supposed to promote already promoted user ?", mono=True)
 				elif user.status == "creator":
-					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+					return await send_edit(m, "How am i supposed to promote a creator of a group ? wth ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
 
@@ -447,11 +449,9 @@ async def demote(client, m):
 
 			if user:
 				if user.user.is_self:
-					return await send_edit(m, "You can't ban yourself !", mono=True)
-				elif user.status == "administrator":
-					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+					return await send_edit(m, "You can't demote yourself !", mono=True)
 				elif user.status == "creator":
-					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+					return await send_edit(m, "How am i supposed to demote a creator of a group ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
 
