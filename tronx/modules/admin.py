@@ -70,6 +70,8 @@ async def ban_hammer(_, m):
 				user = reply.from_user
 				if user.is_self:
 					return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
+				elif user.is_admin:
+					return await send_edit(m, "How am I supposed to ban a admin ?", mono=True)
 	
 				await send_edit(m, "⏳ • Hold on . . .", mono=True)
 				await kick(m.chat.id, user.id)
@@ -81,6 +83,8 @@ async def ban_hammer(_, m):
 					user = await app.get_users(m.command[1])
 					if user.is_self:
 						return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
+					elif user.is_admin:
+						return await send_edit(m, "How am I supposed to ban a admin ?", mono=True)
 	
 					await send_edit(m, "⏳ • Hold on . . .", mono=True)
 					done = await kick(m.chat.id, user.id)
@@ -92,8 +96,8 @@ async def ban_hammer(_, m):
 				await send_edit(m, "Something went wrong . . .", delme=2, mono=True)
 		else:
 			await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2, mono=True)
-	except UserAdminInvalid:
-		await send_edit(m, "How am i supposed to ban admins ?", mono=True)
+	except Exception as e:
+		await error(m, e)
 
 
 
