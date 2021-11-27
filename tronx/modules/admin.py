@@ -61,38 +61,39 @@ CMD_HELP.update(
 
 @app.on_message(gen("ban"))
 async def ban_hammer(_, m):
-	# return if used in private
-	await private(m)
-	reply = m.reply_to_message
-	if await CheckAdmin(m) is True:
-		if reply:
-			user = reply.from_user
-			if user.is_self:
-				await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
-				return
-			await send_edit(m, "⏳ • Hold on...")
-			await kick(m.chat.id, user.id)
-			await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} in this chat.")
-		elif not reply:
-			if long(m) == 1:
-				await send_edit(m, "Give me user id or username of that member you want to ban ...", mono=True)
-			elif long(m) > 1:
-				user = await app.get_users(m.command[1])
+	try:
+		# return if used in private
+		await private(m)
+		reply = m.reply_to_message
+		if await CheckAdmin(m) is True:
+			if reply:
+				user = reply.from_user
 				if user.is_self:
-					await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
-					return
-				await send_edit(m, "⏳ • Hold on...")
-				done = await kick(m.chat.id, user.id)
-				if done:
-					await send_edit(m, f"Banned {mention_markdown(user.id, user.first_name)} from the chat !")
+					return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
+	
+				await send_edit(m, "⏳ • Hold on . . .", mono=True)
+				await kick(m.chat.id, user.id)
+				await send_edit(m, f"Banned {reply.from_user.mention} in this chat !")
+			elif not reply:
+				if long(m) == 1:
+					await send_edit(m, "Give me user id or username of user or reply to their message . . .", mono=True)
+				elif long(m) > 1:
+					user = await app.get_users(m.command[1])
+					if user.is_self:
+						return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
+	
+					await send_edit(m, "⏳ • Hold on . . .", mono=True)
+					done = await kick(m.chat.id, user.id)
+					if done:
+						await send_edit(m, f"Banned {user.mention} in this chat !")
+				else:
+					await send_edit(m, "Please try again later . . .", delme=2, mono=True)
 			else:
-				await send_edit(m, "Please try again later . . .", delme=2, mono=True)
-		# used on admin or owner
+				await send_edit(m, "Something went wrong . . .", delme=2, mono=True)
 		else:
-			await send_edit(m, "I can't ban this user . . .", delme=2, mono=True)
-	else:
-		await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2, mono=True)
-
+			await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2, mono=True)
+	except UserAdminInvalid:
+		await send_edit(m, "How am i supposed to ban admins ?", mono=True)
 
 
 
