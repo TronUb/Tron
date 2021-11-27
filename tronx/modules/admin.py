@@ -72,7 +72,7 @@ async def ban_hammer(_, m):
 		if await CheckAdmin(m) is True:
 			await send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
-				user = await app.get_chat_member(m.chat.id, reply.user.id)
+				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
 				if long(m) == 1:
 					return await send_edit(m, "Give me user id | username or reply to the user you want to ban . . .", mono=True)
@@ -139,12 +139,12 @@ async def unban(_, m):
 		user = False
 		if await CheckAdmin(m) is True:
 			if reply:
-				user = await app.get_chat_member(reply.from_user.id)
+				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
 				if long(m) == 1:
 					return await send_edit(m, "Give me user id | username or reply to that user you want to unban . . .", mono=True, delme=4)
 				if long(m) > 1:
-					user = await app.get_chat_member(m.command[1])
+					user = await app.get_chat_member(m.chat.id, m.command[1])
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True, delme=4)
 
