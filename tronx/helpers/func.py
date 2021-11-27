@@ -280,7 +280,6 @@ async def kick(chat_id, user_id):
 			)
 	except Exception as e:
 		print(e)
-		await error(m, e)
 
 
 
