@@ -69,7 +69,7 @@ async def ban_hammer(_, m):
 		if await CheckAdmin(m) is True:
 			await send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
-				user = await app.get_chat_member(m.chat.id, user.id)
+				user = await app.get_chat_member(m.chat.id, reply.user.id)
 			elif not reply:
 				if long(m) == 1:
 					return await send_edit(m, "Give me user id | username or reply to the user you want to ban . . .")
@@ -81,9 +81,9 @@ async def ban_hammer(_, m):
 			if user:
 				if user.user.is_self:
 					return await send_edit(m, "You can't ban yourself !", mono=True)
-				elif user.user.status == "administrator":
+				elif user.status == "administrator":
 					return await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
-				elif user.user.status == "creator":
+				elif user.status == "creator":
 					return await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
 			else:
 				return await send_edit(m, "Something went wrong !", mono=True)
