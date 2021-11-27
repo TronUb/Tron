@@ -89,9 +89,9 @@ async def ban_hammer(_, m):
 						return await send_edit(m, "How am I supposed to ban the creator of this chat ?", mono=True)
 	
 					await send_edit(m, "⏳ • Hold on . . .", mono=True)
-					done = await kick(m.chat.id, user.id)
+					done = await kick(m.chat.id, user.user.id)
 					if done:
-						await send_edit(m, f"Banned {user.mention} in this chat !")
+						await send_edit(m, f"Banned {user.user.mention} in this chat !")
 				else:
 					await send_edit(m, "Please try again later . . .", delme=2, mono=True)
 			else:
