@@ -89,7 +89,7 @@ async def ban_hammer(_, m):
 				return await send_edit(m, "Something went wrong !", mono=True)
 
 			await kick(m.chat.id, user.user.id)
-			await send_edit(m, f"Banned {reply.from_user.mention} in this chat !")
+			await send_edit(m, f"Banned {user.user.mention} in this chat !")
 	except Exception as e:
 		await error(m, e)
 
