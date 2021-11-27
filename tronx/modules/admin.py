@@ -96,8 +96,10 @@ async def ban_hammer(_, m):
 		else:
 			return await send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
 
-	except UsernameInvalid:
+	except (UsernameInvalid, UsernameNotOccupied):
 		await send_edit(m, "The provided username | id is invalid !", mono=True, delme=5)
+	except UserNotParticipant:
+		await send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
 		await error(m, e)
 
@@ -159,12 +161,14 @@ async def unban(_, m):
 				return await send_edit(m, "Something went wrong !", mono=True)
 
 			await app.unban_chat_member(m.chat.id, user.user.id)
-			await send_edit(m, f"Banned {user.user.mention} in this chat !")
+			await send_edit(m, f"Unbanned {user.user.mention} in this chat !")
 		else:
 			return await send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
 
-	except UsernameInvalid:
+	except (UsernameInvalid, UsernameNotOccupied):
 		await send_edit(m, "The provided username | id is invalid !", mono=True, delme=5)
+	except UserNotParticipant:
+		await send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
 		await error(m, e)
 					
