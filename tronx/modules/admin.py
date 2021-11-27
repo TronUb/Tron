@@ -119,7 +119,7 @@ async def ban_all(_, m):
 					if x.status == "member":
 						await kick(m.chat.id, x.user.id)
 						count += 1
-						await send_edit(m, f"Banned {x.user.mention}" . . .)
+						await send_edit(m, f"Banned {x.user.mention} . . .")
 				await send_edit(m, f"Banned {count} members !")
 			elif long(m) > 1 and m.command[1] != "confirm":
 				await send_edit(m, "Use '`confirm`' text after command to ban all members . . .", delme=2, mono=True)
