@@ -7,7 +7,9 @@ from pyrogram.types import Message, ChatPermissions, User
 
 from pyrogram.errors import (
 	UserAdminInvalid, 
-	UsernameInvalid
+	UsernameInvalid,
+	UserNotParticipant,
+	UsernameNotOcuupied,
 )
 from pyrogram.methods.chats.get_chat_members import Filters as ChatMemberFilters
 
