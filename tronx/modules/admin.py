@@ -65,41 +65,34 @@ async def ban_hammer(_, m):
 		# return if used in private
 		await private(m)
 		reply = m.reply_to_message
+		user = False
 		if await CheckAdmin(m) is True:
+			await send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
-				user = reply.from_user
-				if user.is_self:
-					return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
-				elif user.is_admin:
-					return await send_edit(m, "How am I supposed to ban a admin ?", mono=True)
-	
-				await send_edit(m, "⏳ • Hold on . . .", mono=True)
-				await kick(m.chat.id, user.id)
-				await send_edit(m, f"Banned {reply.from_user.mention} in this chat !")
+				user = await app.get_chat_member(m.chat.id, user.id)
 			elif not reply:
 				if long(m) == 1:
-					await send_edit(m, "Give me user id or username of user or reply to their message . . .", mono=True)
+					return await send_edit(m, "Give me user id | username or reply to the user you want to ban . . .")
 				elif long(m) > 1:
 					user = await app.get_chat_member(m.chat.id, m.command[1])
-					if user.user.is_self:
-						return await send_edit(m, "You can't ban yourself !", delme=2, mono=True)
-					elif user.user.status == "administrator":
-						return await send_edit(m, "How am I supposed to ban an admin ?", mono=True)
-					elif user.user.status == "creator":
-						return await send_edit(m, "How am I supposed to ban the creator of this chat ?", mono=True)
-	
-					await send_edit(m, "⏳ • Hold on . . .", mono=True)
-					done = await kick(m.chat.id, user.user.id)
-					if done:
-						await send_edit(m, f"Banned {user.user.mention} in this chat !")
-				else:
-					await send_edit(m, "Please try again later . . .", delme=2, mono=True)
 			else:
-				await send_edit(m, "Something went wrong . . .", delme=2, mono=True)
-		else:
-			await send_edit(m, "Sorry, Your Are Not An Admin Here !", delme=2, mono=True)
+				await send_edit(m, "Something went wrong !", mono=True)
+
+			if user:
+				if user.user.is_self:
+					await send_edit(m, "You can't ban yourself !", mono=True)
+				elif user.user.status == "administrator":
+					await send_edit(m, "How am i supposed to ban an admin ?", mono=True)
+				elif user.user.status == "creator":
+					await send_edit(m, "How am i supposed to ban a creator of a group ?", mono=True)
+			else:
+				return await send_edit(m, "Something went wrong !", mono=True)
+
+			await kick(m.chat.id, user.user.id)
+			await send_edit(m, f"Banned {reply.from_user.mention} in this chat !")
 	except Exception as e:
 		await error(m, e)
+
 
 
 
