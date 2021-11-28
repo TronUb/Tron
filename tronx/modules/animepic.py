@@ -5,6 +5,7 @@ from pyrogram.types import Message
 from tronx import (
 	app, 
 	CMD_HELP,
+	PREFIX,
 )
 
 from tronx.helpers import (
@@ -19,6 +20,7 @@ from tronx.helpers import (
 
 
 anime_suffix = "`baka`\n`bite`\n`blush`\n`bored`\n`cry`\n`cuddle`\n`dance`\n`facepalm`\n`feed`\n`happy`\n`highfive`\n`hug`\n`kiss`\n`laugh`\n`pat`\n`poke`\n`pout`\n`shrug`\n`slap`\n`sleep`\n`smile`\n`stare`\n`think`\n`thumbsup`\n`tickle`\n`wave`\n`wink`"
+anime_list = ["baka", "bite", "blush", "bored", "cry", "cuddle", "dance", "facepalm", "feed", "happy", "highfive", "hug", "kiss", "laugh", "pat", "poke", "pout", "shrug", "slap", "sleep", "smile", "stare", "think", "thumbsup", "tickle", "wave", "wink"]
 
 
 
@@ -93,96 +95,12 @@ async def baka_gif(_, m):
 		arg = m.command[1]
 		try:
 			await m.delete()
-			if arg == "baka":
-				data = get_anime_gif("baka")
-				await send_gif(m, data)
-			elif arg == "bite":
-				data = get_anime_gif("bite")
-				await send_gif(m, data)
-			elif arg == "blush":
-				data = get_anime_gif("blush")
-				await send_gif(m, data)
-			elif arg == "bored":
-				data = get_anime_gif("bored")
-				await send_gif(m, data)
-			elif arg == "cry":
-				data = get_anime_gif("cry")
-				await send_gif(m, data)
-			elif arg == "cuddle":
-				data = get_anime_gif("cuddle")
-				await send_gif(m, data)
-			elif arg == "dance":
-				data = get_anime_gif("dance")
-				await send_gif(m, data)
-			elif arg == "facepalm":
-				data = get_anime_gif("facepalm")
-				await send_gif(m, data)
-			elif arg ==  "feed":
-				data = get_anime_gif("feed")
-				await send_gif(m, data)
-			elif arg == "happy":
-				data = get_anime_gif("happy")
-				await send_gif(m, data)
-			elif arg == "highfive":
-				data = get_anime_gif("highfive")
-				await send_gif(m, data)
-			elif arg == "hug":
-				data = get_anime_gif("hug")
-				await send_gif(m, data)
-			elif arg == "kiss":
-				data = get_anime_gif("kiss")
-				await send_gif(m, data)
-			elif arg == "laugh":
-				data = get_anime_gif("laugh")
-				await send_gif(m, data)
-			elif arg == "pat":
-				data = get_anime_gif("pat")
-				await send_gif(m, data)
-			elif arg == "poke":
-				data = get_anime_gif("poke")
-				await send_gif(m, data)
-			elif arg == "pout":
-				data = get_anime_gif("pout")
-				await send_gif(m, data)
-			elif arg == "shrug":
-				data = get_anime_gif("shrug")
-				await send_gif(m, data)
-			elif arg == "sleep":
-				data = get_anime_gif("sleep")
-				await send_gif(m, data)
-			elif arg == "slap":
-				data = get_anime_gif("slap")
-				await send_gif(m, data)
-			elif arg == "smile":
-				data = get_anime_gif("smile")
-				await send_gif(m, data)
-			elif arg == "smug":
-				data = get_anime_gif("smug")
-				await send_gif(m, data)
-			elif arg == "stare":
-				data = get_anime_gif("stare")
-				await send_gif(m, data)
-			elif arg == "think":
-				data = get_anime_gif("think")
-				await send_gif(m, data)
-			elif arg == "thumbsup":
-				data = get_anime_gif("thumbsup")
-				await send_gif(m, data)
-			elif arg == "tickle":
-				data = get_anime_gif("tickle")
-				await send_gif(m, data)
-			elif arg == "wave":
-				data = get_anime_gif("wave")
-				await send_gif(m, data)
-			elif arg == "wink":
-				data = get_anime_gif("wink")
-				await send_gif(m, data)
-			elif arg == "think":
-				data = get_anime_gif("think")
+			if arg in anime_list:
+				data = get_anime_gif(arg)
 				await send_gif(m, data)
 			else:
 				await send_edit(m, anime_suffix)
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Give me a suffix . . .", mono=True, delme=3)
+		await send_edit(m, "Give me a suffix, use `{PREFIX}giflist` to get suffix . . .", delme=5)
