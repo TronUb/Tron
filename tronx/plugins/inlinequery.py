@@ -1,14 +1,4 @@
-import time
-import heroku3
-import requests
-
-from sys import (
-	version_info, 
-	platform,
-)
-
 from pyrogram import (
-	Client, 
 	filters, 
 	__version__ as __pyro_version__,
 )
@@ -26,36 +16,25 @@ from pyrogram.types import (
 try:
 	from tronx import bot
 except ImportError:
-	bot = None
+	bot = False
 
 from tronx import (
-	app, 
-	CMD_HELP, 
 	version, 
 	USER_ID, 
 	USER_NAME, 
 	USER_USERNAME, 
 	Config,
 	uptime,
-	PREFIX,
 	__python_version__,
-	db_status,
-	lara_version,
 )
 
 from tronx.helpers import (
-	helpdex,
 	build_keyboard,
 	quote,
-	data,
 	ialive_pic,
-	bot_bio,
 	bot_pic,
 )
 
-from tronx.database.postgres import pmpermit_sql as db
-from tronx.database.postgres import dv_sql as dv
-from tronx.variable import message_ids
 
 
 
@@ -101,7 +80,7 @@ def inline_res(_, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=Config.BOT_PIC,
+				photo_url=bot_pic(),
 				title="Installation",
 				description="tron helpdex",
 				caption="**Dex:** Home\n\n**Description:** This is your helpdex use to navigate in different sub dex to information.",
