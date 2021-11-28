@@ -50,7 +50,6 @@ async def create_anyfile(app, m:Message):
 			givename = cmd[1]
 			await create_file(
 				m, 
-				app, 
 				filename=givename, 
 				text=data
 			)
@@ -59,7 +58,6 @@ async def create_anyfile(app, m:Message):
 			data = reply.text
 			await create_file(
 				m, 
-				app, 
 				filename="file.py", 
 				text=data
 			)
@@ -69,14 +67,13 @@ async def create_anyfile(app, m:Message):
 			data = reply.text
 			await create_file(
 				m, 
-				app, 
 				filename=givename, 
 				text=data
 			)
 		else:
 			await send_edit(
 				m, 
-				f"Use cmd correctly: `{PREFIX}new [ file name ]`\n\nNote: use filename with extention, ex: file.py",
+				f"Use cmd correctly: `{PREFIX}new [ file name ] [content]`\n\nNote: use filename with extention, ex: file.py, file.txt, etc",
 				)
 	except Exception as e:
 		await error(m, e)
