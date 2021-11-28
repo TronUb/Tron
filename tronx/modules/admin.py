@@ -64,7 +64,7 @@ CMD_HELP.update(
 
 
 
-@app.on_message(gen("ban"))
+@app.on_message(gen("ban", allow_channel=True))
 async def ban_hammer(_, m):
 	try:
 		# return if used in private
@@ -108,7 +108,7 @@ async def ban_hammer(_, m):
 
 
 
-@app.on_message(gen("banall"))
+@app.on_message(gen("banall", allow_channel=True))
 async def ban_all(_, m):
 	try: 
 		await private(m)
@@ -135,7 +135,7 @@ async def ban_all(_, m):
 
 
 
-@app.on_message(gen("unban"))
+@app.on_message(gen("unban", allow_channel=True))
 async def unban(_, m):
 	try:
 		await private(m)
@@ -294,7 +294,7 @@ async def unmute(_, m):
 
 
 
-@app.on_message(gen("kick"))
+@app.on_message(gen("kick", allow_channel=True))
 async def kick_user(_, m):
 	try:
 		await private(m)
@@ -336,7 +336,7 @@ async def kick_user(_, m):
 
 
 
-@app.on_message(gen("pin"))
+@app.on_message(gen("pin", allow_channel=True))
 async def pin_message(_, m):
 	try:
 		if await CheckAdmin(m) is True:
@@ -355,7 +355,7 @@ async def pin_message(_, m):
 
 
 
-@app.on_message(gen("unpin"))
+@app.on_message(gen("unpin", allow_channel=True))
 async def pin_message(_, m):
 	try:
 		reply = m.reply_to_message
@@ -380,7 +380,7 @@ async def pin_message(_, m):
 
 
 
-@app.on_message(gen("promote"))
+@app.on_message(gen("promote", allow_channel=True))
 async def promote(_, m):
 	try:
 		await private(m)
@@ -430,7 +430,7 @@ async def promote(_, m):
 
 
 
-@app.on_message(gen("demote"))
+@app.on_message(gen("demote", allow_channel=True))
 async def demote(client, m):
 	try:
 		await private(m)
