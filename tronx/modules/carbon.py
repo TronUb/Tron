@@ -141,6 +141,7 @@ async def create_carbon(app: Client, m: Message, text, colour):
 			reply_to_message_id=ReplyCheck(m),
 		)
 		await m.delete()
+		os.remove(filename)
 	else:
 		await send_edit(
 			m, 
@@ -149,4 +150,3 @@ async def create_carbon(app: Client, m: Message, text, colour):
 			)
 		time.sleep(2)
 		await m.delete()
-	os.remove(filename)
