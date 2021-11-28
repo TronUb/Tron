@@ -39,7 +39,7 @@ async def set_dv_var(_, m: Message):
 	if long(m) == 2:
 		await send_edit(m, "Please give me key with a value . . . ", delme=2)  
 
-	if long(m) > 2 and long(m) < 4096:
+	if long(m) > 2 & long(m) < 4096:
 		key = m.command[1]
 		value = m.text.split(None, 2)[2]
 		done = dv.setdv(key, value)
@@ -101,15 +101,20 @@ async def get_database_var(_, m: Message):
 
 	elif long(m) > 1 and arg[1] == "on":
 		if bool(dv.getdv("PMPERMIT")) is True:
-			await send_edit(m, "Pmguard is already active !")
+			return await send_edit(m, "Pmguard is already active !", mono=True)
 
-		elif bool(dv.getdv("PMPERMIT")) is False:
-			dv.setdv("PMPERMIT", "True")
-			await send_edit(m, "Pmguard is now turned on !")
+		dv.setdv("PMPERMIT", "True")
+		await send_edit(m, "Pmguard is now turned on !")
 
 	elif long(m) > 1 and arg[1] == "off":
+		if bool(dv.getdv("PMPERMIT")) is False:
+			return await send_edit(m, "Pmguard is already off !", mono=True)
+
 		dv.deldv("PMPERMIT")
-		await send_edit(m, "Pmguard is now turned off !")
+		await send_edit(m, "Pmguard is now turned off !", mono=True)
 
 	elif long(m) > 1 and arg[1] not in ["on", "off"]:
 		await send_edit(m, "Use `on` or `off` after command to turn on & off pmguard !")
+	else:
+		await send_edit(m, "Something went wrong, please try again later !", mono=True)
+
