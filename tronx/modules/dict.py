@@ -46,7 +46,7 @@ async def create_anyfile(app, m:Message):
 	cmd = m.command
 	try:
 		if long(m) < 4096 and long(m) > 2:
-			data = " ".join(cmd[1:])
+			data = m.text.split(None, 2)[2]
 			givename = cmd[1]
 			await create_file(
 				m, 
