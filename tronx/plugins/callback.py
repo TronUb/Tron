@@ -1,15 +1,6 @@
-import os
-import time
 import heroku3
-import requests
-
-from sys import (
-	version_info, 
-	platform,
-)
 
 from pyrogram import (
-	Client, 
 	filters, 
 	__version__ as __pyro_version__,
 )
@@ -17,9 +8,6 @@ from pyrogram import (
 from pyrogram.types import (
 	InlineKeyboardButton, 
 	InlineKeyboardMarkup, 
-	InlineQueryResultArticle, 
-	InlineQueryResultPhoto, 
-	InputTextMessageContent, 
 	CallbackQuery, 
 	Message,
 )
@@ -30,7 +18,6 @@ except ImportError:
 	bot = None
 
 from tronx import (
-	app, 
 	CMD_HELP, 
 	version, 
 	USER_ID, 
@@ -49,14 +36,8 @@ from tronx.helpers import (
 	build_keyboard,
 	quote,
 	data,
-	ialive_pic,
-	bot_bio,
-	bot_pic,
 )
 
-from tronx.database.postgres import pmpermit_sql as db
-from tronx.database.postgres import dv_sql as dv
-from tronx.variable import message_ids
 
 
 
@@ -169,9 +150,8 @@ async def give_plugin_cmds(_, cb):
 
 
 # list of helpdex
-@bot.on_callback_query(filters.regex("open-stats-dex"))
+@bot.on_callback_query(filters.regex("open-stats-dex") & filters.user(USER_ID))
 async def _stats(_, cb):
-	await alert_user(cb)
 	await cb.edit_message_text(
 		text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
 		reply_markup=InlineKeyboardMarkup([home_back]),
@@ -384,9 +364,8 @@ async def _shutdown_tron(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("shutdown-core"))
+@bot.on_callback_query(filters.regex("shutdown-core") & filters.user(USER_ID))
 async def _shutdown_core(_, cb):
-	await alert_user(cb)
 	if filters.regex("shutdown-core"):
 		await cb.edit_message_text(
 			text="**Dex:** shutdown bot ( after confirm )\n\n**Location:** /home/settings/shutdown bot/confirm\n\n`Turning the userbot off, please wait...`", 
@@ -436,9 +415,8 @@ async def _shutdown_core(_, cb):
 			else:
 				sys.exit(0)
 
-@bot.on_callback_query(filters.regex("more-anime-quotes"))
+@bot.on_callback_query(filters.regex("more-anime-quotes") & filters.user(USER_ID))
 async def _more_anime_quotes(_, cb):
-	await alert_user(cb)
 	await cb.edit_message_text(
 		quote(),
 		reply_markup=InlineKeyboardMarkup(
@@ -490,12 +468,3 @@ async def _back_to_info(_, cb):
 
 
 
-async def alert_user(cb):
-	if not cb.from_user.id == USER_ID:
-		await cb.answer(
-			"Sorry you can't use this userbot , make your own userbot at @tronuserbot !",
-			show_alert=True,
-		)
-	return
-
-# ---------------- The End ---------------------------------------
