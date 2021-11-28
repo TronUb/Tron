@@ -154,7 +154,7 @@ async def inline_alive(_, m: Message):
 		else:
 			await send_edit(
 				m, 
-				"Failed to get inline alive results !",
+				"Please try again later !",
 				delme=2,
 				mono=True
 				)
