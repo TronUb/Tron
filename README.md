@@ -8,7 +8,7 @@
 
 ## **About**
 
-**A telegram userbot, which is written in Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library**
+**This is a telegram userbot with an assistant bot, it is written in Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library**
 
 &nbsp;
 
