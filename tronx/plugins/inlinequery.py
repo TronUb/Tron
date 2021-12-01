@@ -96,7 +96,7 @@ def inline_res(_, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=_ialive_pic(),
+				photo_url=ialive_pic(),
 				title="Ialive query",
 				description="Tron helpdex",
 				caption=f"⛊  Inline Status:\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{version}`\n**⟜ Python:** `{__python_version__}`\n⟜ **Pyrogram:** `{__pyro_version__}`\n⟜ **uptime:** `{uptime()}\n\n",
