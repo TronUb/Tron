@@ -63,7 +63,8 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 # modules dex
-@bot.on_callback_query(filters.regex("tron-dex-2") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("tron-dex-2"))
+@alert_user
 async def modules(_, cb):
 	official = True
 	cmd = CMD_HELP
@@ -77,7 +78,8 @@ async def modules(_, cb):
 
 
 # next page
-@bot.on_callback_query(filters.regex(pattern="helpme_next\((.+?)\)_(True|False)") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex(pattern="helpme_next\((.+?)\)_(True|False)"))
+@alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
 	official = True
@@ -93,7 +95,8 @@ async def give_next_page(_, cb):
 
 
 # previous page
-@bot.on_callback_query(filters.regex(pattern="helpme_prev\((.+?)\)_(True|False)") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex(pattern="helpme_prev\((.+?)\)_(True|False)"))
+@alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
 	official = True
@@ -109,7 +112,8 @@ async def give_old_page(_, cb):
 
 
 # back from modules dex to home
-@bot.on_callback_query(filters.regex(pattern="backme_(.*)_(True|False)") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex(pattern="backme_(.*)_(True|False)"))
+@alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
 	official = True
@@ -124,7 +128,8 @@ async def get_back(_, cb):
 
 
 # modules plugin page information
-@bot.on_callback_query(filters.regex(pattern="modulelist_(.*)_(True|False)") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex(pattern="modulelist_(.*)_(True|False)"))
+@alert_user
 async def give_plugin_cmds(_, cb):
 	plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
 	official = True
@@ -161,7 +166,8 @@ async def _stats(_, cb):
 
 
 # about info
-@bot.on_callback_query(filters.regex("open-about-dex") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("open-about-dex"))
+@alert_user
 async def _about(_, cb):
 	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
@@ -170,7 +176,8 @@ async def _about(_, cb):
 		)
 
 
-@bot.on_callback_query(filters.regex("public-commands") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("public-commands"))
+@alert_user
 async def _public(_, cb):
 	if filters.regex("public-commands"):
 		await cb.edit_message_text(
@@ -186,7 +193,8 @@ async def _public(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("open-extra-dex") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("open-extra-dex"))
+@alert_user
 async def _extra(_, cb):
 	if filters.regex("open-extra-dex"):
 		await cb.edit_message_text(
@@ -214,7 +222,8 @@ async def _extra(_, cb):
 		)
 
 
-@bot.on_callback_query(filters.regex("close-dex") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("close-dex"))
+@alert_user
 async def _close(_, cb: CallbackQuery):
 	if filters.regex("close-dex"):
 		await cb.edit_message_text(
@@ -237,7 +246,8 @@ async def _close(_, cb: CallbackQuery):
 
 
 
-@bot.on_callback_query(filters.regex("open-settings-dex") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("open-settings-dex"))
+@alert_user
 async def _settings(_, cb):
 	if filters.regex("open-settings-dex"):
 		await cb.edit_message_text(
@@ -260,7 +270,8 @@ async def _settings(_, cb):
 		)
 
 
-@bot.on_callback_query(filters.regex("open-start-dex") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("open-start-dex"))
+@alert_user
 async def _start(_, cb):
 	if filters.regex("open-start-dex"):
 		await cb.edit_message_text(
@@ -270,7 +281,8 @@ async def _start(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("restart-tron") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("restart-tron"))
+@alert_user
 async def _restart_tron(_, cb):
 	if filters.regex("restart-tron"):
 		await cb.edit_message_text(
@@ -294,7 +306,8 @@ async def _restart_tron(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("restart-core") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("restart-core"))
+@alert_user
 async def _restart_core(_, cb):
 	if filters.regex("restart-core"):
 		await cb.edit_message_text(
@@ -341,7 +354,8 @@ async def _restart_core(_, cb):
 				),
 			)
 
-@bot.on_callback_query(filters.regex("shutdown-tron") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("shutdown-tron"))
+@alert_user
 async def _shutdown_tron(_, cb):
 	if filters.regex("shutdown-tron"):
 		await cb.edit_message_text(
@@ -366,7 +380,8 @@ async def _shutdown_tron(_, cb):
 			),
 		)
 
-@bot.on_callback_query(filters.regex("shutdown-core") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("shutdown-core"))
+@alert_user
 async def _shutdown_core(_, cb):
 	if filters.regex("shutdown-core"):
 		await cb.edit_message_text(
@@ -417,7 +432,8 @@ async def _shutdown_core(_, cb):
 			else:
 				sys.exit(0)
 
-@bot.on_callback_query(filters.regex("more-anime-quotes") & filters.user(USER_ID))
+@bot.on_callback_query(filters.regex("more-anime-quotes")
+@alert_user)
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
 		quote(),
