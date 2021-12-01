@@ -151,8 +151,8 @@ async def give_plugin_cmds(_, cb):
 
 
 # list of helpdex
-@alert_user
 @bot.on_callback_query(filters.regex("open-stats-dex"))
+@alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(
 		text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
