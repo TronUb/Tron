@@ -44,7 +44,7 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 # /start command for bot
-@bot.on_message(filters.command(["start"]))
+@bot.on_message(filters.command("help"))
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id in USER_ID:
