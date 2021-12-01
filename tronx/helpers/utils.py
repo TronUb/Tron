@@ -4,7 +4,6 @@ import shlex
 import os
 import asyncio
 import html
-import sys
 import math
 import aiohttp 
 import random
@@ -15,7 +14,6 @@ from hachoir.parser import createParser
 from PIL import Image
 
 from math import ceil
-from time import sleep
 from typing import List, Union
 from re import escape, sub
 from enum import IntEnum, unique
@@ -26,10 +24,8 @@ from tronx import (
 	Config,
 )
 
-from pyrogram.types import Message, User
-from pyrogram.errors import RPCError
-from pyrogram.types import InlineKeyboardButton
-from pyrogram.errors import MessageNotModified, FloodWait
+from pyrogram.types import Message, User, InlineKeyboardButton
+from pyrogram.errors import RPCError, MessageNotModified, FloodWait
 
 
 
@@ -61,7 +57,7 @@ class Types(IntEnum):
 
 
 # help menu builder
-def helpdex(page_number, loaded_modules, prefix, official=True):
+def helpdex(page_number, loaded_modules, prefix):
 	rows = 4
 	column = 2
 	help_modules = []
@@ -75,7 +71,7 @@ def helpdex(page_number, loaded_modules, prefix, official=True):
 				HELP_EMOJI,
 				x.replace("_", " ").title(),
 			),
-			callback_data="modulelist_{}|{}_{}".format(x, page_number, official),
+			callback_data="modulelist_{}|{}".format(x, page_number),
 		)
 		for x in help_modules
 	]
@@ -91,15 +87,15 @@ def helpdex(page_number, loaded_modules, prefix, official=True):
 			(
 				InlineKeyboardButton(
 					text="❰ Prev",
-					callback_data="{}_prev({})_{}".format(
-						prefix, mod_page, official
+					callback_data="{}_prev({})".format(
+						prefix, mod_page
 					),
 				),
 				InlineKeyboardButton(text="Back", callback_data=f"open-start-dex"),
 				InlineKeyboardButton(
 					text="Next ❱",
-					callback_data="{}_next({})_{}".format(
-						prefix, mod_page, official
+					callback_data="{}_next({})".format(
+						prefix, mod_page
 					),
 				),
 			)
@@ -110,10 +106,14 @@ def helpdex(page_number, loaded_modules, prefix, official=True):
 
 
 # get type of message
-def get_message_type(msg):
-	if msg.text or msg.caption:
-		content = None
-		message_type = Types.TEXT
+def get_message_type(msg, include_text=True):
+	content = None
+	message_type = None
+	
+	if include_text is True:
+		if msg.text or msg.caption:
+			content = None
+			message_type = Types.TEXT
 
 	elif msg.sticker:
 		content = msg.sticker.file_id
@@ -149,79 +149,42 @@ def get_message_type(msg):
 	elif msg.animation:
 		content = msg.animation.file_id
 		message_type = Types.ANIMATION
-	else:
-		return None, None
 	return content, message_type
 
 
 
 
 def get_note_type(msg):
-	if len(msg.text.split()) <= 1:
-		return None, None, None, None, None
+	reply = msg.reply_to_message
+	note_name = None
 	message_type = None
 	content = None
+	text = None
+	file_id = None
+
+
+	if long(m) <= 1:
+		return None, None, None, None, None
+
 	if msg.text:
-		raw_text = msg.text.markdown
+		raw_text = msg.text.markdown 
 	else:
 		raw_text = msg.caption.markdown
-	args = raw_text.split(None, 2)  # use python's maxsplit to separate cmd and args
-	note_name = args[1]
+	note_name = raw_text.split()[1]
 
 	# determine what the contents of the filter are - text, image, sticker, etc
-	if len(args) >= 3:
-		text = args[2]
+	if long(m) >= 3:
+		text = raw_text.split(None, 2)[2]
 		message_type = Types.TEXT
-		file_id = None		
 
-	elif msg.reply_to_message:
-		if msg.reply_to_message.text:
-			text = msg.reply_to_message.text.markdown
-		elif msg.reply_to_message.caption:
-			text = msg.reply_to_message.caption.markdown
-		else:
-			text = ""
-		if len(args) >= 2 and msg.reply_to_message.text:  # not caption, text
+	elif reply:
+		if reply.text:
+			text = reply.text.markdown if reply.text else reply.caption.markdown if reply.caption else ""
 			message_type = Types.TEXT
-			file_id = None			
-
-		elif msg.reply_to_message.sticker:
-			content = msg.reply_to_message.sticker.file_id			
-			message_type = Types.STICKER
-
-		elif msg.reply_to_message.document:
-			if msg.reply_to_message.document.mime_type == "application/x-bad-tgsticker":
-				message_type = Types.ANIMATED_STICKER
-			else:
-			        message_type = Types.DOCUMENT
-			content = msg.reply_to_message.document.file_id		
-
-		elif msg.reply_to_message.photo:
-			content = msg.reply_to_message.photo.file_id			
-			message_type = Types.PHOTO
-
-		elif msg.reply_to_message.audio:
-			content = msg.reply_to_message.audio.file_id	
-			message_type = Types.AUDIO
-
-		elif msg.reply_to_message.voice:
-			content = msg.reply_to_message.voice.file_id
-			message_type = Types.VOICE
-
-		elif msg.reply_to_message.video:
-			content = msg.reply_to_message.video.file_id
-			message_type = Types.VIDEO
-
-		elif msg.reply_to_message.video_note:
-			content = msg.reply_to_message.video_note.file_id
-			message_type = Types.VIDEO_NOTE
-
-		elif msg.reply_to_message.animation:
-			content = msg.reply_to_message.animation.file_id
-			# text = None
-			message_type = Types.ANIMATION
+		content, message_type = get_message_type(reply, include_text=False)
 	else:
-		return None, None, None, None, None
+		return
+
 	return note_name, text, message_type, content
 
 
@@ -233,54 +196,13 @@ def fetch_note_type(msg):
 	note_name = None
 	text = None
 
-	# determine what the contents of the filter are - text, image, sticker, etc
 	if msg:
 		if msg.text:
-			text = msg.text.markdown
-		elif msg.caption:
-			text = msg.caption.markdown
-		else:
-			text = ""
-		if msg.text:
+			text = msg.text.markdown if msg.text else msg.caption.markdown if msg.caption else ""        
 			message_type = Types.TEXT
 
-		elif msg.sticker:
-			content = msg.sticker.file_id
-			message_type = Types.STICKER
+		content, message_type = get_message_type(msg, include_text=False)
 
-		elif msg.document:
-			if msg.document.mime_type == "application/x-bad-tgsticker":
-				message_type = Types.ANIMATED_STICKER
-			else:
-				message_type = Types.DOCUMENT
-			content = msg.document.file_id
-
-		elif msg.photo:
-			content = msg.photo.file_id
-			message_type = Types.PHOTO
-
-		elif msg.audio:
-			content = msg.audio.file_id
-			message_type = Types.AUDIO
-
-		elif msg.voice:
-			content = msg.voice.file_id
-			message_type = Types.VOICE
-
-		elif msg.video:
-			content = msg.video.file_id
-			message_type = Types.VIDEO
-
-		elif msg.video_note:
-			content = msg.video_note.file_id
-			message_type = Types.VIDEO_NOTE
-
-		elif msg.animation:
-			content = msg.animation.file_id
-			# text = None
-			message_type = Types.ANIMATION
-	else:
-		return None, None, None, None, None
 	return note_name, text, message_type, content 
 
 
@@ -288,51 +210,15 @@ def fetch_note_type(msg):
 
 async def CheckAdmin(m: Message):
 	"""Check if we are an admin."""
-	admin = "administrator"
-	creator = "creator"
-	ranks = [admin, creator]
 
-	SELF = await app.get_chat_member(
+	ranks = ["administrator", "creator"]
+
+	data = await app.get_chat_member(
 		chat_id=m.chat.id, 
 		user_id=m.from_user.id
 	)
 
-	if SELF.status not in ranks:
-		await m.edit("__I'm not Admin!__")
-		sleep(2)
-		await m.delete()
-
-	else:
-		if SELF.status is not admin or SELF.can_restrict_members:
-			return True
-		else:
-			await m.edit("__No Permissions to restrict Members__")
-			sleep(2)
-			await m.delete()
-
-
-
-
-async def CheckReplyAdmin(m: Message):
-	"""Check if the message is a reply to another user."""
-	if not m.reply_to_message:
-		await m.edit(f"`.{m.command[0]}` needs to be a reply")
-		sleep(2)
-		await m.delete()
-	elif m.reply_to_message.from_user.is_self:
-		await m.edit(f"I can't {m.command[0]} myself.")
-		sleep(2)
-		await m.delete()
-	else:
-		return True
-
-
-
-
-async def RestrictFailed(m: Message):
-	await m.edit(f"I can't {message.command} this user.")
-	sleep(2)
-	await m.delete()
+	return False if not data.status in ranks else True
 
 
 
@@ -483,9 +369,7 @@ def get_size_format(b, factor=1024, suffix="B"):
 
 
 def get_directory_size(location):
-	size = get_size_recursive(location)
-	return get_size_format(size)
-# ----------------------------------
+	return get_size_format(get_size_recursive(location))
 
 
 
@@ -550,6 +434,8 @@ def parse_button(text):
 
 def build_keyboard(buttons):
 	keyb = []
+	keyb.clear()
+
 	for btn in buttons:
 		keyb.append(
 				InlineKeyboardButton(
@@ -621,13 +507,12 @@ def convert_size(size_bytes):
 
 
 def ReplyCheck(m: Message):
-	reply_id = None
+	reply_id = False
+	reply = m.reply_to_message
 
-	if m.reply_to_message:
-		reply_id = m.reply_to_message.message_id
+	if reply:
+		reply_id = reply.message_id if reply else m.message_id if not m.from_user.is_self else False
 
-	elif not m.from_user.is_self:
-		reply_id = m.message_id
 	return reply_id
 
 
@@ -760,13 +645,14 @@ async def extract_user(m: Message) -> (int, str):
 	"""extracts the user from a message"""
 	user_id = None
 	user_first_name = None
+	reply = m.reply_to_message
 
-	if m.reply_to_message:
-		user_id = m.reply_to_message.from_user.id
-		user_first_name = m.reply_to_message.from_user.first_name
+	if reply:
+		user_id = reply.from_user.id
+		user_first_name = reply.from_user.first_name
 
-	elif len(m.command) > 1:
-		if len(m.entities) > 1:
+	elif long(m) > 1:
+		if long(m) > 1:
 			# 0: is the command used
 			# 1: should be the user specified
 			required_entity = m.entities[1]
@@ -811,6 +697,7 @@ def GetUserMentionable(user: User):
 
 
 
+# return msg type
 def types(m: Message):
 	reply = m.reply_to_message
 	if reply.text:
@@ -840,13 +727,6 @@ def types(m: Message):
 
 # chat type
 def chattype(m: Message):
-	chat = m.chat.type
-	if chat == "supergroup":
-		chat_type = "supergroup"
-	elif chat == "group":
-		chat_type == "group"
-	elif chat == "private":
-		chat_type = "private"
-	else:
-		chat_type = "unknown chat type"
-	return chat_type
+	return m.chat.type
+
+
