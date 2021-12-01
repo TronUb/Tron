@@ -20,9 +20,9 @@ from tronx.helpers import (
 	build_keyboard,
 	bot_bio,
 	bot_pic,
+	message_ids,
 )
 
-from tronx.variable import message_ids
 
 
 
