@@ -239,6 +239,14 @@ async def CheckReplyAdmin(m: Message):
 
 
 
+
+async def RestrictFailed(m: Message):
+	await m.edit(f"I can't {message.command} this user.")
+	sleep(2)
+	await m.delete()
+
+
+
 class AioHttp:
 	@staticmethod
 	async def get_json(link):
