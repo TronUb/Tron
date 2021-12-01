@@ -12,5 +12,5 @@ from pyrogram.types import Message
 async def send_help(_, m: Message):
 	await bot.send_message(
 		m.chat.id,
-		"Just use the /start command . . . 🤭"
+		"How can i help you ?"
 		)
