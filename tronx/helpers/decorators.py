@@ -1,6 +1,6 @@
 from pyrogram.types import CallbackQuery
 from .variables import USER_ID
-
+from pyrogram.errors import MessageNotModified
 
 
 
@@ -14,4 +14,9 @@ def alert_user(func):
 				f"Sorry, but you can't use this userbot ! make your own userbot at @tronuserbot", 
 				show_alert=True
 			)
+		else:
+			try:
+				await func(_, cb)
+			except MessageNotModified:
+				pass
 	return wrapper
