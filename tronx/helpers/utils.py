@@ -9,6 +9,7 @@ import aiohttp
 import random
 import json
 
+from time import sleep
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
@@ -220,6 +221,21 @@ async def CheckAdmin(m: Message):
 
 	return False if not data.status in ranks else True
 
+
+
+
+async def CheckReplyAdmin(m: Message):
+	"""Check if the message is a reply to another user."""
+	if not m.reply_to_message:
+		await m.edit(f"`.{m.command[0]}` needs to be a reply")
+		sleep(2)
+		await m.delete()
+	elif m.reply_to_message.from_user.is_self:
+		await m.edit(f"I can't {m.command[0]} myself.")
+		sleep(2)
+		await m.delete()
+	else:
+		return True
 
 
 
