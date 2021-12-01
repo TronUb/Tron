@@ -66,11 +66,9 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 @bot.on_callback_query(filters.regex("tron-dex-2"))
 @alert_user
 async def modules(_, cb):
-	official = True
-	cmd = CMD_HELP
-	btn = helpdex(0, CMD_HELP, "helpme", official=official)
+	btn = helpdex(0, CMD_HELP, "helpme")
 	await cb.edit_message_text(
-		f"**Dex:** Modules \n\n**Location:** /home/modules\n\n**Modules:** `{len(cmd)}`",
+		f"**Dex:** Modules \n\n**Location:** /home/modules\n\n**Modules:** `{len(CMD_HELP)}`",
 		reply_markup=InlineKeyboardMarkup(btn),
 	)
 
@@ -82,13 +80,7 @@ async def modules(_, cb):
 @alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	official = True
-	if cb.matches[0].group(2) == "False":
-		official = False
-	cmd_help = CMD_HELP if official else cmd_help
-	buttons = helpdex(
-		current_page_number + 1, cmd_help, "helpme", official=official
-	)
+	buttons = helpdex(current_page_number + 1, CMD_HELP, "helpme")
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
 
 
@@ -99,13 +91,7 @@ async def give_next_page(_, cb):
 @alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	official = True
-	if cb.matches[0].group(2) == "False":
-		official = False
-	cmd_help = CMD_HELP if official else CMD_HELP
-	buttons = helpdex(
-		current_page_number - 1, cmd_help, "helpme", official=official
-	)
+	buttons = helpdex(current_page_number - 1, CMD_HELP, "helpme")
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
 
 
@@ -116,12 +102,8 @@ async def give_old_page(_, cb):
 @alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
-	official = True
-	if cb.matches[0].group(2) == "False":
-		official = False
-	cmd_help = CMD_HELP if official else CMD_HELP
-	buttons = helpdex(page_number, cmd_help, "helpme", official=official)
-	text = f"**Dex:** Modules\n\nLocation: /home/modules\n\n**Modules:** `{len(cmd_help)}`"
+	buttons = helpdex(page_number, CMD_HELP, "helpme", official=official)
+	text = f"**Dex:** Modules\n\nLocation: /home/modules\n\n**Modules:** `{len(CMD_HELP)}`"
 	await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons))
 
 
@@ -132,9 +114,6 @@ async def get_back(_, cb):
 @alert_user
 async def give_plugin_cmds(_, cb):
 	plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
-	official = True
-	if cb.matches[0].group(2) == "False":
-		official = False
 	plugs = await data(plugin_name)
 	help_string = f"PLUGIN: {plugin_name}\n\n" + "".join(plugs)
 	await cb.edit_message_text(
@@ -144,7 +123,7 @@ async def give_plugin_cmds(_, cb):
 				[
 					InlineKeyboardButton(
 						text="Back",
-						callback_data=f"backme_{page_number}_{official}",
+						callback_data=f"backme_{page_number}",
 					)
 				]
 			]
