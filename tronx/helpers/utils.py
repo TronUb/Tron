@@ -172,7 +172,7 @@ def get_note_type(msg):
 	file_id = None
 
 
-	if long(m) <= 1:
+	if long(msg) <= 1:
 		return None, None, None, None, None
 
 	if msg.text:
@@ -182,7 +182,7 @@ def get_note_type(msg):
 	note_name = raw_text.split()[1]
 
 	# determine what the contents of the filter are - text, image, sticker, etc
-	if long(m) >= 3:
+	if long(msg) >= 3:
 		text = raw_text.split(None, 2)[2]
 		message_type = Types.TEXT
 
