@@ -10,4 +10,4 @@ from pyrogram.types import Message
 
 @bot.on_message(filters.command("start"))
 async def send_help(_, m: Message):
-	await bot.reply("How can i help you ?")
+	await m.reply("How can i help you ?")
