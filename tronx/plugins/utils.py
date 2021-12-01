@@ -1,5 +1,5 @@
 from pyrogram import filters
-from pyrogram.types import ReplyKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from tronx import (
 	bot
