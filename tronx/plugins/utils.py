@@ -33,7 +33,16 @@ async def id_of_user(_, m):
 async def get_anime_quotes(_, m):
 	await bot.send_message(
 		m.chat.id,
-		quote()
+		quote(),
+		reply_markup=InlineKeyboardMarkup(
+			[
+				[
+					InlineKeyboardButton(
+						"More", callback_data="more-anime-quotes"
+					)
+				],
+			]
+		)
 	)
 
 
