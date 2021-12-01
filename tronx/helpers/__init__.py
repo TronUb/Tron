@@ -1,5 +1,6 @@
 from .bots import *
 from .filters import *
-from .func import *
+from .functions import *
 from .user import *
 from .utils import *
+from .decorators import *
