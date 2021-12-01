@@ -36,6 +36,7 @@ from tronx.helpers import (
 	build_keyboard,
 	quote,
 	data,
+	alert_user,
 )
 
 
@@ -150,6 +151,7 @@ async def give_plugin_cmds(_, cb):
 
 
 # list of helpdex
+@alert_user
 @bot.on_callback_query(filters.regex("open-stats-dex") & filters.user(USER_ID))
 async def _stats(_, cb):
 	await cb.edit_message_text(
