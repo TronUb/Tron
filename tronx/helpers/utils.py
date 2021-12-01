@@ -25,6 +25,8 @@ from tronx import (
 	Config,
 )
 
+from .functions import long
+
 from pyrogram.types import Message, User, InlineKeyboardButton
 from pyrogram.errors import RPCError, MessageNotModified, FloodWait
 
