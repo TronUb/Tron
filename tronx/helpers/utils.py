@@ -25,7 +25,6 @@ from tronx import (
 	Config,
 )
 
-from .functions import long
 
 from pyrogram.types import Message, User, InlineKeyboardButton
 from pyrogram.errors import RPCError, MessageNotModified, FloodWait
@@ -55,6 +54,13 @@ class Types(IntEnum):
 	ANIMATION = 9
 	ANIMATED_STICKER = 10
 	CONTACT = 11
+
+
+
+
+def long(m: Message):
+	text = len(m.command)
+	return text if text else None
 
 
 
