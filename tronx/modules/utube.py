@@ -14,6 +14,19 @@ from tronx.helpers import (
 
 
 
+CMD_HELP.update(
+	{"utube": (
+		"utube",
+		{
+		"vinfo" : "Get a youtube video information . . ."
+		}
+		)
+	}
+)
+
+
+
+
 @app.on_message(gen("vinfo"))
 async def utube_info(_, m: Message):
 	reply = m.reply_to_message
