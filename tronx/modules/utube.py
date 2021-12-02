@@ -1,5 +1,6 @@
 from tronx import (
 	app,
+	CMD_HELP,
 )
 
 from pytube import YouTube
