@@ -1,4 +1,4 @@
 ## material
 
 
-### This storage shares his resources to help others.
+###  This directory contains useful images, fonts, etc for userbot.
