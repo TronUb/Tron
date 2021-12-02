@@ -50,7 +50,7 @@ async def send_welcome(_, m: Message):
 		file_id = chat["file_id"] if chat["file_id"] else False
 		caption = chat["caption"] if chat["caption"] else False
 		if file_id and not file_id.startswith("#"):
-			return await app.send_message(m.chat.id, file_id)
+			return await app.send_message(m.chat.id, file_id, reply_to_message_id=m.message_id)
 
 		elif file_id and file_id.startswith("#"):
 			file_id = file_id.replace("#", "")
@@ -59,13 +59,13 @@ async def send_welcome(_, m: Message):
 				m.chat.id,
 				file_id=file_id,
 				caption=caption,
-				reply_to_message_id=m.from_user.id
+				reply_to_message_id=m.message_id
 			)
 		elif not caption:
 			await app.send_cached_media(
 				m.chat.id,
 				file_id=file_id,
-				reply_to_message_id=m.from_user.id
+				reply_to_message_id=m.message_id
 			)
 	except Exception as e:
 		await error(m, e)
