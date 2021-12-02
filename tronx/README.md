@@ -1,6 +1,6 @@
 # Files location
 
-* database
+* database/postgres
 * helpers
 * methods
 * modules
