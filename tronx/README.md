@@ -2,7 +2,7 @@
 
 * database/postgres
 * helpers
-* methods
+* methods/decorators
 * modules
 * plugins
 * ____init____.py
