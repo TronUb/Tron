@@ -123,20 +123,20 @@ async def upstream(_, m):
 				await app.send_document(
 					m.chat.id,
 					"output.txt",
-					caption="Do `.update now` to update.",
+					caption="[ STATUS ]: Do `.update now` to update.",
 					reply_to_message_id=send_message_id,
 				)
 				remove("output.txt")
 			else:
 				return await send_edit(
 					m, 
-					f"{changelog_str}\n\nDo `.update now` to update.",
+					f"{changelog_str}\n\n[ STATUS ]: Do `.update now` to update.",
 					disable_web_page_preview=True,
 				)
 		else:
 			await send_edit(
 				m, 
-				f"\nYour bot is  **up-to-date**  with  **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
+				f"\n[ STATUS ]: Your bot is upto date with **version:** `{version}` and **branch:** **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
 				disable_web_page_preview=True,
 			)
 			repo.__del__()
@@ -161,13 +161,13 @@ async def upstream(_, m):
 		if heroku_app is None:
 			await send_edit(
 				m, 
-				f"{txt}\n`Invalid Heroku credentials for updating userbot dyno.`"
+				f"{txt}\n`Invalid Heroku credentials for updating userbot.`"
 			)
 			repo.__del__()
 			return
 		msg = await send_edit(
 			m, 
-			"`Userbot dyno build in progress, please wait for it to complete.`"
+			"`Userbot update in progress, please wait for few minutes . . .`"
 		)
 		ups_rem.fetch(ac_br)
 		repo.git.reset("--hard", "FETCH_HEAD")
@@ -186,7 +186,7 @@ async def upstream(_, m):
 		try:
 			await msg.edit("`Successfully Updated!\nRestarting, Please wait . . .`")
 		except Exception:
-			await send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=8)
+			await send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=5)
 	else:
 		try:
 			ups_rem.pull(ac_br)
@@ -195,7 +195,7 @@ async def upstream(_, m):
 		await updateme_requirements()
 		await send_edit(
 			m,
-			"Successfully Updated!\nBot is restarting . . . Wait for a second !", 
+			"Successfully Updated!\nBot is restarting . . . Wait for few seconds !", 
 			mono=True, 
 			delme=8
 		)
