@@ -1,7 +1,9 @@
-tronx/
-	database/
-	helpers/
-	modules/
-	plugins/
-	__init__.py
-	__main__.py
+# Files location
+
+* database
+* helpers
+* methods
+* modules
+* plugins
+* ____init____.py
+* ____main____.py
