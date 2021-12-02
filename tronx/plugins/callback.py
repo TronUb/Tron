@@ -102,7 +102,7 @@ async def give_old_page(_, cb):
 @alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
-	buttons = helpdex(page_number, CMD_HELP, "helpme", official=official)
+	buttons = helpdex(page_number, CMD_HELP, "helpme")
 	text = f"**Dex:** Modules\n\nLocation: /home/modules\n\n**Modules:** `{len(CMD_HELP)}`"
 	await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons))
 
