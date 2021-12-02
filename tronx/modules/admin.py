@@ -340,11 +340,12 @@ async def kick_user(_, m):
 async def pin_message(_, m):
 	reply = m.reply_to_message
 	try:
-		if m.chat.type in ["private,", "bot"]:
+		if m.chat.type in ["private", "bot"]:
 			if not reply:
 				return await send_edit("reply to some message, so that i can pin ", mono=True, delme=5)
 			else:
-				return await reply.pin()
+				await reply.pin()
+				return await send_edit(m, "Pinned message !", mono=True, delme=5)
 		if await CheckAdmin(m) is True:
 			if reply:
 				await send_edit(m, "⏳ • Hold on . . .", mono=True)
