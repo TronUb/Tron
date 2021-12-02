@@ -65,29 +65,26 @@ async def unzipfiles(zippath):
 async def zipit(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, f"Reply to some media file . . .", mono=True, delme=2)
+		return await send_edit(m, f"Reply to some media file . . .", mono=True, delme=2)
 
 	elif reply:
-		await send_edit(m, "Zipping . . .")
-		name = types(m)[1]
+		if reply.text:
+			return await send_edit(m, "Reply to some media not text . . .", mono=True)
+		await send_edit(m, "Zipping . . .", mono=True)
 
-		if reply:
-			if Config.TEMP_DICT:
-				loc = Config.TEMP_DICT
-			else:
-				loc = "./downloads"
-			dl = await app.download_media(
-				message=doc,
-				file_name=loc + name,
-				block=False
-				)
-			zipfile.ZipFile(dl + ".zip", "w", zipfile.ZIP_DEFLATED).write(dl)
-			place = loc + name + ".zip"
-			await send_edit(m, f"Your file is compressed and saved here: \n`{place}`")
+		if Config.TEMP_DICT:
+			loc = Config.TEMP_DICT
 		else:
-			await send_edit(m, f"Reply to a file and give a name after cmd. \nEx: `{PREFIX}zip myfile`", delme=2)
+			loc = "tronx/downloads"
+		dl = await app.download_media(
+			reply,
+			block=False
+		)
+		zipfile.ZipFile(dl.replace("/app/downloads/", "") + ".zip", "w").write(dl)
+		place = dl.replace("/app/downloads/", "") + ".zip"
+		await send_edit(m, f"**Your file is compressed and saved here:** \n`{place}`")
 	else:
-		await send_edit(m, "Reply to some media please ...", delme=2, mono=True)
+		await send_edit(m, "Something went wrong . . .", delme=2, mono=True)
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
