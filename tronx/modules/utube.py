@@ -1,6 +1,5 @@
 from tronx import (
 	app,
-	gen,
 )
 
 from pytube import YouTube
@@ -8,6 +7,7 @@ from pyrogram.types import Message
 from tronx.helpers import (
 	get_readable_time,
 	long,
+	gen,
 )
 
 
