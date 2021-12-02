@@ -29,6 +29,6 @@ async def utube_info(_, m: Message):
 	data += f"**Duration:** {get_readable_time(yt.length)}\n"
 	data += f"**Description:** {yt.description}\n"
 	data += f"**Views:** {yt.views}\n"
-	data += f"Age Restricted:** {"Yes" if yt.age_restricted else "No"}"
+	data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
 
 	await app.send_photo(m.chat.id, thumb_link, caption=data)
