@@ -74,7 +74,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 
-@app.on_message(gen("help"))
+@app.on_message(gen("help", allow_channel=True))
 async def help_menu(app, m):
 	args = m.command if long(m) > 1 else False
 
@@ -147,7 +147,7 @@ async def all_plugins(_, m: Message):
 
 
 
-@app.on_message(gen("inline"))
+@app.on_message(gen("inline", allow_channel=True))
 async def _toggle_inline(_, m: Message):
 	await toggle_inline(m)
 	return
