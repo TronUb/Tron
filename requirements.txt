@@ -1,4 +1,5 @@
 pyrogram
+pytube
 telegraph
 heroku3
 aiohttp
