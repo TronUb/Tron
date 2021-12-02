@@ -82,7 +82,7 @@ async def list_directories(_, m: Message):
 	collect.clear()
 
 	for file in files:
-		if not file.endswith(".session") and not file in ("__pycache__", ".git", ".github", ".profile.d", ".heroku"):
+		if not file.endswith(".session") and not file in ["__pycache__", ".git", ".github", ".profile.d", ".heroku", ".cache"]:
 			if os.path.isfile(f"{location}/{file}"):
 				collect.append(f"📑 `{file}` ({get_directory_size(os.path.abspath(location+file))})")
 			if os.path.isdir(f"{location}/{file}"):
