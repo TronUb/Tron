@@ -7,7 +7,7 @@ from pyrogram.scaffold import Scaffold
 
 
 class OnMessage(Scaffold):
-    def on_msg(
+    def on_msessage(
         self = None,
         filters = None,
         group: int = 0
