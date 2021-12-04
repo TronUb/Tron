@@ -349,8 +349,8 @@ async def toggle_inline(m: Message):
 async def inline_helper(m: Message):
 	try:
 		await send_edit(m, "Processing command . . .", mono=True)
-		await app.send_message(93372553, "/mybots")# BotFather (93372553) 
-		await asyncio.sleep(1) # 
+		await app.send_message("BotFather", "/mybots") # BotFather (93372553) 
+		await asyncio.sleep(1) # floodwaits
 
 		data = await get_last_msg(m)
 		usernames = list(data[0].reply_markup.inline_keyboard)[0]
