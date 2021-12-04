@@ -341,6 +341,7 @@ async def toggle_inline(m: Message):
 		await inline_helper(m)
 	except YouBlockedUser:
 		await app.unblock_user("BotFather")
+		await inline_helper(m)
 
 
 
