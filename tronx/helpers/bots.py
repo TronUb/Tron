@@ -47,3 +47,30 @@ def botid():
 	return data if data else None
 
 
+
+# bio of bot
+def bot_bio(m: Message):
+	if bool(dv.getdv("BOT_BIO")):
+		msg = dv.getdv("BOT_BIO") + "\n\nCatagory: "
+	elif Config.BOT_BIO:
+		msg = Config.BOT_BIO + "\n\nCatagory: "
+	else:
+		msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands...And Other Functions.\n\nCatagory: "
+	return msg
+
+
+
+
+# pic of bot
+def bot_pic():
+	if bool(dv.getdv("BOT_PIC")):
+		_pic = dv.getdv("BOT_PIC")
+	elif Config.BOT_PIC:
+		_pic = Config.BOT_PIC
+	else:
+		_pic = False
+	return _pic
+
+#End
+
+
