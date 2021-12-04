@@ -8,6 +8,7 @@ import requests
 
 from pyrogram import Client
 from pyrogram.types import Message
+from pyrogram.errors import YouBlockedUser
 
 from tronx import (
 	app,
@@ -336,6 +337,15 @@ async def get_last_msg(m: Message):
 
 
 async def toggle_inline(m: Message):
+	try:
+		await inline_helper(m)
+	except YouBlockedUser:
+		await app.unblock_user("BotFather")
+
+
+
+
+async def inline_helper(m: Message):
 	try:
 		await send_edit(m, "Processing command . . .", mono=True)
 		await app.send_message(93372553, "/mybots")# BotFather (93372553) 
