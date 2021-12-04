@@ -338,16 +338,6 @@ async def get_last_msg(m: Message):
 
 async def toggle_inline(m: Message):
 	try:
-		await inline_helper(m)
-	except YouBlockedUser:
-		await app.unblock_user("BotFather")
-		await inline_helper(m)
-
-
-
-
-async def inline_helper(m: Message):
-	try:
 		await send_edit(m, "Processing command . . .", mono=True)
 		await app.send_message("BotFather", "/mybots") # BotFather (93372553) 
 		await asyncio.sleep(1) # floodwaits
@@ -394,6 +384,10 @@ async def inline_helper(m: Message):
 			await send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
 	except YouBlockedUser:
 		await app.unblock_user("BotFather")
+		await toggle_inline(m)
+	except Exception as e:
+		await error(m, e)
+
 
 
 
