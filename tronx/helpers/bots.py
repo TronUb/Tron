@@ -13,6 +13,7 @@ except ImportError:
 	BOT_USERNAME = Config.BOT_USERNAME if Config.BOT_USERNAME else None     
 
 from tronx.database.postgres import dv_sql as dv
+from pyrogram.types import Message
 
 
 
