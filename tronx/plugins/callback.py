@@ -412,7 +412,6 @@ async def _shutdown_core(_, cb):
 				sys.exit(0)
 
 @bot.on_callback_query(filters.regex("more-anime-quotes"))
-@alert_user
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
 		quote(),
