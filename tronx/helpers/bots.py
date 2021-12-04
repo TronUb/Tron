@@ -1,12 +1,11 @@
-from config import Config
-
 from tronx.helpers.utils import mention_markdown 
 
 try: 
 	from tronx import (
 		BOT_ID,
 		BOT_NAME,
-		BOT_USERNAME
+		BOT_USERNAME,
+		Config
 		)
 except ImportError:
 	BOT_ID = Config.BOT_ID if Config.BOT_ID else None
