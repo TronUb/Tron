@@ -49,7 +49,7 @@ CMD_HELP.update(
 
 
 
-@app.on_msg(gen("afk", allow_channel=True))
+@app.on_message(gen("afk", allow_channel=True))
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
