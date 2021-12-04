@@ -392,8 +392,8 @@ async def inline_helper(m: Message):
 			await send_edit(m, "Turning Inline mode Off . . .", mono=True)
 			await data[0].click("Turn inline mode off")
 			await send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
-	except Exception as e:
-		await error(m, e)
+	except YouBlockedUser:
+		await app.unblock_user("BotFather")
 
 
 
