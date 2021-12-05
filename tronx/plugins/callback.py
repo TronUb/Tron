@@ -76,7 +76,7 @@ async def modules(_, cb):
 
 
 # next page
-@bot.on_callback_query(filters.regex(pattern="helpme_next\((.+?)\)_(True|False)"))
+@bot.on_callback_query(filters.regex(pattern="helpme_next\((.+?)\)"))
 @alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
@@ -88,7 +88,7 @@ async def give_next_page(_, cb):
 
 
 # previous page
-@bot.on_callback_query(filters.regex(pattern="helpme_prev\((.+?)\)_(True|False)"))
+@bot.on_callback_query(filters.regex(pattern="helpme_prev\((.+?)\)"))
 @alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
@@ -99,7 +99,7 @@ async def give_old_page(_, cb):
 
 
 # back from modules dex to home
-@bot.on_callback_query(filters.regex(pattern="backme_(.*)_(True|False)"))
+@bot.on_callback_query(filters.regex(pattern="backme_(.*)"))
 @alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
@@ -111,7 +111,7 @@ async def get_back(_, cb):
 
 
 # modules plugin page information
-@bot.on_callback_query(filters.regex(pattern="modulelist_(.*)_(True|False)"))
+@bot.on_callback_query(filters.regex(pattern="modulelist_(.*)"))
 @alert_user
 async def give_plugin_cmds(_, cb):
 	plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
