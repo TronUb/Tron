@@ -77,7 +77,7 @@ def getdv(keys):
 
 
 
-def get_alldv(keys):
+def get_alldv():
 	kv_data = {}
 	mydata = SESSION.query(data).ditinct().all()
 	for x in mydata:
