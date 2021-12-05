@@ -103,7 +103,7 @@ async def auto_block(_, m: Message):
 	# auto allow while outgoing first msg of ub owner
 
 	if (await app.get_history(m.chat.id, reverse=True))[0].from_user.is_self:
-		db.set_whitelist(user.id, True)
+		return db.set_whitelist(user.id, True)
 
 	pmlimit = dv.getdv("PM_LIMIT") if dv.getdv("PM_LIMIT") else int(Config.PM_LIMIT) if Config.PM_LIMIT else 4 
 
