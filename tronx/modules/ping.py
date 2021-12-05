@@ -68,7 +68,7 @@ pings.clear()
 
 @app.on_message(gen(["ping", "pong"], allow_channel=True))
 async def pingme(_, m: Message):
-	if len(m.command) == 1:
+	if long(m) == 1:
 		start = datetime.now()
 		await send_edit(m, ". . .", mono=True)
 		end = datetime.now()
