@@ -24,6 +24,7 @@ from tronx.helpers import (
 	gen,
 	send_edit,
 	mymention,
+	long,
 )
 
 
@@ -34,7 +35,8 @@ CMD_HELP.update(
 	{"ping" : (
 		"ping",
 		{
-		"ping" : "Shows you the response speed of the bot."
+		"ping" : "Shows you the response speed of the bot.",
+		"ping [ number ]" : "Make infinite pings, don't overuse."
 		}
 		)
 	}
@@ -64,11 +66,11 @@ pings.clear()
 
 
 
-@app.on_message(gen("ping", allow_channel=True))
+@app.on_message(gen(["ping", "pong"], allow_channel=True))
 async def pingme(_, m: Message):
 	if len(m.command) == 1:
 		start = datetime.now()
-		await send_edit(m, "...", mono=True)
+		await send_edit(m, ". . .", mono=True)
 		end = datetime.now()
 		m_s = (end - start).microseconds / 1000
 		await send_edit(
@@ -90,7 +92,7 @@ async def pingme(_, m: Message):
 				num = int(count) + 1
 				for x in range(1, num):
 					await infinite(m)
-					await send_edit(m, "...", mono=True)
+					await send_edit(m, ". . .", mono=True)
 					time.sleep(0.50)
 				await send_edit(m, "".join(pings))
 			except Exception as e:
@@ -101,7 +103,7 @@ async def pingme(_, m: Message):
 
 
 
-# function to create pings
+# function to create lots of pings
 async def infinite(m: Message):
 	start = datetime.now()
 	mid = await send_edit(
