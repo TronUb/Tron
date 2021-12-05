@@ -92,14 +92,18 @@ async def send_warn(m: Message, user):
 # incoming autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
 async def auto_block(_, m: Message):
-	if bool(dv.getdv("PMPERMIT")) is False:
+	if bool(dv.getdv("PMPERMIT")) is False or m.from_user.is_verified:
 		return
-	if m.from_user.is_verified:
-		return
+
 	if bool(db.get_whitelist(m.chat.id)) is False:
 		user = await app.get_users(m.chat.id)
 	else:
 		return
+
+	# auto allow while outgoing first msg of ub owner
+
+	if (await app.get_history(m.chat.id, reverse=True))[0].from_user.is_self:
+		db.set_whitelist(user.id, True)
 
 	pmlimit = dv.getdv("PM_LIMIT") if dv.getdv("PM_LIMIT") else int(Config.PM_LIMIT) if Config.PM_LIMIT else 4 
 
@@ -111,11 +115,13 @@ async def auto_block(_, m: Message):
 	msg += f"Username: `@{user.username}`\n" if user.username else f"Username: `None`\n"
 	msg += f"Message: `{m.text}`\n"
 
-	if bool(db.get_warn(user.id)) is False:
+	warns = bool(db.get_warn(user.id))
+
+	if warns is False:
 		db.set_warn(user.id, 1)
 		await send_warn(m, user.id)
 
-	elif bool(db.get_warn(user.id)) is True:
+	elif warns is True:
 		warn = int(db.get_warn(user.id))
 		if warn < pmlimit:
 			maximum = warn + 1
@@ -133,9 +139,9 @@ async def auto_block(_, m: Message):
 				except PeerIdInvalid:
 					pass
 			else:
-				print("Failed to block user because of spamming in pm")
+				await send_edit(m, "Failed to block user because of spamming in pm", mono=True)
 		else:
-			print("Can't block user in pm")
+			print("Something went wrong in pmpermit")
 
 
 
@@ -169,13 +175,13 @@ async def approve_pm(app, m: Message):
 				return await send_edit(m, "Please check username again . . .", delme=3, mono=True)
 
 		else:
-			return await send_edit(m, "Failed to approve user . . .", delme=2)
+			return await send_edit(m, "Something went wrong . . .", mono=True, delme=2)
 
 	info = await app.get_users(user_id)
 	user_name = info.first_name
 	try:
 		db.set_whitelist(user_id, True)
-		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) is now approved to pm.", delme=5)
+		await send_edit(m, f"{info.mention} is now approved for pm.", delme=5)
 
 		db.del_warn(user_id)
 
@@ -184,7 +190,7 @@ async def approve_pm(app, m: Message):
 
 	except Exception as e:
 		await error(m, e)
-		await send_edit(m, f"Failed to approve [{user_name}](tg://user?id={user_id})")
+		await send_edit(m, f"Something went wrong . . .", mono=True, delme=3)
 
 
 
@@ -223,14 +229,14 @@ async def diapprove_pm(_, m:Message):
 	user_name = info.first_name
 	if user_name:
 		db.del_whitelist(user_id)
-		await send_edit(m, f"[{user_name}](tg://user?id={user_id}) has been disapproved for pm!", delme=5)
+		await send_edit(m, f"{info.mention} has been disapproved for pm!", delme=5)
 		try:
 			await app.send_message(
 				Config.LOG_CHAT, 
-				f"#disallow\n\n[{user_name}](tg://user?id={user_id}) has been disapproved for pm !"
+				f"#disallow\n\n{info.mention} has been disapproved for pm !"
 			)
 		except Exception as e:
-			await error(m, e)
+			pass
 	else:
 		await send_edit(m, "Sorry there is no user id to disapprove . . .", mono=True, delme=3)
 
