@@ -88,19 +88,6 @@ async def send_warn(m: Message, user):
 
 
 
-@app.on_message(filters.me & filters.outgoing, group=2)
-async def auto_allow(_, m):
-	try:
-		if m.chat.type == "private":
-			if db.get_whitelist(m.chat.id) is True:
-				return
-			else:
-				db.set_whitelist(m.chat.id, True)
-	except Exception as e:
-		await error(m, e)
-
-
-
 
 # incoming autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
