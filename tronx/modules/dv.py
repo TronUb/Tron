@@ -118,3 +118,22 @@ async def get_database_var(_, m: Message):
 	else:
 		await send_edit(m, "Something went wrong, please try again later !", mono=True)
 
+
+
+
+@app.on_message(gen("alldv"))
+async def get_all_dv(_, m: Message):
+	if bool(dv.get_alldv()) is True:
+		my_dict = dv.get_alldv()
+		dict_data = []
+		dict_data.clear()
+
+		for key, value in my_dict:
+			dict_data.append(f"{key} = {value}\n")
+
+		await send_edit(m, "All Database vars:\n\n" + "".join(dict_data))
+	else:
+		await send_edit(m, "There are no database vars (empty) . . .", mono=True, delme=5)
+
+
+
