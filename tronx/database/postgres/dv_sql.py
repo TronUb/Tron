@@ -79,7 +79,7 @@ def getdv(keys):
 
 def get_alldv():
 	kv_data = {}
-	mydata = SESSION.query(data).ditinct().all()
+	mydata = SESSION.query(data).distinct().all()
 	for x in mydata:
 		kv_data.update({x.keys : x.values})
 
