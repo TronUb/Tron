@@ -1,16 +1,11 @@
 from tronx.helpers.utils import mention_markdown 
 
-try: 
-	from tronx import (
-		BOT_ID,
-		BOT_NAME,
-		BOT_USERNAME,
-		Config
-		)
-except ImportError:
-	BOT_ID = Config.BOT_ID if Config.BOT_ID else None
-	BOT_NAME = Config.BOT_NAME if Config.BOT_NAME else None
-	BOT_USERNAME = Config.BOT_USERNAME if Config.BOT_USERNAME else None     
+from tronx import (
+	BOT_ID,
+	BOT_NAME,
+	BOT_USERNAME,
+	Config
+)
 
 from tronx.database.postgres import dv_sql as dv
 from pyrogram.types import Message
