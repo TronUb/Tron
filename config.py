@@ -65,8 +65,10 @@ class Config(object):
 	BOT_NAME = os.getenv("BOT_NAME", "LARA")
 	# your aassistants alive pic (optional)
 	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/4d93e5fa480b5e53d898f.jpg")
-	# bot username for bot
+	# bot username of bot
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
+	# bot id of bot
+	BOT_ID = os.getenv("BOT_ID")
 	# token of your bot if you want to use assistant
 	TOKEN = os.getenv("TOKEN")
 # ---------------------
