@@ -36,7 +36,7 @@ def botusername():
 
 # mention of bot
 def botmention():
-	return mention_markdown(botid(), botname()) if botid() and bname() else None  
+	return mention_markdown(botid(), botname()) if botid() and botname() else None  
 
 
 # id of bot 
