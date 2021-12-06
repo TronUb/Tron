@@ -29,7 +29,7 @@ def botusername():
 
 def botmention():
 	"""Get bot mention"""
-	return f"[{botname()}](tg://user?id={botid()}) if botid() and botname() else None  
+	return f"[{botname()}](tg://user?id={botid()})" if botid() and botname() else None  
 
 
 def botid():
