@@ -59,7 +59,7 @@ async def yt_download(_, m):
 	if not reply:
 		if long(m) == 1:
 			return await send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
-		elif long(m) > 1 and and not m.command[1].isdigit() and m.command[1].startswith("http://" or "https://"):
+		elif long(m) > 1 and not m.command[1].isdigit() and m.command[1].startswith("http://" or "https://"):
 			link = m.command[1]
 		else:
 			return await send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
