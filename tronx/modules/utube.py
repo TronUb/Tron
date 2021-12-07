@@ -55,6 +55,7 @@ async def utube_info(_, m: Message):
 @app.on_message(gen("yvdl"))
 async def yt_download(_, m):
 	reply = m.reply_to_message
+	await send_edit(m, "processing link . . .", mono=True)
 	if not reply:
 		if long(m) == 1:
 			return await send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
