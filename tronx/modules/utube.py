@@ -48,3 +48,36 @@ async def utube_info(_, m: Message):
 	data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
 
 	await app.send_photo(m.chat.id, thumb_link, caption=data)
+
+
+
+
+@app.on_message(gen("yvdl"))
+async def yt_download(_, m):
+	reply = m.reply_to_message
+	if not reply:
+		if long(m) == 1:
+			return await send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
+		elif long(m) > 1 and m.command[1].startswith("https://"):
+			link = m.command[1]
+	elif reply:
+		if reply.text and reply.text.startswith("https://"):
+			link = reply.text
+		else:
+			return await send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
+	else:
+		return await send_edit(m, "Something went wrong . . .")
+
+	yt = YouTube(link)
+	data = yt.streams.all()
+
+	await send_edit(m, "**Trying to download **" + f"`{yt.title}`")
+	for x in data:
+		if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
+			try:
+				loc = x.download()
+				await app.send_video(m.chat.id, loc, caption=yt.title)
+				break
+			except Exception as e:
+				await error(m, e)
+
