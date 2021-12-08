@@ -42,11 +42,11 @@ def botid():
 
 def bot_bio(m: Message):
 	"""Get your bots bio"""
-	msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands.\n\nCatagory: "  
+	msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands."  
 	var = dv.getdv("BOT_BIO")
-	var_data = var + "\n\nCatagory: " if bool(var) else Config.BOT_BIO + "\n\nCatagory: "
+	var_data = var if bool(var) else Config.BOT_BIO
 	data = var_data if var_data else msg
-	return data if data else None
+	return f"{data}\n\nCatagory: " if data else None
 
 
 def bot_pic():
