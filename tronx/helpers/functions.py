@@ -121,7 +121,7 @@ async def edit_text(m: Message, text, disable_web_page_preview=False, parse_mode
 			parse_mode=parse_mode, 
 			disable_web_page_preview=disable_web_page_preview,
 		)
-	except MessageidInvalid:
+	except MessageIdInvalid:
 		await app.send_message(
 			m.chat.id,
 			text,
