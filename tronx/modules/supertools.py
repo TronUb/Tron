@@ -260,8 +260,8 @@ async def webshot(_, m: Message):
 			await send_edit(m, "generating pic . . .", mono=True)
 			await app.send_document(
 				m.chat.id, 
-				url, 
-				caption=m.command[1]
+				path, 
+				caption=url
 				)
 			await m.delete()
 			os.remove(url)
