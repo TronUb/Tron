@@ -264,7 +264,7 @@ async def webshot(_, m: Message):
 				caption=url
 				)
 			await m.delete()
-			os.remove(url)
+			os.remove(path)
 		except Exception as e:
 			await error(m, e)
 	else:
