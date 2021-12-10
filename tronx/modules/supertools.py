@@ -248,15 +248,23 @@ async def wtr(_, m: Message):
 async def webshot(_, m: Message):
 	if long(m) > 1:
 		try:
-			user_link = m.command[1]
+			BASE = "https://render-tron.appspot.com/screenshot/"
+			url = m.command[1] 
+			path = "downloads/screenshot.jpg"
+			response = requests.get(BASE + url, stream=True)
+
+			if response.status_code == 200:
+				with open(path, "wb") as file:
+					for chunk in response:
+						file.write(chunk)
 			await send_edit(m, "generating pic . . .", mono=True)
-			full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
 			await app.send_document(
 				m.chat.id, 
-				full_link, 
-				caption=f'{user_link}'
+				url, 
+				caption=m.command[1]
 				)
 			await m.delete()
+			os.remove(url)
 		except Exception as e:
 			await error(m, e)
 	else:
