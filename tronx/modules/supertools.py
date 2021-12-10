@@ -247,7 +247,7 @@ async def webshot(_, m: Message):
 	if long(m) > 1:
 		try:
 			user_link = m.command[1]
-			await send_edit(m, "generating pic . . .", monk=True)
+			await send_edit(m, "generating pic . . .", mono=True)
 			full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
 			await app.send_document(
 				m.chat.id, 
