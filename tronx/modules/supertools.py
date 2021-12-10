@@ -26,8 +26,6 @@ from tronx.helpers import (
 	create_file,
 )
 
-from pyrogram.errors import PeerIdInvalid
-
 
 
 
@@ -63,7 +61,7 @@ def replace_text(text):
 async def voice(_, m: Message):
 	reply = m.reply_to_message
 
-	if not reply and long(m) < 2:
+	if not reply and len(m.command) < 2:
 		return await send_edit(m, "reply to someone's text message & use only command", delme=True, mono=True)
 
 	elif not reply and long(m) > 1:
@@ -132,7 +130,7 @@ async def urban_dictionary(_, m:Message):
 @app.on_message(gen("short"))
 async def short_link(_, m: Message):
 	reply = m.reply_to_message
-	if replied or not replied and len(m.command) < 2:
+	if reply or not reply and len(m.command) < 2:
 		return await send_edit(m, "Please give me some link or reply to a link", mono=True)
 
 	if not reply and long(m) > 1:
@@ -169,11 +167,11 @@ async def short_link(_, m: Message):
 
 @app.on_message(gen(["unshort", "noshort"]))
 async def unshort_link(_, m: Message):
-	replied = m.reply_to_message
-	if not replied and len(m.command) < 2:
+	reply = m.reply_to_message
+	if not reply and len(m.command) < 2:
 		return await send_edit(m, "Please give me a da.gd link to convert to orginal link", mono=True)
 
-	elif not replied and len(m.command) > 1:
+	elif not reply and len(m.command) > 1:
 		try:
 			text_url = m.text.split(None, 1)[1]
 			if not text_url.startswith("https://da.gd/"):
@@ -195,9 +193,9 @@ async def unshort_link(_, m: Message):
 					await send_edit(m, "something is wrong. please try again later.", mono=True)
 		except Exception as e:
 			await error(m, e)
-	elif replied:
+	elif reply:
 		try:
-			text_url = replied.text
+			text_url = reply.text
 			if not text_url.startswith("https://da.gd/"):
 				await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
 			else:
@@ -248,23 +246,15 @@ async def wtr(_, m: Message):
 async def webshot(_, m: Message):
 	if long(m) > 1:
 		try:
-			BASE = "https://render-tron.appspot.com/screenshot/"
-			url = m.command[1] 
-			path = "downloads/screenshot.jpg"
-			response = requests.get(BASE + url, stream=True)
-
-			if response.status_code == 200:
-				with open(path, "wb") as file:
-					for chunk in response:
-						file.write(chunk)
-			await send_edit(m, "generating pic . . .", mono=True)
+			user_link = m.command[1]
+			await send_edit(m, "generating pic . . .", monk=True)
+			full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
 			await app.send_document(
 				m.chat.id, 
-				path, 
-				caption=url
+				full_link, 
+				caption=f'{user_link}'
 				)
 			await m.delete()
-			os.remove(path)
 		except Exception as e:
 			await error(m, e)
 	else:
