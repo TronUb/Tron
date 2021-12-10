@@ -56,52 +56,85 @@ def replace_text(text):
 	return text.replace('"', "").replace("\\r", "").replace("\\n", "").replace("\\", "")
 
 
+async def text_to_voice(m: Message, text):
+	tts = gTTS(text, lang=lang_code)
+	tts.save(f"{Config.TEMP_DICT}voice.mp3")
+	await app.send_voice(
+		m.chat.id, 
+		voice=f"{Config.TEMP_DICT}voice.mp3", 
+		reply_to_message_id=m.message_id
+		)
+	await m.delete()
+	os.remove(f"{Config.TEMP_DICT}voice.mp3")
+	return
 
-@app.on_message(gen(["tts"]))
-async def voice(_, m: Message):
+
+
+
+async def shorten_link(m: Message, text):
+	sample_url = f"https://da.gd/s?url={text_url}"
+	response = requests.get(sample_url).text
+	if response:
+		await send_edit(
+			m, 
+			f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text_url}", 
+			disable_web_page_preview=True)
+	else:
+		await send_edit(m, "something is wrong. please try again later.", mono=True)
+
+
+
+
+async def unshorten_link(m: Message, text):
+		if not text_url.startswith("https://da.gd/"):
+				await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
+		else:
+			r = requests.get(
+				text, 
+				allow_redirects=False
+			)
+			if str(r.status_code).startswith("3"):
+				fakelink = r.headers["Location"]
+				await send_edit(
+					m, 
+					f"**Generated Links:**\n\nUnshorted Link: {fakelink}\nYour Link: {text}", 
+					disable_web_page_preview=True
+				)
+			else:
+				await send_edit(m,"Something went wrong, please try again later . . .", mono=True)
+
+
+
+
+@app.on_message(gen("tts"))
+async def create_voice(_, m: Message):
 	reply = m.reply_to_message
 
-	if not reply and len(m.command) < 2:
-		return await send_edit(m, "reply to someone's text message & use only command", delme=True, mono=True)
+	try:
+		if not reply and long(m) == 1:
+			return await send_edit(m, "Reply to someone's text message or give me the text as a suffix . . .", delme=True, mono=True)
 
-	elif not reply and long(m) > 1:
-		try:
+		elif not reply and long(m) > 1:
 			await send_edit(m, "Converting text to voice . . .", mono=True)
-
 			text = m.text.split(None, 1)[1]
-			tts = gTTS(text, lang=lang_code)
-			tts.save(f"{Config.TEMP_DICT}voice.mp3")
-			await app.send_voice(
-				m.chat.id, 
-				voice=f"{Config.TEMP_DICT}voice.mp3", 
-				reply_to_message_id=m.message_id
-				)
-			await m.delete()
-			os.remove(f"{Config.TEMP_DICT}voice.mp3")
-		except Exception as e:
-			await error(m, e)
-	elif reply:
-		try:
+			await text_to_voice(m, text)
+
+		elif reply:
+			if not reply.text:
+				return await send_edit(m, "Please reply to a text . . .", mono=True, delme=3)
 			await send_edit(m, "Converting text to voice . . .", mono=True)
 			text = reply.text
-			tts = gTTS(text, lang=lang_code)
-			tts.save(f"{Config.TEMP_DICT}voice.mp3")
-			await app.send_voice(
-				m.chat.id, 
-				voice=f"{Config.TEMP_DICT}voice.mp3", 
-				reply_to_message_id=reply.message_id
-				)
-			await m.delete()
-			os.remove(f"{Config.TEMP_DICT}voice.mp3")
-		except Exception as e:
-			await error(m, e)
-	else:
-		await send_edit(m, "Something went wrong !", mono=True)
+			await text_to_voice(m, text)
+
+		else:
+			await send_edit(m, "Something went wrong !", mono=True)
+	except Exception as e:
+		await error(m, e)
 
 
 
 
-@app.on_message(gen(["ud"]))
+@app.on_message(gen("ud"))
 async def urban_dictionary(_, m:Message):
 	if long(m) == 1:
 		return await send_edit(m, f"Use: `{PREFIX}ud cats`")
@@ -122,122 +155,73 @@ async def urban_dictionary(_, m:Message):
 		)
 		await send_edit(m, resp)
 	except IndexError:
-		await send_edit(m, "No Results Found !", mono=True)
+		await send_edit(m, "No Results Found !", mono=True, delme=3)
+	except Exception as e:
+		await error(m, e)
 
 
 
 
 @app.on_message(gen("short"))
-async def short_link(_, m: Message):
+async def shorten_the_link(_, m: Message):
 	reply = m.reply_to_message
-	if reply or not reply and len(m.command) < 2:
-		return await send_edit(m, "Please give me some link or reply to a link", mono=True)
+	try:
+		if not reply and long(m) == 1:
+			return await send_edit(m, "Please give me some link or reply to a link", mono=True)
 
-	if not reply and long(m) > 1:
-		try:
+		if not reply and long(m) > 1:
 			text_url = m.text.split(None, 1)[1]
-			sample_url = f"https://da.gd/s?url={text_url}"
-			response = requests.get(sample_url).text
-			if response:
-				await send_edit(
-					m, 
-					f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text_url}", 
-					disable_web_page_preview=True)
-			else:
-				await send_edit(m, "something is wrong. please try again later.", mono=True)
-
-		except Exception as e:
-			await error(m, e)
-	elif reply:
-		try:
+			await shorten_link(m, text)
+		elif reply:
+			if not reply.text:
+				return await send_edit(m, "Please reply to text . . .", mono=True)
 			text_url = reply.text
-			sample_url = f"https://da.gd/s?url={text_url}"
-			response = requests.get(sample_url).text
-			if response:
-				await send_edit(
-					m, 
-					f"**Generated Link:**\n\nShortened Link: {response}\nOriginal Link: {text_url}", 
-					disable_web_page_preview=True)
-			else:
-				await send_edit(m, "something is wrong. please try again later.", mono=True)
-		except Exception as e:
-			await error(m, e)
+			await shorten_link(m, text)
+	except Exception as e:
+		await error(m, e)
+
 
 
 
 @app.on_message(gen(["unshort", "noshort"]))
 async def unshort_link(_, m: Message):
 	reply = m.reply_to_message
-	if not reply and len(m.command) < 2:
-		return await send_edit(m, "Please give me a da.gd link to convert to orginal link", mono=True)
+	try:
+		if not reply and long(m) == 1:
+			return await send_edit(m, "Please give me a da.gd link to convert to orginal link", mono=True)
 
-	elif not reply and len(m.command) > 1:
-		try:
-			text_url = m.text.split(None, 1)[1]
-			if not text_url.startswith("https://da.gd/"):
-				return await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
+		elif not reply and long(m) > 1:
+			text = m.text.split(None, 1)[1]
+			await unshorten_link(m, text)
 
-			else:
-				r = requests.get(
-					text_url, 
-					allow_redirects=False
-					)
-				if str(r.status_code).startswith("3"):
-					fakelink = r.headers["Location"]
-					await send_edit(
-						m, 
-					f"**Generated Links:**\n\nUnshorted Link: {fakelink}\nYour Link: {text_url}", 
-					disable_web_page_preview=True
-					)
-				else:
-					await send_edit(m, "something is wrong. please try again later.", mono=True)
-		except Exception as e:
-			await error(m, e)
-	elif reply:
-		try:
-			text_url = reply.text
-			if not text_url.startswith("https://da.gd/"):
-				await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
-			else:
-				r = requests.get(
-					text, 
-					allow_redirects=False
-					)
-				if str(r.status_code).startswith("3"):
-					fakelink = r.headers["Location"]
-					await send_edit(
-						m, 
-						f"**Generated Links:**\n\nUnshorted Link: {fakelink}\nYour Link: {text_url}", 
-						disable_web_page_preview=True
-						)
-				else:
-					await send_edit(m,"something is wrong. please try again later.", mono=True)
-		except Exception as e:
-			await error(m, e)
-	else:
-		await send_edit(m, "Something went wrong, try again later !", mono=True)
+		elif reply:
+			if not reply.text:
+				return await send_edit(m, "Please reply to a text . . .", mono=True)
+			text = reply.text
+			await unshorten_link(m, text)
+
+		else:
+			await send_edit(m, "Something went wrong, try again later !", mono=True)
+	except Exception as e:
+		await error(m, e)
 
 
 
 
 @app.on_message(gen(["wtr", "weather"]))
 async def wtr(_, m: Message):
-	if len(m.text.split()) == 1:
+	if long(m) == 1:
 		return await send_edit(m, "Piro Master Atleast Give Me Some Location !", mono=True)
 
 	await send_edit(m, "Checking weather . . .", mono=True)
-	location = m.text.split(None, 1)[1]
+	location = m.command[1]
 	h = {'user-agent': 'httpie'}
-	a = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=h)
-	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in a.text:
+	response = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=h)
+	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in response.text:
 		return await send_edit(m, "Too many requests, try again later !", mono=True)
 
 	weather = f"__{escape(a.text)}__"
-	await send_edit(
-		m, 
-		weather, 
-		parse_mode="markdown"
-		)
+	await send_edit(m, weather)
 
 
 
@@ -246,15 +230,23 @@ async def wtr(_, m: Message):
 async def webshot(_, m: Message):
 	if long(m) > 1:
 		try:
-			user_link = m.command[1]
-			await send_edit(m, "generating pic . . .", monk=True)
-			full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
+			BASE = "https://render-tron.appspot.com/screenshot/"
+			url = m.command[1] 
+			path = "downloads/screenshot.jpg"
+			response = requests.get(BASE + url, stream=True)
+
+			if response.status_code == 200:
+				with open(path, "wb") as file:
+					for chunk in response:
+						file.write(chunk)
+			await send_edit(m, "generating pic . . .", mono=True)
 			await app.send_document(
 				m.chat.id, 
-				full_link, 
-				caption=f'{user_link}'
+				path, 
+				caption=url
 				)
 			await m.delete()
+			os.remove(path)
 		except Exception as e:
 			await error(m, e)
 	else:
@@ -272,21 +264,13 @@ async def undelete_msg(_, m: Message):
 	elif long(m) > 1:
 		count = m.command[1]
 		if not count.isdigit():
-			count = int(count)
+			count = 5
 	try:
-		data = await app.get_history(m.chat.id, limit=count)
-		data = False
-		if data:
-			for x in data:
-				collect.append(f"**Message:** `{x.text}`")
-#			try:
-#				await send_edit(m, "\n\n".join(collect))
-#			except:
-#				await create_file(m, app, "undlete.txt", "\n\n".join(collect))
-		else:
-			await send_edit(m, "No history found !")
+		async for x in app.iter_history(m.chat.id, limit=count):
+			if x.text:
+				collect.append(f"**Message:** `{x.text}`\n\n")
+		await app.send_edit(m, "".join(collect))
 	except Exception as e:
 		await error(m, e)
-
 
 
