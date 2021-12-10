@@ -269,7 +269,7 @@ async def undelete_msg(_, m: Message):
 		async for x in app.iter_history(m.chat.id, limit=count):
 			if x.text:
 				collect.append(f"**Message:** `{x.text}`\n\n")
-		await app.send_edit(m, "".join(collect))
+		await send_edit(m, "".join(collect))
 	except Exception as e:
 		await error(m, e)
 
