@@ -8,7 +8,7 @@ import requests
 
 from pyrogram import Client
 from pyrogram.types import Message
-from pyrogram.errors import YouBlockedUser, MessageIdInvalid
+from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
 from tronx import (
 	app,

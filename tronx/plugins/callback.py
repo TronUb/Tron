@@ -244,10 +244,25 @@ async def _settings(_, cb):
 							"Shutdown bot", callback_data="shutdown-tron",
 						)
 					],
+					[
+						InlineKeyboardButton(
+							"Update bot", callback_data="update-tron",
+						)
+					],
 					home_back,
 				]
 			),
 		)
+
+
+
+
+@bot.on_callback_query(filters.regex("update-tron"))
+@alert_user
+async def _start(_, cb):
+	pass
+
+
 
 
 @bot.on_callback_query(filters.regex("open-start-dex"))
