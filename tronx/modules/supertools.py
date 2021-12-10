@@ -86,7 +86,7 @@ async def shorten_link(m: Message, text):
 
 
 async def unshorten_link(m: Message, text):
-		if not text_url.startswith("https://da.gd/"):
+		if not text.startswith("https://da.gd/"):
 				await send_edit(m, "Please Give me a valid link that starts with `https://da.gd/`")
 		else:
 			r = requests.get(
