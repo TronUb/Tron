@@ -263,7 +263,9 @@ async def undelete_msg(_, m: Message):
 		count = 5
 	elif long(m) > 1:
 		count = m.command[1]
-		if not count.isdigit():
+		if count.isdigit():
+			count = int(count)
+		else:
 			count = 5
 	try:
 		async for x in app.iter_history(m.chat.id, limit=count):
