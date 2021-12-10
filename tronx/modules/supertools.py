@@ -170,12 +170,12 @@ async def shorten_the_link(_, m: Message):
 			return await send_edit(m, "Please give me some link or reply to a link", mono=True)
 
 		if not reply and long(m) > 1:
-			text_url = m.text.split(None, 1)[1]
+			text = m.text.split(None, 1)[1]
 			await shorten_link(m, text)
 		elif reply:
 			if not reply.text:
 				return await send_edit(m, "Please reply to text . . .", mono=True)
-			text_url = reply.text
+			text = reply.text
 			await shorten_link(m, text)
 	except Exception as e:
 		await error(m, e)
