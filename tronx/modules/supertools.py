@@ -215,12 +215,12 @@ async def wtr(_, m: Message):
 
 	await send_edit(m, "Checking weather . . .", mono=True)
 	location = m.command[1]
-	h = {'user-agent': 'httpie'}
-	response = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=h)
+	headers = {'user-agent': 'httpie'}
+	response = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=headers)
 	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in response.text:
 		return await send_edit(m, "Too many requests, try again later !", mono=True)
 
-	weather = f"__{escape(a.text)}__"
+	weather = f"__{escape(response.text)}__"
 	await send_edit(m, weather)
 
 
