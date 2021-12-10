@@ -72,12 +72,12 @@ async def text_to_voice(m: Message, text):
 
 
 async def shorten_link(m: Message, text):
-	sample_url = f"https://da.gd/s?url={text_url}"
+	sample_url = f"https://da.gd/s?url={text}"
 	response = requests.get(sample_url).text
 	if response:
 		await send_edit(
 			m, 
-			f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text_url}", 
+			f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text}", 
 			disable_web_page_preview=True)
 	else:
 		await send_edit(m, "something is wrong. please try again later.", mono=True)
