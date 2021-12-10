@@ -26,6 +26,8 @@ from tronx.helpers import (
 	create_file,
 )
 
+from pyrogram.errors import PeerIdInvalid
+
 
 
 
