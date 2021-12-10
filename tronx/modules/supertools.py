@@ -63,7 +63,7 @@ def replace_text(text):
 async def voice(_, m: Message):
 	reply = m.reply_to_message
 
-	if not replied and len(m.command) < 2:
+	if not reply and long(m) < 2:
 		return await send_edit(m, "reply to someone's text message & use only command", delme=True, mono=True)
 
 	elif not reply and long(m) > 1:
