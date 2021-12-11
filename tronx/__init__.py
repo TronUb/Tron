@@ -340,21 +340,7 @@ class lara(Client):
 
 
 
-if SESSION:
-	""" Decorator assignment """
-	app = tron()
-elif not SESSION:
-	app = False
-	log.warning("Failed to create (app) client, please recheck your credentials.")
-
-
-
-if TOKEN:
-	""" Decorator assignment """
-	bot = lara()
-elif not TOKEN:
-	bot = False
-	log.warning("Failed to create (bot) client, please recheck your credentials.")
-
+app = tron() if SESSION else False
+bot = lara() if TOKEN else False
 
 
