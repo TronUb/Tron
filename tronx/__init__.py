@@ -162,77 +162,10 @@ def get_readable_time(seconds: int) -> str:
 
 
 
-
-async def get_self():
-	""" Get self information for later use """
-	global USER_ID, USER_NAME, USER_USERNAME, USER_DC
-	
-	USER_ID = None
-	USER_DC = None
-	USER_NAME = None
-	USER_USERNAME = None
-
-	getself = await app.get_me()
-	if getself:
-		if getself.last_name and getself.username:
-			# sometimes users don't have the last name & username
-			USER_NAME = f"{getself.first_name} {getself.last_name}"
-			USER_USERNAME = f"@{getself.username}"
-		else:
-			USER_NAME = getself.first_name
-			USER_USERNAME = "No Username"
-		USER_ID = getself.id
-		USER_DC = getself.dc_id
-	else:
-		log.warning("Failed to get user information (USER_ID, USER_DC, USER_NAME, USER_USERNAME)")  
-
-	return (
-		{
-			"USER_ID" : USER_ID, 
-			"USER_DC" : USER_DC,
-			"USER_NAME" : USER_NAME, 
-			"USER_USERNAME" : USER_USERNAME
-		}
-		)
-
-
-
-
-async def get_bot():
-	""" Get bot information for later use """
-	global BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME
-	
-	BOT_ID = None
-	BOT_DC = None
-	BOT_NAME = None
-	BOT_USERNAME = None
-	
-	getbot = await bot.get_me()
-	if getbot:
-		# bot have all permanent information
-		BOT_ID = getbot.id
-		BOT_DC = getbot.dc_id
-		BOT_NAME = getbot.first_name
-		BOT_USERNAME = "@" + getbot.username
-	else:
-		log.warning("Failed to get bot information (BOT_ID, BOT_DC, BOT_NAME, BOT_USERNAME)") 
-		
-	return (
-		{
-			"BOT_ID" : BOT_ID, 
-			"BOT_DC" : BOT_DC, 
-			"BOT_NAME" : BOT_NAME, 
-			"BOT_USERNAME" : BOT_USERNAME
-		}
-		)
-
-
-
-
-async def add_user(user_id: Union[int, List[int]], chat_id: str):
+def add_user(user_id: Union[int, List[int]], chat_id: str):
 	""" Add users in groups / channels """
 	try:
-		done = await app.add_chat_members(
+		done = app.add_chat_members(
 			chat_id, 
 			user_id
 			)
@@ -244,10 +177,10 @@ async def add_user(user_id: Union[int, List[int]], chat_id: str):
 
 
 # check if the bot is in log chat 
-async def exists(user_id: int, chat_id: str):
+def exists(user_id: int, chat_id: str):
 	_data = []
 	_data.clear()
-	lime = await app.get_chat_members(chat_id)
+	lime = app.get_chat_members(chat_id)
 
 	for x in lime:
 		_data.append(x.user.id)
@@ -256,34 +189,13 @@ async def exists(user_id: int, chat_id: str):
 
 
 
-async def userlise():
-	global telegraph
-	try:
-		if app:
-			await app.start()
-			await get_self()
-			# telegraph account
-			telegraph = Telegraph()
-			telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot") 
-			await botlise()
-			await app.stop()
-		else:
-			log.warning("App client is not available, please check your (SESSION, API_ID, API_HASH)")
-	except Exception as e:
-		print(e)
-
-
-
-
-async def botlise():
+def check_bot_in_log_chat():
 	try:
 		if bot:
-			await bot.start()
-			await get_bot()
 			print("Checking presence of bot in log chat . . .\n")
 			try:
-				if await exists(BOT_ID, LOG_CHAT) is False:
-					await add_user(
+				if exists(BOT_ID, LOG_CHAT) is False:
+					add_user(
 						LOG_CHAT,
 						BOT_ID
 					)
@@ -293,9 +205,7 @@ async def botlise():
 			except PeerIdInvalid:
 				print("Peer id is invalid, Manually send a message in log chat . . .\n")
 				pass
-			await bot.stop()
 		else:
-			await get_bot()
 			log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
 	except Exception as e:
 		print(e)
@@ -347,6 +257,9 @@ if app:
 	USER_NAME = data.first_name
 	USER_USERNAME = f"@{data.username}" if data.username else "None"
 	USER_DC = data.dc_id
+	telegraph = Telegraph()
+	telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
+	check_bot_in_log_chat()
 	app.stop()
 
 bot = lara() if TOKEN else False
