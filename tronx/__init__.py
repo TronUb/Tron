@@ -351,4 +351,13 @@ if app:
 
 bot = lara() if TOKEN else False
 
+if bot:
+	bot.start()
+	data = bot.get_me()
+	BOT_ID = data.id
+	BOT_NAME = data.first_name
+	BOT_USERNAME = f"@{data.username}"
+	BOT_DC = data.dc_id
+	bot.stop()
+
 
