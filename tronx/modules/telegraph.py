@@ -51,7 +51,7 @@ async def telegraph(app, m:Message):
 			await send_edit(m, "⏳• Hold on . . .", mono=True)
 			link = tgm.create_page(
 				myname(),
-				html_content=replied.text
+				html_content=reply.text
 				)
 			await send_edit(
 				m, 
@@ -73,12 +73,12 @@ async def telegraph(app, m:Message):
 			# change ext to png to use convert in link
 			if reply.animation or reply.sticker:
 				loc = await app.download_media(
-					replied,
+					reply,
 					file_name=f"{Config.TEMP_DICT}telegraph.png"
 					)
 			else:
 				loc = await app.download_media(
-					replied, 
+					reply, 
 					file_name=f"{Config.TEMP_DICT}"
 					)
 			try:
