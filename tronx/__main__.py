@@ -10,8 +10,6 @@ from tronx import (
 	app, 
 	bot, 
 	log, 
-	get_self, 
-	get_bot,
 	add_user,
 	userlise,
 )
