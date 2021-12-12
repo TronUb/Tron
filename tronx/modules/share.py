@@ -92,10 +92,12 @@ async def send_modules(app, m: Message):
 
 @app.on_message(gen("install"))
 async def install_module(_, m: Message):
-	if long(m) == 1 and m.reply_to_message.document:
-		if not m.reply_to_message.document.file_name.endswith(".py"):
-			return await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
-		reply = m.reply_to_message
+	reply = m.reply_to_message
+	if not reply:
+		return await send_edit(m, "Reply to a python file to install . . .", mono=True, delme=4)
+	if reply:
+		if not reply.document.file_name.endswith(".py"):
+			return await send_edit(m, "Only (.py) modules can be installed !!", mono=True, delme=2)
 		doc_name = reply.document.file_name
 
 		module_loc = (
@@ -122,6 +124,7 @@ async def install_module(_, m: Message):
 
 
 
+
 @app.on_message(gen("uninstall"))
 async def uninstall_module(_, m: Message):
 	cmd = m.command
@@ -135,7 +138,7 @@ async def uninstall_module(_, m: Message):
 				os.remove(module_loc)
 				await send_edit(m, f"**Uninstalled module** {cmd[1]}")
 			else:
-				await send_edit(m,"Module does not exist!", delme=2, mono=True)
+				await send_edit(m,"Module doesn't exist !", delme=2, mono=True)
 		else:
 			await send_edit(m, "Give me a module name . . .", mono=True)
 	except Exception as e:
