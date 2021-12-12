@@ -345,7 +345,7 @@ if app:
 	data = app.get_me()
 	USER_ID = data.id
 	USER_NAME = data.first_name
-	USER_USERNAME = f"@{data.username}" id data.username else "None"
+	USER_USERNAME = f"@{data.username}" if data.username else "None"
 	USER_DC = data.dc_id
 	app.stop()
 
