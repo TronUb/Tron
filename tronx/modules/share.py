@@ -26,6 +26,7 @@ from tronx.helpers import (
 	is_thumb_image_exists, 
 	mention_markdown,
 	long,
+	aexec,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -111,7 +112,8 @@ async def install_module(_, m: Message):
 			)
 			if download_loc:
 				await send_edit(m, f"**Installed module:** `{doc_name}`")
-				os.system(f"python3 {download_loc}")
+				data = open(download_loc, "r")
+				await aexec(data.read())
 			else:
 				await send_edit(m, f"Failed to install module {doc_name}", mono=True, delme=4)
 		except Exception as e:
