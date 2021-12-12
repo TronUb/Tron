@@ -94,21 +94,26 @@ async def install_module(_, m: Message):
 	if long(m) == 1 and m.reply_to_message.document:
 		if not m.reply_to_message.document.file_name.endswith(".py"):
 			return await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
+		reply = m.reply_to_message
+		doc_name = reply.document.file_name
 
 		module_loc = (
-			f"tronx/modules/{m.reply_to_message.document.file_name}"
+			f"tronx/modules/{doc_name}"
 		)
 		await send_edit(m, "Installing module . . .", delme=2, mono=True)
 		if os.path.exists(module_loc):
-			return await send_edit(m, f"Module `{m.reply_to_message.document.file_name}` already exists !")
+			return await send_edit(m, f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
 
 		try:
 			download_loc = await app.download_media(
-				message=m.reply_to_message, 
+				message=reply, 
 				file_name=module_loc
 			)
 			if download_loc:
-				await send_edit(m, f"**Installed module:** `{m.reply_to_message.document.file_name}`")
+				await send_edit(m, f"**Installed module:** `{doc_name}`")
+				os.system(f"python3 {download_loc}")
+			else:
+				await send_edit(m, f"Failed to install module {doc_name}", mono=True, delme=4)
 		except Exception as e:
 			await error(m, e)
 
