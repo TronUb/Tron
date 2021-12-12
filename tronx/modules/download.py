@@ -262,7 +262,7 @@ async def batch_upload(_, m: Message):
 
 	if os.path.exists(temp_dir):
 		try:
-			await send_edit(m, "Uploading Files from `{temp_dir}` . . .")
+			await send_edit(m, f"Uploading Files from `{temp_dir}` . . .")
 			files = os.listdir(temp_dir)
 			files.sort()
 			for file in files:
@@ -279,7 +279,6 @@ async def batch_upload(_, m: Message):
 						thumb=thumb_image_path,
 						caption=doc_caption,
 						disable_notification=True,
-						progress=progress_for_pyrogram,
 					)
 					await send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
 					log.info("Uploaded all files in batch !!")
