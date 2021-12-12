@@ -89,7 +89,6 @@ async def start_bot():
 	""" Main startup """
 	log.info("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	log.info("initialising . . .\n\n")
-	await userlise() # first startup
 	await start_assistant()
 	await start_userbot()
 
