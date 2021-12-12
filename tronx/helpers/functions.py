@@ -26,6 +26,16 @@ from tronx.database.postgres import dv_sql as dv
 
 
 
+async def aexec(code, app, m):
+	exec(
+		f"async def __aexec(app, m): "
+		+ "".join(f"\n {l}" for l in code.split("\n"))
+	)
+	return await locals()["__aexec"](app, m)
+
+
+
+
 def showdate():
 	"""Your location's date"""
 	today = pytz.timezone(Config.TIME_ZONE)

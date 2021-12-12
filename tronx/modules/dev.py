@@ -37,16 +37,6 @@ c = Config
 
 
 
-async def aexec(code, app, m):
-	exec(
-		f"async def __aexec(app, m): "
-		+ "".join(f"\n {l}" for l in code.split("\n"))
-	)
-	return await locals()["__aexec"](app, m)
-
-
-
-
 @app.on_message(gen(["eval", "e"], allow_channel=True))
 async def evaluate(app, m):
 	global reply

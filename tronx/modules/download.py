@@ -70,7 +70,7 @@ async def list_directories(_, m: Message):
 		location += "/"
 	OUTPUT = f"Files in `{location}`:\n\n"
 
-	await send_edit(m, "Fetching files . . .")
+	await send_edit(m, "Fetching files . . .", mono=True)
 
 	try:
 		files = os.listdir(location)
@@ -101,7 +101,7 @@ async def list_directories(_, m: Message):
 				text=OUTPUT
 			)
 	elif OUTPUT.endswith("\n\n"):
-		return await send_edit(m, f"No files in {location}", delme=2)
+		return await send_edit(m, f"No files in `{location}`", delme=4)
 	await send_edit(m, OUTPUT)
 
 
@@ -208,7 +208,7 @@ async def download_media(_, m: Message):
 		await send_edit(m, "Reply to a Telegram Media to download it to local server.", delme=2)
 
 
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 @app.on_message(gen(["upload", "ul"]))
@@ -218,14 +218,11 @@ async def upload_as_document(_, m: Message):
 	if long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
-			await send_edit(
-				m, 
-				"`Uploading...`"
-				)
+			await send_edit(m, "Uploading . . .", mono=True)
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
-			await send_edit(m,f"Uploading __{doc_caption}__...")
+			await send_edit(m, f"Uploading `{doc_caption}` . . .")
 
 			await m.reply_document(
 				document=local_file_name,
@@ -234,12 +231,12 @@ async def upload_as_document(_, m: Message):
 				disable_notification=True,
 				reply_to_message_id=m.message_id,
 				progress=progress_for_pyrogram,
-				progress_args=("Uploading file...", m, c_time),
+				progress_args=("Uploading file . . .", m, c_time),
 			)
 
 			end_t = datetime.now()
 			ms = (end_t - start_t).seconds
-			await send_edit(m, f"**Uploaded in {ms} seconds**", delme=2)
+			await send_edit(m, f"Uploaded in `{ms}` seconds . . .", delme=2)
 		else:
 			await send_edit(
 				m, 
@@ -247,54 +244,47 @@ async def upload_as_document(_, m: Message):
 				mono=True
 				)
 	else:
-		await send_edit(m, f"`{PREFIX}upload [file path ]` to upload to current Telegram chat", delme=2)
+		await send_edit(m, f"`{PREFIX}upload [file path ]` to upload to current Telegram chat", delme=4)
 
 
 
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-@app.on_message(gen("batchup"))
-async def covid(_, m: Message):
+@app.on_message(gen(["batchup", "bcp"]))
+async def batch_upload(_, m: Message):
 	if long(m) == 1:
-		return await send_edit(m, "`Give me a location to upload files from the directory ...`", delme=2)
+		return await send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, mono=True)
 
-	elif long(m) >= 2:
-		temp_dir = m.text.split(None, 1)[1]
+	elif long(m) > 1:
+		temp_dir = m.command[1]
 		if not temp_dir.endswith("/"):
 			temp_dir += "/"
-	await send_edit(m, "`Uploading Files to Telegram...`")
 
 	if os.path.exists(temp_dir):
 		try:
+			await send_edit(m, f"Uploading Files from `{temp_dir}` . . .")
 			files = os.listdir(temp_dir)
 			files.sort()
 			for file in files:
-				if not file.startswith("__"):
+				if file.endswith(".py"):
 					c_time = time.time()
 					required_file_name = temp_dir + file
 					thumb_image_path = await is_thumb_image_exists(required_file_name)
 					doc_caption = os.path.basename(required_file_name)
-					log.info(
-						f"Uploading <i>{required_file_name}</i> from {temp_dir} to Telegram."
-					)
+					log.info(f"Uploading {required_file_name} from {temp_dir} to Telegram.")
+
 					await app.send_document(
 						chat_id=m.chat.id,
 						document=required_file_name,
 						thumb=thumb_image_path,
 						caption=doc_caption,
 						disable_notification=True,
-						progress=progress_for_pyrogram,
-						progress_args=(
-							f"Trying to upload __{file}__",
-							sm,
-							c_time,
-						),
 					)
+					await send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
+					log.info("Uploaded all files in batch !!")
+
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Directory Not Found ...", delme=2)
-		return
-	await send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
-	log.info("Uploaded all files in batch !!")
+		return await send_edit(m, "Directory not found . . .", delme=2)
+

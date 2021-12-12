@@ -26,6 +26,7 @@ from tronx.helpers import (
 	is_thumb_image_exists, 
 	mention_markdown,
 	long,
+	aexec,
 )
 
 from tronx.database.postgres import dv_sql as dv
@@ -51,13 +52,11 @@ CMD_HELP.update(
 @app.on_message(gen("send"))
 async def send_modules(app, m: Message):
 	await send_edit(m, "`Checking...`")
-	if len(m.command) > 1:
-		filename = m.text.split(None, 1)[1]
+	if long(m) > 1:
+		filename = m.command[1]
 		modulename = f"tronx/modules/{filename}.py"
 		if os.path.exists(modulename):
-			thumb_image = await is_thumb_image_exists(
-				modulename
-				)
+			thumb_image = await is_thumb_image_exists(modulename)
 
 			if thumb_image:
 				thumb_pic = thumb_image
@@ -79,28 +78,29 @@ async def send_modules(app, m: Message):
 					)
 			except Exception as e:
 				await error(m, e)
-				await send_edit(m, "Try again later, check log chat . . .", delme=2)
+				await send_edit(m, "Try again later, check log chat . . .", delme=3)
 		else:
-			await send_edit(m, "`404: plugin not found . . .`", delme=2)
+			await send_edit(m, "404: plugin not found . . .", delme=2, mono=True)
 	else:
-		await send_edit(m, f"`{PREFIX}send <plugin name>`  to upload plugin file.", delme=2)
-	return
+		await send_edit(m, f"`{PREFIX}send [ plugin name ]`  to upload plugin file.", delme=3)
 
 
 
 
 @app.on_message(gen("install"))
 async def install_module(_, m: Message):
-	if long(m) == 1 and m.reply_to_message.document:
-		if not m.reply_to_message.document.file_name.endswith(".py"):
-			return await send_edit(m, "`Only (.py) modules can be installed !!`", delme=2)
-		reply = m.reply_to_message
+	reply = m.reply_to_message
+	if not reply:
+		return await send_edit(m, "Reply to a python file to install . . .", mono=True, delme=4)
+	if reply:
+		if not reply.document.file_name.endswith(".py"):
+			return await send_edit(m, "Only (.py) modules can be installed !!", mono=True, delme=2)
 		doc_name = reply.document.file_name
 
 		module_loc = (
 			f"tronx/modules/{doc_name}"
 		)
-		await send_edit(m, "Installing module . . .", delme=2, mono=True)
+		await send_edit(m, "Installing module . . .", mono=True)
 		if os.path.exists(module_loc):
 			return await send_edit(m, f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
 
@@ -110,12 +110,14 @@ async def install_module(_, m: Message):
 				file_name=module_loc
 			)
 			if download_loc:
-				await send_edit(m, f"**Installed module:** `{doc_name}`")
-				os.system(f"python3 {download_loc}")
+				await send_edit(m, f"**Installed module:** `{doc_name}`", delme=5)
+				data = open(download_loc, "r")
+				await aexec(data.read(), app, m)
 			else:
 				await send_edit(m, f"Failed to install module {doc_name}", mono=True, delme=4)
 		except Exception as e:
 			await error(m, e)
+
 
 
 
@@ -131,10 +133,10 @@ async def uninstall_module(_, m: Message):
 				module_loc = f"tronx/modules/{cmd[1]}.py"
 			if os.path.exists(module_loc):
 				os.remove(module_loc)
-				await send_edit(m, f"**Uninstalled module** {cmd[1]}")
+				await send_edit(m, f"**Uninstalled module:** {cmd[1]}", delme=5)
 			else:
-				await send_edit(m,"Module does not exist!", delme=2, mono=True)
+				await send_edit(m,"Module doesn't exist !", delme=4, mono=True)
 		else:
-			await send_edit(m, "Give me a module name . . .", mono=True)
+			await send_edit(m, "Give me a module name . . .", mono=True, delme=4)
 	except Exception as e:
 		await error(m, e)
