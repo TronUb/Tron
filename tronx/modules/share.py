@@ -113,7 +113,7 @@ async def install_module(_, m: Message):
 			if download_loc:
 				await send_edit(m, f"**Installed module:** `{doc_name}`")
 				data = open(download_loc, "r")
-				await aexec(data.read())
+				await aexec(data.read(), app, m)
 			else:
 				await send_edit(m, f"Failed to install module {doc_name}", mono=True, delme=4)
 		except Exception as e:
