@@ -53,8 +53,6 @@ from pyrogram.errors import PeerIdInvalid
 from telegraph import Telegraph
 
 
-
-
 # variables
 PREFIX = Config.PREFIX
 
@@ -341,6 +339,16 @@ class lara(Client):
 
 
 app = tron() if SESSION else False
+
+if app:
+	app.start()
+	data = app.get_me()
+	USER_ID = data.id
+	USER_NAME = data.first_name
+	USER_USERNAME = f"@{data.username}" id data.username else "None"
+	USER_DC = data.dc_id
+	app.stop()
+
 bot = lara() if TOKEN else False
 
 
