@@ -143,7 +143,7 @@ async def _stats(_, cb):
 		text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
 		reply_markup=InlineKeyboardMarkup([home_back]),
 	)
-	print(cb.matches[0].group())
+	print(cb.matches[0].group(1))
 
 
 # about info
