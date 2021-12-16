@@ -22,3 +22,12 @@ stat_string = f"""
 **Uptime:** {uptime()}
 **User Bio:** {USER_BIO}
 """
+
+
+
+closed_menu_string = f"""
+Welcome to Tron.
+This is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA )
+
+• Menu is closed
+"""
