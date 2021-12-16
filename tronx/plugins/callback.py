@@ -37,6 +37,8 @@ from tronx.helpers import (
 	quote,
 	data,
 	alert_user,
+	stat_string,
+	closed_menu_string,
 )
 
 
@@ -140,7 +142,7 @@ async def give_plugin_cmds(_, cb):
 @alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(
-		text=f"**Dex:** Stats\n\n**Location:** /home/stats\n\nName: {USER_NAME}\nLara version: {lara_version}\nPython version: {__python_version__}\nPyrogram: {__pyro_version__}\nDB_URI: {db_status}\nUptime: {uptime()}\n\nUser Bio: {Config.USER_BIO}",
+		text=stat_string,
 		reply_markup=InlineKeyboardMarkup([home_back]),
 	)
 	print(cb.matches[0].group(1))
@@ -208,7 +210,7 @@ async def _extra(_, cb):
 async def _close(_, cb: CallbackQuery):
 	if filters.regex("close-dex"):
 		await cb.edit_message_text(
-			text="Welcome to Tron.\n\nThis is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA ).\n\n• Menu is closed.",
+			text=closed_menu_string,
 			reply_markup=InlineKeyboardMarkup(
 				[
 					[
