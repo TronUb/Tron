@@ -102,6 +102,8 @@ API_HASH = Config.API_HASH
 
 WORKERS = Config.WORKERS
 
+USER_BIO = Config.USER_BIO
+
 
 # owner details /
 
