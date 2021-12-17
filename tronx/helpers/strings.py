@@ -2,6 +2,7 @@ from tronx import (
 	USER_NAME, 
 	__python_version__, 
 	__pyro_version__, 
+	lara_version,
 	db_status, 
 	uptime, 
 	USER_BIO,
