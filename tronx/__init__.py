@@ -25,6 +25,7 @@ from tronx.client import (
 	version,
 	lara_version,
 	__python_version__,
+	__pyro_version__,
 	# containers
 	CMD_HELP,
 	HELP,
