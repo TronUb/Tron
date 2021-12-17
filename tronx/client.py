@@ -70,6 +70,7 @@ lara_version = "v.0.0.1"
 
 __python_version__ = f"{platform.python_version()}"
 
+__pyro_version__ = "v.1.2.9"
 
 # database /
 
