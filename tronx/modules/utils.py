@@ -77,7 +77,7 @@ async def admin_title(_, m: Message):
 				user_name = user.first_name
 				user_chat_info = await app.get_chat_member(m.chat.id, admin)
 				is_admin = user_chat_info.status
-				if is_admin is "member":
+				if is_admin == "member":
 					await send_edit(m, f"{user_name} is not an admin in this chat, use {PREFIX}promote command to promote them.", delme=3, mono=True)
 				else:
 					await app.set_administrator_title(m.chat.id, admin, title)
