@@ -7,6 +7,7 @@ from tronx.client import (
 	USER_NAME,
 	USER_USERNAME,
 	USER_DC,
+	USER_BIO,
 	# bot info
 	BOT_NAME,
 	BOT_ID,
