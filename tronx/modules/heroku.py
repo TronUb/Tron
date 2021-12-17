@@ -89,7 +89,7 @@ async def restart_app(_, m: Message):
 	try:
 		await send_edit(m, "Restarting . . .", mono=True)
 		Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
-		zen = Heroku.apps()[Config.HEROKU_APP_NAME]
+		heroku_app = Heroku.apps()[Config.HEROKU_APP_NAME]
 		restart = heroku_app.restart()
 		if restart:
 			return await send_edit(
