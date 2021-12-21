@@ -29,11 +29,15 @@ def import_module(path, exclude=[], display_module=True):
 	py_path_raw = ".".join(path.split("/"))
 	py_path = py_path_raw[0:len(py_path_raw)-1]
 
+	count = 0
 	for x in plugins:
 		if not x in exclude:
 			importlib.import_module(py_path + "." + x)
+			count += 1
 			if display_module:
 				print(x + " Loaded !")
+	return count
+
 
 
 
@@ -65,10 +69,12 @@ async def start_bot():
 	""" Main startup """
 	log.info("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	log.info("initialising . . .\n\n")
-	log.info("Loading modules:\n\n")
-	import_module("tronx/modules/")
 	log.info("Loading plugins:\n\n")
-	import_module("tronx/plugins/")
+	_plugs = import_module("tronx/plugins/")
+	log.info(f"\n\n{_plugs} modules Loaded\n\n")
+	log.info("Loading modules:\n\n")
+	_mods = import_module("tronx/modules/")
+	log.info(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
 	await idle()
