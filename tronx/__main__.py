@@ -26,7 +26,8 @@ def import_module(path, exclude=[], display_module=True):
 			if not x in ["__pycache__",  "__init__.py"]:
 				plugins.append(x.replace(".py", ""))
 
-	py_path = ".".join(path.split("/"))
+	py_path_raw = ".".join(path.split("/"))
+	py_path = py_path_raw[0:len(py_path_raw)-1]
 
 	for x in plugins:
 		if not x in exclude:
