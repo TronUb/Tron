@@ -1,4 +1,4 @@
-
+import importlib
 import asyncio
 
 from pyrogram import idle
@@ -12,6 +12,27 @@ from tronx.client import (
 
 
 loop = asyncio.get_event_loop()
+
+
+def import_module(path, exclude=[], display_module=True):
+	"""Modified version of pyrogram smart plugins"""
+	if not os.path.exists(path):
+		return print(f"No path found: {path}")
+
+	plugins = []
+	for x in os.listdir(path):
+		if x.endswith(".py"):
+			if not x in ["__pycache__",  "__init__.py"]:
+				plugins.append(x.replace(".py", ""))
+
+	py_path = ".".join(path.split("/"))
+
+	for x in plugins:
+		if not x in exclude:
+			importlib.import_module(py_path + "." + x)
+			if display_module:
+				print(x + " Loaded !")
+
 
 
 async def start_assistant():
@@ -42,6 +63,10 @@ async def start_bot():
 	""" Main startup """
 	log.info("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	log.info("initialising . . .\n\n")
+	log.info("Loading modules:\n\n")
+	import_module("tronx/modules/")
+	log.info("Loading plugins:\n\n")
+	import_module("tronx/plugins/")
 	await start_assistant()
 	await start_userbot()
 	await idle()
