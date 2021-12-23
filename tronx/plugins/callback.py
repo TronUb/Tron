@@ -83,9 +83,9 @@ async def modules(_, cb):
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
 	buttons = helpdex(current_page_number + 1, CMD_HELP, "helpme")
+	print(cb.matches[0])
+	print(dir(cb.matches[0]))
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
-	print(current_page_number, buttons, cb)
-
 
 
 
