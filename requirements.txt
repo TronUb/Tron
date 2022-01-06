@@ -19,7 +19,7 @@ currencyconverter
 deep_translator
 gtts
 git-python
-wikipediaapi
+wikipedia-api
 youtube_dl
 speedtest-cli==2.1.3
 search-engine-parser
