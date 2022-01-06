@@ -48,7 +48,7 @@ async def wikipedia_search(app, m:Message):
 			await send_edit(m, f"Searching for: {text} . . .", mono=True)
 			if result:
 				giveresult = result.summary
-				if len(result) <= 4096:
+				if len(giveresult) <= 4096:
 					await send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult}```")
 				else:
 					await send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult[:4095]}```")
