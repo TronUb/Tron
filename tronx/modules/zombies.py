@@ -65,8 +65,11 @@ async def zombies_clean(_, m: Message):
 						await asyncio.sleep(0.1)
 					except Exception as e:
 						await error(m, e)
-						
-		await send_edit(m, f"Group clean-up done !\nRemoved `{count}` deleted accounts in {m.chat.title}.")
+		if count == 0:
+			await send_edit(m, f"Group clean-up done !\nFailed to remove deleted accounts (maybe they are admins)")
+		else:
+			await send_edit(m, f"Group clean-up done !\nRemoved `{count}` deleted accounts in {m.chat.title}.")
+
 	else:
 		await send_edit(m, f"Check `{PREFIX}help zombies` to see how it works!")
 
