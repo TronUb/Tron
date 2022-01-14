@@ -78,7 +78,7 @@ async def start_bot():
 	print("initialising . . .\n\n")
 	print("Loading plugins:\n\n")
 	_plugs = import_module("tronx/plugins/")
-	print(f"\n\n{_plugs} modules Loaded\n\n")
+	print(f"\n\n{_plugs} plugins Loaded\n\n")
 	print("Loading modules:\n\n")
 	_mods = import_module("tronx/modules/")
 	print(f"\n\n{_mods} modules Loaded")
