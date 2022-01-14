@@ -12,7 +12,7 @@ from tronx.methods import Methods
 
 
 # debugging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 log = logging.getLogger(__name__)
 
 
