@@ -148,7 +148,7 @@ async def _stats(_, cb):
 async def _about(_, cb):
 	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
-			text="**Dex:** About\n\n**Location:** /home/about\n\n**[ Personal Info ]:**\n\n**Age:** {assistant_age}\n**Name:** {assistant_name}\n**Gender:** {assistant_gender}\n\n**[ Versions ]:**\n\n**Python:** {python_version}\n**Pyrogram:** {pyrogram_version}\n**Assistant:**  {assistant_version}\n\n**[ About ]:**\n\nI am Nora made by ࿇•ẞᗴᗩSԵ•࿇\nI am your friendly assistant, i will help you as much as you need. You can ask me for any help related to your userbot. If you have any suggestions or you're facing any problems which are related to tronuserbot then just ask in [support group](https://t.me/tronuserbot_support), ",
+			text=f"**Dex:** About\n\n**Location:** /home/about\n\n**[ Personal Info ]:**\n\n**Age:** {assistant_age}\n**Name:** {assistant_name}\n**Gender:** {assistant_gender}\n\n**[ Versions ]:**\n\n**Python:** {python_version}\n**Pyrogram:** {pyrogram_version}\n**Assistant:**  {assistant_version}\n\n**[ About ]:**\n\nI am Nora made by ࿇•ẞᗴᗩSԵ•࿇\nI am your friendly assistant, i will help you as much as you need. You can ask me for any help related to your userbot. If you have any suggestions or you're facing any problems which are related to tronuserbot then just ask in [support group](https://t.me/tronuserbot_support), ",
 			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
 
