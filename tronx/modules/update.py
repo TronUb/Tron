@@ -9,7 +9,6 @@ from tronx import (
   	app, 
 	CMD_HELP,
 	Config,
-	version,
 )
 
 from tronx.helpers import (

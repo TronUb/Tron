@@ -1,9 +1,6 @@
 import heroku3
 
-from pyrogram import (
-	filters, 
-	__version__ as __pyro_version__,
-)
+from pyrogram import filters
 
 from pyrogram.types import (
 	InlineKeyboardButton, 
@@ -19,16 +16,16 @@ except ImportError:
 
 from tronx import (
 	CMD_HELP, 
-	version, 
 	USER_ID, 
 	USER_NAME, 
 	USER_USERNAME, 
 	Config,
 	uptime,
 	PREFIX,
-	__python_version__,
 	db_status,
-	lara_version,
+	python_version,
+	assistant_version,
+	pyrogram_version,
 )
 
 from tronx.helpers import (
@@ -39,15 +36,12 @@ from tronx.helpers import (
 	alert_user,
 	stat_string,
 	closed_menu_string,
+	PIC,
+	USER_ID,
+	assistant_name,
+	assistant_age,
+	assistant_gender,
 )
-
-
-
-
-# variables
-USER_ID = [USER_ID]
-
-PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
 
 
 
@@ -154,7 +148,7 @@ async def _stats(_, cb):
 async def _about(_, cb):
 	if filters.regex("open-about-dex"):
 		await cb.edit_message_text(
-			text="**Dex:** About\n\n**Location:** /home/about\n\n[ Personal Info ]:\n\nAge: 19\nName: Lara\nGender: Female\n\n[ Versions ]:\n\nPython : v.3.9.4\nPyrogram: v.1.2.8\nAssistant:  v.0.0.1\n\n[ About ]:\n\nI am Lara made by ࿇•ẞᗴᗩSԵ•࿇\nFrom now on i am your friendly assistant. You can ask me for any help related to your userbot.",
+			text=f"**Dex:** About\n\n**Location:** /home/about\n\n**[ Personal Info ]:**\n\n**Age:** {assistant_age}\n**Name:** {assistant_name}\n**Gender:** {assistant_gender}\n\n**[ Versions ]:**\n\n**Python:** {python_version}\n**Pyrogram:** {pyrogram_version}\n**Assistant:**  {assistant_version}\n\n**[ About ]:**\n\nI am Nora made by ࿇•ẞᗴᗩSԵ•࿇\nI am your friendly assistant, i will help you as much as you need. You can ask me for any help related to your userbot. If you have any suggestions or you're facing any problems which are related to tronuserbot then just ask in [support group](https://t.me/tronuserbot_support), ",
 			reply_markup=InlineKeyboardMarkup([home_back]),
 		)
 

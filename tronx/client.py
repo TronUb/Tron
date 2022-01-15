@@ -52,7 +52,7 @@ if list(platform.uname())[1] == "localhost":
 else:
 	from config import Config
 
-
+import pyrogram
 from pyrogram.types import Message
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid
@@ -64,13 +64,14 @@ from telegraph import Telegraph
 
 # versions /
 
-version="v.0.0.5"
+userbot_version = "v.0.0.5"
 
-lara_version = "v.0.0.1"
+assistant_version = "v.0.0.1"
 
-__python_version__ = f"{platform.python_version()}"
+python_version = str(platform.python_version())
 
-__pyro_version__ = "v.1.2.9"
+pyrogram_version = str(pyrogram.__version__)
+
 
 # database /
 
@@ -150,7 +151,7 @@ app = Client(
 	session_name=Config.SESSION,
 	api_id=Config.API_ID,
 	api_hash=Config.API_HASH,
-	app_version=version,
+	app_version=userbot_version,
 	workers=Config.WORKERS,
 )
 
@@ -300,7 +301,7 @@ class tron(Client, Methods):
 		session_name=SESSION,
 		api_id=API_ID,
 		api_hash=API_HASH,
-		app_version=version,
+		app_version=userbot_version,
 		workers=WORKERS,
 		)
 

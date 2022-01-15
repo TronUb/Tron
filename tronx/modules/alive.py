@@ -3,16 +3,16 @@ import time
 from sys import version_info
 
 from pyrogram.errors import BotInvalid
-from pyrogram import __version__ as __pyro_version__
 from pyrogram.types import Message
 
 from tronx import (
 	app,
 	CMD_HELP,
-	version, 
+	userbot_version, 
 	uptime,
 	Config,
-	__python_version__,
+	python_version,
+	pyrogram_version,
 	)
 
 from tronx.helpers import (
@@ -58,9 +58,9 @@ async def alive(app, m: Message):
 		if BIO:
 			alive_msg += f"⦿ {BIO}\n\n"
 		alive_msg += f"⟜ **Owner:** {mymention()}\n"
-		alive_msg += f"⟜ **Tron:** `{version}`\n"
-		alive_msg += f"⟜ **Python:** `{__python_version__}`\n"
-		alive_msg += f"⟜ **Pyrogram:** `{__pyro_version__}`\n"
+		alive_msg += f"⟜ **Tron:** `{userbot_version}`\n"
+		alive_msg += f"⟜ **Python:** `{python_version}`\n"
+		alive_msg += f"⟜ **Pyrogram:** `{pyrogram_version}`\n"
 		alive_msg += f"⟜ **Uptime:** {uptime()}\n\n"
 
 		await m.delete()
