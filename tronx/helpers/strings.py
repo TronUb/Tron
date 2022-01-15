@@ -2,7 +2,7 @@ from tronx import (
 	USER_NAME, 
 	__python_version__, 
 	__pyro_version__, 
-	lara_version,
+	nora_version,
 	db_status, 
 	uptime, 
 	USER_BIO,
@@ -21,7 +21,7 @@ stat_string = f"""
 **Location:** /home/stats
 
 **Name:** {USER_NAME}
-**{assistant_name} version:** {lara_version}
+**{assistant_name} version:** {nora_version}
 **Python version:** {__python_version__}
 **Pyrogram version:** {__pyro_version__}
 **Database:** {db_status}
