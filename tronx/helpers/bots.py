@@ -7,6 +7,7 @@ from tronx import (
 
 from tronx.database.postgres import dv_sql as dv
 from pyrogram.types import Message
+from .variables import assistant_name
 
 
 
@@ -42,7 +43,7 @@ def botid():
 
 def bot_bio(m: Message):
 	"""Get your bots bio"""
-	msg = f"Hey {m.from_user.mention} my name is LARA and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands."  
+	msg = f"Hey {m.from_user.mention} my name is {assistant_name} and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands."  
 	var = dv.getdv("BOT_BIO")
 	var_data = var if bool(var) else Config.BOT_BIO
 	data = var_data if var_data else msg
