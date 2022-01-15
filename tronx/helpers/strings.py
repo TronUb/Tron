@@ -8,6 +8,11 @@ from tronx import (
 	USER_BIO,
 )
 
+from .variables import (
+	assistant_name
+}
+
+
 
 
 stat_string = f"""
@@ -16,7 +21,7 @@ stat_string = f"""
 **Location:** /home/stats
 
 **Name:** {USER_NAME}
-**Lara version:** {lara_version}
+**{assistant_name} version:** {lara_version}
 **Python version:** {__python_version__}
 **Pyrogram version:** {__pyro_version__}
 **Database:** {db_status}
