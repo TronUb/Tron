@@ -301,7 +301,7 @@ class tron(Client, Methods):
 		session_name=SESSION,
 		api_id=API_ID,
 		api_hash=API_HASH,
-		app_version=version,
+		app_version=userbot_version,
 		workers=WORKERS,
 		)
 
