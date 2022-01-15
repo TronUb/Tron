@@ -5,6 +5,11 @@ from tronx import (
 
 
 
+# upper
 USER_ID = [USER_ID]
-message_ids = {}
 CMD_HELP = {}
+
+# lower
+message_ids = {}
+assistant_name = "Nora"
+userbot_name = "Tron"
