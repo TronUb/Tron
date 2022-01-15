@@ -151,7 +151,7 @@ app = Client(
 	session_name=Config.SESSION,
 	api_id=Config.API_ID,
 	api_hash=Config.API_HASH,
-	app_version=version,
+	app_version=userbot_version,
 	workers=Config.WORKERS,
 )
 
