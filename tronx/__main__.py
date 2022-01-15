@@ -17,6 +17,9 @@ loop = asyncio.get_event_loop()
 
 def import_module(path, exclude=[], display_module=True):
 	"""Modified version of pyrogram smart plugins"""
+	bin = []
+	bin.clear()
+
 	if not os.path.exists(path):
 		return print(f"No path found: {path}")
 
@@ -34,8 +37,12 @@ def import_module(path, exclude=[], display_module=True):
 		if not x in exclude:
 			importlib.import_module(py_path + "." + x)
 			count += 1
-			if display_module:
-				print(x + " Loaded !")
+			bin.append(x)
+
+	if display_module:
+		data = sorted(bin)
+		for x in data:
+			print(x + " Loaded !")
 	return count
 
 
@@ -67,14 +74,14 @@ async def start_userbot():
 
 async def start_bot():
 	""" Main startup """
-	log.info("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	log.info("initialising . . .\n\n")
-	log.info("Loading plugins:\n\n")
+	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
+	print("initialising . . .\n\n")
+	print("Loading plugins:\n\n")
 	_plugs = import_module("tronx/plugins/")
-	log.info(f"\n\n{_plugs} modules Loaded\n\n")
-	log.info("Loading modules:\n\n")
+	print(f"\n\n{_plugs} plugins Loaded\n\n")
+	print("Loading modules:\n\n")
 	_mods = import_module("tronx/modules/")
-	log.info(f"\n\n{_mods} modules Loaded")
+	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
 	await idle()
