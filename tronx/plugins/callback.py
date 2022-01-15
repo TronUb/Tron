@@ -16,7 +16,6 @@ except ImportError:
 
 from tronx import (
 	CMD_HELP, 
-	version, 
 	USER_ID, 
 	USER_NAME, 
 	USER_USERNAME, 
