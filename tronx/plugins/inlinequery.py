@@ -1,7 +1,4 @@
-from pyrogram import (
-	filters, 
-	__version__ as __pyro_version__,
-)
+from pyrogram import filters
 
 from pyrogram.types import (
 	InlineKeyboardButton, 
@@ -19,13 +16,14 @@ except ImportError:
 	bot = False
 
 from tronx import (
-	version, 
+	userbot_version, 
+	python_version,
+	pyrogram_version,
 	USER_ID, 
 	USER_NAME, 
 	USER_USERNAME, 
 	Config,
 	uptime,
-	__python_version__,
 )
 
 from tronx.helpers import (
@@ -33,15 +31,12 @@ from tronx.helpers import (
 	quote,
 	ialive_pic,
 	bot_pic,
+	USER_ID,
+	PIC,
 )
 
 
 
-
-# variables
-USER_ID = [USER_ID]
-
-PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
 
 settings = build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
 extra = build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
@@ -66,12 +61,10 @@ def inline_res(_, inline_query):
 			InlineQueryResultPhoto(
 				photo_url=Config.PMPERMIT_PIC,
 				title="Tron security system",
-				description="This is tron security system, leaves no spammer.",
+				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
 				caption=Config.PMPERMIT_TEXT,
-				parse_mode="markdown",
-				reply_markup=InlineKeyboardMarkup(
-					[approve]
-				)
+				parse_mode="combined",
+				reply_markup=InlineKeyboardMarkup([approve])
 			)
 			],
 		cache_time=1
@@ -81,13 +74,11 @@ def inline_res(_, inline_query):
 		results=[
 			InlineQueryResultPhoto(
 				photo_url=bot_pic(),
-				title="Installation",
-				description="tron helpdex",
-				caption="**Dex:** Home\n\n**Description:** This is your helpdex use to navigate in different sub dex to information.",
-				parse_mode="markdown",
-				reply_markup=InlineKeyboardMarkup(
-					[settings, extra, about, close]
-				)
+				title="Introduction to tron",
+				description="This is the tron helpdex menu.",
+				caption="**Dex:** Home\n\n**Description:** This is your helpdex use this to navigate in different sub dex, guidence and information is given in each dex.",
+				parse_mode="combined",
+				reply_markup=InlineKeyboardMarkup([settings, extra, about, close])
 			)
 			],
 		cache_time=1
@@ -97,10 +88,10 @@ def inline_res(_, inline_query):
 		results=[
 			InlineQueryResultPhoto(
 				photo_url=ialive_pic(),
-				title="Ialive query",
-				description="Tron helpdex",
-				caption=f"⛊  Inline Status:\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{version}`\n**⟜ Python:** `{__python_version__}`\n⟜ **Pyrogram:** `{__pyro_version__}`\n⟜ **uptime:** `{uptime()}\n\n",
-				parse_mode="markdown",
+				title="Inline alive",
+				description="This is same as alive command, the difference is that this command have inline button.",
+				caption=f"**⛊  Inline Status:**\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{userbot_version}`\n**⟜ Python:** `{python_version}`\n⟜ **Pyrogram:** `{pyrogram_version}`\n⟜ **uptime:** `{uptime()}\n\n",
+				parse_mode="combined",
 				reply_markup=InlineKeyboardMarkup([home_back])
 			)
 			],
@@ -111,10 +102,8 @@ def inline_res(_, inline_query):
 		results=[
 			InlineQueryResultArticle(
 				title="Inline quotes",
-				input_message_content=InputTextMessageContent(
-					quote()
-					),
-				description="inline quotes plugin command",
+				input_message_content=InputTextMessageContent(quote()),
+				description="Get infinite anime character quotes through this inline loop button.",
 				reply_markup=InlineKeyboardMarkup(
 					[
 						[
