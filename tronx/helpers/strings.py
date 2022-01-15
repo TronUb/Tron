@@ -10,7 +10,7 @@ from tronx import (
 
 from .variables import (
 	assistant_name
-}
+)
 
 
 
