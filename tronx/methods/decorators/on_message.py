@@ -3,7 +3,7 @@ from typing import Callable
 import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.scaffold import Scaffold
-from tronx import CMD_HELP
+from tronx.client import CMD_HELP
 
 
 
