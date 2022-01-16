@@ -103,4 +103,4 @@ async def baka_gif(_, m):
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Give me a suffix, use `{PREFIX}giflist` to get suffix . . .", delme=5)
+		await send_edit(m, f"Give me a suffix, use `{PREFIX}giflist` to get suffix . . .", delme=5)
