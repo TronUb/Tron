@@ -283,6 +283,7 @@ class tron(Client, Methods, Inversion):
 		api_hash=Config.API_HASH,
 		workers=Config.WORKERS,
 		)
+	test = 0
         
 
 
