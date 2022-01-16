@@ -54,3 +54,10 @@ from tronx.client import (
 	Config,
 	telegraph,
 )
+
+
+
+
+CMD_HELP = {}
+
+HELP = {}
