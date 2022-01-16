@@ -80,13 +80,6 @@ DB_URI = Config.DB_URI
 db_status = "Available" if DB_URI else "Not Available"
 
 
-# containers /
-
-CMD_HELP = {}
-
-HELP = {}
-
-
 # configurations shortcut /
 
 LOG_CHAT = Config.LOG_CHAT
