@@ -89,7 +89,7 @@ async def baka_gif(_, m):
 
 
 
-@app.on_message(gen("gif"))
+@app.on_message(gen("animegif"))
 async def baka_gif(_, m):
 	if long(m) > 1:
 		arg = m.command[1]
