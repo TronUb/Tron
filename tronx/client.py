@@ -84,6 +84,42 @@ if not os.path.exists("downloads"):
 
 
 
+# versions /
+userbot_version = "v.0.0.5"
+assistant_version = "v.0.0.1"
+python_version = str(platform.python_version())
+pyrogram_version = str(pyrogram.__version__)
+
+# database /
+DB_URI = Config.DB_URI
+db_status = "Available" if DB_URI else "Not Available"
+
+# containers
+CMD_HELP = {}
+HELP = {}
+	
+# configurations shortcut /
+LOG_CHAT = Config.LOG_CHAT
+PREFIX = Config.PREFIX
+SESSION = Config.SESSION
+TOKEN = Config.TOKEN
+API_ID = Config.API_ID
+API_HASH = Config.API_HASH
+WORKERS = Config.WORKERS
+USER_BIO = Config.USER_BIO
+
+# owner details /
+OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
+OWNER_ID = 1790546938
+OWNER_USERNAME = "@BEASTZX"
+
+# other /
+REPO = "https://github.com/beastzx18/Tron"
+StartTime = time.time()
+
+
+
+
 # temporary clients
 app = Client(
 	session_name=Config.SESSION,
@@ -229,19 +265,7 @@ telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 
-
-# main client classes
-class tron(Client, Methods):
-	""" Userbot """
-	def __init__(self):
-		super().__init__(
-		session_name=Config.SESSION,
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
-		workers=Config.WORKERS,
-		)
-
-	global userbot_version, assistant_version, python_version, pyrogram_version, DB_URI, db_status, StartTime, REPO, LOG_CHAT, PREFIX, SESSION, TOKEN, API_ID, API_HASH, WORKERS, USER_BIO, OWNER_NAME, OWNER_ID, OWNER_USERNAME, CMD_HELP, HELP
+class Inversion(object):
 	# versions /
 
 	userbot_version = "v.0.0.5"
@@ -279,7 +303,20 @@ class tron(Client, Methods):
 
 	REPO = "https://github.com/beastzx18/Tron"
 	StartTime = time.time()
-        
+
+
+
+# main client classes
+class tron(Client, Methods, Inversion):
+	""" Userbot """
+	def __init__(self):
+		super().__init__(
+		session_name=Config.SESSION,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		workers=Config.WORKERS,
+		)
+       
 
 
 
