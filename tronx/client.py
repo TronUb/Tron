@@ -230,7 +230,17 @@ telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 
-class Inversion(object):
+# main client classes
+class tron(Client, Methods, Inversion):
+	""" Userbot """
+	def __init__(self):
+		super().__init__(
+		session_name=Config.SESSION,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		workers=Config.WORKERS,
+		)
+
 	global userbot_version, assistant_version, python_version, pyrogram_version, DB_URI, db_status, StartTime, REPO, LOG_CHAT, PREFIX, SESSION, TOKEN, API_ID, API_HASH, WORKERS, USER_BIO, OWNER_NAME, OWNER_ID, OWNER_USERNAME, CMD_HELP, HELP
 	# versions /
 
@@ -269,21 +279,6 @@ class Inversion(object):
 
 	REPO = "https://github.com/beastzx18/Tron"
 	StartTime = time.time()
-
-
-
-
-# main client classes
-class tron(Client, Methods, Inversion):
-	""" Userbot """
-	def __init__(self):
-		super().__init__(
-		session_name=Config.SESSION,
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
-		workers=Config.WORKERS,
-		)
-	test = 0
         
 
 
