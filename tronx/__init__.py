@@ -49,11 +49,8 @@ from tronx.client import (
 	REPO,
 	Config,
 	telegraph,
+
+	# containers
+	CMD_HELP,
+	HELP,
 )
-
-
-
-
-CMD_HELP = {}
-
-HELP = {}
