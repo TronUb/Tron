@@ -242,6 +242,7 @@ class tron(Client, Methods):
 		app_version=userbot_version,
 		workers=WORKERS,
 		)
+	global userbot_version, assistant_version, python_version, pyrogram_version, DB_URI, db_status, StartTime, REPO, LOG_CHAT, PREFIX, SESSION, TOKEN, API_ID, API_HASH, WORKERS, USER_BIO, OWNER_NAME, OWNER_ID, OWNER_USERNAME 
 	# versions /
 
 	userbot_version = "v.0.0.5"
