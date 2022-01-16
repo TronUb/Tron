@@ -231,7 +231,7 @@ telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 # main client classes
-class tron(Client, Methods, Inversion):
+class tron(Client, Methods):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
