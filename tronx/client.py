@@ -62,61 +62,6 @@ from telegraph import Telegraph
 
 
 
-# versions /
-
-userbot_version = "v.0.0.5"
-
-assistant_version = "v.0.0.1"
-
-python_version = str(platform.python_version())
-
-pyrogram_version = str(pyrogram.__version__)
-
-
-# database /
-
-DB_URI = Config.DB_URI
-
-db_status = "Available" if DB_URI else "Not Available"
-
-
-# configurations shortcut /
-
-LOG_CHAT = Config.LOG_CHAT
-
-PREFIX = Config.PREFIX
-
-SESSION = Config.SESSION
-
-TOKEN = Config.TOKEN
-
-API_ID = Config.API_ID
-
-API_HASH = Config.API_HASH
-
-WORKERS = Config.WORKERS
-
-USER_BIO = Config.USER_BIO
-
-
-# owner details /
-
-OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
-
-OWNER_ID = 1790546938
-
-OWNER_USERNAME = "@BEASTZX"
-
-
-# other /
-
-REPO = "https://github.com/beastzx18/Tron"
-
-StartTime = time.time()
-
-
-
-
 if not Config.LOG_CHAT:
 	""" log chat is required """
 	log.warning("LOG_CHAT is important for bots normal working, please fill it, quitting.")
@@ -160,7 +105,7 @@ bot = Client(
 
 
 
-# doing this because of smart plugins in pyrogram
+# Things don't work properly without this
 if app:
 	app.start()
 	data = app.get_me()
@@ -297,6 +242,40 @@ class tron(Client, Methods):
 		app_version=userbot_version,
 		workers=WORKERS,
 		)
+	# versions /
+
+	userbot_version = "v.0.0.5"
+	assistant_version = "v.0.0.1"
+	python_version = str(platform.python_version())
+	pyrogram_version = str(pyrogram.__version__)
+
+	# database /
+
+	DB_URI = Config.DB_URI
+	db_status = "Available" if DB_URI else "Not Available"
+
+	# configurations shortcut /
+
+	LOG_CHAT = Config.LOG_CHAT
+	PREFIX = Config.PREFIX
+	SESSION = Config.SESSION
+	TOKEN = Config.TOKEN
+	API_ID = Config.API_ID
+	API_HASH = Config.API_HASH
+	WORKERS = Config.WORKERS
+	USER_BIO = Config.USER_BIO
+
+	# owner details /
+
+	OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
+	OWNER_ID = 1790546938
+	OWNER_USERNAME = "@BEASTZX"
+
+	# other /
+
+	REPO = "https://github.com/beastzx18/Tron"
+	StartTime = time.time()
+        
 
 
 
