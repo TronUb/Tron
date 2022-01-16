@@ -235,11 +235,10 @@ class tron(Client, Methods):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
-		session_name=SESSION,
-		api_id=API_ID,
-		api_hash=API_HASH,
-		app_version=userbot_version,
-		workers=WORKERS,
+		session_name=Config.SESSION,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		workers=Config.WORKERS,
 		)
 	global userbot_version, assistant_version, python_version, pyrogram_version, DB_URI, db_status, StartTime, REPO, LOG_CHAT, PREFIX, SESSION, TOKEN, API_ID, API_HASH, WORKERS, USER_BIO, OWNER_NAME, OWNER_ID, OWNER_USERNAME 
 	# versions /
@@ -285,9 +284,9 @@ class lara(Client):
 	def __init__(self):
 		super().__init__(
 		session_name="lara",
-		api_id=API_ID,
-		api_hash=API_HASH,
-		bot_token=TOKEN,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		bot_token=Config.TOKEN,
 		)
 
 
