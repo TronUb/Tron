@@ -3,16 +3,20 @@ from typing import Callable
 import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.scaffold import Scaffold
+from tronx import CMD_HELP
 
 
 
 class OnMessage(Scaffold):
-    def on_msessage(
+    def on_msg(
         self = None,
         filters = None,
+        info: dict = None,
         group: int = 0
     ) -> callable:
         """Decorator for handling messages."""
+
+        CMD_HELP.update(info)
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
