@@ -3,7 +3,6 @@ from typing import Callable
 import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.scaffold import Scaffold
-from tronx import CMD_HELP
 
 
 
@@ -15,8 +14,6 @@ class OnMessage(Scaffold):
         group: int = 0
     ) -> callable:
         """Decorator for handling messages."""
-
-        CMD_HELP.update(info)
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
@@ -31,6 +28,8 @@ class OnMessage(Scaffold):
                         group if filters is None else filters
                     )
                 )
+
+            self.CMD_HELP.update(info)
 
             return func
 
