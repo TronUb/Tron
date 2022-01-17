@@ -33,10 +33,6 @@ from tronx.client import (
 	python_version,
 	pyrogram_version,
 
-	# containers
-	CMD_HELP,
-	HELP,
-
 	# database
 	db_status,
 
@@ -53,4 +49,8 @@ from tronx.client import (
 	REPO,
 	Config,
 	telegraph,
+
+	# containers
+	CMD_HELP,
+	HELP,
 )

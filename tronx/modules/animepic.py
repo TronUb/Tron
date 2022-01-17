@@ -30,7 +30,7 @@ CMD_HELP.update(
 		"animepic",
 		{
 		"neko" : "Get a anime neko girl image.",
-		"gif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
+		"animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
 		"giflist" : "Get a list of suffix.",
 		}
 		)
@@ -89,7 +89,7 @@ async def baka_gif(_, m):
 
 
 
-@app.on_message(gen("gif"))
+@app.on_message(gen("animegif"))
 async def baka_gif(_, m):
 	if long(m) > 1:
 		arg = m.command[1]
@@ -103,4 +103,4 @@ async def baka_gif(_, m):
 		except Exception as e:
 			await error(m, e)
 	else:
-		await send_edit(m, "Give me a suffix, use `{PREFIX}giflist` to get suffix . . .", delme=5)
+		await send_edit(m, f"Give me a suffix, use `{PREFIX}giflist` to get suffix . . .", delme=5)

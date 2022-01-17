@@ -62,68 +62,6 @@ from telegraph import Telegraph
 
 
 
-# versions /
-
-userbot_version = "v.0.0.5"
-
-assistant_version = "v.0.0.1"
-
-python_version = str(platform.python_version())
-
-pyrogram_version = str(pyrogram.__version__)
-
-
-# database /
-
-DB_URI = Config.DB_URI
-
-db_status = "Available" if DB_URI else "Not Available"
-
-
-# containers /
-
-CMD_HELP = {}
-
-HELP = {}
-
-
-# configurations shortcut /
-
-LOG_CHAT = Config.LOG_CHAT
-
-PREFIX = Config.PREFIX
-
-SESSION = Config.SESSION
-
-TOKEN = Config.TOKEN
-
-API_ID = Config.API_ID
-
-API_HASH = Config.API_HASH
-
-WORKERS = Config.WORKERS
-
-USER_BIO = Config.USER_BIO
-
-
-# owner details /
-
-OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
-
-OWNER_ID = 1790546938
-
-OWNER_USERNAME = "@BEASTZX"
-
-
-# other /
-
-REPO = "https://github.com/beastzx18/Tron"
-
-StartTime = time.time()
-
-
-
-
 if not Config.LOG_CHAT:
 	""" log chat is required """
 	log.warning("LOG_CHAT is important for bots normal working, please fill it, quitting.")
@@ -146,12 +84,47 @@ if not os.path.exists("downloads"):
 
 
 
+# versions /
+userbot_version = "v.0.0.5"
+assistant_version = "v.0.0.1"
+python_version = str(platform.python_version())
+pyrogram_version = str(pyrogram.__version__)
+
+# database /
+DB_URI = Config.DB_URI
+db_status = "Available" if DB_URI else "Not Available"
+
+# containers
+CMD_HELP = {}
+HELP = {}
+	
+# configurations shortcut /
+LOG_CHAT = Config.LOG_CHAT
+PREFIX = Config.PREFIX
+SESSION = Config.SESSION
+TOKEN = Config.TOKEN
+API_ID = Config.API_ID
+API_HASH = Config.API_HASH
+WORKERS = Config.WORKERS
+USER_BIO = Config.USER_BIO
+
+# owner details /
+OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
+OWNER_ID = 1790546938
+OWNER_USERNAME = "@BEASTZX"
+
+# other /
+REPO = "https://github.com/beastzx18/Tron"
+StartTime = time.time()
+
+
+
+
 # temporary clients
 app = Client(
 	session_name=Config.SESSION,
 	api_id=Config.API_ID,
 	api_hash=Config.API_HASH,
-	app_version=userbot_version,
 	workers=Config.WORKERS,
 )
 
@@ -167,7 +140,7 @@ bot = Client(
 
 
 
-# doing this because of smart plugins in pyrogram
+# Things don't work properly without this
 if app:
 	app.start()
 	data = app.get_me()
@@ -292,19 +265,58 @@ telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 
+class Inversion(object):
+	# versions /
+
+	userbot_version = "v.0.0.5"
+	assistant_version = "v.0.0.1"
+	python_version = str(platform.python_version())
+	pyrogram_version = str(pyrogram.__version__)
+
+	# database /
+
+	DB_URI = Config.DB_URI
+	db_status = "Available" if DB_URI else "Not Available"
+
+	# containers
+	CMD_HELP = {}
+	HELP = {}
+
+	# configurations shortcut /
+
+	LOG_CHAT = Config.LOG_CHAT
+	PREFIX = Config.PREFIX
+	SESSION = Config.SESSION
+	TOKEN = Config.TOKEN
+	API_ID = Config.API_ID
+	API_HASH = Config.API_HASH
+	WORKERS = Config.WORKERS
+	USER_BIO = Config.USER_BIO
+
+	# owner details /
+
+	OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
+	OWNER_ID = 1790546938
+	OWNER_USERNAME = "@BEASTZX"
+
+	# other /
+
+	REPO = "https://github.com/beastzx18/Tron"
+	StartTime = time.time()
+
+
 
 # main client classes
-class tron(Client, Methods):
+class tron(Client, Methods, Inversion):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
-		session_name=SESSION,
-		api_id=API_ID,
-		api_hash=API_HASH,
-		app_version=userbot_version,
-		workers=WORKERS,
+		session_name=Config.SESSION,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		workers=Config.WORKERS,
 		)
-
+       
 
 
 
@@ -313,9 +325,9 @@ class lara(Client):
 	def __init__(self):
 		super().__init__(
 		session_name="lara",
-		api_id=API_ID,
-		api_hash=API_HASH,
-		bot_token=TOKEN,
+		api_id=Config.API_ID,
+		api_hash=Config.API_HASH,
+		bot_token=Config.TOKEN,
 		)
 
 
