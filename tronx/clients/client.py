@@ -11,31 +11,6 @@ from tronx.methods import Methods
 
 
 
-if sys.version_info[0] < 3 or sys.version_info[1] < 9:
-	""" lower version will produce errors in userbot """
-	log.error("python version 3.9.0 or greater is required, bot is quitting !")
-	quit(1)
-
-
-
-
-
-
-if not Config.LOG_CHAT:
-	""" log chat is required """
-	log.warning("LOG_CHAT is important for bots normal working, please fill it, quitting.")
-	quit(1)
-
-
-
-
-if not Config.DB_URI:
-	""" database is required """
-	log.warning("DB_URI is important please fill this requirement, quitting.")
-	quit(1)
-
-
-
 
 if not os.path.exists("downloads"):
 	""" all files are downloaded here """
@@ -75,32 +50,6 @@ OWNER_USERNAME = "@BEASTZX"
 # other /
 REPO = "https://github.com/beastzx18/Tron"
 StartTime = time.time()
-
-
-
-
-# temporary clients
-app = Client(
-	session_name=Config.SESSION,
-	api_id=Config.API_ID,
-	api_hash=Config.API_HASH,
-	workers=Config.WORKERS,
-)
-
-
-
-
-bot = Client(
-	session_name="lara",
-	api_id=Config.API_ID,
-	api_hash=Config.API_HASH,
-	bot_token=Config.TOKEN,
-)
-
-
-
-# Things don't work properly without this
-
 
 
 
