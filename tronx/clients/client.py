@@ -19,41 +19,6 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 
 
 
-# termux requirement installation
-if list(platform.uname())[1] == "localhost":
-	counter = 0
-	if counter == 0:
-		from demo_config import Config
-		try:
-			# installing these packages using standard method in termux
-			os.system("apt update && apt upgrade")
-			# install lxml
-			one = os.system("pkg install libxml2 clang libxslt")
-			two = subprocess.call(["pip3", "install", "lxml"])
-			# install psycopg2
-			three = os.system("pkg install postgresql python make clang")
-			four = subprocess.call(["pip3", "install", "psycopg2"])
-			# install remaining requirements
-			five = subprocess.call(["pip3", "install", "-r", "requirements.txt"])
-			os.system("clear")
-			if one + two + three + four + five == 0:
-				print("\nSuccessfully installed requirements.\n")
-			else:
-				print("\nFailed to install some requirements, it might show some errors.\n")
-			counter += 1
-		except Exception as e:
-			print(e)
-else:
-	from config import Config
-
-import pyrogram
-from pyrogram.types import Message
-from pyrogram import Client, filters
-from pyrogram.errors import PeerIdInvalid
-
-from telegraph import Telegraph
-
-
 
 
 if not Config.LOG_CHAT:
