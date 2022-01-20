@@ -11,12 +11,6 @@ from tronx.methods import Methods
 
 
 
-# debugging
-logging.basicConfig(level=logging.WARNING)
-log = logging.getLogger(__name__)
-
-
-
 if sys.version_info[0] < 3 or sys.version_info[1] < 9:
 	""" lower version will produce errors in userbot """
 	log.error("python version 3.9.0 or greater is required, bot is quitting !")
@@ -141,28 +135,7 @@ bot = Client(
 
 
 # Things don't work properly without this
-if app:
-	app.start()
-	data = app.get_me()
-	USER_ID = data.id
-	USER_NAME = data.first_name
-	USER_USERNAME = f"@{data.username}" if data.username else "None"
-	USER_DC = data.dc_id
-	telegraph = Telegraph()
-	telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
-	app.stop()
 
-
-
-
-if bot:
-	bot.start()
-	data = bot.get_me()
-	BOT_ID = data.id
-	BOT_NAME = data.first_name
-	BOT_USERNAME = f"@{data.username}"
-	BOT_DC = data.dc_id
-	bot.stop()
 
 
 
@@ -259,13 +232,8 @@ def uptime():
 
 
 
-# telegraph plugin
-telegraph = Telegraph()
-telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
-
-
-class Collector(Config):
+class Collector(Methods, Config):
 	# versions /
 
 	userbot_version = "v.0.0.5"
@@ -275,9 +243,9 @@ class Collector(Config):
 
 	# database /
 
-	db_status = "Available" if DB_URI else "Not Available"
+	db_status = "Available" if Config.DB_URI else "Not Available"
 
-	# containers
+	# containers /
 
 	CMD_HELP = {}
 	HELP = {}
@@ -290,13 +258,24 @@ class Collector(Config):
 
 	# other /
 
-	REPO = "https://github.com/beastzx18/Tron"
+	Repo = "https://github.com/beastzx18/Tron"
 	StartTime = time.time()
 
+	# debugging /
+
+	logging.basicConfig(level=logging.WARNING)
+	log = logging.getLogger(__name__)
+
+	# telegraph /
+
+	telegraph = Telegraph()
+	telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
-# main client classes
-class Tron(Client, Methods, Collector):
+
+
+
+class Tron(Client, Collector):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
@@ -306,25 +285,22 @@ class Tron(Client, Methods, Collector):
 		workers=self.WORKERS,
 		)
        
-
-
-
-class Nora(Client):
-	""" Assistant """
-	def __init__(self):
-		super().__init__(
-		session_name="lara",
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
-		bot_token=Config.TOKEN,
-		)
+	class bot(Client, Collector):
+		""" Assistant """
+		def __init__(self):
+			super().__init__(
+			session_name="Nora",
+			api_id=self.API_ID,
+			api_hash=self.API_HASH,
+			bot_token=self.TOKEN,
+			)
 
 
 
 
-# instances of pyrogram.Client()
+
 app = Tron() 
-bot = Nora() 
+bot = Tron.Nora()
 
 
 
