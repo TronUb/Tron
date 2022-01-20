@@ -1,1 +1,1 @@
-from tronx.client import app
+from tronx.clients import app
