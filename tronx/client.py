@@ -265,7 +265,7 @@ telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 
-class Inversion(object):
+class Collector(Config):
 	# versions /
 
 	userbot_version = "v.0.0.5"
@@ -275,23 +275,12 @@ class Inversion(object):
 
 	# database /
 
-	DB_URI = Config.DB_URI
 	db_status = "Available" if DB_URI else "Not Available"
 
 	# containers
+
 	CMD_HELP = {}
 	HELP = {}
-
-	# configurations shortcut /
-
-	LOG_CHAT = Config.LOG_CHAT
-	PREFIX = Config.PREFIX
-	SESSION = Config.SESSION
-	TOKEN = Config.TOKEN
-	API_ID = Config.API_ID
-	API_HASH = Config.API_HASH
-	WORKERS = Config.WORKERS
-	USER_BIO = Config.USER_BIO
 
 	# owner details /
 
@@ -307,20 +296,20 @@ class Inversion(object):
 
 
 # main client classes
-class tron(Client, Methods, Inversion):
+class Tron(Client, Methods, Collector):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
-		session_name=Config.SESSION,
-		api_id=Config.API_ID,
-		api_hash=Config.API_HASH,
-		workers=Config.WORKERS,
+		session_name=self.SESSION,
+		api_id=self.API_ID,
+		api_hash=self.API_HASH,
+		workers=self.WORKERS,
 		)
        
 
 
 
-class lara(Client):
+class Nora(Client):
 	""" Assistant """
 	def __init__(self):
 		super().__init__(
@@ -334,8 +323,8 @@ class lara(Client):
 
 
 # instances of pyrogram.Client()
-app = tron() if SESSION else False
-bot = lara() if TOKEN else False
+app = Tron() 
+bot = Nora() 
 
 
 
