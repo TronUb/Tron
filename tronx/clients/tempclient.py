@@ -41,8 +41,8 @@ else:
 from pyrogram.types import Message
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid
-
 from telegraph import Telegraph
+from tronx.methods import Methods
 
 
 
@@ -68,6 +68,36 @@ class Collector(Methods, Config):
 	assistant_version = "v.0.0.1"
 	python_version = str(platform.python_version())
 	pyrogram_version = str(pyrogram.__version__)
+
+	# database /
+
+	db_status = "Available" if Config.DB_URI else "Not Available"
+
+	# containers /
+
+	CMD_HELP = {}
+	HELP = {}
+
+	# owner details /
+
+	OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
+	OWNER_ID = 1790546938
+	OWNER_USERNAME = "@BEASTZX"
+
+	# other /
+
+	Repo = "https://github.com/beastzx18/Tron"
+	StartTime = time.time()
+
+	# debugging /
+
+	logging.basicConfig(level=logging.WARNING)
+	log = logging.getLogger(__name__)
+
+	# telegraph /
+
+	telegraph = Telegraph()
+	telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
 
 
 
@@ -180,38 +210,3 @@ class utils(Initialisation):
 		""" Bot active time """
 		return self.get_readable_time(time.time() - self.StartTime)
 
-
-
-
-
-
-
-	# database /
-
-	db_status = "Available" if Config.DB_URI else "Not Available"
-
-	# containers /
-
-	CMD_HELP = {}
-	HELP = {}
-
-	# owner details /
-
-	OWNER_NAME = "࿇•ẞᗴᗩSԵ•࿇"
-	OWNER_ID = 1790546938
-	OWNER_USERNAME = "@BEASTZX"
-
-	# other /
-
-	Repo = "https://github.com/beastzx18/Tron"
-	StartTime = time.time()
-
-	# debugging /
-
-	logging.basicConfig(level=logging.WARNING)
-	log = logging.getLogger(__name__)
-
-	# telegraph /
-
-	telegraph = Telegraph()
-	telegraph.create_account(short_name=USER_NAME if USER_NAME else "Tron userbot")
