@@ -73,6 +73,8 @@ class Config(object):
 	TOKEN = os.getenv("TOKEN")
 # ---------------------
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
+# ---------------------
+	TL_NAME = os.getenv("TL_NAME")
 
 
 
