@@ -3,11 +3,7 @@ import time
 from pyrogram.types import Message
 from pyrogram import filters
 
-from tronx import (
-	app,
-	LOG_CHAT,
-	CMD_HELP,
-)
+from tronx import app
 
 from tronx.database.postgres import welcome_sql as dw   
 
@@ -17,14 +13,14 @@ from tronx.helpers import (
 	gen,
 	long,
 	private,
+	get_file_id
 )
 
-from . import get_file_id
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"welcome": (
 		"welcome",
 		{
@@ -54,6 +50,7 @@ async def send_welcome(_, m: Message):
 
 		elif file_id and file_id.startswith("#"):
 			file_id = file_id.replace("#", "")
+
 		if caption:
 			await app.send_cached_media(
 				m.chat.id,
@@ -63,7 +60,7 @@ async def send_welcome(_, m: Message):
 			)
 		elif not caption:
 			await app.send_cached_media(
-				m.chat.id,
+				chat_id=m.chat.id,
 				file_id=file_id,
 				reply_to_message_id=m.message_id
 			)
@@ -130,7 +127,7 @@ async def delete_welcome(_, m: Message):
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
-					file_id=text,
+					file_id=text.replace("#", ""),
 					reply_to_message_id=m.message_id
 					)
 				await m.delete()
@@ -140,13 +137,12 @@ async def delete_welcome(_, m: Message):
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
-					file_id=text,
+					file_id=text.replace("#", ""),
 					caption=cap,
 					reply_to_message_id=m.message_id
 					)
 				await m.delete()
 	except Exception as e:
-		print(e)
 		await error(m, e)
 
 
