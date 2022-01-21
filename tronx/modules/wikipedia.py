@@ -4,12 +4,7 @@ import wikipediaapi
 from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
@@ -21,7 +16,7 @@ from tronx.helpers import (
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"wikipedia" : (
 		"wikipedia",
 		{
@@ -36,7 +31,7 @@ CMD_HELP.update(
 
 
 @app.on_message(gen("wiki"))
-async def wikipedia_search(app, m:Message):
+async def wikipedia_search(_, m: Message):
 	if long(m) == 1:
 		await send_edit(m, "Give me some query to search on wikipedia . . .", mono=True, delme=True)
 
@@ -45,7 +40,7 @@ async def wikipedia_search(app, m:Message):
 			obj = wikipediaapi.Wikipedia("en")
 			text = m.text.split(None, 1)[1]
 			result = obj.page(text)
-			await send_edit(m, f"Searching for: {text} . . .", mono=True)
+			await send_edit(m, f"Searching for: __{text}__ . . .", mono=True)
 			if result:
 				giveresult = result.summary
 				if len(giveresult) <= 4096:
