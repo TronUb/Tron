@@ -101,7 +101,7 @@ class Collector(Methods, Config):
 	# telegraph /
 
 	telegraph = Telegraph()
-	telegraph.create_account(short_name=self.USER_NAME if self.USER_NAME else "Tron userbot")
+	telegraph.create_account(short_name=Config.TL_NAME if Config.TL_NAME else "Tron userbot")
 
 
 
