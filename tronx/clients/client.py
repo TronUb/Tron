@@ -36,7 +36,7 @@ class Tron(Client, utils):
 
 
 app = Tron() 
-bot = Tron.Nora()
+bot = Tron.bot()
 
 
 
