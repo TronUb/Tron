@@ -2,6 +2,7 @@ import os
 import sys
 import platform
 import subprocess
+import importlib
 
 
 
@@ -200,4 +201,35 @@ class utils(Initialisation):
 	def uptime(self):
 		""" Bot active time """
 		return self.get_readable_time(time.time() - self.StartTime)
+
+
+	def import_module(path, exclude=[], display_module=True):
+		"""Modified version of pyrogram smart plugins"""
+		bin = []
+		bin.clear()
+
+		if not os.path.exists(path):
+			return print(f"No path found: {path}")
+
+		plugins = []
+		for x in os.listdir(path):
+			if x.endswith(".py"):
+				if not x in ["__pycache__",  "__init__.py"]:
+					plugins.append(x.replace(".py", ""))
+
+		py_path_raw = ".".join(path.split("/"))
+		py_path = py_path_raw[0:len(py_path_raw)-1]
+
+		count = 0
+		for x in plugins:
+			if not x in exclude:
+				importlib.import_module(py_path + "." + x)
+				count += 1
+				bin.append(x)
+
+		if display_module:
+			data = sorted(bin)
+			for x in data:
+				print(x + " Loaded !")
+		return count
 
