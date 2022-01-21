@@ -38,6 +38,7 @@ if list(platform.uname())[1] == "localhost":
 else:
 	from config import Config
 
+import pyrogram
 from pyrogram.types import Message
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid
@@ -140,24 +141,17 @@ class utils(Initialisation):
 	def add_user(self, user_id: Union[int, List[int]], chat_id: str):
 		""" Add users in groups / channels """
 		try:
-			done = app.add_chat_members(
-				chat_id, 
-				user_id
-			)
+			done = app.add_chat_members(chat_id, user_id)
 			return True if done else False
 		except Exception as e:
 			print(e)
 
 
 	def exists(self, user_id: int, chat_id: str):
-		_data = []
-		_data.clear()
-		lime = app.get_chat_members(chat_id)
-
-		for x in lime:
-			_data.append(x.user.id)
-		return True if user_id in _data else False
-
+		for x in app.iter_chat_members(chat_id):
+			if x.user.id == user_id:
+				return True
+		
 
 	def check_bot_in_log_chat(self):
 		try:
@@ -165,18 +159,15 @@ class utils(Initialisation):
 				print("Checking presence of bot in log chat . . .\n")
 				try:
 					if self.exists(BOT_ID, LOG_CHAT) is False:
-						self.add_user(
-							LOG_CHAT,
-							BOT_ID
-						)
+						self.add_user(self.LOG_CHAT, self.BOT_ID)
 						print(f"Added bot in log chat . . .\n")
 					else:
-						print(f"Bot is present in log chat . . .\n")
+						print(f"Bot is already present in log chat . . .\n")
 				except PeerIdInvalid:
 					print("Peer id is invalid, Manually send a message in log chat . . .\n")
-					pass
+
 			else:
-				log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+				self.log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
 		except Exception as e:
 			print(e)
 
