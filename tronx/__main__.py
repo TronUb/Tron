@@ -1,6 +1,6 @@
 import asyncio
 from pyrogram import idle
-from tronx.client import app
+from tronx.clients import app
 
 
 
