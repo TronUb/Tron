@@ -1,6 +1,6 @@
 import os
 from pyrogram import Client
-from .utils import utils
+from .tempclient import utils
 
 
 
