@@ -206,7 +206,7 @@ class utils(Initialisation):
 		return self.get_readable_time(time.time() - self.StartTime)
 
 
-	def import_module(path, exclude=[], display_module=True):
+	def import_module(self, path, exclude=[], display_module=True):
 		"""Modified version of pyrogram smart plugins"""
 		bin = []
 		bin.clear()
