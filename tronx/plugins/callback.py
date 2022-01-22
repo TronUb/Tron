@@ -16,13 +16,13 @@ from tronx import app
 
 
 # buttons
-settings = build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = build_keyboard(([["About", "open-about-dex"]]))
-close = build_keyboard(([["Close", "close-dex"]]))
-approve = build_keyboard(([["Approve", "approve-user"]]))
-global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
-home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
+extra = app.build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
+about = app.build_keyboard(([["About", "open-about-dex"]]))
+close = app.build_keyboard(([["Close", "close-dex"]]))
+approve = app.build_keyboard(([["Approve", "approve-user"]]))
+global_command = app.build_keyboard(([["• Global commands •", "global-commands"]]))
+home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
