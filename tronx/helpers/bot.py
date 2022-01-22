@@ -1,5 +1,3 @@
-from tronx import app
-
 from tronx.database.postgres import dv_sql as dv
 from pyrogram.types import Message
 
