@@ -27,7 +27,7 @@ home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"
 @app.bot.on_message(filters.command("help"))
 async def start(_, m: Message):
 	if m.from_user:
-		if m.from_user.id == app.USER_ID:
+		if m.from_user.id == app.REAL_USER_ID:
 			# bot pic
 			if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
 				info = await app.bot.send_photo(
@@ -56,7 +56,7 @@ async def start(_, m: Message):
 					),
 				)
 
-		elif m.from_user.id != USER_ID:
+		elif m.from_user.id != app.REAL_USER_ID:
 			info = await app.bot.send_photo(
 				m.chat.id,
 				app.PIC,
