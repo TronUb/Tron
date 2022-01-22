@@ -19,11 +19,7 @@ from pyrogram.types import (
 	Update
 )
 
-from tronx import (
-	PREFIX,
-	USER_ID,
-	CMD_HELP,
-)
+from tronx import app
 
 
 
@@ -82,7 +78,7 @@ def regex(
 
 # multiple prefixes
 def myprefix():
-	return PREFIX.split()[0] if len(PREFIX.split()) > 1 else PREFIX
+	return app.PREFIX.split()[0] if len(app.PREFIX.split()) > 1 else app.PREFIX
 
 
 
