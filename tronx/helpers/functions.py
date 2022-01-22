@@ -8,20 +8,18 @@ import requests
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
-from tronx import app
-
 from tronx.database.postgres import dv_sql as dv
 
 
 
 
 class Functions(object):
-	async def aexec(self, code, app, m):
+	async def aexec(self, code, self, m):
 		exec(
-			f"async def __aexec(app, m): "
+			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
 		)
-		return await locals()["__aexec"](app, m)
+		return await locals()["__aexec"](self, m)
 
 
 	def showdate(self):
@@ -338,7 +336,7 @@ class Functions(object):
 	def ialive_pic(self):
 		"""inline alive pic url"""
 		pic_url = dv.getdv("USER_PIC")
-		data = pic_url if pic_url else self.User_Pic()
+		data = pic_url if pic_url else self.UserPic()
 		return data if data else None
 	
 	
