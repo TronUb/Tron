@@ -5,6 +5,7 @@ from .strings import Strings
 from .utilities import Utilities
 from .bots import Bot
 from .user import User
+from .filters import *
 
 
 
