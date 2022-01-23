@@ -75,7 +75,7 @@ class AioHttp:
 
 
 class Utilities(Types, AioHttp):
-	def helpdex(self, page_number, loaded_modules, prefix):
+	def HelpDex(self, page_number, loaded_modules, prefix):
 		rows = 4
 		column = 2
 		help_modules = []
@@ -286,7 +286,7 @@ class Utilities(Types, AioHttp):
 		return str(round(size, 2)) + " " + dict_power_n[number] + "B"
 
 
-	async def ProgressForPyrpgram(self, current, total, ud_type, message, start):
+	async def ProgressForPyrogram(self, current, total, ud_type, message, start):
 		""" generic progress display for Telegram Upload / Download status """
 		now = time.time()
 		diff = now - start
