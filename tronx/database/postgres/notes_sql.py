@@ -44,7 +44,7 @@ SELF_NOTES = {}
 
 
 
-class NOTESSQL
+class NOTESSQL(object):
 	# save a note
 	def save_selfnote(self, user_id, note_name, note_data, msgtype, file=None, file_ref=None, message_id=0):
 		global SELF_NOTES
