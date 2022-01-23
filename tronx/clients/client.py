@@ -1,5 +1,5 @@
 from pyrogram import Client, idle
-from .tempclient import Utils
+from .utils import Utils
 
 
 
@@ -52,14 +52,4 @@ class SuperClient(Client, Utils):
 
 		def username(self):
 			return nora.username
-
-
- 
-
-
-
-
-
-
-
 
