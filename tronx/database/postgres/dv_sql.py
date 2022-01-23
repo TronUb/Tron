@@ -1,7 +1,5 @@
 import threading
 
-from sys import platform
-
 from sqlalchemy import (
 	Column, 
 	String, 
@@ -13,8 +11,9 @@ from . import SESSION, BASE
 
 
 
-# save user ids in whitelists
-class data(BASE):
+
+class DV(BASE):
+
 	__tablename__ = "database var"
 	
 	keys = Column(String, primary_key=True)
@@ -27,60 +26,55 @@ class data(BASE):
 
 
 
-data.__table__.create(checkfirst=True)
+DV.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
 
 
 
-# set, del, get keys & values
-def setdv(keys, values):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(data).get(keys)
-		try:
-			if not mydata:
-				mydata = data(keys, values)
-			else:
-				mydata.values = values
-			SESSION.merge(mydata)
-			SESSION.commit()
-		finally:
-			SESSION.close()
-	return keys
 
-
-
-
-def deldv(keys):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(data).get(keys)
-		try:
-			if mydata:
-				SESSION.delete(mydata)
+class DVSQL(object):
+	def setdv(self, keys, values):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(DV).get(keys)
+			try:
+				if not mydata:
+					mydata = DV(keys, values)
+				else:
+					mydata.values = values
+				SESSION.merge(mydata)
 				SESSION.commit()
-		finally:
-			SESSION.close()
-		return False
+			finally:
+				SESSION.close()
+		return keys
 
 
+	def deldv(self, keys):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(DV).get(keys)
+			try:
+				if mydata:
+					SESSION.delete(mydata)
+					SESSION.commit()
+			finally:
+				SESSION.close()
+			return False
 
 
-def getdv(keys):
-	mydata = SESSION.query(data).get(keys)
-	rep = ""
-	if mydata:
-		rep = str(mydata.values)
-	SESSION.close()
-	return rep
+	def getdv(self, keys):
+		mydata = SESSION.query(DV).get(keys)
+		rep = ""
+		if mydata:
+			rep = str(mydata.values)
+		SESSION.close()
+		return rep
 
 
+	def getalldv(self):
+		kv_data = {}
+		mydata = SESSION.query(DV).distinct().all()
+		for x in mydata:
+			kv_data.update({x.keys : x.values})
 
-
-def get_alldv():
-	kv_data = {}
-	mydata = SESSION.query(data).distinct().all()
-	for x in mydata:
-		kv_data.update({x.keys : x.values})
-
-	return kv_data
+		return kv_data
