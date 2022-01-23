@@ -140,7 +140,7 @@ class Functions(object):
 			"mono" : f"<code>{text}</code>", 
 			"bold" : f"<b>{text}</b>",
 			"italic" : f"<i>{text}</i>",
-			"strike" f"<s>{text}</s>",
+			"strike" : f"<s>{text}</s>",
 			"underline" : f"<u>{text}</u>"
 		}
 
