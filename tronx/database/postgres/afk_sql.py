@@ -13,14 +13,14 @@ from . import BASE, SESSION
 
 
 
-USER = 0
 MY_AFK = {}
 
 
 
 
-# afk table for afk plugin
+
 class AFK(BASE):
+	""" create table afk """
 	__tablename__ = "afk"
 
 	user_id = Column(String(14), primary_key=True)
@@ -45,36 +45,35 @@ AFK.__table__.create(checkfirst=True)
 
 
 
-# set afk status to true
-def set_afk(afk, reason, afktime):
-	global MY_AFK
-	afk_db = SESSION.query(AFK).get(str(USER))
-	if afk_db:
-		SESSION.delete(afk_db)
-	afk_db = AFK(USER, afk, reason, afktime)
-	SESSION.add(afk_db)
-	SESSION.commit()
-	MY_AFK[USER] = {"afk": afk, "reason": reason, "afktime": afktime}
+class AFKSQL(object):
+	""" AMC -> Afk Modification Class """
+	def set_afk(afk, reason, afktime):
+		global MY_AFK
+		afk_db = SESSION.query(AFK).get(str(0))
+		if afk_db:
+			SESSION.delete(afk_db)
+		afk_db = AFK(0, afk, reason, afktime)
+		SESSION.add(afk_db)
+		SESSION.commit()
+		MY_AFK[0] = {"afk": afk, "reason": reason, "afktime": afktime}
+
+
+	def get_afk():
+		return MY_AFK.get(0)
+
+
+	def load_afk():
+		global MY_AFK
+		try:
+			MY_AFK = {}
+			listall = SESSION.query(AFK).all()
+			for x in listall:
+				MY_AFK[(x.user_id)] = {"afk": x.is_afk, "reason": x.reason, "afktime": x.afktime}
+		finally:
+			SESSION.close()
 
 
 
 
-# get afk status
-def get_afk():
-	return MY_AFK.get(USER)
+AFKSQL.load_afk()
 
-
-
-
-# load afk data in set variable
-def __load_afk():
-	global MY_AFK
-	try:
-		MY_AFK = {}
-		listall = SESSION.query(AFK).all()
-		for x in listall:
-			MY_AFK[(x.user_id)] = {"afk": x.is_afk, "reason": x.reason, "afktime": x.afktime}
-	finally:
-		SESSION.close()
-
-__load_afk()
