@@ -12,8 +12,6 @@ if not os.path.exists("downloads"):
 
 class Tron(Client, utils):
 	""" Userbot """
-	from tronx.helpers import Helpers
-
 	def __init__(self):
 		super().__init__(
 		session_name=self.SESSION,
