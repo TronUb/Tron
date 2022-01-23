@@ -62,7 +62,7 @@ INSERTION_LOCK = threading.RLock()
 
 
 
-class PMPERMITSQL(object)
+class PMPERMITSQL(object):
 	# add message id of a user
 	def set_msgid(self, user_id, msg_id):
 		with INSERTION_LOCK:
