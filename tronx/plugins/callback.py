@@ -16,13 +16,13 @@ from tronx import app
 
 
 # buttons
-settings = app.build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = app.build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = app.build_keyboard(([["About", "open-about-dex"]]))
-close = app.build_keyboard(([["Close", "close-dex"]]))
-approve = app.build_keyboard(([["Approve", "approve-user"]]))
-global_command = app.build_keyboard(([["• Global commands •", "global-commands"]]))
-home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
+extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
+about = app.BuildKeyboard(([["About", "open-about-dex"]]))
+close = app.BuildKeyboard(([["Close", "close-dex"]]))
+approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
+global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
+home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -31,7 +31,7 @@ home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"
 @app.bot.on_callback_query(filters.regex("tron-dex-2"))
 @app.alert_user
 async def modules(_, cb):
-	btn = app.helpdex(0, app.CMD_HELP, "helpme")
+	btn = app.HelpDex(0, app.CMD_HELP, "helpme")
 	await cb.edit_message_text(
 		f"**Dex:** Modules \n\n**Location:** /home/modules\n\n**Modules:** `{len(app.CMD_HELP)}`",
 		reply_markup=InlineKeyboardMarkup(btn),
@@ -43,7 +43,7 @@ async def modules(_, cb):
 @app.alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.helpdex(current_page_number + 1, app.CMD_HELP, "helpme")
+	buttons = app.helpDex(current_page_number + 1, app.CMD_HELP, "helpme")
 	print(cb.matches[0])
 	print(dir(cb.matches[0]))
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
@@ -54,7 +54,7 @@ async def give_next_page(_, cb):
 @app.alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.helpdex(current_page_number - 1, app.CMD_HELP, "helpme")
+	buttons = app.Helpdex(current_page_number - 1, app.CMD_HELP, "helpme")
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
 
 
@@ -63,7 +63,7 @@ async def give_old_page(_, cb):
 @app.alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
-	buttons = app.helpdex(page_number, app.CMD_HELP, "helpme")
+	buttons = app.HelpDex(page_number, app.CMD_HELP, "helpme")
 	text = f"**Dex:** Modules\n\nLocation: /home/modules\n\n**Modules:** `{len(app.CMD_HELP)}`"
 	await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons))
 
@@ -98,7 +98,6 @@ async def _stats(_, cb):
 		text=app.stat_string,
 		reply_markup=InlineKeyboardMarkup([home_back]),
 	)
-	print(cb.matches[0].group(1))
 
 
 # about info
@@ -204,7 +203,6 @@ async def _settings(_, cb):
 			]
 		),
 	)
-
 
 
 @app.bot.on_callback_query(filters.regex("update-tron"))
@@ -378,7 +376,7 @@ async def _shutdown_core(_, cb):
 @app.bot.on_callback_query(filters.regex("more-anime-quotes"))
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
-		quote(),
+		app.quote(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[
