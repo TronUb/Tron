@@ -348,7 +348,7 @@ class Functions(object):
 			if hasattr(message, x):
 				if hasattr(message, "caption"):
 					return [message[x].file_id, message.caption, "media"]
-	        	    	else:
-	        	        	return [messsge[x].file_id, None, "media"]
-	        	elif hasattr(message, "text"):
-	        	    return [messsge.text, None, "text"]
+				else:
+					return [messsge[x].file_id, None, "media"]
+			elif hasattr(message, "text"):
+				return [messsge.text, None, "text"]
