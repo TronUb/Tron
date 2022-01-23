@@ -1,7 +1,5 @@
 import threading
 
-from sys import platform
-
 from sqlalchemy import (
 	Column, 
 	String, 
@@ -14,7 +12,7 @@ from . import SESSION, BASE
 
 
 # save user ids in whitelists
-class whole(BASE):
+class WELCOME(BASE):
 	__tablename__ = "welcome"
 	
 	user_id = Column(String, primary_key=True)
@@ -29,54 +27,48 @@ class whole(BASE):
 
 
 
-whole.__table__.create(checkfirst=True)
+WELCOME.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
 
 
 
-# set, del, get user_id & file_id
-def set_welcome(user_id, file_id, text=None):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(whole).get(user_id)
-		try:
-			if mydata:
-				SESSION.delete(mydata)
-			mydata = whole(user_id, file_id, text)
-			SESSION.add(mydata)
-			SESSION.commit()
-		finally:
-			SESSION.close()
-	return user_id
-
-
-
-
-def del_welcome(user_id):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(whole).get(user_id)
-		try:
-			if mydata:
-				SESSION.delete(mydata)
+class WELCOMESQL(object):
+	# set, del, get user_id & file_id
+	def set_welcome(self, user_id, file_id, text=None):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(WELCOME).get(user_id)
+			try:
+				if mydata:
+					SESSION.delete(mydata)
+				mydata = WELCOME(user_id, file_id, text)
+				SESSION.add(mydata)
 				SESSION.commit()
-		finally:
-			SESSION.close()
-		return False
+			finally:
+				SESSION.close()
+		return user_id
 
 
+	def del_welcome(self, user_id):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(WELCOME).get(user_id)
+			try:
+				if mydata:
+					SESSION.delete(mydata)
+					SESSION.commit()
+			finally:
+				SESSION.close()
+			return False
 
 
-def get_welcome(user_id):
-	mydata = SESSION.query(whole).get(user_id)
-	rep = None
-	repx = None
-	if mydata:
-		rep = str(mydata.file_id)
-		repx = mydata.text
-	SESSION.close()
-	return {"file_id" : rep, "caption" : repx}
-
-
-
+	def get_welcome(self, user_id):
+		mydata = SESSION.query(WELCOME).get(user_id)
+		rep = None
+		repx = None
+		if mydata:
+			rep = str(mydata.file_id)
+			repx = mydata.text
+		SESSION.close()
+		return {"file_id" : rep, "caption" : repx}
 
