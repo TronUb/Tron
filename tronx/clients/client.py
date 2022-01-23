@@ -1,7 +1,7 @@
 import os
 from pyrogram import Client
 from .tempclient import utils
-
+from tronx.helpers import Helpers
 
 
 
@@ -11,7 +11,7 @@ if not os.path.exists("downloads"):
 
 
 
-class Tron(Client, utils):
+class Tron(Client, utils, Helpers):
 	""" Userbot """
 	def __init__(self):
 		super().__init__(
