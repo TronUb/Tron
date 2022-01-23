@@ -1,17 +1,11 @@
-import os
-from pyrogram import Client
-from .tempclient import utils
+from pyrogram import Client, idle
+from .tempclient import Utils
 
 
 
-if not os.path.exists("downloads"):
-	""" all files are downloaded here """
-	os.mkdir("downloads")
 
-
-
-class Tron(Client, utils):
-	""" Userbot """
+class SuperClient(Client, Utils):
+	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
 		session_name=self.SESSION,
@@ -19,9 +13,24 @@ class Tron(Client, utils):
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
 		)
-       
-	class bot(Client, utils):
-		""" Assistant """
+		self.start()
+		idle()
+
+	def tron(self):
+		return self.get_me()
+
+	def id(self):
+		return tron.id
+
+	def name(self):
+		return tron.first_name
+
+	def username(self):
+		return tron.username if get_myself.username else ""
+
+
+	class bot(Client, Utils):
+		""" Assistant (Nora) """
 		def __init__(self):
 			super().__init__(
 			session_name="Nora",
@@ -29,13 +38,24 @@ class Tron(Client, utils):
 			api_hash=self.API_HASH,
 			bot_token=self.TOKEN,
 			)
+			self.start()
+			idle()
+
+		def nora(self):
+			return self.get_me()
+
+		def id(self):
+			return nora.id
+
+		def name(self):
+			return nora.first_name
+
+		def username(self):
+			return nora.username
 
 
+ 
 
-
-
-app = Tron() 
-bot = Tron.bot()
 
 
 
