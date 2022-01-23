@@ -14,7 +14,7 @@ from tronx.database.postgres import dv_sql as dv
 
 
 class Functions(object):
-	async def aexec(self, code, self, m):
+	async def aexec(self, m, code):
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
