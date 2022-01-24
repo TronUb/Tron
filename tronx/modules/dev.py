@@ -153,7 +153,7 @@ async def terminal(_, m):
 				reply_to_message_id=m.message_id,
 				caption="`Output file`",
 			)
-			if os.path.exists("./output.txt")
+			if os.path.exists("./output.txt"):
 				os.remove("output.txt")
 		else:
 			await app.send_edit(m, f"**OUTPUT:**\n\n```{output}```")
