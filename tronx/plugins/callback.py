@@ -95,7 +95,7 @@ async def give_plugin_cmds(_, cb):
 @app.alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(
-		text=app.stat_string,
+		text=app.stat_string(),
 		reply_markup=InlineKeyboardMarkup([home_back]),
 	)
 
@@ -159,7 +159,7 @@ async def _extra(_, cb):
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
-		text=app.closed_menu_string,
+		text=app.closed_menu_string(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[
