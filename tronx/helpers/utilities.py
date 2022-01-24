@@ -533,7 +533,7 @@ class Utilities(Types, AioHttp):
 
 
 # get thumbnail of file if it exists
-	async IsThumbExists(self, file_name: str):
+	async def IsThumbExists(self, file_name: str):
 		thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
 		if os.path.exists(thumb_image_path):
 			thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
