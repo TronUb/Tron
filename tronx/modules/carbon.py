@@ -59,7 +59,7 @@ colour_code = {
 async def carb_api(_, m: Message):
 	cmd = m.command
 	if app.long(m) < 2:
-		return await app.send_edit(m, f"Usage:\n\n1) `{app.PREFIX}carbon [colour] [text]`\n2) `{PREFIX}carbon [text]`\n\n**Note:** Default colour aqua" delme=2)
+		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=2)
 
 	elif app.long(m) <= 4096:
 		try:
