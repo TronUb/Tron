@@ -11,13 +11,13 @@ from tronx import app
 
 
 
-settings = app.build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = app.build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = app.build_keyboard(([["About", "open-about-dex"]]))
-close = app.build_keyboard(([["Close", "close-dex"]]))
-approve = app.build_keyboard(([["Approve", "approve-user"]]))
-global_command = app.build_keyboard(([["• Global commands •", "global-commands"]]))
-home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
+extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
+about = app.BuildKeyboard(([["About", "open-about-dex"]]))
+close = app.BuildKeyboard(([["Close", "close-dex"]]))
+approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
+global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
+home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -27,7 +27,7 @@ home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"
 @app.bot.on_message(filters.command("help"))
 async def start(_, m: Message):
 	if m.from_user:
-		if m.from_user.id == app.REAL_USER_ID:
+		if m.from_user.id == app.id:
 			# bot pic
 			if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
 				info = await app.bot.send_photo(
@@ -56,7 +56,7 @@ async def start(_, m: Message):
 					),
 				)
 
-		elif m.from_user.id != app.REAL_USER_ID:
+		elif m.from_user.id != app.id:
 			info = await app.bot.send_photo(
 				m.chat.id,
 				app.PIC,
