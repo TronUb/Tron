@@ -30,7 +30,7 @@ home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]
 
 # via bot messages
 @app.bot.on_inline_query(filters.user(app.id))
-def inline_res(_, inline_query):
+def inline_result(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
 		inline_query.answer(
@@ -64,7 +64,7 @@ def inline_res(_, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=ialive_pic(),
+				photo_url=app.ialive_pic(),
 				title="Inline alive",
 				description="This is same as alive command, the difference is that this command have inline button.",
 				caption=f"**⛊  Inline Status:**\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{userbot_version}`\n**⟜ Python:** `{python_version}`\n⟜ **Pyrogram:** `{pyrogram_version}`\n⟜ **uptime:** `{uptime()}\n\n",
