@@ -1,4 +1,4 @@
-from pyrogram import Client, idle
+from pyrogram import Client
 from .utils import Utils
 
 
@@ -14,7 +14,6 @@ class SuperClient(Client, Utils):
 		workers=self.WORKERS,
 		)
 		self.start()
-		idle()
 
 	def tron(self):
 		return print(self.get_me())
@@ -42,7 +41,6 @@ class SuperClient(Client, Utils):
 			bot_token=self.TOKEN,
 			)
 			self.start()
-			idle()
 
 		def nora(self):
 			return self.bot.get_me()
