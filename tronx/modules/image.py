@@ -1,4 +1,9 @@
-import os, time, asyncio, qrcode, requests, json
+import os
+import time
+import asyncio
+import qrcode
+import requests
+import json
 
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
@@ -6,21 +11,10 @@ from pyrogram import filters, Client
 from pyrogram.errors import UsernameInvalid
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	# others
-	AioHttp,
-	long,
-	is_str,
 )
 
 
@@ -62,12 +56,12 @@ COLOUR_CODE = {
 
 
 async def get_image(m: Message, keyword):
-	await send_edit(
+	await app.send_edit(
 		m, 
 		"Getting Picture . . .",
 		mono=True
 		)
-	img = await AioHttp().get_url(
+	img = await app.get_url(
 		f"https://source.unsplash.com/1600x900/?{keyword}"
 		)
 	await asyncio.gather(
@@ -106,25 +100,25 @@ async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
 @app.on_message(gen(["uns", "unsplash"]))
 async def unsplash(_, m: Message):
 	cmd = m.command
-	if long(m) == 1:
-		await send_edit(m, "Give me some query after command . . .", mono=True)
-	elif long(m) == 2:
+	if app.long(m) == 1:
+		await app.send_edit(m, "Give me some query after command . . .", mono=True)
+	elif app.long(m) == 2:
 		if cmd[1].isdigit():
-			await send_edit(m, "Sorry you can't use numbers to get images . . .")
+			await app.send_edit(m, "Sorry you can't use numbers to get images . . .")
 			return
 		else:
 			keyword = cmd[1]
 		await get_image(m, keyword)
-	elif long(m) > 2:
+	elif app.long(m) > 2:
 		images = []
 		images.clear()
 		if cmd[1].isdigit():
-			if is_str(cmd[2]):
-				await send_edit(m, "Getting images . . .", mono=True)
+			if app.is_str(cmd[2]):
+				await app.send_edit(m, "Getting images . . .", mono=True)
 				second = int(cmd[1]) + 1
 				keyword = cmd[2]
 				for x in range(1, second):
-					img = await AioHttp().get_url(
+					img = await app.get_url(
 						f"https://source.unsplash.com/1600x900/?{keyword}"
 						)
 					images.append(img)
@@ -135,9 +129,9 @@ async def unsplash(_, m: Message):
 						)
 				await m.delete()
 			else:
-				await send_edit(m, "Sorry numbers are not allowed to be a search query . . .", mono=True)  
+				await app.send_edit(m, "Sorry numbers are not allowed to be a search query . . .", mono=True)  
 		else:
-			await send_edit(m, "Give me count number of how many images you need . . .", mono=True)
+			await app.send_edit(m, "Give me count number of how many images you need . . .", mono=True)
 	else:
 		return print("Failed to get images through (uns) command.")
 
@@ -148,26 +142,26 @@ async def unsplash(_, m: Message):
 async def stick2image(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "`reply to a sticker . . .`", delme=3)
+		await app.send_edit(m, "`reply to a sticker . . .`", delme=3)
 	elif reply:
 		if reply.sticker:
 			if not reply.sticker.is_animated:
-				await send_edit(m, '`Converting To Image...`')
+				await app.send_edit(m, '`Converting To Image...`')
 				await app.download_media(
 					message=reply, 
-					file_name=f"{Config.TEMP_DICT}test.jpg"
+					file_name=f"{app.TEMP_DICT}test.jpg"
 					)
 				await app.send_photo(
 					m.chat.id, 
-					f"{Config.TEMP_DICT}test.jpg", 
+					f"{app.TEMP_DICT}test.jpg", 
 					reply_to_message_id=reply.message_id
 					)
 				await m.delete()
-				os.remove(f"{Config.TEMP_DICT}test.jpg")
+				os.remove(f"{app.TEMP_DICT}test.jpg")
 			else:
-				await send_edit(m, "Animated Stickers are Not Supported!", delme=2, mono=True)
+				await app.send_edit(m, "Animated Stickers are Not Supported!", delme=2, mono=True)
 		else:
-			await send_edit(m, "Reply to a sticker please !", delme=2, mono=True)
+			await app.send_edit(m, "Reply to a sticker please !", delme=2, mono=True)
 
 
 
@@ -176,25 +170,25 @@ async def stick2image(_, m):
 async def image2stick(app, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "`Reply to a image`", delme=3)
+		await app.send_edit(m, "`Reply to a image`", delme=3)
 	elif reply:
 		if reply.photo or reply.document.file_name.endswith(".png" or ".jpg" or "jpeg"):
 			if not reply.video:
-				await send_edit(m, "Converting To Sticker . . .", mono=True)
+				await app.send_edit(m, "Converting To Sticker . . .", mono=True)
 				await app.download_media(
 					message=reply, 
-					file_name=f"{Config.TEMP_DICT}sticker.webp"
+					file_name=f"{app.TEMP_DICT}sticker.webp"
 					)
 				await app.send_sticker(
 					m.chat.id, 
-					f"{Config.TEMP_DICT}sticker.webp", 
+					f"{app.TEMP_DICT}sticker.webp", 
 					reply_to_message_id=reply.message_id)
 				await m.delete()
-				os.remove(f"{Config.TEMP_DICT}sticker.webp")
+				os.remove(f"{app.TEMP_DICT}sticker.webp")
 			else:
-				await send_edit(m, "video and animated Stickers Not Supported!", delme=3, mono=True)
+				await app.send_edit(m, "video and animated Stickers Not Supported!", delme=3, mono=True)
 		else:
-			await send_edit(m, "Reply to supported media . . .", delme=3, mono=True)
+			await app.send_edit(m, "Reply to supported media . . .", delme=3, mono=True)
 
 
 
@@ -202,19 +196,19 @@ async def image2stick(app, m):
 @app.on_message(gen(["qc", "qrcode"]))
 async def make_qr(app, m):
 		try:
-			await send_edit(m, "making qrcode ...")
+			await app.send_edit(m, "making qrcode ...")
 			img = qrcode.make(m.command[1:])
 			alva = img.save(
-				f"{Config.TEMP_DICT}qrcode.jpg"
+				f"{app.TEMP_DICT}qrcode.jpg"
 				)
 			await app.send_document(
 				m.chat.id, 
-				f"{Config.TEMP_DICT}qrcode.jpg"
+				f"{app.TEMP_DICT}qrcode.jpg"
 				)
-			os.remove(f"{Config.TEMP_DICT}qrcode.jpg")
+			os.remove(f"{app.TEMP_DICT}qrcode.jpg")
 			await m.delete()
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 
 
 
@@ -222,27 +216,27 @@ async def make_qr(app, m):
 @app.on_message(gen("colour"))
 async def get_colour_templates(_, m: Message):
 	if len(m.command) < 2:
-		await send_edit(m, "Please give some colour name after command ...", delme=3)
+		await app.send_edit(m, "Please give some colour name after command ...", delme=3)
 	elif len(m.command) > 1:
 		if len(m.command) < 4096:
 			try:
-				await send_edit(m, "creating image ...")
+				await app.send_edit(m, "creating image ...")
 				img = Image.new(
 					"RGB", 
 					(60, 30), 
 					color = f"{m.command[1]}"
 					)
-				img.save(f"{Config.TEMP_DICT}/colour_image.png")
+				img.save(f"{app.TEMP_DICT}/colour_image.png")
 				await app.send_photo(
 					m.chat.id,
-					f"{Config.TEMP_DICT}/colour_image.png"
+					f"{app.TEMP_DICT}/colour_image.png"
 					)
 				await m.delete()
-				os.remove(f"{Config.TEMP_DICT}/colour_image.png")
+				os.remove(f"{app.TEMP_DICT}/colour_image.png")
 			except Exception as e:
-				await error(m, e)
+				await app.error(m, e)
 		else:
-			await send_edit(m, "Only 4096 charactes are allowed ! ...", delme=3)
+			await app.send_edit(m, "Only 4096 charactes are allowed ! ...", delme=3)
 
 
 
@@ -257,7 +251,7 @@ async def get_cat_image(_, m):
 		await app.send_photo(m.chat.id, img)
 	except Exception as e:
 		await print(e)
-		await send_edit(m, "Sorry, No cats found !")
+		await app.send_edit(m, "Sorry, No cats found !")
 
 
 
@@ -265,33 +259,33 @@ async def get_cat_image(_, m):
 @app.on_message(gen("waifu"))
 async def get_waifu_images(_, m):
 	try:
-		await send_edit(m, "Finding a waifu . . .")
-		if long(m) == 1:
+		await app.send_edit(m, "Finding a waifu . . .")
+		if app.long(m) == 1:
 			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
 			photo = data.json().get("url")
 			if photo:
 				await app.send_photo(m.chat.id, photo)
 				await m.delete()
 			else:
-				await send_edit(m, "No waifu found !", delme=3)
-		elif long(m) > 1 and m.command[1] == "nsfw":
+				await app.send_edit(m, "No waifu found !", delme=3)
+		elif app.long(m) > 1 and m.command[1] == "nsfw":
 			data = requests.get(f"https://api.waifu.pics/nsfw/waifu")
 			photo = data.json().get("url")
 			if photo:
 				await app.send_photo("me", photo)
-				await send_edit(m, "The pic was sent in your saved message . . .")
+				await app.send_edit(m, "The pic was sent in your saved message . . .")
 			else:
-				await send_edit(m, "No waifu found !", delme=3)
-		elif long(m) > 1 and m.command[1] != "nsfw":
+				await app.send_edit(m, "No waifu found !", delme=3)
+		elif app.long(m) > 1 and m.command[1] != "nsfw":
 			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
 			photo = data.json().get("url")
 			if photo:
 				await app.send_photo(m.chat.id, photo)
 				await m.delete()
 			else:
-				await send_edit(m, "No waifu found !", delme=3)
+				await app.send_edit(m, "No waifu found !", delme=3)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -300,30 +294,30 @@ async def get_waifu_images(_, m):
 async def get_profile_photos(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
-	await send_edit(m, "Sending profile photos . . .")
+	await app.send_edit(m, "Sending profile photos . . .")
 	if reply:
 		try:
-			if long(m) > 1:
+			if app.long(m) > 1:
 				if cmd[1] == "all":
 					await send_profile_pic(app, m, False)
 				if cmd[1] != "all":
 					await send_profile_pic(app, m)
 
-			if long(m) == 1:
+			if app.long(m) == 1:
 				await send_profile_pic(app, m)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 
 	elif not reply:
-		if long(m) > 1:
+		if app.long(m) > 1:
 			try:
 				user = await app.get_users(cmd[1])
 				p_id = await app.get_profile_photos(user.id)
 				await send_profile_pic(app, m, p_id=p_id)
 			except UsernameInvalid:
-				await send_edit(m, "Sorry this username does not exist . . .", mono=True)
+				await app.send_edit(m, "Sorry this username does not exist . . .", mono=True)
 
-		elif long(m) == 1:
+		elif app.long(m) == 1:
 			user = m.from_user
 			p_id = await app.get_profile_photos(user.id)
 			await send_profile_pic(app, m, p_id=p_id)
