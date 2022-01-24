@@ -62,7 +62,7 @@ class AFKSQL(object):
 		return MY_AFK.get(0)
 
 
-	def load_afk(self):
+	def load_afk():
 		global MY_AFK
 		try:
 			MY_AFK = {}
