@@ -243,7 +243,7 @@ class Utilities(Types, AioHttp):
 		msg = re.sub(r"\*\*(.*)\*\*", "\g<1>", msg)
 		msg = re.sub(r"\_\_(.*)\_\_", "\g<1>", msg)
 		msg = re.sub(r"\`(.*)\`", "\g<1>", msg)
-	return msg
+		return msg
 
 
 	def QuoteHtml(self, text: str) -> str:
