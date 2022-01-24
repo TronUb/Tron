@@ -20,13 +20,13 @@ class SuperClient(Client, Utils):
 		return self.get_me()
 
 	def id(self):
-		return tron.id
+		return self.tron.id
 
 	def name(self):
-		return tron.first_name
+		return self.tron.first_name
 
 	def username(self):
-		return tron.username if get_myself.username else ""
+		return self.tron.username if self.tron.username else ""
 
 
 	class bot(Client, Utils):
@@ -45,11 +45,11 @@ class SuperClient(Client, Utils):
 			return self.get_me()
 
 		def id(self):
-			return nora.id
+			return self.nora.id
 
 		def name(self):
-			return nora.first_name
+			return self.nora.first_name
 
 		def username(self):
-			return nora.username
+			return self.nora.username
 
