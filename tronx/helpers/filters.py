@@ -18,8 +18,8 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
+from config import Config
 
-from tronx import app
 
 
 
@@ -78,7 +78,7 @@ def regex(
 
 # multiple prefixes
 def myprefix():
-	return app.PREFIX.split()[0] if len(app.PREFIX.split()) > 1 else app.PREFIX
+	return Config.PREFIX.split()[0] if len(Config.PREFIX.split()) > 1 else Config.PREFIX
 
 
 
