@@ -12,11 +12,12 @@ from tronx.methods import Methods
 from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
 from tronx.database import Database
+from tronx.helpers import Helpers
 
 
 
 
-class Collector(Methods, Config, Database):
+class Collector(Methods, Config, Database, Helpers):
 	# versions /
 
 	userbot_version = "v.0.0.5"
