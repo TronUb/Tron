@@ -1,21 +1,16 @@
-from tronx import (
-	app,
-	CMD_HELP,
-)
+from tronx import app
 
 from pytube import YouTube
 from pyrogram.types import Message
+
 from tronx.helpers import (
-	get_readable_time,
-	long,
 	gen,
-	send_edit,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"utube": (
 		"utube",
 		{
@@ -33,16 +28,16 @@ async def utube_info(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
 		link = reply.text
-	elif not reply and long(m) >= 1:
+	elif not reply and app.long(m) >= 1:
 		link = m.text.split(None, 1)[1]
-	elif not reply and long(m) == 1:
-		return await send_edit(m, "Reply to youtube link or give link as a suffix . . .", mono=True, delme=5)
+	elif not reply and app.long(m) == 1:
+		return await app.send_edit(m, "Reply to youtube link or give link as a suffix . . .", mono=True, delme=5)
 
-	await send_edit(m, "Getting information . . .", mono=True)
+	await app.send_edit(m, "Getting information . . .", mono=True)
 	yt = YouTube(link)
 	thumb_link = yt.thumbnail_url
 	data = f"**Title:** {yt.title}\n\n"
-	data += f"**Duration:** {get_readable_time(yt.length)}\n\n"
+	data += f"**Duration:** {app.GetReadableTime(yt.length)}\n\n"
 	data += f"**Description:** {yt.description}\n\n"
 	data += f"**Views:** {yt.views}\n\n"
 	data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
@@ -55,26 +50,26 @@ async def utube_info(_, m: Message):
 @app.on_message(gen("yvdl"))
 async def yt_download(_, m):
 	reply = m.reply_to_message
-	await send_edit(m, "processing link . . .", mono=True)
+	await app.send_edit(m, "processing link . . .", mono=True)
 	if not reply:
-		if long(m) == 1:
-			return await send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
-		elif long(m) > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
+		if app.long(m) == 1:
+			return await app.send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
+		elif app.long(m) > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
 			link = m.command[1]
 		else:
-			return await send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
+			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
 	elif reply:
 		if reply.text and reply.text.startswith("http://" or "https://"):
 			link = reply.text
 		else:
-			return await send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
+			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
 	else:
-		return await send_edit(m, "Something went wrong . . .")
+		return await app.send_edit(m, "Something went wrong . . .")
 
 	yt = YouTube(link)
 	data = yt.streams.all()
 
-	await send_edit(m, "**Trying to download **" + f"`{yt.title}`")
+	await app.send_edit(m, "**Trying to download **" + f"`{yt.title}`")
 	for x in data:
 		if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
 			try:
