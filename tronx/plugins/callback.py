@@ -76,7 +76,7 @@ async def give_plugin_cmds(_, cb):
 	plugs = await app.data(plugin_name)
 	help_string = f"PLUGIN: {plugin_name}\n\n" + "".join(plugs)
 	await cb.edit_message_text(
-		app.help_string,
+		help_string,
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[
