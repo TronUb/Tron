@@ -3,39 +3,17 @@ import time
 from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	USER_NAME, 
-	USER_ID, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	)
-
-from tronx.database import (
-	set_afk, 
-	get_afk,
-	)
+from tronx import app
 
 from tronx.helpers import (
-	error,
-	send_edit,
-	mymention,
 	gen,
-	# others
-	Types, 
-	get_message_type,
-	get_readable_time,
-	long,
-	delete,
 )
 
-from tronx.database.postgres import dv_sql as dv
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"afk": (
 		"afk",
 		{
@@ -53,31 +31,31 @@ CMD_HELP.update(
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
-		if long(m) >= 2:
-			set_afk(True, m.text.split(None, 1)[1], start) # with reason
-			await send_edit(
+		if app.long(m) >= 2:
+			app.set_afk(True, m.text.split(None, 1)[1], start) # with reason
+			await app.send_edit(
 				m, 
-				"{} is now Offline.\nBecause: {}".format(mymention(), m.text.split(None, 1)[1]),
+				"{} is now Offline.\nBecause: {}".format(app.mymention(), m.text.split(None, 1)[1]),
 				delme=2
 				)
-		elif long(m) == 1 and long(m) < 4096:
-			if dv.getdv("AFK_TEXT"):
-				reason = dv.getdv("AFK_TEXT")
-			elif Config.AFK_TEXT:
-				reason = Config.AFK_TEXT
+		elif app.long(m) == 1 and app.long(m) < 4096:
+			if app.getdv("AFK_TEXT"):
+				reason = app.getdv("AFK_TEXT")
+			elif app.AFK_TEXT:
+				reason = app.AFK_TEXT
 			else:
 				reason = False
 			if reason:
-				set_afk(True, reason, start)
+				app.set_afk(True, reason, start)
 			elif not reason:
-				set_afk(True, "", start) # without reason
-			await send_edit(
+				app.set_afk(True, "", start) # without reason
+			await app.send_edit(
 				m, 
-				"{} is now offline.".format(mymention()),
+				"{} is now offline.".format(app.mymention()),
 				delme=2
 				)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -86,9 +64,9 @@ async def go_offline(_, m: Message):
 @app.on_message(~filters.bot & ~filters.channel & filters.mentioned | filters.private, group=-2)
 async def offline_mention(_, m: Message):
 	try:
-		get = get_afk()
+		get = app.get_afk()
 		if get and get["afk"]: 
-			if m.from_user.id == USER_ID:
+			if m.from_user.id == app.id:
 				return
 
 			if "-" in str(m.chat.id):
@@ -97,23 +75,23 @@ async def offline_mention(_, m: Message):
 				cid = str(m.chat.id)
 
 			end = int(time.time())
-			otime = get_readable_time(end - get["afktime"])
+			otime = app.GetReadableTime(end - get["afktime"])
 			if get["reason"] and get["afktime"]:
 				msg = await app.send_message(
 					m.chat.id,
-					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(mymention(), otime, get['reason']),
+					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.mymention(), otime, get['reason']),
 					reply_to_message_id=m.message_id
 					) 
 				await delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
 				await app.send_message(
 					m.chat.id,
-					"Sorry {} is currently offline !\n**Time:** {}".format(mymention(), otime),
+					"Sorry {} is currently offline !\n**Time:** {}".format(app.mymention(), otime),
 					reply_to_message_id=m.message_id
 					)
 				await delete(msg, 3)
-			content, message_type = get_message_type(m)
-			if message_type == Types.TEXT:
+			content, message_type = app.GetMessageType(m)
+			if message_type == app.TEXT:
 				if m.text:
 					text = m.text
 				else:
@@ -122,7 +100,7 @@ async def offline_mention(_, m: Message):
 				text = message_type.name
 
 			await app.send_message(
-				Config.LOG_CHAT, 
+				app.LOG_CHAT, 
 				f"""#mention\n\n
 				**User:** `{m.from_user.first_name}`\n
 				**Id:** {m.from_user.id}\n
@@ -133,7 +111,7 @@ async def offline_mention(_, m: Message):
 				parse_mode = "markdown"
 				)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -144,26 +122,26 @@ async def back_online(_, m: Message):
 	try:
 		# don't break afk while going offline
 		if m.text:
-			if m.text.startswith(f"{PREFIX}afk"):
+			if m.text.startswith(f"{app.PREFIX}afk"):
 				return
 			elif "#afk" in m.text:
 				return
 		elif m.media:
 			pass
 
-		get = get_afk()
+		get = app.get_afk()
 		if get and get["afk"] and filters.outgoing:
 			end = int(time.time())
-			afk_time = get_readable_time(end - get["afktime"])
+			afk_time = app.GetReadableTime(end - get["afktime"])
 			msg = await app.send_message(
 				m.chat.id, 
-				f"{mymention()} is now online !\n**Time:** `{afk_time}`"
+				f"{app.mymention()} is now online !\n**Time:** `{afk_time}`"
 				)
-			set_afk(False, "", 0)
+			app.set_afk(False, "", 0)
 		else:
 			return
 
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
