@@ -30,7 +30,7 @@ date_dict = []
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"profile" : (
 		"profile",
 		{
