@@ -1,20 +1,17 @@
 import os
 
-from pyrogram.types import Message
+from pyrogram.app.types import Message
 
-from tronx import app, CMD_HELP
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	types,
-	send_edit,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"info" : (
 		"info",
 		{
@@ -32,12 +29,12 @@ CMD_HELP.update(
 async def media_info(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await send_edit(
+		return await app.send_edit(
 			m, 
 			"Please reply to some media to get media info ...",
 			mono=True
 			)
-	if types(m) == "photo":
+	if app.types(m) == "photo":
 		pie = replied.photo
 		msg = "**Type:** Photo\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -48,12 +45,12 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg += " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "video":
+	elif app.types(m) == "video":
 		pie = replied.video
 		msg = "**Types:** Video\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -67,12 +64,12 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg +=  " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "sticker":
+	elif app.types(m) == "sticker":
 		pie = replied.sticker
 		msg = "**Types:** sticker\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -88,12 +85,12 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg +=  " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "document":
+	elif app.types(m) == "document":
 		pie = replied.document
 		msg = "**Types:** Document\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -104,12 +101,12 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg +=  " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "animation":
+	elif app.types(m) == "animation":
 		pie = replied.animation
 		msg = "**Types:** Animation\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -123,12 +120,12 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg +=  " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "audio":
+	elif app.types(m) == "audio":
 		pie = replied.audio
 		msg = "**Types:** Audio\n"
 		msg += f"**Title:** `{pie.title}`\n"
@@ -142,15 +139,15 @@ async def media_info(_, m: Message):
 			msg += f"**Caption:** `{replied.caption}`\n"
 		else:
 			msg +=  " "
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif types(m) == "text":
+	elif app.types(m) == "text":
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"**⚶ Text Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
@@ -167,7 +164,7 @@ async def get_chatinfo(_, m: Message):
 			chat = await app.get_chat(chat_u)
 		else:
 			if m.chat.type == "private":
-				await send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
+				await app.send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
 				return
 			else:
 				chat_v = m.chat.id
@@ -178,7 +175,7 @@ async def get_chatinfo(_, m: Message):
 		else:
 			poto = False
 
-		await send_edit(m, "Processing ...")
+		await app.send_edit(m, "Processing ...")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
 		data += f"**Title:** `{chat.title}`\n"
@@ -208,8 +205,8 @@ async def get_chatinfo(_, m: Message):
 				caption=data
 			)
 		elif not poto:
-			await send_edit(m, data)
+			await app.send_edit(m, data)
 		else:
-			await send_edit(m, "Failed to get information of this group . . .", delme=2)
+			await app.send_edit(m, "Failed to get information of this group . . .", delme=2)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
