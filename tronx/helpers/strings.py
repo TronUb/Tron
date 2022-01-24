@@ -1,28 +1,25 @@
-from tronx import app
-
-
-
-
 class Strings(object):
-	stat_string = f"""
-	**Dex:** Stats
+	def stat_string(self):
+		return f"""
+			**Dex:** Stats
 
-	**Location:** /home/stats
+			**Location:** /home/stats
 
-	**Name:** {app.REAL_USER_NAME}
-	**{app.assistant_name} version:** {app.assistant_version}
-	**Python version:** {app.python_version}
-	**Pyrogram version:** {app.pyrogram_version}
-	**Database:** {app.db_status}
-	**Uptime:** {app.uptime()}
-	**User Bio:** {app.UserBio}
-	"""
+			**Name:** {self.UserName()}
+			**{self.assistant_name} version:** {self.assistant_version}
+			**Python version:** {self.python_version}
+			**Pyrogram version:** {self.pyrogram_version}
+			**Database:** {self.db_status()}
+			**Uptime:** {self.uptime()}
+			**User Bio:** {self.UserBio()}
+			"""
 
 
 
-	closed_menu_string = f"""
-	Welcome to Tron.
-	This is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA )
+	def closed_menu_string(self):
+		return f"""
+			Welcome to Tron.
+			This is your Helpdex, Tap on open button to get more buttons which will help you to understand & operate your userbot & assistant ( LARA )
 
-	• Menu is closed
-	"""
+			• Menu is closed
+			"""
