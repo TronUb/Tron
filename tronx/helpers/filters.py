@@ -18,12 +18,8 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
+from config import Config
 
-from tronx import (
-	PREFIX,
-	USER_ID,
-	CMD_HELP,
-)
 
 
 
@@ -82,7 +78,7 @@ def regex(
 
 # multiple prefixes
 def myprefix():
-	return PREFIX.split()[0] if len(PREFIX.split()) > 1 else PREFIX
+	return Config.PREFIX.split()[0] if len(Config.PREFIX.split()) > 1 else Config.PREFIX
 
 
 
@@ -90,7 +86,6 @@ def myprefix():
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	info: dict = "",
 	prefixes: Union[str, List[str]] = myprefix(), 
 	case_sensitive: bool = True, 
 	only_me: bool = True,
@@ -100,7 +95,6 @@ def gen(
 	):
 
 	# update the commands and information of commands.
-	CMD_HELP.update(info)
 
 	# modified func of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")

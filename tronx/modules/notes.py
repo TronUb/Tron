@@ -1,39 +1,22 @@
 import time
 
-from pyrogram import filters
 from pyrogram.types import (
 	InlineKeyboardMarkup, 
 	InlineKeyboardButton, 
 	Message
 )
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
-
-from tronx.database.postgres import notes_sql as db
+from tronx import app
 
 from tronx.helpers import (
 	gen,
 	regex,
-	error,
-	send_edit,
-	# others 
-	parse_button, 
-	build_keyboard, 
-	Types, 
-	get_note_type, 
-	fetch_note_type,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"notes" : (
 		"notes",
 		{
@@ -50,17 +33,17 @@ CMD_HELP.update(
 
 
 GET_FORMAT = {
-	Types.TEXT.value: app.send_message,
-	Types.DOCUMENT.value: app.send_document,
-	Types.PHOTO.value: app.send_photo,
-	Types.VIDEO.value: app.send_video,
-	Types.STICKER.value: app.send_sticker,
-	Types.AUDIO.value: app.send_audio,
-	Types.VOICE.value: app.send_voice,
-	Types.VIDEO_NOTE.value: app.send_video_note,
-	Types.ANIMATION.value: app.send_animation,
-	Types.ANIMATED_STICKER.value: app.send_sticker,
-	Types.CONTACT: app.send_contact
+	app.TEXT: app.send_message,
+	app.DOCUMENT: app.send_document,
+	app.PHOTO: app.send_photo,
+	app.VIDEO: app.send_video,
+	app.STICKER: app.send_sticker,
+	app.AUDIO: app.send_audio,
+	app.VOICE: app.send_voice,
+	app.VIDEO_NOTE: app.send_video_note,
+	app.ANIMATION: app.send_animation,
+	app.ANIMATED_STICKER: app.send_sticker,
+	app.CONTACT: app.send_contact
 }
 
 
@@ -69,20 +52,20 @@ GET_FORMAT = {
 @app.on_message(gen("save"))
 async def save_note(_, m: Message):
 	if len(m.command) < 2:
-		return await send_edit(m, "A note name is required with command to save notes ...", mono=True)
+		return await app.send_edit(m, "A note name is required with command to save notes ...", mono=True)
 
-	note_name, text, message_type, content = get_note_type(m)
+	note_name, text, message_type, content = app.GetNoteType(m)
 	if not note_name:
-		return await send_edit(m, "A name is necessary for a note !", mono=True)
+		return await app.send_edit(m, "A name is necessary for a note !", mono=True)
 
-	if message_type == Types.TEXT:
+	if message_type == app.TEXT:
 		file_id = None
-		teks, button = parse_button(text)
+		teks, button = app.ParseButtom(text)
 		if not teks:
-			await send_edit(m, f"`{m.text}`\n\nError: There is no text in here !")
+			await app.send_edit(m, f"`{m.text}`\n\nError: There is no text in here !")
 
 	db.save_selfnote(m.from_user.id, note_name, text, message_type, content)
-	await send_edit(m, "Saved note = **[ `{}` ]**".format(note_name),parse_mode="markdown")
+	await app.send_edit(m, "Saved note = **[ `{}` ]**".format(note_name),parse_mode="markdown")
 
 
 
@@ -98,24 +81,24 @@ async def get_note(_, m: Message):
 		getnotes = db.get_selfnote(m.from_user.id, note)
 
 		if not getnotes:
-			return await send_edit(m, "This note does not exist !")
+			return await app.send_edit(m, "This note does not exist !")
 
 		msg_id = None # message.message_id
 		if reply:
 			mdg_id = reply.message_id
-		if getnotes['type'] == Types.TEXT:
-			teks, button = parse_button(getnotes.get('value'))
-			button = build_keyboard(button)
+		if getnotes['type'] == app.TEXT:
+			teks, button = app.ParseButtom(getnotes.get('value'))
+			button = app.BuildKeyboard(button)
 			if button:
 				button = InlineKeyboardMarkup(button)
 			else:
 				button = False
 			if button:
-				return await send_edit(m, "Inline button not supported in this userbot version :(")
+				return await app.send_edit(m, "Inline button not supported in this userbot version :(")
 			else:
-				await send_edit(m, teks)
+				await app.send_edit(m, teks)
 
-		elif getnotes['type'] in (Types.STICKER, Types.VOICE, Types.VIDEO_NOTE, Types.CONTACT, Types.ANIMATED_STICKER):
+		elif getnotes['type'] in (app.STICKER, app.VOICE, app.VIDEO_NOTE, app.CONTACT, app.ANIMATED_STICKER):
 			await m.delete()
 			try:
 				if msg_id:
@@ -124,7 +107,7 @@ async def get_note(_, m: Message):
 					await GET_FORMAT[getnotes['type']](message.chat.id, getnotes['file'])
 			except errors.exceptions.bad_request_400.BadRequest:
 				msg = await app.get_messages(m.chat.id, getnotes['message_id'])
-				note_name, text, message_type, content = fetch_note_type(msg)
+				note_name, text, message_type, content = app.FetchNoteType(msg)
 				db.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
 				if msg_id:
 					await GET_FORMAT[getnotes['type']](m.chat.id, content, reply_to_message_id=msg_id)
@@ -133,8 +116,8 @@ async def get_note(_, m: Message):
 		else:
 			await m.delete()
 			if getnotes.get('value'):
-				teks, button = parse_button(getnotes.get('value'))
-				button = build_keyboard(button)
+				teks, button = app.ParseButtom(getnotes.get('value'))
+				button = app.BuildKeyboard(button)
 				if button:
 					button = InlineKeyboardMarkup(button)
 				else:
@@ -143,7 +126,7 @@ async def get_note(_, m: Message):
 				teks = False
 				button = False
 			if button:
-				return await send_edit(m, "Inline button not supported in this userbot version :(\nSee @tronuserbot for more information")
+				return await app.send_edit(m, "Inline button not supported in this userbot version :(\nSee @tronuserbot for more information")
 			else:
 				try:
 					if msg_id:
@@ -152,7 +135,7 @@ async def get_note(_, m: Message):
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
 				except errors.exceptions.bad_request_400.BadRequest:
 					msg = await app.get_messages(m.chat.id, getnotes['message_id'])
-					note_name, text, message_type, content = fetch_note_type(msg)
+					note_name, text, message_type, content = app.FetchNoteType(msg)
 					db.save_selfnote(m.chat.id, note, teks, getnotes['type'], content, getnotes['message_id'])
 					if msg_id:
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
@@ -168,29 +151,29 @@ async def get_note(_, m: Message):
 async def notes_list(_, m: Message):	
 	getnotes = db.get_all_selfnotes(m.from_user.id)
 	if not getnotes:
-		return await send_edit(m, "There are no saved notes !")
+		return await app.send_edit(m, "There are no saved notes !")
 
 	notelist = "**Notebook:**\n\n"
 	for x in getnotes:
 		if len(notelist) >= 1800:
-			await send_edit(m, notebook)
+			await app.send_edit(m, notebook)
 			notelist = "**Notebook:**\n\n"
 		notelist += "`>{}`\n".format(x)
 
-	await send_edit(m, notelist)
+	await app.send_edit(m, notelist)
 
 
 
 
 @app.on_message(gen("clear"))
 async def clear_note(client, m: Message):	
-	if long(m) <= 1:
-		return await send_edit(m, f"Sir, give note name after command, Ex: `{PREFIX}clear cat`")
+	if app.long(m) <= 1:
+		return await app.send_edit(m, f"Sir, give note name after command, Ex: `{app.PREFIX}clear cat`")
 
 	note = m.text.split()[1]
 	getnote = db.rm_selfnote(m.from_user.id, note)
 	if not getnote:
-		return await send_edit(m, "This note does not exist!")
+		return await app.send_edit(m, "This note does not exist!")
 	else:
-		await send_edit(m, "Deleted note = **[ `{}` ]**".format(note),parse_mode="markdown")
+		await app.send_edit(m, "Deleted note = **[ `{}` ]**".format(note),parse_mode="markdown")
         

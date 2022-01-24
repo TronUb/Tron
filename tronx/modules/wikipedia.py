@@ -1,27 +1,18 @@
 import time
 import wikipediaapi
 
-from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"wikipedia" : (
 		"wikipedia",
 		{
@@ -36,25 +27,25 @@ CMD_HELP.update(
 
 
 @app.on_message(gen("wiki"))
-async def wikipedia_search(app, m:Message):
-	if long(m) == 1:
-		await send_edit(m, "Give me some query to search on wikipedia . . .", mono=True, delme=True)
+async def wikipedia_search(_, m: Message):
+	if app.long(m) == 1:
+		await app.send_edit(m, "Give me some query to search on wikipedia . . .", mono=True, delme=True)
 
-	elif long(m) > 1 and long(m) < 4096:
+	elif app.long(m) > 1 and app.long(m) < 4096:
 		try:
 			obj = wikipediaapi.Wikipedia("en")
 			text = m.text.split(None, 1)[1]
 			result = obj.page(text)
-			await send_edit(m, f"Searching for: {text} . . .", mono=True)
+			await app.send_edit(m, f"Searching for: __{text}__ . . .", mono=True)
 			if result:
 				giveresult = result.summary
 				if len(giveresult) <= 4096:
-					await send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult}```")
+					await app.send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult}```")
 				else:
-					await send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult[:4095]}```")
+					await app.send_edit(m, f"**Results for:** `{text}`\n\n```{giveresult[:4095]}```")
 			else:
-				await send_edit(m, "No results found !", delme=2, mono=True)
+				await app.send_edit(m, "No results found !", delme=2, mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
-		await send(m, "Something went wrong !", mono=True, delme=3)
+		await app.send(m, "Something went wrong !", mono=True, delme=3)

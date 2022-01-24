@@ -1,7 +1,5 @@
 import threading
 
-from sys import platform
-
 from sqlalchemy import (
 	Column, 
 	String, 
@@ -13,8 +11,7 @@ from . import SESSION, BASE
 
 
 
-# save user ids in whitelists
-class filters(BASE):
+class FILTERS(BASE):
 	__tablename__ = "filters"
 	
 	trigger = Column(String, primary_key=True)
@@ -31,57 +28,57 @@ class filters(BASE):
 
 
 
-filters.__table__.create(checkfirst=True)
+FILTERS.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
 
 
 
-# set, del, get chat_id & file_id
-def set_filter(trigger, chat_id, file_id, caption=False):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(filters).get(trigger)
-		try:
-			if mydata:
-				SESSION.delete(mydata)
-			mydata = filters(trigger, chat_id, file_id, caption)
-			SESSION.add(mydata)
-			SESSION.commit()
-		finally:
-			SESSION.close()
-	return chat_id
-
-
-
-
-def del_filter(trigger):
-	with INSERTION_LOCK:
-		mydata = SESSION.query(filters).get(trigger) 
-		try:
-			if mydata:
-				SESSION.delete(mydata)
+class FILTERSSQL(object):
+	def set_filter(self, trigger, chat_id, file_id, caption=False):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(filters).get(trigger)
+			try:
+				if mydata:
+					SESSION.delete(mydata)
+				mydata = filters(trigger, chat_id, file_id, caption)
+				SESSION.add(mydata)
 				SESSION.commit()
-		finally:
-			SESSION.close()
-		return False
+			finally:
+				SESSION.close()
+		return chat_id
 
 
 
 
-def get_filter(trigger):
-	mydata = SESSION.query(filters).get(trigger)
-	rep = None
-	repx = None
-	repy = None
-	repz = None
-	if mydata:
-		rep = str(mydata.file_id)
-		repx = mydata.trigger
-		repy = mydata.chat_id
-		repz = mydata.caption
-	SESSION.close()
-	return {"file_id" : rep, "trigger" : repx, "chat_id" : repy, "caption" : repz}
+	def del_filter(self, trigger):
+		with INSERTION_LOCK:
+			mydata = SESSION.query(filters).get(trigger) 
+			try:
+				if mydata:
+					SESSION.delete(mydata)
+					SESSION.commit()
+			finally:
+				SESSION.close()
+			return False
+
+
+
+
+	def get_filter(self, trigger):
+		mydata = SESSION.query(filters).get(trigger)
+		rep = None
+		repx = None
+		repy = None
+		repz = None
+		if mydata:
+			rep = str(mydata.file_id)
+			repx = mydata.trigger
+			repy = mydata.chat_id
+			repz = mydata.caption
+		SESSION.close()
+		return {"file_id" : rep, "trigger" : repx, "chat_id" : repy, "caption" : repz}
 
 
 

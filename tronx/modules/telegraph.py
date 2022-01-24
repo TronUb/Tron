@@ -6,26 +6,16 @@ from telegraph import upload_file
 
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	)
-
-from tronx import telegraph as tgm
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	myname
 )
 
 
 
 
-CMD_HELP.update( 
+app.CMD_HELP.update( 
 	{"telegraph" : (
 		"telegraph",
 		{
@@ -44,22 +34,22 @@ async def telegraph(app, m:Message):
 	filesize = 5242880
 	# if not replied
 	if not reply:
-		await send_edit(m, f"Please reply to media / text . . .", mono=True)
+		await app.send_edit(m, f"Please reply to media / text . . .", mono=True)
 	# replied to text 
 	elif reply.text:
 		if len(reply.text) <= 4096:
-			await send_edit(m, "⏳• Hold on . . .", mono=True)
-			link = tgm.create_page(
-				myname(),
+			await app.send_edit(m, "⏳• Hold on . . .", mono=True)
+			link = app.create_page(
+				app.name(),
 				html_content=reply.text
 				)
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"**Telegraph Link: [Press Here](https://telegra.ph/{link.get('path')})**",
 				disable_web_page_preview=True
 				)
 		else:
-			await send_edit(m, "The length text exceeds 4096 characters . . .", mono=True)
+			await app.send_edit(m, "The length text exceeds 4096 characters . . .", mono=True)
 	# replied to supported media
 	elif reply.media:
 		if (
@@ -69,32 +59,31 @@ async def telegraph(app, m:Message):
 			or reply.sticker and reply.sticker.file_size <= filesize
 			or reply.document and reply.document.file_size <= filesize # [photo, video] document
 			):
-			await send_edit(m, "⏳• Hold on . . .", mono=True)
+			await app.send_edit(m, "⏳• Hold on . . .", mono=True)
 			# change ext to png to use convert in link
 			if reply.animation or reply.sticker:
 				loc = await app.download_media(
 					reply,
-					file_name=f"{Config.TEMP_DICT}telegraph.png"
+					file_name=f"{app.TEMP_DICT}telegraph.png"
 					)
 			else:
 				loc = await app.download_media(
-					reply, 
-					file_name=f"{Config.TEMP_DICT}"
+					reply
 					)
 			try:
 				response = upload_file(loc)
 			except Exception as e:
-				return await error(m, e)
-			await send_edit(
+				return await app.error(m, e)
+			await app.send_edit(
 				m, 
 				f"**Telegraph Link: [Press Here](https://telegra.ph{response[0]})**", 
 				disable_web_page_preview=True
 				)
-			os.remove(loc)
+			if os.path.exists(loc):
+				os.remove(loc)
 		else:
-			await send_edit(m, "Please check the file format or file size , it must be less than 5 mb . . .", mono=True)
+			await app.send_edit(m, "Please check the file format or file size , it must be less than 5 mb . . .", mono=True)
 	else:
 		# if replied to unsupported media
-		await send_edit(m, "Sorry, The File is not supported !", delme=2, mono=True)
-
+		await app.send_edit(m, "Sorry, The File is not supported !", delme=2, mono=True)
 

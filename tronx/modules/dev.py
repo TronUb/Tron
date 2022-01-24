@@ -16,12 +16,12 @@ from tronx.helpers import *
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"dev" : (
 		"dev",
 		{
 		"eval print('cat')" : "A nice tool to test python codes.",
-		"term pip3 install pyrogram" : "Run commands in shell."
+		"term pip3 install colorama" : "Run commands in shell."
 		}
 		)
 	}
@@ -38,23 +38,20 @@ c = Config
 
 
 @app.on_message(gen(["eval", "e"], allow_channel=True))
-async def evaluate(app, m):
+async def evaluate(_, m):
 	global reply
 	reply = m.reply_to_message
 	try:
 		cmd = m.text.split(" ", maxsplit=1)[1]
 	except IndexError:
-		await send_edit(
-			m, 
-			"Give me some code to execute ..."
-			)
-		return await delete(m, 3)
+		return await app.send_edit(m, "Give me some code to execute . . .", mono=True, delme=3)
 
-	await send_edit(m, "Running . . .", mono=True)
+	await app.send_edit(m, "Running . . .", mono=True)
 
 	reply_to_id = m.message_id
 	if reply:
 		reply_to_id = reply.message_id
+
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
 	redirected_output = sys.stdout = StringIO()
@@ -62,7 +59,7 @@ async def evaluate(app, m):
 	stdout, stderr, exc = None, None, None
 
 	try:
-		await aexec(cmd, app, m)
+		await app.aexec(m, cmd)
 	except Exception:
 		exc = traceback.format_exc()
 	stdout = redirected_output.getvalue()
@@ -70,6 +67,7 @@ async def evaluate(app, m):
 	sys.stdout = old_stdout
 	sys.stderr = old_stderr
 	evaluation = ""
+
 	if exc:
 		evaluation = exc
 	elif stderr:
@@ -78,6 +76,7 @@ async def evaluate(app, m):
 		evaluation = stdout
 	else:
 		evaluation = f"Success"
+
 	final_output = f"**• COMMAND:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
 	if len(final_output) > 4096:
 		filename = "eval_output.txt"
@@ -89,20 +88,21 @@ async def evaluate(app, m):
 			disable_notification=True,
 			reply_to_message_id=reply_to_id,
 		)
-		os.remove(filename)
+		if os.path.exists(f"./{filename}"):
+			os.remove(filename)
 		await m.delete()
 	else:
-		await send_edit(m, final_output)
+		await app.send_edit(m, final_output)
 
 
 
 
 @app.on_message(gen("term", allow_channel=True))
-async def terminal(app, m):
-	if len(m.text.split()) == 1:
-		await send_edit(m, "Use: `.term pip3 install colorama`")
-		return
-	await send_edit(m, "`Running ...`")
+async def terminal(_, m):
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Use: `.term pip3 install colorama`", delme=5)
+
+	await app.send_edit(m, "Running . . .", mono=True)
 	args = m.text.split(None, 1)
 	teks = args[1]
 	if "\n" in teks:
@@ -116,7 +116,7 @@ async def terminal(app, m):
 				)
 			except Exception as e:
 				print(e)
-				await send_edit(m,
+				await app.send_edit(m,
 					"""
 					**Error:**
 					```{}```
@@ -138,8 +138,8 @@ async def terminal(app, m):
 			errors = traceback.format_exception(
 				etype=exc_type, value=exc_obj, tb=exc_tb
 			)
-			await send_edit(m, """**Error:**\n```{}```""".format("".join(errors)))
-			return
+			return await app.send_edit(m, """**Error:**\n```{}```""".format("".join(errors)))
+
 		output = process.stdout.read()[:-1].decode("utf-8")
 	if str(output) == "\n":
 		output = None
@@ -153,12 +153,11 @@ async def terminal(app, m):
 				reply_to_message_id=m.message_id,
 				caption="`Output file`",
 			)
-			os.remove("output.txt")
-			return
-		await send_edit(m, f"**Output:**\n```{output}```")
+			if os.path.exists("./output.txt"):
+				os.remove("output.txt")
+		else:
+			await app.send_edit(m, f"**OUTPUT:**\n\n```{output}```")
 	else:
-		await send_edit(m, "**Output:**\n`No Output`")
-
-
+		await app.send_edit(m, "**OUTPUT:**\n\n`No Output`")
 
 

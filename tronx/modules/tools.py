@@ -1,45 +1,24 @@
-import os
-import sys
-import time
-import ftplib
-import requests
 import speedtest
-import traceback
 
 from datetime import datetime
 
-from io import BytesIO
 from currency_converter import CurrencyConverter
 
-from pyrogram import filters, __version__, client
 from pyrogram.types import Message
 from pyrogram.errors import (
 	MessageTooLong,
 )
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	mymention,
-	send_edit,
-	# others 
-	clear_string, 
-	speed_convert,
-	create_file,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"tools" : (
 		"tools",
 		{
@@ -83,10 +62,10 @@ def convert_c(celsius):
 async def get_word_links(_, m: Message):
 	links = []
 	links.clear()
-	await send_edit(m, "Finding word in this chat . . .", mono=True)
+	await app.send_edit(m, "Finding word in this chat . . .", mono=True)
 	try:
-		if long(m) < 2:
-			return await send_edit(m, "Please give some text to search in chat ...")
+		if app.long(m) < 2:
+			return await app.send_edit(m, "Please give some text to search in chat ...")
 
 		else:
 			info = await app.get_history(m.chat.id)
@@ -95,17 +74,17 @@ async def get_word_links(_, m: Message):
 				msg = str(ele.text)
 				if query in msg:
 					links.append(f"https://t.me/c/{str(ele.chat.id)[4:]}/{ele.message_id}")
-			await send_edit(m, "\n".join(links))
+			await app.send_edit(m, "\n".join(links))
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
 
 @app.on_message(gen(["cur", "currency"]))
 async def evaluate(_, m: Message):
-	if long(m) <= 3:
-		return await send_edit(m, f"Use | `{PREFIX}cur 100 USD INR` or `{PREFIX}currency 100 USD INR`")
+	if app.long(m) <= 3:
+		return await app.send_edit(m, f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
 
 	value = m.command[1]
 	cur1 = m.command[2].upper()
@@ -113,9 +92,9 @@ async def evaluate(_, m: Message):
 	try:
 		conv = c.convert(int(value), cur1, cur2)
 		text = "{} {} = {} {}".format(value, cur1, f'{conv:,.2f}', cur2)
-		await send_edit(m, text)
+		await app.send_edit(m, text)
 	except ValueError as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -131,15 +110,15 @@ async def evaluate(_, m: Message):
 		if temp2 == "f":
 			result = convert_c(temp1)
 			text = "`{}°F` = `{}°C`".format(temp1, result)
-			await send_edit(m, text)
+			await app.send_edit(m, text)
 		elif temp2 == "c":
 			result = convert_f(temp1)
 			text = "`{}°C` = `{}°F`".format(temp1, result)
-			await send_edit(m, text)
+			await app.send_edit(m, text)
 		else:
-			await send_edit(m, "Unknown type {}".format(temp2))
+			await app.send_edit(m, "Unknown type {}".format(temp2))
 	except ValueError as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -151,10 +130,10 @@ async def json_of_msg(_, m: Message):
 	data = str(reply) if reply else str(m)
 
 	try:
-		await send_edit(m, data, mono=True)
+		await app.send_edit(m, data, mono=True)
 	except MessageTooLong: # message too long
-		await send_edit(m, "Sending file . . .", mono=True)
-		await create_file(m, "json.txt", data)
+		await app.send_edit(m, "Sending file . . .", mono=True)
+		await app.create_file(m, "json.txt", data)
 
 
 
@@ -171,7 +150,7 @@ async def get_inlinelinks(app, m: Message):
 		try:
 			raw = reply.reply_markup.inline_keyboard
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 
 		for x in range(len(raw)):
 			cat.append(raw[x])
@@ -181,11 +160,11 @@ async def get_inlinelinks(app, m: Message):
 
 		msg = "\n".join(dog)
 		if msg:
-			await send_edit(m, f"`{msg}`")
+			await app.send_edit(m, f"`{msg}`")
 		else:
-			await send_edit(m, "There are no links in this message . . .", mono=True)
+			await app.send_edit(m, "There are no links in this message . . .", mono=True)
 	else:
-		await send_edit(m, "Try this command on url button message to get info of the button . . .", mono=True)
+		await app.send_edit(m, "Try this command on url button message to get info of the button . . .", mono=True)
 
 
 
@@ -195,7 +174,7 @@ async def get_message_links(_, m: Message):
 	reply = m.reply_to_message
 
 	if m.chat.type == "private" or "bot":
-		return await send_edit(m, "This is not a group, try in groups . . .", delme=2, mono=True)
+		return await app.send_edit(m, "This is not a group, try in groups . . .", delme=2, mono=True)
 
 	elif m.chat.type == "supergroup" or "group":
 		if reply:
@@ -208,7 +187,7 @@ async def get_message_links(_, m: Message):
 				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
 				msg_id = data.message_id
 			except Exception as e:
-				await error(m, e)
+				await app.error(m, e)
 		else:
 			try:
 				data = await app.get_messages(
@@ -219,12 +198,12 @@ async def get_message_links(_, m: Message):
 				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
 				msg_id = data.message_id
 			except Exception as e:
-				await error(m, e)
+				await app.error(m, e)
 		try:
 			group = await data.username
-			await send_edit(m, f"https://t.me/{group}/{msg_id}")
+			await app.send_edit(m, f"https://t.me/{group}/{msg_id}")
 		except Exception:
-			await send_edit(m, f"https://t.me/c/{chatid}/{msg_id}")
+			await app.send_edit(m, f"https://t.me/c/{chatid}/{msg_id}")
 
 
 
@@ -242,30 +221,30 @@ async def forward_msgs(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		await m.delete()
-		if reply and long(m) == 1:
+		if reply and app.long(m) == 1:
 			await reply.forward(m.chat.id)
 
-		elif reply and long(m) > 1:
+		elif reply and app.long(m) > 1:
 			await reply.forward(m.command[1])
 
-		elif not reply and long(m) == 1:
+		elif not reply and app.long(m) == 1:
 			await m.forward(m.chat.id)
 
-		elif not reply and long(m) > 1:
-			await send_edit(m, "Sir reply to yours or someone's message.", mono=True, delme=3)
+		elif not reply and app.long(m) > 1:
+			await app.send_edit(m, "Sir reply to yours or someone's message.", mono=True, delme=3)
 
 		else:
-			await send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
+			await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
 
 @app.on_message(gen(["spt", "speed", "speedtest"]))
 async def speed_tests(app, m: Message):
-	if long(m) == 1:
-		await send_edit(m, "Testing speed . . .", mono=True)
+	if app.long(m) == 1:
+		await app.send_edit(m, "Testing speed . . .", mono=True)
 		test = speedtest.Speedtest()
 		test.get_best_server()
 		test.download()
@@ -273,17 +252,17 @@ async def speed_tests(app, m: Message):
 		test.results.share()
 		result = test.results.dict()
 		teks = "**⧓ Speed Test Results ⧓**\n\n"
-		teks += "**DOWNLOAD ⊢** `{}`\n".format(speed_convert(result['download']))
-		teks += "**UPLOAD ⊢** `{}`\n".format(speed_convert(result['upload']))
+		teks += "**DOWNLOAD ⊢** `{}`\n".format(app.SpeedConvert(result['download']))
+		teks += "**UPLOAD ⊢** `{}`\n".format(app.SpeedConvert(result['upload']))
 		teks += "**PING ⊢** `{} ms`\n".format(result['ping'])
 		teks += "**SERVER ⊢** `{}`\n".format(result['client']['isp'])
 		teks += "**LOCATION ⊢** `{}, {}`".format(result['server']['name'], result['server']['country'])
 		if teks:
-			await send_edit(m, teks)
+			await app.send_edit(m, teks)
 		else:
-			await send_edit(m, "Something went wrong !", mono=True, delme=5)
-	elif long(m) > 1 and "pic" in m.command[1]:
-		msg = await send_edit(m, "Calculating Speed . . .")
+			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
+	elif app.long(m) > 1 and "pic" in m.command[1]:
+		msg = await app.send_edit(m, "Calculating Speed . . .")
 
 		start = datetime.now()
 		s = speedtest.Speedtest()
@@ -310,7 +289,7 @@ async def speed_tests(app, m: Message):
 			)
 			await msg.delete()
 		else:
-			await send_edit(m, "Something went wrong !", mono=True, delme=5)
+			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
 
 
 
@@ -327,10 +306,10 @@ async def common_chats(_, m):
 			for x in data:
 				collect.append(x["title"] + "\n")
 
-			await send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
+			await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
 		else:
-			await send_edit(m, "Please reply to someone . . .", mono=True, delme=3)
+			await app.send_edit(m, "Please reply to someone . . .", mono=True, delme=3)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 

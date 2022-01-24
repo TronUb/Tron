@@ -10,41 +10,18 @@ from pyrogram.types import (
 	Message,
 )
 
-try:
-	from tronx import bot
-except ImportError:
-	bot = False
-
-from tronx import (
-	userbot_version, 
-	python_version,
-	pyrogram_version,
-	USER_ID, 
-	USER_NAME, 
-	USER_USERNAME, 
-	Config,
-	uptime,
-)
-
-from tronx.helpers import (
-	build_keyboard,
-	quote,
-	ialive_pic,
-	bot_pic,
-	USER_ID,
-	PIC,
-)
+from tronx import app
 
 
 
 
-settings = build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = build_keyboard(([["About", "open-about-dex"]]))
-close = build_keyboard(([["Close", "close-dex"]]))
-approve = build_keyboard(([["Approve", "approve-user"]]))
-global_command = build_keyboard(([["• Global commands •", "global-commands"]]))
-home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
+extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
+about = app.BuildKeyboard(([["About", "open-about-dex"]]))
+close = app.BuildKeyboard(([["Close", "close-dex"]]))
+approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
+global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
+home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -52,17 +29,17 @@ home_back = build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 # via bot messages
-@bot.on_inline_query(filters.user(USER_ID))
+@app.bot.on_inline_query(filters.user(app.id))
 def inline_res(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=Config.PMPERMIT_PIC,
+				photo_url=app.PMPERMIT_PIC,
 				title="Tron security system",
 				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
-				caption=Config.PMPERMIT_TEXT,
+				caption=app.PMPERMIT_TEXT,
 				parse_mode="combined",
 				reply_markup=InlineKeyboardMarkup([approve])
 			)
@@ -73,7 +50,7 @@ def inline_res(_, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=bot_pic(),
+				photo_url=app.BotPic(),
 				title="Introduction to tron",
 				description="This is the tron helpdex menu.",
 				caption="**Dex:** Home\n\n**Description:** This is your helpdex use this to navigate in different sub dex, guidence and information is given in each dex.",
@@ -102,7 +79,7 @@ def inline_res(_, inline_query):
 		results=[
 			InlineQueryResultArticle(
 				title="Inline quotes",
-				input_message_content=InputTextMessageContent(quote()),
+				input_message_content=InputTextMessageContent(app.quote()),
 				description="Get infinite anime character quotes through this inline loop button.",
 				reply_markup=InlineKeyboardMarkup(
 					[
@@ -117,4 +94,3 @@ def inline_res(_, inline_query):
 		],
 	cache_time=1
 	)
-	print(inline_query)

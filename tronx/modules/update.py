@@ -5,23 +5,16 @@ from os import environ, execle, path, remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from tronx import (
-  	app, 
-	CMD_HELP,
-	Config,
-)
+from tronx import app
 
 from tronx.helpers import (
-	get_arg,
-	send_edit,
 	gen,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"update" : (
 		"update",
 		{
@@ -72,8 +65,8 @@ async def updateme_requirements():
 
 @app.on_message(gen("update"))
 async def upstream(_, m):
-	await send_edit(m, "Checking for updates, please wait . . .", mono=True)
-	if long(m) > 1:
+	await app.send_edit(m, "Checking for updates, please wait . . .", mono=True)
+	if app.long(m) > 1:
 		cmd = m.command
 	else:
 		cmd = False
@@ -83,11 +76,11 @@ async def upstream(_, m):
 		txt += "some problems occured`\n\n**LOGTRACE:**\n"
 		repo = Repo()
 	except NoSuchPathError as error:
-		await send_edit(m, f"{txt}\n`directory {error} is not found`")
+		await app.send_edit(m, f"{txt}\n`directory {error} is not found`")
 		repo.__del__()
 		return
 	except GitCommandError as error:
-		await send_edit(m, f"{txt}\n`Early failure! {error}`")
+		await app.send_edit(m, f"{txt}\n`Early failure! {error}`")
 		repo.__del__()
 		return
 	except InvalidGitRepositoryError as error:
@@ -99,7 +92,7 @@ async def upstream(_, m):
 		repo.heads.master.checkout(True)
 	ac_br = repo.active_branch.name
 	if ac_br != "master":
-		await send_edit(
+		await app.send_edit(
 			m, 
 			f"**[UPDATER]:**` You are on ({ac_br})\n Please change to master branch.`"
 		)
@@ -116,7 +109,7 @@ async def upstream(_, m):
 		if changelog:
 			changelog_str = f"**New UPDATE available for [[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br}):\n\nCHANGELOG**\n\n{changelog}"
 			if len(changelog_str) > 4096:
-				await send_edit(m, "Changelog is too big, view the file to see it.", monk=True, delme=6)
+				await app.send_edit(m, "Changelog is too big, view the file to see it.", monk=True, delme=6)
 				file = open("output.txt", "w+")
 				file.write(changelog_str)
 				file.close()
@@ -128,51 +121,51 @@ async def upstream(_, m):
 				)
 				remove("output.txt")
 			else:
-				return await send_edit(
+				return await app.send_edit(
 					m, 
 					f"{changelog_str}\n\n[ STATUS ]: Do `.update now` to update.",
 					disable_web_page_preview=True,
 				)
 		else:
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"\n[ STATUS ]: Your bot is upto date with **version:** `{version}` and **branch:** **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
 				disable_web_page_preview=True,
 			)
 			repo.__del__()
 			return
-	if Config.HEROKU_API_KEY is not None:
+	if app.HEROKU_API_KEY is not None:
 		import heroku3
 
-		heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+		heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		heroku_app = None
 		heroku_applications = heroku.apps()
-		if not Config.HEROKU_APP_NAME:
-			await send_edit(
+		if not app.HEROKU_APP_NAME:
+			await app.send_edit(
 				m, 
 				"`Please set up the HEROKU_APP_NAME variable to be able to update userbot.`"
 			)
 			repo.__del__()
 			return
 		for bars in heroku_applications:
-			if bars.name == Config.HEROKU_APP_NAME:
+			if bars.name == app.HEROKU_APP_NAME:
 				heroku_app = bars
 				break
 		if heroku_app is None:
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"{txt}\n`Invalid Heroku credentials for updating userbot.`"
 			)
 			repo.__del__()
 			return
-		msg = await send_edit(
+		msg = await app.send_edit(
 			m, 
 			"`Userbot update in progress, please wait for few minutes . . .`"
 		)
 		ups_rem.fetch(ac_br)
 		repo.git.reset("--hard", "FETCH_HEAD")
 		heroku_git_url = heroku_app.git_url.replace(
-			"https://", "https://api:" + Config.HEROKU_API_KEY + "@"
+			"https://", "https://api:" + app.HEROKU_API_KEY + "@"
 		)
 		if "heroku" in repo.remotes:
 			remote = repo.remote("heroku")
@@ -186,14 +179,14 @@ async def upstream(_, m):
 		try:
 			await msg.edit("`Successfully Updated!\nRestarting, Please wait . . .`")
 		except Exception:
-			await send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=5)
+			await app.send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=5)
 	else:
 		try:
 			ups_rem.pull(ac_br)
 		except GitCommandError:
 			repo.git.reset("--hard", "FETCH_HEAD")
 		await updateme_requirements()
-		await send_edit(
+		await app.send_edit(
 			m,
 			"Successfully Updated!\nBot is restarting . . . Wait for few seconds !", 
 			mono=True, 

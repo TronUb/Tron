@@ -10,27 +10,18 @@ import http.cookiejar
 from bs4 import BeautifulSoup
 from google_images_download import google_images_download
 
-from pyrogram import Client, filters
 from pyrogram.types import Message, User
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"google" : (
 		"google",
 		{
@@ -62,7 +53,7 @@ async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if reply.photo:
-			await send_edit(m, "⏳ • Hold on ...")
+			await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "photo_{}_{}.png".format(
 				reply.photo.file_id, 
 				reply.photo.date
@@ -72,7 +63,7 @@ async def image_sauce(_, m: Message):
 				file_name="./downloads/" + universe
 				)
 		elif reply.animation:
-			await send_edit(m, "⏳ • Hold on ...")
+			await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "giphy_{}-{}.gif".format(
 				reply.animation.date,
 				reply.animation.file_size
@@ -82,16 +73,16 @@ async def image_sauce(_, m: Message):
 				file_name="./downloads/" + universe
 				)
 		else:
-			await send_edit(m, "Only photo & animation media supported.", delme=3)
+			await app.send_edit(m, "Only photo & animation media supported.", delme=3)
 			return
 		searchUrl = 'http://www.google.co.id/searchbyimage/upload'
 		filePath = 'tronx/downloads/{}'.format(universe)
 		multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
 		response = requests.post(searchUrl, files=multipart, allow_redirects=False)
 		fetchUrl = response.headers['Location']
-		await send_edit(m, "Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
+		await app.send_edit(m, "Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -99,11 +90,11 @@ async def image_sauce(_, m: Message):
 @app.on_message(gen("pic"))
 async def yandex_images(_, m: Message):
 	if len(m.text.split()) == 1:
-		await send_edit(m, "Usage: `.pic cat`", delme=3)
+		await app.send_edit(m, "Usage: `.pic cat`", delme=3)
 		return
 	try:
 		if len(m.text.split()) > 1:
-			node = await send_edit(m, "`Getting image ...`")
+			node = await app.send_edit(m, "`Getting image ...`")
 			photo = m.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
@@ -117,9 +108,9 @@ async def yandex_images(_, m: Message):
 				hide_via=True
 			)
 		else:
-			await send_edit(m, "Failed to get the image, try again later !", delme=3)
+			await app.send_edit(m, "Failed to get the image, try again later !", delme=3)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -133,7 +124,7 @@ async def google_img(_, m: Message):
 		images = 3
 		search = m.text.split(None, 1)[1]
 	try:
-		await send_edit(m, f"Sending `{search}` images ...")
+		await app.send_edit(m, f"Sending `{search}` images ...")
 		response = google_images_download.googleimagesdownload()
 		arguments = {"keywords":f"{search}", "limit":f"{images}", "print_urls":True}
 		paths = response.download(arguments) # creates directory of searched keyword
@@ -143,7 +134,7 @@ async def google_img(_, m: Message):
 					m.chat.id, 
 					f"./downloads/{search}/{poto}")
 			else:
-				await send_edit(
+				await app.send_edit(
 					m, 
 					f"[ `./downloads/{search}/{poto}` ] is not a photo")
 			os.remove(
@@ -151,4 +142,4 @@ async def google_img(_, m: Message):
 			)
 		os.rmdir(f"./downloads/{search}") # remove empty folders
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)

@@ -2,15 +2,7 @@ import os
 
 from pyrogram import filters
 
-from tronx import (
-	app, 
-	bot, 
-	CMD_HELP, 
-	HELP, 
-	Config,
-	PREFIX, 
-	USER_ID,
-	)
+from tronx import app
 
 from pyrogram.types import (
 	Message,
@@ -18,24 +10,13 @@ from pyrogram.types import (
 )
 
 from tronx.helpers import (
-	error,
 	gen,
-	send_edit,
-	# others
-	delete,
-	botusername,
-	data,
-	toggle_inline,
-	long,
-	message_ids,
 )
 
 
 
 
-
-
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"help" : (
 		"help",
 		{
@@ -51,16 +32,17 @@ CMD_HELP.update(
 
 
 
-@bot.on_callback_query(filters.regex("delete-dex") & filters.user(USER_ID))
+@app.bot.on_callback_query(filters.regex("delete-dex") & filters.user(app.id()))
+@app.alert_user
 async def delete_helpdex(_, cb: CallbackQuery):
-	if bool(message_ids) is False:
+	if bool(app.message_ids) is False:
 		await cb.answer(
 			"This message is expired, hence it can't be deleted !",
 			show_alert=True,
 		)
 	else:
 		try:
-			for chat_id, msg_id in zip(list(message_ids.keys()), list(message_ids.values())):
+			for chat_id, msg_id in zip(list(app.message_ids.keys()), list(app.message_ids.values())):
 				done = await app.delete_messages(chat_id, msg_id)
 				if done is False:
 					await cb.answer(
@@ -76,13 +58,13 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 @app.on_message(gen("help", allow_channel=True))
 async def help_menu(app, m):
-	args = m.command if long(m) > 1 else False
+	args = m.command if app.long(m) > 1 else False
 
 	try:
 		if args is False:
-			await send_edit(m, ". . .", mono=True)
+			await app.send_edit(m, ". . .", mono=True)
 			result = await app.get_inline_bot_results(
-				botusername(), 
+				app.bot.username(), 
 				"#t5r4o9nn6" 
 			)
 			if result:
@@ -95,38 +77,35 @@ async def help_menu(app, m):
 					hide_via=True
 				)
 				if m.chat.type in ["bot", "private"]:
-					message_ids.update({m.chat.id : info.updates[1].message.id})
+					app.message_ids.update({m.chat.id : info.updates[1].message.id})
 				else:
-					message_ids.update({m.chat.id : info.updates[2].message.id})
+					app.message_ids.update({m.chat.id : info.updates[2].message.id})
 			else:
-				await send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
+				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
 
-			module_help = await data(args[1])
+			module_help = await app.data(args[1])
 			if not module_help:
-				await send_edit(m, f"Invalid module name specified, use `{PREFIX}mods` to get list of modules", delme=3)
+				await app.send_edit(m, f"Invalid module name specified, use `{app.PREFIX}mods` to get list of modules", delme=3)
 			else:
-				await send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
+				await app.send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
 		else:
-			await send_edit(m, "Try again later !", mono=True, delme=3)
+			await app.send_edit(m, "Try again later !", mono=True, delme=3)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
 
 # get all module name
 @app.on_message(gen("mods"))
-async def all_plugins(_, m: Message):
+async def all_modules(_, m: Message):
 	store = []
 	for x in os.listdir("tronx/modules/"):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await send_edit(
-		m,
-		"Modules of userbot:\n\n" + "".join(store)
-		)
+	await app.send_edit(m, "Modules of userbot:\n\n" + "".join(store))
 
 
 
@@ -139,16 +118,13 @@ async def all_plugins(_, m: Message):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await send_edit(
-		m,
-		"Plugins of bot:\n\n" + "".join(store)
-		)
+	await app.send_edit(m, "Plugins of bot:\n\n" + "".join(store))
 
 
 
 
 @app.on_message(gen("inline", allow_channel=True))
 async def _toggle_inline(_, m: Message):
-	await toggle_inline(m)
-	return
+	return await app.toggle_inline(m)
+
 

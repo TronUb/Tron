@@ -1,59 +1,54 @@
 from pyrogram import filters
 
-from tronx import (
-	bot,
-)
+from tronx import app
 
-from tronx.helpers import (
-	long,
-)
 
 
 collect = {}
 
+numbers = [f"{x}" for x in range(10)]
+cmd_handler = ["+", "-"]
 
 
-@bot.on_message(filters.command("1", "+") & filters.group)
-async def increment(_, m):
+
+@app.bot.on_message(filters.command(numbers, cmd_handler) & filters.group)
+async def increment_decrement(_, m):
 	reply = m.reply_to_message
-	if (m.from_user.id == reply.from_user.id) or (reply.from_user.is_bot):
+
+	if (reply.from_user.is_self) or (reply.from_user.is_bot):
 		return
+
 	if reply:
+		prefix = [x for x in m.text]
 		if str(reply.from_user.id) in collect:
-			data = collect.get(str(reply.from_user.id)) 
-			collect.update({str(reply.from_user.id) : str(int(data) + 1)})
-			await bot.send_message(
-				m.chat.id,
-				f"{reply.from_user.first_name}: " + str(int(data)+1) + " increment"
-			)
+			if prefix[0] == "+":
+				data = collect.get(str(reply.from_user.id)) 
+				collect.update({str(reply.from_user.id) : str(int(data) + int(prefix[1]))})
+				await app.bot.send_message(
+					m.chat.id,
+					f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increment"
+				)
+			elif prefix[0] == "-":
+				data = collect.get(str(reply.from_user.id)) 
+				collect.update({str(reply.from_user.id) : str(int(data) - int(prefix[1]))})
+				await app.bot.send_message(
+					m.chat.id,
+					f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " decrement"
+				)
 		elif str(reply.from_user.id) not in collect:
-			data = {str(reply.from_user.id) : str(1)}
-			collect.update(data)
-			await bot.send_message(
-				m.chat.id,
-				f"{reply.from_user.first_name}: 1 increment"
-			) 
+			if prefix[0] == "+":
+				data = {str(reply.from_user.id) : str(1)}
+				collect.update(data)
+				await app.bot.send_message(
+					m.chat.id,
+					f"{reply.from_user.first_name}: 1 increment"
+				) 
+			elif prefix[0] == "-":
+				data = {str(reply.from_user.id) : str(-1)}
+				collect.update(data)
+				await app.bot.send_message(
+					m.chat.id,
+					f"{reply.from_user.first_name}: 1 decrement"
+				) 
 
 
-
-
-@bot.on_message(filters.command("1", "-") & filters.group)
-async def increment(_, m):
-	reply = m.reply_to_message
-	if (m.from_user.id == reply.from_user.id) or (reply.from_user.is_bot):
-		return
-	if reply:
-		if str(reply.from_user.id) in collect:
-			data = collect.get(str(reply.from_user.id)) 
-			collect.update({str(reply.from_user.id) : str(int(data) - 1)})
-			await bot.send_message(
-				m.chat.id,
-				f"{reply.from_user.first_name}: " + str(int(data) - 1) + " increment"
-			)
-		elif str(reply.from_user.id) not in collect:
-			data = {str(reply.from_user.id) : str(1)}
-			collect.update(data)
-			await bot.send_message(
-				m.chat.id,
-				f"{reply.from_user.first_name}: 0 increment"
-			) 

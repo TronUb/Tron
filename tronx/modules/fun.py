@@ -1,31 +1,22 @@
-import time, random,asyncio,requests, json
+import time
+import json
+import random
+import asyncio
+import requests
 
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	USER_NAME,
-	USER_ID
-	)
+from tronx import app
 
 from tronx.helpers import (
-	error,
-	mymention,
 	gen,
-	send_edit,
-	# others 
-	mention_markdown,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"fun" : (
 		"fun",
 		{
@@ -46,14 +37,14 @@ CMD_HELP.update(
 
 
 @app.on_message(gen("slap"))
-async def insult_friends(app, m):
+async def slap_friends(app, m):
 	if m.reply_to_message:
 		try:
-			await send_edit(m,"...")
+			await app.send_edit(m,"...")
 
-			my_info = mymention()
+			my_info = app.mymention()
 			user = m.reply_to_message.from_user
-			user_info = mention_markdown(user.id, user.first_name)
+			user_info = app.mention_markdown(user.id, user.first_name)
 			TASK = (
 				f"{my_info} slaps {user_info} with a bunch of cardboards",
 				f"{my_info} hits {user_info} in the face with cows",
@@ -69,55 +60,55 @@ async def insult_friends(app, m):
 				f"{my_info} pats {user_info} on head",
 				f"{my_info} kicks {user_info}'s out of the conversation",
 			)
-			await send_edit(m, f"{random.choice(TASK)}")
+			await app.send_edit(m, f"{random.choice(TASK)}")
 
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
-		await send_edit(m, "Reply to a friend to use harsh words to insult him", delme=2, mono=True)
+		await app.send_edit(m, "Reply to a friend to use harsh words to insult him", delme=2, mono=True)
 		return
 
 
 
 
 @app.on_message(gen(["cap", "capital"]))
-async def switch(_, m):
+async def capitalise(_, m):
 	try:
 		reply = m.reply_to_message
 		if reply:
 			text = reply.text.capitalize()
-			await send_edit(m, text)
+			await app.send_edit(m, text)
 		elif not reply:
-			if long(m) > 1:
+			if app.long(m) > 1:
 				text = m.text.split(None, 1)[1].capitalize()
-				await send_edit(m, text)
-			elif long(m) == 1:
-				await send_edit(m, "Please give me some text after command . . .", delme= 2, mono=True)
+				await app.send_edit(m, text)
+			elif app.long(m) == 1:
+				await app.send_edit(m, "Please give me some text after command . . .", delme= 2, mono=True)
 		else:
 			return print("error in cap command")
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
 
 @app.on_message(gen("type"))
-async def type(_, m):
+async def type_animatiom(_, m):
 	try:
-		if long(m) > 1:
+		if app.long(m) > 1:
 			text = " ".join(m.command[1:])
 		else:
-			await send_edit(m, "Some text is required to show in typing animation", delme=2)
+			await app.send_edit(m, "Some text is required to show in typing animation", delme=2)
 			return
 		tbp = "" 
 		typing_symbol = "▒"
 		while(tbp != text):
 			try:
-				await send_edit(m, tbp + typing_symbol)
+				await app.send_edit(m, tbp + typing_symbol)
 				await asyncio.sleep(0.40)
 				tbp = tbp + text[0]
 				text = text[1:]
-				await send_edit(m, tbp)
+				await app.send_edit(m, tbp)
 				await asyncio.sleep(0.40)
 			except FloodWait as e:
 				time.sleep(e.x) # continue
@@ -131,22 +122,22 @@ async def type(_, m):
 async def insult_someone(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2, mono=True)
+		await app.send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await send_edit(m, "Insulting . . .", mono=True)
-			if long(m) == 1:
+			await app.send_edit(m, "Insulting . . .", mono=True)
+			if app.long(m) == 1:
 				lang = "en"
-			elif long(m) > 1:
+			elif app.long(m) > 1:
 				lang = m.command[1]
 			data = requests.get(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
 			_data = data.json()
 			if _data:
-				await send_edit(m, f"`{_data.get('insult')}`")
+				await app.send_edit(m, f"`{_data.get('insult')}`")
 			else:
-				await send_edit(m, "No insults found !", delme=2, mono=True)
+				await app.send_edit(m, "No insults found !", delme=2, mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
 		return
 
@@ -157,18 +148,18 @@ async def insult_someone(_, m):
 async def give_advice(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can give them a advice . . .", delme=2, mono=True)
+		await app.send_edit(m, "Please reply to someone, so that i can give them a advice . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await send_edit(m, "Finding a good advice . . .", mono=True)
+			await app.send_edit(m, "Finding a good advice . . .", mono=True)
 			data = requests.get(f"https://api.adviceslip.com/advice")
 			_data = data.json().get("slip").get("advice")
 			if _data:
-				await send_edit(m, f"`{_data}`")
+				await app.send_edit(m, f"`{_data}`")
 			else:
-				await send_edit(m, "No advice found !", delme=2, mono=True)
+				await app.send_edit(m, "No advice found !", delme=2, mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
 		return
 
@@ -176,23 +167,23 @@ async def give_advice(_, m):
 
 
 @app.on_message(gen("qs"))
-async def insult_someone(_, m):
+async def ask_question(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await send_edit(m, "Please reply to someone, so that i can give them a question . . .", delme=2, mono=True)
+		await app.send_edit(m, "Please reply to someone, so that i can give them a question . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await send_edit(m, "Finding a question . . .", mono=True)
+			await app.send_edit(m, "Finding a question . . .", mono=True)
 			data = requests.get(f"http://jservice.io/api/random")
 			question = data.json()[0].get("question")
 			answer = data.json()[0].get("answer")
 			if question and answer:
-				await send_edit(m, f"Question:\n\n`{question}`")
+				await app.send_edit(m, f"Question:\n\n`{question}`")
 				await app.send_message("me", f"Answer:\n\n`{answer}`") # answer in saved messages
 			else:
-				await send_edit(m, "No question found !", delme=2, mono=True)
+				await app.send_edit(m, "No question found !", delme=2, mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
 		return
 
@@ -202,16 +193,16 @@ async def insult_someone(_, m):
 @app.on_message(gen("wtd"))
 async def what_to_do(_, m):
 	try:
-		await send_edit(m, "Finding a activity . . .", mono=True)
+		await app.send_edit(m, "Finding a activity . . .", mono=True)
 		data = requests.get(f"http://www.boredapi.com/api/activity/")
 		act = data.json().get("activity")
 		typ = data.json().get("type")
 		if act:
-			await send_edit(m, f"Activity: `{act}`\n\nType: `{typ}`") 
+			await app.send_edit(m, f"Activity: `{act}`\n\nType: `{typ}`") 
 		else:
-			await send_edit(m, "No Activity found !", delme=2, mono=True)
+			await app.send_edit(m, "No Activity found !", delme=2, mono=True)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -219,34 +210,34 @@ async def what_to_do(_, m):
 @app.on_message(gen("mqt"))
 async def movie_quotes(_, m):
 	try:
-		await send_edit(m, "Finding a movie quote . . .", mono=True)
+		await app.send_edit(m, "Finding a movie quote . . .", mono=True)
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
 		qt = data.json().get("quote")
 		role = data.json().get("role")
 		show = data.json().get("show")
 		if qt and role and show:
-			await send_edit(m, f"**Quote:**\n\n`{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
+			await app.send_edit(m, f"**Quote:**\n\n`{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
 		else:
-			await send_edit(m, "No movie quotes found !", delme=2, mono=True)
+			await app.send_edit(m, "No movie quotes found !", delme=2, mono=True)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
 
 @app.on_message(gen("joke"))
-async def tell_me_a_joke(_, m):
+async def send_joke(_, m):
 	try:
-		await send_edit(m, "Finding a joke . . .", mono=True)
+		await app.send_edit(m, "Finding a joke . . .", mono=True)
 		data = requests.get(f"https://official-joke-api.appspot.com/random_joke")
 		one = data.json().get("setup")
 		two = data.json().get("punchline")
 		if bool(data) is False:
-			return send_edit(m, "Site is down, please try again later . . .", delme=2, mono=True)
+			return app.send_edit(m, "Site is down, please try again later . . .", delme=2, mono=True)
 		if one and two:
-			await send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
+			await app.send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
 		else:
-			await send_edit(m, "No jokes found !", delme=2, mono=True)
+			await app.send_edit(m, "No jokes found !", delme=2, mono=True)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 

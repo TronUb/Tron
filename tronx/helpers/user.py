@@ -1,48 +1,34 @@
-from tronx import (
-	USER_NAME,
-	USER_USERNAME,
-	USER_ID,
-	USER_DC,
-	Config,
-	)
-
-from tronx.helpers.utils import mention_markdown
-
-from tronx.database.postgres import dv_sql as dv
+class User(object):
+	# instant change of names through database vars
+	def UserName(self):
+		var = self.getdv("USER_NAME")
+		one = var if bool(var) is True else self.USER_NAME
+		two = one if one else self.name
+		return two if two else None
 
 
+	# username of bot owner
+	def UserUsername(self):
+		var = self.getdv("USER_USERNAME")
+		one = var if bool(var) is True else self.USER_USERNAME
+		two = one if one else self.username
+		return two if two else None
 
 
-# instant change of names through database vars
-def myname():
-	var = dv.getdv("USER_NAME")
-	one = var if bool(var) is True else Config.USER_NAME
-	two = one if one else USER_NAME
-	return two if two else None
+	# mention of bot owner
+	def UserMention(self):
+		return self.mention_markdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
 
 
-# username of bot owner
-def myusername():
-	var = dv.getdv("USER_USERNAME")
-	one = var if bool(var) is True else Config.USER_USERNAME
-	two = one if one else USER_USERNAME
-	return two if two else None
+	# telegram id of bot owner
+	def UserId(self):
+		var = self.getdv("USER_ID")
+		one = var if bool(var) is True else self.USER_ID
+		two = one if one else self.id
+		return two if two else None
 
 
-# mention of bot owner
-def mymention():
-	return mention_markdown(myid(), myname()) if myname() and myid() else None
-
-
-# telegram id of bot owner
-def myid():
-	var = dv.getdv("USER_ID")
-	one = var if bool(var) is True else Config.USER_ID
-	two = one if one else USER_ID
-	return two if two else None
-
-
-# dc id of bot owner
-def mydc():
-	data = Config.USER_DC if Config.USER_DC else USER_DC
-	return data if data else None
+	# dc id of bot owner
+	def UserDc(self):
+		data = self.USER_DC if self.USER_DC else self.dc_id
+		return data if data else None
