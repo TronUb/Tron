@@ -1,20 +1,18 @@
-import os, sys, time
+import os
+import sys
 
 from pyrogram.types import Message
 
-from tronx import app, CMD_HELP
+from tronx import app
 
 from tronx.helpers import (
 	gen, 
-	error,
-	send_edit,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"power" : (
 		"power",
 		{
@@ -31,7 +29,7 @@ CMD_HELP.update(
 @app.on_message(gen("reboot"))
 async def restart_userbot(_, m: Message):
 	try:
-		msg = await send_edit(m, "`Restarting bot ...`")
+		msg = await app.send_edit(m, "`Restarting bot ...`")
 
 		os.execv(sys.executable, ['python'] + sys.argv)
 		await app.edit_message_text(
@@ -40,8 +38,8 @@ async def restart_userbot(_, m: Message):
 			"Restart completed !\nBot is alive now !"
 		)
 	except Exception as e:
-		await m.edit("Failed to re-start userbot !", delme=2, mono=True)
-		await error(m, e)
+		await m.edit("Failed to restart userbot !", delme=2, mono=True)
+		await app.error(m, e)
 
 
 
@@ -49,11 +47,12 @@ async def restart_userbot(_, m: Message):
 # sleep 
 @app.on_message(gen("sleep"))
 async def sleep_userbot(_, m: Message):
-	if long(m) == 1:
-		await send_edit(m, "Give me some seconds after command . . .")
-		return
-	elif long(m) > 1:
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Give me some seconds after command . . .")
+
+	elif app.long(m) > 1:
 		cmd = m.command[1]
+
 	if cmd.isdigit():
 		if int(cmd) > 60:
 			sleeptime = int(cmd//60)
@@ -65,11 +64,10 @@ async def sleep_userbot(_, m: Message):
 			sleeptime = int(cmd//3600)
 			sec = "hours"
 		elif int(cmd) > 86400:
-			await send_edit(m, "Sorry you can't sleep bot for more than 24 hours . . .", delme=3)
-			return
+			return await app.send_edit(m, "Sorry you can't sleep bot for more than 24 hours . . .", delme=3)
 		else:
 			return
 
-		await send_edit(m, f"Sleeping for {sleeptime} {sec} ...", delme=int(cmd))
+		await app.send_edit(m, f"Sleeping for {sleeptime} {sec} ...", delme=int(cmd))
 	else:
-		await send_edit(m, "Please give me a number not text ...", delme=2, mono=True)
+		await app.send_edit(m, "Please give me a number not text ...", delme=2, mono=True)
