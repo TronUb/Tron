@@ -32,3 +32,10 @@ class User(object):
 	def UserDc(self):
 		data = self.USER_DC if self.USER_DC else self.dc_id
 		return data if data else None
+
+
+	# custom user pic
+	def UserPic(self):
+		var = self.getdv("USER_PIC")
+		one = var if bool(var) is True else self.USER_PIC
+		return one if one else None
