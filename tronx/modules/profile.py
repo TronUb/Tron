@@ -1,34 +1,25 @@
-import os, time, math, asyncio
+import os
+import time
+import math
+import asyncio
 
 from functools import partial
 from datetime import datetime
 
-from pyrogram import filters, Client
 from pyrogram.types import (
 	Message, 
 	User, 
 	InlineKeyboardMarkup, 
 	InlineKeyboardButton
 	)
+
 from pyrogram.raw import functions
 from pyrogram.errors import PeerIdInvalid
 
-from tronx import (
-	app, 
-	CMD_HELP, 
-	log,
-	Config,
-	PREFIX
-	)
-
-
-
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	send_edit,
-	error,
-	long,
 )
 
 
@@ -76,7 +67,7 @@ infotext = (
 
 
 def FullName(user: User):
-	return user.first_name + " " + user.last_name if user.last_name else user.first_name
+	return user.first_name + " " + user.last_name if user.last_name else ""
 
 
 
@@ -85,13 +76,13 @@ def FullName(user: User):
 async def whois(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
-	await send_edit(m, "...", mono=True)
+	await app.send_edit(m, "...", mono=True)
 
-	if reply and long(m) == 1:
+	if reply and app.long(m) == 1:
 		get_user = reply.id
-	elif not reply and long(m) == 1:
+	elif not reply and app.long(m) == 1:
 		get_user = m.from_user.id
-	elif long(m) > 1:
+	elif app.long(m) > 1:
 		get_user = cmd[1]
 	else:
 		get_user = False
@@ -100,11 +91,11 @@ async def whois(_, m: Message):
 		if get_user:
 			user = await app.get_users(get_user)
 	except PeerIdInvalid:
-		return await send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", mono=True)
 
 	pfp = await app.get_profile_photos(user.id)
 	if not pfp:
-		await send_edit(
+		await app.send_edit(
 			m.chat.id,
 			infotext.format(
 				full_name=FullName(user),
@@ -134,7 +125,7 @@ async def whois(_, m: Message):
 
 @app.on_message(gen("id"))
 async def id(_, m: Message):
-	await send_edit(m, "Getting id . . .", mono=True)
+	await app.send_edit(m, "Getting id . . .", mono=True)
 	cmd = m.command
 	reply = m.reply_to_message
 
@@ -149,36 +140,36 @@ async def id(_, m: Message):
 		user = await app.get_users(get_user)
 		chat = await app.get_chat(m.chat.id)
 	except PeerIdInvalid:
-		return await send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", mono=True)
 
 	u_name = user.first_name if user.first_name else None
 	c_name = chat.first_name if chat.first_name else chat.title
 
-	await send_edit(m, f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat.id}`")
+	await app.send_edit(m, f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat.id}`")
 
 
 
 
 @app.on_message(gen(["men", "mention"]))
 async def mention(_, m: Message):
-	if long(m) < 3:
-		return await send_edit(m, "Incorrect input.\n\n**Example** : `.men @tronuserbot CTO`")
+	if app.long(m) < 3:
+		return await app.send_edit(m, "Incorrect input.\n\n**Example** : `.men @tronuserbot CTO`")
 
 	try:
 		user = await app.get_users(m.command[1])
 	except Exception as e:
-		await send_edit(m, "User not found !", mono=True)
-		return await error(m, e)
+		await app.send_edit(m, "User not found !", mono=True)
+		return await app.error(m, e)
 
 	_men = men(user.id, " ".join(m.command[2:]))
-	await send_edit(m, _men)
+	await app.send_edit(m, _men)
 
 
 
 
 @app.on_message(gen("uinfo"))
 async def get_full_user_info(_, m: Message):
-	await send_edit(m, "scrapping info . . .", mono=True)
+	await app.send_edit(m, "scrapping info . . .", mono=True)
 	reply = m.reply_to_message
 
 	if reply:
@@ -214,10 +205,10 @@ async def get_full_user_info(_, m: Message):
 				caption=duo
 			)
 		elif p_id is False:
-			await send_edit(m, duo)
+			await app.send_edit(m, duo)
 	except Exception as e:
-		await send_edit(m, "Try again later . . .", mono=True)
-		await error(m, e)
+		await app.send_edit(m, "Try again later . . .", mono=True)
+		await app.error(m, e)
 
 
 
@@ -238,12 +229,12 @@ async def tg_scanner(_, m: Message):
 			)
 		if msg:
 			user = "**INFO: **" + msg[0].text.split("\n\n1. ")[0]
-			await send_edit(m, user)
+			await app.send_edit(m, user)
 		else:
-			await send_edit(m, "No information found !", mono=True)
+			await app.send_edit(m, "No information found !", mono=True)
 
 	else:
-		await send_edit(m, "reply to someone's message . . .", delme=2, mono=True)
+		await app.send_edit(m, "reply to someone's message . . .", delme=2, mono=True)
 
 
 
@@ -252,20 +243,20 @@ async def tg_scanner(_, m: Message):
 async def block_pm(_, m: Message):
 	reply = m.reply_to_message
 
-	if long(m) >= 2 and not reply:
+	if app.long(m) >= 2 and not reply:
 		user = m.command[1]
 		try:
 			await app.unblock_user(user)
-			await send_edit(m, "Blocked User", mono=True)
+			await app.send_edit(m, "Blocked User", mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.unblock_user(user)
-			await send_edit(m, "Blocked User.", mono=True)
+			await app.send_edit(m, "Blocked User.", mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 
 
 
@@ -274,20 +265,20 @@ async def block_pm(_, m: Message):
 async def unblock_pm(_, m: Message):
 	reply = m.reply_to_message
 
-	if long(m) >= 2 and not reply:
+	if app.long(m) >= 2 and not reply:
 		user = m.command[1]
 		try:
 			await app.unblock_user(user)
-			await send_edit(m, "Unblocked User", mono=True)
+			await app.send_edit(m, "Unblocked User", mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.unblock_user(user)
-			await send_edit(m, "Unblocked User", mono=True)
+			await app.send_edit(m, "Unblocked User", mono=True)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 
 
 
@@ -297,7 +288,7 @@ async def check_name_history(_, m: Message):
 	reply = m.reply_to_message
 
 	if reply:
-		await send_edit(m, "Checking History...", mono=True)
+		await app.send_edit(m, "Checking History...", mono=True)
 		await app.forward_messages(
 			"@SangMataInfo_bot", 
 			m.chat.id, 
@@ -311,7 +302,7 @@ async def check_name_history(_, m: Message):
 				limit=3
 				)
 			if msg[0].text == "No records found":
-				await send_edit(m, "No records found")
+				await app.send_edit(m, "No records found")
 				is_no_record = True
 				await app.read_history("@SangMataInfo_bot")
 				break
@@ -326,15 +317,15 @@ async def check_name_history(_, m: Message):
 		history_name = "1. " + msg[2].text.split("\n\n1. ")[1]
 		username_history = "1. " + msg[1].text.split("\n\n1. ")[1]
 		text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(m.reply_to_message.from_user.first_name, m.reply_to_message.from_user.id, m.reply_to_message.from_user.id) + history_name
-		if long(m) <= 4096 and len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906:
+		if app.long(m) <= 4096 and len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906:
 			text += "\n\n**Username History**\n\n" + username_history
-			await send_edit(m, text)
+			await app.send_edit(m, text)
 		else:
-			await send_edit(m, text)
-			await send_edit(m, "\n\n**Username History**\n\n" + username_history)
+			await app.send_edit(m, text)
+			await app.send_edit(m, "\n\n**Username History**\n\n" + username_history)
 		return
 	else:
-		await send_edit(m, "Reply to a user to get history of name / username.", delme=2)
+		await app.send_edit(m, "Reply to a user to get history of name / username.", delme=2)
 
 
 
@@ -343,10 +334,10 @@ async def check_name_history(_, m: Message):
 async def update_profile(_, m: Message):
 	custom = m.command
 
-	if long(m) < 3:
-		return await send_edit(m, "Please use text and suffix after command ...")
+	if app.long(m) < 3:
+		return await app.send_edit(m, "Please use text and suffix after command ...")
 	# set -> fname, lname & bio
-	if long(m) > 2:
+	if app.long(m) > 2:
 		text = m.text.split(None, 2)[2]
 
 		if custom[1] in ["fname", "lname", "bio"]:
@@ -360,24 +351,24 @@ async def update_profile(_, m: Message):
 				f"{custom[2]}"
 			)
 	else:
-		return await send_edit(m, f"Please specify a correct suffix.", delme=2)
+		return await app.send_edit(m, f"Please specify a correct suffix.", delme=2)
 
 
 
 
 @app.on_message(gen("rem"))
 async def remove_profile(_, m: Message):
-	if long(m) > 1:
+	if app.long(m) > 1:
 		cmd = m.command[1]
-	elif long(m) == 1:
-		return await send_edit(m,"what do you want to remove ?", delme=2)
+	elif app.long(m) == 1:
+		return await app.send_edit(m,"what do you want to remove ?", delme=2)
 	try:
 		if cmd in ["lname", "bio", "pfp", "uname"]:
 			await rmprofile(m, cmd)
 		else:
-			await send_edit(m,"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=2)
+			await app.send_edit(m,"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=2)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -390,38 +381,38 @@ async def setprofile(m: Message, args, kwargs):
 			await app.update_profile(
 				first_name = f"{kwargs}"
 				)
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"✅ Updated first name to [ {kwargs} ]"
 				)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	# set last name
 	elif args == "lname":
 		try:
 			await app.update_profile(
 				last_name = f"{kwargs}"
 			)
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"✅ Updated last name to [ {kwargs} ]"
 				)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	# set bio
 	elif args == "bio":
 		try:
 			await app.update_profile(
 				bio = f"{kwargs}"
 				)
-			await send_edit(
+			await app.send_edit(
 				m, 
 				f"✅ Updated bio to [ {kwargs}]"
 				)
 		except Exception as e:
-			await error(m, e)
+			await app.error(m, e)
 	else:
-		await send_edit(m, "Please give correct format.", delme=2)
+		await app.send_edit(m, "Please give correct format.", delme=2)
 
 
 
@@ -433,7 +424,7 @@ async def rmprofile(m: Message, args):
 		await app.update_profile(
 			last_name = ""
 			)
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"✅ Removed last name from profile."
 			)
@@ -441,7 +432,7 @@ async def rmprofile(m: Message, args):
 	elif args == "bio":
 		await app.update_profile(
 			bio = "")
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"✅ Removed bio from profile."
 			)
@@ -450,27 +441,27 @@ async def rmprofile(m: Message, args):
 		photos = await app.get_profile_photos("me")
 		if photos:
 			await app.delete_profile_photos([p.file_id for p in photos[1:]])
-			await send_edit(
+			await app.send_edit(
 				m, 
 				"✅ Deleted all photos from profile."
 				)
 		else:
-			await send_edit(m, "❌ There are no photos in your profile.")
+			await app.send_edit(m, "❌ There are no photos in your profile.")
 	# delete username
 	elif args == "uname":
 		await app.update_username("")
-		await send_edit(
+		await app.send_edit(
 			m, 
 			"✅ Removed username from profile."
 			)
 	else:
-		await send_edit(m, "Give correct format.", delme=2)
+		await app.send_edit(m, "Give correct format.", delme=2)
 
 
 
 
 @app.on_message(gen("repo"))
 async def get_repo_link(_, m: Message):
-	await send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
+	await app.send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
 
 
