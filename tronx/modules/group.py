@@ -17,9 +17,10 @@ app.CMD_HELP.update(
 	{"group" : (
 		"group",
 		{
-		"group [group name]" : "Creates a basic group.",
+		"bgroup [group name]" : "Creates a basic group.",
 		"sgroup [group name]" : "Creates a super group.",
-		"unread" : "Mark a chat as unread in your telegram folders."
+		"unread" : "Mark a chat as unread in your telegram folders.",
+		"channel [channel name]" : "Create a channel through this command."
 		}
 		)
 	}
@@ -31,21 +32,16 @@ app.CMD_HELP.update(
 @app.on_message(gen(["bgroup", "bgp"]))
 async def create_basic_group(_, m: Message):
 	if app.long(m) < 2:
-		return await app.send_edit(m, f"`Usage: {app.PREFIX}group [group name]`", delme=3)
+		return await app.send_edit(m, f"`Usage: {app.PREFIX}bgroup [group name]`", delme=3)
 
 	args = m.text.split(None, 1)
 	grpname = args[1]
 	grptype = "basic"
 	user_id = "@Alita_Robot"
 	try:
-		if grptype == "basic":
-			try:
-				await app.send_edit(m, f"Creating a new basic group: `{grpname}`")
-				groupjson = await app.create_group(f"{grpname}", user_id)
-				print(groupjson)
-			except Exception as e:
-				await app.error(m, e)
-			await app.send_edit(m, f"**Created a new basic group:** `{grpname}`")
+		await app.send_edit(m, f"Creating a new basic group: `{grpname}`")
+		groupjson = await app.create_group(f"{grpname}", user_id)
+		await app.send_edit(m, f"**Created a new basic group:** `{grpname}`")
 	except Exception as e:
 		await app.error(m, e)
 
@@ -62,15 +58,9 @@ async def create_supergroup(_, m: Message):
 	grptype = "super"
 	user_id = "@Alita_Robot"
 	try:
-		if grptype == "super":
-			try:
-				await app.send_edit(m, f"Creating a new super Group: `{grpname}`")
-				await app.create_group(
-					f"{grpname}", user_id
-					)
-			except Exception as e:
-				await app.error(m, e)
-			await app.send_edit(m, f"**Created a new super Group:** `{grpname}`")
+		await app.send_edit(m, f"Creating a new super Group: `{grpname}`")
+		await app.create_supergroup(f"{grpname}", user_id)
+		await app.send_edit(m, f"**Created a new super Group:** `{grpname}`")
 	except Exception as e:
 		await app.error(m, e)
 
