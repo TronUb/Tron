@@ -8,7 +8,6 @@ import requests
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
-from tronx.database.postgres import dv_sql as dv
 
 
 
@@ -335,7 +334,7 @@ class Functions(object):
 	
 	def ialive_pic(self):
 		"""inline alive pic url"""
-		pic_url = dv.getdv("USER_PIC")
+		pic_url = self.getdv("USER_PIC")
 		data = pic_url if pic_url else self.UserPic()
 		return data if data else None
 	
