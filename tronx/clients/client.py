@@ -20,16 +20,16 @@ class SuperClient(Client, Utils):
 		return self.get_me()
 
 	def dc_id(self):
-		return (self.get_me()).dc_id
+		return (self.get_me())
 
 	def id(self):
-		return (self.get_me()).id
+		return (self.get_me())
 
 	def name(self):
-		return (self.get_me()).first_name
+		return (self.get_me())
 
 	def username(self):
-		return "@" + (self.get_me()).username if (self.get_me()).username else ""
+		return "@" + (self.get_me()) if (self.get_me()) else ""
 
 
 	class bot(Client, Utils):
@@ -48,14 +48,14 @@ class SuperClient(Client, Utils):
 			return self.bot.get_me()
 
 		def dc_id(self):
-			return (self.bot.get_me()).dc_id
+			return (self.bot.get_me())
 
 		def id(self):
-			return (self.bot.get_me()).id
+			return (self.bot.get_me())
 
 		def name(self):
-			return (self.bot.get_me()).first_name
+			return (self.bot.get_me())
 
 		def username(self):
-			return "@" + (self.bot.get_me()).username
+			return "@" + (self.bot.get_me())
 
