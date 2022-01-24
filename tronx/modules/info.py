@@ -1,6 +1,6 @@
 import os
 
-from pyrogram.app.types import Message
+from pyrogram.types import Message
 
 from tronx import app
 
