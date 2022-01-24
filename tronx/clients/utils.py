@@ -11,11 +11,12 @@ from telegraph import Telegraph
 from tronx.methods import Methods
 from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
+from tronx.database import Database
 
 
 
 
-class Collector(Methods, Config):
+class Collector(Methods, Config, Database):
 	# versions /
 
 	userbot_version = "v.0.0.5"
