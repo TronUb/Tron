@@ -67,7 +67,7 @@ def inline_result(_, inline_query):
 				photo_url=app.ialive_pic(),
 				title="Inline alive",
 				description="This is same as alive command, the difference is that this command have inline button.",
-				caption=f"**⛊  Inline Status:**\n\n**⟐** {Config.USER_BIO}\n\n**⟜ Owner**: [{USER_NAME}](https://t.me/{USER_USERNAME})\n**⟜ Tron:** `{userbot_version}`\n**⟜ Python:** `{python_version}`\n⟜ **Pyrogram:** `{pyrogram_version}`\n⟜ **uptime:** `{uptime()}\n\n",
+				caption=f"**⛊  Inline Status:**\n\n**⟐** {app.USER_BIO}\n\n**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n**⟜ Tron:** `{app.userbot_version}`\n**⟜ Python:** `{app.python_version}`\n⟜ **Pyrogram:** `{app.pyrogram_version}`\n⟜ **uptime:** `{app.uptime()}\n\n",
 				parse_mode="combined",
 				reply_markup=InlineKeyboardMarkup([home_back])
 			)
