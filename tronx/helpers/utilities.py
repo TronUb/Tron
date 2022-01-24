@@ -348,7 +348,7 @@ class Utilities(AioHttp):
 
 
 	def DictSize(self, location):
-		return SizeFormat(DictSizeInBytes(location))
+		return self.SizeFormat(self.DictSizeInBytes(location))
 
 
 	def CleanHtml(self, raw_html):
