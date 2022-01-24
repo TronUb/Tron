@@ -8,26 +8,16 @@ from requests import post
 from pyrogram import Client
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP, 
-	PREFIX,
-	)
+from tronx import app
 
 from tronx.helpers import (
-	error,
-	mymention,
 	gen,
-	send_edit,
-	# others 
-	ReplyCheck,
-	long,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"carbon" : (
 		"carbon",
 		{
@@ -40,8 +30,6 @@ CMD_HELP.update(
 
 
 
-
-CARBON_LANG = "Auto"
 
 
 colour_code = {
@@ -70,41 +58,24 @@ colour_code = {
 @app.on_message(gen(["carbon", "carb"]))
 async def carb_api(_, m: Message):
 	cmd = m.command
-	if long(m) < 2:
-		await send_edit(
-			m, 
-			f"Usage:\n\n1) `{PREFIX}carbon [colour] [text]`\n2) `{PREFIX}carbon [text]`\n\n**Note:** Default colour aqua",
-			delme=2
-			)
-		return
+	if app.long(m) < 2:
+		return await app.send_edit(m, f"Usage:\n\n1) `{app.PREFIX}carbon [colour] [text]`\n2) `{PREFIX}carbon [text]`\n\n**Note:** Default colour aqua" delme=2)
 
-	elif long(m) <= 4096:
+	elif app.long(m) <= 4096:
 		try:
-			await send_edit(
-				m, 
-				"creating carbon..."
-				)
+			await app.send_edit(m, "creating carbon . . .", mono=True)
 			if cmd[1] in colour_code:
 				text = m.text.split(None, 2)[2]
 				colour = cmd[1]
-				await create_carbon(app, m, text=text, colour=colour)
+				await create_carbon(m, text=text, colour=colour)
 			else:
 				text = m.text.split(None, 1)[1]
 				colour= "aqua"
-				await create_carbon(
-					app, 
-					m, 
-					text=text, 
-					colour=colour
-					)
+				await create_carbon(m, text=text, colour=colour)
 		except Exception as e:
-			await error(m, e)
-	elif long(m) > 4096:
-		await send_edit(
-			m, 
-			"Something went wrong !",
-			delme=2
-			)
+			await app.error(m, e)
+	elif app.long(m) > 4096:
+		await app.send_edit(m, "The text is too long !", delme=2)
 
 
 
@@ -112,41 +83,35 @@ async def carb_api(_, m: Message):
 @app.on_message(gen("carblist"))
 async def carb_colour_list(_, m: Message):
 	clist = list(colour_code.keys())
-	await send_edit(
-		m,
-		"\n".join(clist)
-		)
+	await app.send_edit(m, "\n".join(clist))
 
 
 
 
-async def create_carbon(app: Client, m: Message, text, colour):
+async def create_carbon(m: Message, text, colour):
+	reply = m.reply_to_message
 	json = {"backgroundColor": f"{colour_code.get(colour)}",
 		"theme": "Dracula",
 		"exportSize": "4x",}
 	json["code"] = urllib.parse.quote(text)
-	json["language"] = CARBON_LANG
-	apiUrl = "http://carbonnowsh.herokuapp.com"
-	text = post(apiUrl, json=json, stream=True)
+	json["language"] = "Auto"
+	ApiUrl = "http://carbonnowsh.herokuapp.com"
+	text = post(ApiUrl, json=json, stream=True)
 	filename = "carbon_image.png"
 	if text.status_code == 200:
 		text.raw.decode_content = True
 		with open(filename, "wb") as f:
 			shutil.copyfileobj(text.raw, f)
 			f.close()
+		reply_msg_id = reply.message_id if reply else None
 		await app.send_document(
 			m.chat.id,
 			filename,
-			caption=f"**Carbon Made by:** {mymention()}",
-			reply_to_message_id=ReplyCheck(m),
+			caption=f"**Carbon Made by:** {app.mymention()}",
+			reply_to_message_id=reply_msg_id,
 		)
 		await m.delete()
-		os.remove(filename)
+		if os.path.exists(f"./{filename}"):
+			os.remove(filename)
 	else:
-		await send_edit(
-			m, 
-			"Image Couldn't be retreived . . .",
-			delme=2
-			)
-		time.sleep(2)
-		await m.delete()
+		await app.send_edit(m, "Image Couldn't be retreived . . .", delme=2, mono=True)
