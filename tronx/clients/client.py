@@ -17,7 +17,7 @@ class SuperClient(Client, Utils):
 		idle()
 
 	def tron(self):
-		return self.get_me()
+		return print(self.get_me())
 
 	def dc_id(self):
 		return (self.get_me())
