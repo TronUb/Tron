@@ -3,7 +3,7 @@ from .functions import Functions
 from .decorators import Decorators
 from .strings import Strings
 from .utilities import Utilities
-from .bots import Bot
+from .bot import Bot
 from .user import User
 from .filters import *
 
