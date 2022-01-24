@@ -13,30 +13,16 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 from pyrogram.errors import YouBlockedUser, StickersetInvalid
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX,
-	USER_ID,
-	USER_NAME,
-	USER_USERNAME
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	# others 
-	get_arg,
-	myid, 
-	myusername,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"stickers" : (
 		"stickers",
 		{
@@ -67,20 +53,20 @@ async def kang(_, m: Message):
 			is_anim = True
 		elif replied.sticker:
 			if not replied.sticker.file_name:
-				return await send_edit(m, "Sticker has no Name !", mono=True)
+				return await app.send_edit(m, "Sticker has no Name !", mono=True)
 
 			emoji_ = replied.sticker.emoji
 			is_anim = replied.sticker.is_animated
 			if not replied.sticker.file_name.endswith(".tgs"):
 				resize = True
 		else:
-			return await send_edit(m, "Unsupported File !", mono=True)
+			return await app.send_edit(m, "Unsupported File !", mono=True)
 
-		await send_edit(m, f"{random.choice(KANGING_STR)}", mono=True)
+		await app.send_edit(m, f"{random.choice(KANGING_STR)}", mono=True)
 
 		photo = await app.download_media(message=replied)
 	else:
-		return await send_edit(m, "I can't kang that . . .", mono=True)
+		return await app.send_edit(m, "I can't kang that . . .", mono=True)
 
 	if photo:
 		args = m.command
@@ -100,8 +86,8 @@ async def kang(_, m: Message):
 		if not emoji_:
 			emoji_ = "😐"
 
-		packname = f"a{myid()}_by_tron_{pack}"
-		custom_packnick = f"{myusername()}'s kang pack"
+		packname = f"a{app.id()}_by_tron_{pack}"
+		custom_packnick = f"{app.username()}'s kang pack"
 		packnick = f"{custom_packnick} Vol.{pack}"
 		cmd = "/newpack"
 		if resize:
@@ -121,7 +107,7 @@ async def kang(_, m: Message):
 			try:
 				await app.send_message("Stickers", "/addsticker")
 			except YouBlockedUser:
-				return await send_edit(m, "first Unblock @Stickers . . .")
+				return await app.send_edit(m, "first Unblock @Stickers . . .")
 
 			await asyncio.sleep(0.40)
 			await app.send_message("Stickers", packname)
@@ -133,7 +119,7 @@ async def kang(_, m: Message):
 				if is_anim:
 					packname += "_anim"
 					packnick += " (Animated)"
-				await send_edit(m, "Switching to Pack " + str(pack) + " due to insufficient space") 
+				await app.send_edit(m, "Switching to Pack " + str(pack) + " due to insufficient space") 
 
 				await app.send_message("Stickers", packname)
 				if await get_response(m) == "Invalid pack selected":
@@ -166,7 +152,7 @@ async def kang(_, m: Message):
 					await app.send_message("Stickers", packname)
 					await asyncio.sleep(0.40)
 					out = f"[kanged](t.me/addstickers/{packname})"
-					await send_edit(m, 
+					await app.send_edit(m, 
 						f"**Sticker** {out} __in a Different Pack__**!**"
 					)
 					return
@@ -175,19 +161,19 @@ async def kang(_, m: Message):
 			await asyncio.sleep(0.40)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				return await send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", mono=True)
+				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", mono=True)
 
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
 			await get_response(m)
 			await app.send_message("Stickers", "/done")
 		else:
-			await send_edit(m, "Brewing a new Pack . . .")
+			await app.send_edit(m, "Brewing a new Pack . . .")
 			try:
 				await asyncio.sleep(0.40)
 				await app.send_message("Stickers", cmd)
 			except YouBlockedUser:
-				return await send_edit(m, "first **unblock** @Stickers")
+				return await app.send_edit(m, "first **unblock** @Stickers")
 
 			await app.send_message("Stickers", packnick)
 			await asyncio.sleep(0.40)
@@ -197,7 +183,7 @@ async def kang(_, m: Message):
 			await get_response(m)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				return await send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.")
+				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.")
 
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
@@ -214,7 +200,7 @@ async def kang(_, m: Message):
 			await get_response(m)
 			await app.send_message("Stickers", packname)
 			await asyncio.sleep(0.40)
-		await send_edit(m, f"[kanged](t.me/addstickers/{packname})", delme=True)
+		await app.send_edit(m, f"[kanged](t.me/addstickers/{packname})", delme=True)
 		await app.read_history("Stickers")
 		if os.path.exists(str(photo)):
 			os.remove(photo)
@@ -226,12 +212,12 @@ async def kang(_, m: Message):
 async def sticker_pack_info_(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await send_edit(m, "I can't fetch info from nothing, can I ?!", mono=True)
+		return await app.send_edit(m, "I can't fetch info from nothing, can I ?!", mono=True)
 
 	if not replied.sticker:
-		return await send_edit(m, "Reply to a sticker to get the pack details.", mono=True)
+		return await app.send_edit(m, "Reply to a sticker to get the pack details.", mono=True)
 
-	await send_edit(m, "Fetching details of the sticker pack, please wait . . .", mono=True)
+	await app.send_edit(m, "Fetching details of the sticker pack, please wait . . .", mono=True)
 	get_stickerset = await app.send(
 		GetStickerSet(
 			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
@@ -252,7 +238,7 @@ async def sticker_pack_info_(_, m: Message):
 		f"**Stickers In Pack:** `{get_stickerset.set.count}`\n"
 		f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
 	)
-	await send_edit(m, out_str)
+	await app.send_edit(m, out_str)
 
 
 
