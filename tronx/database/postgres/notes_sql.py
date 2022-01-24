@@ -18,7 +18,7 @@ class NOTES(BASE):
 	user_id = Column(Integer, primary_key=True)
 	name = Column(UnicodeText, primary_key=True)
 	value = Column(UnicodeText, nullable=False)
-	msgtype = Column(Integer, default=self.TEXT)
+	msgtype = Column(Integer, default=0)
 	file = Column(UnicodeText)
 	file_ref = Column(UnicodeText)
 	message_id = Column(Integer)
