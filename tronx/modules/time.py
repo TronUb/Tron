@@ -2,29 +2,18 @@ import pytz
 import time
 import datetime
 
-from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	#others
-	showtime,
-	showdate,
 )
 
 
 
 
-CMD_HELP.update( 
+app.CMD_HELP.update( 
 	{"time" : (
 		"time",
 		{
@@ -56,28 +45,25 @@ async def today(_, m: Message):
 		today = "Saturday"
 	elif weekday == 6:
 		today = "Sunday"
-	my_time = pytz.timezone(Config.TIME_ZONE)
+	my_time = pytz.timezone(app.TIME_ZONE)
 	
 	time = datetime.datetime.now(my_time)
 
 	text = f"Today is `{today}`, "
 	text += f"{time.strftime('%d %b %Y')}\n" 
 	text += f"Time: {time.strftime('%r')}"
-	await send_edit(
-		m,
-		text
-		)
+	await app.send_edit(m,text)
 
 
 
 
 @app.on_message(gen("time"))
 async def what(_, m: Message):
-	await send_edit(m, f"Today's time: `{showtime()}`")
+	await app.send_edit(m, f"Today's time: `{app.showtime()}`")
 
 
 
 
 @app.on_message(gen("date"))
 async def what(_, m: Message):
-	await send_edit(m, f"Today's date: `{showdate()}`")
+	await app.send_edit(m, f"Today's date: `{app.showdate()}`")
