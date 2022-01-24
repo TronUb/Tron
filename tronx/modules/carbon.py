@@ -107,7 +107,7 @@ async def create_carbon(m: Message, text, colour):
 		await app.send_document(
 			m.chat.id,
 			filename,
-			caption=f"**Carbon Made by:** {app.mymention()}",
+			caption=f"**Carbon Made by:** {app.UserMention()}",
 			reply_to_message_id=reply_msg_id,
 		)
 		await m.delete()
