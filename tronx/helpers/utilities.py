@@ -40,7 +40,7 @@ class Types(IntEnum):
 
 
 
-class AioHttp:
+class AioHttp(Types, IntEnum):
 	@staticmethod
 	async def get_json(link):
 		async with aiohttp.ClientSession() as session:
@@ -74,7 +74,7 @@ class AioHttp:
 
 
 
-class Utilities(Types, AioHttp):
+class Utilities(AioHttp):
 	def HelpDex(self, page_number, loaded_modules, prefix):
 		rows = 4
 		column = 2
