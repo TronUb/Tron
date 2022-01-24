@@ -15,7 +15,6 @@ from PIL import Image
 
 from typing import List
 from re import escape, sub
-from enum import IntEnum, unique
 
 from pyrogram.types import Message, User, InlineKeyboardButton
 from pyrogram.errors import MessageNotModified, FloodWait
@@ -24,8 +23,7 @@ from pyrogram.errors import MessageNotModified, FloodWait
 
 
 
-@unique
-class Types(IntEnum):
+class Types(object):
 	TEXT = 1
 	DOCUMENT = 2
 	PHOTO = 3
@@ -40,7 +38,7 @@ class Types(IntEnum):
 
 
 
-class AioHttp(Types, IntEnum):
+class AioHttp(Types):
 	@staticmethod
 	async def get_json(link):
 		async with aiohttp.ClientSession() as session:
