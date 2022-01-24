@@ -1,27 +1,18 @@
 import random
 import asyncio
 
-from asyncio import sleep
-
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"quotly" : (
 		"quotly",
 		{
@@ -37,9 +28,9 @@ CMD_HELP.update(
 async def quote(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		return await send_edit(m, "Reply to any users text message", delme=2)
+		return await app.send_edit(m, "Reply to any users text message", delme=2)
 
-	await send_edit(m, "Making a Quote . . .", mono=True)
+	await app.send_edit(m, "Making a Quote . . .", mono=True)
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0
@@ -52,7 +43,7 @@ async def quote(_, m: Message):
 			check = msg[0]["sticker"]["file_id"]
 			is_sticker = False
 		except:
-			await sleep(0.5)
+			await asyncio.sleep(0.5)
 	if msg_id := msg[0]["message_id"]:
 		await asyncio.gather(
 			m.delete(),
