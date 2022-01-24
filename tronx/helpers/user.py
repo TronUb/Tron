@@ -17,7 +17,7 @@ class User(object):
 
 	# mention of bot owner
 	def UserMention(self):
-		return self.mention_markdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
+		return self.MentionMarkdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
 
 
 	# telegram id of bot owner
