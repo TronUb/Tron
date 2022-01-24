@@ -55,7 +55,7 @@ class DISAPPROVE(BASE):
 
 PMTABLE.__table__.create(checkfirst=True)
 MSGID.__table__.create(checkfirst=True)
-Disapprove.__table__.create(checkfirst=True)
+DISAPPROVE.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
