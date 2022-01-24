@@ -20,7 +20,7 @@ from tronx.helpers import (
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"image" : (
 		"image",
 		{
