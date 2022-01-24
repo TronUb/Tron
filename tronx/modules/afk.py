@@ -82,14 +82,14 @@ async def offline_mention(_, m: Message):
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.UserMention(), otime, get['reason']),
 					reply_to_message_id=m.message_id
 					) 
-				await delete(msg, 3)
+				await app.delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
-				await app.send_message(
+				msg = await app.send_message(
 					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}".format(app.UserMention(), otime),
 					reply_to_message_id=m.message_id
 					)
-				await delete(msg, 3)
+				await app.delete(msg, 3)
 			content, message_type = app.GetMessageType(m)
 			if message_type == app.TEXT:
 				if m.text:
@@ -138,8 +138,6 @@ async def back_online(_, m: Message):
 				f"{app.UserMention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			app.set_afk(False, "", 0)
-		else:
-			return
 
 	except Exception as e:
 		await app.error(m, e)
