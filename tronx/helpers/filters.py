@@ -86,7 +86,6 @@ def myprefix():
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	info: dict = "",
 	prefixes: Union[str, List[str]] = myprefix(), 
 	case_sensitive: bool = True, 
 	only_me: bool = True,
@@ -96,7 +95,6 @@ def gen(
 	):
 
 	# update the commands and information of commands.
-	CMD_HELP.update(info)
 
 	# modified func of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
