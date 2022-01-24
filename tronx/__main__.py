@@ -12,6 +12,7 @@ loop = asyncio.get_event_loop()
 async def start_assistant():
 	""" Start assistant """
 	if app.bot:
+		await app.bot.start()
 		app.log.info("Assistant activated, startup in progress . . .\n")
 	else:
 		app.log.info("Assistant start unsuccessful, please check that you have given the bot token.\n")
@@ -23,6 +24,7 @@ async def start_assistant():
 async def start_userbot():
 	""" Start userbot """
 	if app:
+		await app.start()
 		app.log.info("Userbot activated, startup in progress . . .\n")
 	else:
 		app.log.info("Userbot startup unsuccessful, please check everything again ...")
