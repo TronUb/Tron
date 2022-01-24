@@ -43,6 +43,7 @@ async def start_bot():
 	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
+	idle()
 
 
 
