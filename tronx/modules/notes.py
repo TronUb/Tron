@@ -33,16 +33,16 @@ app.CMD_HELP.update(
 
 
 GET_FORMAT = {
-	app.TEXT.value: app.send_message,
-	app.DOCUMENT.value: app.send_document,
-	app.PHOTO.value: app.send_photo,
-	app.VIDEO.value: app.send_video,
-	app.STICKER.value: app.send_sticker,
-	app.AUDIO.value: app.send_audio,
-	app.VOICE.value: app.send_voice,
-	app.VIDEO_NOTE.value: app.send_video_note,
-	app.ANIMATION.value: app.send_animation,
-	app.ANIMATED_STICKER.value: app.send_sticker,
+	app.TEXT: app.send_message,
+	app.DOCUMENT: app.send_document,
+	app.PHOTO: app.send_photo,
+	app.VIDEO: app.send_video,
+	app.STICKER: app.send_sticker,
+	app.AUDIO: app.send_audio,
+	app.VOICE: app.send_voice,
+	app.VIDEO_NOTE: app.send_video_note,
+	app.ANIMATION: app.send_animation,
+	app.ANIMATED_STICKER: app.send_sticker,
 	app.CONTACT: app.send_contact
 }
 
