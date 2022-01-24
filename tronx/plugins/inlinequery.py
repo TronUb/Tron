@@ -15,13 +15,13 @@ from tronx import app
 
 
 
-settings = app.build_keyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = app.build_keyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = app.build_keyboard(([["About", "open-about-dex"]]))
-close = app.build_keyboard(([["Close", "close-dex"]]))
-approve = app.build_keyboard(([["Approve", "approve-user"]]))
-global_command = app.build_keyboard(([["• Global commands •", "global-commands"]]))
-home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
+extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
+about = app.BuildKeyboard(([["About", "open-about-dex"]]))
+close = app.BuildKeyboard(([["Close", "close-dex"]]))
+approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
+global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
+home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
 
 
 
@@ -29,7 +29,7 @@ home_back = app.build_keyboard((["Home", "close-dex"], ["Back", "open-start-dex"
 
 
 # via bot messages
-@app.bot.on_inline_query(filters.user(app.REAL_USER_ID))
+@app.bot.on_inline_query(filters.user(app.id))
 def inline_res(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#p0e3r4m8i8t5"):
@@ -94,4 +94,3 @@ def inline_res(_, inline_query):
 		],
 	cache_time=1
 	)
-	print(inline_query)
