@@ -1,31 +1,17 @@
-import time
 import asyncio
 
-from sys import platform
-
-from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import (
-	app, 
-	CMD_HELP, 
-	StartTime,
-	Config,
-	PREFIX
-	)
+from tronx import app
 
 from tronx.helpers import (
 	gen,
-	error,
-	send_edit,
-	# others 
-	ReplyCheck,
 )
 
 
 
 
-CMD_HELP.update(
+app.CMD_HELP.update(
 	{"spam" : (
 		"spam",
 		{
@@ -42,6 +28,7 @@ CMD_HELP.update(
 @app.on_message(gen("spam"))
 async def spam(_, m: Message):
 	replied = m.reply_to_message
+	reply_to_id = replied.message_id if replied.message_id else ""
 	if not replied and len(m.command) > 1:
 		await m.delete()
 		times = m.command[1]
@@ -51,7 +38,7 @@ async def spam(_, m: Message):
 				await app.send_message(
 					m.chat.id, 
 					to_spam, 
-					reply_to_message_id=ReplyCheck(m)
+					reply_to_message_id=reply_to_id
 				)
 				await asyncio.sleep(0.20)
 		elif m.chat.type == "private":
@@ -93,9 +80,6 @@ async def delay_spam(_, m: Message):
 				m.chat.id,
 				text
 				)
-			time.sleep(sec)
+			await asyncio.sleep(sec)
 	else:
-		await send_edit(
-			m,
-			"Something wrong in spam command !"
-			)
+		await app.send_edit(m,"Something wrong in spam command !")
