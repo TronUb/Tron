@@ -42,7 +42,7 @@ async def slap_friends(app, m):
 		try:
 			await app.send_edit(m,"...")
 
-			my_info = app.mymention()
+			my_info = app.UserMention()
 			user = m.reply_to_message.from_user
 			user_info = app.mention_markdown(user.id, user.first_name)
 			TASK = (
