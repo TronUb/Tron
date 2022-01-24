@@ -19,14 +19,17 @@ class SuperClient(Client, Utils):
 	def tron(self):
 		return self.get_me()
 
+	def dc_id(self):
+		return (self.get_me()).dc_id
+
 	def id(self):
-		return (self.tron).id
+		return (self.get_me()).id
 
 	def name(self):
-		return (self.tron).first_name
+		return (self.get_me()).first_name
 
 	def username(self):
-		return (self.tron).username if (self.tron.username) else ""
+		return "@" + (self.get_me()).username if (self.get_me()).username else ""
 
 
 	class bot(Client, Utils):
@@ -42,14 +45,17 @@ class SuperClient(Client, Utils):
 			idle()
 
 		def nora(self):
-			return self.get_me()
+			return self.bot.get_me()
+
+		def dc_id(self):
+			return (self.bot.get_me()).dc_id
 
 		def id(self):
-			return (self.nora).id
+			return (self.bot.get_me()).id
 
 		def name(self):
-			return (self.nora).first_name
+			return (self.bot.get_me()).first_name
 
 		def username(self):
-			return (self.nora).username
+			return "@" + (self.bot.get_me()).username
 
