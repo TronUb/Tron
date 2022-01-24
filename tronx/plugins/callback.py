@@ -43,7 +43,7 @@ async def modules(_, cb):
 @app.alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.helpDex(current_page_number + 1, app.CMD_HELP, "helpme")
+	buttons = app.HelpDex(current_page_number + 1, app.CMD_HELP, "helpme")
 	print(cb.matches[0])
 	print(dir(cb.matches[0]))
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
@@ -54,7 +54,7 @@ async def give_next_page(_, cb):
 @app.alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.Helpdex(current_page_number - 1, app.CMD_HELP, "helpme")
+	buttons = app.HelpDex(current_page_number - 1, app.CMD_HELP, "helpme")
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
 
 
