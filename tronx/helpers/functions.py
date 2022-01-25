@@ -208,10 +208,11 @@ class Functions(object):
 				name,
 				caption = f"**Uploaded By:** {self.mymention()}"
 				)
-			os.remove(name)
+			if os.path.exists(name):
+				os.remove(name)
 			await m.delete()
 		except Exception as e:
-			await error(m, e)
+			await self.error(m, e)
 
 
 	def rem_dual(self, one, two):
