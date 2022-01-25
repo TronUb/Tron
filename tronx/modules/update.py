@@ -129,7 +129,7 @@ async def upstream(_, m):
 		else:
 			await app.send_edit(
 				m, 
-				f"\n[ STATUS ]: Your bot is upto date with **version:** `{version}` and **branch:** **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
+				f"\n[ STATUS ]: Your bot is upto date with **version:** `{app.userbot_version}` and **branch:** **[[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br})**\n",
 				disable_web_page_preview=True,
 			)
 			repo.__del__()
