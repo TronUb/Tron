@@ -4,7 +4,6 @@ import time
 import random
 import asyncio
 
-from sys import platform
 from PIL import Image
 
 from pyrogram import emoji
@@ -86,8 +85,8 @@ async def kang(_, m: Message):
 		if not emoji_:
 			emoji_ = "😐"
 
-		packname = f"a{app.id()}_by_tron_{pack}"
-		custom_packnick = f"{app.username()}'s kang pack"
+		packname = f"a{app.id}_by_tron_{pack}"
+		custom_packnick = f"{app.username}'s kang pack"
 		packnick = f"{custom_packnick} Vol.{pack}"
 		cmd = "/newpack"
 		if resize:
