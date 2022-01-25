@@ -209,7 +209,7 @@ class Functions(object):
 			await self.send_document(
 				m.chat.id,
 				name,
-				caption = f"**Uploaded By:** {self.mymention()}"
+				caption = f"**Uploaded By:** {self.UserMention()}"
 				)
 			if os.path.exists(name):
 				os.remove(name)
