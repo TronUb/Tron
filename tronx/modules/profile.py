@@ -55,19 +55,19 @@ app.CMD_HELP.update(
 men = partial("<a href='tg://user?id={}'>{}</a>".format)
 
 
-infotext = (
-	"**NAME:** `{full_name}`\n"
-	"**USER ID:** `{user_id}`\n"
-	"**Mention:** [{full_name}](tg://user?id={user_id})\n"
-	"**USERNAME:** @{username}\n"
-	"**DC ID:** {dc_id}\n"
-)
+infotext = """
+**NAME:** `{}`
+**USER ID:** `{}`
+**Mention:** [{}](tg://user?id={})
+**USERNAME:** {}
+**DC ID:** `{}`
+"""
 
 
 
 
 def FullName(user: User):
-	return user.first_name + " " + user.last_name if user.last_name else ""
+	return user.first_name + " " + user.last_name if user.last_name else user.first_name
 
 
 
@@ -76,7 +76,7 @@ def FullName(user: User):
 async def whois(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
-	await app.send_edit(m, "...", mono=True)
+	msg = await app.send_edit(m, "Processing . . .", mono=True)
 
 	if reply and app.long(m) == 1:
 		get_user = reply.id
@@ -98,11 +98,12 @@ async def whois(_, m: Message):
 		await app.send_edit(
 			m.chat.id,
 			infotext.format(
-				full_name=FullName(user),
-				user_id=user.id,
-				first_name=user.first_name,
-				username=user.username or "",
-				dc_id=user.dc_id
+				FullName(user),
+				user.id,
+				user.first_name,
+				user.id,
+				f"@{user.username}" if user.username else "",
+				user.dc_id
 			),
 		disable_web_page_preview=True,
 		)
@@ -111,13 +112,15 @@ async def whois(_, m: Message):
 			m.chat.id, 
 			file_id = pfp[0].file_id,
 			caption=infotext.format(
-				full_name=FullName(user),
-				user_id=user.id,
-				first_name=user.first_name,
-				username=user.username or "",
-				dc_id=user.dc_id
+				FullName(user),
+				user.id,
+				user.first_name,
+				user.id,
+				f"@{user.username}" if user.username else  "",
+				user.dc_id
 			)
 		)
+		await msg.delete()
 		
 
 
@@ -151,9 +154,9 @@ async def id(_, m: Message):
 
 
 @app.on_message(gen(["men", "mention"]))
-async def mention(_, m: Message):
+async def mention_user(_, m: Message):
 	if app.long(m) < 3:
-		return await app.send_edit(m, "Incorrect input.\n\n**Example** : `.men @tronuserbot CTO`")
+		return await app.send_edit(m, "Incorrect input.\n\n**Example** : `.men @beastzx CTO`")
 
 	try:
 		user = await app.get_users(m.command[1])
@@ -161,15 +164,15 @@ async def mention(_, m: Message):
 		await app.send_edit(m, "User not found !", mono=True)
 		return await app.error(m, e)
 
-	_men = men(user.id, " ".join(m.command[2:]))
-	await app.send_edit(m, _men)
+	mention = men(user.id, " ".join(m.command[2:]))
+	await app.send_edit(m, mention)
 
 
 
 
 @app.on_message(gen("uinfo"))
 async def get_full_user_info(_, m: Message):
-	await app.send_edit(m, "scrapping info . . .", mono=True)
+	msg = await app.send_edit(m, "scrapping info . . .", mono=True)
 	reply = m.reply_to_message
 
 	if reply:
@@ -204,6 +207,7 @@ async def get_full_user_info(_, m: Message):
 				file_id=p_id, 
 				caption=duo
 			)
+			await msg.delete()
 		elif p_id is False:
 			await app.send_edit(m, duo)
 	except Exception as e:
@@ -222,7 +226,7 @@ async def tg_scanner(_, m: Message):
 			m.chat.id, 
 			m.reply_to_message.message_id
 			)
-		time.sleep(1)
+		time.sleep(0.5)
 		msg = await app.get_history(
 			"@tgscanrobot", 
 			limit=1
@@ -246,15 +250,15 @@ async def block_pm(_, m: Message):
 	if app.long(m) >= 2 and not reply:
 		user = m.command[1]
 		try:
-			await app.unblock_user(user)
-			await app.send_edit(m, "Blocked User", mono=True)
+			await app.block_user(user)
+			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
-			await app.unblock_user(user)
-			await app.send_edit(m, "Blocked User.", mono=True)
+			await app.block_user(user)
+			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -269,14 +273,14 @@ async def unblock_pm(_, m: Message):
 		user = m.command[1]
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User", mono=True)
+			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User", mono=True)
+			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -287,7 +291,10 @@ async def unblock_pm(_, m: Message):
 async def check_name_history(_, m: Message):
 	reply = m.reply_to_message
 
-	if reply:
+	if not reply:
+		await app.send_edit(m, "Reply to a user to get history of name / username.", mono=True, delme=2)
+
+	elif reply:
 		await app.send_edit(m, "Checking History...", mono=True)
 		await app.forward_messages(
 			"@SangMataInfo_bot", 
@@ -324,8 +331,6 @@ async def check_name_history(_, m: Message):
 			await app.send_edit(m, text)
 			await app.send_edit(m, "\n\n**Username History**\n\n" + username_history)
 		return
-	else:
-		await app.send_edit(m, "Reply to a user to get history of name / username.", delme=2)
 
 
 
@@ -343,13 +348,12 @@ async def update_profile(_, m: Message):
 		if custom[1] in ["fname", "lname", "bio"]:
 			await setprofile(
 				m, 
-				custom, 
+				custom[1], 
 				f"{text[2:]}"
 			)
 		elif custom[1] == "uname":
-			app.update_username(
-				f"{custom[2]}"
-			)
+			await app.update_username(f"{custom[2]}"
+)
 	else:
 		return await app.send_edit(m, f"Please specify a correct suffix.", delme=2)
 
