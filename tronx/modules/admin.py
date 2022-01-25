@@ -52,7 +52,7 @@ async def ban_hammer(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -84,7 +84,7 @@ async def ban_hammer(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -93,7 +93,7 @@ async def ban_hammer(_, m):
 async def ban_all(_, m):
 	try: 
 		await app.private(m)
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			count = 0
 			data = []
 			data.clear()
@@ -111,7 +111,7 @@ async def ban_all(_, m):
 		else:
 			await app.send_edit(m, "`Sorry, you are not an admin here . . .`", delme=2, mono=True)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -122,7 +122,7 @@ async def unban(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -153,7 +153,7 @@ async def unban(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 					
 
 
@@ -165,7 +165,7 @@ async def mute_user(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -212,7 +212,7 @@ async def mute_user(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -223,7 +223,7 @@ async def unmute(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -270,7 +270,7 @@ async def unmute(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -281,7 +281,7 @@ async def kick_user(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -312,7 +312,7 @@ async def kick_user(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -327,7 +327,7 @@ async def pin_message(_, m):
 			else:
 				await reply.pin()
 				return await app.send_edit(m, "Pinned message !", mono=True, delme=5)
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 				done = await reply.pin()
@@ -337,7 +337,7 @@ async def pin_message(_, m):
 		else:
 			await app.send_edit(m, "Sorry, you don't have permissions to perform this action !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -373,7 +373,7 @@ async def promote(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -412,7 +412,7 @@ async def promote(_, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 
@@ -423,7 +423,7 @@ async def demote(client, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		if await IsAdmin(m) is True:
+		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 			elif not reply:
@@ -464,4 +464,4 @@ async def demote(client, m):
 	except UserNotParticipant:
 		await app.send_edit(m, "This user doesn't exist in this group !", mono=True, delme=5)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
