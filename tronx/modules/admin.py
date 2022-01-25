@@ -348,7 +348,7 @@ async def pin_message(_, m):
 		reply = m.reply_to_message
 		if reply:
 			await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
-			done = reply.unpin()
+			done = await reply.unpin()
 			await app.send_edit(m, "Unpinned message !", mono=True) if done else await app.send_edit(m, "Failed to unpin message . . .", delme=2, mono=True)
 		elif not reply and app.long(m) > 1:
 			cmd = m.command[1]
