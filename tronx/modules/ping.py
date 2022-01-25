@@ -62,7 +62,7 @@ async def pingme(_, m: Message):
 		m_s = (end - start).microseconds / 1000
 		await app.send_edit(
 			m, 
-			f"**Pöng !**\n`{m_s} ms`\n⧑ {app.mymention()}", 
+			f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention()}", 
 			disable_web_page_preview=True
 			)
 	elif app.long(m) == 2:
@@ -96,7 +96,7 @@ async def infinite(m: Message):
 	mid = await app.send_edit(m, random.choice(data))
 	end = datetime.now()
 	ms = (end - start).microseconds / 1000
-	msg = f"Pöng !\n{ms} ms\n⧑ {app.mymention()}\n\n"
+	msg = f"Pöng !\n{ms} ms\n⧑ {app.UserMention()}\n\n"
 	pings.append(msg)
 
 
