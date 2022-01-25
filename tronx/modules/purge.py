@@ -91,9 +91,8 @@ async def purge_myself(app, m:Message):
 @app.on_message(gen("del"))
 async def delete_tag(_, m: Message):
 	reply = m.reply_to_message
-	
 
-	msg_id = [m.message_id, reply.message_id if reply.from_user.id == app.id() else ""] if reply else m.message_id
+	msg_id = [m.message_id, reply.message_id if reply else ""]
 
 	try:
 		await app.delete_messages(m.chat.id, msg_id)
