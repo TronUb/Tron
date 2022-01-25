@@ -39,8 +39,8 @@ async def telegraph(app, m:Message):
 	elif reply.text:
 		if len(reply.text) <= 4096:
 			await app.send_edit(m, "⏳• Hold on . . .", mono=True)
-			link = app.create_page(
-				app.name(),
+			link = app.telegraph.create_page(
+				app.name,
 				html_content=reply.text
 				)
 			await app.send_edit(
