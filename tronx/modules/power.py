@@ -69,5 +69,6 @@ async def sleep_userbot(_, m: Message):
 			return
 
 		await app.send_edit(m, f"Sleeping for {sleeptime} {sec} ...", delme=int(cmd))
+		time.sleep(int(cmd))
 	else:
 		await app.send_edit(m, "Please give me a number not text ...", delme=2, mono=True)
