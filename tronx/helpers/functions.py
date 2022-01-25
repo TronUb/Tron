@@ -74,6 +74,12 @@ class Functions(object):
 		teks += f"Error:\n\n"
 		teks += f"**SHORT:** \n\n{e}\n\n"
 		teks += f"**FULL:** \n\n{traceback.format_exc()}"
+
+		try:
+			await self.send_edit(e.MESSAGE)
+		except Exception as err:
+			print(err)
+
 		try:
 			await self.send_message(
 				self.LOG_CHAT,
