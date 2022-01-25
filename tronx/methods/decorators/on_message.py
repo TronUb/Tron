@@ -10,7 +10,6 @@ class OnMessage(Scaffold):
     def on_message(
         self = None,
         filters = None,
-        info: dict = None,
         group: int = 0
     ) -> callable:
         """Decorator for handling messages : (user defined method)."""
