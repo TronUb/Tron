@@ -29,12 +29,9 @@ app.CMD_HELP.update(
 async def media_info(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(
-			m, 
-			"Please reply to some media to get media info ...",
-			mono=True
-			)
-	if app.types(m) == "photo":
+		return await app.send_edit(m, "Please reply to some media to get media info . . .",mono=True)
+
+	if (app.get_file_id(replied))[2] == "photo":
 		pie = replied.photo
 		msg = "**Type:** Photo\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -50,7 +47,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "video":
+	elif (app.get_file_id(replied))[2] == "video":
 		pie = replied.video
 		msg = "**Types:** Video\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -69,7 +66,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "sticker":
+	elif (app.get_file_id(replied))[2] == "sticker":
 		pie = replied.sticker
 		msg = "**Types:** sticker\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -90,7 +87,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "document":
+	elif (app.get_file_id(replied))[2] == "document":
 		pie = replied.document
 		msg = "**Types:** Document\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -106,7 +103,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "animation":
+	elif (app.get_file_id(replied))[2] == "animation":
 		pie = replied.animation
 		msg = "**Types:** Animation\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -125,7 +122,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "audio":
+	elif (app.get_file_id(replied))[2] == "audio":
 		pie = replied.audio
 		msg = "**Types:** Audio\n"
 		msg += f"**Title:** `{pie.title}`\n"
@@ -144,7 +141,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif app.types(m) == "text":
+	elif (app.get_file_id(replied))[2] == "text":
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
 		await app.send_edit(
