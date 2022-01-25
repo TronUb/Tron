@@ -73,10 +73,9 @@ async def image_sauce(_, m: Message):
 				file_name="./downloads/" + universe
 				)
 		else:
-			await app.send_edit(m, "Only photo & animation media supported.", delme=3)
-			return
+			return await app.send_edit(m, "Only photo & animation media supported.", delme=3)
 		searchUrl = 'http://www.google.co.id/searchbyimage/upload'
-		filePath = 'tronx/downloads/{}'.format(universe)
+		filePath = './downloads/{}'.format(universe)
 		multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
 		response = requests.post(searchUrl, files=multipart, allow_redirects=False)
 		fetchUrl = response.headers['Location']

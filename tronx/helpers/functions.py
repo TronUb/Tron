@@ -136,11 +136,11 @@ class Functions(object):
 		formats = [mono, bold, italic, strike, underline]
 
 		format_dict = {
-			"mono" : f"<code>{text}</code>", 
-			"bold" : f"<b>{text}</b>",
-			"italic" : f"<i>{text}</i>",
-			"strike" : f"<s>{text}</s>",
-			"underline" : f"<u>{text}</u>"
+			mono : f"<code>{text}</code>", 
+			bold : f"<b>{text}</b>",
+			italic : f"<i>{text}</i>",
+			strike : f"<s>{text}</s>",
+			underline : f"<u>{text}</u>"
 		}
 
 		edited = False
@@ -150,7 +150,7 @@ class Functions(object):
 				await self.edit_text(
 					m, 
 					format_dict[x],
-					disable_wab_page_preview=disable_wab_page_preview,
+					disable_web_page_preview=disable_web_page_preview,
 					parse_mode=parse_mode
 				)
 				edited = True

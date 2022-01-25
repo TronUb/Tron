@@ -43,7 +43,7 @@ async def modules(_, cb):
 @app.alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.helpDex(current_page_number + 1, app.CMD_HELP, "helpme")
+	buttons = app.HelpDex(current_page_number + 1, app.CMD_HELP, "helpme")
 	print(cb.matches[0])
 	print(dir(cb.matches[0]))
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
@@ -54,7 +54,7 @@ async def give_next_page(_, cb):
 @app.alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
-	buttons = app.Helpdex(current_page_number - 1, app.CMD_HELP, "helpme")
+	buttons = app.HelpDex(current_page_number - 1, app.CMD_HELP, "helpme")
 	await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
 
 
@@ -76,7 +76,7 @@ async def give_plugin_cmds(_, cb):
 	plugs = await app.data(plugin_name)
 	help_string = f"PLUGIN: {plugin_name}\n\n" + "".join(plugs)
 	await cb.edit_message_text(
-		app.help_string,
+		help_string,
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[
@@ -95,7 +95,7 @@ async def give_plugin_cmds(_, cb):
 @app.alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(
-		text=app.stat_string,
+		text=app.stat_string(),
 		reply_markup=InlineKeyboardMarkup([home_back]),
 	)
 
@@ -159,7 +159,7 @@ async def _extra(_, cb):
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
-		text=app.closed_menu_string,
+		text=app.closed_menu_string(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

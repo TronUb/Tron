@@ -35,7 +35,7 @@ async def go_offline(_, m: Message):
 			app.set_afk(True, m.text.split(None, 1)[1], start) # with reason
 			await app.send_edit(
 				m, 
-				"{} is now Offline.\nBecause: {}".format(app.mymention(), m.text.split(None, 1)[1]),
+				"{} is now Offline.\nBecause: {}".format(app.UserMention(), m.text.split(None, 1)[1]),
 				delme=2
 				)
 		elif app.long(m) == 1 and app.long(m) < 4096:
@@ -51,7 +51,7 @@ async def go_offline(_, m: Message):
 				app.set_afk(True, "", start) # without reason
 			await app.send_edit(
 				m, 
-				"{} is now offline.".format(app.mymention()),
+				"{} is now offline.".format(app.UserMention()),
 				delme=2
 				)
 	except Exception as e:
@@ -79,17 +79,17 @@ async def offline_mention(_, m: Message):
 			if get["reason"] and get["afktime"]:
 				msg = await app.send_message(
 					m.chat.id,
-					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.mymention(), otime, get['reason']),
+					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.UserMention(), otime, get['reason']),
 					reply_to_message_id=m.message_id
 					) 
-				await delete(msg, 3)
+				await app.delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
-				await app.send_message(
+				msg = await app.send_message(
 					m.chat.id,
-					"Sorry {} is currently offline !\n**Time:** {}".format(app.mymention(), otime),
+					"Sorry {} is currently offline !\n**Time:** {}".format(app.UserMention(), otime),
 					reply_to_message_id=m.message_id
 					)
-				await delete(msg, 3)
+				await app.delete(msg, 3)
 			content, message_type = app.GetMessageType(m)
 			if message_type == app.TEXT:
 				if m.text:
@@ -135,11 +135,9 @@ async def back_online(_, m: Message):
 			afk_time = app.GetReadableTime(end - get["afktime"])
 			msg = await app.send_message(
 				m.chat.id, 
-				f"{app.mymention()} is now online !\n**Time:** `{afk_time}`"
+				f"{app.UserMention()} is now online !\n**Time:** `{afk_time}`"
 				)
 			app.set_afk(False, "", 0)
-		else:
-			return
 
 	except Exception as e:
 		await app.error(m, e)

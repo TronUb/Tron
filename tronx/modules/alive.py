@@ -39,7 +39,7 @@ async def simple_alive(_, m: Message):
 		alive_msg = f"\n"
 		if BIO:
 			alive_msg += f"⦿ {BIO}\n\n"
-		alive_msg += f"⟜ **Owner:** {app.mymention()}\n"
+		alive_msg += f"⟜ **Owner:** {app.UserMention()}\n"
 		alive_msg += f"⟜ **Tron:** `{app.userbot_version}`\n"
 		alive_msg += f"⟜ **Python:** `{app.python_version}`\n"
 		alive_msg += f"⟜ **Pyrogram:** `{app.pyrogram_version}`\n"
@@ -106,7 +106,7 @@ async def inline_quote(_, m: Message):
 	try:
 		await app.send_edit(m,". . .")
 		try:
-			result = await app.get_inline_bot_results(BOT_USERNAME, "#q7o5e")
+			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 		except BotInvalid:
 			return await app.send_edit(m,"This bot can't be used in inline mode.", delme=2)
 

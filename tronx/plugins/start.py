@@ -16,7 +16,7 @@ async def send_help(_, m: Message):
 
 @app.bot.on_message(filters.new_chat_members & filters.group)
 async def added_to_group_msg(_, m: Message):
-	if m.new_chat_members[0].id == app.REAL_BOT_ID:
+	if m.new_chat_members[0].id == app.bot.id:
 		try:
 			await app.bot.send_message(
 				m.chat.id,

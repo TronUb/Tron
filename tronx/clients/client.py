@@ -14,24 +14,15 @@ class SuperClient(Client, Utils):
 		workers=self.WORKERS,
 		)
 		self.start()
+		self.bot = self.Bot()
+		self.me = self.get_me()
+		self.id = self.me.id
+		self.dc_id = self.me.dc_id
+		self.name = self.me.first_name
+		self.username = "@" + self.me.username if self.me.username else ""
+		self.stop()
 
-	def tron(self):
-		return print(self.get_me())
-
-	def dc_id(self):
-		return (self.get_me())
-
-	def id(self):
-		return (self.get_me())
-
-	def name(self):
-		return (self.get_me())
-
-	def username(self):
-		return "@" + (self.get_me()) if (self.get_me()) else ""
-
-
-	class bot(Client, Utils):
+	class Bot(Client, Utils):
 		""" Assistant (Nora) """
 		def __init__(self):
 			super().__init__(
@@ -41,19 +32,9 @@ class SuperClient(Client, Utils):
 			bot_token=self.TOKEN,
 			)
 			self.start()
-
-		def nora(self):
-			return self.bot.get_me()
-
-		def dc_id(self):
-			return (self.bot.get_me())
-
-		def id(self):
-			return (self.bot.get_me())
-
-		def name(self):
-			return (self.bot.get_me())
-
-		def username(self):
-			return "@" + (self.bot.get_me())
-
+			self.me = self.get_me()
+			self.id = self.me.id
+			self.dc_id = self.me.dc_id
+			self.name = self.me.first_name
+			self.username = "@" + self.me.username
+			self.stop()

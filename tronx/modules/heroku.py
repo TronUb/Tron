@@ -117,7 +117,7 @@ async def dynostats(_, m: Message):
 			r = requests.get(heroku_api + path, headers=headers)
 			if r.status_code != 200:
 				return await app.send_edit(
-					msg, 
+					m, 
 					"Error: something bad happened`\n\n" f"> {r.reason}\n",
 					mono=True
 				)
@@ -144,7 +144,7 @@ async def dynostats(_, m: Message):
 			AppMinutes = math.floor(AppQuotaUsed % 60)
 
 			await app.send_edit(
-				msg, 
+				m, 
 				"**Dyno Usage**:\n\n"
 				f"**Total Dyno Hours:** `550 Hours`\n\n"
 				f"**⧓ Dyno usage for App:** __`{app.HEROKU_APP_NAME}`__\n"
@@ -318,11 +318,7 @@ async def delvar(_, m: Message):
 @app.on_message(gen("logs"))
 async def logs(_, m: Message):
 	await not_heroku(m)
-	await app.send_edit(
-		m, 
-		"⏳ • hold on . . .", 
-		mono=True
-		)
+	await app.send_edit(m, "⏳ • hold on . . .", mono=True)
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)
@@ -336,23 +332,19 @@ async def logs(_, m: Message):
 	data = zen.get_log()
 	if data:
 		try:
-			file = open(f"{app.username()}_logs.txt", "w+")
+			file = open(f"{app.username}_logs.txt", "w+")
 			file.write(data)
 			file.close()
 			await app.send_document(
 				m.chat.id,
-				f"{app.username()}_logs.txt",
-				caption=f"Uploaded By: {app.mymention()}")
-			os.remove(f"{app.username()}_logs.txt")
+				f"{app.username}_logs.txt",
+				caption=f"Uploaded By: {app.UserMention()}")
+			os.remove(f"{app.username}_logs.txt")
 			await m.delete()
 		except Exception as e:
 			await app.error(m, e)
 	else:
-		await app.send_edit(
-			m, 
-			"Failed to get logs . . .",
-			delme=3
-		)
+		await app.send_edit(m, "Failed to get logs . . .", delme=3)
 
 
 
@@ -361,10 +353,7 @@ async def logs(_, m: Message):
 @app.on_message(gen(["textlogs", "tlogs"]))
 async def logs_in_text(_, m: Message):
 	await not_heroku(m)
-	await app.send_edit(
-		m, 
-		"⏳ • hold on . . . ", mono=True
-	)
+	await app.send_edit(m, "⏳ • hold on . . . ", mono=True)
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)

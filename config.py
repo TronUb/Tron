@@ -75,6 +75,6 @@ class Config(object):
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
 # ---------------------
 	TL_NAME = os.getenv("TL_NAME")
-
+	HELP_EMOJI = os.getenv("HELP_EMOJI")
 
 

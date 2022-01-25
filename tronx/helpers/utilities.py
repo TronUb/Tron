@@ -329,7 +329,7 @@ class Utilities(AioHttp):
 				elif entry.is_dir():
 					# if it's a directory, recursively call this function	
 
-					total += DictSizeInBytes(entry.path)
+					total += self.DictSizeInBytes(entry.path)
 		except NotADirectoryError:
 			# if `directory` isn't a directory, get the file size then
 			return os.path.getsize(directory)
@@ -348,7 +348,7 @@ class Utilities(AioHttp):
 
 
 	def DictSize(self, location):
-		return SizeFormat(DictSizeInBytes(location))
+		return self.SizeFormat(self.DictSizeInBytes(location))
 
 
 	def CleanHtml(self, raw_html):

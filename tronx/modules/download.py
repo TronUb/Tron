@@ -66,9 +66,9 @@ async def list_directories(_, m: Message):
 	for file in files:
 		if not file.endswith(".session") and not file in ["__pycache__", ".git", ".github", ".profile.d", ".heroku", ".cache"]:
 			if os.path.isfile(f"{location}/{file}"):
-				collect.append(f"📑 `{file}` ({DictSize(os.path.abspath(location+file))})")
+				collect.append(f"📑 `{file}` ({app.DictSize(os.path.abspath(location+file))})")
 			if os.path.isdir(f"{location}/{file}"):
-				collect.append(f"🗂️ `{file}` ({DictSize(os.path.abspath(location+file))})")
+				collect.append(f"🗂️ `{file}` ({app.DictSize(os.path.abspath(location+file))})")
 					
 	collect.sort() # sort the files
 	file = "\n".join(collect)
