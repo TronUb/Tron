@@ -13,9 +13,8 @@ class SuperClient(Client, Utils):
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
 		)
-		self.on_message = Utils.on_message
-		self.start()
 		self.bot = self.Bot()
+		self.start()
 		self.me = self.get_me()
 		self.id = self.me.id
 		self.dc_id = self.me.dc_id
