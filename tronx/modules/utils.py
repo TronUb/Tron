@@ -41,7 +41,7 @@ app.CMD_HELP.update(
 async def admin_title(_, m: Message):
 	await app.private(m)
 	reply = m.reply_to_message
-	if await app.CheckAdmdin(m) is True:
+	if await app.IsAdmin(m) is True:
 		if app.long(m) == 3:
 			try:
 				user_data = m.command[1]
@@ -183,7 +183,7 @@ async def report_admin(_, m: Message):
 	else:
 		return await app.send_edit(m, "Reply to someone to report him to admins . . .", delme =4, mono=True)
 	teks += " ".join(admin)
-	await app.send_edit(m, teks, parse_mode="md")
+	await app.send_edit(m, teks)
 
 
 
@@ -256,7 +256,7 @@ async def get_list_bots(_, m: Message):
 async def leave(_, m):
 	await app.private(m)
 	try:
-		await app.send_edit(m, f"{app.mymention()} left the chat . . .")
+		await app.send_edit(m, f"{app.UserMention()} left the chat . . .")
 		await asyncio.sleep(1)
 		await app.leave_chat(m.chat.id)
 	except Exception as e:
@@ -311,7 +311,7 @@ async def join_chats(_, m: Message):
 @app.on_message(gen("slowmo"))
 async def slow_mode(_, m: Message):
 	await app.private(m)
-	if await app.CheckAdmdin(m) is True:
+	if await app.IsAdmin(m) is True:
 		if app.long(m) == 1:
 			sec = 10
 		elif app.long(m) > 1:
