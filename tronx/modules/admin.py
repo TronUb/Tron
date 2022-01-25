@@ -447,6 +447,8 @@ async def demote(client, m):
 					user.user.id,
 					is_anonymous=False,
 					can_change_info=False,
+					can_manage_voice_chats=False,
+					can_manage_chat=False,
 					can_delete_messages=False,
 					can_edit_messages=False,
 					can_invite_users=False,
