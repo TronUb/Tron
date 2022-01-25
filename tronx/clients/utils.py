@@ -131,7 +131,7 @@ class Utils(Collector):
 		return count
 
 
-		def db_status(self):
-			"Available" if self.DB_URI else "Unavailable"
+	def db_status(self):
+		"Available" if self.DB_URI else "Unavailable"
 
 
