@@ -28,7 +28,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("spam"))
 async def spam(_, m: Message):
 	replied = m.reply_to_message
-	reply_to_id = replied.message_id if replied.message_id else ""
+	reply_to_id = replied.message_id if replied else ""
 	if not replied and len(m.command) > 1:
 		await m.delete()
 		times = m.command[1]
