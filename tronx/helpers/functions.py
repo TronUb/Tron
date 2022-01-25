@@ -76,7 +76,10 @@ class Functions(object):
 		teks += f"**FULL:** \n\n{traceback.format_exc()}"
 
 		try:
-			await self.send_edit(e.MESSAGE)
+			if hasattr(e, "MESSAGE"):
+				await self.send_edit(m, e.MESSAGE)
+			else:
+				await self.send_edit(m, e.args)
 		except Exception as err:
 			print(err)
 
