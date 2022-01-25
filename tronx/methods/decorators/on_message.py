@@ -29,8 +29,6 @@ class OnMessage(Scaffold):
                     )
                 )
 
-            self.CMD_HELP.update(info)
-
             return func
 
         return decorator
