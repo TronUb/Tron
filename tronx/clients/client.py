@@ -4,7 +4,7 @@ from .utils import Utils
 
 
 
-class SuperClient(Client, Utils):
+class SuperClient(Utils, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
