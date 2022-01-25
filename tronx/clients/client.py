@@ -13,6 +13,7 @@ class SuperClient(Client, Utils):
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
 		)
+		self.on_message = Utils.on_message
 		self.start()
 		self.bot = self.Bot()
 		self.me = self.get_me()
