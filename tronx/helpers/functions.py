@@ -351,13 +351,13 @@ class Functions(object):
 	
 	
 	def get_file_id(self, message):
-		media = ["video", "audio", "document", "sticker", "animation"]
+		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
 			if hasattr(message, x):
 				if hasattr(message, "caption"):
-					return [message[x].file_id, message.caption, "media"]
+					return [(message[x]).file_id, message.caption, "media"]
 				else:
-					return [messsge[x].file_id, None, "media"]
+					return [(messsge[x]).file_id, None, "media"]
 			elif hasattr(message, "text"):
 				return [messsge.text, None, "text"]
