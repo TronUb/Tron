@@ -7,13 +7,12 @@ from pyrogram.scaffold import Scaffold
 
 
 class OnMessage(Scaffold):
-    def on_msg(
+    def on_message(
         self = None,
         filters = None,
-        info: dict = None,
         group: int = 0
     ) -> callable:
-        """Decorator for handling messages."""
+        """Decorator for handling messages : (user defined method)."""
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
@@ -28,8 +27,6 @@ class OnMessage(Scaffold):
                         group if filters is None else filters
                     )
                 )
-
-            self.CMD_HELP.update(info)
 
             return func
 
