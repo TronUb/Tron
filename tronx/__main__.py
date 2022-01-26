@@ -10,7 +10,7 @@ loop = asyncio.get_event_loop()
 
 
 async def start_assistant():
-	""" Start assistant """
+	"""assistant start in __main__"""
 	if app.bot:
 		await app.bot.start()
 		app.log.info("Assistant activated, startup in progress . . .\n")
@@ -22,7 +22,7 @@ async def start_assistant():
 
 
 async def start_userbot():
-	""" Start userbot """
+	"""userbot start in __main__"""
 	if app:
 		await app.start()
 		app.log.info("Userbot activated, startup in progress . . .\n")
@@ -34,18 +34,21 @@ async def start_userbot():
 
 
 async def start_bot():
-	""" Main startup """
+	""" __main__ startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	print("initialising . . .\n\n")
-	print("Loading plugins:\n\n")
+	print("PEERS RESOLVING: Started . . .\n\n")
+	async for x in app.iter_dialogs():
+		pass
+	print("PEERS RESOLVE: Done . . .")
+	print("PLUGINS: Installing . . .\n\n")
 	_plugs = app.import_module("tronx/plugins/")
 	print(f"\n\n{_plugs} plugins Loaded\n\n")
-	print("Loading modules:\n\n")
+	print("MODULES: Installing . . .\n\n")
 	_mods = app.import_module("tronx/modules/")
 	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
-	await idle()
+	await idle() # block execution
 
 
 
