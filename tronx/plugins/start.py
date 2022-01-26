@@ -9,14 +9,14 @@ from pyrogram.types import Message
 
 
 @app.bot.on_message(filters.command("start"))
-async def send_help(_, m: Message):
+async def send_response(_, m: Message):
 	await m.reply("How can i help you ?")
 
 
 
 @app.bot.on_message(filters.new_chat_members & filters.group)
 async def added_to_group_msg(_, m: Message):
-	if m.new_chat_members[0].id == app.bot.id:
+	if m.new_chat_members[0].is_self:
 		try:
 			await app.bot.send_message(
 				m.chat.id,
