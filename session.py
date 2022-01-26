@@ -1,6 +1,6 @@
 import os
 os.system("pip3 install tgcrypto pyrogram")
-
+os.system("clear")
 from pyrogram import Client
 import asyncio
 
