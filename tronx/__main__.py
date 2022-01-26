@@ -26,6 +26,10 @@ async def start_userbot():
 	if app:
 		await app.start()
 		app.log.info("Userbot activated, startup in progress . . .\n")
+		print("PEERS RESOLVING: Started . . .\n\n")
+		async for x in app.iter_dialogs():
+			pass
+		print("PEERS RESOLVE: Done . . .")
 	else:
 		app.log.info("Userbot startup unsuccessful, please check everything again ...")
 		app.log.info("Couldn't load modules of userbot")
@@ -36,10 +40,6 @@ async def start_userbot():
 async def start_bot():
 	""" __main__ startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	print("PEERS RESOLVING: Started . . .\n\n")
-	async for x in app.iter_dialogs():
-		pass
-	print("PEERS RESOLVE: Done . . .")
 	print("PLUGINS: Installing . . .\n\n")
 	_plugs = app.import_module("tronx/plugins/")
 	print(f"\n\n{_plugs} plugins Loaded\n\n")
