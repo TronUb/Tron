@@ -26,7 +26,7 @@ print(intro)
 
 API_ID = input("\nEnter your API_ID: ")
 
-while not API_ID.isdigit():
+while not API_ID.isdigit() and (len(API_ID) < 7 or len(API_ID) > 7:
   print("\n\nPlease enter a digit.\n\n")
   API_ID = input("Enter your API_ID (1234567): ")
 
