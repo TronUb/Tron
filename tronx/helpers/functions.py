@@ -65,7 +65,7 @@ class Functions(object):
 			await error(m, e)
 
 
-	async def error(self, m: Message, e):
+	async def error(self, m: Message, e, edit_error=False):
 		"""Error tracing"""
 		teks = f"Traceback Report:\n\n"
 		teks += f"Date: {self.showdate()}\nTime: {self.showtime()}\n\n"
@@ -76,10 +76,11 @@ class Functions(object):
 		teks += f"**FULL:** \n\n{traceback.format_exc()}"
 
 		try:
-			if hasattr(e, "MESSAGE"):
-				await self.send_edit(m, e.MESSAGE)
-			else:
-				await self.send_edit(m, e.args)
+			if edit_error:
+				if hasattr(e, "MESSAGE"):
+					await self.send_edit(m, (e.MESSAGE.replace("(", "")).replace(")", ""))
+				else:
+					await self.send_edit(m, e.args)
 		except Exception as err:
 			print(err)
 
