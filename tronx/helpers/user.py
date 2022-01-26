@@ -39,3 +39,9 @@ class User(object):
 		var = self.getdv("USER_PIC")
 		one = var if bool(var) is True else self.USER_PIC
 		return one if one else None
+
+
+	def UserBio(self):
+		var = self.getdv("USER_BIO")
+		one = var if bool(var) is True else self.USER_BIO
+		return one if one else None
