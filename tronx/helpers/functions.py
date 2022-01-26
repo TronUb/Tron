@@ -65,7 +65,7 @@ class Functions(object):
 			await error(m, e)
 
 
-	async def error(self, m: Message, e):
+	async def error(self, m: Message, e, edit_error=False):
 		"""Error tracing"""
 		teks = f"Traceback Report:\n\n"
 		teks += f"Date: {self.showdate()}\nTime: {self.showtime()}\n\n"
@@ -76,7 +76,11 @@ class Functions(object):
 		teks += f"**FULL:** \n\n{traceback.format_exc()}"
 
 		try:
-			await self.send_edit(e.MESSAGE)
+			if edit_error:
+				if hasattr(e, "MESSAGE"):
+					await self.send_edit(m, (e.MESSAGE.replace("(", "")).replace(")", ""))
+				else:
+					await self.send_edit(m, e.args)
 		except Exception as err:
 			print(err)
 
@@ -206,7 +210,7 @@ class Functions(object):
 			await self.send_document(
 				m.chat.id,
 				name,
-				caption = f"**Uploaded By:** {self.mymention()}"
+				caption = f"**Uploaded By:** {self.UserMention()}"
 				)
 			if os.path.exists(name):
 				os.remove(name)
@@ -348,13 +352,13 @@ class Functions(object):
 	
 	
 	def get_file_id(self, message):
-		media = ["video", "audio", "document", "sticker", "animation"]
+		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
 			if hasattr(message, x):
 				if hasattr(message, "caption"):
-					return [message[x].file_id, message.caption, "media"]
+					return [(message[x]).file_id, message.caption, x]
 				else:
-					return [messsge[x].file_id, None, "media"]
+					return [(messsge[x]).file_id, None, x]
 			elif hasattr(message, "text"):
 				return [messsge.text, None, "text"]

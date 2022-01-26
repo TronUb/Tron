@@ -60,12 +60,12 @@ async def save_note(_, m: Message):
 
 	if message_type == app.TEXT:
 		file_id = None
-		teks, button = app.ParseButtom(text)
+		teks, button = app.ParseButton(text)
 		if not teks:
 			await app.send_edit(m, f"`{m.text}`\n\nError: There is no text in here !")
 
-	db.save_selfnote(m.from_user.id, note_name, text, message_type, content)
-	await app.send_edit(m, "Saved note = **[ `{}` ]**".format(note_name),parse_mode="markdown")
+	app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
+	await app.send_edit(m, "Saved note = **[ `{}` ]**".format(note_name))
 
 
 
@@ -78,7 +78,7 @@ async def get_note(_, m: Message):
 			note = m.text.replace(">", "")
 		else:
 			return
-		getnotes = db.get_selfnote(m.from_user.id, note)
+		getnotes = app.get_selfnote(m.from_user.id, note)
 
 		if not getnotes:
 			return await app.send_edit(m, "This note does not exist !")
@@ -87,7 +87,7 @@ async def get_note(_, m: Message):
 		if reply:
 			mdg_id = reply.message_id
 		if getnotes['type'] == app.TEXT:
-			teks, button = app.ParseButtom(getnotes.get('value'))
+			teks, button = app.ParseButton(getnotes.get('value'))
 			button = app.BuildKeyboard(button)
 			if button:
 				button = InlineKeyboardMarkup(button)
@@ -108,7 +108,7 @@ async def get_note(_, m: Message):
 			except errors.exceptions.bad_request_400.BadRequest:
 				msg = await app.get_messages(m.chat.id, getnotes['message_id'])
 				note_name, text, message_type, content = app.FetchNoteType(msg)
-				db.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
+				app.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
 				if msg_id:
 					await GET_FORMAT[getnotes['type']](m.chat.id, content, reply_to_message_id=msg_id)
 				else:
@@ -116,7 +116,7 @@ async def get_note(_, m: Message):
 		else:
 			await m.delete()
 			if getnotes.get('value'):
-				teks, button = app.ParseButtom(getnotes.get('value'))
+				teks, button = app.ParseButton(getnotes.get('value'))
 				button = app.BuildKeyboard(button)
 				if button:
 					button = InlineKeyboardMarkup(button)
@@ -136,7 +136,7 @@ async def get_note(_, m: Message):
 				except errors.exceptions.bad_request_400.BadRequest:
 					msg = await app.get_messages(m.chat.id, getnotes['message_id'])
 					note_name, text, message_type, content = app.FetchNoteType(msg)
-					db.save_selfnote(m.chat.id, note, teks, getnotes['type'], content, getnotes['message_id'])
+					app.save_selfnote(m.chat.id, note, teks, getnotes['type'], content, getnotes['message_id'])
 					if msg_id:
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
 					else:
@@ -149,7 +149,7 @@ async def get_note(_, m: Message):
 
 @app.on_message(gen("notes"))
 async def notes_list(_, m: Message):	
-	getnotes = db.get_all_selfnotes(m.from_user.id)
+	getnotes = app.get_all_selfnotes(m.from_user.id)
 	if not getnotes:
 		return await app.send_edit(m, "There are no saved notes !")
 
@@ -171,7 +171,7 @@ async def clear_note(client, m: Message):
 		return await app.send_edit(m, f"Sir, give note name after command, Ex: `{app.PREFIX}clear cat`")
 
 	note = m.text.split()[1]
-	getnote = db.rm_selfnote(m.from_user.id, note)
+	getnote = app.rm_selfnote(m.from_user.id, note)
 	if not getnote:
 		return await app.send_edit(m, "This note does not exist!")
 	else:

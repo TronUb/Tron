@@ -55,7 +55,7 @@ async def send_modules(app, m: Message):
 					m.chat.id,
 					document=modulename,
 					thumb=thumb_pic,
-					caption=(f"File name: `{module_caption}`\n\nUploaded By: {app.mymention()}")
+					caption=(f"File name: `{module_caption}`\n\nUploaded By: {app.UserMention()}")
 					)
 			except Exception as e:
 				await app.error(m, e)

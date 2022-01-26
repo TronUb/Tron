@@ -1,3 +1,4 @@
+import asyncio
 from pyrogram.types import Message
 
 from tronx import app
@@ -56,7 +57,7 @@ async def send_music(_, m: Message):
 				chat_id=m.chat.id,
 				audio=str(saved.audio.file_id),
 				reply_to_message_id=reply_to,
-				caption=f"**Song:** `{song_name}`\n**Uploaded By:** {app.mymention()}",
+				caption=f"**Song:** `{song_name}`\n**Uploaded By:** {app.UserMention()}",
 			)
 
 			# delete the message from Saved Messages
@@ -102,7 +103,7 @@ async def send_music(_, m: Message):
 				chat_id=m.chat.id,
 				audio=str(saved.audio.file_id),
 				reply_to_message_id=reply_to,
-				caption=f"**Song:** `{song_name}`\n**Uploaded By:** {app.mymention()}",
+				caption=f"**Song:** `{song_name}`\n**Uploaded By:** {app.UserMention()}",
 			)
 
 			# delete the message from Saved Messages

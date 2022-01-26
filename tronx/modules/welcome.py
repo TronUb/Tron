@@ -69,11 +69,11 @@ async def save_welcome(_, m: Message):
 	reply = m.reply_to_message
 	if reply:
 		try:
-			fall = app.get_file_id(m)
-			file_id = fall["data"] if fall["data"] else None
-			caption = fall["caption"] if fall["caption"] else None
-
 			if bool(reply.media) is True:
+				fall = app.get_file_id(m)
+				file_id = fall["data"] if fall["data"] else None
+				caption = fall["caption"] if fall["caption"] else None
+
 				if caption:
 					app.set_welcome(str(m.chat.id), "#" + file_id, caption)
 				else:

@@ -69,7 +69,7 @@ class NOTESSQL(object):
 
 
 	# get list of saved notes
-	def get_all_NOTES(self, user_id):
+	def get_all_selfnotes(self, user_id):
 		if not SELF_NOTES.get(user_id):
 			SELF_NOTES[user_id] = {}
 			return None
