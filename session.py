@@ -24,8 +24,9 @@ Required:
 print(intro)
 
 
-# decimal only
-while not isinstance(input("\nEnter your API_ID: "), int):
+API_ID = input("\nEnter your API_ID: ")
+
+while not API_ID.isdigit():
   print("\n\nPlease enter a digit.\n\n")
   API_ID = input("Enter your API_ID (1234567): ")
 
