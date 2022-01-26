@@ -6,7 +6,7 @@ from tronx import app
 
 collect = {}
 
-numbers = [f"{x}" for x in range(10)]
+numbers = [f"{x}" for x in range(1, 10)]
 cmd_handler = ["+", "-"]
 
 
@@ -15,7 +15,7 @@ cmd_handler = ["+", "-"]
 async def increment_decrement(_, m):
 	reply = m.reply_to_message
 
-	if (reply.from_user.is_self) or (reply.from_user.is_bot):
+	if reply and (reply.from_user.is_self) or (reply.from_user.is_bot):
 		return
 
 	if reply:
@@ -26,14 +26,14 @@ async def increment_decrement(_, m):
 				collect.update({str(reply.from_user.id) : str(int(data) + int(prefix[1]))})
 				await app.bot.send_message(
 					m.chat.id,
-					f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increment"
+					f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increments"
 				)
 			elif prefix[0] == "-":
 				data = collect.get(str(reply.from_user.id)) 
 				collect.update({str(reply.from_user.id) : str(int(data) - int(prefix[1]))})
 				await app.bot.send_message(
 					m.chat.id,
-					f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " decrement"
+					f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " increments"
 				)
 		elif str(reply.from_user.id) not in collect:
 			if prefix[0] == "+":
@@ -41,14 +41,14 @@ async def increment_decrement(_, m):
 				collect.update(data)
 				await app.bot.send_message(
 					m.chat.id,
-					f"{reply.from_user.first_name}: 1 increment"
+					f"{reply.from_user.first_name}: 1 increments"
 				) 
 			elif prefix[0] == "-":
 				data = {str(reply.from_user.id) : str(-1)}
 				collect.update(data)
 				await app.bot.send_message(
 					m.chat.id,
-					f"{reply.from_user.first_name}: 1 decrement"
+					f"{reply.from_user.first_name}: 1 increments"
 				) 
 
 
