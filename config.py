@@ -5,36 +5,36 @@ import os
 
 #-------------------------------------------------------------------------------------------------------------
 class Config(object):
-	# required
+	# api id of your telegram account (required)
 	API_ID = os.getenv("API_ID")
-	# required
+	# api hash of your telegram account (required)
 	API_HASH = os.getenv("API_HASH")
-	# access Session from your account
+	# Create a session from session.py (required)
 	SESSION = os.getenv("SESSION")
 # ------------------
-	# to download files
+	# temporary download location (required)
 	TEMP_DICT = os.getenv("TEMP_DICT", os.path.abspath(".") + "/downloads/")
 	# official repo for updates
 	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO", "https://github.com/beastzx18/Tron.git")
 # ------------------
-	# heroku api key 
+	# heroku api key (required if hosted on heroku)
 	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
-	# heroku app name
+	# heroku app name (required if hosted on heroku)
 	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-	# database url
+	# database url (required)
 	DB_URI = os.getenv("DATABASE_URL")
 # ------------------
-	# sudo users can user your bot too
+	# these users can use your bot / userbot
 	SUDO_USERS = os.getenv("SUDO_USERS")
-	# log mentioned and other messages
+	# a group to store logs, etc (required)
 	LOG_CHAT = os.getenv("LOG_CHAT")
-	 # Insert command prefix, if you insert "!" then you can do !ping
+	# command handler, if you give ! (exclamation) then you can do like this !ping => pong !
 	PREFIX = os.getenv("PREFIX", ".")
-	# must be int (number)
+	# for more info visit docs.pyrogram.org, workers section (required)
 	WORKERS = os.getenv("WORKERS", 8)
-	# not loaded or not installed plugins
+	# exclude official plugins from installing
 	NO_LOAD = os.getenv("NO_LOAD")
-	# default reason for afk
+	# default reason for afk plugin
 	AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Now !")
 # ------------------
 	# add True to enable (default: False)
@@ -45,36 +45,39 @@ class Config(object):
 	PMPERMIT_TEXT = os.getenv("PMPERMIT_TEXT", "Hey ! This is [Tron Userbot](https://t.me/tronuserbot) Security System.\n**You will be blocked if you spammed my owner's pm**\nCurrently My Owner is busy! So Wait Until He Arrives. 👍🏻\nAnd Better Not To Spam His here!")
 	# pmpermit warn limit
 	PM_LIMIT = os.getenv("PM_LIMIT", 4)
-	# add your city time zone
+	# this is used in time plugin
 	TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
 # -------------------
-	# for time plugin (default : Asia/Kolkata)
+	# your custom name (default: telegram name)
 	USER_NAME = os.getenv("USER_NAME")
-	# for alive plugin (optional)
+	# your custom bio (default: None)
 	USER_BIO = os.getenv("USER_BIO")
-	# for alive plugin (optional)
+	# used for alive plugin (default: official tronuserbot logo image)
 	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/1073e200f9d8e70b91f0d.jpg")
-	# add your id if bot fails to get your id
+	# add your telegram id if bot fails to get your id 
 	USER_ID = os.getenv("USER_ID")
 	# add your username if bot fails to get your username
 	USER_USERNAME = os.getenv("USER_USERNAME")
 # --------------------
-	# your custom bot bio (optional)
+	# this bio will be shown in /help menu (default: official bio from bot) 
 	BOT_BIO = os.getenv("BOT_BIO")
-	# your assistants custom name (default: LARA)
-	BOT_NAME = os.getenv("BOT_NAME", "LARA")
-	# your aassistants alive pic (optional)
+	# your assistants custom name (default: NORA)
+	BOT_NAME = os.getenv("BOT_NAME", "NORA")
+	# your assistants alive pic (optional)
 	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/4d93e5fa480b5e53d898f.jpg")
-	# bot username of bot
+	# provide this if bot fails to get username of bot
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
-	# bot id of bot
+	# telegram id of bot 
 	BOT_ID = os.getenv("BOT_ID")
-	# token of your bot if you want to use assistant
+	# without this the bot will not work (required)
 	TOKEN = os.getenv("TOKEN")
 # ---------------------
+	# thumbnail used while uploading plugin, etc.
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
 # ---------------------
+	# your telegraph account name (default: Tronuserbot)
 	TL_NAME = os.getenv("TL_NAME")
+	# this will be shown before (as a prefix) the texts in the help dex 
 	HELP_EMOJI = os.getenv("HELP_EMOJI")
 
 
