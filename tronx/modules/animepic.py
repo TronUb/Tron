@@ -24,8 +24,8 @@ app.CMD_HELP.update(
 		"animepic",
 		{
 		"neko" : "Get a anime neko girl image.",
-		"animelist [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
-		"giflist" : "Get a list of suffix.",
+		"animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
+		"animelist":"Get list of supported suffix for animegif command."
 		}
 		)
 	}
@@ -61,14 +61,14 @@ async def send_gif(m: Message, gif_data):
 
 
 @app.on_message(gen("animelist"))
-async def list_of_suffix(_, m):
+async def list_of_suffix(_, m: Message):
 	await app.send_edit(m, anime_suffix)
 
 
 
 	
 @app.on_message(gen("neko"))
-async def nekoanime(_, m):
+async def nekoanime(_, m: Message):
 	try:
 		await m.delete()
 		data = requests.get("https://nekos.best/api/v1/nekos").text
@@ -85,14 +85,14 @@ async def nekoanime(_, m):
 
 
 @app.on_message(gen("animegif"))
-async def animegif(_, m):
+async def animegif(_, m: Message):
 	if app.long(m) > 1:
 		arg = m.command[1]
 		try:
 			await m.delete()
 			if arg in anime_list:
 				data = get_anime_gif(arg)
-				await app.send_gif(m, data)
+				await send_gif(m, data)
 			else:
 				await app.send_edit(m, anime_suffix)
 		except Exception as e:
