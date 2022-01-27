@@ -437,10 +437,16 @@ async def promote(_, m):
 			await app.promote_chat_member(
 				m.chat.id, 
 				user.user.id,
-				can_pin_messages=True, 
-				can_invite_users=True,
-				can_restrict_members=True,
+				is_anonymous=False,
+				can_change_info=True,
+				can_manage_voice_chats=True,
+				can_manage_chat=True,
 				can_delete_messages=True,
+				can_edit_messages=True,
+				can_invite_users=True,
+				can_promote_members=False,
+				can_restrict_members=True,
+				can_pin_messages=True,
 				can_post_messages=True,
 				)
 			await app.send_edit(m, f"Promoted {user.user.mention} in this chat !")
