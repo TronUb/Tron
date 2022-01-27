@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 	{"admin" : (
 		"admin", 
 		{
-		"ban" : "bans a user",
+		"ban [username | id | reply] [time]" : "bans a user, use it as timeban too",
 		"banall [confirm]" : "Ban all members in by one command",
 		"unban" : "unbans a user",
 		"mute" : "restricts a user from talking in groups",
@@ -44,6 +44,12 @@ app.CMD_HELP.update(
 
 
 
+def to_seconds(format, number): # number: int, format: s, m, h, d
+	format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24, format:0} # avoid KeyError
+	return int(format_set[format])
+
+
+
 
 @app.on_message(gen("ban", allow_channel=True))
 async def ban_hammer(_, m):
@@ -52,15 +58,25 @@ async def ban_hammer(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
+		cmd = m.command
+		ban_time = False
+
 		if await app.IsAdmin(m) is True:
 			await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
-				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
+				user = await app.get_chat_member(m.chat.id, reply.from_user)
+				if app.long(m) > 1:
+						arg = cmd[1]
+						ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], ""))
+	
 			elif not reply:
 				if app.long(m) == 1:
 					return await app.send_edit(m, "Give me user id | username or reply to the user you want to ban . . .", mono=True)
 				elif app.long(m) > 1:
-					user = await app.get_chat_member(m.chat.id, m.command[1])
+					user = await app.get_chat_member(m.chat.id, cmd[1])
+					if app.long(m) > 2:
+						arg = cmd[2]
+						ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
@@ -74,10 +90,14 @@ async def ban_hammer(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
-			await app.kick(m.chat.id, user.user.id)
-			await app.send_edit(m, f"Banned {user.user.mention} in this chat !")
+			if ban_time:
+				await app.ban_chat_member(m.chat.id, user.user.id, int(time.time()) + ban_time)
+				await app.send_edit(m, f"Banned {user.user.mention} for {arg} ")
+			else:
+				await app.ban_chat_member(m.chat.id, user.user.id)
+				await app.send_edit(m, f"Banned {user.user.mention} in this chat !")
 		else:
-			return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
+			return await app.send_edit(m, "Sorry, You are not an admin here !", delme=1, mono=True)
 
 	except (UsernameInvalid, UsernameNotOccupied):
 		await app.send_edit(m, "The provided username | id is invalid !", mono=True, delme=5)
