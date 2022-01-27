@@ -91,7 +91,7 @@ async def ban_hammer(_, m):
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
 			if ban_time:
-				await app.ban_chat_member(m.chat.id, user.user.id, int(time.time()) + ban_time)
+				await app.ban_chat_member(m.chat.id, user.user.id, time.time() + ban_time)
 				await app.send_edit(m, f"Banned {user.user.mention} for {arg} ")
 			else:
 				await app.ban_chat_member(m.chat.id, user.user.id)
@@ -178,6 +178,30 @@ async def unban(_, m):
 
 
 
+async def mute_user(chat_id, user_id, duration=0):
+	duration = 0 
+	await app.restrict_chat_member(
+		m.chat.id,
+		user,
+		permissions=ChatPermissions(
+			can_send_messages=False,
+			can_send_media_messages=False,
+			can_send_stickers=False,
+			can_send_animations=False,
+			can_send_games=True,
+			can_use_inline_bots=False,
+			can_add_web_page_previews=False,
+			can_send_polls=False,
+			can_change_info=False,
+			can_invite_users=True,
+			can_pin_messages=False,
+		),
+		duration 
+	)
+
+
+
+
 
 @app.on_message(gen("mute"))
 async def mute_user(_, m):
@@ -185,14 +209,22 @@ async def mute_user(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
+		ban_time = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
+				if app.long(m) > 1:
+					arg = cmd[1]
+					mute_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 			elif not reply:
 				if app.long(m) == 1:
 					return await app.send_edit(m, "Give me user id | username or reply to that user you want to unban . . .", mono=True, delme=4)
 				if app.long(m) > 1:
 					user = await app.get_chat_member(m.chat.id, m.command[1])
+					if app.long(m) > 2:
+						arg = cmd[2]
+						mute_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True, delme=4)
 
@@ -206,24 +238,12 @@ async def mute_user(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
-			await app.restrict_chat_member(
-				m.chat.id,
-				user.user.id,
-				permissions=ChatPermissions(
-					can_send_messages=False,
-					can_send_media_messages=False,
-					can_send_stickers=False,
-					can_send_animations=False,
-					can_send_games=True,
-					can_use_inline_bots=False,
-					can_add_web_page_previews=False,
-					can_send_polls=False,
-					can_change_info=False,
-					can_invite_users=True,
-					can_pin_messages=False,
-				)
-				)		
-			await app.send_edit(m, f"Muted {user.user.mention} in this chat !")
+			if mute_time:
+				await mute_user(m.chat.id, user.user.id, time.time()+mute_time)
+				await app.send_edit(m, f"Muted {user.user.mention} for {arg}")
+			else:
+				await mute_user(m.chat.id, user.user.id)
+				await app.send_edit(m, f"Muted {user.user.mention} in this chat for forever.")
 		else:
 			return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
 
