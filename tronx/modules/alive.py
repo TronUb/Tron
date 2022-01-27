@@ -76,6 +76,7 @@ async def inline_alive(_, m: Message):
 	except BotInlineDisabled:
 		await app.send_edit(m, "Turning inline mode to on, wait . . .", mono=True)
 		await app.toggle_inline(m)
+			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 
 	if result:
 		await app.send_inline_bot_result(
@@ -101,6 +102,7 @@ async def inline_quote(_, m: Message):
 		except BotInlineDisabled:
 			await app.send_edit(m, "Turning inline mode on, wait . . .", mono=True)
 			await app.toggle_inline(m)
+			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 
 		if result:
 			await app.send_inline_bot_result(
