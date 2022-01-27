@@ -209,6 +209,7 @@ async def mute_user(_, m):
 		reply = m.reply_to_message
 		user = False
 		mute_time = False
+		cmd = m.command
 
 		if await app.IsAdmin(m) is True:
 			if reply:
