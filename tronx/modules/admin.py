@@ -122,7 +122,7 @@ async def ban_all(_, m):
 			elif app.long(m) > 1 and m.command[1] == "confirm":
 				async for x in app.iter_chat_members(m.chat.id):
 					if x.status == "member":
-						await app.kick(m.chat.id, x.user.id)
+						await app.ban_chat_member(m.chat.id, x.user.id)
 						count += 1
 						await app.send_edit(m, f"Banned {x.user.mention} . . .")
 				await app.send_edit(m, f"Banned {count} members !")
