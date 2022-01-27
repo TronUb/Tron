@@ -29,7 +29,7 @@ app.CMD_HELP.update(
 		"ban [username | id | reply] [time]" : "bans a user, use it as timeban too",
 		"banall [confirm]" : "Ban all members in by one command",
 		"unban" : "unbans a user",
-		"mute" : "restricts a user from talking in groups",
+		"mute [username | id | reply] [time]" : "restricts a user from talking in groups",
 		"unmute" : "unrestricts a user from talking in groups",
 		"promote" : "promote a member to admin",
 		"demote" : "demote a admin to a member",
