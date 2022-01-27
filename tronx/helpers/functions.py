@@ -62,7 +62,7 @@ class Functions(object):
 				text
 			)
 		except Exception as e:
-			await error(m, e)
+			await self.error(m, e)
 
 
 	async def error(self, m: Message, e, edit_error=False):
@@ -268,7 +268,7 @@ class Functions(object):
 				return False
 		except Exception as e:
 			print(e)
-			await error(m, e)
+			await self.error(m, e)
 	
 	
 	async def get_last_msg(self, m: Message, user_id: int, reverse=False):
@@ -295,8 +295,8 @@ class Functions(object):
 	
 			await self.send_edit(m, "Choosing bot . . . ", mono=True)
 	
-			if self.Bot_Username() in unames:
-				await data[0].click(self.Bot_Username())
+			if self.bot.username in unames:
+				await data[0].click(self.bot.username)
 			else:
 				return await self.send_edit(m, "Looks like you don't have a bot please, use your own bot . . .", mono=True, delme=True)
 	
@@ -325,10 +325,10 @@ class Functions(object):
 				await data[0].click("Turn inline mode off")
 				await self.send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
 		except YouBlockedUser:
-			await self.unblock_user("BotFather")
+			await self.unblock_user(botname)
 			await self.toggle_inline(m)
 		except Exception as e:
-			await error(m, e)
+			await self.error(m, e)
 	
 	
 	def quote(self):
