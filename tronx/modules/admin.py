@@ -178,11 +178,10 @@ async def unban(_, m):
 
 
 
-async def mute_user(chat_id, user_id, duration=0):
-	duration = 0 
-	await app.restrict_chat_member(
-		m.chat.id,
-		user,
+async def mute_user(m: Message, user_id, duration=0):
+	return await app.restrict_chat_member(
+		chat_id=m.chat.id,
+		user_id=user_id,
 		permissions=ChatPermissions(
 			can_send_messages=False,
 			can_send_media_messages=False,
@@ -194,10 +193,10 @@ async def mute_user(chat_id, user_id, duration=0):
 			can_send_polls=False,
 			can_change_info=False,
 			can_invite_users=True,
-			can_pin_messages=False,
-		),
-		duration 
-	)
+			can_pin_messages=False
+			),
+		until_date=duration
+		)
 
 
 
@@ -209,7 +208,7 @@ async def mute_user(_, m):
 		await app.private(m)
 		reply = m.reply_to_message
 		user = False
-		ban_time = False
+		mute_time = False
 
 		if await app.IsAdmin(m) is True:
 			if reply:
