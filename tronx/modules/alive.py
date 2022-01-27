@@ -1,4 +1,4 @@
-from pyrogram.errors import BotInvalid
+from pyrogram.errors import BotInvalid, BotInlineDisabled
 from pyrogram.types import Message
 
 from tronx import app
@@ -73,7 +73,7 @@ async def inline_alive(_, m: Message):
 	msg = await app.send_edit(m, ". . .", mono=True)
 	try:
 		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
-	except BotInvalid:
+	except BotInlineDisabled:
 		await send_edit(m, "Turning inline mode to on, wait . . .", mono=True)
 		await app.toggle_inline(m)
 
@@ -98,7 +98,7 @@ async def inline_quote(_, m: Message):
 		msg = await app.send_edit(m,". . .", mono=True)
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
-		except BotInvalid:
+		except BotInlineDisabled:
 			await send_edit(m, "Turning inline mode on, wait . . .", mono=True)
 			await app.toggle_inline(m)
 
