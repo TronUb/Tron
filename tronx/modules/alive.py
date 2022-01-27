@@ -70,7 +70,7 @@ async def simple_alive(_, m: Message):
 
 @app.on_message(gen("ialive"))
 async def inline_alive(_, m: Message):
-	msg = await app.send_edit(m, ". . .", mono=True)
+	await app.send_edit(m, ". . .", mono=True)
 	try:
 		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 	except BotInlineDisabled:
@@ -86,7 +86,7 @@ async def inline_alive(_, m: Message):
 			disable_notification=True, 
 			hide_via=True
 		)
-		await msg.delete()
+		await m.delete()
 	else:
 		await app.send_edit(m, "Something went wrong, please try again later . . .", delme=2)
 
@@ -96,7 +96,7 @@ async def inline_alive(_, m: Message):
 @app.on_message(gen(["qt"]))
 async def inline_quote(_, m: Message):
 	try:
-		msg = await app.send_edit(m,". . .", mono=True)
+		await app.send_edit(m,". . .", mono=True)
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 		except BotInlineDisabled:
@@ -112,7 +112,7 @@ async def inline_quote(_, m: Message):
 				disable_notification=True, 
 				hide_via=True
 				)
-			await msg.delete()
+			await m.delete()
 		else:
 			await app.send_edit(m, "Please try again later !", delme=2, mono=True)
 	except Exception as e:
