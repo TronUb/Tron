@@ -203,7 +203,7 @@ async def mute_user(m: Message, user_id, duration=0):
 
 
 @app.on_message(gen("mute"))
-async def mute_user(_, m):
+async def mute_users(_, m):
 	try:
 		await app.private(m)
 		reply = m.reply_to_message
