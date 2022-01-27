@@ -45,8 +45,8 @@ app.CMD_HELP.update(
 
 
 def to_seconds(format, number): # number: int, format: s, m, h, d
-	format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24, format:0} # avoid KeyError
-	return int(format_set[format])
+	format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24} 
+	return int(format_set[format]) 
 
 
 
