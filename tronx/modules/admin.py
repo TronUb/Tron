@@ -236,7 +236,7 @@ async def mute_users(_, m):
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
 			if mute_time:
-				await mute_user(m.chat.id, user.user.id, time.time()+mute_time)
+				await mute_user(m.chat.id, user.user.id, int(time.time() + mute_time))
 				await app.send_edit(m, f"Muted {user.user.mention} for {arg}")
 			else:
 				await mute_user(m.chat.id, user.user.id)
