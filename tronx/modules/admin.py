@@ -180,7 +180,7 @@ async def unban(_, m):
 
 async def mute_user(chat_id, user_id, duration=0):
 	return await app.restrict_chat_member(
-		chat_id=m.chat_id,
+		chat_id=chat_id,
 		user_id=user_id,
 		permissions=ChatPermissions(
 			can_send_messages=False,
