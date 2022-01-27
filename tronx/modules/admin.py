@@ -66,8 +66,8 @@ async def ban_hammer(_, m):
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user)
 				if app.long(m) > 1:
-						arg = cmd[1]
-						ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], ""))
+					arg = cmd[1]
+					ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], ""))
 	
 			elif not reply:
 				if app.long(m) == 1:
