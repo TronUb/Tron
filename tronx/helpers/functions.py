@@ -273,21 +273,18 @@ class Functions(object):
 	
 	async def get_last_msg(self, m: Message, user_id: int, reverse=False):
 		"""Get the first or last message of user chat"""
-		if reverse:
-			data = await self.get_history(user_id, limit=1, reverse=True)
-		else:
-			data = await self.get_history(user_id, limit=1)
-		return data
+		return await self.get_history(user_id, limit=1, reverse=reverse)
 	
 	
 	async def toggle_inline(self, m: Message):
 		"""Turn on | off inline mode of your bot"""
 		try:
+			botname = "BotFather"
 			await self.send_edit(m, "Processing command . . .", mono=True)
-			await self.send_message("BotFather", "/mybots") # BotFather (93372553) 
+			await self.send_message(botname, "/mybots") # BotFather (93372553) 
 			await asyncio.sleep(1) # floodwaits
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 			usernames = list(data[0].reply_markup.inline_keyboard)[0]
 	
 			unames = []
@@ -303,19 +300,19 @@ class Functions(object):
 			else:
 				return await self.send_edit(m, "Looks like you don't have a bot please, use your own bot . . .", mono=True, delme=True)
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			await self.send_edit(m, "Pressing Bot Settings . . . ", mono=True)
 	
 			await data[0].click("Bot Settings")
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			await self.send_edit(m, "checking whether inline mode is On or Off . . . ", mono=True)
 	
 			await data[0].click("Inline Mode")
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			# Turn on inline mode
 			if "Turn on" in str(data[0]):
