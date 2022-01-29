@@ -14,7 +14,8 @@ app.CMD_HELP.update(
 	{"utube": (
 		"utube",
 		{
-		"vinfo" : "Get a youtube video information . . ."
+		"yvinfo [link]" : "Get a youtube video information . . .",
+		"yvdl [link]" : "Download any video from YouTube . . ."
 		}
 		)
 	}
