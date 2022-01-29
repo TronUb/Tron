@@ -17,7 +17,7 @@ app.CMD_HELP.update(
 		"zombies",
 		{
 		"zombies" : "Get number of deleted accounts in a chat.",
-		"zombies clean" : "Remove all deleted accounts from chat."
+		"zombies [clean]" : "Remove all deleted accounts from chat."
 		}
 		)
 	}
@@ -42,7 +42,7 @@ async def remove_deleted(_, m: Message):
 				temp_count += 1
 
 		if temp_count > 0:
-			await app.send_edit(m, f"Found `{temp_count}` Deleted accounts found! Use `{app.PREFIX}zombies clean` to remove them from group.")
+			await app.send_edit(m, f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.PREFIX}zombies clean` to remove them from group.")
 		else:
 			await app.send_edit(m, "No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, mono=True)
 
