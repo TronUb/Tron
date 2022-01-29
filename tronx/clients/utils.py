@@ -61,38 +61,39 @@ class Utils(Collector):
 		subprocess.call("clear" if os.name == "posix" else "cls") 
 
 
-	def add_user(self, user_id: Union[int, List[int]], chat_id: str):
+	async def add_users(self, user_id: Union[int, List[int]], chat_id: str):
 		""" Add users in groups / channels """
 		try:
-			done = self.add_chat_members(chat_id, user_id)
+			done = await self.add_chat_members(chat_id, user_id)
 			return True if done else False
 		except Exception as e:
 			print(e)
 
 
-	def exists(self, user_id: int, chat_id: str):
-		for x in self.iter_chat_members(chat_id):
+	async def user_exists(self, user_id: int, chat_id: str):
+		async for x in self.iter_chat_members(chat_id):
 			if x.user.id == user_id:
 				return True
-		
+		return False
 
-	def check_bot_in_log_chat(self):
+
+	async def check_bot_in_log_chat(self):
 		try:
 			if bot:
-				print("Checking presence of bot in log chat . . .\n")
+				self.log.info("Checking presence of bot in log chat . . .\n")
 				try:
-					if self.exists(self.bot.id, self.LOG_CHAT) is False:
-						self.add_user(self.LOG_CHAT, self.bot.id)
-						print(f"Added bot in log chat . . .\n")
+					if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
+						await self.add_user(self.LOG_CHAT, self.bot.id)
+						self.log.info(f"Added bot in log chat . . .\n")
 					else:
-						print(f"Bot is already present in log chat . . .\n")
+						self.log.info(f"Bot is already present in log chat . . .\n")
 				except PeerIdInvalid:
-					print("Peer id is invalid, Manually send a message in log chat . . .\n")
+					self.log.info("Peer id is invalid, Manually add bot to your log chat . . .\n")
 
 			else:
 				self.log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
 		except Exception as e:
-			print(e)
+			await self.log.info(e)
 
 
 	def uptime(self):
@@ -106,7 +107,7 @@ class Utils(Collector):
 		bin.clear()
 
 		if not os.path.exists(path):
-			return print(f"No path found: {path}")
+			return self.log.info(f"No path found: {path}")
 
 		plugins = []
 		for x in os.listdir(path):
