@@ -8,6 +8,7 @@ import subprocess
 import importlib
 import requests
 
+from typing import Union, List
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
