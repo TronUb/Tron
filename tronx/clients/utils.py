@@ -1,10 +1,7 @@
 import os
 import time
-import logging
 import pyrogram
 import platform
-import importlib
-import subprocess
 
 from pysimplelog import Logger
 from config import Config
