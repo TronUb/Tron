@@ -59,7 +59,7 @@ async def sleep_userbot(_, m: Message):
 			return await app.send_edit(m, "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", mono=True, delme=3)
 
 		format = {
-			cmd<=60:"seconds", 
+			cmd<60:f"{cmd} seconds", 
 			cmd>=60:f"{cmd//60} minutes", 
 			cmd>=3600:f"{cmd//3600} hours"
 			}
