@@ -6,6 +6,7 @@ import platform
 import importlib
 import subprocess
 
+from pysimplelog import Logger
 from config import Config
 from typing import Union, List
 from telegraph import Telegraph
@@ -43,8 +44,7 @@ class Collector(Methods, Config, Database, Helpers):
 
 	# debugging /
 
-	logging.basicConfig(level=logging.WARNING)
-	log = logging.getLogger(__name__)
+	log = Logger(__name__)
 
 	# telegraph /
 
