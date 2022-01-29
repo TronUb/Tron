@@ -32,28 +32,25 @@ async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
 		if app.long(m) >= 2:
-			app.set_afk(True, m.text.split(None, 1)[1], start) # with reason
-			await app.send_edit(
-				m, 
-				"{} is now Offline.\nBecause: {}".format(app.UserMention(), m.text.split(None, 1)[1]),
-				delme=2
-				)
+			reason = m.text.split(None, 1)[1]
+			app.set_afk(True, reason, start) # with reason
+			await app.send_edit(m, f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=2)
+
 		elif app.long(m) == 1 and app.long(m) < 4096:
 			if app.getdv("AFK_TEXT"):
 				reason = app.getdv("AFK_TEXT")
 			elif app.AFK_TEXT:
-				reason = app.AFK_TEXT
+				reason = app.AFK_TEXT # config.AFK_TEXT
 			else:
 				reason = False
+
 			if reason:
-				app.set_afk(True, reason, start)
-			elif not reason:
+				app.set_afk(True, reason, start) # with reason
+				await app.send_edit(m, f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=2)
+			else:
 				app.set_afk(True, "", start) # without reason
-			await app.send_edit(
-				m, 
-				"{} is now offline.".format(app.UserMention()),
-				delme=2
-				)
+				await app.send_edit(m, f"{app.UserMention()} is now offline.", delme=2)
+
 	except Exception as e:
 		await app.error(m, e)
 
@@ -135,8 +132,8 @@ async def back_online(_, m: Message):
 			afk_time = app.GetReadableTime(end - get["afktime"])
 			msg = await app.send_message(
 				m.chat.id, 
-				f"{app.UserMention()} is now online !\n**Time:** `{afk_time}`"
-				)
+				f"{app.UserMention()} is now online !\n**Offline Time:** `{afk_time}`"
+			)
 			app.set_afk(False, "", 0)
 
 	except Exception as e:

@@ -1,10 +1,14 @@
 import os
 import pytz
+import time
 import datetime
 import asyncio
 import traceback
+import subprocess
+import importlib
 import requests
 
+from typing import Union, List
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
@@ -14,6 +18,7 @@ from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
 class Functions(object):
 	async def aexec(self, m, code):
+		"""execute python codes"""
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
@@ -22,7 +27,7 @@ class Functions(object):
 
 
 	def showdate(self):
-		"""Your location's date"""
+		"""your location's date"""
 		today = pytz.timezone(self.TIME_ZONE)
 		get_date = datetime.datetime.now(today)
 		mydate = get_date.strftime("%d %b %Y")
@@ -30,7 +35,7 @@ class Functions(object):
 
 
 	def showtime(self):
-		"""Your location's time"""
+		"""your location's time"""
 		today = pytz.timezone(self.TIME_ZONE)
 		get_time = datetime.datetime.now(today)
 		mytime = get_time.strftime("%r")
@@ -38,7 +43,7 @@ class Functions(object):
 
 
 	async def edit_text(self, m: Message, text, disable_web_page_preview=False, parse_mode="combined"):
-		"""edit or send that message"""
+		"""this is a alias function for send_edit function"""
 		try:
 			await m.edit(
 				text, 
@@ -54,24 +59,13 @@ class Functions(object):
 			)
 
 
-	async def send_msg(self, m: Message, text):
-		"""Send message"""
-		try:
-			await self.send_message(
-				m.chat.id,
-				text
-			)
-		except Exception as e:
-			await error(m, e)
-
-
 	async def error(self, m: Message, e, edit_error=False):
 		"""Error tracing"""
-		teks = f"Traceback Report:\n\n"
-		teks += f"Date: {self.showdate()}\nTime: {self.showtime()}\n\n"
+		teks = f"**Traceback Report:**\n\n"
+		teks += f"**Date:** {self.showdate()}\nTime: {self.showtime()}\n\n"
 		teks += f"This can be a error in tronuserbot, if you want you can forward this to @tronuserbot.\n\n" 
-		teks += f"Command: {m.text}\n\n"
-		teks += f"Error:\n\n"
+		teks += f"**Command:** {m.text}\n\n"
+		teks += f"**Error:**\n\n"
 		teks += f"**SHORT:** \n\n{e}\n\n"
 		teks += f"**FULL:** \n\n{traceback.format_exc()}"
 
@@ -94,23 +88,23 @@ class Functions(object):
 		self.log.error("Please check your logs online.")
 
 
-	async def sleep(self, m: Message, sec, del_msg=False):
-		"""Delete a message after some time"""
+	async def sleep(self, m: Message, sec, delme=False):
+		"""delete a message after some time"""
 		await asyncio.sleep(sec)
-		if del_msg and m.from_user.is_self:
+		if delme and m.from_user.is_self:
 			await m.delete()
 
 
 	async def delete(self, m: Message, sec: int = 0):
-		"""Delete a message after some time using sleep func"""
+		"""delete a message after some time using sleep func without blocking the code"""
 		if sec <= 600: # 10 min
-			asyncio.create_task(self.sleep(m, sec=sec, del_msg=True))
+			asyncio.create_task(self.sleep(m, sec=sec, delme=True))
 		else:
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
 
 	async def data(self, plug):
-		"""Create help information page for each module"""
+		"""create help information page for each module"""
 		try:
 			plugin_data = []
 			plugin_data.clear()
@@ -124,7 +118,7 @@ class Functions(object):
 					)
 			return plugin_data
 		except Exception as e:
-			print(e)
+			self.log.info(e)
 			return None
 
 
@@ -141,7 +135,7 @@ class Functions(object):
 		strike=False,
 		underline=False,
 		):
-		"""This function edits or sends the message"""
+		"""This function edits or exceptionally sends the message"""
 
 		formats = [mono, bold, italic, strike, underline]
 
@@ -183,7 +177,7 @@ class Functions(object):
 
 
 	async def private(self, m : Message):
-		"""Stop user from using in private"""
+		"""stop user from using in private"""
 		if m.chat.type == "private":
 			await self.send_edit(
 				m, 
@@ -200,7 +194,7 @@ class Functions(object):
 
 
 	async def create_file(self, m: Message, filename, text):
-		"""Create a file with anytype of extension"""
+		"""create a file with any type of extension"""
 		try:
 			name = filename
 			content = text
@@ -222,72 +216,50 @@ class Functions(object):
 	def rem_dual(self, one, two):
 		"""remove multiples of same element from a list"""
 		return list(set(one) - set(two))
-	
-	
-	async def kick(self, chat_id, user_id):
+
+
+	async def kick_user(self, chat_id, user_id):
 		"""kick user from chat"""
 		try:
-			await self.kick_chat_member(
-				chat_id,
-				user_id
-				)
+			await self.kick_chat_member(chat_id, user_id)
 		except Exception as e:
 			print(e)
-	
-	
+
+
 	def is_str(self, element):
-		"""True if string else False"""
+		"""true if string else False"""
 		return isinstance(element, str)
-	
-	
+
+
 	def is_bool(self, element):
-		"""True if boolean else False"""
+		"""true if boolean else False"""
 		return isinstance(element, bool)
-	
-	
+
+
 	def is_float(self, element):
-		"""True if float else False"""
+		"""true if float else False"""
 		return isinstance(element, float)
-	
-	
+
+
 	def is_int(self, element):
-		"""True if int else False"""
+		"""true if int else False"""
 		return isinstance(element, int)
-	
-	
-	async def textlen(self, m: Message, num: int = 1):
-		"""auto check and warn if not suffix with command"""
-		try:
-			cmd = True if len(m.command) > num else False
-			text = True if len(m.text) > 1 and len(m.text) <= 4096 else False
-			if cmd is False:
-				await self.send_edit(m, "Please give me some suffix . . .", mono=True, delme=3)
-			elif text is False:
-				await self.send_edit(m, "Only 4096 characters are allowed !", mono=True, delme=3)
-			else: 
-				return False
-		except Exception as e:
-			print(e)
-			await error(m, e)
-	
-	
+
+
 	async def get_last_msg(self, m: Message, user_id: int, reverse=False):
-		"""Get the first or last message of user chat"""
-		if reverse:
-			data = await self.get_history(user_id, limit=1, reverse=True)
-		else:
-			data = await self.get_history(user_id, limit=1)
-		return data
-	
-	
+		"""get the first or last message of user/chat"""
+		return await self.get_history(user_id, limit=1, reverse=reverse)
+
+
 	async def toggle_inline(self, m: Message):
-		"""Turn on | off inline mode of your bot"""
+		"""turn on | off inline mode of your bot"""
 		try:
+			botname = "BotFather"
 			await self.send_edit(m, "Processing command . . .", mono=True)
-			await self.send_message("BotFather", "/mybots") # BotFather (93372553) 
+			await self.send_message(botname, "/mybots") # BotFather (93372553) 
 			await asyncio.sleep(1) # floodwaits
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 			usernames = list(data[0].reply_markup.inline_keyboard)[0]
 	
 			unames = []
@@ -298,24 +270,24 @@ class Functions(object):
 	
 			await self.send_edit(m, "Choosing bot . . . ", mono=True)
 	
-			if self.Bot_Username() in unames:
-				await data[0].click(self.Bot_Username())
+			if self.bot.username in unames:
+				await data[0].click(self.bot.username)
 			else:
 				return await self.send_edit(m, "Looks like you don't have a bot please, use your own bot . . .", mono=True, delme=True)
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			await self.send_edit(m, "Pressing Bot Settings . . . ", mono=True)
 	
 			await data[0].click("Bot Settings")
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			await self.send_edit(m, "checking whether inline mode is On or Off . . . ", mono=True)
 	
 			await data[0].click("Inline Mode")
 	
-			data = await self.get_last_msg(m)
+			data = await self.get_last_msg(m, botname)
 	
 			# Turn on inline mode
 			if "Turn on" in str(data[0]):
@@ -328,12 +300,12 @@ class Functions(object):
 				await data[0].click("Turn inline mode off")
 				await self.send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
 		except YouBlockedUser:
-			await self.unblock_user("BotFather")
+			await self.unblock_user(botname)
 			await self.toggle_inline(m)
 		except Exception as e:
-			await error(m, e)
-	
-	
+			await self.error(m, e)
+
+
 	def quote(self):
 		"""anime quotes for weebs"""
 		results = requests.get("https://animechan.vercel.app/api/random").json()
@@ -341,17 +313,17 @@ class Functions(object):
 		msg += f" [ {results.get('anime')} ]\n\n"
 		msg += f"- {results.get('character')}\n\n"
 		return msg
-	
-	
+
+
 	def ialive_pic(self):
 		"""inline alive pic url"""
 		pic_url = self.getdv("USER_PIC")
 		data = pic_url if pic_url else self.UserPic()
 		return data if data else None
-	
-	
-	
+
+
 	def get_file_id(self, message):
+		"""get file id of supported telegram media"""
 		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
@@ -362,3 +334,86 @@ class Functions(object):
 					return [(messsge[x]).file_id, None, x]
 			elif hasattr(message, "text"):
 				return [messsge.text, None, "text"]
+
+
+	def clear():
+		""" clear terminal prompt """
+		subprocess.call("clear" if os.name == "posix" else "cls") 
+
+
+	async def add_users(self, user_id: Union[int, List[int]], chat_id: str):
+		""" add users in groups / channels """
+		try:
+			done = await self.add_chat_members(chat_id, user_id)
+			return True if done else False
+		except Exception as e:
+			print(e)
+
+
+	async def user_exists(self, user_id: int, chat_id: str):
+		"""check whether a user exists in a group or not"""
+		async for x in self.iter_chat_members(chat_id):
+			if x.user.id == user_id:
+				return True
+		return False
+
+
+	async def check_bot_in_log_chat(self):
+		"""check pesence of bot (assistant) in log chat"""
+		try:
+			if bot:
+				self.log.info("Checking presence of bot in log chat . . .\n")
+				try:
+					if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
+						await self.add_user(self.LOG_CHAT, self.bot.id)
+						self.log.info(f"Added bot in log chat . . .\n")
+					else:
+						self.log.info(f"Bot is already present in log chat . . .\n")
+				except PeerIdInvalid:
+					self.log.info("Peer id is invalid, Manually add bot to your log chat . . .\n")
+
+			else:
+				self.log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+		except Exception as e:
+			await self.log.info(e)
+
+
+	def uptime(self):
+		""" bot active time """
+		return self.GetReadableTime(time.time() - self.StartTime)
+
+
+	def import_module(self, path, exclude=[], display_module=True):
+		"""include/exclude modules installation"""
+		bin = []
+		bin.clear()
+
+		if not os.path.exists(path):
+			return self.log.info(f"No path found: {path}")
+
+		plugins = []
+		for x in os.listdir(path):
+			if x.endswith(".py"):
+				if not x in ["__pycache__",  "__init__.py"]:
+					plugins.append(x.replace(".py", ""))
+
+		py_path_raw = ".".join(path.split("/"))
+		py_path = py_path_raw[0:len(py_path_raw)-1]
+
+		count = 0
+		for x in plugins:
+			if not x in exclude:
+				importlib.import_module(py_path + "." + x)
+				count += 1
+				bin.append(x)
+
+		if display_module:
+			data = sorted(bin)
+			for x in data:
+				self.log.info(x + " Loaded !")
+		return count
+
+
+	def db_status(self):
+		"""database is available or not"""
+		"Available" if self.DB_URI else "Unavailable"

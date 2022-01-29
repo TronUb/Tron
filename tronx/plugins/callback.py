@@ -393,7 +393,7 @@ async def _more_anime_quotes(_, cb):
 @app.bot.on_callback_query(filters.regex("global-commands"))
 async def _global_commands(_, cb):
 	await cb.edit_message_text(
-		text="**Dex:** Public commands\n\nCOMMAND: /start \n**USAGE:** Check that bot is on or off.\n\n**COMMAND:** /help\n**USAGE:** Need help? Type this command.\n\n**COMMAND:** /anime\n**USAGE:** Search anime to get anime information.\n\n**COMMAND:** /manga\n**USAGE:** Search manga to get manga information.\n\n**COMMAND:** /airing\n**USAGE:** Search ongoing anime and get information.\n\n**COMMAND:** /character\n**USAGE:** Search anime character and get their information.\n\n**COMMAND:** /quote\n**USAGE:** Get random anime character quote with a “more” inline button to change random quote infinitely.\n\n**COMMAND:** /ping\n**USAGE:** Test the speed of our bot and get results.\n\n",
+		text="**Dex:** Public commands\n\nCOMMAND: /start \n**USAGE:** Check that bot is on or off.\n\n**COMMAND:** /help\n**USAGE:** Need help? Type this command.\n\n**COMMAND:** /quote\n**USAGE:** Get random anime character quote with a “more” inline button to change random quote infinitely.\n\n**COMMAND:** /ping\n**USAGE:** Test the speed of our bot and get results.\n\n**COMMAND:** /id\n**USAGE:** Get id of group and user.",
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[
