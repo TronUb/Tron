@@ -51,7 +51,7 @@ async def sleep_userbot(_, m: Message):
 		return await app.send_edit(m, "Give me some seconds after command . . .")
 
 	elif app.long(m) > 1:
-		cmd = m.command[1]
+		cmd = int(m.command[1])
 
 	if cmd.isdigit():
 		if int(cmd) > 60:
