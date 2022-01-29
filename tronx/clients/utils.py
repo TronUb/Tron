@@ -41,7 +41,7 @@ class Utils(Methods, Config, Database, Helpers):
 
 	# debugging /
 
-	log = Logger(__name__)
+	log = Logger(name=__name__, timezone=Config.TIME_ZONE)
 
 	# telegraph /
 
