@@ -4,7 +4,7 @@ import os
 
 
 #todo
-if os.unname()[1] == "localhost":
+if os.uname()[1] == "localhost":
 	response = os.system("pip3 install -r requirements.txt")
 	if response == 0:
 		print("Successfully Installed all requirements")
