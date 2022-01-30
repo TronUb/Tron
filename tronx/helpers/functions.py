@@ -170,7 +170,7 @@ class Functions(object):
 
 		try:
 			if delme > 0:
-				asyncio.create_task(self.sleep(m, sec=delme, del_msg=True))
+				asyncio.create_task(self.sleep(m, sec=delme, delme=True))
 
 		except Exception as e:
 			await self.error(m, e)

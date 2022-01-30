@@ -3,6 +3,20 @@ import os
 
 
 
+#todo
+if os.uname()[1] == "localhost":
+	response = os.system("pip3 install -r requirements.txt")
+	if response == 0:
+		print("Successfully Installed all requirements")
+	else:
+		print("Failed to install requirements")
+
+
+
+
+# if you deploy this bot by localhost method, then replace all the necessary part of variables given below after '=' sign with your desired values.
+# for example edit like 'API_ID = 1234567' instead of 'API_ID = os.getenv("API_ID")'
+# Note: don't touch anything else given below except the values you wanna change otherwise you'll face errors.
 #-------------------------------------------------------------------------------------------------------------
 class Config(object):
 	# api id of your telegram account (required)
@@ -65,19 +79,19 @@ class Config(object):
 	BOT_NAME = os.getenv("BOT_NAME", "NORA")
 	# your assistants alive pic (optional)
 	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/4d93e5fa480b5e53d898f.jpg")
-	# provide this if bot fails to get username of bot
+	# provide this if bot fails to get username of bot (optional)
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
-	# telegram id of bot 
+	# telegram id of bot if failed to get automatically (optional)
 	BOT_ID = os.getenv("BOT_ID")
 	# without this the bot will not work (required)
 	TOKEN = os.getenv("TOKEN")
 # ---------------------
-	# thumbnail used while uploading plugin, etc.
+	# thumbnail used while uploading plugins, etc. (optional)
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
 # ---------------------
 	# your telegraph account name (default: Tronuserbot)
 	TL_NAME = os.getenv("TL_NAME")
-	# this will be shown before (as a prefix) the texts in the help dex 
+	# this will be shown before (as a prefix) the texts in the help dex (default: None)
 	HELP_EMOJI = os.getenv("HELP_EMOJI")
 
 
