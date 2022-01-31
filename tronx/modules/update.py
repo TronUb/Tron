@@ -97,7 +97,7 @@ async def update_ub(_, m):
 	changelog = await gen_chlog(repo, f"{ACTIVE_BRANCH}")
 	if cmd is False:
 		if changelog:
-			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ac_br}):\n\n[CHANGE LOG]:**\n\n{changelog}"
+			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH}):\n\n[CHANGE LOG]:**\n\n{changelog}"
 			if len(changelog_str) > 4096:
 				await app.send_edit(m, "Changelog is too big, view the file below to see it.", mono=True, delme=6)
 				file = open("output.txt", "w+")
