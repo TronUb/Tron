@@ -100,7 +100,7 @@ async def update_ub(_, m):
 			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH}):\n\n[CHANGE LOG]:**\n\n{changelog}"
 			if len(changelog_str) > 4096:
 				await app.send_edit(m, "Changelog is too big, view the file below to see it.", mono=True, delme=6)
-				file = open("output.txt", "w+")
+				file = open("up_output.txt", "w+")
 				file.write(changelog_str)
 				file.close()
 				await app.send_document(
