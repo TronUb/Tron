@@ -19,7 +19,7 @@ app.CMD_HELP.update(
 		"update",
 		{
 		"update" : "To check if new update is available or not.",
-		"update now" : "To update userbot to latest version."
+		"update [ now ]" : "To update userbot to latest version."
 		}
 		)
 	}
@@ -28,30 +28,23 @@ app.CMD_HELP.update(
 
 
 
-UPSTREAM_REPO_URL = "https://github.com/beastzx18/tron"
-
-requirements_path = path.join(
-	path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
-)
-
-
+TRON_REPO = app.UPSTREAM_REPO
 
 
 async def gen_chlog(repo, diff):
 	ch_log = ""
-	d_form = "On %d/%m/%y at %H:%M:%S"
-	for c in repo.iter_commits(diff):
-		ch_log += f"**#{c.count()}** : {c.committed_datetime.strftime(d_form)} : [{c.summary}]({UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}) by `{c.author}`\n"
+	dateform = "On %d/%m/%y at %H:%M:%S"
+	for data in repo.iter_commits(diff):
+		ch_log += f"**#{data.count()}** : {data.committed_datetime.strftime(dateform)} : [{data.summary}]({TRON_REPO.rstrip('/')}/commit/{c}) by `{data.author}`\n"
 	return ch_log
 
 
 
 
-async def updateme_requirements():
-	reqs = str(requirements_path)
+async def install_requirements():
 	try:
 		process = await asyncio.create_subprocess_shell(
-			" ".join([sys.executable, "-m", "pip", "install", "-r", reqs]),
+			" ".join([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"]),
 			stdout=asyncio.subprocess.PIPE,
 			stderr=asyncio.subprocess.PIPE,
 		)
@@ -64,72 +57,68 @@ async def updateme_requirements():
 
 
 @app.on_message(gen("update"))
-async def upstream(_, m):
+async def update_ub(_, m):
+	cmd = False
+	errtext = "Some problem occurred:\n\n"
+
 	await app.send_edit(m, "Checking for updates, please wait . . .", mono=True)
+
 	if app.long(m) > 1:
 		cmd = m.command
-	else:
-		cmd = False
-	off_repo = UPSTREAM_REPO_URL
+
 	try:
-		txt = "`Oops . . . Updater cannot continue due to "
-		txt += "some problems occured`\n\n**LOGTRACE:**\n"
 		repo = Repo()
-	except NoSuchPathError as error:
-		await app.send_edit(m, f"{txt}\n`directory {error} is not found`")
-		repo.__del__()
-		return
-	except GitCommandError as error:
-		await app.send_edit(m, f"{txt}\n`Early failure! {error}`")
-		repo.__del__()
-		return
-	except InvalidGitRepositoryError as error:
+	except NoSuchPathError as e:
+		await app.send_edit(m, f"{errtext}`{e}`")
+		return repo.__del__()
+
+	except GitCommandError as e:
+		await app.send_edit(m, f"{errtext}`{e}`")
+		return repo.__del__()
+
+	except InvalidGitRepositoryError as e:
 		repo = Repo.init()
-		origin = repo.create_remote("upstream", off_repo)
+		origin = repo.create_remote("upstream", TRON_REPO)
 		origin.fetch()
 		repo.create_head("master", origin.refs.master)
 		repo.heads.master.set_tracking_branch(origin.refs.master)
 		repo.heads.master.checkout(True)
-	ac_br = repo.active_branch.name
-	if ac_br != "master":
-		await app.send_edit(
-			m, 
-			f"**[UPDATER]:**` You are on ({ac_br})\n Please change to master branch.`"
-		)
-		repo.__del__()
-		return
+	ACTIVE_BRANCH = repo.active_branch.name
+	if ACTIVE_BRANCH != "master":
+		await app.send_edit(m, f"**[ UPDATER ]:** You are on [ {ACTIVE_BRANCH} ]\n\nPlease change to `master` branch.`")
+		return repo.__del__()
+
 	try:
-		repo.create_remote("upstream", off_repo)
+		repo.create_remote("upstream", TRON_REPO)
 	except BaseException:
 		pass
 	ups_rem = repo.remote("upstream")
-	ups_rem.fetch(ac_br)
-	changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
+	ups_rem.fetch(ACTIVE_BRANCH)
+	changelog = await gen_chlog(repo, f"{ACTIVE_BRANCH}")
 	if cmd is False:
 		if changelog:
-			changelog_str = f"**New UPDATE available for [[{ac_br}]]({UPSTREAM_REPO_URL}/tree/{ac_br}):\n\nCHANGELOG**\n\n{changelog}"
+			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ac_br}):\n\n[CHANGE LOG]:**\n\n{changelog}"
 			if len(changelog_str) > 4096:
-				await app.send_edit(m, "Changelog is too big, view the file to see it.", monk=True, delme=6)
+				await app.send_edit(m, "Changelog is too big, view the file below to see it.", mono=True, delme=6)
 				file = open("output.txt", "w+")
 				file.write(changelog_str)
 				file.close()
 				await app.send_document(
 					m.chat.id,
-					"output.txt",
+					"up_output.txt",
 					caption="[ STATUS ]: Do `.update now` to update.",
-					reply_to_message_id=send_message_id,
 				)
-				remove("output.txt")
+				remove("up_output.txt")
 			else:
 				return await app.send_edit(
 					m, 
-					f"{changelog_str}\n\n[ STATUS ]: Do `.update now` to update.",
+					f"{changelog_str}\n\n[ UPDATE ]: Do `.update now` to update.",
 					disable_web_page_preview=True,
 				)
 		else:
 			await app.send_edit(
 				m, 
-				f"**[ STATUS ]:** Your bot is upto date !\n**[VERSION]:** `{app.userbot_version}`\n**[BRANCH]:** [{ac_br}]({UPSTREAM_REPO_URL}/tree/{ac_br})",
+				f"**[ STATUS ]:** Your bot is upto date !\n**[ VERSION ]:** `{app.userbot_version}`\n**[ BRANCH ]:** [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH})",
 				disable_web_page_preview=True,
 			)
 			return repo.__del__()
@@ -143,10 +132,10 @@ async def upstream(_, m):
 		if not app.HEROKU_APP_NAME:
 			await app.send_edit(
 				m, 
-				"`Please set up the HEROKU_APP_NAME variable to be able to update userbot.`"
+				"`Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.`"
 			)
-			repo.__del__()
-			return
+			return repo.__del__()
+
 		for bars in heroku_applications:
 			if bars.name == app.HEROKU_APP_NAME:
 				heroku_app = bars
@@ -154,15 +143,15 @@ async def upstream(_, m):
 		if heroku_app is None:
 			await app.send_edit(
 				m, 
-				f"{txt}\n`Invalid Heroku credentials for updating userbot.`"
+				f"Invalid Heroku credentials for updating userbot."
 			)
-			repo.__del__()
-			return
+			return repo.__del__()
+
 		msg = await app.send_edit(
 			m, 
 			"`Userbot update in progress, please wait for few minutes . . .`"
 		)
-		ups_rem.fetch(ac_br)
+		ups_rem.fetch(ACTIVE_BRANCH)
 		repo.git.reset("--hard", "FETCH_HEAD")
 		heroku_git_url = heroku_app.git_url.replace(
 			"https://", "https://api:" + app.HEROKU_API_KEY + "@"
@@ -173,26 +162,23 @@ async def upstream(_, m):
 		else:
 			remote = repo.create_remote("heroku", heroku_git_url)
 		try:
-			remote.push(refspec=f"HEAD:refs/heads/{ac_br}", force=True)
+			remote.push(refspec=f"HEAD:refs/heads/{ACTIVE_BRANCH}", force=True)
 		except GitCommandError as error:
 			pass
 		try:
-			await msg.edit("`Successfully Updated!\nRestarting, Please wait . . .`")
+			await msg.edit("Successfully Updated!\nRestarting, Please wait . . .", mono=True)
 		except Exception:
 			await app.send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=5)
 	else:
 		try:
-			ups_rem.pull(ac_br)
+			ups_rem.pull(ACTIVE_BRANCH)
 		except GitCommandError:
 			repo.git.reset("--hard", "FETCH_HEAD")
 		await updateme_requirements()
 		await app.send_edit(
 			m,
-			"Successfully Updated!\nBot is restarting . . . Wait for few seconds !", 
+			"Successfully updated Userbot!\nBot is restarting . . .", 
 			mono=True, 
 			delme=8
 		)
-
-		args = [sys.executable, "./resources/startup/deploy.sh"]
-		execle(sys.executable, *args, environ)
-		return
+		await install_requirements()
