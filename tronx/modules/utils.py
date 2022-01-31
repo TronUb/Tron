@@ -106,7 +106,7 @@ async def invite(_, m):
 	except (UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied):
 		return await app.send_edit(m, "The username | id seems to be invalid  . . .", mono=True, delme=4)
 
-	await app.add_user(get_user.id, m.chat.id)
+	await app.add_users(get_user.id, m.chat.id)
 	await app.send_edit(m, f"Added {get_user.first_name} to the chat!")
 
 
