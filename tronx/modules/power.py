@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import asyncio
 
 from pyrogram.types import Message
@@ -71,6 +72,6 @@ async def sleep_userbot(_, m: Message):
 				break
 
 		await app.send_edit(m, f"Sleeping for {suffix} . . .", delme=cmd)
-		await asyncio.sleep(cmd)
+		time.sleep(cmd) 
 	else:
 		await app.send_edit(m, "Please give me a number not text . . .", delme=3, mono=True)

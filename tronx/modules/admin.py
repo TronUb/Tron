@@ -336,7 +336,7 @@ async def kick_user(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
-			await app.kick(m.chat.id, user.user.id)
+			await app.kick_user(m.chat.id, user.user.id)
 			await app.send_edit(m, f"Kicked {user.user.mention} in this chat !")
 		else:
 			return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)

@@ -189,8 +189,12 @@ class Functions(object):
 
 	def long(self, m: Message):
 		"""to check args, same as len(message.text.split())"""
-		text = len(m.command)
-		return text if text else None
+		text = len(m.command) or None
+
+
+	def textlen(self, m: Message):
+		"""to check length of characters inside a message"""
+		return len([x for x in m.text or m.caption])
 
 
 	async def create_file(self, m: Message, filename, text):
