@@ -1,47 +1,34 @@
 class User(object):
-	# instant change of names through database vars
 	def UserName(self):
-		var = self.getdv("USER_NAME")
-		one = var if bool(var) is True else self.USER_NAME
-		two = one if one else self.name
-		return two if two else None
+		"""returns name of user"""
+		return self.getdv("USER_NAME") or self.USER_NAME or self.name or None
 
 
-	# username of bot owner
 	def UserUsername(self):
-		var = self.getdv("USER_USERNAME")
-		one = var if bool(var) is True else self.USER_USERNAME
-		two = one if one else self.username
-		return two if two else None
+		"""returns username of user"""
+		return self.getdv("USER_USERNAME") or self.USER_USERNAME or self.username or None
 
 
-	# mention of bot owner
 	def UserMention(self):
+		"""returns mention of user"""
 		return self.MentionMarkdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
 
 
-	# telegram id of bot owner
 	def UserId(self):
-		var = self.getdv("USER_ID")
-		one = var if bool(var) is True else self.USER_ID
-		two = one if one else self.id
-		return two if two else None
+		"""returns telegram id of user"""
+		return self.getdv("USER_ID") or self.USER_ID or self.id or None
 
 
-	# dc id of bot owner
 	def UserDc(self):
-		data = self.USER_DC if self.USER_DC else self.dc_id
-		return data if data else None
+		"""returns telegram dc id of user"""
+		return self.dc_id or None
 
 
-	# custom user pic
 	def UserPic(self):
-		var = self.getdv("USER_PIC")
-		one = var if bool(var) is True else self.USER_PIC
-		return one if one else None
+		"""returns pic of user"""
+		return self.getdv("USER_PIC") or self.USER_PIC or self.pic or None
 
 
 	def UserBio(self):
-		var = self.getdv("USER_BIO")
-		one = var if bool(var) is True else self.USER_BIO
-		return one if one else None
+		"""returns bio of user"""
+		return self.getdv("USER_BIO") or self.USER_BIO or self.bio or None
