@@ -189,7 +189,8 @@ class Functions(object):
 
 	def long(self, m: Message):
 		"""to check args, same as len(message.text.split())"""
-		text = len(m.command) or None
+		text = len(m.command)
+		return text if bool(text) else none
 
 
 	def textlen(self, m: Message):
