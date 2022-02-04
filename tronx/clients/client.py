@@ -20,8 +20,8 @@ class SuperClient(Utils, Client):
 		self.dc_id = self.me.dc_id
 		self.name = self.me.first_name
 		self.username = f"@{self.me.username}" if self.me.username else ""
-		bio = self.me.bio if self.me.bio else ""
-		pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else ""
+		self.bio = self.me.bio if self.me.bio else ""
+		self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else ""
 		self.stop()
 
 	class Bot(Client, Utils):
@@ -39,6 +39,6 @@ class SuperClient(Utils, Client):
 			self.dc_id = self.me.dc_id
 			self.name = self.me.first_name
 			self.username = f"@{self.me.username}"
-			bio = self.me.bio if self.me.bio else ""
-			pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else ""
+			self.bio = self.me.bio if self.me.bio else ""
+			self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else ""
 			self.stop()
