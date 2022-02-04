@@ -13,13 +13,15 @@ class SuperClient(Utils, Client):
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
 		)
-		self.bot = self.Bot()
+		self.bot = self.Bot() # workaround
 		self.start()
-		self.me = self.get_me()
+		self.me = self.get_chat("me")
 		self.id = self.me.id
 		self.dc_id = self.me.dc_id
 		self.name = self.me.first_name
-		self.username = "@" + self.me.username if self.me.username else ""
+		self.username = f"@{self.me.username}" if self.me.username else ""
+		bio = self.bio if self.bio else ""
+		pic = self.download_media(self.photo.big_file_id) if self.photo else ""
 		self.stop()
 
 	class Bot(Client, Utils):
@@ -32,9 +34,11 @@ class SuperClient(Utils, Client):
 			bot_token=self.TOKEN,
 			)
 			self.start()
-			self.me = self.get_me()
+			self.me = self.get_chat("me")
 			self.id = self.me.id
 			self.dc_id = self.me.dc_id
 			self.name = self.me.first_name
-			self.username = "@" + self.me.username
+			self.username = f"@{self.me.username}"
+			bio = self.bio if self.bio else ""
+			pic = self.download_media(self.photo.big_file_id) if self.photo else ""
 			self.stop()
