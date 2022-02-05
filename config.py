@@ -41,7 +41,7 @@ class Config(object):
 	DB_URI = os.getenv("DATABASE_URL")
 # ------------------
 	# these users can use your userbot
-	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS").split()] # splits on spaces
+	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split() if ] # splits on spaces
 	# a group to store logs, etc (required)
 	LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
@@ -49,7 +49,7 @@ class Config(object):
 	# for more info visit docs.pyrogram.org, workers section
 	WORKERS = int(os.getenv("WORKERS", 8))
 	# exclude official plugins from installing, give a space between plugin names
-	NO_LOAD = [int(x) for x in os.getenv("NO_LOAD").split()] # splits on spaces
+	NO_LOAD = [int(x) for x in os.getenv("NO_LOAD", "").split()] # splits on spaces
 	# default reason for afk plugin
 	AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Now !")
 # ------------------
