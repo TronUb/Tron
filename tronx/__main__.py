@@ -44,7 +44,7 @@ async def start_bot():
 	_plugs = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	print(f"\n\n{_plugs} plugins Loaded\n\n")
 	print("MODULES: Installing . . .\n\n")
-	_mods = app.import_module("tronx/modules/", exclude=app.NoLoad()))
+	_mods = app.import_module("tronx/modules/", exclude=app.NoLoad())
 	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
