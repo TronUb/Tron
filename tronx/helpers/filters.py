@@ -28,29 +28,32 @@ from config import Config
 def regex(
 	pattern: Union[str, Pattern], 
 	flags: int = 0,
-	only_me: bool = True,
+	allow_sudo: bool = True,
 	allow_forward: bool = False,
 	allow_channel: bool = False,
 	allow_edit: bool = True
 	):
 
-	async def func(flt, _, update: Update):
-		if only_me:
-			if not (update.from_user
-				and update.from_user.is_self
-				):
+	async def func(flt, client: Client, update: Update):
+
+		# works for you & sudo | only for you
+		if allow_sudo:
+			if not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
+				return False
+		elif not allow_sudo:
+			if not update.from_user.is_self:
 				return False
 
-		if allow_forward is False:
-			if update.forward_date:
+		if not allow_forward:
+			if update.forward_date: 
 				return False
 
-		if allow_channel is False:
-			if update.chat.type == "channel":
+		if not allow_channel:
+			if update.chat.type == "channel": 
 				return False
 
-		if allow_edit is False:
-			if update.edit_date:
+		if not allow_edit:
+			if update.edit_date: 
 				return False
 
 		if isinstance(update, Message):
@@ -88,7 +91,7 @@ def gen(
 	commands: Union[str, List[str]], 
 	prefixes: Union[str, List[str]] = myprefix(), 
 	case_sensitive: bool = True, 
-	only_me: bool = True,
+	allow_sudo: bool = True,
 	allow_forward: bool = False,
 	allow_channel: bool = False,
 	allow_edit: bool = True,
@@ -110,9 +113,12 @@ def gen(
 		if not text:
 			return False
 
-		# works only for you 
-		if only_me:
-			if message.from_user and not message.from_user.is_self:
+		# works for you & sudo | only for you
+		if allow_sudo:
+			if not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
+				return False
+		elif not allow_sudo:
+			if not message.from_user.is_self:
 				return False
 
 		if allow_forward is False:
