@@ -50,7 +50,8 @@ class Functions(object):
 				parse_mode=parse_mode, 
 				disable_web_page_preview=disable_web_page_preview,
 			)
-		except MessageIdInvalid:
+		except (MessageIdInvalid or MessageAuthorRequired):
+			await m.delete()
 			await self.send_message(
 				m.chat.id,
 				text,
