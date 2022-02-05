@@ -27,7 +27,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("setdv"))
+@app.on_message(gen("setdv", allow_sudo=False))
 async def set_dv_var(_, m: Message):
 	if app.long(m) == 2:
 		await app.send_edit(m, "Please give me key with a value . . . ", mono=True, delme=2)  
@@ -49,7 +49,7 @@ async def set_dv_var(_, m: Message):
 
 
 
-@app.on_message(gen("deldv"))
+@app.on_message(gen("deldv", allow_sudo=False))
 async def del_dv_var(_, m: Message):
 	if app.long(m) == 1:
 		await app.send_edit(m, "Give me some key to delete that a var from database . . . ", mono=True, delme=2)
@@ -66,7 +66,7 @@ async def del_dv_var(_, m: Message):
 
 
 
-@app.on_message(gen("getdv"))
+@app.on_message(gen("getdv", allow_sudo=False))
 async def get_dv_var(_, m: Message):
 	if app.long(m) == 1:
 		await app.send_edit(m, "Give me some key to get value that a var from database . . . ", mono=True, delme=2)
@@ -86,7 +86,7 @@ async def get_dv_var(_, m: Message):
 
 
 
-@app.on_message(gen("pm"))
+@app.on_message(gen("pm", allow_sudo=False))
 async def get_database_var(_, m: Message):
 	arg = m.command
 	if app.long(m) < 2:
@@ -114,7 +114,7 @@ async def get_database_var(_, m: Message):
 
 
 
-@app.on_message(gen("alldv"))
+@app.on_message(gen("alldv", allow_sudo=False))
 async def get_all_dv(_, m: Message):
 	if bool(app.getalldv()) is True:
 		await app.send_edit(m, "Getting all database vars . . .", mono=True)
