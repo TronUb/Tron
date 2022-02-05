@@ -71,7 +71,7 @@ class Config(object):
 	# used for alive plugin (default: tronuserbot logo image)
 	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/1073e200f9d8e70b91f0d.jpg")
 	# add your telegram id if bot fails to get your id 
-	USER_ID = int(os.getenv("USER_ID"))
+	USER_ID = os.getenv("USER_ID")
 	# add your username if bot fails to get your username
 	USER_USERNAME = os.getenv("USER_USERNAME")
 # --------------------
@@ -84,7 +84,7 @@ class Config(object):
 	# provide this if bot fails to get username of bot (optional)
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# telegram id of bot if failed to get automatically (optional)
-	BOT_ID = int(os.getenv("BOT_ID"))
+	BOT_ID = os.getenv("BOT_ID")
 	# access token of your bot, without this the bot will not work (required)
 	TOKEN = os.getenv("TOKEN")
 # ---------------------
