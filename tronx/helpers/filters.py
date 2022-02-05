@@ -38,10 +38,10 @@ def regex(
 
 		# works for you & sudo | only for you
 		if allow_sudo:
-			if not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
+			if update.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
 				return False
 		elif not allow_sudo:
-			if not update.from_user.is_self:
+			if update.from_user and not update.from_user.is_self:
 				return False
 
 		if not allow_forward:
@@ -115,10 +115,10 @@ def gen(
 
 		# works for you & sudo | only for you
 		if allow_sudo:
-			if not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
+			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
 				return False
 		elif not allow_sudo:
-			if not message.from_user.is_self:
+			if message.from_user and not message.from_user.is_self:
 				return False
 
 		if allow_forward is False:
