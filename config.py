@@ -41,7 +41,7 @@ class Config(object):
 	DB_URI = os.getenv("DATABASE_URL")
 # ------------------
 	# these users can use your userbot
-	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split() if ] # splits on spaces
+	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
 	# a group to store logs, etc (required)
 	LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
