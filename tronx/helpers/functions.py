@@ -188,6 +188,7 @@ class Functions(object):
 				mono=True, 
 				delme=True
 			)
+			return
 
 
 	def long(self, m: Message):
