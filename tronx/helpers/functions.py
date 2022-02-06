@@ -426,3 +426,4 @@ class Functions(object):
 	def db_status(self):
 		"""database is available or not"""
 		"Available" if self.DB_URI else "Unavailable"
+
