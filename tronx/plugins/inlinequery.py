@@ -36,10 +36,10 @@ def inline_result(_, inline_query):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
-				photo_url=app.PMPERMIT_PIC,
+				photo_url=app.PmpermitPic(),
 				title="Tron security system",
 				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
-				caption=app.PMPERMIT_TEXT,
+				caption=app.PmpermitText(),
 				parse_mode="combined",
 				reply_markup=InlineKeyboardMarkup([approve])
 			)
