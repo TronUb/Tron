@@ -45,18 +45,21 @@ class Functions(object):
 	async def edit_text(self, m: Message, text, disable_web_page_preview=False, parse_mode="combined"):
 		"""this is a alias function for send_edit function"""
 		try:
-			await m.edit(
-				text, 
-				parse_mode=parse_mode, 
-				disable_web_page_preview=disable_web_page_preview,
-			)
-		except MessageIdInvalid:
-			await self.send_message(
-				m.chat.id,
-				text,
-				disable_web_page_preview=disable_web_page_preview,
-				parse_mode=parse_mode
-			)
+			if m.from_user and m.from_user.is_self:
+				await m.edit(
+					text, 
+					parse_mode=parse_mode, 
+					disable_web_page_preview=disable_web_page_preview,
+				)
+			elif m.from_user and not m.from_user.is_self: # for sudo users
+				await self.send_message(
+					m.chat.id,
+					text,
+					disable_web_page_preview=disable_web_page_preview,
+					parse_mode=parse_mode
+				)
+		except Exception as e:
+			self.log.info(e)
 
 
 	async def error(self, m: Message, e, edit_error=False):

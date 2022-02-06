@@ -41,10 +41,10 @@ async def start_bot():
 	""" __main__ startup """
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
 	print("PLUGINS: Installing . . .\n\n")
-	_plugs = app.import_module("tronx/plugins/")
+	_plugs = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	print(f"\n\n{_plugs} plugins Loaded\n\n")
 	print("MODULES: Installing . . .\n\n")
-	_mods = app.import_module("tronx/modules/")
+	_mods = app.import_module("tronx/modules/", exclude=app.NoLoad())
 	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()

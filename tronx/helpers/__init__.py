@@ -5,6 +5,7 @@ from .strings import Strings
 from .utilities import Utilities
 from .bot import Bot
 from .user import User
+from .others import Others
 from .filters import *
 
 
@@ -16,6 +17,7 @@ class Helpers(
 	Strings,
 	Utilities,
 	Bot,
-	User
+	User,
+	Others
 ):
 	pass
