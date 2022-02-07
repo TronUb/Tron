@@ -44,23 +44,23 @@ async def evaluate(client, m: Message):
 	reply = m.reply_to_message
 	chat_type = m.chat.type
 	chat_id = m.chat.id
-	text_list = m.command
+	text = m.text
 	p = print
 	bot = app.bot
 
 	if chat_type in ("supergroup", "group") and chat_id != app.LOG_CHAT:
-		for x in text_list:
-			if x in sensitive:
+		for x in sensitive:
+			if x in text:
 				return await app.send_edit(m, warning_message, mono=True, delme=4)	
 
 	elif chat_type == "private" and chat_id != app.id:
-		for y in text_list:
-			if y in sensitive:
+		for y in sensitive:
+			if y in text:
 				return await app.send_edit(m, warning_message, mono=True, delme=4)	
 
 	elif chat_type == "bot" and chat_id != app.bot.id:
-		for z in text_list:
-			if z in sensitive:
+		for z in sensitive:
+			if z in text:
 				return await app.send_edit(m, warning_message, mono=True, delme=4)
 
 	try:
