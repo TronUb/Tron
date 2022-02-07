@@ -36,11 +36,11 @@ app.CMD_HELP.update(
 async def evaluate(client, m: Message):
 	""" This function is made to execute python codes """
 
-	global reply, chat_id, chat_type
+	global reply, chat_id, chat_type, p, bot
 
 	access_list = ("SESSION", "API_ID",  "API_HASH", "session_name", "api_id", "api_hash")
 	sensitive = [ f"app.{x}" for x in dir(app) if x in access_list] + [ f"self.{y}" for y in dir(app) if y in access_list] + [f"Config.{z}" for z in dir(app) if z in access_list]   
-	warning = "Sorry but by evaluating this code your sensitive data will be exposed in this chat, aborting command !"
+	warning_message = "Sorry but by evaluating this code your sensitive data will be exposed in this chat, aborting command !"
 	reply = m.reply_to_message
 	chat_type = m.chat.type
 	chat_id = m.chat.id
