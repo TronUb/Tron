@@ -30,17 +30,40 @@ app.CMD_HELP.update(
 
 
 
-# shortcuts
-p = print
-c = Config
-
 
 
 
 @app.on_message(gen(["eval", "e"], allow_channel=True))
-async def evaluate(_, m):
-	global reply
+async def evaluate(client, m: Message):
+	""" This function is made to execute python codes """
+
+	global reply, chat_id, chat_type
+
+	access_list = ("SESSION", "API_ID",  "API_HASH", "session_name", "api_id", "api_hash")
+	sensitive = [ f"app.{x}" for x in dir(self) if x in access_list] + [ f"self.{y}" for y in dir(self) if y in access_list] + [f"Config.{z}" for z in dir(self) if z in access_list]   
+	warning = "Sorry but by evaluating this code your sensitive data will be exposed in this chat, aborting command !"
 	reply = m.reply_to_message
+	chat_type = m.chat.type
+	chat_id = m.chat.id
+	text_list = m.command
+	p = print
+	bot = app.bot
+
+	if chat_type in ("supergroup", "group") and chat_id != app.LOG_CHAT:
+		for x in text_list:
+			if x in sensitive:
+				return await send_edit(m, warning_message, mono=True, delme=4)	
+
+	elif chat_type == "private" and chat_id != app.id:
+		for y in text_list:
+			if y in sensitive:
+				return await send_edit(m, warning_message, mono=True, delme=4)	
+
+	elif chat_type == "bot" and chat_id != app.bot.id::
+		for z in text_list:
+			if z in sensitive:
+				return await send_edit(m, warning_message, mono=True, delme=4)
+
 	try:
 		cmd = m.text.split(" ", maxsplit=1)[1]
 	except IndexError:
@@ -48,9 +71,7 @@ async def evaluate(_, m):
 
 	await app.send_edit(m, "Running . . .", mono=True)
 
-	reply_to_id = m.message_id
-	if reply:
-		reply_to_id = reply.message_id
+	reply_to_id = reply.message_id if reply else m.message_id
 
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
