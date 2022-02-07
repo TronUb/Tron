@@ -59,13 +59,13 @@ async def evaluate(client, m: Message):
 			if y in sensitive:
 				return await send_edit(m, warning_message, mono=True, delme=4)	
 
-	elif chat_type == "bot" and chat_id != app.bot.id::
+	elif chat_type == "bot" and chat_id != app.bot.id:
 		for z in text_list:
 			if z in sensitive:
 				return await send_edit(m, warning_message, mono=True, delme=4)
 
 	try:
-		cmd = m.text.split(" ", maxsplit=1)[1]
+		cmd = m.text.split(None, 1)[1]
 	except IndexError:
 		return await app.send_edit(m, "Give me some code to execute . . .", mono=True, delme=3)
 
