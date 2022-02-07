@@ -9,9 +9,8 @@ from io import StringIO
 from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import *
-
-from tronx.helpers import *
+from tronx import app
+from tronx.helpers import gen, regex
 
 
 
@@ -40,7 +39,7 @@ async def evaluate(client, m: Message):
 	global reply, chat_id, chat_type
 
 	access_list = ("SESSION", "API_ID",  "API_HASH", "session_name", "api_id", "api_hash")
-	sensitive = [ f"app.{x}" for x in dir(self) if x in access_list] + [ f"self.{y}" for y in dir(self) if y in access_list] + [f"Config.{z}" for z in dir(self) if z in access_list]   
+	sensitive = [ f"app.{x}" for x in dir(app) if x in access_list] + [ f"self.{y}" for y in dir(app) if y in access_list] + [f"Config.{z}" for z in dir(app) if z in access_list]   
 	warning = "Sorry but by evaluating this code your sensitive data will be exposed in this chat, aborting command !"
 	reply = m.reply_to_message
 	chat_type = m.chat.type
