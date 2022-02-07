@@ -10,7 +10,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from tronx import app
-from tronx.helpers import gen, regex
+from tronx.helpers import gen
 
 
 
@@ -29,12 +29,17 @@ app.CMD_HELP.update(
 
 
 
+bot = app.bot
+p = print
 
 
 
 @app.on_message(gen(["eval", "e"], allow_channel=True))
 async def evaluate(client, m: Message):
 	""" This function is made to execute python codes """
+
+	if app.textlen(m) > 4096:
+		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", mono=True, delme=4)
 
 	global reply, chat_id, chat_type, p, bot
 
@@ -45,8 +50,6 @@ async def evaluate(client, m: Message):
 	chat_type = m.chat.type
 	chat_id = m.chat.id
 	text = m.text
-	p = print
-	bot = app.bot
 
 	if chat_type in ("supergroup", "group") and chat_id != app.LOG_CHAT:
 		for x in sensitive:
@@ -66,11 +69,9 @@ async def evaluate(client, m: Message):
 	try:
 		cmd = m.text.split(None, 1)[1]
 	except IndexError:
-		return await app.send_edit(m, "Give me some code to execute . . .", mono=True, delme=3)
+		return await app.send_edit(m, "Give me some text (code) to execute . . .", mono=True, delme=3)
 
 	await app.send_edit(m, "Running . . .", mono=True)
-
-	reply_to_id = reply.message_id if reply else m.message_id
 
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
@@ -82,34 +83,16 @@ async def evaluate(client, m: Message):
 		await app.aexec(m, cmd)
 	except Exception:
 		exc = traceback.format_exc()
+
 	stdout = redirected_output.getvalue()
 	stderr = redirected_error.getvalue()
 	sys.stdout = old_stdout
 	sys.stderr = old_stderr
-	evaluation = ""
-
-	if exc:
-		evaluation = exc
-	elif stderr:
-		evaluation = stderr
-	elif stdout:
-		evaluation = stdout
-	else:
-		evaluation = f"Success"
-
+	evaluation = exc or stderr or stdout or "Success"
 	final_output = f"**• COMMAND:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
+
 	if len(final_output) > 4096:
-		filename = "eval_output.txt"
-		with open(filename, "w+", encoding="utf8") as out_file:
-			out_file.write(str(final_output))
-		await m.reply_document(
-			document=filename,
-			caption=f"`{cmd}`",
-			disable_notification=True,
-			reply_to_message_id=reply_to_id,
-		)
-		if os.path.exists(f"./{filename}"):
-			os.remove(filename)
+		await app.create_file(m, "eval_output.txt", str(final_output))
 		await m.delete()
 	else:
 		await app.send_edit(m, final_output)
@@ -118,9 +101,12 @@ async def evaluate(client, m: Message):
 
 
 @app.on_message(gen("term", allow_channel=True))
-async def terminal(_, m):
+async def terminal(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Use: `.term pip3 install colorama`", delme=5)
+
+	elif app.textlen(m) > 4096:
+		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", mono=True, delme=4)
 
 	await app.send_edit(m, "Running . . .", mono=True)
 	args = m.text.split(None, 1)
@@ -135,13 +121,7 @@ async def terminal(_, m):
 					shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
 				)
 			except Exception as e:
-				print(e)
-				await app.send_edit(m,
-					"""
-					**Error:**
-					```{}```
-					""".format(e)
-				)
+				await app.error(m, e)
 			output += "**{}**\n".format(code)
 			output += process.stdout.read()[:-1].decode("utf-8")
 			output += "\n"
@@ -165,16 +145,7 @@ async def terminal(_, m):
 		output = None
 	if output:
 		if len(output) > 4096:
-			with open("term_output.txt", "w+") as file:
-				file.write(output)
-			await app.send_document(
-				m.chat.id,
-				"output.txt",
-				reply_to_message_id=m.message_id,
-				caption="`Output file`",
-			)
-			if os.path.exists("./output.txt"):
-				os.remove("output.txt")
+			await app.create_file(m, "term_output.txt", output)
 		else:
 			await app.send_edit(m, f"**OUTPUT:**\n\n```{output}```")
 	else:
