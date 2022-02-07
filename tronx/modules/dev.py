@@ -51,17 +51,17 @@ async def evaluate(client, m: Message):
 	if chat_type in ("supergroup", "group") and chat_id != app.LOG_CHAT:
 		for x in text_list:
 			if x in sensitive:
-				return await send_edit(m, warning_message, mono=True, delme=4)	
+				return await app.send_edit(m, warning_message, mono=True, delme=4)	
 
 	elif chat_type == "private" and chat_id != app.id:
 		for y in text_list:
 			if y in sensitive:
-				return await send_edit(m, warning_message, mono=True, delme=4)	
+				return await app.send_edit(m, warning_message, mono=True, delme=4)	
 
 	elif chat_type == "bot" and chat_id != app.bot.id:
 		for z in text_list:
 			if z in sensitive:
-				return await send_edit(m, warning_message, mono=True, delme=4)
+				return await app.send_edit(m, warning_message, mono=True, delme=4)
 
 	try:
 		cmd = m.text.split(None, 1)[1]
