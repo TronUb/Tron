@@ -63,32 +63,43 @@ class Functions(object):
 
 
 	async def error(self, m: Message, e, edit_error=False):
-		"""Error tracing"""
+		"""
+		params: 
+			1. message (update) :: incoming updates
+			2. error :: occured error
+			3. edit_error: bool, default=False :: edits | sends error message 
+
+		usage:
+			use this function at the end of try/except block
+
+		ex: (async)
+			try:
+				statements . . .
+			except Exception as e:
+				await app.error(m, e, edit_error=True) 
+		"""
+
 		teks = f"**Traceback Report:**\n\n"
-		teks += f"**Date:** {self.showdate()}\nTime: {self.showtime()}\n\n"
-		teks += f"This can be a error in tronuserbot, if you want you can forward this to @tronuserbot.\n\n" 
-		teks += f"**Command:** {m.text}\n\n"
-		teks += f"**Error:**\n\n"
-		teks += f"**SHORT:** \n\n{e}\n\n"
-		teks += f"**FULL:** \n\n{traceback.format_exc()}"
+		teks += f"**Date:** `{self.showdate()}`\n**Time:** `{self.showtime()}`\n\n"
+		teks += f"`This can be a error in tronuserbot, if you want you can forward this to @tronuserbot_support.`\n\n" 
+		teks += f"**Command:** `{m.text}`\n\n"
+		teks += "`-`" * 30 + "\n\n"
+		teks += f"**SHORT:** \n\n`{e}`\n\n"
+		teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
 
 		try:
 			if edit_error:
 				if hasattr(e, "MESSAGE"):
-					await self.send_edit(m, (e.MESSAGE.replace("(", "")).replace(")", ""))
+					await self.send_edit(m, f"[ **{e.CODE}** ] : `{e.MESSAGE}`")
 				else:
 					await self.send_edit(m, e.args)
-		except Exception as err:
-			print(err)
 
-		try:
-			await self.send_message(
-				self.LOG_CHAT,
-				teks
-			)
+			await self.send_message(self.LOG_CHAT, teks)
+
 		except PeerIdInvalid:
-			print(teks)
-		self.log.error("Please check your logs online.")
+			self.log.error(teks)
+		except Exception as err:
+			self.log.error(err)
 
 
 	async def sleep(self, m: Message, sec, delme=False):
