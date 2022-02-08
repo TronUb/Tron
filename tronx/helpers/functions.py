@@ -18,7 +18,18 @@ from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
 class Functions(object):
 	async def aexec(self, m, code):
-		"""execute python codes"""
+		"""
+		params:
+			1. message (update) :: incoming update
+			2. code: str :: your written python code
+
+		use:
+			use this function to execute python codes
+
+		ex: (async)
+			await app.aexec(message, "print('Hello, World !')")
+		"""
+
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
@@ -27,7 +38,17 @@ class Functions(object):
 
 
 	def showdate(self):
-		"""your location's date"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to get realtime date of your location
+
+		ex: (async)
+			await app.showdate()
+		"""
+
 		today = pytz.timezone(self.TIME_ZONE)
 		get_date = datetime.datetime.now(today)
 		mydate = get_date.strftime("%d %b %Y")
@@ -35,7 +56,17 @@ class Functions(object):
 
 
 	def showtime(self):
-		"""your location's time"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to get time of your location
+
+		ex: (async)
+			await app.showtime()
+		"""
+
 		today = pytz.timezone(self.TIME_ZONE)
 		get_time = datetime.datetime.now(today)
 		mytime = get_time.strftime("%r")
@@ -43,7 +74,19 @@ class Functions(object):
 
 
 	async def edit_text(self, m: Message, text, disable_web_page_preview=False, parse_mode="combined"):
-		"""this is a alias function for send_edit function"""
+		"""
+		params: 
+			1. message :: incoming update
+			2. text: str :: text to be edited to
+			3. disable_web_page_preview: bool, default=False :: shows web page preview if True, Not if it is False
+
+		use: 
+			use this function to edit message, this is also a alias for send_edit function
+
+		ex: (async)
+			await app.edit_text(m, "This is a text", disable_web_page_preview=True)
+		"""
+
 		try:
 			if m.from_user and m.from_user.is_self:
 				await m.edit(
@@ -74,9 +117,9 @@ class Functions(object):
 
 		ex: (async)
 			try:
-				statements . . .
+				await app.send_message(message.chat.id, "This is a test")
 			except Exception as e:
-				await app.error(m, e, edit_error=True) 
+				await app.error(message, error, edit_error=True) 
 		"""
 
 		teks = f"**Traceback Report:**\n\n"
@@ -103,14 +146,39 @@ class Functions(object):
 
 
 	async def sleep(self, m: Message, sec, delme=False):
-		"""delete a message after some time"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+			2. sec :: time to sleep in seconds
+			3. delme, default=False :: delete the message if it is True
+
+		use: 
+			this function deletes the message after sleeping for a given time,
+			this function blocks the code
+
+		ex: (async)
+			await app.sleep(message, 10, delme=True)
+		"""
+
 		await asyncio.sleep(sec)
 		if delme and m.from_user.is_self:
 			await m.delete()
 
 
 	async def delete(self, m: Message, sec: int = 0):
-		"""delete a message after some time using sleep func without blocking the code"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+			2. sec: int, default=0 :: time to sleep in seconds
+
+		use: 
+			this function deletes a message after given time period
+			this function works without blocking the entire execution
+
+		ex: (async)
+			await app.delete(message, 10)
+		"""
+
 		if sec <= 600: # 10 min
 			asyncio.create_task(self.sleep(m, sec=sec, delme=True))
 		else:
@@ -118,7 +186,17 @@ class Functions(object):
 
 
 	async def data(self, plug):
-		"""create help information page for each module"""
+		"""
+		params: 
+			1. plug: str :: module name whose information is updated in app.CMD_HELP dict
+
+		use: 
+			use this function to get information about a module
+
+		ex: (async)
+			await app.data("admin")
+		"""
+
 		try:
 			plugin_data = []
 			plugin_data.clear()
@@ -132,7 +210,7 @@ class Functions(object):
 					)
 			return plugin_data
 		except Exception as e:
-			self.log.info(e)
+			self.log.error(e)
 			return None
 
 
@@ -149,7 +227,29 @@ class Functions(object):
 		strike=False,
 		underline=False,
 		):
-		"""This function edits or exceptionally sends the message"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+			2. text: str :: text to be edited or sent instead of editing
+			3. disable_web_page_preview: bool, default=False :: web page preview will be shown if True
+			4. delme: int, default=0 :: sleeps for given time and then deletes the message
+			5. mono: bool, default=False :: all text format will become mono
+			6. bold: bool, default=False :: all text format will become bold
+			7. italic: bool, default=False :: all text format will become italic
+			8. underline: bool, defau=False :: all text format will become underlined
+
+		use: 
+			use this function to get realtime date of your location
+
+		ex: (async)
+			await app.send_edit(
+				message, 
+				"This text is sent or edited", 
+				disable_web_page_preview=True,
+				delme=5,
+				mono=True
+			)
+		"""
 
 		formats = [mono, bold, italic, strike, underline]
 
@@ -191,7 +291,17 @@ class Functions(object):
 
 
 	async def private(self, m : Message):
-		"""stop user from using in private"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+
+		use: 
+			use this to tell that they can't use some commands in private
+
+		ex: (async)
+			await app.private(message)
+		"""
+
 		if m.chat.type == "private":
 			await self.send_edit(
 				m, 
@@ -203,18 +313,54 @@ class Functions(object):
 
 
 	def long(self, m: Message):
-		"""to check args, same as len(message.text.split())"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+
+		use: 
+			this function returns the length of a list containing message splited on spaces
+
+		ex: 
+			if app.long(message) == 1:
+				print("more arguments needed")
+				return
+		"""
+
 		text = len(m.command)
-		return text if bool(text) else none
+		return text if bool(text) else None
 
 
 	def textlen(self, m: Message):
-		"""to check length of characters inside a message"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+
+		use: 
+			this function returns length of characters in message.text
+
+		ex: 
+			if app.textlen(message) > 4096:
+				print("Text too long")
+		"""
+
 		return len([x for x in m.text or m.caption])
 
 
 	async def create_file(self, m: Message, filename, text):
-		"""create a file with any type of extension"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+			2. filename: str :: give a filename with some extension or without extension
+			3. text: str :: contents which is going to be written in the file
+
+		use: 
+			use this function to create files with any type of extension (.txt, .py, .java, .html, etc),
+			this function also sends the created file.
+
+		ex: (async)
+			await app.create_file(message, "sample.txt", "This file was created with app.create_file() method")
+		"""
+
 		try:
 			name = filename
 			content = text
@@ -234,12 +380,34 @@ class Functions(object):
 
 
 	def rem_dual(self, one, two):
-		"""remove multiples of same element from a list"""
+		"""
+		params: 
+			1. one: list :: list from that you want to remove duplicates
+			2. two: list :: list that contains removable elements
+
+		use: 
+			use this function to remove duplicates from lists
+
+		ex: 
+			await app.rem_dual([1, 1, 1, 2, 3], [1])
+		"""
+
 		return list(set(one) - set(two))
 
 
 	async def kick_user(self, chat_id, user_id):
-		"""kick user from chat"""
+		"""
+		params: 
+			1. chat_id: int :: chat id of the chat where this method is used
+			2. user_id: int :: user id of the user you want to kick from chat
+
+		use: 
+			use this function to kick a member from your chat
+
+		ex: (async)
+			await app.kick_user(chat_id, user_id)
+		"""
+
 		try:
 			await self.kick_chat_member(chat_id, user_id)
 		except Exception as e:
@@ -247,32 +415,94 @@ class Functions(object):
 
 
 	def is_str(self, element):
-		"""true if string else False"""
+		"""
+		params: 
+			1. element: [str, bool, int, float] :: anytype of data
+
+		use: 
+			use this function to check if the element is string or not
+
+		ex: 
+			await app.is_str(data)
+		"""
+
 		return isinstance(element, str)
 
 
 	def is_bool(self, element):
-		"""true if boolean else False"""
+		"""
+		params: 
+			1. element: [str, bool, int, float] :: anytype of data
+
+		use: 
+			use this function to check if the element is boolean or not
+
+		ex: 
+			await app.is_bool(data)
+		"""
+
 		return isinstance(element, bool)
 
 
 	def is_float(self, element):
-		"""true if float else False"""
+		"""
+		params: 
+			1. element: [str, bool, int, float] :: anytype of data
+
+		use: 
+			use this function to check if the element is float or not
+
+		ex: 
+			await app.is_float(data)
+		"""
+
 		return isinstance(element, float)
 
 
 	def is_int(self, element):
-		"""true if int else False"""
+		"""
+		params: 
+			1. element: [str, bool, int, float] :: anytype of data
+
+		use: 
+			use this function to check if the element is integer or not
+
+		ex: 
+			await app.is_int(data)
+		"""
+
 		return isinstance(element, int)
 
 
-	async def get_last_msg(self, m: Message, user_id: int, reverse=False):
-		"""get the first or last message of user/chat"""
+	async def get_last_msg(self, m: Message, chat_id: int, reverse=False):
+		"""
+		params: 
+			1. message (update) :: incoming update
+			2. chat_id: int :: chat id of group or user
+			3. reverse: bool, default=False :: if reverse is True you'll get the oldest message in chat
+
+		use: 
+			use this function to get last message of the chat or user
+
+		ex: (async)
+			await app.get_last_msg(message, chat_id, reverse=True)
+		"""
+
 		return await self.get_history(user_id, limit=1, reverse=reverse)
 
 
 	async def toggle_inline(self, m: Message):
-		"""turn on | off inline mode of your bot"""
+		"""
+		params: 
+			1. message (update) :: incoming update
+
+		use: 
+			use this function to turn on | off inline mode of your bot
+
+		ex: (async)
+			await app.toggle_inline()
+		"""
+
 		try:
 			botname = "BotFather"
 			await self.send_edit(m, "Processing command . . .", mono=True)
@@ -327,7 +557,17 @@ class Functions(object):
 
 
 	def quote(self):
-		"""anime quotes for weebs"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to anime quotes
+
+		ex: 
+			await app.quote()
+		"""
+
 		results = requests.get("https://animechan.vercel.app/api/random").json()
 		msg = f"❝ {results.get('quote')} ❞"
 		msg += f" [ {results.get('anime')} ]\n\n"
@@ -336,14 +576,34 @@ class Functions(object):
 
 
 	def ialive_pic(self):
-		"""inline alive pic url"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to get inline alive pic url
+
+		ex: 
+			await app.ialive_pic()
+		"""
+
 		pic_url = self.getdv("USER_PIC")
 		data = pic_url if pic_url else self.UserPic()
 		return data if data else None
 
 
 	def get_file_id(self, message):
-		"""get file id of supported telegram media"""
+		"""
+		params: 
+			1. message (update) :: incoming update 
+
+		use: 
+			use this function to get file_id of any media in telegram
+
+		ex: 
+			await app.get_file_id(message)
+		"""
+
 		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
@@ -356,13 +616,34 @@ class Functions(object):
 				return [messsge.text, None, "text"]
 
 
-	def clear():
-		""" clear terminal prompt """
+	def clear_screen(self):
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to clear terminal screen
+
+		ex:
+			await app.clear_screen()
+		"""
+
 		subprocess.call("clear" if os.name == "posix" else "cls") 
 
 
-	async def add_users(self, user_id: Union[int, List[int]], chat_id: str):
-		""" add users in groups / channels """
+	async def add_users(self, user_id: Union[int, List[int]], chat_id):
+		"""
+		params: 
+			1. user_id: int :: list of telegram id of user
+			2. chat_id :: chat id of a group or channel
+
+		use: 
+			use this function to add users in a group / channel
+
+		ex: (async)
+			await app.add_users(user_id, chat_id)
+		"""
+
 		try:
 			done = await self.add_chat_members(chat_id, user_id)
 			return True if done else False
@@ -370,8 +651,19 @@ class Functions(object):
 			print(e)
 
 
-	async def user_exists(self, user_id: int, chat_id: str):
-		"""check whether a user exists in a group or not"""
+	async def user_exists(self, user_id: int, chat_id):
+		"""
+		params: 
+			1. user_id: int :: id of a telegram user
+			2. chat :: id of telegram chat
+
+		use: 
+			use this function to check whether a user exists in a group or not
+
+		ex: (async)
+			await app.user_exists(user_id, chat_id)
+		"""
+
 		async for x in self.iter_chat_members(chat_id):
 			if x.user.id == user_id:
 				return True
@@ -379,7 +671,17 @@ class Functions(object):
 
 
 	async def check_bot_in_log_chat(self):
-		"""check pesence of bot (assistant) in log chat"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to add your bot if he is not in the log chat
+
+		ex: (async)
+			await app.check_bot_in_log_chat()
+		"""
+
 		try:
 			if bot:
 				self.log.info("Checking presence of bot in log chat . . .\n")
@@ -399,12 +701,34 @@ class Functions(object):
 
 
 	def uptime(self):
-		""" bot active time """
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to get ubot uptime
+
+		ex: 
+			await app.uptime()
+		"""
+
 		return self.GetReadableTime(time.time() - self.StartTime)
 
 
 	def import_module(self, path, exclude=[], display_module=True):
-		"""include/exclude modules installation"""
+		"""
+		params: 
+			1. path :: path of module directory
+			2. exclude: list, default=[] :: exclude specific module installation
+			3. display_module: bool, drfau=True :: whether to print module name after installation or not
+
+		use: 
+			use this function to install python modules 
+
+		ex: 
+			await app.import_module("./tronx/modules/", exclude=["admin"])
+		"""
+
 		bin = []
 		bin.clear()
 
@@ -435,6 +759,16 @@ class Functions(object):
 
 
 	def db_status(self):
-		"""database is available or not"""
+		"""
+		params: 
+			None
+
+		use: 
+			use this function to check if database is available or not
+
+		ex: 
+			await app.db_status()
+		"""
+
 		"Available" if self.DB_URI else "Unavailable"
 
