@@ -89,13 +89,13 @@ class Functions(object):
 
 		try:
 			if m.from_user and m.from_user.is_self:
-				await m.edit(
+				m = await m.edit(
 					text, 
 					parse_mode=parse_mode, 
 					disable_web_page_preview=disable_web_page_preview,
 				)
 			elif m.from_user and not m.from_user.is_self: # for sudo users
-				await self.send_message(
+				m = await self.send_message(
 					m.chat.id,
 					text,
 					disable_web_page_preview=disable_web_page_preview,
@@ -103,6 +103,7 @@ class Functions(object):
 				)
 		except Exception as e:
 			self.log.info(e)
+		return m
 
 
 	async def error(self, m: Message, e, edit_error=False):
@@ -265,7 +266,7 @@ class Functions(object):
 
 		for x in formats:
 			if x:
-				await self.edit_text(
+				m = await self.edit_text(
 					m, 
 					format_dict[x],
 					disable_web_page_preview=disable_web_page_preview,
@@ -275,7 +276,7 @@ class Functions(object):
 				break
 
 		if not edited:
-			await self.edit_text(
+			m = await self.edit_text(
 				m, 
 				text, 
 				disable_web_page_preview=disable_web_page_preview, 
@@ -288,6 +289,7 @@ class Functions(object):
 
 		except Exception as e:
 			await self.error(m, e)
+		return m
 
 
 	async def private(self, m : Message):
