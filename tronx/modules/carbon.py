@@ -61,20 +61,19 @@ async def carb_api(_, m: Message):
 	if app.long(m) < 2:
 		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=2)
 
-	elif app.long(m) <= 4096:
+	elif app.textlen(m) <= 4096:
 		try:
-			await app.send_edit(m, "creating carbon . . .", mono=True)
+			m = await app.send_edit(m, "creating carbon . . .", mono=True)
 			if cmd[1] in colour_code:
 				text = m.text.split(None, 2)[2]
 				colour = cmd[1]
-				await create_carbon(m, text=text, colour=colour)
 			else:
 				text = m.text.split(None, 1)[1]
 				colour= "aqua"
-				await create_carbon(m, text=text, colour=colour)
+			await create_carbon(m, text=text, colour=colour)
 		except Exception as e:
 			await app.error(m, e)
-	elif app.long(m) > 4096:
+	elif app.textlen(m) > 4096:
 		await app.send_edit(m, "The text is too long !", delme=2)
 
 
