@@ -78,7 +78,7 @@ async def pingme(_, m: Message):
 			try:
 				num = int(count) + 1
 				for x in range(1, num):
-					await infinite(m)
+					m = await infinite(m)
 					await app.send_edit(m, ". . .", mono=True)
 					time.sleep(0.50)
 				await app.send_edit(m, "".join(pings))
@@ -98,5 +98,6 @@ async def infinite(m: Message):
 	ms = (end - start).microseconds / 1000
 	msg = f"Pöng !\n{ms} ms\n⧑ {app.UserMention()}\n\n"
 	pings.append(msg)
+	return m
 
 
