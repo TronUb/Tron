@@ -73,7 +73,14 @@ class Functions(object):
 		return mytime
 
 
-	async def edit_text(self, m: Message, text, disable_web_page_preview=False, parse_mode="combined"):
+	async def edit_text(
+		self, 
+		m: Message, 
+		text, 
+		disable_web_page_preview=False, 
+		parse_mode="combined",
+		reply_markup=None
+		):
 		"""
 		params: 
 			1. message :: incoming update
@@ -93,13 +100,15 @@ class Functions(object):
 					text, 
 					parse_mode=parse_mode, 
 					disable_web_page_preview=disable_web_page_preview,
+					reply_markup=reply_markup
 				)
 			elif m.from_user and not m.from_user.is_self: # for sudo users
 				m = await self.send_message(
 					m.chat.id,
 					text,
 					disable_web_page_preview=disable_web_page_preview,
-					parse_mode=parse_mode
+					parse_mode=parse_mode,
+					reply_markup=reply_markup
 				)
 		except Exception as e:
 			self.log.info(e)
