@@ -35,7 +35,7 @@ async def remove_deleted(_, m: Message):
 	count = 0
 
 	if app.long(m) != 2:
-		await app.send_edit(m, "Checking deleted accounts . . .", mono=True)
+		m = await app.send_edit(m, "Checking deleted accounts . . .", mono=True)
 
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
@@ -47,7 +47,7 @@ async def remove_deleted(_, m: Message):
 			await app.send_edit(m, "No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, mono=True)
 
 	elif app.long(m) == 2 and m.command[1] == "clean":
-		await app.send_edit(m, "Cleaning deleted accounts . . .", mono=True)
+		m = await app.send_edit(m, "Cleaning deleted accounts . . .", mono=True)
 
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
