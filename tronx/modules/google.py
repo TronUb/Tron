@@ -124,7 +124,7 @@ async def image_search(_, m: Message):
 		limit = 3 # default
 		query = m.text.split(None, 1)[1]
 	try:
-		m = await send_edit(m, f"**Getting images:** `{query}`")
+		m = await app.send_edit(m, f"**Getting images:** `{query}`")
 		bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=True, timeout=60, verbose=False)
 
 		for img in os.listdir(f"./images/{query}"):
