@@ -118,7 +118,7 @@ async def yandex_images(_, m: Message):
 @app.on_message(gen("img"))
 async def image_search(_, m: Message):
 	if app.long(m) > 2 and bool(m.command[1].isdigit()):
-		limit = m.command[1]
+		limit = int(m.command[1])
 		query = m.text.split(None, 2)[2]
 	else:
 		limit = 3 # default
