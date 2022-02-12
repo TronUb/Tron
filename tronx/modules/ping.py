@@ -57,7 +57,7 @@ pings.clear()
 async def pingme(_, m: Message):
 	if app.long(m) == 1:
 		start = datetime.now()
-		await app.send_edit(m, ". . .", mono=True)
+		m = await app.send_edit(m, ". . .", mono=True)
 		end = datetime.now()
 		m_s = (end - start).microseconds / 1000
 		await app.send_edit(
@@ -78,7 +78,7 @@ async def pingme(_, m: Message):
 			try:
 				num = int(count) + 1
 				for x in range(1, num):
-					await infinite(m)
+					m = await infinite(m)
 					await app.send_edit(m, ". . .", mono=True)
 					time.sleep(0.50)
 				await app.send_edit(m, "".join(pings))
@@ -93,10 +93,11 @@ async def pingme(_, m: Message):
 # function to create lots of pings
 async def infinite(m: Message):
 	start = datetime.now()
-	mid = await app.send_edit(m, random.choice(data))
+	m = await app.send_edit(m, random.choice(data))
 	end = datetime.now()
 	ms = (end - start).microseconds / 1000
 	msg = f"Pöng !\n{ms} ms\n⧑ {app.UserMention()}\n\n"
 	pings.append(msg)
+	return m
 
 

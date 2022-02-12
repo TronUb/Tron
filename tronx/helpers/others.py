@@ -10,3 +10,11 @@ class Others(object):
 		data_list = [int(x) for x in sudovar.split()] if sudovar else False  
 		return data_list or self.SUDO_USERS or [] 
 
+
+	def PmpermitPic(self):
+		return self.getdv("PMPERMIT_PIC") or self.PMPERMIT_PIC or None
+
+
+	def PmpermitText(self):
+		return self.getdv("PMPERMIT_TEXT") or self.PMPERMIT_TEXT or None
+

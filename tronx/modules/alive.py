@@ -27,7 +27,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("alive"))
 async def simple_alive(_, m: Message):
 	try:
-		await app.send_edit(m, ". . .", mono=True)
+		m = await app.send_edit(m, ". . .", mono=True)
 
 		alive_msg = f"\n"
 		if app.UserBio():
@@ -56,8 +56,8 @@ async def simple_alive(_, m: Message):
 				parse_mode="markdown"
 				)
 		elif not pic:
-			await app.send_message(
-				m.chat.id, 
+			await app.send_edit(
+				m, 
 				alive_msg, 
 				disable_web_page_preview=True,
 				parse_mode="markdown",
@@ -70,7 +70,7 @@ async def simple_alive(_, m: Message):
 
 @app.on_message(gen("ialive"))
 async def inline_alive(_, m: Message):
-	await app.send_edit(m, ". . .", mono=True)
+	m = await app.send_edit(m, ". . .", mono=True)
 	try:
 		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 	except BotInlineDisabled:
@@ -96,7 +96,7 @@ async def inline_alive(_, m: Message):
 @app.on_message(gen(["qt"]))
 async def inline_quote(_, m: Message):
 	try:
-		await app.send_edit(m,". . .", mono=True)
+		m = await app.send_edit(m,". . .", mono=True)
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 		except BotInlineDisabled:
