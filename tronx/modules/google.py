@@ -126,7 +126,7 @@ async def image_search(_, m: Message):
 	try:
 		m = await app.send_edit(m, f"**Getting images:** `{query}`")
 		bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=False, timeout=60, verbose=False)
-		img_dir = bool(os.listdir("./images"))
+		img_dir = os.path.exists("./images")
 
 		if img_dir:
 			for img in os.listdir(f"./images/{query}"):
