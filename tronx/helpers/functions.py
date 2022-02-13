@@ -698,15 +698,15 @@ class Functions(object):
 				self.log.info("PROCESS: Checking presence of bot in log chat . . .\n")
 				try:
 					if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
-						await self.add_users(self.LOG_CHAT, self.bot.id)
-						self.log.info(f"Added bot in log chat . . .\n")
+						await self.add_users(self.bot.id, self.LOG_CHAT)
+						self.log.info(f"COMPLETED: Added bot in log chat . . .\n")
 					else:
-						self.log.info(f"Bot is already present in log chat . . .\n")
+						self.log.info(f"COMPLETED: Bot is already present in log chat . . .\n")
 				except PeerIdInvalid:
 					self.log.info("Peer id is invalid, Manually add bot to your log chat . . .\n")
 
 			else:
-				self.log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+				self.log.warning("Bot client is not available, please check (TOKEN, API_ID, API_HASH)")
 		except Exception as e:
 			await self.log.info(e)
 
