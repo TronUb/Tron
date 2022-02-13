@@ -420,9 +420,9 @@ class Functions(object):
 		"""
 
 		try:
-			await self.kick_chat_member(chat_id, user_id)
+			await self.ban_chat_member(chat_id, user_id, int(time.time()) + 30) 
 		except Exception as e:
-			print(e)
+			await self.error(m, e)
 
 
 	def is_str(self, element):
@@ -598,9 +598,7 @@ class Functions(object):
 			await app.ialive_pic()
 		"""
 
-		pic_url = self.getdv("USER_PIC")
-		data = pic_url if pic_url else self.UserPic()
-		return data if data else None
+		return self.getdv("USER_PIC") or self.UserPic() or None
 
 
 	def get_file_id(self, message):
