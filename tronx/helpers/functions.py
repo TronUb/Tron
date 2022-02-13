@@ -681,7 +681,7 @@ class Functions(object):
 		return False
 
 
-	async def check_bot_in_log_chat(self):
+	async def add_logbot(self):
 		"""
 		params: 
 			None
@@ -694,11 +694,11 @@ class Functions(object):
 		"""
 
 		try:
-			if bot:
-				self.log.info("Checking presence of bot in log chat . . .\n")
+			if self.bot:
+				self.log.info("PROCESS: Checking presence of bot in log chat . . .\n")
 				try:
 					if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
-						await self.add_user(self.LOG_CHAT, self.bot.id)
+						await self.add_users(self.LOG_CHAT, self.bot.id)
 						self.log.info(f"Added bot in log chat . . .\n")
 					else:
 						self.log.info(f"Bot is already present in log chat . . .\n")
