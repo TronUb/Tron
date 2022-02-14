@@ -485,7 +485,7 @@ class Functions(object):
 		return isinstance(element, int)
 
 
-	async def get_last_msg(self, m: Message, chat_id: int, reverse=False):
+	async def get_last_msg(self, m: Message, user_id, reverse=False):
 		"""
 		params: 
 			1. message (update) :: incoming update
