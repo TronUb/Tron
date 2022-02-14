@@ -1,6 +1,7 @@
 import os
 
 from pyrogram import filters
+from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
 
 from tronx import app
 
@@ -23,6 +24,8 @@ app.CMD_HELP.update(
 		"help [ module name ]" : "Get commands info of that plugin.",
 		"help" : "Get your inline help dex.",
 		"inline" : "Toggle inline mode to On or Off of your bot through @BotFather",
+		"mods" : "Get list of available module names",
+		"plugs" : "Get list of available plugin names",
 		}
 		)
 	}
@@ -57,7 +60,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 @app.on_message(gen("help", allow_channel=True))
-async def help_menu(app, m):
+async def help_menu(client, m):
 	args = m.command if app.long(m) > 1 else False
 
 	try:
@@ -91,6 +94,9 @@ async def help_menu(app, m):
 				await app.send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
 		else:
 			await app.send_edit(m, "Try again later !", mono=True, delme=3)
+	except BotInlineDisabled:
+		await app.toggle_inline(m)
+		await help_menu(client, m)
 	except Exception as e:
 		await app.error(m, e)
 
