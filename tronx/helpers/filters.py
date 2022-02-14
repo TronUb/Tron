@@ -18,8 +18,7 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
-from config import Config
-
+from .other import Other
 
 
 
@@ -79,17 +78,10 @@ def regex(
 
 
 
-# multiple prefixes
-def myprefix():
-	return Config.PREFIX.split()[0] if len(Config.PREFIX.split()) > 1 else Config.PREFIX
-
-
-
-
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	prefixes: Union[str, List[str]] = myprefix(), 
+	prefixes: Union[str, List[str]] = Other.myprefix(), 
 	case_sensitive: bool = True, 
 	allow_sudo: bool = True,
 	allow_forward: bool = False,
