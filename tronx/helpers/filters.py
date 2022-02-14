@@ -18,7 +18,7 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
-from .others import Others
+from ..clients import app
 
 
 
