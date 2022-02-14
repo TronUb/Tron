@@ -19,9 +19,9 @@ from pyrogram.types import (
 	Update
 )
 from config import Config
-from tronx.database.postgres.dv_sql import DVSQL as dv
+from tronx.database.postgres.dv_sql import DVSQL 
 
-
+dv = DVSQL()
 
 
 # custom regex filter
