@@ -18,10 +18,8 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
-from .others import Others
-
-
-myprefix = Others()
+from config import Config
+from tronx.database.postgres import dv_sql as dv
 
 
 
@@ -80,11 +78,16 @@ def regex(
 
 
 
+def MyPrefix():
+	"""Multiple prefix support function"""
+	return dv.getdv("PREFIX").split() or Config.PREFIX.split() or "."
+
+
 
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	prefixes: Union[str, List[str]] = myprefix.MyPrefix(), 
+	prefixes: Union[str, List[str]] = MyPrefix(), 
 	case_sensitive: bool = True, 
 	allow_sudo: bool = True,
 	allow_forward: bool = False,
