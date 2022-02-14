@@ -19,7 +19,7 @@ from pyrogram.types import (
 	Update
 )
 from config import Config
-from tronx.database.postgres import dv_sql as dv
+from tronx.database.postgres.dv_sql import DVSQL as dv
 
 
 
