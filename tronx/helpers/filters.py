@@ -81,7 +81,7 @@ def regex(
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	prefixes: Union[str, List[str]] = Other.myprefix(), 
+	prefixes: Union[str, List[str]] = Other.MyPrefix(), 
 	case_sensitive: bool = True, 
 	allow_sudo: bool = True,
 	allow_forward: bool = False,
