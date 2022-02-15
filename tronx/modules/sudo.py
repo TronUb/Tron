@@ -26,7 +26,7 @@ async def add_sudo(_, m: Message):
 @app.on_message(gen("getsudo"))
 async def get_sudo(_, m: Message):
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
-	await app.send_edit(m, f"**Available Sudo id:**\n\n{'\n'.join(sudo_list)}")
+	await app.send_edit(m, "**Available Sudo id:**\n\n" + "\n".join(sudo_list))
 
 
 
