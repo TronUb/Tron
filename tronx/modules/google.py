@@ -54,7 +54,7 @@ async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if reply.photo:
-			await app.send_edit(m, "⏳ • Hold on ...")
+			m = await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "photo_{}_{}.png".format(
 				reply.photo.file_id, 
 				reply.photo.date
@@ -64,7 +64,7 @@ async def image_sauce(_, m: Message):
 				file_name="./downloads/" + universe
 				)
 		elif reply.animation:
-			await app.send_edit(m, "⏳ • Hold on ...")
+			m = await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "giphy_{}-{}.gif".format(
 				reply.animation.date,
 				reply.animation.file_size
@@ -89,18 +89,18 @@ async def image_sauce(_, m: Message):
 
 @app.on_message(gen("pic"))
 async def yandex_images(_, m: Message):
-	if len(m.text.split()) == 1:
-		await app.send_edit(m, "Usage: `.pic cat`", delme=3)
-		return
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Usage: `.pic cat`", delme=3)
+
 	try:
 		if len(m.text.split()) > 1:
-			node = await app.send_edit(m, "`Getting image ...`")
+			m = await app.send_edit(m, "`Getting image ...`")
 			photo = m.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
 				photo
 			)
-			await m.delete(node)
+			await m.delete()
 			saved = await app.send_inline_bot_result(
 				m.chat.id, 
 				query_id=result.query_id, 
