@@ -25,10 +25,10 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["neko", "bin"]))
+@app.on_message(gen(["paste", "bin"]))
 async def paster(_, m: Message):
 	reply = m.reply_to_message
-	await app.send_edit(m, "`Pasting to nekobin ...`")
+	m = await app.send_edit(m, "`Pasting to nekobin ...`")
 
 	if reply:
 		text = reply.text
