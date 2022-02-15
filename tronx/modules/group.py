@@ -39,7 +39,7 @@ async def create_basic_group(_, m: Message):
 	grptype = "basic"
 	user_id = "@Alita_Robot"
 	try:
-		await app.send_edit(m, f"Creating a new basic group: `{grpname}`")
+		m = await app.send_edit(m, f"Creating a new basic group: `{grpname}`")
 		groupjson = await app.create_group(f"{grpname}", user_id)
 		await app.send_edit(m, f"**Created a new basic group:** `{grpname}`")
 	except Exception as e:
@@ -58,7 +58,7 @@ async def create_supergroup(_, m: Message):
 	grptype = "super"
 	user_id = "@Alita_Robot"
 	try:
-		await app.send_edit(m, f"Creating a new super Group: `{grpname}`")
+		m = await app.send_edit(m, f"Creating a new super Group: `{grpname}`")
 		await app.create_supergroup(f"{grpname}", user_id)
 		await app.send_edit(m, f"**Created a new super Group:** `{grpname}`")
 	except Exception as e:
@@ -93,7 +93,7 @@ async def create_channel(_, m: Message):
 	chname = m.text.split(None, 1)[1]
 	try:
 		if chname:
-			await app.send_edit(m, f"Creating your channel: `{chname}`")
+			m = await app.send_edit(m, f"Creating your channel: `{chname}`")
 			done = await app.create_channel(f"{chname}")
 			if done:
 				await app.send_edit(m, f"**Created channel:** `{chname}`")
