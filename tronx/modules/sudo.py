@@ -17,7 +17,7 @@ async def add_sudo(_, m: Message):
 	else:
 		all_sudo = [str(reply.from_user.id)]
 
-	app.setdv("SUDO_USERS", " ".join(all_sudo))
+	app.setdv("SUDO_USERS", " ".join(list(set(all_sudo)))) # rem duplicates
 	await app.send_edit(m, f"{reply.from_user.mention()} `has been added to sudo.`", delme=4)
 
 
