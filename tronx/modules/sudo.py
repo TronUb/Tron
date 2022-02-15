@@ -38,7 +38,7 @@ async def get_sudo(_, m: Message):
 	if not reply:
 		return await app.send_edit(m, "Reply to a user to add him in sudo list", mono=True, delme=4)  
 
-	sudo_list = [x for x app.getdv("SUDO_USERS").split()]
+	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	if user_id in sudo_list:
 		sudo_list.remove(user_id)
 	else:
