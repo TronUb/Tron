@@ -161,8 +161,8 @@ async def get_chatinfo(_, m: Message):
 			chat = await app.get_chat(chat_u)
 		else:
 			if m.chat.type == "private":
-				await app.send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
-				return
+				return await app.send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
+
 			else:
 				chat_v = m.chat.id
 				chat = await app.get_chat(chat_v)
@@ -172,7 +172,7 @@ async def get_chatinfo(_, m: Message):
 		else:
 			poto = False
 
-		await app.send_edit(m, "Processing ...")
+		m = await app.send_edit(m, "Processing ...")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
 		data += f"**Title:** `{chat.title}`\n"
