@@ -40,7 +40,7 @@ app.CMD_HELP.update(
 async def slap_friends(app, m):
 	if m.reply_to_message:
 		try:
-			await app.send_edit(m,"...")
+			m = await app.send_edit(m,". . .")
 
 			my_info = app.UserMention()
 			user = m.reply_to_message.from_user
@@ -85,7 +85,7 @@ async def capitalise(_, m):
 			elif app.long(m) == 1:
 				await app.send_edit(m, "Please give me some text after command . . .", delme= 2, mono=True)
 		else:
-			return print("error in cap command")
+			return await app.send_edit(m, "Something went wrong !", mono=True, delme=4)
 	except Exception as e:
 		await app.error(m, e)
 
@@ -98,8 +98,8 @@ async def type_animatiom(_, m):
 		if app.long(m) > 1:
 			text = " ".join(m.command[1:])
 		else:
-			await app.send_edit(m, "Some text is required to show in typing animation", delme=2)
-			return
+			return await app.send_edit(m, "Some text is required to show in typing animation", delme=2)
+
 		tbp = "" 
 		typing_symbol = "▒"
 		while(tbp != text):
@@ -112,8 +112,8 @@ async def type_animatiom(_, m):
 				await asyncio.sleep(0.40)
 			except FloodWait as e:
 				time.sleep(e.x) # continue
-	except IndexError:
-		pass
+	except Exception as e:
+		await app.error(m, e)
 
 
 
@@ -125,7 +125,7 @@ async def insult_someone(_, m):
 		await app.send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await app.send_edit(m, "Insulting . . .", mono=True)
+			m = await app.send_edit(m, "Insulting . . .", mono=True)
 			if app.long(m) == 1:
 				lang = "en"
 			elif app.long(m) > 1:
@@ -151,7 +151,7 @@ async def give_advice(_, m):
 		await app.send_edit(m, "Please reply to someone, so that i can give them a advice . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await app.send_edit(m, "Finding a good advice . . .", mono=True)
+			m = await app.send_edit(m, "Finding a good advice . . .", mono=True)
 			data = requests.get(f"https://api.adviceslip.com/advice")
 			_data = data.json().get("slip").get("advice")
 			if _data:
@@ -173,7 +173,7 @@ async def ask_question(_, m):
 		await app.send_edit(m, "Please reply to someone, so that i can give them a question . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			await app.send_edit(m, "Finding a question . . .", mono=True)
+			m = await app.send_edit(m, "Finding a question . . .", mono=True)
 			data = requests.get(f"http://jservice.io/api/random")
 			question = data.json()[0].get("question")
 			answer = data.json()[0].get("answer")
@@ -193,7 +193,7 @@ async def ask_question(_, m):
 @app.on_message(gen("wtd"))
 async def what_to_do(_, m):
 	try:
-		await app.send_edit(m, "Finding a activity . . .", mono=True)
+		m = await app.send_edit(m, "Finding a activity . . .", mono=True)
 		data = requests.get(f"http://www.boredapi.com/api/activity/")
 		act = data.json().get("activity")
 		typ = data.json().get("type")
@@ -210,7 +210,7 @@ async def what_to_do(_, m):
 @app.on_message(gen("mqt"))
 async def movie_quotes(_, m):
 	try:
-		await app.send_edit(m, "Finding a movie quote . . .", mono=True)
+		m = await app.send_edit(m, "Finding a movie quote . . .", mono=True)
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
 		qt = data.json().get("quote")
 		role = data.json().get("role")
@@ -228,7 +228,7 @@ async def movie_quotes(_, m):
 @app.on_message(gen("joke"))
 async def send_joke(_, m):
 	try:
-		await app.send_edit(m, "Finding a joke . . .", mono=True)
+		m = await app.send_edit(m, "Finding a joke . . .", mono=True)
 		data = requests.get(f"https://official-joke-api.appspot.com/random_joke")
 		one = data.json().get("setup")
 		two = data.json().get("punchline")
