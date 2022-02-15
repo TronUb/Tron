@@ -60,7 +60,7 @@ async def zipit(_, m: Message):
 	elif reply:
 		if not reply.media:
 			return await app.send_edit(m, "Reply to some media not text . . .", mono=True)
-		await app.send_edit(m, "Zipping . . .", mono=True)
+		m = await app.send_edit(m, "Zipping . . .", mono=True)
 
 		if app.TEMP_DICT:
 			loc = app.TEMP_DICT
@@ -84,7 +84,7 @@ async def unzipit(_, m: Message):
 	if app.long(m) == 2:
 		if app.long(m) <= 4096:
 			loc = m.text.split(None, 1)[1]
-			await app.send_edit(m, "Unzipping file . . .", mono=True)
+			m = await app.send_edit(m, "Unzipping file . . .", mono=True)
 			extract_path = await unzipfiles(loc)
 			await app.send_edit(m, f"File unzipped and saved here: `{extract_path}`")
 		else:
@@ -98,7 +98,7 @@ async def unzipit(_, m: Message):
 @app.on_message(gen("new"))
 async def create_anyfile(app, m:Message):
 	reply = m.reply_to_message
-	await app.send_edit(m, "making file . . .", mono=True)
+	m = await app.send_edit(m, "making file . . .", mono=True)
 	cmd = m.command
 	try:
 		if app.long(m) < 4096 and app.long(m) > 2:
