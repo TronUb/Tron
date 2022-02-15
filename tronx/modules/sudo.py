@@ -32,7 +32,7 @@ async def get_sudo(_, m: Message):
 
 
 @app.on_message(gen("delsudo"))
-async def get_sudo(_, m: Message):
+async def delete_sudo(_, m: Message):
 	reply = m.reply_to_message
 	user_id = str(reply.from_user.id)
 	if not reply:
@@ -41,6 +41,7 @@ async def get_sudo(_, m: Message):
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	if user_id in sudo_list:
 		sudo_list.remove(user_id)
+		app.setdv("SUDO_USERS", " ".join(sudo_list))
 	else:
 		return await app.send_edit(m, "This user is not in sudo list", mono=True, delme=4)
 
