@@ -52,7 +52,7 @@ async def list_directories(_, m: Message):
 		location += "/"
 	OUTPUT = f"Files in `{location}`:\n\n"
 
-	await app.send_edit(m, "Fetching files . . .", mono=True)
+	m = await app.send_edit(m, "Fetching files . . .", mono=True)
 
 	try:
 		files = os.listdir(location)
@@ -93,7 +93,7 @@ async def list_directories(_, m: Message):
 
 @app.on_message(gen(["download", "dl"]))
 async def download_media(_, m: Message):
-	await app.send_edit(m, "⏳ •Downloading . . .")
+	m = await app.send_edit(m, "⏳ •Downloading . . .")
 	reply = m.reply_to_message
 	if reply and reply.media:
 		try:
@@ -191,7 +191,7 @@ async def download_media(_, m: Message):
 
 @app.on_message(gen(["upload", "ul"]))
 async def upload_as_document(_, m: Message):
-	await app.send_edit(m, ". . .", mono=True)
+	m = await app.send_edit(m, ". . .", mono=True)
 
 	if app.long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
@@ -235,7 +235,7 @@ async def batch_upload(_, m: Message):
 
 	if os.path.exists(temp_dir):
 		try:
-			await app.send_edit(m, f"Uploading Files from `{temp_dir}` . . .")
+			m = await app.send_edit(m, f"Uploading Files from `{temp_dir}` . . .")
 			files = os.listdir(temp_dir)
 			files.sort()
 			for file in files:
