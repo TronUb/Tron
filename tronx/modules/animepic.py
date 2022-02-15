@@ -67,7 +67,7 @@ async def list_of_suffix(_, m: Message):
 
 
 	
-@app.on_message(gen("neko"))
+@app.on_message(gen(["nekopic", "npic"]))
 async def nekoanime(_, m: Message):
 	try:
 		await m.delete()
