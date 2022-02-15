@@ -76,7 +76,7 @@ async def turn_off_dyno(_, m: Message):
 async def restart_app(_, m: Message):
 	await not_heroku(m)
 	try:
-		await app.send_edit(m, "Restarting . . .", mono=True)
+		m = await app.send_edit(m, "Restarting . . .", mono=True)
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		heroku_app = Heroku.apps()[app.HEROKU_APP_NAME]
 		restart = heroku_app.restart()
@@ -104,7 +104,7 @@ async def dynostats(_, m: Message):
 	await not_heroku(m)
 
 	Heroku = heroku3.from_key(app.HEROKU_API_KEY)
-	await app.send_edit(m, "Checking usage . . .", mono=True)
+	m = await app.send_edit(m, "Checking usage . . .", mono=True)
 	u_id = Heroku.account().id
 	try:
 		if app.HEROKU_API_KEY is not None:
@@ -165,7 +165,7 @@ async def dynostats(_, m: Message):
 async def heroku_vars(_, m: Message):
 	await not_heroku(m)
 	try:
-		await app.send_edit(
+		m = await app.send_edit(
 			m, 
 			"Fetching all vars from Heroku . . .", 
 			mono=True
@@ -277,7 +277,7 @@ async def delvar(_, m: Message):
 			mono=True
 		)
 	elif app.long(m) >= 2:
-		await app.send_edit(
+		m = await app.send_edit(
 			m, 
 			"Verifying var in heroku config vars . . .", 
 			delme=3, 
@@ -318,7 +318,7 @@ async def delvar(_, m: Message):
 @app.on_message(gen("logs"))
 async def logs(_, m: Message):
 	await not_heroku(m)
-	await app.send_edit(m, "⏳ • hold on . . .", mono=True)
+	m = await app.send_edit(m, "⏳ • hold on . . .", mono=True)
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)
@@ -353,7 +353,7 @@ async def logs(_, m: Message):
 @app.on_message(gen(["textlogs", "tlogs"]))
 async def logs_in_text(_, m: Message):
 	await not_heroku(m)
-	await app.send_edit(m, "⏳ • hold on . . . ", mono=True)
+	m = await app.send_edit(m, "⏳ • hold on . . . ", mono=True)
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)
