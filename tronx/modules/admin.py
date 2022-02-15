@@ -62,7 +62,7 @@ async def ban_hammer(_, m):
 		ban_time = False
 
 		if await app.IsAdmin(m) is True:
-			await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
+			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 				if app.long(m) > 1:
@@ -124,7 +124,7 @@ async def ban_all(_, m):
 					if x.status == "member":
 						await app.ban_chat_member(m.chat.id, x.user.id)
 						count += 1
-						await app.send_edit(m, f"Banned {x.user.mention} . . .")
+						m = await app.send_edit(m, f"Banned {x.user.mention} . . .")
 				await app.send_edit(m, f"Banned {count} members !")
 			elif app.long(m) > 1 and m.command[1] != "confirm":
 				await app.send_edit(m, "Use '`confirm`' text after command to ban all members . . .", delme=2, mono=True)
@@ -363,7 +363,7 @@ async def pin_message(_, m):
 				return await app.send_edit(m, "Pinned message !", mono=True, delme=5)
 		if await app.IsAdmin(m) is True:
 			if reply:
-				await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
+				m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 				done = await reply.pin()
 				await app.send_edit(m, "Pinned message!", mono=True) if done else await app.send_edit(m, "Failed to pin message", delme=2, mono=True)
 			elif not reply:
@@ -381,7 +381,7 @@ async def pin_message(_, m):
 	try:
 		reply = m.reply_to_message
 		if reply:
-			await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
+			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			done = await reply.unpin()
 			await app.send_edit(m, "Unpinned message !", mono=True) if done else await app.send_edit(m, "Failed to unpin message . . .", delme=2, mono=True)
 		elif not reply and app.long(m) > 1:
