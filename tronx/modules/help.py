@@ -35,7 +35,7 @@ app.CMD_HELP.update(
 
 
 
-@app.bot.on_callback_query(filters.regex("delete-dex") & filters.user(app.id))
+@app.bot.on_callback_query(filters.regex("delete-dex") & filters.user((app.SudoUsers() or app.id)))
 @app.alert_user
 async def delete_helpdex(_, cb: CallbackQuery):
 	if bool(app.message_ids) is False:
@@ -65,7 +65,7 @@ async def help_menu(client, m):
 
 	try:
 		if args is False:
-			await app.send_edit(m, ". . .", mono=True)
+			m = await app.send_edit(m, ". . .", mono=True)
 			result = await app.get_inline_bot_results(
 				app.bot.username, 
 				"#t5r4o9nn6" 
