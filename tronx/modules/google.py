@@ -4,13 +4,14 @@ import time
 import json
 import random
 import asyncio
+import shutil
 import urllib
 import requests
 import http.cookiejar
-from bs4 import BeautifulSoup
-from google_images_download import google_images_download
 
-from pyrogram.types import Message, User
+from bs4 import BeautifulSoup
+from bing_image_downloader import downloader as bing_downloader
+from pyrogram.types import Message
 
 from tronx import app
 
@@ -25,7 +26,7 @@ app.CMD_HELP.update(
 	{"google" : (
 		"google",
 		{
-		"img [number of pic] [query]" : "Search something on google ans get the photo of that query",
+		"img [number of pic] [query]" : "uploads searched images on telegram using bing.com",
 		"sauce [reply to pic]" : "Get the source link of that image",
 		"pic [query]" : "Get Images from @bing bot.",
 		}
@@ -53,7 +54,7 @@ async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if reply.photo:
-			await app.send_edit(m, "⏳ • Hold on ...")
+			m = await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "photo_{}_{}.png".format(
 				reply.photo.file_id, 
 				reply.photo.date
@@ -63,7 +64,7 @@ async def image_sauce(_, m: Message):
 				file_name="./downloads/" + universe
 				)
 		elif reply.animation:
-			await app.send_edit(m, "⏳ • Hold on ...")
+			m = await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "giphy_{}-{}.gif".format(
 				reply.animation.date,
 				reply.animation.file_size
@@ -88,18 +89,18 @@ async def image_sauce(_, m: Message):
 
 @app.on_message(gen("pic"))
 async def yandex_images(_, m: Message):
-	if len(m.text.split()) == 1:
-		await app.send_edit(m, "Usage: `.pic cat`", delme=3)
-		return
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Usage: `.pic cat`", delme=3)
+
 	try:
 		if len(m.text.split()) > 1:
-			node = await app.send_edit(m, "`Getting image ...`")
+			m = await app.send_edit(m, "`Getting image ...`")
 			photo = m.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
 				photo
 			)
-			await m.delete(node)
+			await m.delete()
 			saved = await app.send_inline_bot_result(
 				m.chat.id, 
 				query_id=result.query_id, 
@@ -115,30 +116,30 @@ async def yandex_images(_, m: Message):
 
 
 @app.on_message(gen("img"))
-async def google_img(_, m: Message):
-	if bool(m.command[1].isdigit()):
-		images = m.command[1]
-		search = m.text.split(None, 2)[2]
+async def image_search(_, m: Message):
+	if app.long(m) > 2 and bool(m.command[1].isdigit()):
+		limit = int(m.command[1])
+		query = m.text.split(None, 2)[2]
 	else:
-		images = 3
-		search = m.text.split(None, 1)[1]
+		limit = 3 # default
+		query = m.text.split(None, 1)[1]
 	try:
-		await app.send_edit(m, f"Sending `{search}` images ...")
-		response = google_images_download.googleimagesdownload()
-		arguments = {"keywords":f"{search}", "limit":f"{images}", "print_urls":True}
-		paths = response.download(arguments) # creates directory of searched keyword
-		for poto in os.listdir(f"./downloads/{search}/"):
-			if poto.endswith((".jpg", ".png", "jpeg")):
-				await app.send_photo(
-					m.chat.id, 
-					f"./downloads/{search}/{poto}")
-			else:
-				await app.send_edit(
-					m, 
-					f"[ `./downloads/{search}/{poto}` ] is not a photo")
-			os.remove(
-				f"./downloads/{search}/{poto}" # remove files from folders
-			)
-		os.rmdir(f"./downloads/{search}") # remove empty folders
+		m = await app.send_edit(m, f"**Getting images:** `{query}`")
+		bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=False, timeout=60, verbose=False)
+		img_dir = os.path.exists("./images")
+
+		if img_dir:
+			for img in os.listdir(f"./images/{query}"):
+				await app.send_photo(m.chat.id, f"./images/{query}/{img}")
+		else:
+			await app.send_edit(m, "No images found !", mono=True, delme=4)
+
+		if os.path.exists(f"./images/{query}/"):
+			shutil.rmtree(f"./images")
+
+		await m.delete()
+
 	except Exception as e:
 		await app.error(m, e)
+
+

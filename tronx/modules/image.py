@@ -104,8 +104,7 @@ async def unsplash(_, m: Message):
 		await app.send_edit(m, "Give me some query after command . . .", mono=True)
 	elif app.long(m) == 2:
 		if cmd[1].isdigit():
-			await app.send_edit(m, "Sorry you can't use numbers to get images . . .")
-			return
+			return await app.send_edit(m, "Sorry you can't use numbers to get images . . .")
 		else:
 			keyword = cmd[1]
 		await get_image(m, keyword)
@@ -114,7 +113,7 @@ async def unsplash(_, m: Message):
 		images.clear()
 		if cmd[1].isdigit():
 			if app.is_str(cmd[2]):
-				await app.send_edit(m, "Getting images . . .", mono=True)
+				m = await app.send_edit(m, "Getting images . . .", mono=True)
 				second = int(cmd[1]) + 1
 				keyword = cmd[2]
 				for x in range(1, second):
@@ -133,7 +132,7 @@ async def unsplash(_, m: Message):
 		else:
 			await app.send_edit(m, "Give me count number of how many images you need . . .", mono=True)
 	else:
-		return print("Failed to get images through (uns) command.")
+		return app.send_edit(m, "Something went wrong !", mono=True, delme=4)
 
 
 
@@ -146,7 +145,7 @@ async def stick2image(_, m):
 	elif reply:
 		if reply.sticker:
 			if not reply.sticker.is_animated:
-				await app.send_edit(m, '`Converting To Image...`')
+				m = await app.send_edit(m, '`Converting To Image...`')
 				await app.download_media(
 					message=reply, 
 					file_name=f"{app.TEMP_DICT}test.jpg"
@@ -174,7 +173,7 @@ async def image2stick(app, m):
 	elif reply:
 		if reply.photo or reply.document.file_name.endswith(".png" or ".jpg" or "jpeg"):
 			if not reply.video:
-				await app.send_edit(m, "Converting To Sticker . . .", mono=True)
+				m = await app.send_edit(m, "Converting To Sticker . . .", mono=True)
 				await app.download_media(
 					message=reply, 
 					file_name=f"{app.TEMP_DICT}sticker.webp"
@@ -196,7 +195,7 @@ async def image2stick(app, m):
 @app.on_message(gen(["qc", "qrcode"]))
 async def make_qr(app, m):
 		try:
-			await app.send_edit(m, "making qrcode ...")
+			m = await app.send_edit(m, "making qrcode ...")
 			img = qrcode.make(m.command[1:])
 			alva = img.save(
 				f"{app.TEMP_DICT}qrcode.jpg"
@@ -220,7 +219,7 @@ async def get_colour_templates(_, m: Message):
 	elif len(m.command) > 1:
 		if len(m.command) < 4096:
 			try:
-				await app.send_edit(m, "creating image ...")
+				m = await app.send_edit(m, "creating image ...")
 				img = Image.new(
 					"RGB", 
 					(60, 30), 
@@ -259,7 +258,7 @@ async def get_cat_image(_, m):
 @app.on_message(gen("waifu"))
 async def get_waifu_images(_, m):
 	try:
-		await app.send_edit(m, "Finding a waifu . . .")
+		m = await app.send_edit(m, "Finding a waifu . . .")
 		if app.long(m) == 1:
 			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
 			photo = data.json().get("url")
@@ -294,7 +293,7 @@ async def get_waifu_images(_, m):
 async def get_profile_photos(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
-	await app.send_edit(m, "Sending profile photos . . .")
+	m = await app.send_edit(m, "Sending profile photos . . .")
 	if reply:
 		try:
 			if app.long(m) > 1:

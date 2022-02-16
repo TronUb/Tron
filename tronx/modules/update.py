@@ -106,7 +106,7 @@ async def update_ub(_, m):
 				await app.send_document(
 					m.chat.id,
 					"up_output.txt",
-					caption="[ STATUS ]: Do `.update now` to update.",
+					caption="**[ STATUS ]:** Do `.update now` to update.",
 				)
 				remove("up_output.txt")
 			else:
@@ -123,62 +123,49 @@ async def update_ub(_, m):
 			)
 			return repo.__del__()
 
-	if app.HEROKU_API_KEY is not None:
+	if app.HEROKU_API_KEY:
 		import heroku3
 
 		heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		heroku_app = None
 		heroku_applications = heroku.apps()
 		if not app.HEROKU_APP_NAME:
-			await app.send_edit(
-				m, 
-				"`Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.`"
-			)
+			await app.send_edit(m, "Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.", mono=True, delme=4)
 			return repo.__del__()
 
-		for bars in heroku_applications:
-			if bars.name == app.HEROKU_APP_NAME:
-				heroku_app = bars
+		for apps in heroku_applications:
+			if apps.name == app.HEROKU_APP_NAME:
+				heroku_app = apps
 				break
+
 		if heroku_app is None:
-			await app.send_edit(
-				m, 
-				f"Invalid Heroku credentials for updating userbot."
-			)
+			await app.send_edit(m, "Invalid Heroku credentials for updating userbot.", mono=True, delme=4)
 			return repo.__del__()
 
-		msg = await app.send_edit(
-			m, 
-			"`Userbot update in progress, please wait for few minutes . . .`"
-		)
+		m = await app.send_edit(m, "Userbot update in progress, please wait for few minutes . . .", mono=True)
 		ups_rem.fetch(ACTIVE_BRANCH)
 		repo.git.reset("--hard", "FETCH_HEAD")
-		heroku_git_url = heroku_app.git_url.replace(
-			"https://", "https://api:" + app.HEROKU_API_KEY + "@"
-		)
+		heroku_git_url = heroku_app.git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
+
 		if "heroku" in repo.remotes:
 			remote = repo.remote("heroku")
 			remote.set_url(heroku_git_url)
 		else:
 			remote = repo.create_remote("heroku", heroku_git_url)
+
 		try:
 			remote.push(refspec=f"HEAD:refs/heads/{ACTIVE_BRANCH}", force=True)
 		except GitCommandError as error:
-			pass
-		try:
-			await msg.edit("Successfully Updated!\nRestarting, Please wait . . .", mono=True)
-		except Exception:
-			await app.send_edit(m, "Successfully Updated!\nRestarting, please wait . . .", mono=True, delme=5)
+			app.log.error(e)
+
+		await app.send_edit(m, "Successfully Updated, initialing . . .", mono=True, delme=8)
+
 	else:
 		try:
 			ups_rem.pull(ACTIVE_BRANCH)
 		except GitCommandError:
 			repo.git.reset("--hard", "FETCH_HEAD")
-		await updateme_requirements()
-		await app.send_edit(
-			m,
-			"Successfully updated Userbot!\nBot is restarting . . .", 
-			mono=True, 
-			delme=8
-		)
 		await install_requirements()
+		await app.send_edit(m,"Successfully updated Userbot!\nBot is restarting . . .", mono=True, delme=8)
+
+

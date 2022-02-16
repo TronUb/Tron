@@ -48,6 +48,7 @@ async def start_bot():
 	print(f"\n\n{_mods} modules Loaded")
 	await start_assistant()
 	await start_userbot()
+	await app.add_logbot()
 	await idle() # block execution
 
 

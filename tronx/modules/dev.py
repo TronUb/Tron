@@ -35,7 +35,7 @@ p = print
 
 
 @app.on_message(gen(["eval", "e"], allow_channel=True))
-async def evaluate(client, m: Message):
+async def evaluate(app, m: Message):
 	""" This function is made to execute python codes """
 
 	if app.textlen(m) > 4096:
@@ -71,7 +71,7 @@ async def evaluate(client, m: Message):
 	except IndexError:
 		return await app.send_edit(m, "Give me some text (code) to execute . . .", mono=True, delme=3)
 
-	await app.send_edit(m, "Running . . .", mono=True)
+	m = await app.send_edit(m, "Running . . .", mono=True)
 
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
@@ -108,7 +108,7 @@ async def terminal(_, m: Message):
 	elif app.textlen(m) > 4096:
 		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", mono=True, delme=4)
 
-	await app.send_edit(m, "Running . . .", mono=True)
+	m = await app.send_edit(m, "Running . . .", mono=True)
 	args = m.text.split(None, 1)
 	teks = args[1]
 	if "\n" in teks:

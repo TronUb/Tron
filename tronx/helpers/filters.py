@@ -19,9 +19,9 @@ from pyrogram.types import (
 	Update
 )
 from config import Config
+from tronx.database.postgres.dv_sql import DVSQL 
 
-
-
+dv = DVSQL()
 
 
 # custom regex filter
@@ -78,18 +78,16 @@ def regex(
 
 
 
-
-# multiple prefixes
-def myprefix():
-	return Config.PREFIX.split()[0] if len(Config.PREFIX.split()) > 1 else Config.PREFIX
-
+def MyPrefix():
+	"""Multiple prefix support function"""
+	return dv.getdv("PREFIX").split() or Config.PREFIX.split() or "."
 
 
 
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	prefixes: Union[str, List[str]] = myprefix(), 
+	prefixes: Union[str, List[str]] = MyPrefix(), 
 	case_sensitive: bool = True, 
 	allow_sudo: bool = True,
 	allow_forward: bool = False,

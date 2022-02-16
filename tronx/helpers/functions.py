@@ -420,9 +420,9 @@ class Functions(object):
 		"""
 
 		try:
-			await self.kick_chat_member(chat_id, user_id)
+			await self.ban_chat_member(chat_id, user_id, int(time.time()) + 30) 
 		except Exception as e:
-			print(e)
+			await self.error(m, e)
 
 
 	def is_str(self, element):
@@ -485,7 +485,7 @@ class Functions(object):
 		return isinstance(element, int)
 
 
-	async def get_last_msg(self, m: Message, chat_id: int, reverse=False):
+	async def get_last_msg(self, m: Message, user_id, reverse=False):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -598,9 +598,7 @@ class Functions(object):
 			await app.ialive_pic()
 		"""
 
-		pic_url = self.getdv("USER_PIC")
-		data = pic_url if pic_url else self.UserPic()
-		return data if data else None
+		return self.getdv("USER_PIC") or self.UserPic() or None
 
 
 	def get_file_id(self, message):
@@ -681,7 +679,7 @@ class Functions(object):
 		return False
 
 
-	async def check_bot_in_log_chat(self):
+	async def add_logbot(self):
 		"""
 		params: 
 			None
@@ -694,19 +692,19 @@ class Functions(object):
 		"""
 
 		try:
-			if bot:
-				self.log.info("Checking presence of bot in log chat . . .\n")
+			if self.bot:
+				self.log.info("PROCESS: Checking presence of bot in log chat . . .\n")
 				try:
 					if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
-						await self.add_user(self.LOG_CHAT, self.bot.id)
-						self.log.info(f"Added bot in log chat . . .\n")
+						await self.add_users(self.bot.id, self.LOG_CHAT)
+						self.log.info(f"COMPLETED: Added bot in log chat . . .\n")
 					else:
-						self.log.info(f"Bot is already present in log chat . . .\n")
+						self.log.info(f"COMPLETED: Bot is already present in log chat . . .\n")
 				except PeerIdInvalid:
 					self.log.info("Peer id is invalid, Manually add bot to your log chat . . .\n")
 
 			else:
-				self.log.warning("Bot is not available, please check (TOKEN, API_ID, API_HASH)")
+				self.log.warning("Bot client is not available, please check (TOKEN, API_ID, API_HASH)")
 		except Exception as e:
 			await self.log.info(e)
 

@@ -18,3 +18,8 @@ class Others(object):
 	def PmpermitText(self):
 		return self.getdv("PMPERMIT_TEXT") or self.PMPERMIT_TEXT or None
 
+
+	def MyPrefix(self):
+		return self.getdv("PREFIX").split() or self.PREFIX.split() or "."
+		
+
