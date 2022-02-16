@@ -62,7 +62,6 @@ async def ban_hammer(_, m):
 		ban_time = False
 
 		if await app.IsAdmin(m) is True:
-			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
 				if app.long(m) > 1:
@@ -90,6 +89,7 @@ async def ban_hammer(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
+			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			if ban_time:
 				await app.ban_chat_member(m.chat.id, user.user.id, time.time() + ban_time)
 				await app.send_edit(m, f"Banned {user.user.mention} for {arg} ")
