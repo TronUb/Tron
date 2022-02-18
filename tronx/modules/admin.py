@@ -2,8 +2,7 @@ import time
 import asyncio
 import html
 
-from pyrogram import Client, filters
-from pyrogram.types import Message, ChatPermissions, User
+from pyrogram.types import Message, ChatPermissions
 
 from pyrogram.errors import (
 	UserAdminInvalid, 
@@ -11,7 +10,6 @@ from pyrogram.errors import (
 	UserNotParticipant,
 	UsernameNotOccupied,
 )
-from pyrogram.methods.chats.get_chat_members import Filters as ChatMemberFilters
 
 from tronx import app
 
@@ -34,8 +32,8 @@ app.CMD_HELP.update(
 		"promote" : "promote a member to admin",
 		"demote" : "demote a admin to a member",
 		"pin" : "pin a message in group",
-		"kick" : "kick a user out of your group.",
-		"unpin" : "unpin a pinned message in group",
+		"kick" : "kick a user out of your groups.",
+		"unpin" : "unpin a pinned message.",
 		"unpin all" : "unpin all pinned messages in one command"
 		}
 		)
@@ -44,6 +42,7 @@ app.CMD_HELP.update(
 
 
 
+private = ("private", "bot")
 def to_seconds(format, number): # number: int, format: s, m, h, d
 	format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24} 
 	return int(format_set[format]) 
@@ -51,11 +50,13 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 
-@app.on_message(gen("ban", allow_channel=True))
-async def ban_hammer(_, m):
+@app.on_message(gen("ban", allow_channel=True, allow_sudo=True))
+async def ban_members(_, m: Message):
 	try:
 		# return if used in private
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
 		cmd = m.command
@@ -67,7 +68,7 @@ async def ban_hammer(_, m):
 				if app.long(m) > 1:
 					arg = cmd[1]
 					ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
-	
+
 			elif not reply:
 				if app.long(m) == 1:
 					return await app.send_edit(m, "Give me user id | username or reply to the user you want to ban . . .", mono=True)
@@ -136,12 +137,15 @@ async def ban_all(_, m):
 
 
 
-@app.on_message(gen("unban", allow_channel=True))
-async def unban(_, m):
+@app.on_message(gen("unban", allow_channel=True, allow_sudo=True))
+async def unban_members(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -163,6 +167,7 @@ async def unban(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
+			await app.send_edit(m, "Unbanning . . .", mono=True)
 			await app.unban_chat_member(m.chat.id, user.user.id)
 			await app.send_edit(m, f"Unbanned {user.user.mention} in this chat !")
 		else:
@@ -199,10 +204,12 @@ async def mute_user(chat_id, user_id, duration=0):
 
 
 
-@app.on_message(gen("mute"))
-async def mute_users(_, m):
+@app.on_message(gen("mute", allow_sudo=True))
+async def mute_users(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
 		mute_time = False
@@ -254,12 +261,15 @@ async def mute_users(_, m):
 
 
 
-@app.on_message(gen("unmute"))
-async def unmute(_, m):
+@app.on_message(gen("unmute", allow_sudo=True))
+async def unmute_users(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -309,12 +319,15 @@ async def unmute(_, m):
 
 
 
-@app.on_message(gen("kick", allow_channel=True))
-async def kick_user(_, m):
+@app.on_message(gen("kick", allow_channel=True, allow_sudo=True))
+async def kick_users(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -336,6 +349,7 @@ async def kick_user(_, m):
 			else:
 				return await app.send_edit(m, "Something went wrong !", mono=True)
 
+			await app.send_edit(m, "Kicking . . .", mono=True)
 			await app.kick_user(m.chat.id, user.user.id)
 			await app.send_edit(m, f"Kicked {user.user.mention} in this chat !")
 		else:
@@ -351,16 +365,17 @@ async def kick_user(_, m):
 
 
 
-@app.on_message(gen("pin", allow_channel=True))
-async def pin_message(_, m):
+@app.on_message(gen("pin", allow_channel=True, allow_sudo=True))
+async def pin_message(_, m: Message):
 	reply = m.reply_to_message
 	try:
-		if m.chat.type in ["private", "bot"]:
+		if m.chat.type in private:
 			if not reply:
 				return await app.send_edit("reply to some message, so that i can pin ", mono=True, delme=5)
 			else:
 				await reply.pin()
 				return await app.send_edit(m, "Pinned message !", mono=True, delme=5)
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
@@ -376,10 +391,11 @@ async def pin_message(_, m):
 
 
 
-@app.on_message(gen("unpin", allow_channel=True))
-async def pin_message(_, m):
+@app.on_message(gen("unpin", allow_channel=True, allow_sudo=True))
+async def unpin_message(_, m: Message):
 	try:
 		reply = m.reply_to_message
+
 		if reply:
 			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
 			done = await reply.unpin()
@@ -401,12 +417,15 @@ async def pin_message(_, m):
 
 
 
-@app.on_message(gen("promote", allow_channel=True))
-async def promote(_, m):
+@app.on_message(gen("promote", allow_channel=True, allow_sudo= True))
+async def promote_users(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -443,6 +462,7 @@ async def promote(_, m):
 				can_pin_messages=True,
 				can_post_messages=True,
 				)
+			m = app.send_edit(m, "Promoting . . .", mono=True)
 			await app.send_edit(m, f"Promoted {user.user.mention} in this chat !")
 		else:
 			return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
@@ -457,12 +477,15 @@ async def promote(_, m):
 
 
 
-@app.on_message(gen("demote", allow_channel=True))
-async def demote(client, m):
+@app.on_message(gen("demote", allow_channel=True, allow_sudo=True))
+async def demote_users(_, m: Message):
 	try:
-		await app.private(m)
+		if m.chat.type in private:
+			return await app.private(m)
+
 		reply = m.reply_to_message
 		user = False
+
 		if await app.IsAdmin(m) is True:
 			if reply:
 				user = await app.get_chat_member(m.chat.id, reply.from_user.id)
@@ -497,6 +520,7 @@ async def demote(client, m):
 					can_pin_messages=False,
 					can_post_messages=False,
 					)
+			m = await app.send_edit(m, "Demoting . . .", mono=True)
 			await app.send_edit(m, f"Demoted {user.user.mention} in this chat !")
 		else:
 			return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
