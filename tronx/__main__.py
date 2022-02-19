@@ -27,8 +27,11 @@ async def start_userbot():
 		await app.start()
 		app.log.info("Userbot activated, startup in progress . . .\n")
 		print("PEERS RESOLVING: Started . . .\n\n")
-		async for x in app.iter_dialogs():
-			pass
+		try:
+			async for x in app.iter_dialogs():
+				pass
+		except Exception as e:
+			app.log.info(e)
 		print("PEERS RESOLVE: Done . . .")
 	else:
 		app.log.info("Userbot startup unsuccessful, please check everything again ...")
