@@ -57,7 +57,7 @@ async def reddit_image(_, m: Message):
 
 			# finally remove
 			for x in os.listdir("."):
-				if x.endswith(".jpg") or x.endswith(".png"): or x.endswith(".gif"):
+				if x.endswith(".jpg") or x.endswith(".png") or x.endswith(".gif"):
 					os.remove(x)
 
 			await m.delete()
