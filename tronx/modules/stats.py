@@ -5,6 +5,18 @@ from pyrogram.types import Message
 
 
 
+app.CMD_HELP.update(
+	{"stats": (
+		"stats",
+		{
+		"stats" : "Get information about how many groups/channels/users you have."
+		}
+		)
+	}
+)
+
+
+
 @app.on_message(gen("stats"))
 async def dialog_stats(_, m: Message):
 	try:

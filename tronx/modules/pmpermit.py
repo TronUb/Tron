@@ -44,9 +44,9 @@ async def old_msg(m: Message, user_id):
 
 async def send_warn(m: Message, user):
 	""" Send warning messages """
-	pic = app.getdv("PMPERMIT_PIC") if bool(app.getdv("PMPERMIT_PIC")) else app.PMPERMIT_PIC if bool(app.PMPERMIT_PIC) else False
+	pic = app.PmpermitPic()
 
-	text = app.getdv("PMPERMIT_TEXT") if bool(app.getdv("PMPERMIT_TEXT")) else app.PMPERMIT_TEXT if bool(app.PMPERMIT_TEXT) else None
+	text = app.PmpermitText()
 
 	if pic:
 		msg = await app.send_video(
@@ -70,22 +70,23 @@ async def send_warn(m: Message, user):
 
 
 # incoming autoblock
-@app.on_message(filters.private & filters.incoming & (~filters.me & ~filters.bot), group=3)
+@app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me), group=3)
 async def auto_block(_, m: Message):
-	if bool(app.getdv("PMPERMIT")) is False or m.from_user.is_verified:
+	if app.Pmpermit() is False or m.from_user.is_verified: # allow verified
 		return
 
-	if bool(app.get_whitelist(m.chat.id)) is False:
-		user = await app.get_users(m.chat.id)
-	else:
+	if bool(app.get_whitelist(m.chat.id)) is True:
 		return
+	else:
+		user = await app.get_users(m.chat.id)
 
 	# auto allow while outgoing first msg of ub owner
 
-	if (await app.get_history(m.chat.id, reverse=True))[0].from_user.is_self:
+	history = await app.get_history(m.chat.id)
+	if len(history) == 1 and history[-1].from_user.is_self: # new chat starts with first and one msg
 		return app.set_whitelist(user.id, True)
 
-	pmlimit = app.getdv("PM_LIMIT") if app.getdv("PM_LIMIT") else int(app.PM_LIMIT) if app.PM_LIMIT else 4 
+	pmlimit = app.PmpermitLimit()
 
 	# log user info to log chat
 
@@ -117,9 +118,9 @@ async def auto_block(_, m: Message):
 						f"{user.first_name} is now blocked for spamming !"
 					)
 				except PeerIdInvalid:
-					pass
+					print(f"{user.first_name} was blocked in your pm for spamming.")
 			else:
-				await app.send_edit(m, "Failed to block user because of spamming in pm", mono=True)
+				await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", mono=True, delme=4)
 		else:
 			print("Something went wrong in pmpermit")
 
@@ -136,9 +137,11 @@ async def approve_pm(app, m: Message):
 
 	if m.chat.type == "private":
 		user_id = m.chat.id
+
 	elif m.chat.type != "private":
 		if reply:
 			user_id = reply.from_user.id
+	
 		elif not reply and app.long(m) == 1:
 			return await app.send_edit(m, "Whom should i approve, piro ?", mono=True, delme=3)
 
@@ -146,22 +149,20 @@ async def approve_pm(app, m: Message):
 			try:
 				data = await app.get_users(cmd[1])
 				user_id = data.id
-			except (
-				IndexError, 
-				PeerIdInvalid, 
-				UsernameNotOccupied, 
-				UsernameInvalid
-				):
-				return await app.send_edit(m, "Please check username again . . .", delme=3, mono=True)
+			except PeerIdInvalid:
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+			except UsernameNotOccupied:
+				return await app.send_edit(m, "No user like exists in telegram.", mono=True, delme=4)
+			except UsernameInvalid:
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4) . . .", delme=3)
 
 		else:
-			return await app.send_edit(m, "Something went wrong . . .", mono=True, delme=2)
+			return await app.send_edit(m, "Something went wrong.", mono=True, delme=2)
 
 	info = await app.get_users(user_id)
-	user_name = info.first_name
 	try:
 		app.set_whitelist(user_id, True)
-		await app.send_edit(m, f"{info.mention} is now approved for pm.", delme=5)
+		await app.send_edit(m, f"{info.mention} is now approved for pm.", delme=4)
 
 		app.del_warn(user_id)
 
@@ -169,55 +170,56 @@ async def approve_pm(app, m: Message):
 			await old_msg(m, user_id)
 
 	except Exception as e:
+		await app.send_edit(m, f"Something went wrong.", mono=True, delme=4)
 		await app.error(m, e)
-		await app.send_edit(m, f"Something went wrong . . .", mono=True, delme=3)
 
 
 
 
-@app.on_message(gen(["da", "disapprove"]))
+@app.on_message(gen(["da", "disapprove"], allow_sudo=True))
 async def diapprove_pm(_, m:Message):
 	if m.chat.type == "bot":
 		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
 
-	await app.send_edit(m, "disapproving . . .", mono=True)
+	m = await app.send_edit(m, "disapproving . . .", mono=True)
 	reply = m.reply_to_message
 	cmd = m.command
 
 	if m.chat.type == "private":
 		user_id = m.chat.id
+
 	elif m.chat.type != "private":
 		if reply:
 			user_id = reply.from_user.id
+
 		elif not reply and app.long(m) == 1:
-			await app.send_edit(m, "Whom should i disapprove, piro ?", mono=True, delme=3)
+			return await app.send_edit(m, "Whom should i disapprove, piro ?", mono=True, delme=3)
+
 		elif not reply and app.long(m) > 1:
 			try:
 				data = await app.get_users(cmd[1])
 				user_id = data.id
-			except (
-				IndexError, 
-				PeerIdInvalid, 
-				UsernameNotOccupied, 
-				UsernameInvalid
-				):
-				return await app.send_edit(m, "Please try again later . . .", delme=3)
+			except PeerIdInvalid:
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+			except UsernameNotOccupied:
+				return await app.send_edit(m, "No user like exists in telegram.", mono=True, delme=4)
+			except UsernameInvalid:
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4) . . .", delme=3)
 		else:
-			await app.send_edit(m, "Failed to disapprove user !", mono=True, delme=3)
+			await app.send_edit(m, "Failed to disapprove user !", mono=True, delme=4)
 
 	info = await app.get_users(user_id)
-	user_name = info.first_name
-	if user_name:
+	if info:
 		app.del_whitelist(user_id)
-		await app.send_edit(m, f"{info.mention} has been disapproved for pm!", delme=5)
+		await app.send_edit(m, f"{info.mention} has been disapproved for pm!", delme=4)
 		try:
 			await app.send_message(
 				app.LOG_CHAT, 
 				f"#disallow\n\n{info.mention} has been disapproved for pm !"
 			)
-		except Exception as e:
-			pass
+		except PeerIdInvalid:
+			print(f"{info.first_name} has been disapproved for pm")
 	else:
-		await app.send_edit(m, "Sorry there is no user id to disapprove . . .", mono=True, delme=3)
+		await app.send_edit(m, "Sorry there is no user id to disapprove.", mono=True, delme=4)
 
 

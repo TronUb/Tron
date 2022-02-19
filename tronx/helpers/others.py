@@ -11,6 +11,14 @@ class Others(object):
 		return data_list or self.SUDO_USERS or [] 
 
 
+	def Pmpermit(self):
+		return self.getdv("PMPERMIT") or self.PMPERMIT or None
+
+
+	def PmpermitLimit(self):
+		return self.getdv("PM_LIMIT") or self.PM_LIMIT or 4
+
+
 	def PmpermitPic(self):
 		return self.getdv("PMPERMIT_PIC") or self.PMPERMIT_PIC or None
 
