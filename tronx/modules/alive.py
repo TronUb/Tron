@@ -15,7 +15,8 @@ app.CMD_HELP.update(
 		"alive",
 		{
 		"alive" : "Normal alive, in which you will get userbot status without inline buttons.",
-		"ialive" : "Inline alive that contains your & your userbot status."
+		"ialive" : "Inline alive that contains your & your userbot status.",
+		"qt" : "Get inline quotes with a inline 'more' button."
 		}
 		)
 	}

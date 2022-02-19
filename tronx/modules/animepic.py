@@ -23,7 +23,7 @@ app.CMD_HELP.update(
 	{"animepic": (
 		"animepic",
 		{
-		"neko" : "Get a anime neko girl image.",
+		"nekopic" : "Get a anime neko girl image.",
 		"animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
 		"animelist":"Get list of supported suffix for animegif command."
 		}

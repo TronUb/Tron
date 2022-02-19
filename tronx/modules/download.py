@@ -119,7 +119,6 @@ async def download_media(_, m: Message):
 
 	elif app.long(m) > 1:
 		try:
-			m = await app.send_edit(m, "•Downloading . . .", mono=True)
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
 			url = the_url_parts.strip()
@@ -170,6 +169,7 @@ async def download_media(_, m: Message):
 				except Exception as e:
 					app.log.info(str(e))
 					pass
+			m = await app.send_edit(m, "• Downloading . . .", mono=True)
 			if os.path.exists(download_file_path):
 				end_t = datetime.now()
 				ms = (end_t - start_t).seconds

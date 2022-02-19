@@ -55,7 +55,7 @@ colour_code = {
 
 
 
-@app.on_message(gen(["carbon", "carb"]))
+@app.on_message(gen(["carbon", "carb"], allow_sudo=True))
 async def carb_api(_, m: Message):
 	cmd = m.command
 	if app.long(m) < 2:
@@ -79,7 +79,7 @@ async def carb_api(_, m: Message):
 
 
 
-@app.on_message(gen("carblist"))
+@app.on_message(gen("carblist", allow_sudo=True))
 async def carb_colour_list(_, m: Message):
 	clist = list(colour_code.keys())
 	await app.send_edit(m, "\n".join(clist))
