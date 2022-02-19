@@ -219,7 +219,7 @@ async def webshot(_, m: Message):
 		try:
 			BASE = "https://render-tron.appspot.com/screenshot/"
 			url = m.command[1] 
-			path = "downloads/screenshot.jpg"
+			path = "./downloads/screenshot.jpg"
 			response = requests.get(BASE + url, stream=True)
 
 			if response.status_code == 200:

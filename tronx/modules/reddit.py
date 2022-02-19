@@ -32,7 +32,7 @@ async def reddit_image(_, m: Message):
 
 	elif app.long(m) > 1:
 		try:
-			cmd = m.text.split(None, 1)[1]
+			text = m.text.split(None, 1)[1]
 			url = f"https://old.reddit.com/r/{text}.json"
 
 			headers = {
