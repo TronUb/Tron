@@ -93,13 +93,13 @@ async def list_directories(_, m: Message):
 
 @app.on_message(gen(["download", "dl"]))
 async def download_media(_, m: Message):
-	m = await app.send_edit(m, "⏳ •Downloading . . .")
 	reply = m.reply_to_message
 	if reply and reply.media:
 		try:
 			start_t = datetime.now()
 			c_time = time.time()
 
+			m = await app.send_edit(m, "• Downloading . . .", mono=True)
 			location = await app.download_media(
 				message=reply,
 				progress=app.ProgressForPyrogram,
@@ -119,6 +119,7 @@ async def download_media(_, m: Message):
 
 	elif app.long(m) > 1:
 		try:
+			m = await app.send_edit(m, "•Downloading . . .", mono=True)
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
 			url = the_url_parts.strip()
@@ -191,12 +192,10 @@ async def download_media(_, m: Message):
 
 @app.on_message(gen(["upload", "ul"]))
 async def upload_as_document(_, m: Message):
-	m = await app.send_edit(m, ". . .", mono=True)
-
 	if app.long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
-			await app.send_edit(m, "Uploading . . .", mono=True)
+			m = await app.send_edit(m, "Uploading . . .", mono=True)
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
