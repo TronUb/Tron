@@ -52,8 +52,7 @@ async def reddit_image(_, m: Message):
 						kate = requests.get(pic_url, headers=headers).content
 						f_out.write(kate)
 
-			photos = [x for x in os.listdir(".") if x.endswith(".jpg") or x.endswith(".png") or x.endswith(".gif") else ""]
-
+			photos = [x for x in os.listdir(".") if x.endswith(".jpg") or x.endswith(".png") or x.endswith(".gif") or ""]
 			await app.send_photo(m.chat.id, random.choice(photos))
 
 			# finally remove
