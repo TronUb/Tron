@@ -14,7 +14,7 @@ async def dialog_stats(_, m: Message):
 		user = 0
 		group = 0
 		channel = 0
-		stat_format = f"""
+		stat_format = """
 		• **STATS FOR:** {}
 
 		> **BOTS:** {}
