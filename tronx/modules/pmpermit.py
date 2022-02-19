@@ -204,7 +204,7 @@ async def diapprove_pm(_, m:Message):
 			except UsernameNotOccupied:
 				return await app.send_edit(m, "No user like exists in telegram.", mono=True, delme=4)
 			except UsernameInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4) . . .", delme=3)
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
 		else:
 			await app.send_edit(m, "Failed to disapprove user !", mono=True, delme=4)
 
