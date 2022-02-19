@@ -52,8 +52,7 @@ async def send_warn(m: Message, user):
 		msg = await app.send_video(
 			m.chat.id,
 			pic,
-			caption=text,
-			disable_web_page_preview=True
+			caption=text
 		)
 	elif not pic:
 		msg = await app.send_message(
