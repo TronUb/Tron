@@ -111,12 +111,6 @@ def gen(
 		if not text:
 			return False
 
-		if text and len(text) > 4096:
-			try:
-				await app.send_edit(message, "The length of text exceeds 4096 characters.", mono=True, delme=4)
-			except Exception:
-				pass
-
 		# works for you & sudo | only for you
 		if allow_sudo:
 			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
