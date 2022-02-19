@@ -154,7 +154,7 @@ async def approve_pm(app, m: Message):
 			except UsernameNotOccupied:
 				return await app.send_edit(m, "No user like exists in telegram.", mono=True, delme=4)
 			except UsernameInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4) . . .", delme=3)
+				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
 
 		else:
 			return await app.send_edit(m, "Something went wrong.", mono=True, delme=2)
