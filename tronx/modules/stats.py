@@ -33,6 +33,6 @@ async def dialog_stats(_, m: Message):
 			if x.chat.type == "private":
 				user += 1
 
-		await app.send_edit(m, stat_format.format(bot, user, group, channel))
+		await app.send_edit(m, stat_format.format(app.UserMention(), bot, user, group, channel))
 	except Exception as e:
 		await app.error(m, e)
