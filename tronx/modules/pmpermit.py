@@ -49,7 +49,7 @@ async def send_warn(m: Message, user):
 	text = app.PmpermitText()
 
 	if pic:
-		msg = await app.send_video(
+		msg = await app.send_photo(
 			m.chat.id,
 			pic,
 			caption=text
