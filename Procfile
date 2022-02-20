@@ -1,1 +1,1 @@
-worker: python3 -m tronx
+web: python3 -m tronx
