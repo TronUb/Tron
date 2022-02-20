@@ -49,7 +49,7 @@ GET_FORMAT = {
 
 
 
-@app.on_message(gen("save"))
+@app.on_message(gen("save", allow_sudo=True))
 async def save_note(_, m: Message):
 	if len(m.command) < 2:
 		return await app.send_edit(m, "A note name is required with command to save notes ...", mono=True)
@@ -147,7 +147,7 @@ async def get_note(_, m: Message):
 
 
 
-@app.on_message(gen("notes"))
+@app.on_message(gen("notes", allow_sudo=True))
 async def notes_list(_, m: Message):	
 	getnotes = app.get_all_selfnotes(m.from_user.id)
 	if not getnotes:

@@ -23,7 +23,7 @@ app.CMD_HELP.update(
 	{"animepic": (
 		"animepic",
 		{
-		"nekopic" : "Get a anime neko girl image.",
+		"npic" : "Get a anime neko girl image.",
 		"animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
 		"animelist":"Get list of supported suffix for animegif command."
 		}
@@ -60,17 +60,19 @@ async def send_gif(m: Message, gif_data):
 
 
 
-@app.on_message(gen("animelist"))
-async def list_of_suffix(_, m: Message):
+@app.on_message(gen("animelist", allow_sudo=True))
+async def animelist(_, m: Message):
 	await app.send_edit(m, anime_suffix)
 
 
 
 	
-@app.on_message(gen(["nekopic", "npic"]))
+@app.on_message(gen(["nekopic", "npic"], allow_sudo=True))
 async def nekoanime(_, m: Message):
 	try:
-		await m.delete()
+		if m.from_user.is_self:
+			await m.delete()
+
 		data = requests.get("https://nekos.best/api/v1/nekos").text
 		data = json.loads(data)
 		await app.send_photo(
@@ -84,12 +86,14 @@ async def nekoanime(_, m: Message):
 
 
 
-@app.on_message(gen("animegif"))
+@app.on_message(gen("animegif", allow_sudo=True))
 async def animegif(_, m: Message):
 	if app.long(m) > 1:
 		arg = m.command[1]
 		try:
-			await m.delete()
+			if m.from_user.is_self:
+				await m.delete()
+
 			if arg in anime_list:
 				data = get_anime_gif(arg)
 				await send_gif(m, data)
@@ -98,4 +102,4 @@ async def animegif(_, m: Message):
 		except Exception as e:
 			await app.error(m, e)
 	else:
-		await app.send_edit(m, f"Give me a suffix, use `{app.PREFIX}giflist` to get suffix . . .", delme=5)
+		await app.send_edit(m, f"Give me a suffix, use `{app.PREFIX}giflist` to get suffix.", delme=4)

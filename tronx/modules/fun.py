@@ -36,15 +36,15 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("slap"))
-async def slap_friends(app, m):
+@app.on_message(gen("slap", allow_sudo=True))
+async def slap_friends(_, m):
 	if m.reply_to_message:
 		try:
 			m = await app.send_edit(m,". . .")
 
 			my_info = app.UserMention()
 			user = m.reply_to_message.from_user
-			user_info = app.mention_markdown(user.id, user.first_name)
+			user_info = user.mention
 			TASK = (
 				f"{my_info} slaps {user_info} with a bunch of cardboards",
 				f"{my_info} hits {user_info} in the face with cows",
@@ -66,12 +66,11 @@ async def slap_friends(app, m):
 			await app.error(m, e)
 	else:
 		await app.send_edit(m, "Reply to a friend to use harsh words to insult him", delme=2, mono=True)
-		return
 
 
 
 
-@app.on_message(gen(["cap", "capital"]))
+@app.on_message(gen(["cap", "capital"], allow_sudo=True))
 async def capitalise(_, m):
 	try:
 		reply = m.reply_to_message
@@ -92,7 +91,7 @@ async def capitalise(_, m):
 
 
 
-@app.on_message(gen("type"))
+@app.on_message(gen("type", allow_sudo=True))
 async def type_animatiom(_, m):
 	try:
 		if app.long(m) > 1:
@@ -118,33 +117,32 @@ async def type_animatiom(_, m):
 
 
 
-@app.on_message(gen("insult"))
+@app.on_message(gen("insult", allow_sudo=True))
 async def insult_someone(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2, mono=True)
 	elif reply:
 		try:
-			m = await app.send_edit(m, "Insulting . . .", mono=True)
 			if app.long(m) == 1:
 				lang = "en"
 			elif app.long(m) > 1:
 				lang = m.command[1]
 			data = requests.get(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
 			_data = data.json()
+
+			m = await app.send_edit(m, "Insulting . . .", mono=True)
 			if _data:
 				await app.send_edit(m, f"`{_data.get('insult')}`")
 			else:
-				await app.send_edit(m, "No insults found !", delme=2, mono=True)
+				await app.send_edit(m, "No insults found !", delme=4, mono=True)
 		except Exception as e:
 			await app.error(m, e)
-	else:
-		return
 
 
 
 
-@app.on_message(gen("advice"))
+@app.on_message(gen("advice", allow_sudo=True))
 async def give_advice(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -160,13 +158,11 @@ async def give_advice(_, m):
 				await app.send_edit(m, "No advice found !", delme=2, mono=True)
 		except Exception as e:
 			await app.error(m, e)
-	else:
-		return
 
 
 
 
-@app.on_message(gen("qs"))
+@app.on_message(gen("qs", allow_sudo=True))
 async def ask_question(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -184,13 +180,11 @@ async def ask_question(_, m):
 				await app.send_edit(m, "No question found !", delme=2, mono=True)
 		except Exception as e:
 			await app.error(m, e)
-	else:
-		return
 
 
 
 
-@app.on_message(gen("wtd"))
+@app.on_message(gen("wtd", allow_sudo=True))
 async def what_to_do(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a activity . . .", mono=True)
@@ -207,7 +201,7 @@ async def what_to_do(_, m):
 
 
 
-@app.on_message(gen("mqt"))
+@app.on_message(gen("mqt", allow_sudo=True))
 async def movie_quotes(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a movie quote . . .", mono=True)
@@ -225,7 +219,7 @@ async def movie_quotes(_, m):
 
 
 
-@app.on_message(gen("joke"))
+@app.on_message(gen("joke", allow_sudo=True))
 async def send_joke(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a joke . . .", mono=True)
@@ -239,5 +233,6 @@ async def send_joke(_, m):
 		else:
 			await app.send_edit(m, "No jokes found !", delme=2, mono=True)
 	except Exception as e:
+		await app.send_edit(m, "Server error, try again later.", mono=True, delme=4)
 		await app.error(m, e)
 

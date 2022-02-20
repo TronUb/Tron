@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("minfo"))
+@app.on_message(gen("minfo", allow_sudo=True))
 async def media_info(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
@@ -153,7 +153,7 @@ async def media_info(_, m: Message):
 
 
 
-@app.on_message(gen("chatinfo"))
+@app.on_message(gen("chatinfo", allow_sudo=True))
 async def get_chatinfo(_, m: Message):
 	try:
 		if len(m.command) > 1:
@@ -172,7 +172,7 @@ async def get_chatinfo(_, m: Message):
 		else:
 			poto = False
 
-		m = await app.send_edit(m, "Processing ...")
+		m = await app.send_edit(m, "Processing . . .")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
 		data += f"**Title:** `{chat.title}`\n"
@@ -186,7 +186,6 @@ async def get_chatinfo(_, m: Message):
 		data += f"**Permissions:**\n\n"
 		data += f"**Send Messages:** `{neel.can_send_messages}`\n"
 		data += f"**Send Media:** `{neel.can_send_media_messages}`\n"
-		data += f"**Send Stickers:** `{neel.can_send_stickers}`\n"
 		data += f"**Send Animations:** `{neel.can_send_animations}`\n"
 		data += f"**Send Games:** `{neel.can_send_games}`\n"
 		data += f"**Inline Bots:** `{neel.can_use_inline_bots}`\n"

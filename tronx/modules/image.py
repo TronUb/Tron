@@ -97,7 +97,7 @@ async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
 
 
 
-@app.on_message(gen(["uns", "unsplash"]))
+@app.on_message(gen(["uns", "unsplash"], allow_sudo=True))
 async def unsplash(_, m: Message):
 	cmd = m.command
 	if app.long(m) == 1:
@@ -122,11 +122,13 @@ async def unsplash(_, m: Message):
 						)
 					images.append(img)
 
+				m = await app.send_edit(m, "Getting image . . .", mono=True)
 				for img in images:
 					await asyncio.gather(
 						app.send_photo(m.chat.id, str(img))
 						)
-				await m.delete()
+				if m.from_user.is_self:
+					await m.delete()
 			else:
 				await app.send_edit(m, "Sorry numbers are not allowed to be a search query . . .", mono=True)  
 		else:
@@ -137,7 +139,7 @@ async def unsplash(_, m: Message):
 
 
 
-@app.on_message(gen("stoi"))
+@app.on_message(gen("stoi", allow_sudo=True))
 async def stick2image(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -165,11 +167,12 @@ async def stick2image(_, m):
 
 
 
-@app.on_message(gen("itos"))
+@app.on_message(gen("itos", allow_sudo=True))
 async def image2stick(app, m):
 	reply = m.reply_to_message
 	if not reply:
-		await app.send_edit(m, "`Reply to a image`", delme=3)
+		await app.send_edit(m, "`Reply to a image`", delme=4)
+
 	elif reply:
 		if reply.photo or reply.document.file_name.endswith(".png" or ".jpg" or "jpeg"):
 			if not reply.video:
@@ -192,19 +195,20 @@ async def image2stick(app, m):
 
 
 
-@app.on_message(gen(["qc", "qrcode"]))
+@app.on_message(gen(["qc", "qrcode"], allow_sudo=True))
 async def make_qr(app, m):
 		try:
-			m = await app.send_edit(m, "making qrcode ...")
 			img = qrcode.make(m.command[1:])
 			alva = img.save(
 				f"{app.TEMP_DICT}qrcode.jpg"
 				)
+			m = await app.send_edit(m, "Making qrcode . . .", mono=True)
 			await app.send_document(
 				m.chat.id, 
 				f"{app.TEMP_DICT}qrcode.jpg"
 				)
-			os.remove(f"{app.TEMP_DICT}qrcode.jpg")
+			if os.path.exists(f"{app.TEMP_DICT}qrcode.jpg"):
+				os.remove(f"{app.TEMP_DICT}qrcode.jpg")
 			await m.delete()
 		except Exception as e:
 			await app.error(m, e)
@@ -212,26 +216,28 @@ async def make_qr(app, m):
 
 
 
-@app.on_message(gen("colour"))
+@app.on_message(gen("colour", allow_sudo=True))
 async def get_colour_templates(_, m: Message):
 	if len(m.command) < 2:
-		await app.send_edit(m, "Please give some colour name after command ...", delme=3)
+		await app.send_edit(m, "Please give some colour name after command . . .", delme=3)
+	
 	elif len(m.command) > 1:
 		if len(m.command) < 4096:
 			try:
-				m = await app.send_edit(m, "creating image ...")
 				img = Image.new(
 					"RGB", 
 					(60, 30), 
 					color = f"{m.command[1]}"
 					)
-				img.save(f"{app.TEMP_DICT}/colour_image.png")
+				img.save(f"{app.TEMP_DICT}colour_image.png")
+				m = await app.send_edit(m, "Making colour . . .", mono=True)
 				await app.send_photo(
 					m.chat.id,
-					f"{app.TEMP_DICT}/colour_image.png"
+					f"{app.TEMP_DICT}colour_image.png"
 					)
 				await m.delete()
-				os.remove(f"{app.TEMP_DICT}/colour_image.png")
+				if os.path.exists(f"{app.TEMP_DICT}colour_image.png"):
+					os.remove(f"{app.TEMP_DICT}colour_image.png")
 			except Exception as e:
 				await app.error(m, e)
 		else:
@@ -240,7 +246,7 @@ async def get_colour_templates(_, m: Message):
 
 
 
-@app.on_message(gen("cat"))
+@app.on_message(gen("cat", allow_sudo=True))
 async def get_cat_image(_, m):
 	try:
 		await m.delete()
@@ -255,11 +261,12 @@ async def get_cat_image(_, m):
 
 
 
-@app.on_message(gen("waifu"))
+@app.on_message(gen("waifu", allow_sudo=True))
 async def get_waifu_images(_, m):
+	text = "Finding waifu . . ."
 	try:
-		m = await app.send_edit(m, "Finding a waifu . . .")
 		if app.long(m) == 1:
+			m = await app.send_edit(m, text, mono=True)
 			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
 			photo = data.json().get("url")
 			if photo:
@@ -268,6 +275,7 @@ async def get_waifu_images(_, m):
 			else:
 				await app.send_edit(m, "No waifu found !", delme=3)
 		elif app.long(m) > 1 and m.command[1] == "nsfw":
+			m = await app.send_edit(m, text, mono=True)
 			data = requests.get(f"https://api.waifu.pics/nsfw/waifu")
 			photo = data.json().get("url")
 			if photo:
@@ -276,6 +284,7 @@ async def get_waifu_images(_, m):
 			else:
 				await app.send_edit(m, "No waifu found !", delme=3)
 		elif app.long(m) > 1 and m.command[1] != "nsfw":
+			m = await app.send_edit(m, text, mono=True)
 			data = requests.get(f"https://api.waifu.pics/sfw/waifu")
 			photo = data.json().get("url")
 			if photo:
@@ -289,20 +298,23 @@ async def get_waifu_images(_, m):
 
 
 
-@app.on_message(gen("poto"))
+@app.on_message(gen("poto", allow_sudo=True))
 async def get_profile_photos(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
-	m = await app.send_edit(m, "Sending profile photos . . .")
+	text = "Getting photo . . ."
+
 	if reply:
 		try:
 			if app.long(m) > 1:
+				m = await app.send_edit(m, text, mono=True)
 				if cmd[1] == "all":
 					await send_profile_pic(app, m, False)
 				if cmd[1] != "all":
 					await send_profile_pic(app, m)
 
 			if app.long(m) == 1:
+				m = await app.send_edit(m, text, mono=True)
 				await send_profile_pic(app, m)
 		except Exception as e:
 			await app.error(m, e)
@@ -310,6 +322,7 @@ async def get_profile_photos(_, m):
 	elif not reply:
 		if app.long(m) > 1:
 			try:
+				m = await app.send_edit(m, text, mono=True)
 				user = await app.get_users(cmd[1])
 				p_id = await app.get_profile_photos(user.id)
 				await send_profile_pic(app, m, p_id=p_id)
@@ -320,4 +333,3 @@ async def get_profile_photos(_, m):
 			user = m.from_user
 			p_id = await app.get_profile_photos(user.id)
 			await send_profile_pic(app, m, p_id=p_id)
-	await m.delete()

@@ -99,7 +99,7 @@ async def restart_app(_, m: Message):
 
 
 # get usage of your dyno hours from heroku
-@app.on_message(gen("usage"))
+@app.on_message(gen("usage", allow_sudo=True))
 async def dynostats(_, m: Message):
 	await not_heroku(m)
 
@@ -161,7 +161,7 @@ async def dynostats(_, m: Message):
 
 
 # get list of vars from heroku 
-@app.on_message(gen("vars"))
+@app.on_message(gen("vars", allow_sudo=True))
 async def heroku_vars(_, m: Message):
 	await not_heroku(m)
 	try:
@@ -315,7 +315,7 @@ async def delvar(_, m: Message):
 
 
 # get logs from heroku in file format (.txt)
-@app.on_message(gen("logs"))
+@app.on_message(gen("logs", allow_sudo=True))
 async def logs(_, m: Message):
 	await not_heroku(m)
 	m = await app.send_edit(m, "⏳ • hold on . . .", mono=True)
@@ -350,7 +350,7 @@ async def logs(_, m: Message):
 
 
 # get logs from heroku in nekobin link, not as a file 
-@app.on_message(gen(["textlogs", "tlogs"]))
+@app.on_message(gen(["textlogs", "tlogs"], allow_sudo=True))
 async def logs_in_text(_, m: Message):
 	await not_heroku(m)
 	m = await app.send_edit(m, "⏳ • hold on . . . ", mono=True)

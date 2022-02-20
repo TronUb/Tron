@@ -8,7 +8,6 @@ from tronx.clients import app
 loop = asyncio.get_event_loop()
 
 
-
 async def start_assistant():
 	"""
 	this function starts the pyrogram bot client.
