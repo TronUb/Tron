@@ -93,7 +93,7 @@ async def unshorten_link(m: Message, text):
 
 
 
-@app.on_message(gen("tts"))
+@app.on_message(gen("tts", allow = ["sudo", "channel"]))
 async def create_voice(_, m: Message):
 	reply = m.reply_to_message
 
@@ -121,7 +121,7 @@ async def create_voice(_, m: Message):
 
 
 
-@app.on_message(gen("ud"))
+@app.on_message(gen("ud", allow = ["sudo", "channel"]))
 async def urban_dictionary(_, m:Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"Use: `{app.PREFIX}ud cats`")
@@ -149,7 +149,7 @@ async def urban_dictionary(_, m:Message):
 
 
 
-@app.on_message(gen("short"))
+@app.on_message(gen("short", allow = ["sudo", "channel"]))
 async def shorten_the_link(_, m: Message):
 	reply = m.reply_to_message
 	try:
@@ -170,7 +170,7 @@ async def shorten_the_link(_, m: Message):
 
 
 
-@app.on_message(gen(["unshort", "noshort"]))
+@app.on_message(gen(["unshort", "noshort"], allow = ["sudo", "channel"]))
 async def unshort_link(_, m: Message):
 	reply = m.reply_to_message
 	try:
@@ -195,7 +195,7 @@ async def unshort_link(_, m: Message):
 
 
 
-@app.on_message(gen(["wtr", "weather"]))
+@app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
 async def wtr(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Piro Master Atleast Give Me Some Location !", mono=True)
@@ -213,7 +213,7 @@ async def wtr(_, m: Message):
 
 
 
-@app.on_message(gen(['ws', 'webshot']))
+@app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
 async def webshot(_, m: Message):
 	if app.long(m) > 1:
 		try:
@@ -242,7 +242,7 @@ async def webshot(_, m: Message):
 
 
 
-@app.on_message(gen("undlt"))
+@app.on_message(gen("undlt", allow = ["sudo"]))
 async def undelete_msg(_, m: Message):
 	collect = []
 	collect.clear()
