@@ -16,7 +16,7 @@ app.CMD_HELP.update(
 		"translate",
 		{
 		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language.",
-		"langs" : "Get list of supported translating languages."
+		"trlist" : "Get list of supported translating languages."
 		}
 		)
 	}
@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["tr", "tl"]))
+@app.on_message(gen(["tr", "tl"], allow = ["sudo", "channel"]))
 async def translate(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
@@ -65,7 +65,7 @@ async def translate(m: Message, lang, text):
 
 
 
-@app.on_message(gen("langs"))
+@app.on_message(gen("trlist", allow = ["sudo", "channel"]))
 async def supported_language(_, m):
 	data = []
 	data.clear()
