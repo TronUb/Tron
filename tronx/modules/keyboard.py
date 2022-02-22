@@ -12,7 +12,7 @@ from tronx.helpers import (
 
 
 
-@app.on_message(gen("kbd", allow_sudo=True))
+@app.on_message(gen("kbd", allow = ["sudo"]))
 async def create_keyboard(_, m):
 	await m.delete()
 	if m.chat.type == "bot":
