@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("minfo", allow_sudo=True))
+@app.on_message(gen("minfo", allow = ["sudo"]))
 async def media_info(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
@@ -153,7 +153,7 @@ async def media_info(_, m: Message):
 
 
 
-@app.on_message(gen("chatinfo", allow_sudo=True))
+@app.on_message(gen("chatinfo", allow = ["sudo"]))
 async def get_chatinfo(_, m: Message):
 	try:
 		if len(m.command) > 1:
