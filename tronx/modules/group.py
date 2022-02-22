@@ -29,7 +29,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["bgroup", "bgp"], allow_sudo=True))
+@app.on_message(gen(["bgroup", "bgp"], allow =["sudo"]))
 async def create_basic_group(_, m: Message):
 	if app.long(m) < 2:
 		return await app.send_edit(m, f"`Usage: {app.PREFIX}bgroup [group name]`", delme=3)
@@ -48,7 +48,7 @@ async def create_basic_group(_, m: Message):
 
 
 
-@app.on_message(gen(["sgroup", "sgp"], allow_sudo=True))
+@app.on_message(gen(["sgroup", "sgp"], allow =["sudo"]))
 async def create_supergroup(_, m: Message):
 	if len(m.command) < 1:
 		return await app.send_edit(m, f"`Usage: {app.PREFIX}sgroup [group name]`", delme=3)
@@ -67,7 +67,7 @@ async def create_supergroup(_, m: Message):
 
 
 
-@app.on_message(gen(["unread", "un"], allow_sudo=True))
+@app.on_message(gen(["unread", "un"], allow =["sudo"]))
 async def mark_chat_unread(_, m: Message):
 	try:
 		await asyncio.gather(
@@ -85,7 +85,7 @@ async def mark_chat_unread(_, m: Message):
 
 
 
-@app.on_message(gen("channel", allow_sudo=True))
+@app.on_message(gen("channel", allow =["sudo"]))
 async def create_channel(_, m: Message):
 	if app.long(m) < 2:
 		return await app.send_edit(m, f"`Usage: {app.PREFIX}channel [channel name]`", delme=3)
