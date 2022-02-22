@@ -62,7 +62,7 @@ async def send_welcome(_, m: Message):
 
 
 
-@app.on_message(gen(["setwelcome", "setwc"]))
+@app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
 async def save_welcome(_, m: Message):
 	await app.private(m)
 	await app.send_edit(m, "Setting this media as a welcome message . . .", mono=True)
@@ -91,7 +91,7 @@ async def save_welcome(_, m: Message):
 
 
 
-@app.on_message(gen(["delwelcome", "delwc"]))
+@app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
 async def delete_welcome(_, m: Message):
 	await app.private(m)
 	try:
@@ -104,7 +104,7 @@ async def delete_welcome(_, m: Message):
 
 
 
-@app.on_message(gen(["getwelcome", "getwc"]))
+@app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
 async def delete_welcome(_, m: Message):
 	await app.private(m)
 	try:
