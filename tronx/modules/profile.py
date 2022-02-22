@@ -72,7 +72,7 @@ def FullName(user: User):
 
 
 
-@app.on_message(gen("whois"))
+@app.on_message(gen("whois", allow = ["sudo"]))
 async def whois(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
@@ -126,7 +126,7 @@ async def whois(_, m: Message):
 
 
 
-@app.on_message(gen("id"))
+@app.on_message(gen("id", allow = ["sudo"]))
 async def id(_, m: Message):
 	await app.send_edit(m, "Getting id . . .", mono=True)
 	cmd = m.command
@@ -153,7 +153,7 @@ async def id(_, m: Message):
 
 
 
-@app.on_message(gen(["men", "mention"]))
+@app.on_message(gen(["men", "mention"], allow = ["sudo"]))
 async def mention_user(_, m: Message):
 	if app.long(m) < 3:
 		return await app.send_edit(m, "Incorrect input.\n\n**Example** : `.men @beastzx CTO`")
@@ -170,7 +170,7 @@ async def mention_user(_, m: Message):
 
 
 
-@app.on_message(gen("uinfo"))
+@app.on_message(gen("uinfo", allow = ["sudo"]))
 async def get_full_user_info(_, m: Message):
 	msg = await app.send_edit(m, "scrapping info . . .", mono=True)
 	reply = m.reply_to_message
@@ -217,7 +217,7 @@ async def get_full_user_info(_, m: Message):
 
 
 
-@app.on_message(gen(["sc", "scan"]))
+@app.on_message(gen(["sc", "scan"], allow = ["sudo"]))
 async def tg_scanner(_, m: Message):
 	if m.reply_to_message:
 		await m.edit("Checking database . . .")
@@ -243,7 +243,7 @@ async def tg_scanner(_, m: Message):
 
 
 
-@app.on_message(gen("block"))
+@app.on_message(gen("block", allow = ["sudo"]))
 async def block_pm(_, m: Message):
 	reply = m.reply_to_message
 
@@ -265,7 +265,7 @@ async def block_pm(_, m: Message):
 
 
 
-@app.on_message(gen("unblock"))
+@app.on_message(gen("unblock", allow = ["sudo"]))
 async def unblock_pm(_, m: Message):
 	reply = m.reply_to_message
 
@@ -287,7 +287,7 @@ async def unblock_pm(_, m: Message):
 
 
 
-@app.on_message(gen("sg"))
+@app.on_message(gen("sg", allow = ["sudo"]))
 async def check_name_history(_, m: Message):
 	reply = m.reply_to_message
 
@@ -464,7 +464,7 @@ async def rmprofile(m: Message, args):
 
 
 
-@app.on_message(gen("repo"))
+@app.on_message(gen("repo", allow = ["sudo"]))
 async def get_repo_link(_, m: Message):
 	await app.send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
 
