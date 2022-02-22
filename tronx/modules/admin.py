@@ -50,7 +50,7 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 
-@app.on_message(gen("ban", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("ban", allow = ["sudo", "channel"]))
 async def ban_members(_, m: Message):
 	try:
 		# return if used in private
@@ -110,7 +110,7 @@ async def ban_members(_, m: Message):
 
 
 
-@app.on_message(gen("banall", allow_channel=True))
+@app.on_message(gen("banall", allow = ["channel"]))
 async def ban_all(_, m):
 	try: 
 		await app.private(m)
@@ -137,7 +137,7 @@ async def ban_all(_, m):
 
 
 
-@app.on_message(gen("unban", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("unban", allow = ["sudo", "channel"]))
 async def unban_members(_, m: Message):
 	try:
 		if m.chat.type in private:
@@ -204,7 +204,7 @@ async def mute_user(chat_id, user_id, duration=0):
 
 
 
-@app.on_message(gen("mute", allow_sudo=True))
+@app.on_message(gen("mute", allow = ["sudo"]))
 async def mute_users(_, m: Message):
 	try:
 		if m.chat.type in private:
@@ -261,7 +261,7 @@ async def mute_users(_, m: Message):
 
 
 
-@app.on_message(gen("unmute", allow_sudo=True))
+@app.on_message(gen("unmute", allow = ["sudo"]))
 async def unmute_users(_, m: Message):
 	try:
 		if m.chat.type in private:
@@ -319,7 +319,7 @@ async def unmute_users(_, m: Message):
 
 
 
-@app.on_message(gen("kick", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("kick", allow = ["sudo", "channel"]))
 async def kick_users(_, m: Message):
 	try:
 		if m.chat.type in private:
@@ -365,7 +365,7 @@ async def kick_users(_, m: Message):
 
 
 
-@app.on_message(gen("pin", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("pin", allow = ["sudo", "channel"]))
 async def pin_message(_, m: Message):
 	reply = m.reply_to_message
 	try:
@@ -391,7 +391,7 @@ async def pin_message(_, m: Message):
 
 
 
-@app.on_message(gen("unpin", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("unpin", allow = ["sudo", "channel"]))
 async def unpin_message(_, m: Message):
 	try:
 		reply = m.reply_to_message
@@ -417,7 +417,7 @@ async def unpin_message(_, m: Message):
 
 
 
-@app.on_message(gen("promote", allow_channel=True, allow_sudo= True))
+@app.on_message(gen("promote", allow = ["sudo", "channel"]))
 async def promote_users(_, m: Message):
 	try:
 		if m.chat.type in private:
@@ -477,7 +477,7 @@ async def promote_users(_, m: Message):
 
 
 
-@app.on_message(gen("demote", allow_channel=True, allow_sudo=True))
+@app.on_message(gen("demote", allow = ["sudo", "channel"]))
 async def demote_users(_, m: Message):
 	try:
 		if m.chat.type in private:
