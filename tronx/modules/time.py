@@ -28,7 +28,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("today"))
+@app.on_message(gen("today", allow = ["sudo"]))
 async def today(_, m: Message):
 	weekday = datetime.datetime.today().weekday()
 	if weekday == 0:
@@ -57,13 +57,13 @@ async def today(_, m: Message):
 
 
 
-@app.on_message(gen("time"))
+@app.on_message(gen("time", allow = ["sudo", "channel"]))
 async def what(_, m: Message):
 	await app.send_edit(m, f"Today's time: `{app.showtime()}`")
 
 
 
 
-@app.on_message(gen("date"))
+@app.on_message(gen("date", allow = ["sudo", "channel"]))
 async def what(_, m: Message):
 	await app.send_edit(m, f"Today's date: `{app.showdate()}`")
