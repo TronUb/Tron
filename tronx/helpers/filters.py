@@ -39,7 +39,7 @@ def regex(
 				return False
 
 		# work only for -> bot owner if not sudo
-		elif not "sudo" allow:
+		elif not "sudo" in allow:
 			if update.from_user and not update.from_user.is_self:
 				return False
 
@@ -116,7 +116,7 @@ def gen(
 				return False
 
 		# work only for -> bot owner if not sudo
-		elif not "sudo" allow:
+		elif not "sudo" in allow:
 			if message.from_user and not update.from_user.is_self:
 				return False
 
