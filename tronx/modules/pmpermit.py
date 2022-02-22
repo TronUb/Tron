@@ -126,8 +126,8 @@ async def auto_block(_, m: Message):
 
 
 
-@app.on_message(gen(["a", "approve"]))
-async def approve_pm(app, m: Message):
+@app.on_message(gen(["a", "approve"], allow = ["sudo"]))
+async def approve_pm(_, m: Message):
 	if m.chat.type == "bot":
 		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
 	await app.send_edit(m, "approving . . .", mono=True)
@@ -175,7 +175,7 @@ async def approve_pm(app, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove"], allow_sudo=True))
+@app.on_message(gen(["da", "disapprove"], allow = ["sudo"]))
 async def diapprove_pm(_, m:Message):
 	if m.chat.type == "bot":
 		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=3)
