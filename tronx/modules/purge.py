@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["purge", "p"], allow_channel=True))
+@app.on_message(gen(["purge", "p"], allow = ["sudo", "channel"]))
 async def purge_all(app, m:Message):
 	if m.reply_to_message:
 		await app.send_edit(m, "purging . . .", mono=True)
@@ -60,7 +60,7 @@ async def purge_all(app, m:Message):
 
 
 
-@app.on_message(gen(["purgeme", "pgm"]))
+@app.on_message(gen(["purgeme", "pgm"], allow = ["sudo", "channel"]))
 async def purge_myself(app, m:Message):
 	if app.long(m) > 1:
 		if m.command[1].isdigit() is False:
@@ -88,7 +88,7 @@ async def purge_myself(app, m:Message):
 
 
 
-@app.on_message(gen("del"))
+@app.on_message(gen("del", allow = ["sudo", "channel"]))
 async def delete_tag(_, m: Message):
 	reply = m.reply_to_message
 
