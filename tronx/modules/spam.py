@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("spam"))
+@app.on_message(gen("spam", allow = ["sudo"]))
 async def spam(_, m: Message):
 	replied = m.reply_to_message
 	reply_to_id = replied.message_id if replied else ""
@@ -67,7 +67,7 @@ async def spam(_, m: Message):
 
 
 
-@app.on_message(gen("dspam"))
+@app.on_message(gen("dspam", allow = ["sudo"]))
 async def delay_spam(_, m: Message):
 	if len(m.command) > 2 and not m.reply_to_message:
 		await m.delete()
