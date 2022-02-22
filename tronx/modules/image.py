@@ -97,7 +97,7 @@ async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
 
 
 
-@app.on_message(gen(["uns", "unsplash"], allow_sudo=True))
+@app.on_message(gen(["uns", "unsplash"], allow = ["sudo"]))
 async def unsplash(_, m: Message):
 	cmd = m.command
 	if app.long(m) == 1:
@@ -139,7 +139,7 @@ async def unsplash(_, m: Message):
 
 
 
-@app.on_message(gen("stoi", allow_sudo=True))
+@app.on_message(gen("stoi", allow = ["sudo"]))
 async def stick2image(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -167,7 +167,7 @@ async def stick2image(_, m):
 
 
 
-@app.on_message(gen("itos", allow_sudo=True))
+@app.on_message(gen("itos", allow = ["sudo"]))
 async def image2stick(app, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -195,7 +195,7 @@ async def image2stick(app, m):
 
 
 
-@app.on_message(gen(["qc", "qrcode"], allow_sudo=True))
+@app.on_message(gen(["qc", "qrcode"], allow = ["sudo"]))
 async def make_qr(app, m):
 		try:
 			img = qrcode.make(m.command[1:])
@@ -216,7 +216,7 @@ async def make_qr(app, m):
 
 
 
-@app.on_message(gen("colour", allow_sudo=True))
+@app.on_message(gen("colour", allow = ["sudo"]))
 async def get_colour_templates(_, m: Message):
 	if len(m.command) < 2:
 		await app.send_edit(m, "Please give some colour name after command . . .", delme=3)
@@ -246,7 +246,7 @@ async def get_colour_templates(_, m: Message):
 
 
 
-@app.on_message(gen("cat", allow_sudo=True))
+@app.on_message(gen("cat", allow = ["sudo"]))
 async def get_cat_image(_, m):
 	try:
 		await m.delete()
@@ -261,7 +261,7 @@ async def get_cat_image(_, m):
 
 
 
-@app.on_message(gen("waifu", allow_sudo=True))
+@app.on_message(gen("waifu", allow = ["sudo"]))
 async def get_waifu_images(_, m):
 	text = "Finding waifu . . ."
 	try:
@@ -298,7 +298,7 @@ async def get_waifu_images(_, m):
 
 
 
-@app.on_message(gen("poto", allow_sudo=True))
+@app.on_message(gen("poto", allow = ["sudo"]))
 async def get_profile_photos(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
