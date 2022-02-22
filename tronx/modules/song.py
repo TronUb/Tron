@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["song", "music"]))
+@app.on_message(gen(["song", "music"], allow = ["sudo", "channel"]))
 async def send_music(_, m: Message):
 	await app.send_edit(m, "Getting song . . .")
 	try:
@@ -71,7 +71,7 @@ async def send_music(_, m: Message):
 
 
 
-@app.on_message(gen(["dz", "deezer"]))
+@app.on_message(gen(["dz", "deezer"], allow = ["sudo", "channel"]))
 async def send_music(_, m: Message):
 	await app.send_edit(m, "Searching on deezer . . .")
 	try:
@@ -117,7 +117,7 @@ async def send_music(_, m: Message):
 
 
 
-@app.on_message(gen(["ly", "lyrics"]))
+@app.on_message(gen(["ly", "lyrics"], allow = ["sudo", "channel"]))
 async def lyrics(_, m: Message):
 	try:
 		cmd = m.command
