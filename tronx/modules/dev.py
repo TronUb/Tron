@@ -34,7 +34,7 @@ p = print
 
 
 
-@app.on_message(gen(["eval", "e"], allow_channel=True))
+@app.on_message(gen(["eval", "e"], allow =["sudo"]))
 async def evaluate(client, m: Message):
 	""" This function is made to execute python codes """
 
@@ -82,7 +82,7 @@ async def evaluate(client, m: Message):
 
 
 
-@app.on_message(gen("term", allow_channel=True))
+@app.on_message(gen("term", allow =["sudo"]))
 async def terminal(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Use: `.term pip3 install colorama`", delme=5)
