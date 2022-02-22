@@ -49,7 +49,7 @@ def get_soup(url,header):
 
 
 
-@app.on_message(gen("sauce", allow_sudo=True))
+@app.on_message(gen("sauce", allow =["sudo"]))
 async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
@@ -90,7 +90,7 @@ async def image_sauce(_, m: Message):
 
 
 
-@app.on_message(gen("pic", allow_sudo=True))
+@app.on_message(gen("pic", allow =["sudo"]))
 async def yandex_images(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Usage: `.pic cat`", delme=3)
@@ -118,7 +118,7 @@ async def yandex_images(_, m: Message):
 
 
 
-@app.on_message(gen("img", allow_sudo=True))
+@app.on_message(gen("img", allow =["sudo"]))
 async def image_search(_, m: Message):
 	if app.long(m) > 2 and bool(m.command[1].isdigit()):
 		limit = int(m.command[1])
