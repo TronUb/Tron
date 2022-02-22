@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["paste", "bin"]))
+@app.on_message(gen(["paste", "bin"], allow = ["sudo"]))
 async def paster(_, m: Message):
 	reply = m.reply_to_message
 	m = await app.send_edit(m, "`Pasting to nekobin ...`")
