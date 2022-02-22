@@ -12,7 +12,7 @@ from tronx.helpers import (
 
 
 
-@app.on_message(gen("kbd"))
+@app.on_message(gen("kbd", allow_sudo=True))
 async def create_keyboard(_, m):
 	await m.delete()
 	if m.chat.type == "bot":
@@ -21,10 +21,10 @@ async def create_keyboard(_, m):
 		await app.bot.send_message(
 			m.chat.id, 
 			m.text.split(None, 3)[3],
-        		reply_markup=InlineKeyboardMarkup(
+				reply_markup=InlineKeyboardMarkup(
 				[
 					[
-                    			InlineKeyboardButton( 
+						InlineKeyboardButton( 
 						m.command[1],
 						url=m.command[2]
 					),

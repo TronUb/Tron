@@ -43,7 +43,7 @@ app.CMD_HELP.update(
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@app.on_message(gen("ls"))
+@app.on_message(gen("ls", allow_sudo=True))
 async def list_directories(_, m: Message):
 	location = "." if app.long(m) == 1 else m.command[1] if app.long(m) >= 2 else None
 
@@ -91,7 +91,7 @@ async def list_directories(_, m: Message):
 
 
 
-@app.on_message(gen(["download", "dl"]))
+@app.on_message(gen(["download", "dl"], allow_sudo=True))
 async def download_media(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.media:
@@ -190,7 +190,7 @@ async def download_media(_, m: Message):
 
 
 
-@app.on_message(gen(["upload", "ul"]))
+@app.on_message(gen(["upload", "ul"], allow_sudo=True))
 async def upload_as_document(_, m: Message):
 	if app.long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
@@ -222,7 +222,7 @@ async def upload_as_document(_, m: Message):
 
 
 
-@app.on_message(gen(["batchup", "bcp"]))
+@app.on_message(gen(["batchup", "bcp"], allow_sudo=True))
 async def batch_upload(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, mono=True)

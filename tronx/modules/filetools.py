@@ -51,7 +51,7 @@ async def unzipfiles(zippath):
 
 
 
-@app.on_message(gen("zip"))
+@app.on_message(gen("zip", allow_sudo=True))
 async def zipit(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
@@ -79,7 +79,7 @@ async def zipit(_, m: Message):
 
 
 
-@app.on_message(gen("unzip"))
+@app.on_message(gen("unzip", allow_sudo=True))
 async def unzipit(_, m: Message):
 	if app.long(m) == 2:
 		if app.long(m) <= 4096:
@@ -90,18 +90,20 @@ async def unzipit(_, m: Message):
 		else:
 			await app.send_edit(m, "Text is too long !", delme=2, mono=True)
 	else:
-		await app.send_edit(m, "Give me the file path to unzip the file . . .", delme=2, mono=True)
+		await app.send_edit(m, "Give me the file path to unzip the file . . .", delme=4, mono=True)
 
 
 
 
-@app.on_message(gen("new"))
+@app.on_message(gen("new", allow_sudo=True))
 async def create_anyfile(app, m:Message):
 	reply = m.reply_to_message
-	m = await app.send_edit(m, "making file . . .", mono=True)
 	cmd = m.command
+	text = "Making file . . ."
+
 	try:
 		if app.long(m) < 4096 and app.long(m) > 2:
+			m = await app.send_edit(m, text, mono=True)
 			data = m.text.split(None, 2)[2]
 			givename = cmd[1]
 			await app.create_file(
@@ -111,6 +113,7 @@ async def create_anyfile(app, m:Message):
 			)
 		# if replied to text without file name
 		elif app.long(m) == 1 and reply:
+			m = await app.send_edit(m, text, mono=True)
 			data = reply.text
 			await app.create_file(
 				m, 
@@ -119,6 +122,7 @@ async def create_anyfile(app, m:Message):
 			)
 		# if replied to text with file name
 		elif app.long(m) > 1 and reply:
+			m = await app.send_edit(m, text, mono=True)
 			givename = cmd[1]
 			data = reply.text
 			await app.create_file(
@@ -127,7 +131,7 @@ async def create_anyfile(app, m:Message):
 				text=data
 			)
 		else:
-			await app.send_edit(m, f"Use cmd correctly: `{app.PREFIX}new [ file name ] [content]`\n\nNote: use filename with extention, ex: file.py, file.txt, etc",)
+			await app.send_edit(m, f"Use cmd correctly: `{app.PREFIX}new [ file name ] [content] | [reply]`\n\nNote: use filename with extention, ex: file.py, file.txt, etc",)
 	except Exception as e:
 		await app.error(m, e)
 

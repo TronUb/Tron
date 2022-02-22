@@ -59,8 +59,8 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 
-@app.on_message(gen("help", allow_channel=True))
-async def help_menu(client, m):
+@app.on_message(gen("help", allow_channel=True, allow_sudo=True))
+async def help_menu(_, m: Message):
 	args = m.command if app.long(m) > 1 else False
 
 	try:
@@ -104,7 +104,7 @@ async def help_menu(client, m):
 
 
 # get all module name
-@app.on_message(gen("mods"))
+@app.on_message(gen("mods", allow_sudo=True))
 async def all_modules(_, m: Message):
 	store = []
 	for x in os.listdir("tronx/modules/"):
@@ -117,7 +117,7 @@ async def all_modules(_, m: Message):
 
 
 # get all plugins name
-@app.on_message(gen("plugs"))
+@app.on_message(gen("plugs", allow_sudo=True))
 async def all_plugins(_, m: Message):
 	store = []
 	for x in os.listdir("tronx/plugins/"):
@@ -129,7 +129,7 @@ async def all_plugins(_, m: Message):
 
 
 
-@app.on_message(gen("inline", allow_channel=True))
+@app.on_message(gen("inline", allow_channel=True, allow_sudo=True))
 async def _toggle_inline(_, m: Message):
 	return await app.toggle_inline(m)
 

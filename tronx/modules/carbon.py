@@ -21,8 +21,8 @@ app.CMD_HELP.update(
 	{"carbon" : (
 		"carbon",
 		{
-		"car [text]" : "Get a carbon imagw with written text on it.",
-		"carbon [text]" : "Get a carbon image with written text on it"
+		"carbon [text]" : "Get a carbon image with written text on it.",
+		"carblist" : "Get list of carbon colour codes."
 		}
 		)
 	}
@@ -59,7 +59,7 @@ colour_code = {
 async def carb_api(_, m: Message):
 	cmd = m.command
 	if app.long(m) < 2:
-		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=2)
+		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
 
 	elif app.textlen(m) <= 4096:
 		try:
@@ -80,9 +80,9 @@ async def carb_api(_, m: Message):
 
 
 @app.on_message(gen("carblist", allow_sudo=True))
-async def carb_colour_list(_, m: Message):
-	clist = list(colour_code.keys())
-	await app.send_edit(m, "\n".join(clist))
+async def colour_list(_, m: Message):
+	clist = [f"`{x}`" for x in list(colour_code.keys())]
+	await app.send_edit(m, "**colour code:\n\n" + "\n".join(clist))
 
 
 
@@ -113,4 +113,4 @@ async def create_carbon(m: Message, text, colour):
 		if os.path.exists(f"./{filename}"):
 			os.remove(filename)
 	else:
-		await app.send_edit(m, "Image Couldn't be retreived . . .", delme=2, mono=True)
+		await app.send_edit(m, "Image Couldn't be retreived.", delme=4, mono=True)

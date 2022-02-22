@@ -49,10 +49,13 @@ def get_soup(url,header):
 
 
 
-@app.on_message(gen("sauce"))
+@app.on_message(gen("sauce", allow_sudo=True))
 async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
+		if not reply:
+			await app.send_edit(m, "Reply to some media.", mono=True, delme=4)
+
 		if reply.photo:
 			m = await app.send_edit(m, "⏳ • Hold on ...")
 			universe = "photo_{}_{}.png".format(
@@ -60,7 +63,7 @@ async def image_sauce(_, m: Message):
 				reply.photo.date
 				)
 			await app.download_media(
-				reply.photo,
+				reply,
 				file_name="./downloads/" + universe
 				)
 		elif reply.animation:
@@ -70,7 +73,7 @@ async def image_sauce(_, m: Message):
 				reply.animation.file_size
 				)
 			await app.download_media(
-				reply.animation,
+				reply,
 				file_name="./downloads/" + universe
 				)
 		else:
@@ -87,7 +90,7 @@ async def image_sauce(_, m: Message):
 
 
 
-@app.on_message(gen("pic"))
+@app.on_message(gen("pic", allow_sudo=True))
 async def yandex_images(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Usage: `.pic cat`", delme=3)
@@ -115,7 +118,7 @@ async def yandex_images(_, m: Message):
 
 
 
-@app.on_message(gen("img"))
+@app.on_message(gen("img", allow_sudo=True))
 async def image_search(_, m: Message):
 	if app.long(m) > 2 and bool(m.command[1].isdigit()):
 		limit = int(m.command[1])
