@@ -112,12 +112,12 @@ def gen(
 
 		# work for -> sudo & bot owner if sudo
 		if "sudo" in allow:
-			if message.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
+			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
 				return False
 
 		# work only for -> bot owner if not sudo
 		elif not "sudo" in allow:
-			if message.from_user and not update.from_user.is_self:
+			if message.from_user and not message.from_user.is_self:
 				return False
 
 		# work for -> forwarded message
