@@ -60,14 +60,14 @@ async def send_gif(m: Message, gif_data):
 
 
 
-@app.on_message(gen("animelist", allow_sudo=True))
+@app.on_message(gen("animelist", allow = ["sudo"]))
 async def animelist(_, m: Message):
 	await app.send_edit(m, anime_suffix)
 
 
 
 	
-@app.on_message(gen(["nekopic", "npic"], allow_sudo=True))
+@app.on_message(gen(["nekopic", "npic"], allow = ["sudo"]))
 async def nekoanime(_, m: Message):
 	try:
 		if m.from_user.is_self:
@@ -86,7 +86,7 @@ async def nekoanime(_, m: Message):
 
 
 
-@app.on_message(gen("animegif", allow_sudo=True))
+@app.on_message(gen("animegif", allow = ["sudo"]))
 async def animegif(_, m: Message):
 	if app.long(m) > 1:
 		arg = m.command[1]
