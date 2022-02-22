@@ -36,7 +36,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("slap", allow_sudo=True))
+@app.on_message(gen("slap", allow =["sudo"]))
 async def slap_friends(_, m):
 	if m.reply_to_message:
 		try:
@@ -70,7 +70,7 @@ async def slap_friends(_, m):
 
 
 
-@app.on_message(gen(["cap", "capital"], allow_sudo=True))
+@app.on_message(gen(["cap", "capital"], allow =["sudo"]))
 async def capitalise(_, m):
 	try:
 		reply = m.reply_to_message
@@ -91,7 +91,7 @@ async def capitalise(_, m):
 
 
 
-@app.on_message(gen("type", allow_sudo=True))
+@app.on_message(gen("type", allow =["sudo"]))
 async def type_animatiom(_, m):
 	try:
 		if app.long(m) > 1:
@@ -117,7 +117,7 @@ async def type_animatiom(_, m):
 
 
 
-@app.on_message(gen("insult", allow_sudo=True))
+@app.on_message(gen("insult", allow =["sudo"]))
 async def insult_someone(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -142,7 +142,7 @@ async def insult_someone(_, m):
 
 
 
-@app.on_message(gen("advice", allow_sudo=True))
+@app.on_message(gen("advice", allow =["sudo"]))
 async def give_advice(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -162,7 +162,7 @@ async def give_advice(_, m):
 
 
 
-@app.on_message(gen("qs", allow_sudo=True))
+@app.on_message(gen("qs", allow =["sudo"]))
 async def ask_question(_, m):
 	reply = m.reply_to_message
 	if not reply:
@@ -184,7 +184,7 @@ async def ask_question(_, m):
 
 
 
-@app.on_message(gen("wtd", allow_sudo=True))
+@app.on_message(gen("wtd", allow =["sudo"]))
 async def what_to_do(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a activity . . .", mono=True)
@@ -201,7 +201,7 @@ async def what_to_do(_, m):
 
 
 
-@app.on_message(gen("mqt", allow_sudo=True))
+@app.on_message(gen("mqt", allow =["sudo"]))
 async def movie_quotes(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a movie quote . . .", mono=True)
@@ -219,7 +219,7 @@ async def movie_quotes(_, m):
 
 
 
-@app.on_message(gen("joke", allow_sudo=True))
+@app.on_message(gen("joke", allow =["sudo"]))
 async def send_joke(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a joke . . .", mono=True)
