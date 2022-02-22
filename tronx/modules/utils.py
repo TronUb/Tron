@@ -37,7 +37,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("settitle"))
+@app.on_message(gen("settitle", allow = ["sudo", "channel"]))
 async def admin_title(_, m: Message):
 	await app.private(m)
 	reply = m.reply_to_message
@@ -88,7 +88,7 @@ async def admin_title(_, m: Message):
 
 
 
-@app.on_message(gen("invite"))
+@app.on_message(gen("invite", allow = ["sudo", "channel"]))
 async def invite(_, m):
 	await app.private(m)
 	await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
@@ -111,7 +111,7 @@ async def invite(_, m):
 
 
 
-@app.on_message(gen(["admins", "adminlist"]))
+@app.on_message(gen(["admins", "adminlist"], allow = ["sudo", "channel"]))
 async def adminlist(_, m):
 	await app.private(m)
 
@@ -159,7 +159,7 @@ async def adminlist(_, m):
 
 
 
-@app.on_message(gen("report"))
+@app.on_message(gen("report", allow = ["sudo", "channel"]))
 async def report_admin(_, m: Message):
 	await app.private(m)
 	reply = m.reply_to_message
@@ -188,7 +188,7 @@ async def report_admin(_, m: Message):
 
 
 
-@app.on_message(gen("all"))
+@app.on_message(gen("all", allow = ["sudo"]))
 async def tag_all_users(app, m: Message):
 	await app.private(m)
 	reply = m.reply_to_message
@@ -210,7 +210,7 @@ async def tag_all_users(app, m: Message):
 
 
 
-@app.on_message(gen(["bots"]))
+@app.on_message(gen(["bots"], allow = ["sudo"]))
 async def get_list_bots(_, m: Message):
 	await app.private(m)
 	reply = m.reply_to_message
@@ -252,7 +252,7 @@ async def get_list_bots(_, m: Message):
 
 
 
-@app.on_message(gen("kickme"))
+@app.on_message(gen("kickme", allow = ["sudo", "channel"]))
 async def leave(_, m):
 	await app.private(m)
 	try:
@@ -265,7 +265,7 @@ async def leave(_, m):
 
 
 
-@app.on_message(gen("members"))
+@app.on_message(gen("members", allow = ["sudo", "channel"]))
 async def get_member_count(_, m):
 	await app.private(m)
 	if app.long(m) == 1:
@@ -287,7 +287,7 @@ async def get_member_count(_, m):
 
 
 
-@app.on_message(gen("join"))
+@app.on_message(gen("join", allow = ["sudo", "channel"]))
 async def join_chats(_, m: Message):
 	if app.long(m) == 1:
 		await app.send_edit(m, "Give me some chat id | username after command . . .", mono=True, delme=5)
@@ -308,7 +308,7 @@ async def join_chats(_, m: Message):
 
 
 
-@app.on_message(gen("slowmo"))
+@app.on_message(gen("slowmo", allow = ["sudo"]))
 async def slow_mode(_, m: Message):
 	await app.private(m)
 	if await app.IsAdmin(m) is True:
