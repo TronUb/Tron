@@ -51,7 +51,7 @@ async def unzipfiles(zippath):
 
 
 
-@app.on_message(gen("zip", allow_sudo=True))
+@app.on_message(gen("zip", allow =["sudo"]))
 async def zipit(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
@@ -79,7 +79,7 @@ async def zipit(_, m: Message):
 
 
 
-@app.on_message(gen("unzip", allow_sudo=True))
+@app.on_message(gen("unzip", allow =["sudo"]))
 async def unzipit(_, m: Message):
 	if app.long(m) == 2:
 		if app.long(m) <= 4096:
@@ -95,7 +95,7 @@ async def unzipit(_, m: Message):
 
 
 
-@app.on_message(gen("new", allow_sudo=True))
+@app.on_message(gen("new", allow =["sudo"]))
 async def create_anyfile(app, m:Message):
 	reply = m.reply_to_message
 	cmd = m.command
