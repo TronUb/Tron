@@ -222,7 +222,7 @@ async def upload_as_document(_, m: Message):
 
 
 
-@app.on_message(gen(["batchup", "bcp"], allow_sudo=True))
+@app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
 async def batch_upload(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, mono=True)
