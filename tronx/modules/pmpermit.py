@@ -71,7 +71,7 @@ async def send_warn(m: Message, user):
 # incoming autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me), group=3)
 async def auto_block(_, m: Message):
-	if bool(app.Pmpermit()) is False or m.from_user.is_verified: # allow verified
+	if bool(app.Pmpermit()) is False or m.chat.is_verified: # allow verified
 		return
 
 	if bool(app.get_whitelist(m.chat.id)) is True:
@@ -82,7 +82,7 @@ async def auto_block(_, m: Message):
 	# auto allow while outgoing first msg of ub owner
 
 	history = await app.get_history(m.chat.id)
-	if len(history) == 1 and history[-1].from_user.is_self: # auto allow if you started the chat
+	if len(history) == 1 and history[0].from_user.is_self: 
 		return app.set_whitelist(user.id, True)
 
 	pmlimit = app.PmpermitLimit()
