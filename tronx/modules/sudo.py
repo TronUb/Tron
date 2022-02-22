@@ -4,6 +4,22 @@ from tronx import app
 
 
 
+
+app.CMD_HELP.update(
+	{"sudo" : (
+		"sudo",
+		{
+		"addsudo [reply to user]" : "Add a user into your sudo list.", 
+		"listsudo " : "Get list of available sudo ids.",
+		"delsudo [reply to user]" : "Delete a user from your sudo list."
+		}
+		)
+	}
+)
+
+
+
+
 @app.on_message(gen("addsudo"))
 async def add_sudo(_, m: Message):
 	reply = m.reply_to_message
@@ -23,7 +39,7 @@ async def add_sudo(_, m: Message):
 
 
 
-@app.on_message(gen("getsudo"))
+@app.on_message(gen("listsudo", allow = ["sudo"]))
 async def get_sudo(_, m: Message):
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	await app.send_edit(m, "**Available Sudo id:**\n\n" + "\n".join(sudo_list))
