@@ -59,7 +59,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 
-@app.on_message(gen("help", allow_channel=True, allow =["sudo"]))
+@app.on_message(gen("help", allow =["sudo"]))
 async def help_menu(_, m: Message):
 	args = m.command if app.long(m) > 1 else False
 
