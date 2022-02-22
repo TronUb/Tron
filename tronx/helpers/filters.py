@@ -28,31 +28,33 @@ dv = DVSQL()
 def regex(
 	pattern: Union[str, Pattern], 
 	flags: int = 0,
-	allow_sudo: bool = True,
-	allow_forward: bool = False,
-	allow_channel: bool = False,
-	allow_edit: bool = True
+	allow: list = []
 	):
 
 	async def func(flt, client: Client, update: Update):
 
-		# works for you & sudo | only for you
-		if allow_sudo:
+		# work for -> sudo & bot owner if sudo
+		if "sudo" in allow:
 			if update.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
 				return False
-		elif not allow_sudo:
+
+		# work only for -> bot owner if not sudo
+		elif not "sudo" allow:
 			if update.from_user and not update.from_user.is_self:
 				return False
 
-		if not allow_forward:
+		# work for -> forwarded message
+		if not "forward" in allow:
 			if update.forward_date: 
 				return False
 
-		if not allow_channel:
+		# work for -> messages in channel
+		if not "channel" in allow:
 			if update.chat.type == "channel": 
 				return False
 
-		if not allow_edit:
+		# work for -> edited message
+		if not "edited" in allow:
 			if update.edit_date: 
 				return False
 
@@ -89,10 +91,7 @@ def gen(
 	commands: Union[str, List[str]], 
 	prefixes: Union[str, List[str]] = MyPrefix(), 
 	case_sensitive: bool = True, 
-	allow_sudo: bool = True,
-	allow_forward: bool = False,
-	allow_channel: bool = False,
-	allow_edit: bool = True,
+	allow: list = []
 	):
 
 	# update the commands and information of commands.
@@ -111,25 +110,29 @@ def gen(
 		if not text:
 			return False
 
-		# works for you & sudo | only for you
-		if allow_sudo:
-			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
+		# work for -> sudo & bot owner if sudo
+		if "sudo" in allow:
+			if message.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
 				return False
 
-		elif not allow_sudo:
-			if message.from_user and not message.from_user.is_self:
+		# work only for -> bot owner if not sudo
+		elif not "sudo" allow:
+			if message.from_user and not update.from_user.is_self:
 				return False
 
-		if allow_forward is False:
-			if message.forward_date:
+		# work for -> forwarded message
+		if not "forward" in allow:
+			if message.forward_date: 
 				return False
 
-		if allow_channel is False:
-			if message.chat.type == "channel":
+		# work for -> messages in channel
+		if not "channel" in allow:
+			if message.chat.type == "channel": 
 				return False
 
-		if allow_edit is False:
-			if message.edit_date:
+		# work for -> edited message
+		if not "edited" in allow:
+			if message.edit_date: 
 				return False
 
 		for prefix in flt.prefixes:
