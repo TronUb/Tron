@@ -53,7 +53,7 @@ pings.clear()
 
 
 
-@app.on_message(gen(["ping", "pong"], allow_channel=True))
+@app.on_message(gen(["ping", "pong"], allow = ["sudo", "channel"]))
 async def pingme(_, m: Message):
 	if app.long(m) == 1:
 		start = datetime.now()
