@@ -6,6 +6,8 @@
 
 &nbsp;
 
+[![CodeQL](https://github.com/beastzx18/Tron/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/beastzx18/Tron/actions/workflows/codeql-analysis.yml)
+
 ## **About**
 
 **This is a telegram userbot with an assistant bot, it is written in Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library**
