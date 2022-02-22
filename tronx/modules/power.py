@@ -28,7 +28,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("reboot"))
+@app.on_message(gen("reboot", allow = ["sudo"]))
 async def restart_userbot(_, m: Message):
 	try:
 		msg = await app.send_edit(m, "`Restarting bot ...`")
@@ -46,7 +46,7 @@ async def restart_userbot(_, m: Message):
 
 
 
-@app.on_message(gen("sleep"))
+@app.on_message(gen("sleep", allow = ["sudo"]))
 async def sleep_userbot(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me some seconds after command . . .")
