@@ -56,7 +56,7 @@ async def install_requirements():
 
 
 
-@app.on_message(gen("update"))
+@app.on_message(gen("update", allow = ["sudo", "channel"]))
 async def update_ub(_, m):
 	cmd = False
 	errtext = "Some problem occurred:\n\n"
@@ -155,7 +155,7 @@ async def update_ub(_, m):
 
 		try:
 			remote.push(refspec=f"HEAD:refs/heads/{ACTIVE_BRANCH}", force=True)
-		except GitCommandError as error:
+		except GitCommandError as e:
 			app.log.error(e)
 
 		await app.send_edit(m, "Successfully Updated, initialing . . .", mono=True, delme=8)
