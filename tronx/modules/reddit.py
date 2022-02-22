@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["r", "reddit"], allow_sudo=True))
+@app.on_message(gen(["r", "reddit"], allow = ["sudo", "channel"]))
 async def reddit_image(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Please give me some query to search on reddit.", delme=2)
