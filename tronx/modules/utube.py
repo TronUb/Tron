@@ -24,7 +24,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("vinfo"))
+@app.on_message(gen("vinfo", allow = ["sudo", "channel"]))
 async def utube_info(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
@@ -48,7 +48,7 @@ async def utube_info(_, m: Message):
 
 
 
-@app.on_message(gen("yvdl"))
+@app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
 async def yt_download(_, m):
 	reply = m.reply_to_message
 	await app.send_edit(m, "processing link . . .", mono=True)
