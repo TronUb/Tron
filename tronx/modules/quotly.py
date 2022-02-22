@@ -24,7 +24,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["q"]))
+@app.on_message(gen(["q"], allow = ["sudo", "channel"]))
 async def quote(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
