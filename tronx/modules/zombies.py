@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("zombies"))
+@app.on_message(gen("zombies", allow = ["sudo", "channel"]))
 async def remove_deleted(_, m: Message):
 	await app.private(m)
 
