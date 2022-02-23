@@ -1,6 +1,6 @@
 ## Welcome to tron
 
-Everything that you want to know about tron is given here.
+Here the information about tron is given, it is always updated if any changes are made in tronuserbot.
 
 ### Introduction
 
@@ -16,7 +16,7 @@ I have provided a inline help menu to make it easy for the beginners to look for
 
 ### Deployment
 
-Tue userbot can be deployed in heroku, it is also deployable by localhost methods.
+The userbot can be deployed in heroku, it is also deployable by localhost methods you can do this only if you download and install all the packages from requirements.txt file.
 
 
 ### Contact me 

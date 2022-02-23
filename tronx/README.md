@@ -1,9 +1,1 @@
-# Files location
-
-* database/postgres
-* helpers
-* methods/decorators
-* modules
-* plugins
-* ____init____.py
-* ____main____.py
+### This directory stores all the necessary files which are needed to run the bot, deleting or altering any of the file will give error.
