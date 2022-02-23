@@ -33,7 +33,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("setdv", allow =["sudo"]))
 async def setdv_handler(_, m: Message):
 	if app.long(m) == 1:
-		allvars = [f"`{x}`" for x in dir(Config)]
+		allvars = [f"`{x}`" for x in dir(Config) if x.isupper()]
 		await app.send_edit(m, "**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
 
 	elif app.textlen(m) > 4096:
