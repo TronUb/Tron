@@ -84,7 +84,7 @@ async def getdv_handler(_, m: Message):
 		done = app.getdv(key)
 
 		if done:
-			await app.send_edit(m, f"**Here:**\n\n**key** = `{key}`\n\n**value** = `{done}`", delme=4
+			await app.send_edit(m, f"**Here:**\n\n**key** = `{key}`\n\n**value** = `{done}`", delme=4)
 		else:
 			await app.send_edit(m, "This var doesn't exist in my database.", mono=True, delme=4)
 	else:
