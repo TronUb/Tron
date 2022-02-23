@@ -84,7 +84,7 @@ class Utilities(AioHttp):
 		modules = [
 			InlineKeyboardButton(
 				text="{} {}".format(
-					self.HELP_EMOJI if self.HELP_EMOJI else "",
+					self.HelpEmoji(),
 					x.replace("_", " ").title(),
 				),
 				callback_data="modulelist_{}|{}".format(x, page_number),
