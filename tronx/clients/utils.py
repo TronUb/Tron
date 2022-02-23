@@ -1,5 +1,6 @@
 import time
 import pyrogram
+import platform
 
 from logging import getLogger, WARNING
 from pysimplelog import Logger
