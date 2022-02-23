@@ -29,5 +29,10 @@ class Others(object):
 
 	def MyPrefix(self):
 		return self.getdv("PREFIX").split() or self.PREFIX.split() or "."
+
+
+	def HelpEmoji(self):
+		return self.getdv("HELP_EMOJI") or self.HELP_EMOJI or ""
 		
+
 
