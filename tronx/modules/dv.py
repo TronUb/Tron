@@ -32,7 +32,7 @@ async def set_dv_var(_, m: Message):
 	if app.long(m) == 2:
 		await app.send_edit(m, "Please give me key with a value . . . ", mono=True, delme=2)  
 
-	if app.long(m) > 2 & app.long(m) < 4096:
+	elif app.long(m) > 2 & app.long(m) < 4096:
 		key = m.command[1]
 		value = m.text.split(None, 2)[2]
 		done = app.setdv(key, value)
@@ -43,8 +43,12 @@ async def set_dv_var(_, m: Message):
 		elif not done:
 			await app.send_edit(m, "Failed to a add key & value to database var . . .", mono=True, delme=2)
 
-	else:
-		await app.send_edit(m, "Maximum 4096 characters in one message . . .", mono=True, delme=2)
+	elif app.long(m) == 1:
+		allvars = [f"`{x}`" for x in dir(Config)]
+		await app.send_edit(m, "**AVAILABLE VARS:**\n\n" + "\n".join(allvars))
+
+	elif app.textlen(m) > 4096:
+		await app.send_edit(m, "Text is too long. only 4096 characters are allowed.", mono=True, delme=4)
 
 
 
