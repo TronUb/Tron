@@ -490,8 +490,6 @@ async def promote_handler(_, m: Message):
 		)
 		m = app.send_edit(m, "Promoting . . .", mono=True)
 		await app.send_edit(m, f"Promoted {user.user.mention} in this chat !")
-	else:
-		return await app.send_edit(m, "Sorry, You Are Not An Admin Here !", delme=1, mono=True)
 
 	except (UsernameInvalid, UsernameNotOccupied):
 		await app.send_edit(m, "The provided username | id is invalid !", mono=True, delme=4)
@@ -523,8 +521,6 @@ async def demote_handler(_, m: Message):
 		else:
 			if app.long(m) > 1:
 				user = await app.get_chat_member(m.chat.id, m.command[1])
-		else:
-			return await app.send_edit(m, "Something went wrong !", mono=True, delme=4)
 
 		if user:
 			if user.user.is_self:
