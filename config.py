@@ -69,7 +69,7 @@ class Config(object):
 	# your custom bio (default: telegram bio)
 	USER_BIO = os.getenv("USER_BIO")
 	# used for alive plugin (default: tronuserbot logo image)
-	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/1073e200f9d8e70b91f0d.jpg")
+	USER_PIC = os.getenv("USER_PIC", "https://telegra.ph/file/48f5dc15d51ea7f721275.jpg")
 	# add your telegram id if bot fails to get your id 
 	USER_ID = os.getenv("USER_ID")
 	# add your username if bot fails to get your username
@@ -80,7 +80,7 @@ class Config(object):
 	# your assistants custom name (default: NORA)
 	BOT_NAME = os.getenv("BOT_NAME", "NORA")
 	# your assistants alive pic (optional)
-	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/4d93e5fa480b5e53d898f.jpg")
+	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/48f5dc15d51ea7f721275.jpg")
 	# provide this if bot fails to get username of bot (optional)
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# telegram id of bot if failed to get automatically (optional)
