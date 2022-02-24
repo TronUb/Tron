@@ -172,46 +172,19 @@ async def get_inlinelinks(app, m: Message):
 @app.on_message(gen("mlink", allow = ["sudo", "channel"]))
 async def get_message_links(_, m: Message):
 	reply = m.reply_to_message
+	message = reply if reply else m
 
-	if m.chat.type == "private" or "bot":
-		return await app.send_edit(m, "This is not a group, try in groups . . .", delme=2, mono=True)
-
-	elif m.chat.type == "supergroup" or "group":
-		if reply:
-			try:
-				data = await app.get_messages(
-					chat_id = m.chat.id, 
-					message_ids = reply.message_id
-					)
-				gid = str(data.chat.id)
-				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
-				msg_id = data.message_id
-			except Exception as e:
-				await app.error(m, e)
-		else:
-			try:
-				data = await app.get_messages(
-					chat_id = m.chat.id,
-					message_ids = m.message_id
-					)
-				gid = str(data.chat.id)
-				chatid = int(gid.replace("-100", "")) if gid.startswith("-100") else data.chat.id
-				msg_id = data.message_id
-			except Exception as e:
-				await app.error(m, e)
-		try:
-			group = await data.username
-			await app.send_edit(m, f"https://t.me/{group}/{msg_id}")
-		except Exception:
-			await app.send_edit(m, f"https://t.me/c/{chatid}/{msg_id}")
+	m = await app.send_edit(m, "Generating message link . . .", mono=True)
+	await app.send_edit(m, message.link)
 
 
 
 
 @app.on_message(gen("saved", allow = ["sudo", "channel"]))
 async def save_to_cloud(_, m: Message):
-	await m.delete()
-	await m.reply_to_message.forward("self")
+	if m.from_user.is_self:
+		await m.delete()
+	await m.reply_to_message.copy("me")
 
 
 
@@ -220,7 +193,7 @@ async def save_to_cloud(_, m: Message):
 async def forward_msgs(_, m: Message):
 	reply = m.reply_to_message
 	try:
-		await m.delete()
+
 		if reply and app.long(m) == 1:
 			await reply.forward(m.chat.id)
 
@@ -228,13 +201,17 @@ async def forward_msgs(_, m: Message):
 			await reply.forward(m.command[1])
 
 		elif not reply and app.long(m) == 1:
-			await m.forward(m.chat.id)
+			await m.forward(m.text if m.text else "None")
 
 		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Sir reply to yours or someone's message.", mono=True, delme=3)
+			await app.send_edit(m, "Sir reply to yours or someone's message. to forward.", mono=True, delme=4)
 
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
+			await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=4)
+
+		if m.from_user.is_self:
+			await m.delete()
+
 	except Exception as e:
 		await app.error(m, e)
 
@@ -262,7 +239,7 @@ async def speed_tests(app, m: Message):
 		else:
 			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
 	elif app.long(m) > 1 and "pic" in m.command[1]:
-		msg = await app.send_edit(m, "Calculating Speed . . .")
+		msg = await app.send_edit(m, "Calculating Speed (pic) . . .")
 
 		start = datetime.now()
 		s = speedtest.Speedtest()
@@ -302,13 +279,16 @@ async def common_chats(_, m):
 		if reply:
 			collect = []
 			collect.clear()
+
 			data = await app.get_common_chats(reply.from_user.id)
 			for x in data:
 				collect.append(x["title"] + "\n")
-
-			await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
+			if bool(collect) is False:
+				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
+			else:
+				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "`None`")
 		else:
-			await app.send_edit(m, "Please reply to someone . . .", mono=True, delme=3)
+			await app.send_edit(m, "Please reply to someone . . .", mono=True, delme=4)
 	except Exception as e:
 		await app.error(m, e)
 
