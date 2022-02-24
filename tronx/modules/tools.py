@@ -62,19 +62,20 @@ def convert_c(celsius):
 async def get_word_links(_, m: Message):
 	links = []
 	links.clear()
-	await app.send_edit(m, "Finding word in this chat . . .", mono=True)
+
 	try:
-		if app.long(m) < 2:
+		if app.long(m) == 2:
 			return await app.send_edit(m, "Please give some text to search in chat ...")
 
 		else:
+			m = await app.send_edit(m, "Finding word in this chat . . .", mono=True)
 			info = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
-			for ele in info:
-				msg = str(ele.text)
-				if query in msg:
-					links.append(f"https://t.me/c/{str(ele.chat.id)[4:]}/{ele.message_id}")
-			await app.send_edit(m, "\n".join(links))
+			for words in info:
+				if query in words:
+					links.append(words)
+
+			await app.send_edit(m, f"**FOUND LINKS FOR:** `{query}`\n\n" +"\n".join(links))
 	except Exception as e:
 		await app.error(m, e)
 
@@ -90,8 +91,9 @@ async def evaluate(_, m: Message):
 	cur1 = m.command[2].upper()
 	cur2 = m.command[3].upper()
 	try:
+		m = await .send_edit(m, f"Converting from `{cur1}` to `{cur2}` . . .")
 		conv = c.convert(int(value), cur1, cur2)
-		text = "{} {} = {} {}".format(value, cur1, f'{conv:,.2f}', cur2)
+		text = f"`{value}` `{cur1}` = `{conv:,.2f}` `{cur2}`"
 		await app.send_edit(m, text)
 	except ValueError as e:
 		await app.error(m, e)
@@ -101,8 +103,8 @@ async def evaluate(_, m: Message):
 
 @app.on_message(gen(["temp", "temperature"], allow = ["sudo", "channel"]))
 async def evaluate(_, m: Message):
-	if len(m.text.split()) <= 2:
-		return await send(m, "How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)",disable_web_page_preview=True)
+	if app.long(m) <= 2:
+		return await app.send_edit(m, "How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)", disable_web_page_preview=True)
 
 	temp1 = m.text.split(None, 2)[1]
 	temp2 = m.text.split(None, 2)[2]
@@ -117,7 +119,7 @@ async def evaluate(_, m: Message):
 			await app.send_edit(m, text)
 		else:
 			await app.send_edit(m, "Unknown type {}".format(temp2))
-	except ValueError as e:
+	except Exception as e:
 		await app.error(m, e)
 
 
@@ -131,9 +133,11 @@ async def json_of_msg(_, m: Message):
 
 	try:
 		await app.send_edit(m, data, mono=True)
-	except MessageTooLong: # message too long
-		await app.send_edit(m, "Sending file . . .", mono=True)
+	except Exception: # message too long
+		m = await app.send_edit(m, "Sending file . . .", mono=True)
 		await app.create_file(m, "json.txt", data)
+		if m.from_user.is_self:
+			await m.delete()
 
 
 
@@ -239,7 +243,7 @@ async def speed_tests(app, m: Message):
 		else:
 			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
 	elif app.long(m) > 1 and "pic" in m.command[1]:
-		msg = await app.send_edit(m, "Calculating Speed (pic) . . .")
+		m = await app.send_edit(m, "Calculating Speed (pic) . . .")
 
 		start = datetime.now()
 		s = speedtest.Speedtest()
@@ -264,7 +268,7 @@ async def speed_tests(app, m: Message):
 				caption="**Time Taken:** {} ms".format(ms),
 				parse_mode="markdown"
 			)
-			await msg.delete()
+			await m.delete()
 		else:
 			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
 
@@ -283,7 +287,7 @@ async def common_chats(_, m):
 			data = await app.get_common_chats(reply.from_user.id)
 			for x in data:
 				collect.append(x["title"] + "\n")
-			if bool(collect) is False:
+			if bool(collect):
 				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
 			else:
 				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "`None`")
