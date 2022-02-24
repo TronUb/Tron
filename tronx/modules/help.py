@@ -35,7 +35,7 @@ app.CMD_HELP.update(
 
 
 
-@app.bot.on_callback_query(filters.regex("delete-dex") & filters.user((app.SudoUsers() or app.id)))
+@app.bot.on_callback_query(filters.regex("delete-dex"))
 @app.alert_user
 async def delete_helpdex(_, cb: CallbackQuery):
 	print(cb)
