@@ -32,7 +32,7 @@ app.CMD_HELP.update(
 )
 
 
-
+helpdex_ids = [x for x in app.getdv("DELETE_DEX_ID").strip("[]").split("," " ") if bool(app.getdv("DELETE_DEX_ID"))]
 
 
 @app.bot.on_callback_query(filters.regex("delete-dex"))
@@ -80,10 +80,11 @@ async def help_menu(_, m: Message):
 					disable_notification=True, 
 					hide_via=True
 				)
+				
 				if m.chat.type in ["bot", "private"]:
-					app.message_ids.update({m.chat.id : info.updates[1].message.id})
+					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[1].message.id})
 				else:
-					app.message_ids.update({m.chat.id : info.updates[2].message.id})
+					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[2].message.id})
 			else:
 				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
