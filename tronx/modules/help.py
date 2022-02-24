@@ -82,9 +82,9 @@ async def help_menu(_, m: Message):
 				)
 				
 				if m.chat.type in ["bot", "private"]:
-					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[1].message.id})
+					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[1].message.id}))
 				else:
-					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[2].message.id})
+					app.setdv("DELETE_DEX_ID", helpdex_id.append({m.chat.id : info.updates[2].message.id}))
 			else:
 				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
 		elif args:
