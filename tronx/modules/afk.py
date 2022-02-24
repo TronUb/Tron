@@ -58,7 +58,7 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.bot & ~filters.channel & filters.private | filters.mentioned)
+@app.on_message(~filters.bot & ~filters.channel & filters.private | filters.mentioned, group=0)
 async def offline_mention(_, m: Message):
 	try:
 		get = app.get_afk()
@@ -114,7 +114,7 @@ async def offline_mention(_, m: Message):
 
 
 # come back online
-@app.on_message(filters.me & ~filters.channel)
+@app.on_message(filters.me & ~filters.channel, group=1)
 async def afkme_handler(_, m: Message):
 	try:
 		# don't break afk while going offline
