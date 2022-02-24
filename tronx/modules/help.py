@@ -38,6 +38,7 @@ app.CMD_HELP.update(
 @app.bot.on_callback_query(filters.regex("delete-dex") & filters.user((app.SudoUsers() or app.id)))
 @app.alert_user
 async def delete_helpdex(_, cb: CallbackQuery):
+	print(cb)
 	if bool(app.message_ids) is False:
 		await cb.answer(
 			"This message is expired, hence it can't be deleted !",
