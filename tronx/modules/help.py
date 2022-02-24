@@ -47,7 +47,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 		try:
 			for x in helpdex_ids: # list
 				for y in x: # dicts
-					done = await app.delete_messages(int(y), int(x[y]))
+					done = await app.delete_messages(int(y), x[y])
 					if not done:
 						await cb.answer(
 							"This message is expired, hence it can't be deleted !",
