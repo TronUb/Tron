@@ -26,7 +26,7 @@ class Bot(object):
 
 	def BotBio(self, m: Message):
 		"""Get your bots bio"""
-		official = f"Hey {m.from_user.mention} my name is {self.assistant_name} and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands."  
+		official = f"Hey {m.from_user.mention} my name is {self.BotName()} and I am your assistant bot. I can help you in many ways . Just use the buttons below to get list of possible commands."  
 		get_bio = self.getdv("BOT_BIO") or self.BOT_BIO or official or None
 		return f"{get_bio}\n\n**Catagory: **"
 
