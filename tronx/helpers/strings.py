@@ -6,7 +6,7 @@ class Strings(object):
 			**Location:** /home/stats
 
 			**Name:** {self.UserName()}
-			**{self.assistant_name} version:** {self.assistant_version}
+			**{self.BotName()} version:** {self.assistant_version}
 			**Python version:** {self.python_version}
 			**Pyrogram version:** {self.pyrogram_version}
 			**Database:** {self.db_status()}
