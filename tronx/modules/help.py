@@ -49,12 +49,8 @@ async def delete_helpdex(_, cb: CallbackQuery):
 				for y in x: # dicts
 					if y in ("None", "none", None):
 						continue
-					done = await app.delete_messages(int(y), x[y])
-					if not done:
-						await cb.answer(
-							"This message is expired, hence it can't be deleted !",
-							show_alert=True,
-						)
+					await app.delete_messages(int(y), x[y])
+					app.deldv("DELETE_DEX_ID") # empty var
 		except Exception as e:
 			app.log.error(e)
 
