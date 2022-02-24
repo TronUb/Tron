@@ -68,10 +68,7 @@ async def deldv_handler(_, m: Message):
 		key = m.command[1]
 		done = app.deldv(key)
 
-		if done:
-			await app.send_edit(m, f"Successfully deleted [ **key** = `{key}` ]", delme=4)
-		else:
-			await app.send_edit(m, "Failed to add the key, try again", mono=True, delme=4)
+		await app.send_edit(m, f"Successfully deleted [ **key** = `{key}` ]", delme=4)
 	else:
 		await app.send_edit(m, "Something went wrong, try again later !", mono=True, delme=4)
 
