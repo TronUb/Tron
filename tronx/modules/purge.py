@@ -27,7 +27,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["purge", "p"], allow = ["sudo", "channel"]))
-async def purge_all(app, m:Message):
+async def purge_handler(app, m:Message):
 	if m.reply_to_message:
 		await app.send_edit(m, "purging . . .", mono=True)
 
@@ -48,29 +48,27 @@ async def purge_all(app, m:Message):
 		await app.delete_messages(
 			m.chat.id,
 			msg_id
-			)
+		)
 
 		end = datetime.now()
 		sec = (end - start).seconds
 
-		await app.send_edit(m, "Deleted {} messages in {} seconds.".format(len(msg_id), sec), mono=True, delme=2)
+		await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), mono=True, delme=4)
 	else:
-		await app.send_edit(m, "Reply to a message to delete all from up to bottom", delme=2)
+		await app.send_edit(m, "Reply to a message to delete all messages from tagged message to bottom message.", delme=4)
 
 
 
 
-@app.on_message(gen(["purgeme", "pgm"], allow = ["sudo", "channel"]))
-async def purge_myself(app, m:Message):
+@app.on_message(gen(["purgeme", "purgme", "pgm"], allow = ["sudo", "channel"]))
+async def purgeme_handler(_, m:Message):
 	if app.long(m) > 1:
-		if m.command[1].isdigit() is False:
-			return await app.send_edit(m, "Is that a number ? please give me a number . . .", mono=True)
-		target = int(m.command[1])
+		target = int(m.command[1]) if m.command[1].isdigit() and m.command[1] != 0 else 1
 	else:
-		return await app.send_edit(m, "Give me some number after command to delete messages . . .", delme=2, mono=True)
+		return await app.send_edit(m, "Give me some number after command to delete messages.", mono=True, delme=4)
 
 	start = datetime.now()
-	lim = target + 1  # command msg including
+	lim = target + 1  # command msg included
 
 	await app.send_edit(m, f"Deleting {target} messages . . .")
 
@@ -83,18 +81,17 @@ async def purge_myself(app, m:Message):
 	await app.delete_messages(m.chat.id, message_ids=msg_id[0:lim])
 	sec = (datetime.now() - start).seconds
 
-	await app.send_edit(m, "Deleted {} messages in {} seconds".format(target, sec), mono=True, delme=3)
+	await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(target, sec), mono=True, delme=4)
 
 
 
 
 @app.on_message(gen("del", allow = ["sudo", "channel"]))
-async def delete_tag(_, m: Message):
+async def del_handler(_, m: Message):
 	reply = m.reply_to_message
-
-	msg_id = [m.message_id, reply.message_id if reply else ""]
+	msg_ids = [m.message_id, reply.message_id] if reply.message_id else [m.message_id]
 
 	try:
-		await app.delete_messages(m.chat.id, msg_id)
+		await app.delete_messages(m.chat.id, msg_ids)
 	except Exception as e:
 		await app.error(m, e)
