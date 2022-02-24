@@ -89,7 +89,7 @@ async def purgeme_handler(_, m:Message):
 @app.on_message(gen("del", allow = ["sudo", "channel"]))
 async def del_handler(_, m: Message):
 	reply = m.reply_to_message
-	msg_ids = [m.message_id, reply.message_id] if reply.message_id else [m.message_id]
+	msg_ids = [m.message_id, reply.message_id] if reply else [m.message_id]
 
 	try:
 		await app.delete_messages(m.chat.id, msg_ids)
