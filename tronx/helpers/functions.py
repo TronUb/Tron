@@ -198,7 +198,7 @@ class Functions(object):
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
 
-	async def data(self, moduels):
+	async def data(self, modules):
 		"""
 		params: 
 			1. plug: str :: module name whose information is updated in app.CMD_HELP dict
