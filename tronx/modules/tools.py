@@ -91,7 +91,7 @@ async def evaluate(_, m: Message):
 	cur1 = m.command[2].upper()
 	cur2 = m.command[3].upper()
 	try:
-		m = await .send_edit(m, f"Converting from `{cur1}` to `{cur2}` . . .")
+		m = await app.send_edit(m, f"Converting from `{cur1}` to `{cur2}` . . .")
 		conv = c.convert(int(value), cur1, cur2)
 		text = f"`{value}` `{cur1}` = `{conv:,.2f}` `{cur2}`"
 		await app.send_edit(m, text)
