@@ -59,7 +59,7 @@ class DVSQL(object):
 					SESSION.commit()
 			finally:
 				SESSION.close()
-			return False
+			return True
 
 
 	def getdv(self, keys):
