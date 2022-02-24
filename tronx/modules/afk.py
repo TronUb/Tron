@@ -27,7 +27,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("afk", allow = ["sudo"]))
+@app.on_message(gen("afk", allow = ["sudo"]), group=0)
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
@@ -58,7 +58,7 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.bot & ~filters.channel & filters.private | filters.mentioned, group=0)
+@app.on_message(~filters.bot & ~filters.channel & filters.private | filters.mentioned, group=1)
 async def offline_mention(_, m: Message):
 	try:
 		get = app.get_afk()
@@ -114,7 +114,7 @@ async def offline_mention(_, m: Message):
 
 
 # come back online
-@app.on_message(filters.me & ~filters.channel, group=1)
+@app.on_message(filters.me & ~filters.channel, group=2)
 async def afkme_handler(_, m: Message):
 	try:
 		# don't break afk while going offline
