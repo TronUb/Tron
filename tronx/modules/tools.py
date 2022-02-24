@@ -72,8 +72,8 @@ async def get_word_links(_, m: Message):
 			info = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
 			for words in info:
-				if query in words:
-					links.append(words)
+				if query in words.text:
+					links.append(words.link)
 
 			await app.send_edit(m, f"**FOUND LINKS FOR:** `{query}`\n\n" +"\n".join(links))
 	except Exception as e:
