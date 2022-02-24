@@ -153,6 +153,7 @@ class Functions(object):
 			self.log.error(teks)
 		except Exception as err:
 			self.log.error(err)
+		return True
 
 
 	async def sleep(self, m: Message, sec, delme=False):
@@ -172,7 +173,8 @@ class Functions(object):
 
 		await asyncio.sleep(sec)
 		if delme and m.from_user.is_self:
-			await m.delete()
+			m = await m.delete()
+		return m
 
 
 	async def delete(self, m: Message, sec: int = 0):
@@ -191,11 +193,12 @@ class Functions(object):
 
 		if sec <= 600: # 10 min
 			asyncio.create_task(self.sleep(m, sec=sec, delme=True))
+			return True
 		else:
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
 
-	async def data(self, plug):
+	async def data(self, moduels):
 		"""
 		params: 
 			1. plug: str :: module name whose information is updated in app.CMD_HELP dict
@@ -212,8 +215,8 @@ class Functions(object):
 			plugin_data.clear()
 	
 			for x, y in zip(
-				self.CMD_HELP.get(plug)[1].keys(), 
-				self.CMD_HELP.get(plug)[1].values()
+				self.CMD_HELP.get(modules)[1].keys(), 
+				self.CMD_HELP.get(modules)[1].values()
 				):
 				plugin_data.append(
 					f"CMD: `{self.PREFIX}{x}`\nINFO: `{y}`\n\n"
@@ -231,6 +234,7 @@ class Functions(object):
 		parse_mode="combined", 
 		disable_web_page_preview=False,
 		delme : int=0,
+		text_type: list=[],
 		mono=False,
 		bold=False,
 		italic=False,
@@ -301,7 +305,7 @@ class Functions(object):
 		return m
 
 
-	async def private(self, m : Message):
+	async def private(self, m: Message):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -320,7 +324,8 @@ class Functions(object):
 				mono=True, 
 				delme=True
 			)
-		return
+			return True
+		return False
 
 
 	def long(self, m: Message):
@@ -337,8 +342,8 @@ class Functions(object):
 				return
 		"""
 
-		text = len(m.command)
-		return text if bool(text) else None
+		text_length = len(m.text.split())
+		return text_length if bool(text) else None
 
 
 	def textlen(self, m: Message):
@@ -406,7 +411,7 @@ class Functions(object):
 		return list(set(one) - set(two))
 
 
-	async def kick_user(self, chat_id, user_id):
+	async def kick_user(self, chat_id, user_id, ban_time=30):
 		"""
 		params: 
 			1. chat_id: int :: chat id of the chat where this method is used
@@ -420,7 +425,8 @@ class Functions(object):
 		"""
 
 		try:
-			await self.ban_chat_member(chat_id, user_id, int(time.time()) + 30) 
+			await self.ban_chat_member(chat_id, user_id, int(time.time()) + ban_time) 
+			return True
 		except Exception as e:
 			await self.error(m, e)
 
@@ -657,7 +663,7 @@ class Functions(object):
 			done = await self.add_chat_members(chat_id, user_id)
 			return True if done else False
 		except Exception as e:
-			print(e)
+			self.log.error(e)
 
 
 	async def user_exists(self, user_id: int, chat_id):
