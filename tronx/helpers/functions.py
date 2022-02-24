@@ -343,7 +343,7 @@ class Functions(object):
 		"""
 
 		text_length = len(m.text.split())
-		return text_length if bool(text) else None
+		return text_length if bool(text_length) else None
 
 
 	def textlen(self, m: Message):
