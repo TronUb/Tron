@@ -47,6 +47,8 @@ async def delete_helpdex(_, cb: CallbackQuery):
 		try:
 			for x in helpdex_ids: # list
 				for y in x: # dicts
+					if y in ("None", "none", None):
+						continue
 					done = await app.delete_messages(int(y), x[y])
 					if not done:
 						await cb.answer(
