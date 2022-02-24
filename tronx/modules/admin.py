@@ -437,7 +437,7 @@ async def unpin_handler(_, m: Message):
 			else:
 				await app.send_edit(m, "Failed to unpin all messages.", mono=True, delme=4)
 	except Exception as e:
-		await error(m, e)
+		await app.error(m, e)
 
 
 

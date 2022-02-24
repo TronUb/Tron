@@ -69,59 +69,58 @@ async def send_warn(m: Message, user):
 
 
 # incoming autoblock
-@app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me), group=3)
+@app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me))
 async def auto_block(_, m: Message):
-	if bool(app.Pmpermit()) is False or m.chat.is_verified: # allow verified
-		return
+	try:
+		if bool(app.Pmpermit()) is False or m.chat.is_verified: # allow verified
+			return
 
-	if bool(app.get_whitelist(m.chat.id)) is True:
-		return
-	else:
-		user = await app.get_users(m.chat.id)
-
-	# auto allow while outgoing first msg of ub owner
-
-	history = await app.get_history(m.chat.id)
-	if len(history) == 1 and history[0].from_user.is_self: 
-		return app.set_whitelist(user.id, True)
-
-	pmlimit = app.PmpermitLimit()
-
-	# log user info to log chat
-
-	msg = "#pmpermit\n\n"
-	msg += f"Name: `{user.first_name}`\n"
-	msg += f"Id: `{user.id}`\n"
-	msg += f"Username: `@{user.username}`\n" if user.username else f"Username: `None`\n"
-	msg += f"Message: `{m.text}`\n"
-
-	warns = bool(app.get_warn(user.id))
-
-	if warns is False:
-		app.set_warn(user.id, 1)
-		await send_warn(m, user.id)
-
-	elif warns is True:
-		warn = int(app.get_warn(user.id))
-		if warn < pmlimit:
-			maximum = warn + 1
-			app.set_warn(user.id, maximum)
-			await old_msg(m, user.id) # delete old warns
-			await send_warn(m, user.id) # send new warns
-		elif warn >= pmlimit:
-			done = await app.block_user(user.id)
-			if done:
-				try:
-					await app.send_message(
-						app.LOG_CHAT,
-						f"{user.first_name} is now blocked for spamming !"
-					)
-				except PeerIdInvalid:
-					print(f"{user.first_name} was blocked in your pm for spamming.")
-			else:
-				await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", mono=True, delme=4)
+		if bool(app.get_whitelist(m.chat.id)) is True:
+			return
 		else:
-			print("Something went wrong in pmpermit")
+			user = await app.get_users(m.chat.id)
+
+		# auto allow while outgoing first msg of ub owner
+
+		pmlimit = app.PmpermitLimit()
+
+		# log user info to log chat
+
+		msg = "#pmpermit\n\n"
+		msg += f"Name: `{user.first_name}`\n"
+		msg += f"Id: `{user.id}`\n"
+		msg += f"Username: `@{user.username}`\n" if user.username else f"Username: `None`\n"
+		msg += f"Message: `{m.text}`\n"
+
+		warns = bool(app.get_warn(user.id))
+
+		if warns is False:
+			app.set_warn(user.id, 1)
+			await send_warn(m, user.id)
+
+		elif warns is True:
+			warn = int(app.get_warn(user.id))
+			if warn < pmlimit:
+				maximum = warn + 1
+				app.set_warn(user.id, maximum)
+				await old_msg(m, user.id) # delete old warns
+				await send_warn(m, user.id) # send new warns
+			elif warn >= pmlimit:
+				done = await app.block_user(user.id)
+				if done:
+					try:
+						await app.send_message(
+							app.LOG_CHAT,
+							f"{user.first_name} is now blocked for spamming !"
+						)
+					except PeerIdInvalid:
+						print(f"{user.first_name} was blocked in your pm for spamming.")
+				else:
+					await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", mono=True, delme=4)
+			else:
+				print("Something went wrong in pmpermit")
+	except Exception as e:
+		await app.error(m, e)
 
 
 
