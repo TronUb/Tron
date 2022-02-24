@@ -1,71 +1,75 @@
 {
-  "name": "Trôn",
-  "description": "Tron Is A Multifunctional Telegram Userbot with Custom Settings.",
-  "logo": "https://telegra.ph/file/8d62a8fe005a8077188ec.jpg",
-  "keywords": [
-    "userbot",
-    "plugins",
-    "development",
-    "tools",
-    "pyrogram",
-    "productivity"
-  ],
-  "repository": "https://github.com/beastzx18/Tron/",
-  "website": "https://t.me/tronuserbot",
-  "success_url": "/welcome",
-  "env": {
-      "API_ID": {
-      "description": "Login here -> my.telegram.org to get pair of keys",
-      "value": "",
-      "required": true
-    },
-      "API_HASH": {
-      "description": "Again You Will Find This Here ->  my.telegram.org",
-      "value": "",
-      "required": true
-    },
-      "SESSION": {
-      "description": "Visit here & create https://replit.com/@vs423502/Tron-Session?v=1",
-      "value": "",
-      "required": true
-    },
-      "PREFIX": {
-      "description": "This Is The Handle Of Your All Commands You Can Change It To -> [ . , ? ' / + - * ] Any Symbol That You Like.",
-      "value": ".",
-      "required": true
-    },   
-      "HEROKU_API_KEY": {
-      "description": "Your heroku api key, Go To Heroku >> Profile Icon >> Account settings >> Scroll Down >> Reveal >> Copy.",
-      "value": "",
-      "required": true
-    },
-      "HEROKU_APP_NAME": {
-      "description": "Your Heroku app name, Look Top First Slot You Have Just Filled At The Top, That's The Value.",
-      "value": "",
-      "required": true
-    },
-      "TIME_ZONE": {
-      "description": "For Time Plugin. Change It To Your Time Zone or If You Don't Know Leave As it is.",
-      "value": "Asia/Kolkata",
-      "required": true
-    },
-      "LOG_CHAT": {
-      "description": "A Private Telegram Group Id To Store Your Logs.",
-      "required": true
-    },
-      "TOKEN": {
-      "description": "Go to @botfather in telegram and make a new bot and get the bot token.",
-      "required": true
-    }
-   },
-      "addons": [{
-      "plan": "heroku-postgresql",
-      "options": {
-      "version": "12"
-    }
-    }],
-      "buildpacks": [{
-      "url": "heroku/python"
-    }]
+	"name": "Trôn",
+	"description": "Tron Is A Multifunctional Telegram Userbot with Custom Settings.",
+	"logo": "https://telegra.ph/file/8d62a8fe005a8077188ec.jpg",
+	"keywords": [
+		"userbot",
+		"plugins",
+		"development",
+		"tools",
+		"pyrogram",
+		"productivity"
+	],
+	"repository": "https://github.com/beastzx18/Tron/",
+	"website": "https://t.me/tronuserbot",
+	"success_url": "/welcome",
+	"env": {
+		"API_ID": {
+			"description": "Login here -> my.telegram.org to get pair of keys",
+			"value": "",
+			"required": true
+		},
+		"API_HASH": {
+			"description": "Again You Will Find This Here ->  my.telegram.org",
+			"value": "",
+			"required": true
+		},
+		"SESSION": {
+			"description": "Visit here & create https://replit.com/@beastzx18/Tronuserbot-session",
+			"value": "",
+			"required": true
+		},
+		"PREFIX": {
+			"description": "This Is The Handler Of Your All Commands You Can Change It To -> [ . , ? ' / + - * ] Any Symbol That You Like.",
+			"value": ".",
+			"required": true
+		},   
+		"HEROKU_API_KEY": {
+			"description": "Your heroku api key, Go To Heroku >> Profile Icon >> Account settings >> Scroll Down >> Reveal >> Copy.",
+			"value": "",
+			"required": true
+		},
+		"HEROKU_APP_NAME": {
+			"description": "Your Heroku app name, Look Top First Slot You Have Just Filled At The Top, That's The Value.",
+			"value": "",
+			"required": true
+		},
+		"TIME_ZONE": {
+			"description": "For Time Plugin. Change It To Your Time Zone or If You Don't Know Leave As it is.",
+			"value": "Asia/Kolkata",
+			"required": true
+		},
+		"LOG_CHAT": {
+			"description": "A Private Telegram Group Id To Store Your Logs.",
+			"required": true
+		},
+		"TOKEN": {
+			"description": "Go to @botfather in telegram and make a new bot and get the bot token.",
+			"required": true
+		}
+	},
+	"addons": [
+		{
+			"plan": "heroku-postgresql",
+			"options": {
+				"version": "12"
+			}
+		}
+	],
+	"buildpacks": [
+		{
+		"url": "heroku/python"
+		}
+	]
 }
 

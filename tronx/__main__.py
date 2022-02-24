@@ -13,11 +13,12 @@ async def start_assistant():
 	this function starts the pyrogram bot client.
 	"""
 	if app.bot:
+		print("Activating assistant.\n")
 		await app.bot.start()
-		app.log.info("Assistant activated, startup in progress . . .\n")
+		print("Assistant activated.\n")
 	else:
-		app.log.info("Assistant start unsuccessful, please check that you have given the bot token.\n")
-		app.log.info("skipping assistant start !")
+		print("Assistant start unsuccessful, please check that you have given the bot token.\n")
+		print("skipping assistant start !")
 
 
 
@@ -27,11 +28,12 @@ async def start_userbot():
 	this function starts the pyrogram userbot client.
 	"""
 	if app:
+		print("Activating userbot.\n")
 		await app.start()
-		app.log.info("Userbot activated, startup in progress . . .\n")
+		print("Userbot activated.\n")
 	else:
-		app.log.info("Userbot startup unsuccessful, please check everything again ...")
-		app.log.info("Couldn't load modules of userbot")
+		print("Userbot startup unsuccessful, please check everything again ...")
+		print("Couldn't load modules of userbot")
 
 
 
@@ -42,14 +44,15 @@ async def start_bot():
 	clients custom 'import_module' to start clients & import modules.
 	"""
 	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
-	print("PLUGINS: Installing . . .\n\n")
+	print("PLUGINS: Installing.\n\n")
 	plugins = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	print(f"\n\n{plugins} plugins Loaded\n\n")
-	print("MODULES: Installing . . .\n\n")
+	print("MODULES: Installing.\n\n")
 	modules = app.import_module("tronx/modules/", exclude=app.NoLoad())
-	print(f"\n\n{modules} modules Loaded")
+	print(f"\n\n{modules} modules Loaded\n\n")
 	await start_assistant()
 	await start_userbot()
+	print("You successfully deployed Tronuserbot, try .ping or .alive to test it.")
 	await idle() # block execution
 
 

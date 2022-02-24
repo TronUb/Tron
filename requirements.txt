@@ -1,4 +1,4 @@
-pyrogram
+pyrogram==1.4.7
 pytube
 telegraph
 heroku3
