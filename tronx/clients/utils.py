@@ -2,7 +2,7 @@ import time
 import pyrogram
 import platform
 
-from logging import getLogger, WARNING
+from logging import getLogger, WARNING, CRITICAL
 from pysimplelog import Logger
 from config import Config
 from telegraph import Telegraph
@@ -40,7 +40,7 @@ class Utils(Methods, Config, Database, Helpers):
 
 	# debugging /
 
-	getLogger("pyrogram").setLevel(WARNING) # turn off pyrogram logging
+	getLogger("pyrogram.syncer").setLevel(CRITICAL) # turn off pyrogram logging
 	log = Logger(timezone=Config.TIME_ZONE)
 	log.set_name("") # Ex: Logger <INFO> some message, `Logger` name will empty 
 
