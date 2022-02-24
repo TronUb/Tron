@@ -14,7 +14,7 @@ https://my.telegram.org
 
 Required:
   
-  1. APP_ID
+  1. API_ID
   2. API_HASH
   3. PHONE NUMBER (WITH COUNTRY CODE)
   
