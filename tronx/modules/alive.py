@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("alive", allow = ["sudo"]))
+@app.on_message(gen("alive", allow = ["sudo"]), group=0)
 async def simple_alive(_, m: Message):
 	try:
 		m = await app.send_edit(m, ". . .", mono=True)
@@ -69,7 +69,7 @@ async def simple_alive(_, m: Message):
 
 
 
-@app.on_message(gen("ialive", allow = ["sudo"]))
+@app.on_message(gen("ialive", allow = ["sudo"]), group=1)
 async def inline_alive(_, m: Message):
 	m = await app.send_edit(m, ". . .", mono=True)
 	try:
@@ -94,7 +94,7 @@ async def inline_alive(_, m: Message):
 
 
 
-@app.on_message(gen(["qt"], allow = ["sudo"]))
+@app.on_message(gen(["qt"], allow = ["sudo"]), group=2)
 async def inline_quote(_, m: Message):
 	try:
 		m = await app.send_edit(m,". . .", mono=True)
