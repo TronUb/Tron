@@ -64,7 +64,7 @@ async def get_word_links(_, m: Message):
 	links.clear()
 
 	try:
-		if app.long(m) == 2:
+		if app.long(m) == 1:
 			return await app.send_edit(m, "Please give some text to search in chat ...")
 
 		else:
