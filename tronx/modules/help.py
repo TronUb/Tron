@@ -45,7 +45,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 		)
 	else:
 		try:
-			for x in helpdex_ids: # list
+			for x in helpdex_ids[1:]: # list
 				for y in x: # dicts
 					if y in ("None", "none", None):
 						continue
