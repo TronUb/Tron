@@ -141,7 +141,7 @@ async def autoblock_handler(_, m: Message):
 
 
 @app.on_message(gen(["a", "approve"], allow = ["sudo"]), group=0)
-async def approve_pm(_, m: Message):
+async def approve_handler(_, m: Message):
 	if m.chat.type == "bot":
 		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=4)
 
@@ -193,8 +193,8 @@ async def approve_pm(_, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove"], allow = ["sudo"]), group=1)
-async def diapprove_pm(_, m:Message):
+@app.on_message(gen(["da", "disapprove"], allow = ["sudo"]), group=-2)
+async def diapprove_handler(_, m:Message):
 	if m.chat.type == "bot":
 		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=4)
 
