@@ -217,7 +217,9 @@ class Utilities(AioHttp):
 
 	async def IsAdmin(self, m: Message):
 		"""Check if we are an admin."""
-
+		if not m.from_user:
+			print(m) # getting from user as nonetype
+			return False
 		ranks = ["administrator", "creator"]
 
 		data = await self.get_chat_member(
