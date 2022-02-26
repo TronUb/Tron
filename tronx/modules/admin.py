@@ -378,13 +378,18 @@ async def kick_handler(_, m: Message):
 @app.on_message(gen("pin", allow = ["sudo", "channel"]))
 async def pin_handler(_, m: Message):
 	try:
+		arg = True
+		cmd = m.command
 		reply = m.reply_to_message
+
+		if app.long(m) > 1:
+				arg = False if cmd[1] == "loud" else True
 
 		if m.chat.type in private:
 			if not reply:
-				return await app.send_edit("Reply to some message, so that i can pin that message.", mono=True, delme=4)
+				return await app.send_edit(m, "Reply to some message, so that i can pin that message.", mono=True, delme=4)
 
-			done = await reply.pin()
+			done = await reply.pin(disable_notification=arg)
 			if done:
 				return await app.send_edit(m, "Pinned message !", mono=True, delme=4)
 			else:
@@ -395,7 +400,7 @@ async def pin_handler(_, m: Message):
 
 		if reply:
 			m = await app.send_edit(m, "⏳ • Hold on . . .", mono=True)
-			done = await reply.pin()
+			done = await reply.pin(disable_notification=arg)
 			if done:
 				await app.send_edit(m, "Pinned message.", mono=True, delme=4)
 			else:
