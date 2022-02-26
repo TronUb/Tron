@@ -36,8 +36,8 @@ async def old_msg(m: Message, user_id):
 			chat_id=m.chat.id, 
 			message_ids=old_msgs
 		)
-	else:
-		pass
+		return True
+	return False
 
 
 
@@ -45,7 +45,6 @@ async def old_msg(m: Message, user_id):
 async def send_warn(m: Message, user):
 	""" Send warning messages """
 	pic = app.PmpermitPic()
-
 	text = app.PmpermitText()
 
 	if pic:
@@ -54,14 +53,17 @@ async def send_warn(m: Message, user):
 			pic,
 			caption=text
 		)
+		return True
 	elif not pic:
 		msg = await app.send_message(
 			m.chat.id,
 			text,
 			disable_web_page_preview=True
 			)
+		return True
 	else:
-		return print("The bot didn't send pmpermit warning message . . .")
+		return print("The bot didn't send pmpermit warning message.")
+		return False
 	app.set_msgid(user, msg.message_id)
 
 
@@ -72,17 +74,28 @@ async def send_warn(m: Message, user):
 @app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me))
 async def auto_block(_, m: Message):
 	try:
+		users = []
+		is_user = False
+		pmlimit = app.PmpermitLimit()
+
 		if bool(app.Pmpermit()) is False or m.chat.is_verified: # allow verified
 			return
 
 		if bool(app.get_whitelist(m.chat.id)) is True:
 			return
 		else:
-			user = await app.get_users(m.chat.id)
+			# this will reduce the use of pyrogram's get_users method
+			for x in users:
+				if x.get(m.chat.id)
+					is_user = True
+					break
 
-		# auto allow while outgoing first msg of ub owner
+			if is_user:
+				user = users.get(m.chat.id)
+			else:
+				user = await app.get_users(m.chat.id)
+				users.append({m.chat.id : user})
 
-		pmlimit = app.PmpermitLimit()
 
 		# log user info to log chat
 
