@@ -86,7 +86,7 @@ async def auto_block(_, m: Message):
 		else:
 			# this will reduce the use of pyrogram's get_users method
 			for x in users:
-				if x.get(m.chat.id)
+				if x.get(m.chat.id):
 					is_user = True
 					break
 
