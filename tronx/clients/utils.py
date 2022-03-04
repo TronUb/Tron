@@ -1,14 +1,11 @@
 import time
-import pyrogram
 import platform
 
-from logging import getLogger, WARNING, CRITICAL
-from pysimplelog import Logger
+import logging 
 from config import Config
 from telegraph import Telegraph
 from tronx.methods import Methods
 from pyrogram import __version__ as pyro_version
-from pyrogram.types import Message
 from tronx.database import Database
 from tronx.helpers import Helpers
 
@@ -35,14 +32,16 @@ class Utils(Methods, Config, Database, Helpers):
 
 	# other /
 
-	Repo = "https://github.com/beastzx18/Tron"
+	Repo = "https://github.com/beastzx18/Tron.git"
 	StartTime = time.time()
 
 	# debugging /
 
-	getLogger("pyrogram.syncer").setLevel(CRITICAL) # turn off pyrogram logging
-	log = Logger(timezone=Config.TIME_ZONE)
-	log.set_name("") # Ex: Logger <INFO> some message, `Logger` name will empty 
+	logging.getLogger("pyrogram.syncer").setLevel(CRITICAL) # turn off pyrogram logging
+	logging.getLogger("pyrogram").setLevel(CRITICAL)
+	
+	logging.basicConfig(format="%(asctime)s %(message)s")
+	log = logging.getLogger("———")
 
 	# telegraph /
 
