@@ -37,8 +37,8 @@ class Utils(Methods, Config, Database, Helpers):
 
 	# debugging /
 
-	logging.getLogger("pyrogram.syncer").setLevel(CRITICAL) # turn off pyrogram logging
-	logging.getLogger("pyrogram").setLevel(CRITICAL)
+	logging.getLogger("pyrogram.syncer").setLevel(logging.CRITICAL) # turn off pyrogram logging
+	logging.getLogger("pyrogram").setLevel(logging.CRITICAL)
 	
 	logging.basicConfig(format="%(asctime)s %(message)s")
 	log = logging.getLogger("———")
