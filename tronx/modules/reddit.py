@@ -36,8 +36,8 @@ async def reddit_image(_, m: Message):
 
 	elif app.long(m) > 1:
 		try:
-			m = await app.send_edit(m, "Getting reddit images . . .", mono=True)
 			query = m.text.split(None, 1)[1]
+			m = await app.send_edit(m, "Getting reddit images . . .", mono=True)
 			url = f"https://old.reddit.com/r/{query}.json"
 			headers = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"}   
 			data = requests.get(url, headers=headers).json()
