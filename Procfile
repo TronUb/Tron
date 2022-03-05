@@ -1,1 +1,1 @@
-worker: python3 -m tronx
+worker: bash start.sh
