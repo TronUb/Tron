@@ -626,7 +626,7 @@ class Functions(object):
 				if hasattr(message, "caption"):
 					return {"data":(message[x]).file_id, "caption":message.caption, "type":x}
 				else:
-					return {"data":(messsge[x]).file_id, "caption":None, "type":x]
+					return {"data":(messsge[x]).file_id, "caption":None, "type":x}
 			elif hasattr(message, "text"):
 				return {"data":messsge.text, "caption":None, "type":"text"}
 
