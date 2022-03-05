@@ -628,7 +628,7 @@ class Functions(object):
 				else:
 					return {"data":(messsge[x]).file_id, "caption":None, "type":x]
 			elif hasattr(message, "text"):
-				return {"data":messsge.text, "caption":None, "type":"text"]
+				return {"data":messsge.text, "caption":None, "type":"text"}
 
 
 	def clear_screen(self):
