@@ -70,7 +70,7 @@ async def save_welcome(_, m: Message):
 	if reply:
 		try:
 			if bool(reply.media) is True:
-				fall = app.get_file_id(m)
+				fall = app.get_file_id(reply)
 				file_id = fall["data"] if fall["data"] else None
 				caption = fall["caption"] if fall["caption"] else None
 
