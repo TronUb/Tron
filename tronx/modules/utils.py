@@ -201,7 +201,6 @@ async def tag_all_users(app, m: Message):
 	async for x in app.iter_chat_members(m.chat.id):
 		if x.user.is_bot is False:
 			text += app.MentionHtml(x.user.id, "\u200b")
-	await m.delete()
 	if reply:
 		await app.send_message(m.chat.id, text, reply_to_message_id=reply.message_id, parse_mode="html")
 	else:
