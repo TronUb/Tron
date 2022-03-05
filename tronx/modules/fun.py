@@ -92,21 +92,20 @@ async def capitalise(_, m):
 
 
 @app.on_message(gen("type", allow =["sudo"]))
-async def type_animatiom(_, m):
+async def type_handler(_, m):
 	try:
 		if app.long(m) > 1:
-			text = " ".join(m.command[1:])
+			text = [x for x in m.text.split(None, 1)[1]]
 		else:
 			return await app.send_edit(m, "Some text is required to show in typing animation", delme=2)
 
 		tbp = "" 
 		typing_symbol = "▒"
-		while(tbp != text):
+		for i in range(len(text)):
 			try:
 				await app.send_edit(m, tbp + typing_symbol)
 				await asyncio.sleep(0.40)
-				tbp = tbp + text[0]
-				text = text[1:]
+				tbp = tbp + text[i]
 				await app.send_edit(m, tbp)
 				await asyncio.sleep(0.40)
 			except FloodWait as e:
