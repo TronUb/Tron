@@ -72,3 +72,11 @@ class WELCOMESQL(object):
 		SESSION.close()
 		return {"file_id" : rep, "caption" : repx}
 
+	def get_welcome_all(self):
+		kv_data = {}
+		all_welcome = SESSION.query(WELCOME).distinct().all()
+		for x in all_welcome:
+			kv_data.update({x.keys : x.values})
+		SESSION.close()
+		return kv_data
+		
