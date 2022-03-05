@@ -624,11 +624,11 @@ class Functions(object):
 		for x in media:
 			if hasattr(message, x):
 				if hasattr(message, "caption"):
-					return [(message[x]).file_id, message.caption, x]
+					return {"data":(message[x]).file_id, "caption":message.caption, "type":x}
 				else:
-					return [(messsge[x]).file_id, None, x]
+					return {"data":(messsge[x]).file_id, "caption":None, "type":x]
 			elif hasattr(message, "text"):
-				return [messsge.text, None, "text"]
+				return {"data":messsge.text, "caption":None, "type":"text"]
 
 
 	def clear_screen(self):
