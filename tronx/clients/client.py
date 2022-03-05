@@ -13,7 +13,6 @@ class SuperClient(Utils, Client):
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
 		)
-		self.bot = self.Bot() # workaround
 		self.start()
 		self.me = self.get_chat("me")
 		self.id = self.me.id
@@ -23,6 +22,8 @@ class SuperClient(Utils, Client):
 		self.bio = self.me.bio if self.me.bio else ""
 		self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else ""
 		self.stop()
+
+		self.bot = self.Bot() # workaround
 
 	class Bot(Client, Utils):
 		""" Assistant (Nora) """
