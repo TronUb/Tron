@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/beastzx18/Tron">
-        <img src="material/images/tron.png" height="300" width="300" alt="Tron">
+        <img src="material/images/tron-round.png" height="300" width="300" alt="Tron">
     </a>
 </p>
 <h2 align="center">Tron Userbot</h2> 
