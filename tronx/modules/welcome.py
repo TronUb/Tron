@@ -25,13 +25,17 @@ app.CMD_HELP.update(
 )
 
 
+IgnoreList = []
 
 
-@app.on_message(filters.new_chat_members & filters.group)
+
+
+@app.on_message(filters.new_chat_members & filters.group & ~filters.chat(IgnoreList))
 async def send_welcome(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
 		if chat["file_id"] is None:
+			IgnoreList.append(m.chat.id) # decrease the number of updates per chat
 			return
 
 	try:
@@ -70,7 +74,7 @@ async def save_welcome(_, m: Message):
 	if reply:
 		try:
 			if bool(reply.media) is True:
-				fall = app.get_file_id(m)
+				fall = app.get_file_id(reply)
 				file_id = fall["data"] if fall["data"] else None
 				caption = fall["caption"] if fall["caption"] else None
 
