@@ -76,7 +76,7 @@ class WELCOMESQL(object):
 		kv_data = {}
 		all_welcome = SESSION.query(WELCOME).distinct().all()
 		for x in all_welcome:
-			kv_data.update({x.keys : x.values})
+			kv_data.update({"chat_id" : x.user_id, "file_id" : x.file_id, "text" : x.text})
 		SESSION.close()
 		return kv_data
 		
