@@ -30,13 +30,14 @@ IgnoreList = []
 
 
 
-@app.on_message(filters.new_chat_members & filters.group & ~filters.chat(IgnoreList))
+@app.on_message(filters.new_chat_members & filters.group & ~filters.chat(IgnoreChat))
 async def send_welcome(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
 		if chat["file_id"] is None:
-			IgnoreList.append(m.chat.id) # decrease the number of updates per chat
-			return
+			if not m.chat.id in IgnoreChat:
+				IgnoreChat.append(m.chat.id) # decrease the number of updates per chat
+				return
 
 	try:
 		file_id = chat["file_id"] if chat["file_id"] else False
