@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 )
 
 
-IgnoreList = []
+IgnoreChat = []
 
 
 
