@@ -108,7 +108,7 @@ def gen(
 		global username, raw_commands
 
 		username = ""
-		raw_commands = commands if isinstance(commands, list) else [commands]
+		raw_commands = commands if isinstance(commands, list) else list(commands)
 
 		text = message.text or message.caption
 		message.command = None
