@@ -68,9 +68,9 @@ async def get_word_links(_, m: Message):
 			return await app.send_edit(m, "Please give some text to search in chat ...")
 
 		else:
-			m = await app.send_edit(m, "Finding word in this chat . . .", mono=True)
 			info = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
+			m = await app.send_edit(m, "Finding word in this chat . . .", mono=True)
 			for words in info:
 				if query in words.text:
 					links.append(words.link)

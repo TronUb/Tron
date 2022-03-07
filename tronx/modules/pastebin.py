@@ -28,28 +28,27 @@ app.CMD_HELP.update(
 @app.on_message(gen(["paste", "bin"], allow = ["sudo"]))
 async def paster(_, m: Message):
 	reply = m.reply_to_message
-	m = await app.send_edit(m, "`Pasting to nekobin ...`")
 
-	if reply:
-		text = reply.text
+	if reply and reply.text or reply.caption:
+		text = reply.text or reply.caption
 	elif not reply and app.long(m) > 1:
 		text = m.text.split(None, 1)[1]
-	else:
-		return await app.send_edit(m, "Please reply to a message or give some text after command.", delme=2)
+	elif not reply and app.long(m) == 1:
+		return await app.send_edit(m, "Please reply to a message or give some text after command.", mono=True, delme=4)
 
 	try:
 		async with aiohttp.ClientSession() as session:
 			async with session.post(
-				"https://nekobin.com/api/documents", json={"content": text}, timeout=3
+				"https://www.toptal.com/developers/hastebin/documents", data=text.encode("utf-8"), timeout=3
 			) as response:
-				key = (await response.json())["result"]["key"]
+				key = (await response.json())["key"]
 	except Exception as e:
-		return await app.send_edit(m, "Pasting failed, Try again . . .", delme=2, mono=True)
-		print(e)
+		await app.error(m, e)
+		return await app.send_edit(m, "Pasting failed, Try again later . . .", delme=4, mono=True)
 
 	else:
-		url = f"https://nekobin.com/{key}"
-		reply_text = f"**Nekobin** : [Here]({url})"
+		url = f"https://hastebin.com/raw/{key}"
+		reply_text = f"**Hastebin** : [Click Here]({url})"
 		delete = (True if app.long(m) > 1 and m.command[1] in ["d", "del"] and reply.from_user.is_self else False)
 		if delete:
 			await asyncio.gather(
