@@ -15,12 +15,12 @@ from . import SESSION, BASE
 class WELCOME(BASE):
 	__tablename__ = "welcome"
 	
-	user_id = Column(String, primary_key=True)
+	chat_id = Column(String, primary_key=True)
 	file_id = Column(String)
 	text = Column(String)
 	
 	def __init__(self, user_id, file_id, text):
-		self.user_id = user_id
+		self.chat_id = user_id
 		self.file_id = file_id
 		self.text = text
 
@@ -36,34 +36,37 @@ INSERTION_LOCK = threading.RLock()
 
 class WELCOMESQL(object):
 	# set, del, get user_id & file_id
-	def set_welcome(self, user_id, file_id, text=None):
+	def set_welcome(self, chat_id, file_id, text=None):
 		with INSERTION_LOCK:
 			mydata = SESSION.query(WELCOME).get(user_id)
 			try:
 				if mydata:
 					SESSION.delete(mydata)
-				mydata = WELCOME(user_id, file_id, text)
+				mydata = WELCOME(chat_id, file_id, text)
 				SESSION.add(mydata)
 				SESSION.commit()
 			finally:
 				SESSION.close()
-		return user_id
+		return (chat_id, file_id, text)
 
 
-	def del_welcome(self, user_id):
+	def del_welcome(self, chat_id):
 		with INSERTION_LOCK:
-			mydata = SESSION.query(WELCOME).get(user_id)
+			mydata = SESSION.query(WELCOME).get(chat_id)
 			try:
 				if mydata:
 					SESSION.delete(mydata)
 					SESSION.commit()
-			finally:
+					SESSION.close()
+					return True
+			except Exception as e:
 				SESSION.close()
-			return False
+				print(e)
+				return False
 
 
-	def get_welcome(self, user_id):
-		mydata = SESSION.query(WELCOME).get(user_id)
+	def get_welcome(self, chat_id):
+		mydata = SESSION.query(WELCOME).get(chat_id)
 		rep = None
 		repx = None
 		if mydata:
@@ -72,11 +75,13 @@ class WELCOMESQL(object):
 		SESSION.close()
 		return {"file_id" : rep, "caption" : repx}
 
-	def get_welcome_all(self):
-		kv_data = {}
+
+	def get_welcome_ids(self):
+		chat_ids = []
 		all_welcome = SESSION.query(WELCOME).distinct().all()
 		for x in all_welcome:
-			kv_data.update({"chat_id" : x.user_id, "file_id" : x.file_id, "text" : x.text})
+			if not int(x.chat_id) or x.chat_id in chat_ids:
+				chat_ids.append(int(x.chat_id))
 		SESSION.close()
-		return dict(kv_data)
+		return chat_ids
 		
