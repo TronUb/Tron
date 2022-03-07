@@ -34,10 +34,11 @@ IgnoreChat = []
 async def send_welcome(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
+		if not m.chat.id in IgnoreChat:
+			IgnoreChat.append(m.chat.id) # decrease the number of updates per chat
+
 		if chat["file_id"] is None:
-			if not m.chat.id in IgnoreChat:
-				IgnoreChat.append(m.chat.id) # decrease the number of updates per chat
-				return
+			return
 
 	try:
 		file_id = chat["file_id"] if chat["file_id"] else False
