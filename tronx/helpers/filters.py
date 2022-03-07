@@ -86,7 +86,7 @@ def MyPrefix():
 
 def SudoCmds():
 	"""commands which are in this variable will work for sudo users, `full` to allow all commands"""
-	return dv.getdv("SUDO_CMDS").split() 
+	return dv.getdv("SUDO_CMDS").split() or []
 
 
 
@@ -122,9 +122,11 @@ def gen(
 				return False
 
 			# allow some specific commands to sudos
-			for x in raw_commands:
-				if not x in SudoCmds():
-					return False
+			if message.from_user and message.from_user.id in client.SudoUsers():
+				if not "full" in SudoCmds():
+					for x in raw_commands:
+						if not x in SudoCmds():
+							return False
 
 		# work only for -> bot owner if not sudo
 		elif not "sudo" in allow:
