@@ -79,7 +79,7 @@ class WELCOMESQL(object):
 		chat_ids = []
 		all_welcome = SESSION.query(WELCOME).distinct().all()
 		for x in all_welcome:
-			if not (int(x.chat_id) or x.chat_id in chat_ids):
+			if not (int(x.chat_id) in chat_ids):
 				chat_ids.append(int(x.chat_id))
 		SESSION.close()
 		return chat_ids
