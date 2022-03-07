@@ -19,7 +19,7 @@ class WELCOME(BASE):
 	file_id = Column(String)
 	text = Column(String)
 	
-	def __init__(self, user_id, file_id, text):
+	def __init__(self, chat_id, file_id, text):
 		self.chat_id = user_id
 		self.file_id = file_id
 		self.text = text
