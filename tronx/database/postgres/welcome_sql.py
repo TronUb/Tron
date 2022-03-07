@@ -78,5 +78,5 @@ class WELCOMESQL(object):
 		for x in all_welcome:
 			kv_data.update({"chat_id" : x.user_id, "file_id" : x.file_id, "text" : x.text})
 		SESSION.close()
-		return kv_data
+		return dict(kv_data)
 		
