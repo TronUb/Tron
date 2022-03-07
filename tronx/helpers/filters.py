@@ -84,6 +84,11 @@ def MyPrefix():
 	"""Multiple prefix support function"""
 	return dv.getdv("PREFIX").split() or Config.PREFIX.split() or "."
 
+def SudoCmds():
+	"""commands which are in this variable will work for sudo users, `full` to allow all commands"""
+	return dv.getdv("SUDO_CMDS").split() 
+
+
 
 
 # custom command filter
@@ -103,6 +108,7 @@ def gen(
 		global username
 
 		username = ""
+		raw_commands = commands if isinstance(commands, list) else [commands]
 
 		text = message.text or message.caption
 		message.command = None
@@ -114,6 +120,11 @@ def gen(
 		if "sudo" in allow:
 			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
 				return False
+
+			# allow some specific commands to sudos
+			for x in raw_commands:
+				if not x in SudoCmds():
+					return False
 
 		# work only for -> bot owner if not sudo
 		elif not "sudo" in allow:
