@@ -25,18 +25,15 @@ app.CMD_HELP.update(
 )
 
 
-IgnoreChat = []
+IgnoreChat = app.get_welcome_ids()
 
 
 
 
-@app.on_message(filters.new_chat_members & filters.group & ~filters.chat(IgnoreChat))
+@app.on_message(filters.new_chat_members & filters.group & filters.chat(IgnoreChat))
 async def send_welcome(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
-		if not m.chat.id in IgnoreChat:
-			IgnoreChat.append(m.chat.id) # decrease the number of updates per chat
-
 		if chat["file_id"] is None:
 			return
 
