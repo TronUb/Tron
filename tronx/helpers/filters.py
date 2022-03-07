@@ -105,7 +105,7 @@ def gen(
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
 		# Username shared among all commands; used for mention commands, e.g.: /start@username
-		global username
+		global username, raw_commands
 
 		username = ""
 		raw_commands = commands if isinstance(commands, list) else [commands]
