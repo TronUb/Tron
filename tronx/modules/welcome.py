@@ -42,10 +42,10 @@ async def send_welcome(_, m: Message):
 	try:
 		file_id = chat["file_id"] if chat["file_id"] else False
 		caption = chat["caption"] if chat["caption"] else False
-		if file_id and not file_id.startswith("#"):
+		if file_id and not file_id.startswith("#"): # as a text
 			return await app.send_message(m.chat.id, f"{file_id}", reply_to_message_id=m.message_id)
 
-		elif file_id and file_id.startswith("#"):
+		elif file_id and file_id.startswith("#"): # as a file id 
 			file_id = file_id.replace("#", "")
 
 		if caption:
@@ -69,7 +69,9 @@ async def send_welcome(_, m: Message):
 
 @app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
 async def save_welcome(_, m: Message):
-	await app.private(m)
+	if await app.private(m)
+		return
+
 	await app.send_edit(m, "Setting this media as a welcome message . . .", mono=True)
 	reply = m.reply_to_message
 	if reply:
@@ -85,7 +87,7 @@ async def save_welcome(_, m: Message):
 					app.set_welcome(str(m.chat.id), "#" + file_id)
 				await app.send_edit(m, "Added this media to welcome message . . .", delme=2, mono=True)
 			elif bool(reply.media) is False:
-				app.set_welcome(str(m.chat.id), reply.text)
+				app.set_welcome(str(m.chat.id), reply.text.markdown)
 				await app.send_edit(m, "Added this text to welcome message . . .", delme=2, mono=True)
 		except Exception as e:
 			await app.error(m, e)
@@ -98,7 +100,9 @@ async def save_welcome(_, m: Message):
 
 @app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
 async def delete_welcome(_, m: Message):
-	await app.private(m)
+	if await app.private(m)
+		return
+
 	try:
 		await app.send_edit(m, "Checking welcome message for this group . . .", mono=True)
 		app.del_welcome(str(m.chat.id))
@@ -111,7 +115,9 @@ async def delete_welcome(_, m: Message):
 
 @app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
 async def delete_welcome(_, m: Message):
-	await app.private(m)
+	if await app.private(m)
+		return
+
 	try:
 		await app.send_edit(m, "Getting welcome message of this group . . .")
 		data = app.get_welcome(str(m.chat.id))
