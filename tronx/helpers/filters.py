@@ -80,7 +80,7 @@ def regex(
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	prefixes: Union[str, List[str]],
+	prefixes: Union[str, List[str]] = [],
 	case_sensitive: bool = True, 
 	allow: list = []
 	):
