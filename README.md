@@ -29,19 +29,19 @@
         <b>• Necessary vars</b>
     </summary>
 <br></br>
-<p>1. API_ID</p>
+<p><blockquote>API_ID</blockquote></p>
 
-<p>2. API_HASH</p>
+<p><blockquote>API_HASH</blockquote></p>
 
-<p>3. SESSION</p>
+<p><blockquote>SESSION</blockquote></p>
 
-<p>4. PREFIX</p>
+<p><blockquote>PREFIX</blockquote></p>
 
-<p>5. LOG_CHAT</p>
+<p><blockquote>LOG_CHAT</blockquote></p>
 
-<p>6. TIME_ZONE</p>
+<p><blockquote>TIME_ZONE</blockquote></p>
 
-<p>7. TOKEN</p>
+<p><blockquote>TOKEN</blockquote></p>
 
 </details>
 
