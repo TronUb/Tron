@@ -622,12 +622,12 @@ class Functions(object):
 		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
-			if hasattr(message, x):
-				if hasattr(message, "caption"):
+			if message and message[x]:
+				if message["caption"]:
 					return {"data":(message[x]).file_id, "caption":message.caption, "type":x}
 				else:
 					return {"data":(messsge[x]).file_id, "caption":None, "type":x}
-			elif hasattr(message, "text"):
+			elif message["text"]:
 				return {"data":messsge.text, "caption":None, "type":"text"}
 
 
@@ -769,7 +769,7 @@ class Functions(object):
 		if display_module:
 			data = sorted(bin)
 			for x in data:
-				self.log.info(x + " Loaded !")
+				print(x + " Loaded !")
 		return count
 
 
