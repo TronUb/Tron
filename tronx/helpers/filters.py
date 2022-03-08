@@ -34,6 +34,13 @@ def regex(
 			if update.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
 				return False
 
+			# allow some specific commands to sudos
+			if update.from_user and update.from_user.id in client.SudoUsers():
+				if update.text or update.caption and not "full" in client.SudoCmds():
+					for x in pattern.split(): # list of texts
+						if not x in client.SudoCmds():
+							return False
+
 		# work only for -> bot owner if not sudo
 		elif not "sudo" in allow:
 			if update.from_user and not update.from_user.is_self:
