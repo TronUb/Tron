@@ -18,10 +18,6 @@ from pyrogram.types import (
 	ReplyKeyboardMarkup, 
 	Update
 )
-from config import Config
-from tronx.database.postgres.dv_sql import DVSQL 
-
-dv = DVSQL()
 
 
 # custom regex filter
@@ -80,16 +76,6 @@ def regex(
 
 
 
-def MyPrefix():
-	"""Multiple prefix support function"""
-	return dv.getdv("PREFIX").split() or Config.PREFIX.split() or "."
-
-def SudoCmds():
-	"""commands which are in this variable will work for sudo users, `full` to allow all commands"""
-	return dv.getdv("SUDO_CMDS").split() or []
-
-
-
 
 # custom command filter
 def gen(
@@ -123,9 +109,9 @@ def gen(
 
 			# allow some specific commands to sudos
 			if message.from_user and message.from_user.id in client.SudoUsers():
-				if not "full" in SudoCmds():
+				if not "full" in client.SudoCmds():
 					for x in raw_commands:
-						if not x in SudoCmds():
+						if not x in client.SudoCmds():
 							return False
 
 		# work only for -> bot owner if not sudo
@@ -147,6 +133,8 @@ def gen(
 		if not "edited" in allow:
 			if message.edit_date: 
 				return False
+
+		flt.prefixes = client.MyPrefix() # workaround
 
 		for prefix in flt.prefixes:
 			if not text.startswith(prefix):
