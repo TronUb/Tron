@@ -87,7 +87,7 @@ async def getnote_handler(_, m: Message):
 		if not getnotes:
 			return await app.send_edit(m, "This note does not exist !")
 
-		msg_id = reply.message_id reply else None
+		msg_id = reply.message_id if reply else None
 
 		if getnotes['type'] == app.TEXT:
 			teks, button = app.ParseButton(getnotes.get('value'))
