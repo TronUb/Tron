@@ -54,6 +54,7 @@ async def send_warn(m: Message, user):
 			pic,
 			caption=text
 		)
+		app.set_msgid(user, msg.message_id)
 		return True
 	elif not pic:
 		msg = await app.send_message(
@@ -61,11 +62,12 @@ async def send_warn(m: Message, user):
 			text,
 			disable_web_page_preview=True
 			)
+		app.set_msgid(user, msg.message_id)
 		return True
 	else:
 		return print("The bot didn't send pmpermit warning message.")
 		return False
-	app.set_msgid(user, msg.message_id)
+
 
 
 
