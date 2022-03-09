@@ -1,19 +1,15 @@
-from .variables import Variables
+from .variables import Containers
 from .functions import Functions
 from .decorators import Decorators
-from .strings import Strings
-from .utilities import Utilities
 from .datavars import DataVars
 from .filters import *
 
 
 
 class Helpers(
-	Variables,
+	Containers,
 	Functions,
 	Decorators,
-	Strings,
-	Utilities,
 	DataVars
 ):
 	pass
