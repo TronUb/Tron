@@ -5,7 +5,7 @@ from pyrogram.errors import MessageNotModified
 
 
 
-class Decorators(object):
+class AlertUser(object):
 	def alert_user(self, func):
 		async def wrapper(_, cb: CallbackQuery):
 			if cb.from_user and not (cb.from_user.id == self.id or cb.from_user.id in self.SudoUsers()):
