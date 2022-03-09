@@ -1,1 +1,1 @@
-import os
+from .methods import Methods
