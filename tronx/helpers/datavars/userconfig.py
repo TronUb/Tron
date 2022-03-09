@@ -1,4 +1,4 @@
-class User(object):
+class UserConfig(object):
 	def UserName(self):
 		"""returns name of user"""
 		return self.getdv("USER_NAME") or self.USER_NAME or self.name or None

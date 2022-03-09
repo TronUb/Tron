@@ -16,7 +16,7 @@ from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
 
 
-class Functions(object):
+class RawFunctions(object):
 	async def aexec(self, m, code):
 		"""
 		params:

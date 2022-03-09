@@ -4,7 +4,7 @@ import platform
 import logging 
 from config import Config
 from telegraph import Telegraph
-from tronx.methods import Methods
+from tronx.pyrogram.methods import Methods
 from pyrogram import __version__ as pyro_version
 from tronx.database import Database
 from tronx.helpers import Helpers

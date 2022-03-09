@@ -1,4 +1,4 @@
-class Others(object):
+class OtherConfig(object):
 	def NoLoad(self):
 		""" Get your No load module list """
 		noloadvar = self.getdv("NO_LOAD")

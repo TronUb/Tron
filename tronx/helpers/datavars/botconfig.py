@@ -3,7 +3,7 @@ from pyrogram.types import Message
 
 
 
-class Bot(object):
+class BotConfig(object):
 	def BotName(self):
 		"""Get your bot name"""
 		return self.getdv("BOT_NAME") or self.BOT_NAME or self.bot.name or None
