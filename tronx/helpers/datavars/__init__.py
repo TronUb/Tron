@@ -1,6 +1,6 @@
-from botconfig import BotConfig
-from otherconfig import OtherConfig
-from userconfig import UserConfig
+from .botconfig import BotConfig
+from .otherconfig import OtherConfig
+from .userconfig import UserConfig
 
 
 
