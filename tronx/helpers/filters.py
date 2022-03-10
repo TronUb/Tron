@@ -104,26 +104,31 @@ def gen(
 		raw_commands = commands if isinstance(commands, list) else list(commands)
 
 		text = message.text or message.caption
-		message.command = None
+		message.command = text.split()
+		is_sudo = message.from_user.id in client.SudoUsers()
+		sudo_cmds = client.SudoCmds()
+		is_owner = message.from_user.is_self
+		sudo_full = "full" in sudo_cmds
+		flt.prefixes = client.MyPrefix() # workaround
 
 		if not text:
 			return False
 
 		# work for -> sudo & bot owner if sudo
 		if "sudo" in allow:
-			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
+			if not (is_owner or is_sudo):
 				return False
 
 			# allow some specific commands to sudos
-			if message.from_user and message.from_user.id in client.SudoUsers():
-				if not "full" in client.SudoCmds():
+			if is_sudo:
+				if not sudo_full:
 					for x in raw_commands:
-						if not x in client.SudoCmds():
+						if not x in sudo_cmds:
 							return False
 
 		# work only for -> bot owner if not sudo
 		elif not "sudo" in allow:
-			if message.from_user and not message.from_user.is_self:
+			if is_owner:
 				return False
 
 		# work for -> forwarded message
@@ -141,7 +146,6 @@ def gen(
 			if message.edit_date: 
 				return False
 
-		flt.prefixes = client.MyPrefix() # workaround
 
 		for prefix in flt.prefixes:
 			if not text.startswith(prefix):
