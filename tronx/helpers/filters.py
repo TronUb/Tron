@@ -101,72 +101,41 @@ def gen(
 		global username, raw_commands
 
 		username = ""
-		raw_commands = commands if isinstance(commands, list) else list(commands)
 
 		text = message.text or message.caption
-		message.command = text.split()
-		is_sudo = message.from_user.id in client.SudoUsers()
-		sudo_cmds = client.SudoCmds()
-		is_owner = message.from_user.is_self
-		sudo_full = "full" in sudo_cmds
-		flt.prefixes = client.MyPrefix() # workaround
+		message.command = None
+		user = message.from_user if message.from_user else None
+		message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else "unknown" 
 
-		if not text:
+		if message_owner == "unknown":
 			return False
 
-		# work for -> sudo & bot owner if sudo
-		if "sudo" in allow:
-			if not (is_owner or is_sudo):
-				return False
-
-			# allow some specific commands to sudos
-			if is_sudo:
-				if not sudo_full:
-					for x in raw_commands:
-						if not x in sudo_cmds:
-							return False
-
-		# work only for -> bot owner if not sudo
-		elif not "sudo" in allow:
-			if is_owner:
-				return False
-
-		# work for -> forwarded message
 		if not "forward" in allow:
-			if message.forward_date: 
-				return False
+			if message.forward_date:
+				return
 
-		# work for -> messages in channel
 		if not "channel" in allow:
-			if message.chat.type == "channel": 
-				return False
+			if message.chat.type == "channel":
+				return
 
-		# work for -> edited message
 		if not "edited" in allow:
-			if message.edit_date: 
-				return False
+			if message.edit_date:
+				return
 
+
+		flt.prefixes = client.MyPrefix() # workaround
 
 		for prefix in flt.prefixes:
 			if not text.startswith(prefix):
 				continue
 
-			without_prefix = text[len(prefix):]
-
-			username = None
-
 			for cmd in flt.commands:
-				if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
-					flags=re.IGNORECASE if not flt.case_sensitive else 0):
-					continue
+				if re.match(rf"^\b{cmd}\b", text[len(prefix):]):
+					if message_owner == "sudo" and client.SudoCmds():
+						if not cmd in client.SudoCmds():
+							return False
+					return True
 
-				without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
-
-				message.command = [cmd] + [
-					re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
-					for m in command_re.finditer(without_command)
-				]
-				return True
 		return False
 
 	commands = commands if isinstance(commands, list) else [commands]
@@ -183,5 +152,4 @@ def gen(
 		prefixes=prefixes,
 		case_sensitive=case_sensitive
 	)
-
 
