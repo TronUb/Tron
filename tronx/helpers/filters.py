@@ -110,6 +110,19 @@ def gen(
 		if message_owner == "unknown":
 			return False
 
+		if not "forward" in allow:
+			if message.forward_date:
+				return
+
+		if not "channel" in allow:
+			if message.chat.type == "channel":
+				return
+
+		if not "edited" in allow:
+			if message.edit_date:
+				return
+
+
 		flt.prefixes = client.MyPrefix() # workaround
 
 		for prefix in flt.prefixes:
