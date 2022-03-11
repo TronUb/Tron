@@ -118,7 +118,7 @@ def gen(
 
 			for cmd in flt.commands:
 				if re.match(rf"^\b{cmd}\b", text[len(prefix):]):
-					if message_owner == "sudo" and client.SudoUsers():
+					if message_owner == "sudo" and client.SudoCmds():
 						if not cmd in client.SudoCmds():
 							return False
 					return True
