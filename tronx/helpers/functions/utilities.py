@@ -588,3 +588,17 @@ class Utilities(AioHttp):
 	def ChatType(self, m: Message):
 		return m.chat.type
 
+# get formated text (html)
+	def FormatText(text, format=[]): 
+		for x in format:
+			format_dict = {
+			"mono" : f"<code>{text}</code>", 
+			"bold" : f"<b>{text}</b>",
+			"italic" : f"<i>{text}</i>",
+			"strike" : f"<s>{text}</s>",
+			"underline" : f"<u>{text}</u>"
+			}
+			text = format_dict.get(x)
+		return text
+
+
