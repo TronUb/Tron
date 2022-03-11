@@ -156,7 +156,12 @@ class RawFunctions(object):
 		return True
 
 
-	async def sleep(self, m: Message, sec, delme=False):
+	async def sleep(
+		self, 
+		message: Message, 
+		sec: int=0, 
+		delmsg=False
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -172,12 +177,16 @@ class RawFunctions(object):
 		"""
 
 		await asyncio.sleep(sec)
-		if delme and m.from_user.is_self:
-			m = await m.delete()
-		return m
+		if delmsg and message.from_user.is_self:
+			msg = await messages.delete()
+		return msg
 
 
-	async def delete(self, m: Message, sec: int = 0):
+	async def delete_message(
+		self, 
+		message: Message, 
+		sec: int=0
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -192,7 +201,7 @@ class RawFunctions(object):
 		"""
 
 		if sec <= 600: # 10 min
-			asyncio.create_task(self.sleep(m, sec=sec, delme=True))
+			asyncio.create_task(self.sleep(message, sec=sec, delmsg=True))
 			return True
 		else:
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
@@ -229,17 +238,18 @@ class RawFunctions(object):
 
 	async def send_edit(
 		self,
-		m: Message, 
-		text, 
+		message: Message, 
+		text: str, 
 		parse_mode="combined", 
 		disable_web_page_preview=False,
 		delme : int=0,
-		text_type: list=[],
-		mono=False,
-		bold=False,
-		italic=False,
-		strike=False,
-		underline=False,
+		text_type: list=[]
+		disable_notification: bool=False,
+		reply_to_message_id: int=0,
+		schedule_date: int=0,
+		protect_content: bool=False,
+		reply_markup=None,
+		entities=None
 		):
 		"""
 		params: 
@@ -264,48 +274,40 @@ class RawFunctions(object):
 				mono=True
 			)
 		"""
+		msg = None
 
-		formats = [mono, bold, italic, strike, underline]
+		if message.from_user.is_self:
+			msg = await message.edit(
+				text=self.FormatText(text, format=text_type),
+				parse_mode=parse_mode,
+				disable_web_page_preview=disable_web_page_preview,
+				reply_markup=reply_markup,
+				entities=entities
+			)
 
-		format_dict = {
-			mono : f"<code>{text}</code>", 
-			bold : f"<b>{text}</b>",
-			italic : f"<i>{text}</i>",
-			strike : f"<s>{text}</s>",
-			underline : f"<u>{text}</u>"
-		}
-
-		edited = False
-
-		for x in formats:
-			if x:
-				m = await self.edit_text(
-					m, 
-					format_dict[x],
-					disable_web_page_preview=disable_web_page_preview,
-					parse_mode=parse_mode
-				)
-				edited = True
-				break
-
-		if not edited:
-			m = await self.edit_text(
-				m, 
-				text, 
+		else:
+			msg = await self.send_message(
+				chat_id=message.chat.id, 
+				text=FormatText(text, format=text_type),
 				disable_web_page_preview=disable_web_page_preview, 
-				parse_mode=parse_mode
+				parse_mode=parse_mode,
+				reply_to_message_id=reply_to_message_id,
+				schedule_date=schedule_date,
+				protect_content=protect_content,
+				reply_markup=reply_markup,
+				entities=entities
 			)
 
 		try:
 			if delme > 0:
-				asyncio.create_task(self.sleep(m, sec=delme, delme=True))
+				asyncio.create_task(self.sleep(message, sec=delme, delmsg=True))
 
 		except Exception as e:
 			await self.error(m, e)
-		return m
+		return msg
 
 
-	async def private(self, m: Message):
+	async def check_private(self, m: Message):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -343,7 +345,7 @@ class RawFunctions(object):
 		"""
 
 		text_length = len(m.text.split())
-		return text_length if bool(text_length) else None
+		return text_length if bool(text_length) is True else None
 
 
 	def textlen(self, m: Message):
