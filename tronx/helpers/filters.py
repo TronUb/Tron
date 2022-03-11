@@ -97,10 +97,6 @@ def gen(
 	# modified func of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
-		# Username shared among all commands; used for mention commands, e.g.: /start@username
-		global username, raw_commands
-
-		username = ""
 
 		text = message.text or message.caption
 		message.command = None
@@ -110,17 +106,17 @@ def gen(
 		if message_owner == "unknown":
 			return False
 
-		if not "forward" in allow:
-			if message.forward_date:
-				return
-
 		if not "channel" in allow:
 			if message.chat.type == "channel":
-				return
+				return False
+
+		if not "forward" in allow:
+			if message.forward_date:
+				return False
 
 		if not "edited" in allow:
 			if message.edit_date:
-				return
+				return False
 
 
 		flt.prefixes = client.MyPrefix() # workaround
@@ -131,6 +127,7 @@ def gen(
 
 			for cmd in flt.commands:
 				if re.match(rf"^\b{cmd}\b", text[len(prefix):]):
+					message.command = text.split()
 					if message_owner == "sudo" and client.SudoCmds():
 						if not cmd in client.SudoCmds():
 							return False
