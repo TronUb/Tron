@@ -105,13 +105,16 @@ def gen(
 		text = message.text or message.caption
 		message.command = None
 		is_owner = message.from_user.is_self
-		is_sudo = message.from_user.id in client.SudoUsers()
+		is_sudo = True if message.from_user.id in client.SudoUsers() else False
 
 		if not text:
 			return False
 
 		if not (is_owner or is_sudo):
 			return False
+		#elif not is_sudo:
+		#	return False
+
 
 		flt.prefixes = client.MyPrefix() # workaround
 
