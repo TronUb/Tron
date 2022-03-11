@@ -110,10 +110,10 @@ def gen(
 		if not text:
 			return False
 
-		if not (is_owner or is_sudo):
+		if not is_owner:
 			return False
-		#elif not is_sudo:
-		#	return False
+		elif not is_sudo:
+			return False
 
 
 		flt.prefixes = client.MyPrefix() # workaround
