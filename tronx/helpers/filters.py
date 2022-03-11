@@ -108,7 +108,7 @@ def gen(
 		message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else "unknown" 
 
 		if message_owner == "unknown":
-			return false
+			return False
 
 		flt.prefixes = client.MyPrefix() # workaround
 
@@ -116,22 +116,10 @@ def gen(
 			if not text.startswith(prefix):
 				continue
 
-			without_prefix = text[len(prefix):]
-
-			username = None
-
 			for cmd in flt.commands:
-				if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
-					flags=re.IGNORECASE if not flt.case_sensitive else 0):
-					continue
+				if re.match(rf"^\b{cmd}\b", text[len(prefix):]):
+					return True
 
-				without_command = re.sub(rf"{cmd}(?:@?{username})?\s?", "", without_prefix, count=1)
-
-				message.command = [cmd] + [
-					re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
-					for m in command_re.finditer(without_command)
-				]
-				return True
 		return False
 
 	commands = commands if isinstance(commands, list) else [commands]
