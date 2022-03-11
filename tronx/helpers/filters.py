@@ -101,7 +101,6 @@ def gen(
 		global username, raw_commands
 
 		username = ""
-		raw_commands = commands if isinstance(commands, list) else list(commands)
 
 		text = message.text or message.caption
 		message.command = None
@@ -109,37 +108,8 @@ def gen(
 		if not text:
 			return False
 
-		# work for -> sudo & bot owner if sudo
-		if "sudo" in allow:
-			if message.from_user and not (message.from_user.is_self or message.from_user.id in client.SudoUsers()):
-				return False
-
-			# allow some specific commands to sudos
-			if message.from_user and message.from_user.id in client.SudoUsers():
-				if not "full" in client.SudoCmds():
-					for x in raw_commands:
-						if not x in client.SudoCmds():
-							return False
-
-		# work only for -> bot owner if not sudo
-		elif not "sudo" in allow:
-			if message.from_user and not message.from_user.is_self:
-				return False
-
-		# work for -> forwarded message
-		if not "forward" in allow:
-			if message.forward_date: 
-				return False
-
-		# work for -> messages in channel
-		if not "channel" in allow:
-			if message.chat.type == "channel": 
-				return False
-
-		# work for -> edited message
-		if not "edited" in allow:
-			if message.edit_date: 
-				return False
+		if message.from_user and not message.from_user.is_self:
+			return False
 
 		flt.prefixes = client.MyPrefix() # workaround
 
