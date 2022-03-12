@@ -589,7 +589,7 @@ class Utilities(AioHttp):
 		return m.chat.type
 
 # get formated text (html)
-	def FormatText(text, format=[]): 
+	def FormatText(self, text, format=[]): 
 		for x in format:
 			format_dict = {
 			"mono" : f"<code>{text}</code>", 
