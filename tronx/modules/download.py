@@ -52,7 +52,7 @@ async def list_directories(_, m: Message):
 		location += "/"
 	OUTPUT = f"Files in `{location}`:\n\n"
 
-	m = await app.send_edit(m, "Fetching files . . .", mono=True)
+	m = await app.send_edit(m, "Fetching files . . .", text_type=["mono"])
 
 	try:
 		files = os.listdir(location)
@@ -99,7 +99,7 @@ async def download_media(_, m: Message):
 			start_t = datetime.now()
 			c_time = time.time()
 
-			m = await app.send_edit(m, "• Downloading . . .", mono=True)
+			m = await app.send_edit(m, "• Downloading . . .", text_type=["mono"])
 			location = await app.download_media(
 				message=reply,
 				progress=app.ProgressForPyrogram,
@@ -110,7 +110,7 @@ async def download_media(_, m: Message):
 			duration = app.GetReadableTime((end_t - start_t).seconds)
 
 			if location is None:
-				await app.send_edit(m, "Download failed, please try again.", mono=True)
+				await app.send_edit(m, "Download failed, please try again.", text_type=["mono"])
 			else:
 				await app.send_edit(m, f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`",)
 		except Exception as e:
@@ -169,7 +169,7 @@ async def download_media(_, m: Message):
 				except Exception as e:
 					app.log.info(str(e))
 					pass
-			m = await app.send_edit(m, "• Downloading . . .", mono=True)
+			m = await app.send_edit(m, "• Downloading . . .", text_type=["mono"])
 			if os.path.exists(download_file_path):
 				end_t = datetime.now()
 				ms = (end_t - start_t).seconds
@@ -184,7 +184,7 @@ async def download_media(_, m: Message):
 				f"Failed Download!\n\n{exc}"
 				)
 	else:
-		await app.send_edit(m, "Reply to a Telegram Media to download it to local server.", mono=True, delme=2)
+		await app.send_edit(m, "Reply to a Telegram Media to download it to local server.", text_type=["mono"], delme=2)
 
 
 
@@ -195,7 +195,7 @@ async def upload_as_document(_, m: Message):
 	if app.long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
-			m = await app.send_edit(m, "Uploading . . .", mono=True)
+			m = await app.send_edit(m, "Uploading . . .", text_type=["mono"])
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
@@ -214,7 +214,7 @@ async def upload_as_document(_, m: Message):
 			ms = (end_t - start_t).seconds
 			await app.send_edit(m, f"Uploaded in `{ms}` seconds.", delme=2)
 		else:
-			await app.send_edit(m, "404: directory not found . . .",mono=True, delme=5)
+			await app.send_edit(m, "404: directory not found . . .",text_type=["mono"], delme=5)
 	else:
 		await app.send_edit(m, f"`{app.PREFIX}upload [file path ]` to upload to current Telegram chat", delme=4)
 
@@ -225,7 +225,7 @@ async def upload_as_document(_, m: Message):
 @app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
 async def batch_upload(_, m: Message):
 	if app.long(m) == 1:
-		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, mono=True)
+		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, text_type=["mono"])
 
 	elif app.long(m) > 1:
 		temp_dir = m.command[1]

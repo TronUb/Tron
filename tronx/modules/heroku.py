@@ -63,7 +63,7 @@ async def turn_off_dyno(_, m: Message):
 		await app.send_edit(
 			m, 
 			"Dynos are truned off, if you want turn them on manually from heroku.com",
-			mono=True
+			text_type=["mono"]
 		)
 	else:
 		sys.exit(0)
@@ -76,7 +76,7 @@ async def turn_off_dyno(_, m: Message):
 async def restart_app(_, m: Message):
 	await not_heroku(m)
 	try:
-		m = await app.send_edit(m, "Restarting . . .", mono=True)
+		m = await app.send_edit(m, "Restarting . . .", text_type=["mono"])
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		heroku_app = Heroku.apps()[app.HEROKU_APP_NAME]
 		restart = heroku_app.restart()
@@ -84,13 +84,13 @@ async def restart_app(_, m: Message):
 			return await app.send_edit(
 				m, 
 				"Restarted . . .!\nPlease wait for 3 min or more to restart userbot . . .", 
-				mono=True
+				text_type=["mono"]
 			)
 		else:
 			return await app.send_edit(
 				m, 
 				"Failed to restart userbot, try again later . . .",
-				mono=True
+				text_type=["mono"]
 			)
 	except Exception as e:
 		await app.error(m, e)
@@ -104,7 +104,7 @@ async def dynostats(_, m: Message):
 	await not_heroku(m)
 
 	Heroku = heroku3.from_key(app.HEROKU_API_KEY)
-	m = await app.send_edit(m, "Checking usage . . .", mono=True)
+	m = await app.send_edit(m, "Checking usage . . .", text_type=["mono"])
 	u_id = Heroku.account().id
 	try:
 		if app.HEROKU_API_KEY is not None:
@@ -119,7 +119,7 @@ async def dynostats(_, m: Message):
 				return await app.send_edit(
 					m, 
 					"Error: something bad happened`\n\n" f"> {r.reason}\n",
-					mono=True
+					text_type=["mono"]
 				)
 			result = r.json()
 			quota = result["account_quota"]
@@ -168,7 +168,7 @@ async def heroku_vars(_, m: Message):
 		m = await app.send_edit(
 			m, 
 			"Fetching all vars from Heroku . . .", 
-			mono=True
+			text_type=["mono"]
 			)
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.apps()[app.HEROKU_APP_NAME]
@@ -226,7 +226,7 @@ async def setvar(_, m: Message):
 				await app.send_edit(
 					m,
 					"Something went wrong, try again later !",
-					mono=True
+					text_type=["mono"]
 				)
 		except Exception as e:
 			await app.error(m, e)
@@ -258,7 +258,7 @@ async def getvar(_, m: Message):
 				await app.send_edit(
 					m, 
 					"Failed to get heroku key . . .",
-					mono=True
+					text_type=["mono"]
 				)
 		except Exception as e:
 			await app.error(m, e)
@@ -274,14 +274,14 @@ async def delvar(_, m: Message):
 		return await app.send_edit(
 			m, 
 			f"{app.PREFIX}delvar [key name]", 
-			mono=True
+			text_type=["mono"]
 		)
 	elif app.long(m) >= 2:
 		m = await app.send_edit(
 			m, 
 			"Verifying var in heroku config vars . . .", 
 			delme=3, 
-			mono=True
+			text_type=["mono"]
 		)
 
 		key = m.command[1]
@@ -318,7 +318,7 @@ async def delvar(_, m: Message):
 @app.on_message(gen("logs", allow = ["sudo"]))
 async def logs(_, m: Message):
 	await not_heroku(m)
-	m = await app.send_edit(m, "⏳ • hold on . . .", mono=True)
+	m = await app.send_edit(m, "⏳ • hold on . . .", text_type=["mono"])
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)
@@ -327,7 +327,7 @@ async def logs(_, m: Message):
 			m, 
 			"Please try again later !", 
 			delme=3,
-			mono=True
+			text_type=["mono"]
 		)
 	data = zen.get_log()
 	if data:
@@ -353,7 +353,7 @@ async def logs(_, m: Message):
 @app.on_message(gen(["textlogs", "tlogs"], allow = ["sudo"]))
 async def logs_in_text(_, m: Message):
 	await not_heroku(m)
-	m = await app.send_edit(m, "⏳ • hold on . . . ", mono=True)
+	m = await app.send_edit(m, "⏳ • hold on . . . ", text_type=["mono"])
 	try:
 		Heroku = heroku3.from_key(app.HEROKU_API_KEY)
 		zen = Heroku.app(app.HEROKU_APP_NAME)
@@ -362,7 +362,7 @@ async def logs_in_text(_, m: Message):
 			m, 
 			"Please try again later !", 
 			delme=3,
-			mono=True
+			text_type=["mono"]
 		)
 	data = zen.get_log()
 	if data:

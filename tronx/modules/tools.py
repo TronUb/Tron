@@ -70,7 +70,7 @@ async def get_word_links(_, m: Message):
 		else:
 			info = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
-			m = await app.send_edit(m, "Finding word in this chat . . .", mono=True)
+			m = await app.send_edit(m, "Finding word in this chat . . .", text_type=["mono"])
 			for words in info:
 				if query in words.text:
 					links.append(words.link)
@@ -132,9 +132,9 @@ async def json_of_msg(_, m: Message):
 	data = str(reply) if reply else str(m)
 
 	try:
-		await app.send_edit(m, data, mono=True)
+		await app.send_edit(m, data, text_type=["mono"])
 	except Exception: # message too long
-		m = await app.send_edit(m, "Sending file . . .", mono=True)
+		m = await app.send_edit(m, "Sending file . . .", text_type=["mono"])
 		await app.create_file(m, "json.txt", data)
 		if m.from_user.is_self:
 			await m.delete()
@@ -166,9 +166,9 @@ async def get_inlinelinks(app, m: Message):
 		if msg:
 			await app.send_edit(m, f"`{msg}`")
 		else:
-			await app.send_edit(m, "There are no links in this message . . .", mono=True)
+			await app.send_edit(m, "There are no links in this message . . .", text_type=["mono"])
 	else:
-		await app.send_edit(m, "Try this command on url button message to get info of the button . . .", mono=True)
+		await app.send_edit(m, "Try this command on url button message to get info of the button . . .", text_type=["mono"])
 
 
 
@@ -178,7 +178,7 @@ async def get_message_links(_, m: Message):
 	reply = m.reply_to_message
 	message = reply if reply else m
 
-	m = await app.send_edit(m, "Generating message link . . .", mono=True)
+	m = await app.send_edit(m, "Generating message link . . .", text_type=["mono"])
 	await app.send_edit(m, message.link)
 
 
@@ -208,10 +208,10 @@ async def forward_msgs(_, m: Message):
 			await m.forward(m.text if m.text else "None")
 
 		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Sir reply to yours or someone's message. to forward.", mono=True, delme=4)
+			await app.send_edit(m, "Sir reply to yours or someone's message. to forward.", text_type=["mono"], delme=4)
 
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=4)
+			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=4)
 
 		if m.from_user.is_self:
 			await m.delete()
@@ -225,7 +225,7 @@ async def forward_msgs(_, m: Message):
 @app.on_message(gen(["spt", "speed", "speedtest"], allow = ["sudo", "channel"]))
 async def speed_tests(app, m: Message):
 	if app.long(m) == 1:
-		await app.send_edit(m, "Testing speed . . .", mono=True)
+		await app.send_edit(m, "Testing speed . . .", text_type=["mono"])
 		test = speedtest.Speedtest()
 		test.get_best_server()
 		test.download()
@@ -241,7 +241,7 @@ async def speed_tests(app, m: Message):
 		if teks:
 			await app.send_edit(m, teks)
 		else:
-			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
+			await app.send_edit(m, "Something went wrong !", text_type=["mono"], delme=5)
 	elif app.long(m) > 1 and "pic" in m.command[1]:
 		m = await app.send_edit(m, "Calculating Speed (pic) . . .")
 
@@ -270,7 +270,7 @@ async def speed_tests(app, m: Message):
 			)
 			await m.delete()
 		else:
-			await app.send_edit(m, "Something went wrong !", mono=True, delme=5)
+			await app.send_edit(m, "Something went wrong !", text_type=["mono"], delme=5)
 
 
 
@@ -292,7 +292,7 @@ async def common_chats(_, m):
 			else:
 				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "`None`")
 		else:
-			await app.send_edit(m, "Please reply to someone . . .", mono=True, delme=4)
+			await app.send_edit(m, "Please reply to someone . . .", text_type=["mono"], delme=4)
 	except Exception as e:
 		await app.error(m, e)
 

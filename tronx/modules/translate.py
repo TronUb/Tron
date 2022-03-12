@@ -38,7 +38,7 @@ async def translate(_, m: Message):
 		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values())
 
 		if not lang in languages:
-			return await app.send_edit(m, "Bot doesn't support this language code, please try different one.", mono=True, delme=5)
+			return await app.send_edit(m, "Bot doesn't support this language code, please try different one.", text_type=["mono"], delme=5)
 
 		if (reply and reply.text):
 			tdata = await translate(m, lang=lang, text=reply.text)
@@ -46,12 +46,12 @@ async def translate(_, m: Message):
 
 		elif not reply and len(m.text) <= 4096:
 			if app.long(m) <= 2:
-				return await app.send_edit(m, "Give me the language code with text.", mono=True, delme=3)
+				return await app.send_edit(m, "Give me the language code with text.", text_type=["mono"], delme=3)
 			text = m.text.split(None, 2)[2]
 			tdata = await translate(m, lang=lang, text=text)
 			await app.send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{tdata}`")
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=5)
+			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=5)
 	except Exception as e:
 		await app.error(m, e)
 

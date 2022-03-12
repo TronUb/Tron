@@ -28,14 +28,15 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("zombies", allow = ["sudo", "channel"]))
 async def remove_deleted(_, m: Message):
-	await app.private(m)
+	if await app.check_private(m):
+		return
 
 	temp_count = 0
 	admin_count = 0
 	count = 0
 
 	if app.long(m) != 2:
-		m = await app.send_edit(m, "Checking deleted accounts . . .", mono=True)
+		m = await app.send_edit(m, "Checking deleted accounts . . .", text_type=["mono"])
 
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
@@ -44,10 +45,10 @@ async def remove_deleted(_, m: Message):
 		if temp_count > 0:
 			await app.send_edit(m, f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.PREFIX}zombies clean` to remove them from group.")
 		else:
-			await app.send_edit(m, "No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, mono=True)
+			await app.send_edit(m, "No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, text_type=["mono"])
 
 	elif app.long(m) == 2 and m.command[1] == "clean":
-		m = await app.send_edit(m, "Cleaning deleted accounts . . .", mono=True)
+		m = await app.send_edit(m, "Cleaning deleted accounts . . .", text_type=["mono"])
 
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
@@ -65,7 +66,7 @@ async def remove_deleted(_, m: Message):
 	elif app.long(m) == 2 and m.command[1] != "clean":
 		await app.send_edit(m, f"Check `{app.PREFIX}help zombies` to see how it works !")
 	else:
-		await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
+		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=3)
 
 
 

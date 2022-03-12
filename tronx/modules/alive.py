@@ -28,7 +28,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("alive", allow = ["sudo"]), group=0)
 async def simple_alive(_, m: Message):
 	try:
-		m = await app.send_edit(m, ". . .", mono=True)
+		m = await app.send_edit(m, ". . .", text_type=["mono"])
 
 		alive_msg = f"\n"
 		if app.UserBio():
@@ -71,11 +71,11 @@ async def simple_alive(_, m: Message):
 
 @app.on_message(gen("ialive", allow = ["sudo"]), group=1)
 async def inline_alive(_, m: Message):
-	m = await app.send_edit(m, ". . .", mono=True)
+	m = await app.send_edit(m, ". . .", text_type=["mono"])
 	try:
 		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 	except BotInlineDisabled:
-		await app.send_edit(m, "Turning inline mode to on, wait . . .", mono=True)
+		await app.send_edit(m, "Turning inline mode to on, wait . . .", text_type=["mono"])
 		await app.toggle_inline(m)
 		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 
@@ -97,11 +97,11 @@ async def inline_alive(_, m: Message):
 @app.on_message(gen(["qt"], allow = ["sudo"]), group=2)
 async def inline_quote(_, m: Message):
 	try:
-		m = await app.send_edit(m,". . .", mono=True)
+		m = await app.send_edit(m,". . .", text_type=["mono"])
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 		except BotInlineDisabled:
-			await app.send_edit(m, "Turning inline mode on, wait . . .", mono=True)
+			await app.send_edit(m, "Turning inline mode on, wait . . .", text_type=["mono"])
 			await app.toggle_inline(m)
 			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 
@@ -115,7 +115,7 @@ async def inline_quote(_, m: Message):
 				)
 			await m.delete()
 		else:
-			await app.send_edit(m, "Please try again later !", delme=2, mono=True)
+			await app.send_edit(m, "Please try again later !", delme=2, text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
 

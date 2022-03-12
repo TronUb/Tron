@@ -29,7 +29,7 @@ app.CMD_HELP.update(
 async def media_info(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(m, "Please reply to some media to get media info . . .",mono=True)
+		return await app.send_edit(m, "Please reply to some media to get media info . . .",text_type=["mono"])
 
 	if (app.get_file_id(replied))[2] == "photo":
 		pie = replied.photo

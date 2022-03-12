@@ -52,20 +52,20 @@ async def kang(_, m: Message):
 			is_anim = True
 		elif replied.sticker:
 			if not replied.sticker.file_name:
-				return await app.send_edit(m, "Sticker has no Name !", mono=True)
+				return await app.send_edit(m, "Sticker has no Name !", text_type=["mono"])
 
 			emoji_ = replied.sticker.emoji
 			is_anim = replied.sticker.is_animated
 			if not replied.sticker.file_name.endswith(".tgs"):
 				resize = True
 		else:
-			return await app.send_edit(m, "Unsupported File !", mono=True)
+			return await app.send_edit(m, "Unsupported File !", text_type=["mono"])
 
-		await app.send_edit(m, f"{random.choice(KANGING_STR)}", mono=True)
+		await app.send_edit(m, f"{random.choice(KANGING_STR)}", text_type=["mono"])
 
 		photo = await app.download_media(message=replied)
 	else:
-		return await app.send_edit(m, "I can't kang that . . .", mono=True)
+		return await app.send_edit(m, "I can't kang that . . .", text_type=["mono"])
 
 	if photo:
 		args = m.command
@@ -160,7 +160,7 @@ async def kang(_, m: Message):
 			await asyncio.sleep(0.40)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", mono=True)
+				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", text_type=["mono"])
 
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
@@ -211,12 +211,12 @@ async def kang(_, m: Message):
 async def sticker_pack_info_(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(m, "I can't fetch info from nothing, can I ?!", mono=True)
+		return await app.send_edit(m, "I can't fetch info from nothing, can I ?!", text_type=["mono"])
 
 	if not replied.sticker:
-		return await app.send_edit(m, "Reply to a sticker to get the pack details.", mono=True)
+		return await app.send_edit(m, "Reply to a sticker to get the pack details.", text_type=["mono"])
 
-	await app.send_edit(m, "Fetching details of the sticker pack, please wait . . .", mono=True)
+	await app.send_edit(m, "Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
 	get_stickerset = await app.send(
 		GetStickerSet(
 			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)

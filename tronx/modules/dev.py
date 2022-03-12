@@ -39,7 +39,7 @@ async def evaluate(client, m: Message):
 	""" This function is made to execute python codes """
 
 	if app.textlen(m) > 4096:
-		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", mono=True, delme=4)
+		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
 	global reply, chat_id, chat_type
 
@@ -51,9 +51,9 @@ async def evaluate(client, m: Message):
 	try:
 		cmd = m.text.split(None, 1)[1]
 	except IndexError:
-		return await app.send_edit(m, "Give me some text (code) to execute . . .", mono=True, delme=3)
+		return await app.send_edit(m, "Give me some text (code) to execute . . .", text_type=["mono"], delme=3)
 
-	m = await app.send_edit(m, "Running . . .", mono=True)
+	m = await app.send_edit(m, "Running . . .", text_type=["mono"])
 
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
@@ -88,9 +88,9 @@ async def terminal(_, m: Message):
 		return await app.send_edit(m, "Use: `.term pip3 install colorama`", delme=5)
 
 	elif app.textlen(m) > 4096:
-		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", mono=True, delme=4)
+		return await send_edit(m, "Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
-	m = await app.send_edit(m, "Running . . .", mono=True)
+	m = await app.send_edit(m, "Running . . .", text_type=["mono"])
 	args = m.text.split(None, 1)
 	teks = args[1]
 	if "\n" in teks:

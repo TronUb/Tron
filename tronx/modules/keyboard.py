@@ -16,7 +16,7 @@ from tronx.helpers import (
 async def create_keyboard(_, m):
 	await m.delete()
 	if m.chat.type == "bot":
-		return await app.send_edit(m, "Sorry you can't use it here", mono=True)
+		return await app.send_edit(m, "Sorry you can't use it here", text_type=["mono"])
 	if app.long(m) >= 3:
 		await app.bot.send_message(
 			m.chat.id, 

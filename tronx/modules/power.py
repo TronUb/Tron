@@ -40,7 +40,7 @@ async def restart_userbot(_, m: Message):
 			"Restart completed !\nBot is alive now !"
 		)
 	except Exception as e:
-		await m.edit("Failed to restart userbot !", delme=2, mono=True)
+		await m.edit("Failed to restart userbot !", delme=2, text_type=["mono"])
 		await app.error(m, e)
 
 
@@ -57,7 +57,7 @@ async def sleep_userbot(_, m: Message):
 	if arg.isdigit():
 		cmd = int(arg)
 		if cmd > 86400:
-			return await app.send_edit(m, "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", mono=True, delme=3)
+			return await app.send_edit(m, "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", text_type=["mono"], delme=3)
 
 		format = {
 			cmd<60:f"{cmd} seconds", 
@@ -74,4 +74,4 @@ async def sleep_userbot(_, m: Message):
 		await app.send_edit(m, f"Sleeping for {suffix} . . .", delme=cmd)
 		time.sleep(cmd) 
 	else:
-		await app.send_edit(m, "Please give me a number not text . . .", delme=3, mono=True)
+		await app.send_edit(m, "Please give me a number not text . . .", delme=3, text_type=["mono"])

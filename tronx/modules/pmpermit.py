@@ -133,7 +133,7 @@ async def autoblock_handler(_, m: Message):
 					except PeerIdInvalid:
 						print(f"{user.first_name} was blocked in your pm for spamming.")
 				else:
-					await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", mono=True, delme=4)
+					await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", text_type=["mono"], delme=4)
 			else:
 				print("Something went wrong in pmpermit")
 	except Exception as e:
@@ -145,7 +145,7 @@ async def autoblock_handler(_, m: Message):
 @app.on_message(gen(["a", "approve"], allow = ["sudo"]), group=0)
 async def approve_handler(_, m: Message):
 	if m.chat.type == "bot":
-		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=4)
+		return await app.send_edit(m, "No need to approve innocent bots !", text_type=["mono"], delme=4)
 
 	reply = m.reply_to_message
 	cmd = m.command
@@ -159,21 +159,21 @@ async def approve_handler(_, m: Message):
 			user_id = reply.from_user.id
 	
 		elif not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Whom should i approve, piro ?", mono=True, delme=4)
+			return await app.send_edit(m, "Whom should i approve, piro ?", text_type=["mono"], delme=4)
 
 		elif not reply and app.long(m) > 1:
 			try:
 				user_data = await app.get_users(cmd[1])
 				user_id = user_data.id
 			except PeerIdInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
 			except UsernameNotOccupied:
-				return await app.send_edit(m, "No user like exists in telegram.", mono=True, delme=4)
+				return await app.send_edit(m, "No user like exists in telegram.", text_type=["mono"], delme=4)
 			except UsernameInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
 
 		else:
-			return await app.send_edit(m, "Something went wrong.", mono=True, delme=4)
+			return await app.send_edit(m, "Something went wrong.", text_type=["mono"], delme=4)
 	if user_data:
 		info = user_data
 	else:
@@ -189,7 +189,7 @@ async def approve_handler(_, m: Message):
 			await old_msg(m, user_id)
 
 	except Exception as e:
-		await app.send_edit(m, f"Something went wrong.", mono=True, delme=4)
+		await app.send_edit(m, f"Something went wrong.", text_type=["mono"], delme=4)
 		await app.error(m, e)
 
 
@@ -198,7 +198,7 @@ async def approve_handler(_, m: Message):
 @app.on_message(gen(["da", "disapprove"], allow = ["sudo"]), group=-2)
 async def diapprove_handler(_, m:Message):
 	if m.chat.type == "bot":
-		return await app.send_edit(m, "No need to approve innocent bots !", mono=True, delme=4)
+		return await app.send_edit(m, "No need to approve innocent bots !", text_type=["mono"], delme=4)
 
 	reply = m.reply_to_message
 	cmd = m.command
@@ -212,20 +212,20 @@ async def diapprove_handler(_, m:Message):
 			user_id = reply.from_user.id
 
 		elif not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Whom should i disapprove, piro ?", mono=True, delme=4)
+			return await app.send_edit(m, "Whom should i disapprove, piro ?", text_type=["mono"], delme=4)
 
 		elif not reply and app.long(m) > 1:
 			try:
 				user_data = await app.get_users(cmd[1])
 				user_id = user_data.id
 			except PeerIdInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
 			except UsernameNotOccupied:
-				return await app.send_edit(m, "This user doesn't exists in telegram.", mono=True, delme=4)
+				return await app.send_edit(m, "This user doesn't exists in telegram.", text_type=["mono"], delme=4)
 			except UsernameInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", mono=True, delme=4)
+				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
 		else:
-			return await app.send_edit(m, "Failed to disapprove user !", mono=True, delme=4)
+			return await app.send_edit(m, "Failed to disapprove user !", text_type=["mono"], delme=4)
 	if user_data:
 		info = user_data
 	else:
@@ -243,6 +243,6 @@ async def diapprove_handler(_, m:Message):
 		except PeerIdInvalid:
 			print(f"{info.first_name} has been disapproved for pm")
 	else:
-		return await app.send_edit(m, "Sorry there is no user id to disapprove.", mono=True, delme=4)
+		return await app.send_edit(m, "Sorry there is no user id to disapprove.", text_type=["mono"], delme=4)
 
 

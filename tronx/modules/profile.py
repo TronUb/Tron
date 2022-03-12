@@ -76,7 +76,7 @@ def FullName(user: User):
 async def whois(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
-	msg = await app.send_edit(m, "Processing . . .", mono=True)
+	msg = await app.send_edit(m, "Processing . . .", text_type=["mono"])
 
 	if reply and app.long(m) == 1:
 		get_user = reply.id
@@ -91,7 +91,7 @@ async def whois(_, m: Message):
 		if get_user:
 			user = await app.get_users(get_user)
 	except PeerIdInvalid:
-		return await app.send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", text_type=["mono"])
 
 	pfp = await app.get_profile_photos(user.id)
 	if not pfp:
@@ -128,7 +128,7 @@ async def whois(_, m: Message):
 
 @app.on_message(gen("id", allow = ["sudo"]))
 async def id(_, m: Message):
-	await app.send_edit(m, "Getting id . . .", mono=True)
+	await app.send_edit(m, "Getting id . . .", text_type=["mono"])
 	cmd = m.command
 	reply = m.reply_to_message
 
@@ -143,7 +143,7 @@ async def id(_, m: Message):
 		user = await app.get_users(get_user)
 		chat = await app.get_chat(m.chat.id)
 	except PeerIdInvalid:
-		return await app.send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", text_type=["mono"])
 
 	u_name = user.first_name if user.first_name else None
 	c_name = chat.first_name if chat.first_name else chat.title
@@ -161,7 +161,7 @@ async def mention_user(_, m: Message):
 	try:
 		user = await app.get_users(m.command[1])
 	except Exception as e:
-		await app.send_edit(m, "User not found !", mono=True)
+		await app.send_edit(m, "User not found !", text_type=["mono"])
 		return await app.error(m, e)
 
 	mention = men(user.id, " ".join(m.command[2:]))
@@ -172,7 +172,7 @@ async def mention_user(_, m: Message):
 
 @app.on_message(gen("uinfo", allow = ["sudo"]))
 async def get_full_user_info(_, m: Message):
-	msg = await app.send_edit(m, "scrapping info . . .", mono=True)
+	msg = await app.send_edit(m, "scrapping info . . .", text_type=["mono"])
 	reply = m.reply_to_message
 
 	if reply:
@@ -211,7 +211,7 @@ async def get_full_user_info(_, m: Message):
 		elif p_id is False:
 			await app.send_edit(m, duo)
 	except Exception as e:
-		await app.send_edit(m, "Try again later . . .", mono=True)
+		await app.send_edit(m, "Try again later . . .", text_type=["mono"])
 		await app.error(m, e)
 
 
@@ -235,10 +235,10 @@ async def tg_scanner(_, m: Message):
 			user = "**INFO: **" + msg[0].text.split("\n\n1. ")[0]
 			await app.send_edit(m, user)
 		else:
-			await app.send_edit(m, "No information found !", mono=True)
+			await app.send_edit(m, "No information found !", text_type=["mono"])
 
 	else:
-		await app.send_edit(m, "reply to someone's message . . .", delme=2, mono=True)
+		await app.send_edit(m, "reply to someone's message . . .", delme=2, text_type=["mono"])
 
 
 
@@ -251,14 +251,14 @@ async def block_pm(_, m: Message):
 		user = m.command[1]
 		try:
 			await app.block_user(user)
-			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
+			await app.send_edit(m, "Blocked User 🚫", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.block_user(user)
-			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
+			await app.send_edit(m, "Blocked User 🚫", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -273,14 +273,14 @@ async def unblock_pm(_, m: Message):
 		user = m.command[1]
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
+			await app.send_edit(m, "Unblocked User 🎉", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
+			await app.send_edit(m, "Unblocked User 🎉", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -292,10 +292,10 @@ async def check_name_history(_, m: Message):
 	reply = m.reply_to_message
 
 	if not reply:
-		await app.send_edit(m, "Reply to a user to get history of name / username.", mono=True, delme=2)
+		await app.send_edit(m, "Reply to a user to get history of name / username.", text_type=["mono"], delme=2)
 
 	elif reply:
-		await app.send_edit(m, "Checking History...", mono=True)
+		await app.send_edit(m, "Checking History...", text_type=["mono"])
 		await app.forward_messages(
 			"@SangMataInfo_bot", 
 			m.chat.id, 

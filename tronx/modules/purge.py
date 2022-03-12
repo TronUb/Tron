@@ -29,7 +29,7 @@ app.CMD_HELP.update(
 @app.on_message(gen(["purge", "p"], allow = ["sudo", "channel"]))
 async def purge_handler(app, m:Message):
 	if m.reply_to_message:
-		await app.send_edit(m, "purging . . .", mono=True)
+		await app.send_edit(m, "purging . . .", text_type=["mono"])
 
 		start = datetime.now()
 
@@ -53,7 +53,7 @@ async def purge_handler(app, m:Message):
 		end = datetime.now()
 		sec = (end - start).seconds
 
-		await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), mono=True, delme=4)
+		await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), text_type=["mono"], delme=4)
 	else:
 		await app.send_edit(m, "Reply to a message to delete all messages from tagged message to bottom message.", delme=4)
 
@@ -65,7 +65,7 @@ async def purgeme_handler(_, m:Message):
 	if app.long(m) > 1:
 		target = int(m.command[1]) if m.command[1].isdigit() and m.command[1] != 0 else 1
 	else:
-		return await app.send_edit(m, "Give me some number after command to delete messages.", mono=True, delme=4)
+		return await app.send_edit(m, "Give me some number after command to delete messages.", text_type=["mono"], delme=4)
 
 	start = datetime.now()
 	lim = target + 1  # command msg included
@@ -81,7 +81,7 @@ async def purgeme_handler(_, m:Message):
 	await app.delete_messages(m.chat.id, message_ids=msg_id[0:lim])
 	sec = (datetime.now() - start).seconds
 
-	await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(target, sec), mono=True, delme=4)
+	await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(target, sec), text_type=["mono"], delme=4)
 
 
 

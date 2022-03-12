@@ -64,7 +64,7 @@ async def help_menu(_, m: Message):
 
 	try:
 		if args is False:
-			m = await app.send_edit(m, ". . .", mono=True)
+			m = await app.send_edit(m, ". . .", text_type=["mono"])
 			result = await app.get_inline_bot_results(
 				app.bot.username, 
 				"#t5r4o9nn6" 
@@ -84,7 +84,7 @@ async def help_menu(_, m: Message):
 				else:
 					app.setdv("DELETE_DEX_ID", helpdex_ids.append({m.chat.id : info.updates[2].message.id}))
 			else:
-				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, mono=True)
+				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, text_type=["mono"])
 		elif args:
 
 			module_help = await app.data(args[1])
@@ -93,7 +93,7 @@ async def help_menu(_, m: Message):
 			else:
 				await app.send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
 		else:
-			await app.send_edit(m, "Try again later !", mono=True, delme=3)
+			await app.send_edit(m, "Try again later !", text_type=["mono"], delme=3)
 	except BotInlineDisabled:
 		await app.toggle_inline(m)
 		await help_menu(client, m)

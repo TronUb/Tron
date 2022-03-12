@@ -54,7 +54,7 @@ async def image_sauce(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if not reply:
-			await app.send_edit(m, "Reply to some media.", mono=True, delme=4)
+			await app.send_edit(m, "Reply to some media.", text_type=["mono"], delme=4)
 
 		if reply.photo:
 			m = await app.send_edit(m, "⏳ • Hold on ...")
@@ -135,7 +135,7 @@ async def image_search(_, m: Message):
 			for img in os.listdir(f"./images/{query}"):
 				await app.send_photo(m.chat.id, f"./images/{query}/{img}")
 		else:
-			await app.send_edit(m, "No images found !", mono=True, delme=4)
+			await app.send_edit(m, "No images found !", text_type=["mono"], delme=4)
 
 		if os.path.exists(f"./images/{query}/"):
 			shutil.rmtree(f"./images")

@@ -57,7 +57,7 @@ pings.clear()
 async def pingme(_, m: Message):
 	if app.long(m) == 1:
 		start = datetime.now()
-		m = await app.send_edit(m, ". . .", mono=True)
+		m = await app.send_edit(m, ". . .", text_type=["mono"])
 		end = datetime.now()
 		m_s = (end - start).microseconds / 1000
 		await app.send_edit(
@@ -72,14 +72,14 @@ async def pingme(_, m: Message):
 			return await app.send_edit(m, "If you need one ping use only `.ping`", delme=2)
 
 		elif text == 0:
-			return await app.send_edit(m, "try a greater number like 2.", delme=2, mono=True)
+			return await app.send_edit(m, "try a greater number like 2.", delme=2, text_type=["mono"])
 
 		else:
 			try:
 				num = int(count) + 1
 				for x in range(1, num):
 					m = await infinite(m)
-					await app.send_edit(m, ". . .", mono=True)
+					await app.send_edit(m, ". . .", text_type=["mono"])
 					time.sleep(0.50)
 				await app.send_edit(m, "".join(pings))
 			except Exception as e:

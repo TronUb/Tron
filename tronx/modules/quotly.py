@@ -30,7 +30,7 @@ async def quote(_, m: Message):
 	if not reply:
 		return await app.send_edit(m, "Reply to any users text message", delme=2)
 
-	await app.send_edit(m, "Making a Quote . . .", mono=True)
+	await app.send_edit(m, "Making a Quote . . .", text_type=["mono"])
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0

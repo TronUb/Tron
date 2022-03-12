@@ -34,7 +34,7 @@ async def paster(_, m: Message):
 	elif not reply and app.long(m) > 1:
 		text = m.text.split(None, 1)[1]
 	elif not reply and app.long(m) == 1:
-		return await app.send_edit(m, "Please reply to a message or give some text after command.", mono=True, delme=4)
+		return await app.send_edit(m, "Please reply to a message or give some text after command.", text_type=["mono"], delme=4)
 
 	try:
 		async with aiohttp.ClientSession() as session:
@@ -44,7 +44,7 @@ async def paster(_, m: Message):
 				key = (await response.json())["key"]
 	except Exception as e:
 		await app.error(m, e)
-		return await app.send_edit(m, "Pasting failed, Try again later . . .", delme=4, mono=True)
+		return await app.send_edit(m, "Pasting failed, Try again later . . .", delme=4, text_type=["mono"])
 
 	else:
 		url = f"https://hastebin.com/raw/{key}"

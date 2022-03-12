@@ -25,7 +25,7 @@ async def add_sudo(_, m: Message):
 	reply = m.reply_to_message
 
 	if not reply:
-		return await app.send_edit(m, "Reply to a user to add him in sudo list", mono=True, delme=4)  
+		return await app.send_edit(m, "Reply to a user to add him in sudo list", text_type=["mono"], delme=4)  
 
 	sudo_list = app.getdv("SUDO_USERS")
 	if sudo_list:
@@ -52,14 +52,14 @@ async def delete_sudo(_, m: Message):
 	reply = m.reply_to_message
 	user_id = str(reply.from_user.id)
 	if not reply:
-		return await app.send_edit(m, "Reply to a user to add him in sudo list", mono=True, delme=4)  
+		return await app.send_edit(m, "Reply to a user to add him in sudo list", text_type=["mono"], delme=4)  
 
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	if user_id in sudo_list:
 		sudo_list.remove(user_id)
 		app.setdv("SUDO_USERS", " ".join(sudo_list))
 	else:
-		return await app.send_edit(m, "This user is not in sudo list", mono=True, delme=4)
+		return await app.send_edit(m, "This user is not in sudo list", text_type=["mono"], delme=4)
 
 	await app.send_edit(m, f"{reply.from_user.mention()} `has been removed from sudo list`", delme=4)
 

@@ -37,10 +37,10 @@ async def setdv_handler(_, m: Message):
 		await app.send_edit(m, "**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
 
 	elif app.textlen(m) > 4096:
-		await app.send_edit(m, "Text is too long. only 4096 characters are allowed.", mono=True, delme=4)
+		await app.send_edit(m, "Text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
 
 	elif app.long(m) == 2:
-		await app.send_edit(m, "Please give me key with a value.", mono=True, delme=4)  
+		await app.send_edit(m, "Please give me key with a value.", text_type=["mono"], delme=4)  
 
 	elif app.long(m) > 2:
 		key = m.command[1]
@@ -51,7 +51,7 @@ async def setdv_handler(_, m: Message):
 			await app.send_edit(m, f"Added database var with [ **key** = `{key}` ] and [ **value** = `{value}` ]")
 
 		elif not done:
-			await app.send_edit(m, "Failed to a add key & value to database var.", mono=True, delme=2)
+			await app.send_edit(m, "Failed to a add key & value to database var.", text_type=["mono"], delme=2)
 
 
 
@@ -59,10 +59,10 @@ async def setdv_handler(_, m: Message):
 @app.on_message(gen("deldv", allow =["sudo"]))
 async def deldv_handler(_, m: Message):
 	if app.long(m) == 1:
-		await app.send_edit(m, "Give me some key to delete that a var from database . . . ", mono=True, delme=2)
+		await app.send_edit(m, "Give me some key to delete that a var from database . . . ", text_type=["mono"], delme=2)
 
 	elif app.textlen(m) > 4096:
-		await app.send_edit(m, "text is too long. only 4096 characters are allowed.", mono=True, delme=4)
+		await app.send_edit(m, "text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
 
 	elif app.long(m) > 1:
 		key = m.command[1]
@@ -70,14 +70,14 @@ async def deldv_handler(_, m: Message):
 
 		await app.send_edit(m, f"Successfully deleted [ **key** = `{key}` ]", delme=4)
 	else:
-		await app.send_edit(m, "Something went wrong, try again later !", mono=True, delme=4)
+		await app.send_edit(m, "Something went wrong, try again later !", text_type=["mono"], delme=4)
 
 
 
 @app.on_message(gen("getdv", allow =["sudo"]))
 async def getdv_handler(_, m: Message):
 	if app.long(m) == 1:
-		await app.send_edit(m, "Give me some key to get value that a var from database . . . ", mono=True, delme=2)
+		await app.send_edit(m, "Give me some key to get value that a var from database . . . ", text_type=["mono"], delme=2)
 
 	elif app.long(m) > 1:
 		key = m.command[1]
@@ -86,9 +86,9 @@ async def getdv_handler(_, m: Message):
 		if done:
 			await app.send_edit(m, f"**Here:**\n\n**key** = `{key}`\n\n**value** = `{done}`", delme=4)
 		else:
-			await app.send_edit(m, "This var doesn't exist in my database.", mono=True, delme=4)
+			await app.send_edit(m, "This var doesn't exist in my database.", text_type=["mono"], delme=4)
 	else:
-		await app.send_edit(m, "Maximum 4096 characters in one message . . .", mono=True, delme=4)
+		await app.send_edit(m, "Maximum 4096 characters in one message . . .", text_type=["mono"], delme=4)
 
 
 
@@ -101,28 +101,28 @@ async def pm_handler(_, m: Message):
 
 	elif app.long(m) > 1 and arg[1] == "on":
 		if app.Pmpermit() is True:
-			return await app.send_edit(m, "Pmguard is already active !", mono=True, delme=4)
+			return await app.send_edit(m, "Pmguard is already active !", text_type=["mono"], delme=4)
 
 		done = app.setdv("PMPERMIT", "True")
 		if done:
-			await app.send_edit(m, "Pmguard is now turned on.", mono=True, delme=4)
+			await app.send_edit(m, "Pmguard is now turned on.", text_type=["mono"], delme=4)
 		else:
-			await app.send_edit(m, "Failed to turn on pmguard.", mono=True, delme=4)
+			await app.send_edit(m, "Failed to turn on pmguard.", text_type=["mono"], delme=4)
 
 	elif app.long(m) > 1 and arg[1] == "off":
 		if app.Pmpermit() is False:
-			return await app.send_edit(m, "Pmguard is already off !", mono=True, delme=4)
+			return await app.send_edit(m, "Pmguard is already off !", text_type=["mono"], delme=4)
 
 		done = app.deldv("PMPERMIT")
 		if done:
-			await app.send_edit(m, "Pmguard is now turned off.", mono=True, delme=4)
+			await app.send_edit(m, "Pmguard is now turned off.", text_type=["mono"], delme=4)
 		else:
-			await app.send_edit(m, "Failed to turn off pmguard.", mono=True, delme=4)
+			await app.send_edit(m, "Failed to turn off pmguard.", text_type=["mono"], delme=4)
 
 	elif app.long(m) > 1 and arg[1] not in ("on", "off"):
 		await app.send_edit(m, "Use `on` or `off` after command to turn on & off pmguard.", delme=4)
 	else:
-		await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=4)
+		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=4)
 
 
 
@@ -130,7 +130,7 @@ async def pm_handler(_, m: Message):
 @app.on_message(gen("alldv", allow =["sudo"]))
 async def alldv_handler(_, m: Message):
 	if bool(app.getalldv()) is True:
-		m = await app.send_edit(m, "Getting all database vars . . .", mono=True)
+		m = await app.send_edit(m, "Getting all database vars . . .", text_type=["mono"])
 		my_dict = app.getalldv()
 		dict_data = []
 		dict_data.clear()
@@ -140,7 +140,7 @@ async def alldv_handler(_, m: Message):
 
 		await app.send_edit(m, "**All DB VARS:**\n\n" + "".join(dict_data))
 	else:
-		await app.send_edit(m, "There are no database vars (empty) !", mono=True, delme=4)
+		await app.send_edit(m, "There are no database vars (empty) !", text_type=["mono"], delme=4)
 
 
 

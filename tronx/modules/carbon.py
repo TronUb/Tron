@@ -63,7 +63,7 @@ async def carb_api(_, m: Message):
 
 	elif app.textlen(m) <= 4096:
 		try:
-			m = await app.send_edit(m, "creating carbon . . .", mono=True)
+			m = await app.send_edit(m, "creating carbon . . .", text_type=["mono"])
 			if cmd[1] in colour_code:
 				text = m.text.split(None, 2)[2]
 				colour = cmd[1]
@@ -113,4 +113,4 @@ async def create_carbon(m: Message, text, colour):
 		if os.path.exists(f"./{filename}"):
 			os.remove(filename)
 	else:
-		await app.send_edit(m, "Image Couldn't be retreived.", delme=4, mono=True)
+		await app.send_edit(m, "Image Couldn't be retreived.", delme=4, text_type=["mono"])

@@ -36,7 +36,7 @@ async def send_music(_, m: Message):
 		elif reply and len(cmd) == 1:
 			song_name = reply.text or reply.caption
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		song_results = await app.get_inline_bot_results("audio_storm_bot", song_name)
 
@@ -82,7 +82,7 @@ async def send_music(_, m: Message):
 		elif reply and len(cmd) == 1:
 			song_name = reply.text or reply.caption
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give a song name . . .", delme=3, mono=True)
+			return await app.send_edit(m, "Give a song name . . .", delme=3, text_type=["mono"])
 
 		song_results = await app.get_inline_bot_results("DeezerMusicBot", song_name)
 
@@ -109,10 +109,10 @@ async def send_music(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", saved.message_id)
 		except TimeoutError:
-			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, mono=True)
+			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, try again !", mono=True, delme=3)
+		await app.send_edit(m, "Something went wrong, try again !", text_type=["mono"], delme=3)
 
 
 
@@ -133,10 +133,10 @@ async def lyrics(_, m: Message):
 			elif reply.text and len(cmd) > 1:
 				song_name = m.text.split(None, 1)[1]
 			else:
-				return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+				return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		await app.send_edit(m, f"**Finding lyrics for:** `{song_name}`")
 
@@ -162,7 +162,7 @@ async def lyrics(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", saved.updates[1].message.id)
 		except TimeoutError:
-			return await app.send_edit(m, "Something went Wrong !", mono=True, delme=3)
+			return await app.send_edit(m, "Something went Wrong !", text_type=["mono"], delme=3)
 	except Exception as e:
 		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
+		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=3)
