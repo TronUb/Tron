@@ -17,7 +17,11 @@ from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
 
 
 class RawFunctions(object):
-	async def aexec(self, m, code):
+	async def aexec(
+		self, 
+		message: Message, 
+		code: str
+		):
 		"""
 		params:
 			1. message (update) :: incoming update
@@ -34,10 +38,12 @@ class RawFunctions(object):
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
 		)
-		return await locals()["__aexec"](self, m)
+		return await locals()["__aexec"](self, message)
 
 
-	def showdate(self):
+	def showdate(
+		self
+		):
 		"""
 		params: 
 			None
@@ -55,7 +61,9 @@ class RawFunctions(object):
 		return mydate
 
 
-	def showtime(self):
+	def showtime(
+		self
+		):
 		"""
 		params: 
 			None
@@ -73,49 +81,12 @@ class RawFunctions(object):
 		return mytime
 
 
-	async def edit_text(
+	async def error(
 		self, 
-		m: Message, 
-		text, 
-		disable_web_page_preview=False, 
-		parse_mode="combined",
-		reply_markup=None
+		message: Message, 
+		e, 
+		edit_error: bool=False
 		):
-		"""
-		params: 
-			1. message :: incoming update
-			2. text: str :: text to be edited to
-			3. disable_web_page_preview: bool, default=False :: shows web page preview if True, Not if it is False
-
-		use: 
-			use this function to edit message, this is also a alias for send_edit function
-
-		ex: (async)
-			await app.edit_text(m, "This is a text", disable_web_page_preview=True)
-		"""
-
-		try:
-			if m.from_user and m.from_user.is_self:
-				m = await m.edit(
-					text, 
-					parse_mode=parse_mode, 
-					disable_web_page_preview=disable_web_page_preview,
-					reply_markup=reply_markup
-				)
-			elif m.from_user and not m.from_user.is_self: # for sudo users
-				m = await self.send_message(
-					m.chat.id,
-					text,
-					disable_web_page_preview=disable_web_page_preview,
-					parse_mode=parse_mode,
-					reply_markup=reply_markup
-				)
-		except Exception as e:
-			self.log.info(e)
-		return m
-
-
-	async def error(self, m: Message, e, edit_error=False):
 		"""
 		params: 
 			1. message (update) :: incoming updates
@@ -135,7 +106,7 @@ class RawFunctions(object):
 		teks = f"**Traceback Report:**\n\n"
 		teks += f"**Date:** `{self.showdate()}`\n**Time:** `{self.showtime()}`\n\n"
 		teks += f"`This can be a error in tronuserbot, if you want you can forward this to @tronuserbot_support.`\n\n" 
-		teks += f"**Command:** `{m.text}`\n\n"
+		teks += f"**Command:** `{message.text}`\n\n"
 		teks += "`-`" * 30 + "\n\n"
 		teks += f"**SHORT:** \n\n`{e}`\n\n"
 		teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
@@ -143,9 +114,9 @@ class RawFunctions(object):
 		try:
 			if edit_error:
 				if hasattr(e, "MESSAGE"):
-					await self.send_edit(m, f"[ **{e.CODE}** ] : `{e.MESSAGE}`")
+					await self.send_edit(message, f"[ **{e.CODE}** ] : `{e.MESSAGE}`")
 				else:
-					await self.send_edit(m, e.args)
+					await self.send_edit(message, e.args)
 
 			await self.send_message(self.LOG_CHAT, teks)
 
@@ -178,7 +149,7 @@ class RawFunctions(object):
 
 		await asyncio.sleep(sec)
 		if delmsg and message.from_user.is_self:
-			msg = await messages.delete()
+			msg = await message.delete()
 		return msg
 
 
@@ -207,7 +178,10 @@ class RawFunctions(object):
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
 
-	async def data(self, modules):
+	async def data(
+		self, 
+		modules: str
+		):
 		"""
 		params: 
 			1. plug: str :: module name whose information is updated in app.CMD_HELP dict
@@ -220,17 +194,17 @@ class RawFunctions(object):
 		"""
 
 		try:
-			plugin_data = []
-			plugin_data.clear()
-	
+			module_data = []
+			module_data.clear()
+
 			for x, y in zip(
 				self.CMD_HELP.get(modules)[1].keys(), 
 				self.CMD_HELP.get(modules)[1].values()
 				):
-				plugin_data.append(
+				module_data.append(
 					f"CMD: `{self.PREFIX}{x}`\nINFO: `{y}`\n\n"
 					)
-			return plugin_data
+			return module_data
 		except Exception as e:
 			self.log.error(e)
 			return None
@@ -302,12 +276,15 @@ class RawFunctions(object):
 			if delme > 0:
 				asyncio.create_task(self.sleep(message, sec=delme, delmsg=True))
 
-		except Exception as e:
-			await self.error(m, e)
+		except Exception as err:
+			await self.error(m, err)
 		return msg
 
 
-	async def check_private(self, m: Message):
+	async def check_private(
+		self, 
+		message: Message
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -319,18 +296,21 @@ class RawFunctions(object):
 			await app.private(message)
 		"""
 
-		if m.chat.type == "private":
+		if message.chat.type == "private":
 			await self.send_edit(
-				m, 
+				message, 
 				"Please use these commands in groups . . .",
-				mono=True, 
-				delme=True
+				text_type=["mono"], 
+				delme=4
 			)
 			return True
 		return False
 
 
-	def long(self, m: Message):
+	def long(
+		self, 
+		message: Message
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -344,11 +324,14 @@ class RawFunctions(object):
 				return
 		"""
 
-		text_length = len(m.text.split())
+		text_length = len(message.text.split() or message.caption.split())
 		return text_length if bool(text_length) is True else None
 
 
-	def textlen(self, m: Message):
+	def textlen(
+		self, 
+		message: Message
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -361,10 +344,16 @@ class RawFunctions(object):
 				print("Text too long")
 		"""
 
-		return len([x for x in m.text or m.caption])
+		return len([x for x in message.text or message.caption])
 
 
-	async def create_file(self, m: Message, filename, text):
+	async def create_file(
+		self, 
+		message: Message, 
+		filename: str, 
+		content: str,
+		send: bool=True
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -380,24 +369,29 @@ class RawFunctions(object):
 		"""
 
 		try:
-			name = filename
-			content = text
-			file = open(name, "w+")
+			file = open(f"./downloads/{filename}", "w+")
 			file.write(content)
 			file.close()
-			await self.send_document(
-				m.chat.id,
-				name,
-				caption = f"**Uploaded By:** {self.UserMention()}"
+			if send:
+				await self.send_document(
+					message.chat.id,
+					filename,
+					caption = f"**Uploaded By:** {self.UserMention()}"
 				)
-			if os.path.exists(name):
-				os.remove(name)
-			await m.delete()
+				if os.path.exists(name):
+					os.remove(name)
+				await m.delete()
+			else:
+				return f"./downloads/{filename}"
 		except Exception as e:
 			await self.error(m, e)
 
 
-	def rem_dual(self, one, two):
+	def rem_dual(
+		self, 
+		list1: list, 
+		list2: list
+		):
 		"""
 		params: 
 			1. one: list :: list from that you want to remove duplicates
@@ -407,13 +401,18 @@ class RawFunctions(object):
 			use this function to remove duplicates from lists
 
 		ex: 
-			await app.rem_dual([1, 1, 1, 2, 3], [1])
+			app.rem_dual([1, 1, 1, 2, 3], [1])
 		"""
 
-		return list(set(one) - set(two))
+		return list(set(list1) - set(list2))
 
 
-	async def kick_user(self, chat_id, user_id, ban_time=30):
+	async def kick_user(
+		self, 
+		chat_id: Union[str, int], 
+		user_id: Union[str, int], 
+		ban_time: int=30
+		):
 		"""
 		params: 
 			1. chat_id: int :: chat id of the chat where this method is used
@@ -427,13 +426,15 @@ class RawFunctions(object):
 		"""
 
 		try:
-			await self.ban_chat_member(chat_id, user_id, int(time.time()) + ban_time) 
-			return True
+			return await self.ban_chat_member(chat_id, user_id, int(time.time()) + ban_time) 
 		except Exception as e:
 			await self.error(m, e)
 
 
-	def is_str(self, element):
+	def is_str(
+		self, 
+		element
+		):
 		"""
 		params: 
 			1. element: [str, bool, int, float] :: anytype of data
@@ -442,13 +443,16 @@ class RawFunctions(object):
 			use this function to check if the element is string or not
 
 		ex: 
-			await app.is_str(data)
+			app.is_str(data)
 		"""
 
 		return isinstance(element, str)
 
 
-	def is_bool(self, element):
+	def is_bool(
+		self, 
+		element
+		):
 		"""
 		params: 
 			1. element: [str, bool, int, float] :: anytype of data
@@ -457,13 +461,16 @@ class RawFunctions(object):
 			use this function to check if the element is boolean or not
 
 		ex: 
-			await app.is_bool(data)
+			app.is_bool(data)
 		"""
 
 		return isinstance(element, bool)
 
 
-	def is_float(self, element):
+	def is_float(
+		self, 
+		element
+		):
 		"""
 		params: 
 			1. element: [str, bool, int, float] :: anytype of data
@@ -472,13 +479,16 @@ class RawFunctions(object):
 			use this function to check if the element is float or not
 
 		ex: 
-			await app.is_float(data)
+			app.is_float(data)
 		"""
 
 		return isinstance(element, float)
 
 
-	def is_int(self, element):
+	def is_int(
+		self, 
+		element
+		):
 		"""
 		params: 
 			1. element: [str, bool, int, float] :: anytype of data
@@ -487,13 +497,18 @@ class RawFunctions(object):
 			use this function to check if the element is integer or not
 
 		ex: 
-			await app.is_int(data)
+			app.is_int(data)
 		"""
 
 		return isinstance(element, int)
 
 
-	async def get_last_msg(self, m: Message, user_id, reverse=False):
+	async def get_last_msg(
+		self, 
+		m: Message, 
+		chat_id, 
+		reverse: bool=False
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -507,10 +522,13 @@ class RawFunctions(object):
 			await app.get_last_msg(message, chat_id, reverse=True)
 		"""
 
-		return await self.get_history(user_id, limit=1, reverse=reverse)
+		return await self.get_history(chat_id, limit=1, reverse=reverse)
 
 
-	async def toggle_inline(self, m: Message):
+	async def toggle_inline(
+		self, 
+		message: Message
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update
@@ -524,58 +542,60 @@ class RawFunctions(object):
 
 		try:
 			botname = "BotFather"
-			await self.send_edit(m, "Processing command . . .", mono=True)
+			await self.send_edit(message, "Processing command . . .", text_type=["mono"])
 			await self.send_message(botname, "/mybots") # BotFather (93372553) 
-			await asyncio.sleep(1) # floodwaits
-	
-			data = await self.get_last_msg(m, botname)
+			await asyncio.sleep(0.50) # floodwaits
+
+			data = await self.get_last_msg(message, botname)
 			usernames = list(data[0].reply_markup.inline_keyboard)[0]
-	
+
 			unames = []
 			unames.clear()
-	
+
 			for x in usernames:
 				unames.append(x.text)
-	
-			await self.send_edit(m, "Choosing bot . . . ", mono=True)
-	
+
+			await self.send_edit(message, "Choosing bot . . . ", text_type=["mono"])
+
 			if self.bot.username in unames:
 				await data[0].click(self.bot.username)
 			else:
-				return await self.send_edit(m, "Looks like you don't have a bot please, use your own bot . . .", mono=True, delme=True)
-	
-			data = await self.get_last_msg(m, botname)
-	
-			await self.send_edit(m, "Pressing Bot Settings . . . ", mono=True)
-	
+				return await self.send_edit(message, "Looks like you don't have a bot please, use your own bot.", text_type=["mono"], delme=4)
+
+			data = await self.get_last_msg(message, botname)
+
+			await self.send_edit(message, "Pressing Bot Settings . . . ", text_type=["mono"])
+
 			await data[0].click("Bot Settings")
-	
-			data = await self.get_last_msg(m, botname)
-	
-			await self.send_edit(m, "checking whether inline mode is On or Off . . . ", mono=True)
-	
+
+			data = await self.get_last_msg(message, botname)
+
+			await self.send_edit(message, "checking whether inline mode is On or Off . . . ", text_type=["mono"])
+
 			await data[0].click("Inline Mode")
-	
-			data = await self.get_last_msg(m, botname)
-	
+
+			data = await self.get_last_msg(message, botname)
+
 			# Turn on inline mode
 			if "Turn on" in str(data[0]):
-				await self.send_edit(m, "Turning Inline mode on . . . ", mono=True)
+				await self.send_edit(message, "Turning Inline mode on . . . ", text_type=["mono"])
 				await data[0].click("Turn on")
-				await self.send_edit(m, "Inline mode is now turned On.", mono=True, delme=True)
+				await self.send_edit(message, "Inline mode is now turned On.", text_type=["mono"], delme=4)
 			# Turn inline mode off
 			elif "Turn inline mode off" in str(data[0]):
-				await self.send_edit(m, "Turning Inline mode Off . . .", mono=True)
+				await self.send_edit(message, "Turning Inline mode Off . . .", text_type=["mono"])
 				await data[0].click("Turn inline mode off")
-				await self.send_edit(m, "Inline mode is now turned Off.", mono=True, delme=True)
+				await self.send_edit(message, "Inline mode is now turned Off.", text_type=["mono"], delme=4)
 		except YouBlockedUser:
-			await self.unblock_user(botname)
-			await self.toggle_inline(m)
-		except Exception as e:
-			await self.error(m, e)
+			await self.unblock_user(botname) # unblock & continue
+			await self.toggle_inline(message) # keep process going
+		except Exception as err:
+			await self.error(message, err)
 
 
-	def quote(self):
+	def quote(
+		self
+		):
 		"""
 		params: 
 			None
@@ -584,7 +604,7 @@ class RawFunctions(object):
 			use this function to anime quotes
 
 		ex: 
-			await app.quote()
+			app.quote()
 		"""
 
 		results = requests.get("https://animechan.vercel.app/api/random").json()
@@ -594,7 +614,9 @@ class RawFunctions(object):
 		return msg
 
 
-	def ialive_pic(self):
+	def ialive_pic(
+		self
+		):
 		"""
 		params: 
 			None
@@ -603,13 +625,16 @@ class RawFunctions(object):
 			use this function to get inline alive pic url
 
 		ex: 
-			await app.ialive_pic()
+			app.ialive_pic()
 		"""
 
 		return self.getdv("USER_PIC") or self.UserPic() or None
 
 
-	def get_file_id(self, message):
+	def get_file_id(
+		self, 
+		message: Message
+		):
 		"""
 		params: 
 			1. message (update) :: incoming update 
@@ -618,7 +643,7 @@ class RawFunctions(object):
 			use this function to get file_id of any media in telegram
 
 		ex: 
-			await app.get_file_id(message)
+			app.get_file_id(message)
 		"""
 
 		media = ["photo", "video", "audio", "document", "sticker", "animation"]
@@ -631,9 +656,12 @@ class RawFunctions(object):
 					return {"data":(messsge[x]).file_id, "caption":None, "type":x}
 			elif message["text"]:
 				return {"data":messsge.text, "caption":None, "type":"text"}
+		return {"data":None, "caption":None, "type":None}
 
 
-	def clear_screen(self):
+	def clear_screen(
+		self
+		):
 		"""
 		params: 
 			None
@@ -642,13 +670,17 @@ class RawFunctions(object):
 			use this function to clear terminal screen
 
 		ex:
-			await app.clear_screen()
+			app.clear_screen()
 		"""
 
 		subprocess.call("clear" if os.name == "posix" else "cls") 
 
 
-	async def add_users(self, user_id: Union[int, List[int]], chat_id):
+	async def add_users(
+		self, 
+		user_id: Union[int, str, List[int], List[str]], 
+		chat_id: Union[int, str]
+		):
 		"""
 		params: 
 			1. user_id: int :: list of telegram id of user
@@ -668,7 +700,11 @@ class RawFunctions(object):
 			self.log.error(e)
 
 
-	async def user_exists(self, user_id: int, chat_id):
+	async def user_exists(
+		self, 
+		user_id: Union[int, str]
+		chat_id: Unino[int, str]
+		):
 		"""
 		params: 
 			1. user_id: int :: id of a telegram user
@@ -687,7 +723,9 @@ class RawFunctions(object):
 		return False
 
 
-	async def add_logbot(self):
+	async def add_logbot(
+		self
+		):
 		"""
 		params: 
 			None
@@ -713,11 +751,13 @@ class RawFunctions(object):
 
 			else:
 				self.log.warning("Bot client is not available, please check (TOKEN, API_ID, API_HASH)")
-		except Exception as e:
-			await self.log.info(e)
+		except Exception as err:
+			await self.log.info(err)
 
 
-	def uptime(self):
+	def uptime(
+		self
+		):
 		"""
 		params: 
 			None
@@ -726,13 +766,18 @@ class RawFunctions(object):
 			use this function to get ubot uptime
 
 		ex: 
-			await app.uptime()
+			app.uptime()
 		"""
 
 		return self.GetReadableTime(time.time() - self.StartTime)
 
 
-	def import_module(self, path, exclude=[], display_module=True):
+	def import_module(
+		self, 
+		path: str, 
+		exclude: list=[], 
+		display_module: bool=True
+		):
 		"""
 		params: 
 			1. path :: path of module directory
@@ -743,39 +788,43 @@ class RawFunctions(object):
 			use this function to install python modules 
 
 		ex: 
-			await app.import_module("./tronx/modules/", exclude=["admin"])
+			app.import_module("./tronx/modules/", exclude=["admin"])
 		"""
 
-		bin = []
-		bin.clear()
+		listbin = []
+		listbin.clear()
 
 		if not os.path.exists(path):
 			return self.log.info(f"No path found: {path}")
 
-		plugins = []
+		modules = []
+		modules.clear()
+
 		for x in os.listdir(path):
 			if x.endswith(".py"):
 				if not x in ["__pycache__",  "__init__.py"]:
-					plugins.append(x.replace(".py", ""))
+					modules.append(x.replace(".py", ""))
 
 		py_path_raw = ".".join(path.split("/"))
 		py_path = py_path_raw[0:len(py_path_raw)-1]
 
 		count = 0
-		for x in plugins:
+		for x in modules:
 			if not x in exclude:
 				importlib.import_module(py_path + "." + x)
 				count += 1
-				bin.append(x)
+				listbin.append(x)
 
 		if display_module:
-			data = sorted(bin)
+			data = sorted(listbin)
 			for x in data:
 				print(x + " Loaded !")
 		return count
 
 
-	def db_status(self):
+	def db_status(
+		self
+		):
 		"""
 		params: 
 			None
@@ -784,7 +833,7 @@ class RawFunctions(object):
 			use this function to check if database is available or not
 
 		ex: 
-			await app.db_status()
+			app.db_status()
 		"""
 
 		"Available" if self.DB_URI else "Unavailable"
