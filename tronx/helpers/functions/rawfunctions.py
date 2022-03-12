@@ -702,8 +702,8 @@ class RawFunctions(object):
 
 	async def user_exists(
 		self, 
-		user_id: Union[int, str]
-		chat_id: Unino[int, str]
+		user_id: Union[int, str],
+		chat_id: Uninon[int, str]
 		):
 		"""
 		params: 
