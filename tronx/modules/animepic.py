@@ -102,4 +102,4 @@ async def animegif(_, m: Message):
 		except Exception as e:
 			await app.error(m, e)
 	else:
-		await app.send_edit(m, f"Give me a suffix, use `{app.PREFIX}giflist` to get suffix.", delme=4)
+		await app.send_edit(m, f"Give me a suffix, use `{app.PREFIX}animelist` to get suffix.", delme=4)

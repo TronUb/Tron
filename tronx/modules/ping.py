@@ -1,19 +1,11 @@
-import os
-import time
 import random
 import asyncio
 
-from sys import platform
 from datetime import datetime
 
-from pyrogram import filters
-from pyrogram.types import Message, User
+from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -54,7 +46,7 @@ pings.clear()
 
 
 @app.on_message(gen(["ping", "pong"], allow = ["sudo", "channel"]))
-async def pingme(_, m: Message):
+async def ping_handler(_, m: Message):
 	if app.long(m) == 1:
 		start = datetime.now()
 		m = await app.send_edit(m, ". . .", text_type=["mono"])
@@ -80,7 +72,7 @@ async def pingme(_, m: Message):
 				for x in range(1, num):
 					m = await infinite(m)
 					await app.send_edit(m, ". . .", text_type=["mono"])
-					time.sleep(0.50)
+					await asyncio.sleep(0.50)
 				await app.send_edit(m, "".join(pings))
 			except Exception as e:
 				await app.error(m, e)

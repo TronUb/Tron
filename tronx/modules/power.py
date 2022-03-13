@@ -1,15 +1,10 @@
 import os
 import sys
 import time
-import asyncio
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen, 
-)
+from tronx import app, gen
 
 
 
@@ -29,9 +24,9 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("reboot", allow = ["sudo"]))
-async def restart_userbot(_, m: Message):
+async def reboot_handler(_, m: Message):
 	try:
-		msg = await app.send_edit(m, "`Restarting bot ...`")
+		msg = await app.send_edit(m, "Restarting bot . . .", text_type=["mono"])
 
 		os.execv(sys.executable, ['python'] + sys.argv)
 		await app.edit_message_text(
@@ -47,7 +42,7 @@ async def restart_userbot(_, m: Message):
 
 
 @app.on_message(gen("sleep", allow = ["sudo"]))
-async def sleep_userbot(_, m: Message):
+async def sleep_handler(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me some seconds after command . . .")
 

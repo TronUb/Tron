@@ -26,12 +26,12 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("minfo", allow = ["sudo"]))
-async def media_info(_, m: Message):
+async def mediainfo_handler(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
 		return await app.send_edit(m, "Please reply to some media to get media info . . .",text_type=["mono"])
 
-	if (app.get_file_id(replied))[2] == "photo":
+	if (app.get_file_id(replied))["type"] == "photo":
 		pie = replied.photo
 		msg = "**Type:** Photo\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -47,7 +47,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "video":
+	elif (app.get_file_id(replied))["type"] == "video":
 		pie = replied.video
 		msg = "**Types:** Video\n"
 		msg += f"**Width:** `{pie.width}`\n"
@@ -66,7 +66,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "sticker":
+	elif (app.get_file_id(replied))["type"] == "sticker":
 		pie = replied.sticker
 		msg = "**Types:** sticker\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -87,7 +87,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "document":
+	elif (app.get_file_id(replied))["type"] == "document":
 		pie = replied.document
 		msg = "**Types:** Document\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -103,7 +103,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "animation":
+	elif (app.get_file_id(replied))["type"] == "animation":
 		pie = replied.animation
 		msg = "**Types:** Animation\n"
 		msg += f"**File name:** `{pie.file_name}`\n"
@@ -122,7 +122,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "audio":
+	elif (app.get_file_id(replied))["type"] == "audio":
 		pie = replied.audio
 		msg = "**Types:** Audio\n"
 		msg += f"**Title:** `{pie.title}`\n"
@@ -141,7 +141,7 @@ async def media_info(_, m: Message):
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
-	elif (app.get_file_id(replied))[2] == "text":
+	elif (app.get_file_id(replied))["type"] == "text":
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
 		await app.send_edit(
@@ -154,7 +154,7 @@ async def media_info(_, m: Message):
 
 
 @app.on_message(gen("chatinfo", allow = ["sudo"]))
-async def get_chatinfo(_, m: Message):
+async def chatinfo_handler(_, m: Message):
 	try:
 		if len(m.command) > 1:
 			chat_u = m.command[1]
@@ -186,9 +186,6 @@ async def get_chatinfo(_, m: Message):
 		data += f"**Permissions:**\n\n"
 		data += f"**Send Messages:** `{neel.can_send_messages}`\n"
 		data += f"**Send Media:** `{neel.can_send_media_messages}`\n"
-		data += f"**Send Animations:** `{neel.can_send_animations}`\n"
-		data += f"**Send Games:** `{neel.can_send_games}`\n"
-		data += f"**Inline Bots:** `{neel.can_use_inline_bots}`\n"
 		data += f"**Web Page Preview:** `{neel.can_add_web_page_previews}`\n"  
 		data += f"**Send Polls:** `{neel.can_send_polls}`\n"
 		data += f"**Change Group Info:** `{neel.can_change_info}`\n"

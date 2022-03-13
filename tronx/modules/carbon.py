@@ -56,8 +56,9 @@ colour_code = {
 
 
 @app.on_message(gen(["carbon", "carb"], allow = ["sudo"]))
-async def carb_api(_, m: Message):
+async def carbon_handler(_, m: Message):
 	cmd = m.command
+	oldmsg = m # fixed for-->  m = send_edit() replaces the variable
 	if app.long(m) < 2:
 		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
 
@@ -65,10 +66,10 @@ async def carb_api(_, m: Message):
 		try:
 			m = await app.send_edit(m, "creating carbon . . .", text_type=["mono"])
 			if cmd[1] in colour_code:
-				text = m.text.split(None, 2)[2]
+				text = oldmsg.text.split(None, 2)[2]
 				colour = cmd[1]
 			else:
-				text = m.text.split(None, 1)[1]
+				text = oldmsg.text.split(None, 1)[1]
 				colour= "aqua"
 			await create_carbon(m, text=text, colour=colour)
 		except Exception as e:
@@ -80,9 +81,9 @@ async def carb_api(_, m: Message):
 
 
 @app.on_message(gen("carblist", allow = ["sudo"]))
-async def colour_list(_, m: Message):
+async def carblist_handler(_, m: Message):
 	clist = [f"`{x}`" for x in list(colour_code.keys())]
-	await app.send_edit(m, "**colour code:\n\n" + "\n".join(clist))
+	await app.send_edit(m, "**COLOUR CODES:**\n\n" + "\n".join(clist))
 
 
 

@@ -1,11 +1,7 @@
-from tronx import app
+from tronx import app, gen
 
 from pytube import YouTube
 from pyrogram.types import Message
-
-from tronx.helpers import (
-	gen,
-)
 
 
 
@@ -25,7 +21,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("vinfo", allow = ["sudo", "channel"]))
-async def utube_info(_, m: Message):
+async def videoinfo_handler(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
 		link = reply.text
@@ -49,7 +45,7 @@ async def utube_info(_, m: Message):
 
 
 @app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
-async def yt_download(_, m):
+async def ytdownload_handler(_, m):
 	reply = m.reply_to_message
 	await app.send_edit(m, "processing link . . .", text_type=["mono"])
 	if not reply:

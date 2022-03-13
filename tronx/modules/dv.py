@@ -32,8 +32,9 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("setdv", allow =["sudo"]))
 async def setdv_handler(_, m: Message):
+	restricted_list = ("API_ID", "API_HASH", "SESSION", "TOKEN")
 	if app.long(m) == 1:
-		allvars = [f"`{x}`" for x in dir(Config) if x.isupper()]
+		allvars = [f"`{x}`" for x in dir(Config) if x.isupper() and not x in restricted_list]
 		await app.send_edit(m, "**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
 
 	elif app.textlen(m) > 4096:
@@ -47,7 +48,7 @@ async def setdv_handler(_, m: Message):
 		value = m.text.split(None, 2)[2]
 		done = app.setdv(key, value)
 
-		if done:
+		if done: 
 			await app.send_edit(m, f"Added database var with [ **key** = `{key}` ] and [ **value** = `{value}` ]")
 
 		elif not done:
@@ -65,8 +66,9 @@ async def deldv_handler(_, m: Message):
 		await app.send_edit(m, "text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
 
 	elif app.long(m) > 1:
-		key = m.command[1]
-		done = app.deldv(key)
+		cmd = m.command 
+		for key in cmd[1:]:
+			done = app.deldv(key)
 
 		await app.send_edit(m, f"Successfully deleted [ **key** = `{key}` ]", delme=4)
 	else:

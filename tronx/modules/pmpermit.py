@@ -75,7 +75,7 @@ async def send_warn(m: Message, user):
 
 # incoming autoblock
 @app.on_message(filters.private & filters.incoming & (~filters.bot & ~filters.me), group=-1)
-async def autoblock_handler(_, m: Message):
+async def pmpermit_handler(_, m: Message):
 	try:
 		users = []
 		is_user = False
@@ -180,7 +180,7 @@ async def approve_handler(_, m: Message):
 		info = await app.get_users(user_id)
 
 	try:
-		m = await app.send_edit(m, "`Approving` {info.mention} `. . .`")
+		m = await app.send_edit(m, f"`Approving` {info.mention} `. . .`")
 		app.set_whitelist(user_id, True)
 		await app.send_edit(m, f"{info.mention} `is now approved for pm.`", delme=4)
 		app.del_warn(user_id)

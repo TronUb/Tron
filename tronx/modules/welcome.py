@@ -31,7 +31,7 @@ IgnoreChat = app.get_welcome_ids()
 
 
 @app.on_message(filters.new_chat_members & filters.group & filters.chat(IgnoreChat))
-async def send_welcome(_, m: Message):
+async def sendwelcome_handler(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
 		if chat["file_id"] is None:
@@ -66,8 +66,8 @@ async def send_welcome(_, m: Message):
 
 
 @app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
-async def save_welcome(_, m: Message):
-	if await app.private(m):
+async def savewelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
 	await app.send_edit(m, "Setting this media as a welcome message . . .", text_type=["mono"])
@@ -97,8 +97,8 @@ async def save_welcome(_, m: Message):
 
 
 @app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
-async def delete_welcome(_, m: Message):
-	if await app.private(m):
+async def deletewelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
 	try:
@@ -112,8 +112,8 @@ async def delete_welcome(_, m: Message):
 
 
 @app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
-async def delete_welcome(_, m: Message):
-	if await app.private(m):
+async def getwelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
 	try:

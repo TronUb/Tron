@@ -44,7 +44,7 @@ app.CMD_HELP.update(
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 @app.on_message(gen("ls", allow =["sudo"]))
-async def list_directories(_, m: Message):
+async def ls_handler(_, m: Message):
 	location = "." if app.long(m) == 1 else m.command[1] if app.long(m) >= 2 else None
 
 	location = os.path.abspath(location)
@@ -92,7 +92,7 @@ async def list_directories(_, m: Message):
 
 
 @app.on_message(gen(["download", "dl"], allow =["sudo"]))
-async def download_media(_, m: Message):
+async def download_handler(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.media:
 		try:
@@ -191,7 +191,7 @@ async def download_media(_, m: Message):
 
 
 @app.on_message(gen(["upload", "ul"], allow =["sudo"]))
-async def upload_as_document(_, m: Message):
+async def upload_handler(_, m: Message):
 	if app.long(m) > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
@@ -223,9 +223,12 @@ async def upload_as_document(_, m: Message):
 
 
 @app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
-async def batch_upload(_, m: Message):
+async def batchupload_handler(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, text_type=["mono"])
+
+	if app.textlen(m) > 4096:
+		return await app.send_edit(m, "The message is too long. (must be less than 4096 character)", delme=4, text_type=["mono"])
 
 	elif app.long(m) > 1:
 		temp_dir = m.command[1]
@@ -241,7 +244,7 @@ async def batch_upload(_, m: Message):
 				if file.endswith(".py"):
 					c_time = time.time()
 					required_file_name = temp_dir + file
-					thumb_image_path = await IsThumbExists(required_file_name)
+					thumb_image_path = await app.IsThumbExists(required_file_name)
 					doc_caption = os.path.basename(required_file_name)
 					log.info(f"Uploading {required_file_name} from {temp_dir} to Telegram.")
 

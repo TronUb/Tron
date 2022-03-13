@@ -59,7 +59,7 @@ def convert_c(celsius):
 
 
 @app.on_message(gen("wlink", allow = ["sudo", "channel"]))
-async def get_word_links(_, m: Message):
+async def wordlink_handler(_, m: Message):
 	links = []
 	links.clear()
 
@@ -83,7 +83,7 @@ async def get_word_links(_, m: Message):
 
 
 @app.on_message(gen(["cur", "currency"], allow = ["sudo", "channel"]))
-async def evaluate(_, m: Message):
+async def currency_handler(_, m: Message):
 	if app.long(m) <= 3:
 		return await app.send_edit(m, f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
 
@@ -102,7 +102,7 @@ async def evaluate(_, m: Message):
 
 
 @app.on_message(gen(["temp", "temperature"], allow = ["sudo", "channel"]))
-async def evaluate(_, m: Message):
+async def temperature_handler(_, m: Message):
 	if app.long(m) <= 2:
 		return await app.send_edit(m, "How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)", disable_web_page_preview=True)
 
@@ -126,7 +126,7 @@ async def evaluate(_, m: Message):
 
 
 @app.on_message(gen("json", allow = ["sudo", "channel", "forward"]))
-async def json_of_msg(_, m: Message):
+async def messagejson_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	data = str(reply) if reply else str(m)
@@ -143,7 +143,7 @@ async def json_of_msg(_, m: Message):
 
 
 @app.on_message(gen("ulink", allow = ["sudo", "channel"]))
-async def get_inlinelinks(app, m: Message):
+async def urllink_handler(app, m: Message):
 	reply = m.reply_to_message
 	cat = []
 	dog = []
@@ -174,7 +174,7 @@ async def get_inlinelinks(app, m: Message):
 
 
 @app.on_message(gen("mlink", allow = ["sudo", "channel"]))
-async def get_message_links(_, m: Message):
+async def messagelink_handler(_, m: Message):
 	reply = m.reply_to_message
 	message = reply if reply else m
 
@@ -185,7 +185,7 @@ async def get_message_links(_, m: Message):
 
 
 @app.on_message(gen("saved", allow = ["sudo", "channel"]))
-async def save_to_cloud(_, m: Message):
+async def saved_handler(_, m: Message):
 	if m.from_user.is_self:
 		await m.delete()
 	await m.reply_to_message.copy("me")
@@ -194,7 +194,7 @@ async def save_to_cloud(_, m: Message):
 
 
 @app.on_message(gen(["fwd", "frwd"], allow = ["sudo", "channel"]))
-async def forward_msgs(_, m: Message):
+async def forward_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 
@@ -223,7 +223,7 @@ async def forward_msgs(_, m: Message):
 
 
 @app.on_message(gen(["spt", "speed", "speedtest"], allow = ["sudo", "channel"]))
-async def speed_tests(app, m: Message):
+async def speedtest_handler(app, m: Message):
 	if app.long(m) == 1:
 		await app.send_edit(m, "Testing speed . . .", text_type=["mono"])
 		test = speedtest.Speedtest()
@@ -277,7 +277,7 @@ async def speed_tests(app, m: Message):
 
 
 @app.on_message(gen(["cc", "cchats"], allow = ["sudo", "channel"]))
-async def common_chats(_, m):
+async def commonchat_handler(_, m):
 	try:
 		reply = m.reply_to_message
 		if reply:

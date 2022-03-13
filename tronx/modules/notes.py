@@ -51,13 +51,11 @@ GET_FORMAT = {
 
 @app.on_message(gen("save", allow = ["sudo"]))
 async def savenote_hanlder(_, m: Message):
-	if len(m.command) < 2:
+	reply = m.reply_to_message
+	if app.long(m) == 1:
 		return await app.send_edit(m, "A note name is required with command to save a note.", text_type=["mono"])
 
-	if len(m.command) < 3:
-		return await app.send_edit(m, "A note name & content is required to save a note.", text_type=["mono"])
-
-	note_name, text, message_type, content = app.GetNoteType(m)
+	note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
 	if not note_name:
 		return await app.send_edit(m, "A note name is necessary to save a note !", text_type=["mono"])
 
@@ -145,8 +143,6 @@ async def getnote_handler(_, m: Message):
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
 					else:
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
-	else:
-		return
 
 
 

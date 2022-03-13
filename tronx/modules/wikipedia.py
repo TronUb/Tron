@@ -3,11 +3,7 @@ import wikipediaapi
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -27,7 +23,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("wiki", allow = ["sudo", "channel"]))
-async def wikipedia_search(_, m: Message):
+async def wikipedia_handler(_, m: Message):
 	if app.long(m) == 1:
 		await app.send_edit(m, "Give me some query to search on wikipedia . . .", text_type=["mono"], delme=True)
 

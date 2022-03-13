@@ -79,7 +79,7 @@ async def whois(_, m: Message):
 	msg = await app.send_edit(m, "Processing . . .", text_type=["mono"])
 
 	if reply and app.long(m) == 1:
-		get_user = reply.id
+		get_user = reply.from_user.id
 	elif not reply and app.long(m) == 1:
 		get_user = m.from_user.id
 	elif app.long(m) > 1:
@@ -121,7 +121,6 @@ async def whois(_, m: Message):
 			)
 		)
 		await msg.delete()
-		
 
 
 
@@ -218,7 +217,7 @@ async def get_full_user_info(_, m: Message):
 
 
 @app.on_message(gen(["sc", "scan"], allow = ["sudo"]))
-async def tg_scanner(_, m: Message):
+async def tgscan_handler(_, m: Message):
 	if m.reply_to_message:
 		await m.edit("Checking database . . .")
 		await app.forward_messages(
@@ -244,7 +243,7 @@ async def tg_scanner(_, m: Message):
 
 
 @app.on_message(gen("block", allow = ["sudo"]))
-async def block_pm(_, m: Message):
+async def block_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if app.long(m) >= 2 and not reply:
@@ -266,7 +265,7 @@ async def block_pm(_, m: Message):
 
 
 @app.on_message(gen("unblock", allow = ["sudo"]))
-async def unblock_pm(_, m: Message):
+async def unblock_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if app.long(m) >= 2 and not reply:
@@ -288,7 +287,7 @@ async def unblock_pm(_, m: Message):
 
 
 @app.on_message(gen("sg", allow = ["sudo"]))
-async def check_name_history(_, m: Message):
+async def userhistory_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if not reply:
@@ -336,11 +335,11 @@ async def check_name_history(_, m: Message):
 
 
 @app.on_message(gen("set"))
-async def update_profile(_, m: Message):
+async def setprofile_handler(_, m: Message):
 	custom = m.command
 
 	if app.long(m) < 3:
-		return await app.send_edit(m, "Please use text and suffix after command ...")
+		return await app.send_edit(m, "Please use text and suffix after command suffix: `fname`, `lname`, `bio`")
 	# set -> fname, lname & bio
 	if app.long(m) > 2:
 		text = m.text.split(None, 2)[2]
@@ -361,11 +360,11 @@ async def update_profile(_, m: Message):
 
 
 @app.on_message(gen("rem"))
-async def remove_profile(_, m: Message):
+async def remprofile_handler(_, m: Message):
 	if app.long(m) > 1:
 		cmd = m.command[1]
 	elif app.long(m) == 1:
-		return await app.send_edit(m,"what do you want to remove ?", delme=2)
+		return await app.send_edit(m,"what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`", delme=2)
 	try:
 		if cmd in ["lname", "bio", "pfp", "uname"]:
 			await rmprofile(m, cmd)
@@ -465,7 +464,7 @@ async def rmprofile(m: Message, args):
 
 
 @app.on_message(gen("repo", allow = ["sudo"]))
-async def get_repo_link(_, m: Message):
+async def repolink_handler(_, m: Message):
 	await app.send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
 
 

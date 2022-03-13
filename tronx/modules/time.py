@@ -4,11 +4,7 @@ import datetime
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -29,7 +25,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("today", allow = ["sudo"]))
-async def today(_, m: Message):
+async def today_handler(_, m: Message):
 	weekday = datetime.datetime.today().weekday()
 	if weekday == 0:
 		today = "Monday"
@@ -58,12 +54,12 @@ async def today(_, m: Message):
 
 
 @app.on_message(gen("time", allow = ["sudo", "channel"]))
-async def what(_, m: Message):
+async def time_handler(_, m: Message):
 	await app.send_edit(m, f"Today's time: `{app.showtime()}`")
 
 
 
 
 @app.on_message(gen("date", allow = ["sudo", "channel"]))
-async def what(_, m: Message):
+async def date_handler(_, m: Message):
 	await app.send_edit(m, f"Today's date: `{app.showdate()}`")

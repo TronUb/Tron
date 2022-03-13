@@ -1,5 +1,4 @@
 import os
-import re
 import requests
 
 from gtts import gTTS
@@ -7,11 +6,7 @@ from html import escape
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -20,7 +15,6 @@ app.CMD_HELP.update(
 	{"supertools" : (
 		"supertools",
 		{
-		"id [reply to user] or [username]" : "Get telegram id of a user or a chat.",
 		"ud [query]" : "Get The Meaning Of Any Word In Urban Dictionary.",
 		"short [link]" : "Shorten a link into da.gd link.",
 		"unshort [shortlink]" : "Reverse the da.gd link to real link.",
@@ -94,7 +88,7 @@ async def unshorten_link(m: Message, text):
 
 
 @app.on_message(gen("tts", allow = ["sudo", "channel"]))
-async def create_voice(_, m: Message):
+async def tts_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	try:
@@ -122,7 +116,7 @@ async def create_voice(_, m: Message):
 
 
 @app.on_message(gen("ud", allow = ["sudo", "channel"]))
-async def urban_dictionary(_, m:Message):
+async def ud_handler(_, m:Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"Use: `{app.PREFIX}ud cats`")
 
@@ -150,7 +144,7 @@ async def urban_dictionary(_, m:Message):
 
 
 @app.on_message(gen("short", allow = ["sudo", "channel"]))
-async def shorten_the_link(_, m: Message):
+async def shortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		if not reply and app.long(m) == 1:
@@ -171,7 +165,7 @@ async def shorten_the_link(_, m: Message):
 
 
 @app.on_message(gen(["unshort", "noshort"], allow = ["sudo", "channel"]))
-async def unshort_link(_, m: Message):
+async def unshortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		if not reply and app.long(m) == 1:
@@ -196,7 +190,7 @@ async def unshort_link(_, m: Message):
 
 
 @app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
-async def wtr(_, m: Message):
+async def weather_handler(_, m: Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Piro Master Atleast Give Me Some Location !", text_type=["mono"])
 
@@ -214,7 +208,7 @@ async def wtr(_, m: Message):
 
 
 @app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
-async def webshot(_, m: Message):
+async def webshot_handler(_, m: Message):
 	if app.long(m) > 1:
 		try:
 			BASE = "https://render-tron.appspot.com/screenshot/"
@@ -243,9 +237,10 @@ async def webshot(_, m: Message):
 
 
 @app.on_message(gen("undlt", allow = ["sudo"]))
-async def undelete_msg(_, m: Message):
+async def undlt_handler(_, m: Message):
 	collect = []
 	collect.clear()
+
 	if app.long(m) == 1:
 		count = 5
 	elif app.long(m) > 1:

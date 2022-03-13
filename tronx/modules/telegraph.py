@@ -19,7 +19,7 @@ app.CMD_HELP.update(
 	{"telegraph" : (
 		"telegraph",
 		{
-		"tgm [reply to message/media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
+		"tgm [reply to message | media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
 		}
 		)
 	} 
@@ -29,7 +29,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["tgm", "telegraph"], allow = ["sudo", "channel"]))
-async def telegraph(app, m:Message):
+async def telegraph_handler(_, m:Message):
 	reply = m.reply_to_message
 	filesize = 5242880
 	# if not replied

@@ -21,7 +21,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("addsudo"))
-async def add_sudo(_, m: Message):
+async def addsudo_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if not reply:
@@ -40,7 +40,7 @@ async def add_sudo(_, m: Message):
 
 
 @app.on_message(gen("listsudo", allow = ["sudo"]))
-async def get_sudo(_, m: Message):
+async def getsudo_handler(_, m: Message):
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	await app.send_edit(m, "**Available Sudo id:**\n\n" + "\n".join(sudo_list))
 
@@ -48,7 +48,7 @@ async def get_sudo(_, m: Message):
 
 
 @app.on_message(gen("delsudo"))
-async def delete_sudo(_, m: Message):
+async def delsudo_handler(_, m: Message):
 	reply = m.reply_to_message
 	user_id = str(reply.from_user.id)
 	if not reply:

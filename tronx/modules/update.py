@@ -57,7 +57,7 @@ async def install_requirements():
 
 
 @app.on_message(gen("update", allow = ["sudo", "channel"]))
-async def update_ub(_, m):
+async def update_handler(_, m):
 	cmd = False
 	errtext = "Some problem occurred:\n\n"
 

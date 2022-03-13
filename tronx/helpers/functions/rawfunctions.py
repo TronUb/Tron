@@ -352,7 +352,8 @@ class RawFunctions(object):
 		message: Message, 
 		filename: str, 
 		content: str,
-		send: bool=True
+		send: bool=True,
+		caption: str=None
 		):
 		"""
 		params: 
@@ -373,11 +374,12 @@ class RawFunctions(object):
 			file.write(content)
 			file.close()
 			if send:
-				await self.send_document(
-					message.chat.id,
-					filename,
-					caption = f"**Uploaded By:** {self.UserMention()}"
-				)
+				if caption:
+					await self.send_document(
+						message.chat.id,
+						filename,
+						caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
+					)
 				if os.path.exists(name):
 					os.remove(name)
 				await m.delete()
@@ -653,9 +655,9 @@ class RawFunctions(object):
 				if message["caption"]:
 					return {"data":(message[x]).file_id, "caption":message.caption, "type":x}
 				else:
-					return {"data":(messsge[x]).file_id, "caption":None, "type":x}
+					return {"data":(message[x]).file_id, "caption":None, "type":x}
 			elif message["text"]:
-				return {"data":messsge.text, "caption":None, "type":"text"}
+				return {"data":message.text, "caption":None, "type":"text"}
 		return {"data":None, "caption":None, "type":None}
 
 

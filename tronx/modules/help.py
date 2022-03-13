@@ -36,7 +36,7 @@ helpdex_ids = [x for x in app.getdv("DELETE_DEX_ID").strip("[]").split("," " ") 
 
 
 @app.bot.on_callback_query(filters.regex("delete-dex"))
-@app.alert_user
+@app.alert_user 
 async def delete_helpdex(_, cb: CallbackQuery):
 	if not bool(helpdex_ids):
 		await cb.answer(
@@ -59,7 +59,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 @app.on_message(gen("help", allow =["sudo"]))
-async def help_menu(_, m: Message):
+async def helpdex_handler(_, m: Message):
 	args = m.command if app.long(m) > 1 else False
 
 	try:
@@ -105,32 +105,34 @@ async def help_menu(_, m: Message):
 
 # get all module name
 @app.on_message(gen("mods", allow =["sudo"]))
-async def all_modules(_, m: Message):
+async def allmodules_handler(_, m: Message):
 	store = []
+	store.clear()
 	for x in os.listdir("tronx/modules/"):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await app.send_edit(m, "Modules of userbot:\n\n" + "".join(store))
+	await app.send_edit(m, "**MODULES OF USERBOT:**\n\n" + "".join(store))
 
 
 
 
 # get all plugins name
 @app.on_message(gen("plugs", allow =["sudo"]))
-async def all_plugins(_, m: Message):
+async def allplugins_handler(_, m: Message):
 	store = []
+	store.clear()
 	for x in os.listdir("tronx/plugins/"):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await app.send_edit(m, "Plugins of bot:\n\n" + "".join(store))
+	await app.send_edit(m, "**PLUGINS OF BOT:**\n\n" + "".join(store))
 
 
 
 
 @app.on_message(gen("inline", allow =["sudo"]))
-async def _toggle_inline(_, m: Message):
+async def toggleinline_handler(_, m: Message):
 	return await app.toggle_inline(m)
 
 

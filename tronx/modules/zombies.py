@@ -3,11 +3,7 @@ import asyncio
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen, 
-)
+from tronx import app, gen
 
 
 
@@ -27,7 +23,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("zombies", allow = ["sudo", "channel"]))
-async def remove_deleted(_, m: Message):
+async def zombies_handler(_, m: Message):
 	if await app.check_private(m):
 		return
 

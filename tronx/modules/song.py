@@ -1,11 +1,7 @@
 import asyncio
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -26,7 +22,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["song", "music"], allow = ["sudo", "channel"]))
-async def send_music(_, m: Message):
+async def song_handler(_, m: Message):
 	await app.send_edit(m, "Getting song . . .")
 	try:
 		cmd = m.command
@@ -72,8 +68,8 @@ async def send_music(_, m: Message):
 
 
 @app.on_message(gen(["dz", "deezer"], allow = ["sudo", "channel"]))
-async def send_music(_, m: Message):
-	await app.send_edit(m, "Searching on deezer . . .")
+async def deezer_handler(_, m: Message):
+	m = await app.send_edit(m, "Searching on deezer . . .")
 	try:
 		cmd = m.command
 		reply = m.reply_to_message
@@ -107,7 +103,7 @@ async def send_music(_, m: Message):
 			)
 
 			# delete the message from Saved Messages
-			await app.delete_messages("me", saved.message_id)
+			await app.delete_messages("me", [saved.message_id, m.message_id])
 		except TimeoutError:
 			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, text_type=["mono"])
 	except Exception as e:
@@ -118,7 +114,7 @@ async def send_music(_, m: Message):
 
 
 @app.on_message(gen(["ly", "lyrics"], allow = ["sudo", "channel"]))
-async def lyrics(_, m: Message):
+async def lyrics_handler(_, m: Message):
 	try:
 		cmd = m.command
 		reply = m.reply_to_message

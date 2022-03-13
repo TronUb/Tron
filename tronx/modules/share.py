@@ -6,11 +6,7 @@ from datetime import datetime
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -31,8 +27,8 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("send", allow = ["sudo", "channel"]))
-async def send_modules(app, m: Message):
-	await app.send_edit(m, "`Checking...`")
+async def sendmodule_handler(app, m: Message):
+	m = await app.send_edit(m, "`Checking . . .`")
 	if app.long(m) > 1:
 		filename = m.command[1]
 		modulename = f"tronx/modules/{filename}.py"
@@ -48,7 +44,7 @@ async def send_modules(app, m: Message):
 
 			start = time.time()
 			module_caption = os.path.basename(modulename)
-			await app.send_edit(m, f"Uploading {module_caption} . . .")
+			m = await app.send_edit(m, f"Uploading {module_caption} . . .")
 
 			try:
 				await app.send_document(
@@ -57,6 +53,7 @@ async def send_modules(app, m: Message):
 					thumb=thumb_pic,
 					caption=(f"File name: `{module_caption}`\n\nUploaded By: {app.UserMention()}")
 					)
+				await m.delete()
 			except Exception as e:
 				await app.error(m, e)
 				await app.send_edit(m, "Try again later, check log chat . . .", delme=3)
@@ -69,7 +66,7 @@ async def send_modules(app, m: Message):
 
 
 @app.on_message(gen("install"))
-async def install_module(_, m: Message):
+async def install_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
 		return await app.send_edit(m, "Reply to a python file to install . . .", text_type=["mono"], delme=4)
@@ -104,7 +101,7 @@ async def install_module(_, m: Message):
 
 
 @app.on_message(gen("uninstall"))
-async def uninstall_module(_, m: Message):
+async def uninstall_handler(_, m: Message):
 	cmd = m.command
 	try:
 		if app.long(m) > 1:

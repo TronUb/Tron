@@ -20,7 +20,7 @@ app.CMD_HELP.update(
 	{"fun" : (
 		"fun",
 		{
-		"cap [text]" : "Convert a paragraph into capital.",
+		"upcase [text]" : "Convert texts into uppercase",
 		"slap [reply to user]" : "Slap your friends with amazing items.",
 		"type [text]" : "Retype words with animation, just try and understand, Don't Use too much.",
 		"insult [reply to message]" : "Use it to insult idiots & fools",
@@ -37,7 +37,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("slap", allow =["sudo"]))
-async def slap_friends(_, m):
+async def slap_handler(_, m):
 	if m.reply_to_message:
 		try:
 			m = await app.send_edit(m,". . .")
@@ -58,7 +58,7 @@ async def slap_friends(_, m):
 				f"{my_info} starts puts {user_info} in water with phirana",
 				f"{my_info} dumps {user_info} in a river",
 				f"{my_info} pats {user_info} on head",
-				f"{my_info} kicks {user_info}'s out of the conversation",
+				f"{my_info} kicks {user_info} out of the conversation",
 			)
 			await app.send_edit(m, f"{random.choice(TASK)}")
 
@@ -70,16 +70,16 @@ async def slap_friends(_, m):
 
 
 
-@app.on_message(gen(["cap", "capital"], allow =["sudo"]))
-async def capitalise(_, m):
+@app.on_message(gen(["upcase"], allow =["sudo"]))
+async def uppercase_handler(_, m):
 	try:
 		reply = m.reply_to_message
 		if reply:
-			text = reply.text.capitalize()
+			text = reply.text.upper()
 			await app.send_edit(m, text)
 		elif not reply:
 			if app.long(m) > 1:
-				text = m.text.split(None, 1)[1].capitalize()
+				text = m.text.split(None, 1)[1].upper()
 				await app.send_edit(m, text)
 			elif app.long(m) == 1:
 				await app.send_edit(m, "Please give me some text after command . . .", delme= 2, text_type=["mono"])
@@ -117,7 +117,7 @@ async def type_handler(_, m):
 
 
 @app.on_message(gen("insult", allow =["sudo"]))
-async def insult_someone(_, m):
+async def insult_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit(m, "Please reply to someone, so that i can insult them . . .", delme=2, text_type=["mono"])
@@ -142,7 +142,7 @@ async def insult_someone(_, m):
 
 
 @app.on_message(gen("advice", allow =["sudo"]))
-async def give_advice(_, m):
+async def advice_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit(m, "Please reply to someone, so that i can give them a advice . . .", delme=2, text_type=["mono"])
@@ -162,7 +162,7 @@ async def give_advice(_, m):
 
 
 @app.on_message(gen("qs", allow =["sudo"]))
-async def ask_question(_, m):
+async def question_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit(m, "Please reply to someone, so that i can give them a question . . .", delme=2, text_type=["mono"])
@@ -184,7 +184,7 @@ async def ask_question(_, m):
 
 
 @app.on_message(gen("wtd", allow =["sudo"]))
-async def what_to_do(_, m):
+async def whattodo_handler(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a activity . . .", text_type=["mono"])
 		data = requests.get(f"http://www.boredapi.com/api/activity/")
@@ -201,7 +201,7 @@ async def what_to_do(_, m):
 
 
 @app.on_message(gen("mqt", allow =["sudo"]))
-async def movie_quotes(_, m):
+async def moviequote_handler(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a movie quote . . .", text_type=["mono"])
 		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
@@ -219,7 +219,7 @@ async def movie_quotes(_, m):
 
 
 @app.on_message(gen("joke", allow =["sudo"]))
-async def send_joke(_, m):
+async def joke_handler(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a joke . . .", text_type=["mono"])
 		data = requests.get(f"https://official-joke-api.appspot.com/random_joke")
