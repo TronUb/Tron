@@ -38,7 +38,7 @@ async def spam_handler(_, m: Message):
 			await asyncio.sleep(0.10)
 	elif replied and len(m.command) > 1:
 		await m.delete()
-		times = m.command[1] if m.command[1].isdigit()
+		times = m.command[1] if m.command[1].isdigit() else 0
 		spam_msg = m.reply_to_message.message_id
 		for x in range(times):
 			await app.copy_message(
