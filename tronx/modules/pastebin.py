@@ -49,9 +49,9 @@ async def paster_handler(_, m: Message):
 					),
 				await reply.delete()
 			)
-		else:
-			await app.send_edit(
-				m,
-				reply_text,
-				disable_web_page_preview=True
-			)
+	else:
+		await app.send_edit(
+			m,
+			reply_text,
+			disable_web_page_preview=True
+		)
