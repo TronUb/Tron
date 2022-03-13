@@ -112,7 +112,7 @@ async def channel_handler(_, m: Message):
 			m = await app.send_edit(m, f"Creating your channel: `{chname}`")
 			response = await app.create_channel(title=f"{chname}", description=about)
 			if response:
-				await app.send_edit(m, f"**Created channel:** [{chname}]({(app.get_chat(response.id)).invite_link)})", disable_web_page_preview=True)
+				await app.send_edit(m, f"**Created channel:** [{chname}]({(app.get_chat(response.id)).invite_link})", disable_web_page_preview=True)
 			else:
 				await app.send_edit(m, "Couldn't create a channel.")
 	except Exception as e:
