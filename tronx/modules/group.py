@@ -26,11 +26,13 @@ app.CMD_HELP.update(
 
 @app.on_message(gen(["bgroup", "bgp"], allow =["sudo"]))
 async def basicgroup_handler(_, m: Message):
+	grpname = None
+	users = None
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"Usage: `{app.PREFIX}bgroup mygroupname`", delme=4)
 	elif app.long(m) > 1:
 		grpname = m.text.split(None, 1)[1]
-		about = ""
+		users = "@TheRealPhoenixBot"
 	elif app.long(m) > 2:
 		grpname = m.text.split(None, 1)[1]
 		users = m.text.split(None, 2)[2].split()
@@ -53,6 +55,8 @@ async def basicgroup_handler(_, m: Message):
 
 @app.on_message(gen(["sgroup", "sgp"], allow =["sudo"]))
 async def supergroup_handler(_, m: Message):
+	grpname = None
+	about = None
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"`Usage: {app.PREFIX}sgroup mygroupname`", delme=4)
 	elif app.long(m) > 1:
@@ -98,6 +102,8 @@ async def unreadchat_handler(_, m: Message):
 
 @app.on_message(gen("channel", allow =["sudo"]))
 async def channel_handler(_, m: Message):
+	chname = None
+	about = None
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"Usage: `{app.PREFIX}channel [channel name]`", delme=4)
 
