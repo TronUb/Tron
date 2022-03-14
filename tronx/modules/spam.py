@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 async def spam_handler(_, m: Message):
 	replied = m.reply_to_message
 	reply_to_id = replied.message_id if replied else ""
-	if not replied and len(m.command) > 1:
+	if not replied and app.long(m) > 1:
 		await m.delete()
 		times = m.command[1]
 		spam_msg = m.text.split(None, 2)[2]
@@ -36,7 +36,7 @@ async def spam_handler(_, m: Message):
 				reply_to_message_id=reply_to_id
 			)
 			await asyncio.sleep(0.10)
-	elif replied and len(m.command) > 1:
+	elif replied and app.long(m) > 1:
 		await m.delete()
 		times = m.command[1] if m.command[1].isdigit() else 0
 		spam_msg = m.reply_to_message.message_id

@@ -2,11 +2,7 @@ from deep_translator import GoogleTranslator
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -15,13 +11,15 @@ app.CMD_HELP.update(
 	{"translate" : (
 		"translate",
 		{
-		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\n**Note :**Use Correct Language Codes To Translate In Your Language.",
+		"tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\nNote : Use Correct Language Codes To Translate In Your Language.",
 		"trlist" : "Get list of supported translating languages."
 		}
 		)
 	}
 )
 
+
+gtl = GoogleTranslator()
 
 
 
@@ -35,7 +33,7 @@ async def translate_handler(_, m: Message):
 
 		await app.send_edit(m, f"**Translating in** `{lang}` . . .")
 
-		languages = list((GoogleTranslator.get_supported_languages(as_dict=True)).values())
+		languages = list((gtl.get_supported_languages(as_dict=True)).values())
 
 		if not lang in languages:
 			return await app.send_edit(m, "Bot doesn't support this language code, please try different one.", text_type=["mono"], delme=5)
@@ -70,9 +68,9 @@ async def translatelang_handler(_, m):
 	data = []
 	data.clear()
 
-	langs_list = GoogleTranslator.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english: en etc...}
-	for x, y in zip(langs_list.values(), langs_list.keys()):
-		data.append(f"`{x}` : `{y}`")
+	langs_list = gtl.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english: en etc...}
+	for keys, values in zip(langs_list.values(), langs_list.keys()):
+		data.append(f"`{keys}` : `{values}`")
 
 	await app.send_edit(m, "**Total languages:**\n\n" + "\n".join(data))
 		

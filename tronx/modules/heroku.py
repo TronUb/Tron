@@ -12,7 +12,6 @@ from tronx import app, gen
 
 
 
-
 app.CMD_HELP.update(
 	{"heroku" : (
 		"heroku",
@@ -22,6 +21,8 @@ app.CMD_HELP.update(
 		"usage" : "Check your heroku dyno usage.",
 		"vars" : "Get a list of enabled vars in your heroku account.",
 		"setvar [key] [value]" : "Set config vars of heroku through a command.",
+		"getvar [key]" : "Get a existing var value from heroku config.",
+		"delvar" : "Delete a existing heroku var from heroku config.",
 		"logs" : "Get heroku logs as a file (Extension: .txt).",
 		"textlogs" : "Get logs pasted in nekobin, not as a file."
 		}

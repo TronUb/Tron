@@ -36,7 +36,7 @@ async def paster_handler(_, m: Message):
 	elif not reply and app.long(m) == 1:
 		return await app.send_edit(m, "Please reply to a message or give some text after command.", text_type=["mono"], delme=4)
 
-	m = await app.send_edit(m, "Pasting to pastebin . . .", text_type=["mono"], delme=4)
+	m = await app.send_edit(m, "Pasting to pastebin . . .", text_type=["mono"])
 	url = await app.HasteBinPaste(text)
 	reply_text = f"**Hastebin** : [Click Here]({url})"
 	delete = (True if app.long(m) > 1 and m.command[1] in ["d", "del"] and reply.from_user.is_self else False)

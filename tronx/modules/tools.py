@@ -68,14 +68,14 @@ async def wordlink_handler(_, m: Message):
 			return await app.send_edit(m, "Please give some text to search in chat ...")
 
 		else:
-			info = await app.get_history(m.chat.id)
+			messages = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
 			m = await app.send_edit(m, "Finding word in this chat . . .", text_type=["mono"])
-			for words in info:
-				if query in words.text:
-					links.append(words.link)
+			for msg in messages:
+				if query in msg.text:
+					links.append(msg.link)
 
-			await app.send_edit(m, f"**FOUND LINKS FOR:** `{query}`\n\n" +"\n".join(links))
+			await app.send_edit(m, f"**FOUND LINKS FOR:** `{query}`\n\n" + "\n".join(links))
 	except Exception as e:
 		await app.error(m, e)
 
@@ -104,7 +104,7 @@ async def currency_handler(_, m: Message):
 @app.on_message(gen(["temp", "temperature"], allow = ["sudo", "channel"]))
 async def temperature_handler(_, m: Message):
 	if app.long(m) <= 2:
-		return await app.send_edit(m, "How To Use: [INSTANT VIEW](https://telegra.ph/HOW-TO-USE-04-11)", disable_web_page_preview=True)
+		return await app.send_edit(m, f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
 
 	temp1 = m.text.split(None, 2)[1]
 	temp2 = m.text.split(None, 2)[2]
@@ -200,20 +200,25 @@ async def forward_handler(_, m: Message):
 
 		if reply and app.long(m) == 1:
 			await reply.forward(m.chat.id)
+			delete = True
 
 		elif reply and app.long(m) > 1:
 			await reply.forward(m.command[1])
+			delete = True
 
 		elif not reply and app.long(m) == 1:
-			await m.forward(m.text if m.text else "None")
+			await m.forward(m.chat.id)
+			delete = True
 
 		elif not reply and app.long(m) > 1:
 			await app.send_edit(m, "Sir reply to yours or someone's message. to forward.", text_type=["mono"], delme=4)
+			delete = False
 
 		else:
 			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=4)
+			delete = False
 
-		if m.from_user.is_self:
+		if m.from_user.is_self and delete:
 			await m.delete()
 
 	except Exception as e:

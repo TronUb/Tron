@@ -69,15 +69,15 @@ async def song_handler(_, m: Message):
 
 @app.on_message(gen(["dz", "deezer"], allow = ["sudo", "channel"]))
 async def deezer_handler(_, m: Message):
-	m = await app.send_edit(m, "Searching on deezer . . .")
 	try:
+		m = await app.send_edit(m, "Searching on deezer . . .")
 		cmd = m.command
 		reply = m.reply_to_message
-		if len(cmd) > 1:
+		if app.long(m) > 1:
 			song_name = m.text.split(None, 1)[1]
-		elif reply and len(cmd) == 1:
+		elif reply and app.long(m) == 1:
 			song_name = reply.text or reply.caption
-		elif not reply and len(cmd) == 1:
+		elif not reply and app.long(m) == 1:
 			return await app.send_edit(m, "Give a song name . . .", delme=3, text_type=["mono"])
 
 		song_results = await app.get_inline_bot_results("DeezerMusicBot", song_name)

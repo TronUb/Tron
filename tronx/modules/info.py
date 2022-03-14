@@ -197,6 +197,7 @@ async def chatinfo_handler(_, m: Message):
 				file_id=poto[0].file_id, 
 				caption=data
 			)
+			await m.delete()
 		elif not poto:
 			await app.send_edit(m, data)
 		else:

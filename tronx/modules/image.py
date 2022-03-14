@@ -224,7 +224,7 @@ async def qrcode_handler(_, m):
 
 @app.on_message(gen(["colour", "color"], allow = ["sudo"]))
 async def colourtemplate_handler(_, m: Message):
-	if app.long(m) == 2:
+	if app.long(m) == 1:
 		await app.send_edit(m, "Please give some colour name after command . . .", delme=3)
 
 	elif app.long(m) > 1:

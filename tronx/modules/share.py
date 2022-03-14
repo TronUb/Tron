@@ -28,8 +28,8 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("send", allow = ["sudo", "channel"]))
 async def sendmodule_handler(app, m: Message):
-	m = await app.send_edit(m, "`Checking . . .`")
 	if app.long(m) > 1:
+		m = await app.send_edit(m, "Checking module . . .", text_type=["mono"])
 		filename = m.command[1]
 		modulename = f"tronx/modules/{filename}.py"
 		if os.path.exists(modulename):

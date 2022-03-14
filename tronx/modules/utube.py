@@ -20,7 +20,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("vinfo", allow = ["sudo", "channel"]))
+@app.on_message(gen("yvinfo", allow = ["sudo", "channel"]))
 async def videoinfo_handler(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
@@ -72,6 +72,7 @@ async def ytdownload_handler(_, m):
 			try:
 				loc = x.download()
 				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title)
+				await m.delete()
 				break
 			except Exception as e:
 				await error(m, e)
