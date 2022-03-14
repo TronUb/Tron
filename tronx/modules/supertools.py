@@ -1,5 +1,4 @@
 import os
-import re
 import requests
 
 from gtts import gTTS
@@ -7,11 +6,7 @@ from html import escape
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -20,7 +15,6 @@ app.CMD_HELP.update(
 	{"supertools" : (
 		"supertools",
 		{
-		"id [reply to user] or [username]" : "Get telegram id of a user or a chat.",
 		"ud [query]" : "Get The Meaning Of Any Word In Urban Dictionary.",
 		"short [link]" : "Shorten a link into da.gd link.",
 		"unshort [shortlink]" : "Reverse the da.gd link to real link.",
@@ -67,7 +61,7 @@ async def shorten_link(m: Message, text):
 			f"**Generated Link:**\n\nShorted Link: {response}\nYour Link: {text}", 
 			disable_web_page_preview=True)
 	else:
-		await app.send_edit(m, "something is wrong. please try again later.", mono=True)
+		await app.send_edit(m, "something is wrong. please try again later.", text_type=["mono"])
 
 
 
@@ -88,33 +82,33 @@ async def unshorten_link(m: Message, text):
 					disable_web_page_preview=True
 				)
 			else:
-				await app.send_edit(m,"Something went wrong, please try again later . . .", mono=True)
+				await app.send_edit(m,"Something went wrong, please try again later . . .", text_type=["mono"])
 
 
 
 
 @app.on_message(gen("tts", allow = ["sudo", "channel"]))
-async def create_voice(_, m: Message):
+async def tts_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	try:
 		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Reply to someone's text message or give me the text as a suffix . . .", delme=True, mono=True)
+			return await app.send_edit(m, "Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
 
 		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Converting text to voice . . .", mono=True)
+			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
 			text = m.text.split(None, 1)[1]
 			await text_to_voice(m, text)
 
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to a text . . .", mono=True, delme=3)
-			await app.send_edit(m, "Converting text to voice . . .", mono=True)
+				return await app.send_edit(m, "Please reply to a text . . .", text_type=["mono"], delme=3)
+			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
 			text = reply.text
 			await text_to_voice(m, text)
 
 		else:
-			await app.send_edit(m, "Something went wrong !", mono=True)
+			await app.send_edit(m, "Something went wrong !", text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
 
@@ -122,7 +116,7 @@ async def create_voice(_, m: Message):
 
 
 @app.on_message(gen("ud", allow = ["sudo", "channel"]))
-async def urban_dictionary(_, m:Message):
+async def ud_handler(_, m:Message):
 	if app.long(m) == 1:
 		return await app.send_edit(m, f"Use: `{app.PREFIX}ud cats`")
 
@@ -142,7 +136,7 @@ async def urban_dictionary(_, m:Message):
 		)
 		await app.send_edit(m, resp)
 	except IndexError:
-		await app.send_edit(m, "No Results Found !", mono=True, delme=3)
+		await app.send_edit(m, "No Results Found !", text_type=["mono"], delme=3)
 	except Exception as e:
 		await app.error(m, e)
 
@@ -150,18 +144,18 @@ async def urban_dictionary(_, m:Message):
 
 
 @app.on_message(gen("short", allow = ["sudo", "channel"]))
-async def shorten_the_link(_, m: Message):
+async def shortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Please give me some link or reply to a link", mono=True)
+			return await app.send_edit(m, "Please give me some link or reply to a link", text_type=["mono"])
 
 		if not reply and app.long(m) > 1:
 			text = m.text.split(None, 1)[1]
 			await shorten_link(m, text)
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to text . . .", mono=True)
+				return await app.send_edit(m, "Please reply to text . . .", text_type=["mono"])
 			text = reply.text
 			await shorten_link(m, text)
 	except Exception as e:
@@ -171,11 +165,11 @@ async def shorten_the_link(_, m: Message):
 
 
 @app.on_message(gen(["unshort", "noshort"], allow = ["sudo", "channel"]))
-async def unshort_link(_, m: Message):
+async def unshortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Please give me a da.gd link to convert to orginal link", mono=True)
+			return await app.send_edit(m, "Please give me a da.gd link to convert to orginal link", text_type=["mono"])
 
 		elif not reply and app.long(m) > 1:
 			text = m.text.split(None, 1)[1]
@@ -183,12 +177,12 @@ async def unshort_link(_, m: Message):
 
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to a text . . .", mono=True)
+				return await app.send_edit(m, "Please reply to a text . . .", text_type=["mono"])
 			text = reply.text
 			await unshorten_link(m, text)
 
 		else:
-			await app.send_edit(m, "Something went wrong, try again later !", mono=True)
+			await app.send_edit(m, "Something went wrong, try again later !", text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
 
@@ -196,16 +190,16 @@ async def unshort_link(_, m: Message):
 
 
 @app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
-async def wtr(_, m: Message):
+async def weather_handler(_, m: Message):
 	if app.long(m) == 1:
-		return await app.send_edit(m, "Piro Master Atleast Give Me Some Location !", mono=True)
+		return await app.send_edit(m, "Piro Master Atleast Give Me Some Location !", text_type=["mono"])
 
-	await app.send_edit(m, "Checking weather . . .", mono=True)
+	await app.send_edit(m, "Checking weather . . .", text_type=["mono"])
 	location = m.command[1]
 	headers = {'user-agent': 'httpie'}
 	response = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=headers)
 	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in response.text:
-		return await app.send_edit(m, "Too many requests, try again later !", mono=True)
+		return await app.send_edit(m, "Too many requests, try again later !", text_type=["mono"])
 
 	weather = f"__{escape(response.text)}__"
 	await app.send_edit(m, weather)
@@ -214,7 +208,7 @@ async def wtr(_, m: Message):
 
 
 @app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
-async def webshot(_, m: Message):
+async def webshot_handler(_, m: Message):
 	if app.long(m) > 1:
 		try:
 			BASE = "https://render-tron.appspot.com/screenshot/"
@@ -226,7 +220,7 @@ async def webshot(_, m: Message):
 				with open(path, "wb") as file:
 					for chunk in response:
 						file.write(chunk)
-			await app.send_edit(m, "generating pic . . .", mono=True)
+			await app.send_edit(m, "generating pic . . .", text_type=["mono"])
 			await app.send_document(
 				m.chat.id, 
 				path, 
@@ -237,15 +231,16 @@ async def webshot(_, m: Message):
 		except Exception as e:
 			await app.error(m, e)
 	else:
-		await app.send_edit(m, "Give me the link pro . . .", mono=True)
+		await app.send_edit(m, "Give me the link pro . . .", text_type=["mono"])
 
 
 
 
 @app.on_message(gen("undlt", allow = ["sudo"]))
-async def undelete_msg(_, m: Message):
+async def undlt_handler(_, m: Message):
 	collect = []
 	collect.clear()
+
 	if app.long(m) == 1:
 		count = 5
 	elif app.long(m) > 1:

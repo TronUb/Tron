@@ -1,19 +1,11 @@
-import os
-import time
 import random
 import asyncio
 
-from sys import platform
 from datetime import datetime
 
-from pyrogram import filters
-from pyrogram.types import Message, User
+from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -54,10 +46,10 @@ pings.clear()
 
 
 @app.on_message(gen(["ping", "pong"], allow = ["sudo", "channel"]))
-async def pingme(_, m: Message):
+async def ping_handler(_, m: Message):
 	if app.long(m) == 1:
 		start = datetime.now()
-		m = await app.send_edit(m, ". . .", mono=True)
+		m = await app.send_edit(m, ". . .", text_type=["mono"])
 		end = datetime.now()
 		m_s = (end - start).microseconds / 1000
 		await app.send_edit(
@@ -72,15 +64,15 @@ async def pingme(_, m: Message):
 			return await app.send_edit(m, "If you need one ping use only `.ping`", delme=2)
 
 		elif text == 0:
-			return await app.send_edit(m, "try a greater number like 2.", delme=2, mono=True)
+			return await app.send_edit(m, "try a greater number like 2.", delme=2, text_type=["mono"])
 
 		else:
 			try:
 				num = int(count) + 1
 				for x in range(1, num):
 					m = await infinite(m)
-					await app.send_edit(m, ". . .", mono=True)
-					time.sleep(0.50)
+					await app.send_edit(m, ". . .", text_type=["mono"])
+					await asyncio.sleep(0.50)
 				await app.send_edit(m, "".join(pings))
 			except Exception as e:
 				await app.error(m, e)

@@ -57,11 +57,11 @@ async def install_requirements():
 
 
 @app.on_message(gen("update", allow = ["sudo", "channel"]))
-async def update_ub(_, m):
+async def update_handler(_, m):
 	cmd = False
 	errtext = "Some problem occurred:\n\n"
 
-	await app.send_edit(m, "Checking for updates, please wait . . .", mono=True)
+	await app.send_edit(m, "Checking for updates, please wait . . .", text_type=["mono"])
 
 	if app.long(m) > 1:
 		cmd = m.command
@@ -99,7 +99,7 @@ async def update_ub(_, m):
 		if changelog:
 			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH}):\n\n[CHANGE LOG]:**\n\n{changelog}"
 			if len(changelog_str) > 4096:
-				await app.send_edit(m, "Changelog is too big, view the file below to see it.", mono=True, delme=6)
+				await app.send_edit(m, "Changelog is too big, view the file below to see it.", text_type=["mono"], delme=6)
 				file = open("up_output.txt", "w+")
 				file.write(changelog_str)
 				file.close()
@@ -130,7 +130,7 @@ async def update_ub(_, m):
 		heroku_app = None
 		heroku_applications = heroku.apps()
 		if not app.HEROKU_APP_NAME:
-			await app.send_edit(m, "Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.", mono=True, delme=4)
+			await app.send_edit(m, "Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.", text_type=["mono"], delme=4)
 			return repo.__del__()
 
 		for apps in heroku_applications:
@@ -139,10 +139,10 @@ async def update_ub(_, m):
 				break
 
 		if heroku_app is None:
-			await app.send_edit(m, "Invalid Heroku credentials for updating userbot.", mono=True, delme=4)
+			await app.send_edit(m, "Invalid Heroku credentials for updating userbot.", text_type=["mono"], delme=4)
 			return repo.__del__()
 
-		m = await app.send_edit(m, "Userbot update in progress, please wait for few minutes . . .", mono=True)
+		m = await app.send_edit(m, "Userbot update in progress, please wait for few minutes . . .", text_type=["mono"])
 		ups_rem.fetch(ACTIVE_BRANCH)
 		repo.git.reset("--hard", "FETCH_HEAD")
 		heroku_git_url = heroku_app.git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
@@ -158,7 +158,7 @@ async def update_ub(_, m):
 		except GitCommandError as e:
 			app.log.error(e)
 
-		await app.send_edit(m, "Successfully Updated, initialing . . .", mono=True, delme=8)
+		await app.send_edit(m, "Successfully Updated, initialing . . .", text_type=["mono"], delme=8)
 
 	else:
 		try:
@@ -166,6 +166,6 @@ async def update_ub(_, m):
 		except GitCommandError:
 			repo.git.reset("--hard", "FETCH_HEAD")
 		await install_requirements()
-		await app.send_edit(m,"Successfully updated Userbot!\nBot is restarting . . .", mono=True, delme=8)
+		await app.send_edit(m,"Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=8)
 
 

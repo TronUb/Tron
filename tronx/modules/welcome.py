@@ -31,7 +31,7 @@ IgnoreChat = app.get_welcome_ids()
 
 
 @app.on_message(filters.new_chat_members & filters.group & filters.chat(IgnoreChat))
-async def send_welcome(_, m: Message):
+async def sendwelcome_handler(_, m: Message):
 	chat = app.get_welcome(str(m.chat.id))
 	if bool(chat) is True:
 		if chat["file_id"] is None:
@@ -66,11 +66,11 @@ async def send_welcome(_, m: Message):
 
 
 @app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
-async def save_welcome(_, m: Message):
-	if await app.private(m):
+async def savewelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
-	await app.send_edit(m, "Setting this media as a welcome message . . .", mono=True)
+	await app.send_edit(m, "Setting this media as a welcome message . . .", text_type=["mono"])
 	reply = m.reply_to_message
 	if reply:
 		try:
@@ -83,28 +83,28 @@ async def save_welcome(_, m: Message):
 					app.set_welcome(str(m.chat.id), "#" + file_id, caption)
 				else:
 					app.set_welcome(str(m.chat.id), "#" + file_id)
-				await app.send_edit(m, "Added this media to welcome message . . .", delme=2, mono=True)
+				await app.send_edit(m, "Added this media to welcome message . . .", delme=2, text_type=["mono"])
 			elif bool(reply.media) is False:
 				app.set_welcome(str(m.chat.id), reply.text.markdown)
-				await app.send_edit(m, "Added this text to welcome message . . .", delme=2, mono=True)
+				await app.send_edit(m, "Added this text to welcome message . . .", delme=2, text_type=["mono"])
 		except Exception as e:
 			await app.error(m, e)
 			print(e)
 	else:
-		await app.send_edit(m, "Please reply to some media or text to set welcome message . . .", delme=2, mono=True)      
+		await app.send_edit(m, "Please reply to some media or text to set welcome message . . .", delme=2, text_type=["mono"])      
 
 
 
 
 @app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
-async def delete_welcome(_, m: Message):
-	if await app.private(m):
+async def deletewelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
 	try:
-		await app.send_edit(m, "Checking welcome message for this group . . .", mono=True)
+		await app.send_edit(m, "Checking welcome message for this group . . .", text_type=["mono"])
 		app.del_welcome(str(m.chat.id))
-		await app.send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2, mono=True)
+		await app.send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2, text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
 
@@ -112,8 +112,8 @@ async def delete_welcome(_, m: Message):
 
 
 @app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
-async def delete_welcome(_, m: Message):
-	if await app.private(m):
+async def getwelcome_handler(_, m: Message):
+	if await app.check_private(m):
 		return
 
 	try:
@@ -123,7 +123,7 @@ async def delete_welcome(_, m: Message):
 		cap = data["caption"]
 
 		if text is None and cap is None :
-			await app.send_edit(m, "No welcome message was assigned to this group.", mono=True, delme=3)
+			await app.send_edit(m, "No welcome message was assigned to this group.", text_type=["mono"], delme=3)
 		elif text is not None and cap is None:
 			if text.startswith("#"):
 				await app.send_cached_media(
@@ -133,7 +133,7 @@ async def delete_welcome(_, m: Message):
 					)
 				await m.delete()
 			else:
-				await app.send_edit(m, text, mono=True)
+				await app.send_edit(m, text, text_type=["mono"])
 		elif text is not None and cap is not None:
 			if text.startswith("#"):
 				await app.send_cached_media(

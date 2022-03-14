@@ -13,11 +13,7 @@ from bs4 import BeautifulSoup
 from bing_image_downloader import downloader as bing_downloader
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -50,34 +46,35 @@ def get_soup(url,header):
 
 
 @app.on_message(gen("sauce", allow =["sudo"]))
-async def image_sauce(_, m: Message):
+async def imagesauce_handler(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if not reply:
-			await app.send_edit(m, "Reply to some media.", mono=True, delme=4)
+			return await app.send_edit(m, "Reply to some media.", text_type=["mono"], delme=4)
 
 		if reply.photo:
 			m = await app.send_edit(m, "⏳ • Hold on ...")
-			universe = "photo_{}_{}.png".format(
+			savename = "photo_{}_{}.png".format(
 				reply.photo.file_id, 
 				reply.photo.date
 				)
 			await app.download_media(
 				reply,
-				file_name="./downloads/" + universe
+				file_name="./downloads/" + savename
 				)
 		elif reply.animation:
 			m = await app.send_edit(m, "⏳ • Hold on ...")
-			universe = "giphy_{}-{}.gif".format(
+			savename = "giphy_{}-{}.gif".format(
 				reply.animation.date,
 				reply.animation.file_size
 				)
 			await app.download_media(
 				reply,
-				file_name="./downloads/" + universe
+				file_name="./downloads/" + savename
 				)
 		else:
-			return await app.send_edit(m, "Only photo & animation media supported.", delme=3)
+			return await app.send_edit(m, "Only photo & animation media's are supported.", text_type=["mono"], delme=4)
+
 		searchUrl = 'http://www.google.co.id/searchbyimage/upload'
 		filePath = './downloads/{}'.format(universe)
 		multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
@@ -91,27 +88,28 @@ async def image_sauce(_, m: Message):
 
 
 @app.on_message(gen("pic", allow =["sudo"]))
-async def yandex_images(_, m: Message):
+async def yandeximages_handler(_, m: Message):
+	oldmsg = m
 	if app.long(m) == 1:
-		return await app.send_edit(m, "Usage: `.pic cat`", delme=3)
+		return await app.send_edit(m, "Usage: `.pic cat`", delme=4)
 
 	try:
-		if len(m.text.split()) > 1:
-			m = await app.send_edit(m, "`Getting image ...`")
-			photo = m.text.split(None, 1)[1]
+		if app.long(m) > 1:
+			m = await app.send_edit(m, "Getting image . . .", text_type=["nono"])
+			photo = oldmsg.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
 				photo
 			)
 			await m.delete()
 			saved = await app.send_inline_bot_result(
-				m.chat.id, 
+				msg.chat.id, 
 				query_id=result.query_id, 
 				result_id=result.results[random.randint(0, len(result.results))].id, 
 				hide_via=True
 			)
 		else:
-			await app.send_edit(m, "Failed to get the image, try again later !", delme=3)
+			await app.send_edit(m, "Failed to get the image, try again later !", text_type=["mono"], delme=4)
 	except Exception as e:
 		await app.error(m, e)
 
@@ -119,13 +117,18 @@ async def yandex_images(_, m: Message):
 
 
 @app.on_message(gen("img", allow =["sudo"]))
-async def image_search(_, m: Message):
-	if app.long(m) > 2 and bool(m.command[1].isdigit()):
-		limit = int(m.command[1])
+async def imagesearch_handler(_, m: Message):
+	cmd = m.command
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Please give me some query.", text_type=["mono"], delme=4)
+
+	if app.long(m) > 2 and bool(cmd[1].isdigit()):
+		limit = int(cmd[1])
 		query = m.text.split(None, 2)[2]
 	else:
 		limit = 3 # default
 		query = m.text.split(None, 1)[1]
+
 	try:
 		m = await app.send_edit(m, f"**Getting images:** `{query}`")
 		bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=False, timeout=60, verbose=False)
@@ -135,10 +138,10 @@ async def image_search(_, m: Message):
 			for img in os.listdir(f"./images/{query}"):
 				await app.send_photo(m.chat.id, f"./images/{query}/{img}")
 		else:
-			await app.send_edit(m, "No images found !", mono=True, delme=4)
+			await app.send_edit(m, "No images found !", text_type=["mono"], delme=4)
 
 		if os.path.exists(f"./images/{query}/"):
-			shutil.rmtree(f"./images")
+			shutil.rmtree(f"./images") # remove folder
 
 		await m.delete()
 

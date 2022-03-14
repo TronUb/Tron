@@ -18,9 +18,9 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("stats", allow = ["sudo"]))
-async def dialog_stats(_, m: Message):
+async def dialogstats_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m, "Getting stats . . .", mono=True)
+		m = await app.send_edit(m, "Getting stats . . .", text_type=["mono"])
 
 		bot = 0
 		user = 0
@@ -29,10 +29,10 @@ async def dialog_stats(_, m: Message):
 		stat_format = """
 		• **STATS FOR:** {}
 
-		> **BOTS:** {}
-		> **USERS:** {}
-		> **GROUPS:** {}
-		> **CHANNELS:** {}
+		🤖 • **BOTS:** {}
+		👨 • **USERS:** {}
+		🛡️ • **GROUPS:** {}
+		⚙️ • **CHANNELS:** {}
 		"""
 
 		async for x in app.iter_dialogs():

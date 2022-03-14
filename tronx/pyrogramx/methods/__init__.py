@@ -4,6 +4,6 @@ from .decorators import Decorators
 
 
 class Methods(
-    Decorators
+	Decorators
 ):
-    pass
+	pass

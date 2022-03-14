@@ -19,7 +19,7 @@ app.CMD_HELP.update(
 	{"telegraph" : (
 		"telegraph",
 		{
-		"tgm [reply to message/media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
+		"tgm [reply to message | media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
 		}
 		)
 	} 
@@ -29,16 +29,16 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["tgm", "telegraph"], allow = ["sudo", "channel"]))
-async def telegraph(app, m:Message):
+async def telegraph_handler(_, m:Message):
 	reply = m.reply_to_message
 	filesize = 5242880
 	# if not replied
 	if not reply:
-		await app.send_edit(m, f"Please reply to media / text . . .", mono=True)
+		await app.send_edit(m, f"Please reply to media / text . . .", text_type=["mono"])
 	# replied to text 
 	elif reply.text:
 		if len(reply.text) <= 4096:
-			await app.send_edit(m, "⏳• Hold on . . .", mono=True)
+			await app.send_edit(m, "⏳• Hold on . . .", text_type=["mono"])
 			link = app.telegraph.create_page(
 				app.name,
 				html_content=reply.text
@@ -49,7 +49,7 @@ async def telegraph(app, m:Message):
 				disable_web_page_preview=True
 				)
 		else:
-			await app.send_edit(m, "The length text exceeds 4096 characters . . .", mono=True)
+			await app.send_edit(m, "The length text exceeds 4096 characters . . .", text_type=["mono"])
 	# replied to supported media
 	elif reply.media:
 		if (
@@ -59,7 +59,7 @@ async def telegraph(app, m:Message):
 			or reply.sticker and reply.sticker.file_size <= filesize
 			or reply.document and reply.document.file_size <= filesize # [photo, video] document
 			):
-			await app.send_edit(m, "⏳• Hold on . . .", mono=True)
+			await app.send_edit(m, "⏳• Hold on . . .", text_type=["mono"])
 			# change ext to png to use convert in link
 			if reply.animation or reply.sticker:
 				loc = await app.download_media(
@@ -82,8 +82,8 @@ async def telegraph(app, m:Message):
 			if os.path.exists(loc):
 				os.remove(loc)
 		else:
-			await app.send_edit(m, "Please check the file format or file size , it must be less than 5 mb . . .", mono=True)
+			await app.send_edit(m, "Please check the file format or file size , it must be less than 5 mb . . .", text_type=["mono"])
 	else:
 		# if replied to unsupported media
-		await app.send_edit(m, "Sorry, The File is not supported !", delme=2, mono=True)
+		await app.send_edit(m, "Sorry, The File is not supported !", delme=2, text_type=["mono"])
 

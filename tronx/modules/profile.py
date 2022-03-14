@@ -76,10 +76,10 @@ def FullName(user: User):
 async def whois(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
-	msg = await app.send_edit(m, "Processing . . .", mono=True)
+	msg = await app.send_edit(m, "Processing . . .", text_type=["mono"])
 
 	if reply and app.long(m) == 1:
-		get_user = reply.id
+		get_user = reply.from_user.id
 	elif not reply and app.long(m) == 1:
 		get_user = m.from_user.id
 	elif app.long(m) > 1:
@@ -91,7 +91,7 @@ async def whois(_, m: Message):
 		if get_user:
 			user = await app.get_users(get_user)
 	except PeerIdInvalid:
-		return await app.send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", text_type=["mono"])
 
 	pfp = await app.get_profile_photos(user.id)
 	if not pfp:
@@ -121,14 +121,13 @@ async def whois(_, m: Message):
 			)
 		)
 		await msg.delete()
-		
 
 
 
 
 @app.on_message(gen("id", allow = ["sudo"]))
 async def id(_, m: Message):
-	await app.send_edit(m, "Getting id . . .", mono=True)
+	await app.send_edit(m, "Getting id . . .", text_type=["mono"])
 	cmd = m.command
 	reply = m.reply_to_message
 
@@ -143,7 +142,7 @@ async def id(_, m: Message):
 		user = await app.get_users(get_user)
 		chat = await app.get_chat(m.chat.id)
 	except PeerIdInvalid:
-		return await app.send_edit(m, "I don't know that User.", mono=True)
+		return await app.send_edit(m, "I don't know that User.", text_type=["mono"])
 
 	u_name = user.first_name if user.first_name else None
 	c_name = chat.first_name if chat.first_name else chat.title
@@ -161,7 +160,7 @@ async def mention_user(_, m: Message):
 	try:
 		user = await app.get_users(m.command[1])
 	except Exception as e:
-		await app.send_edit(m, "User not found !", mono=True)
+		await app.send_edit(m, "User not found !", text_type=["mono"])
 		return await app.error(m, e)
 
 	mention = men(user.id, " ".join(m.command[2:]))
@@ -172,7 +171,7 @@ async def mention_user(_, m: Message):
 
 @app.on_message(gen("uinfo", allow = ["sudo"]))
 async def get_full_user_info(_, m: Message):
-	msg = await app.send_edit(m, "scrapping info . . .", mono=True)
+	msg = await app.send_edit(m, "scrapping info . . .", text_type=["mono"])
 	reply = m.reply_to_message
 
 	if reply:
@@ -211,14 +210,14 @@ async def get_full_user_info(_, m: Message):
 		elif p_id is False:
 			await app.send_edit(m, duo)
 	except Exception as e:
-		await app.send_edit(m, "Try again later . . .", mono=True)
+		await app.send_edit(m, "Try again later . . .", text_type=["mono"])
 		await app.error(m, e)
 
 
 
 
 @app.on_message(gen(["sc", "scan"], allow = ["sudo"]))
-async def tg_scanner(_, m: Message):
+async def tgscan_handler(_, m: Message):
 	if m.reply_to_message:
 		await m.edit("Checking database . . .")
 		await app.forward_messages(
@@ -235,30 +234,30 @@ async def tg_scanner(_, m: Message):
 			user = "**INFO: **" + msg[0].text.split("\n\n1. ")[0]
 			await app.send_edit(m, user)
 		else:
-			await app.send_edit(m, "No information found !", mono=True)
+			await app.send_edit(m, "No information found !", text_type=["mono"])
 
 	else:
-		await app.send_edit(m, "reply to someone's message . . .", delme=2, mono=True)
+		await app.send_edit(m, "reply to someone's message . . .", delme=2, text_type=["mono"])
 
 
 
 
 @app.on_message(gen("block", allow = ["sudo"]))
-async def block_pm(_, m: Message):
+async def block_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if app.long(m) >= 2 and not reply:
 		user = m.command[1]
 		try:
 			await app.block_user(user)
-			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
+			await app.send_edit(m, "Blocked User 🚫", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.block_user(user)
-			await app.send_edit(m, "Blocked User 🚫", mono=True, delme=3)
+			await app.send_edit(m, "Blocked User 🚫", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -266,21 +265,21 @@ async def block_pm(_, m: Message):
 
 
 @app.on_message(gen("unblock", allow = ["sudo"]))
-async def unblock_pm(_, m: Message):
+async def unblock_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if app.long(m) >= 2 and not reply:
 		user = m.command[1]
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
+			await app.send_edit(m, "Unblocked User 🎉", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 	elif reply:
 		user = reply.from_user.id
 		try:
 			await app.unblock_user(user)
-			await app.send_edit(m, "Unblocked User 🎉", mono=True, delme=3)
+			await app.send_edit(m, "Unblocked User 🎉", text_type=["mono"], delme=3)
 		except Exception as e:
 			await app.error(m, e)
 
@@ -288,14 +287,14 @@ async def unblock_pm(_, m: Message):
 
 
 @app.on_message(gen("sg", allow = ["sudo"]))
-async def check_name_history(_, m: Message):
+async def userhistory_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	if not reply:
-		await app.send_edit(m, "Reply to a user to get history of name / username.", mono=True, delme=2)
+		await app.send_edit(m, "Reply to a user to get history of name / username.", text_type=["mono"], delme=2)
 
 	elif reply:
-		await app.send_edit(m, "Checking History...", mono=True)
+		await app.send_edit(m, "Checking History...", text_type=["mono"])
 		await app.forward_messages(
 			"@SangMataInfo_bot", 
 			m.chat.id, 
@@ -336,11 +335,11 @@ async def check_name_history(_, m: Message):
 
 
 @app.on_message(gen("set"))
-async def update_profile(_, m: Message):
+async def setprofile_handler(_, m: Message):
 	custom = m.command
 
 	if app.long(m) < 3:
-		return await app.send_edit(m, "Please use text and suffix after command ...")
+		return await app.send_edit(m, "Please use text and suffix after command suffix: `fname`, `lname`, `bio`")
 	# set -> fname, lname & bio
 	if app.long(m) > 2:
 		text = m.text.split(None, 2)[2]
@@ -361,11 +360,11 @@ async def update_profile(_, m: Message):
 
 
 @app.on_message(gen("rem"))
-async def remove_profile(_, m: Message):
+async def remprofile_handler(_, m: Message):
 	if app.long(m) > 1:
 		cmd = m.command[1]
 	elif app.long(m) == 1:
-		return await app.send_edit(m,"what do you want to remove ?", delme=2)
+		return await app.send_edit(m,"what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`", delme=2)
 	try:
 		if cmd in ["lname", "bio", "pfp", "uname"]:
 			await rmprofile(m, cmd)
@@ -465,7 +464,7 @@ async def rmprofile(m: Message, args):
 
 
 @app.on_message(gen("repo", allow = ["sudo"]))
-async def get_repo_link(_, m: Message):
+async def repolink_handler(_, m: Message):
 	await app.send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
 
 

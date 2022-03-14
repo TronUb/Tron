@@ -51,15 +51,13 @@ GET_FORMAT = {
 
 @app.on_message(gen("save", allow = ["sudo"]))
 async def savenote_hanlder(_, m: Message):
-	if len(m.command) < 2:
-		return await app.send_edit(m, "A note name is required with command to save a note.", mono=True)
+	reply = m.reply_to_message
+	if app.long(m) == 1:
+		return await app.send_edit(m, "A note name is required with command to save a note.", text_type=["mono"])
 
-	if len(m.command) < 3:
-		return await app.send_edit(m, "A note name & content is required to save a note.", mono=True)
-
-	note_name, text, message_type, content = app.GetNoteType(m)
+	note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
 	if not note_name:
-		return await app.send_edit(m, "A note name is necessary to save a note !", mono=True)
+		return await app.send_edit(m, "A note name is necessary to save a note !", text_type=["mono"])
 
 	if message_type == app.TEXT:
 		file_id = None
@@ -145,8 +143,6 @@ async def getnote_handler(_, m: Message):
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
 					else:
 						await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
-	else:
-		return
 
 
 
@@ -155,7 +151,7 @@ async def getnote_handler(_, m: Message):
 async def notelist_handler(_, m: Message):	
 	getnotes = app.get_all_selfnotes(m.from_user.id)
 	if not getnotes:
-		return await app.send_edit(m, "There are no saved notes !", mono=True, delme=4)
+		return await app.send_edit(m, "There are no saved notes !", text_type=["mono"], delme=4)
 
 	notelist = "**NOTEBOOK:**\n\n"
 	for x in getnotes:

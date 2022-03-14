@@ -588,3 +588,30 @@ class Utilities(AioHttp):
 	def ChatType(self, m: Message):
 		return m.chat.type
 
+
+# get formated text (html)
+	def FormatText(self, text, format=[]): 
+		for x in format:
+			format_dict = {
+			"mono" : f"<code>{text}</code>", 
+			"bold" : f"<b>{text}</b>",
+			"italic" : f"<i>{text}</i>",
+			"strike" : f"<s>{text}</s>",
+			"underline" : f"<u>{text}</u>"
+			}
+			text = format_dict.get(x)
+		return text
+
+
+# paste anything to pasting site
+		async def HasteBinPaste(self, text):
+			try:
+				async with aiohttp.ClientSession() as session:
+					async with session.post(
+						"https://www.toptal.com/developers/hastebin/documents", data=text.encode("utf-8"), timeout=3
+						) as response:
+						key = (await response.json())["key"]
+						url = f"https://hastebin.com/raw/{key}"
+						return url if key else None
+			except Exception as e:
+				await app.error(m, e)

@@ -1,11 +1,7 @@
-from tronx import app
+from tronx import app, gen
 
 from pytube import YouTube
 from pyrogram.types import Message
-
-from tronx.helpers import (
-	gen,
-)
 
 
 
@@ -24,17 +20,17 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("vinfo", allow = ["sudo", "channel"]))
-async def utube_info(_, m: Message):
+@app.on_message(gen("yvinfo", allow = ["sudo", "channel"]))
+async def videoinfo_handler(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
 		link = reply.text
 	elif not reply and app.long(m) >= 1:
 		link = m.text.split(None, 1)[1]
 	elif not reply and app.long(m) == 1:
-		return await app.send_edit(m, "Reply to youtube link or give link as a suffix . . .", mono=True, delme=5)
+		return await app.send_edit(m, "Reply to youtube link or give link as a suffix . . .", text_type=["mono"], delme=5)
 
-	await app.send_edit(m, "Getting information . . .", mono=True)
+	await app.send_edit(m, "Getting information . . .", text_type=["mono"])
 	yt = YouTube(link)
 	thumb_link = yt.thumbnail_url
 	data = f"**Title:** {yt.title}\n\n"
@@ -49,21 +45,21 @@ async def utube_info(_, m: Message):
 
 
 @app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
-async def yt_download(_, m):
+async def ytdownload_handler(_, m):
 	reply = m.reply_to_message
-	await app.send_edit(m, "processing link . . .", mono=True)
+	await app.send_edit(m, "processing link . . .", text_type=["mono"])
 	if not reply:
 		if app.long(m) == 1:
-			return await app.send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", mono=True, delme=4)
+			return await app.send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", text_type=["mono"], delme=4)
 		elif app.long(m) > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
 			link = m.command[1]
 		else:
-			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
+			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
 	elif reply:
 		if reply.text and reply.text.startswith("http://" or "https://"):
 			link = reply.text
 		else:
-			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", mono=True, delme=4)
+			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
 	else:
 		return await app.send_edit(m, "Something went wrong . . .")
 
@@ -76,6 +72,7 @@ async def yt_download(_, m):
 			try:
 				loc = x.download()
 				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title)
+				await m.delete()
 				break
 			except Exception as e:
 				await error(m, e)

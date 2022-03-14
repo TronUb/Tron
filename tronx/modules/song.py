@@ -1,11 +1,7 @@
 import asyncio
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -26,7 +22,7 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["song", "music"], allow = ["sudo", "channel"]))
-async def send_music(_, m: Message):
+async def song_handler(_, m: Message):
 	await app.send_edit(m, "Getting song . . .")
 	try:
 		cmd = m.command
@@ -36,7 +32,7 @@ async def send_music(_, m: Message):
 		elif reply and len(cmd) == 1:
 			song_name = reply.text or reply.caption
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		song_results = await app.get_inline_bot_results("audio_storm_bot", song_name)
 
@@ -72,17 +68,17 @@ async def send_music(_, m: Message):
 
 
 @app.on_message(gen(["dz", "deezer"], allow = ["sudo", "channel"]))
-async def send_music(_, m: Message):
-	await app.send_edit(m, "Searching on deezer . . .")
+async def deezer_handler(_, m: Message):
 	try:
+		m = await app.send_edit(m, "Searching on deezer . . .")
 		cmd = m.command
 		reply = m.reply_to_message
-		if len(cmd) > 1:
+		if app.long(m) > 1:
 			song_name = m.text.split(None, 1)[1]
-		elif reply and len(cmd) == 1:
+		elif reply and app.long(m) == 1:
 			song_name = reply.text or reply.caption
-		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give a song name . . .", delme=3, mono=True)
+		elif not reply and app.long(m) == 1:
+			return await app.send_edit(m, "Give a song name . . .", delme=3, text_type=["mono"])
 
 		song_results = await app.get_inline_bot_results("DeezerMusicBot", song_name)
 
@@ -107,18 +103,18 @@ async def send_music(_, m: Message):
 			)
 
 			# delete the message from Saved Messages
-			await app.delete_messages("me", saved.message_id)
+			await app.delete_messages("me", [saved.message_id, m.message_id])
 		except TimeoutError:
-			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, mono=True)
+			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, text_type=["mono"])
 	except Exception as e:
 		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, try again !", mono=True, delme=3)
+		await app.send_edit(m, "Something went wrong, try again !", text_type=["mono"], delme=3)
 
 
 
 
 @app.on_message(gen(["ly", "lyrics"], allow = ["sudo", "channel"]))
-async def lyrics(_, m: Message):
+async def lyrics_handler(_, m: Message):
 	try:
 		cmd = m.command
 		reply = m.reply_to_message
@@ -133,10 +129,10 @@ async def lyrics(_, m: Message):
 			elif reply.text and len(cmd) > 1:
 				song_name = m.text.split(None, 1)[1]
 			else:
-				return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+				return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", mono=True, delme=3)
+			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
 
 		await app.send_edit(m, f"**Finding lyrics for:** `{song_name}`")
 
@@ -162,7 +158,7 @@ async def lyrics(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", saved.updates[1].message.id)
 		except TimeoutError:
-			return await app.send_edit(m, "Something went Wrong !", mono=True, delme=3)
+			return await app.send_edit(m, "Something went Wrong !", text_type=["mono"], delme=3)
 	except Exception as e:
 		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, please try again later !", mono=True, delme=3)
+		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=3)

@@ -1,13 +1,8 @@
-import random
 import asyncio
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -25,20 +20,21 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen(["q"], allow = ["sudo", "channel"]))
-async def quote(_, m: Message):
+async def quotly_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		return await app.send_edit(m, "Reply to any users text message", delme=2)
+		return await app.send_edit(m, "Reply to any users text message", delme=4)
 
-	await app.send_edit(m, "Making a Quote . . .", mono=True)
+	m = await app.send_edit(m, "Making a Quote . . .", text_type=["mono"])
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0
 	while is_sticker:
 		try:
-			msg = await app.get_history(
-				"@QuotLyBot", 
-				1
+			msg = await app.get_last_msg(
+				message=m,
+				chat_id="@QuotLyBot", 
+				limit=1
 				)
 			check = msg[0]["sticker"]["file_id"]
 			is_sticker = False
