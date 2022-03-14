@@ -1,5 +1,6 @@
 import os
 import re
+import time
 
 from typing import (
 	Union, 
@@ -92,12 +93,11 @@ def gen(
 	allow: list = []
 	):
 
-	# update the commands and information of commands.
-
-	# modified func of pyrogram.filters.command
+	# modified function of pyrogram.filters.command
 	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
 
+		start = time.time()
 		text = message.text or message.caption
 		message.command = None
 		user = message.from_user if message.from_user else None
@@ -126,11 +126,13 @@ def gen(
 				continue
 
 			for cmd in flt.commands:
-				if re.match(rf"^\b{cmd}\b", text[len(prefix):]):
+				if prefix+cmd == text.split()[0]: # split on spaces
 					message.command = text.split()
 					if message_owner == "sudo" and client.SudoCmds():
 						if not cmd in client.SudoCmds():
 							return False
+					end = time.time()
+					print(end-start)
 					return True
 
 		return False
