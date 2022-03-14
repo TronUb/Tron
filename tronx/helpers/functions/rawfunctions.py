@@ -146,7 +146,7 @@ class RawFunctions(object):
 		ex: (async)
 			await app.sleep(message, 10, delme=True)
 		"""
-
+		msg = None
 		await asyncio.sleep(sec)
 		if delmsg and message.from_user.is_self:
 			msg = await message.delete()
