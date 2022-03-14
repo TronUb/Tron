@@ -198,7 +198,7 @@ async def herokuvars_handler(_, m: Message):
 # set vars in heroku 
 @app.on_message(gen("setvar"))
 async def setvar_handler(_, m: Message):
-	if await not_heroku(m)
+	if await not_heroku(m):
 		return
 
 	if app.long(m) < 3:
