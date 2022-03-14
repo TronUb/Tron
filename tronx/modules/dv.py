@@ -66,7 +66,7 @@ async def deldv_handler(_, m: Message):
 		await app.send_edit(m, "text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
 
 	elif app.long(m) > 1:
-		keys "**Deleted vars:**\n\n"
+		keys = "**Deleted vars:**\n\n"
 		cmd = m.command 
 		for key in cmd[1:]:
 			done = app.deldv(key)
