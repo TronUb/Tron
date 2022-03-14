@@ -262,7 +262,7 @@ class RawFunctions(object):
 		else:
 			msg = await self.send_message(
 				chat_id=message.chat.id, 
-				text=FormatText(text, format=text_type),
+				text=self.FormatText(text, format=text_type),
 				disable_web_page_preview=disable_web_page_preview, 
 				parse_mode=parse_mode,
 				reply_to_message_id=reply_to_message_id,
