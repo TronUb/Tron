@@ -5,8 +5,8 @@ from .on_inline import OnInlineQuery
 
 
 class Decorators(
-    OnMessage,
-    OnInlineQuery,
-    OnCallbackQuery,
+	OnMessage,
+	OnInlineQuery,
+	OnCallbackQuery,
 ):
-    pass
+	pass
