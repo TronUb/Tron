@@ -23,16 +23,16 @@ app.CMD_HELP.update(
 async def quotly_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		return await app.send_edit(m, "Reply to any users text message", delme=2)
+		return await app.send_edit(m, "Reply to any users text message", delme=4)
 
-	await app.send_edit(m, "Making a Quote . . .", text_type=["mono"])
+	m = await app.send_edit(m, "Making a Quote . . .", text_type=["mono"])
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0
 	while is_sticker:
 		try:
 			msg = await app.get_last_msg(
-				m
+				message=m,
 				chat_id="@QuotLyBot", 
 				limit=1
 				)
