@@ -128,11 +128,13 @@ def gen(
 			for cmd in flt.commands:
 				if prefix+cmd == text.split()[0]: # split on spaces
 					message.command = text.split()
-					if message_owner == "sudo" and client.SudoCmds():
+					if message_owner == "sudo":
+						if not client.SudoCmds(): # empty config -> full command access to sudo
+							return True 
+
 						if not cmd in client.SudoCmds():
 							return False
-					end = time.time()
-					print(end-start)
+
 					return True
 
 		return False
