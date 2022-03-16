@@ -94,16 +94,14 @@ def gen(
 	):
 
 	# modified function of pyrogram.filters.command
-	command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")
 	async def func(flt, client: Client, message: Message):
 
-		start = time.time()
 		text = message.text or message.caption
 		message.command = None
 		user = message.from_user if message.from_user else None
-		message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else "unknown" 
+		message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
 
-		if message_owner == "unknown":
+		if not message_owner:
 			return False
 
 		if not "channel" in allow:
@@ -127,7 +125,7 @@ def gen(
 
 			for cmd in flt.commands:
 				if prefix+cmd == text.split()[0]: # split on spaces
-					message.command = text.split()
+					message.command = [cmd] + text.split()[1:]
 					if message_owner == "sudo":
 						if not client.SudoCmds(): # empty config -> full command access to sudo
 							return True 
