@@ -104,18 +104,6 @@ def gen(
 		if not message_owner:
 			return False
 
-		if not "channel" in allow:
-			if message.chat.type == "channel":
-				return False
-
-		if not "forward" in allow:
-			if message.forward_date:
-				return False
-
-		if not "edited" in allow:
-			if message.edit_date:
-				return False
-
 
 		flt.prefixes = client.MyPrefix() # workaround
 
