@@ -97,9 +97,18 @@ def gen(
 	async def func(flt, client: Client, message: Message):
 
 		try:
-			text = message.text or message.caption
+			text = message.text or message.caption or None
+
+			if not text:
+				return False
+
 			message.command = None
+
 			user = message.from_user if message.from_user else None
+
+			if not user:
+				return False
+
 			message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
 
 			if not message_owner:
