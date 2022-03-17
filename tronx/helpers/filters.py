@@ -96,34 +96,39 @@ def gen(
 	# modified function of pyrogram.filters.command
 	async def func(flt, client: Client, message: Message):
 
-		text = message.text or message.caption
-		message.command = None
-		user = message.from_user if message.from_user else None
-		message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
+		try:
+			text = message.text or message.caption
+			message.command = None
+			user = message.from_user if message.from_user else None
+			message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
 
-		if not message_owner:
+			if not message_owner:
+				return False
+
+			if message.forward_date: # forwarded messages can't be edited
+				return False
+
+			flt.prefixes = client.MyPrefix() # workaround
+
+			for prefix in flt.prefixes:
+				if not text.startswith(prefix):
+					continue
+
+				cmd = text.split()[0][1:]
+				if cmd in flt.commands:
+					message.command = [cmd] + text.split()[1:]
+					if message_owner == "sudo":
+						if not client.SudoCmds(): # empty config -> full command access to sudo
+							return True 
+
+						if not cmd in client.SudoCmds():
+							return False
+
+					return True
+
 			return False
-
-
-		flt.prefixes = client.MyPrefix() # workaround
-
-		for prefix in flt.prefixes:
-			if not text.startswith(prefix):
-				continue
-
-			cmd = text.split()[0][1:]
-			if cmd in flt.commands:
-				message.command = [cmd] + text.split()[1:]
-				if message_owner == "sudo":
-					if not client.SudoCmds(): # empty config -> full command access to sudo
-						return True 
-
-					if not cmd in client.SudoCmds():
-						return False
-
-				return True
-
-		return False
+		except Exception as e:
+			print(e)
 
 	commands = commands if isinstance(commands, list) else [commands]
 	commands = {c if case_sensitive else c.lower() for c in commands}
