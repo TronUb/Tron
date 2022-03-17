@@ -104,18 +104,6 @@ def gen(
 		if not message_owner:
 			return False
 
-		if not "channel" in allow:
-			if message.chat.type == "channel":
-				return False
-
-		if not "forward" in allow:
-			if message.forward_date:
-				return False
-
-		if not "edited" in allow:
-			if message.edit_date:
-				return False
-
 
 		flt.prefixes = client.MyPrefix() # workaround
 
@@ -123,17 +111,17 @@ def gen(
 			if not text.startswith(prefix):
 				continue
 
-			for cmd in flt.commands:
-				if prefix+cmd == text.split()[0]: # split on spaces
-					message.command = [cmd] + text.split()[1:]
-					if message_owner == "sudo":
-						if not client.SudoCmds(): # empty config -> full command access to sudo
-							return True 
+			cmd = text.split()[0][1:]
+			if cmd in flt.commands:
+				message.command = [cmd] + text.split()[1:]
+				if message_owner == "sudo":
+					if not client.SudoCmds(): # empty config -> full command access to sudo
+						return True 
 
-						if not cmd in client.SudoCmds():
-							return False
+					if not cmd in client.SudoCmds():
+						return False
 
-					return True
+				return True
 
 		return False
 
