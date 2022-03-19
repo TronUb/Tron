@@ -26,7 +26,6 @@ app.CMD_HELP.update(
 		"cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
 		"temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
 		"json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.", 
-		"ulink [reply to inline button message]" : "Use this to inline or url button message containing links.",
 		"mlink [reply to message]" : "Use this to get message links. both private and public groups.",
 		"saved [reply to message]" : "Save Media To Your Telegram Cloud Storage \ Saved Messages.",
 		"fwd [reply to message]" : "Forward messages to same group or other groups.",
@@ -138,37 +137,6 @@ async def messagejson_handler(_, m: Message):
 		await app.create_file(m, "json.txt", data)
 		if m.from_user.is_self:
 			await m.delete()
-
-
-
-
-@app.on_message(gen("ulink", allow = ["sudo", "channel"]))
-async def urllink_handler(app, m: Message):
-	reply = m.reply_to_message
-	cat = []
-	dog = []
-	cat.clear()
-	dog.clear()
-
-	if reply:
-		try:
-			raw = reply.reply_markup.inline_keyboard
-		except Exception as e:
-			await app.error(m, e)
-
-		for x in range(len(raw)):
-			cat.append(raw[x])
-
-		for y in range(len(cat)):
-			dog.append(cat[x][0].url)
-
-		msg = "\n".join(dog)
-		if msg:
-			await app.send_edit(m, f"`{msg}`")
-		else:
-			await app.send_edit(m, "There are no links in this message . . .", text_type=["mono"])
-	else:
-		await app.send_edit(m, "Try this command on url button message to get info of the button . . .", text_type=["mono"])
 
 
 
