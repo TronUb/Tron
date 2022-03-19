@@ -356,7 +356,7 @@ async def textlogs_handler(_, m: Message):
 	logsdata = heroku_app.get_log()
 	if logsdata:
 		try:
-			url = app.HasteBinpaste(logsdata)
+			url = app.HasteBinPaste(logsdata)
 			text = f"Heroku Logs: [press here]({url})"
 			await app.send_edit(m, text, disable_web_page_preview=True)
 		except Exception as e:
