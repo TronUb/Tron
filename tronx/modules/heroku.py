@@ -356,18 +356,13 @@ async def textlogs_handler(_, m: Message):
 	logsdata = heroku_app.get_log()
 	if logsdata:
 		try:
-			key = (requests.post("https://nekobin.com/api/documents", json={"content":logsdata}).json().get("result").get("key"))
-			url = f"https://nekobin.com/{key}"
-			text = f"Heroku Logs: [here]({url})"
+			link = app.HasteBinpaste(logsdata)
+			text = f"Heroku Logs: [press here]({url})"
 			await app.send_edit(m, text, disable_web_page_preview=True)
 		except Exception as e:
 			await app.error(m, e)
 	else:
-		await app.send_edit(
-			m, 
-			f"Failed to get the logs, try `{app.PREFIX}logs` cmd . . .",
-			delme=4
-		)
+		await app.send_edit(m, f"Failed to get the heroku text logs, try `{app.PREFIX.split()[0]}logs` command.", delme=4)
 
 
 
