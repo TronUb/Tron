@@ -27,29 +27,32 @@ gtl = GoogleTranslator()
 async def translate_handler(_, m: Message):
 	reply = m.reply_to_message
 	cmd = m.command
+	oldmsg = m
 
 	try:
 		lang = cmd[1] if app.long(m) > 1 else "en"
 
-		await app.send_edit(m, f"**Translating in** `{lang}` . . .")
+		m = await app.send_edit(m, f"**Translating in** `{lang}` . . .")
 
 		languages = list((gtl.get_supported_languages(as_dict=True)).values())
 
 		if not lang in languages:
-			return await app.send_edit(m, "Bot doesn't support this language code, please try different one.", text_type=["mono"], delme=5)
+			return await app.send_edit(m, "Bot doesn't support this language code, please try different one.", text_type=["mono"], delme=4)
 
 		if (reply and reply.text):
 			tdata = await translate(m, lang=lang, text=reply.text)
-			await app.send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:**`{tdata}`")
+			await app.send_edit(m, f"**Translated to:** `{lang}`\n\n**Text: **`{tdata}`")
 
-		elif not reply and len(m.text) <= 4096:
+		elif not reply and app.textlen(oldmsg) <= 4096:
 			if app.long(m) <= 2:
-				return await app.send_edit(m, "Give me the language code with text.", text_type=["mono"], delme=3)
+				return await app.send_edit(m, "Give me the language code with text to translate.", text_type=["mono"], delme=4)
+
 			text = m.text.split(None, 2)[2]
 			tdata = await translate(m, lang=lang, text=text)
 			await app.send_edit(m, f"**Translated to:** `{lang}`\n\n**Text:** `{tdata}`")
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=5)
+			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=4)
+
 	except Exception as e:
 		await app.error(m, e)
 
@@ -68,9 +71,9 @@ async def translatelang_handler(_, m):
 	data = []
 	data.clear()
 
-	langs_list = gtl.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english: en etc...}
+	langs_list = gtl.get_supported_languages(as_dict=True)  # output: {arabic: ar, french: fr, english: en etc.}
 	for keys, values in zip(langs_list.values(), langs_list.keys()):
 		data.append(f"`{keys}` : `{values}`")
 
-	await app.send_edit(m, "**Total languages:**\n\n" + "\n".join(data))
+	await app.send_edit(m, "**SUPPORTED LANGUAGES:**\n\n" + "\n".join(data))
 		
