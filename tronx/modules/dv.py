@@ -2,13 +2,7 @@ import time
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
-
-from config import Config
+from tronx import app, gen
 
 
 
@@ -22,6 +16,7 @@ app.CMD_HELP.update(
 		"getdv [varname]" : "Get a existing database vars value.",
 		"deldv [varname]" : "Delete a existing database var with its value.",
 		"alldv" : "Get all existing database vars.",
+		"listdv" : "Get all available dv vars which you set.",
 		"pm [on | off]" : "Turn on & off your pmguard",
 		}
 		)
@@ -32,10 +27,8 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("setdv", allow =["sudo"]))
 async def setdv_handler(_, m: Message):
-	restricted_list = ("API_ID", "API_HASH", "SESSION", "TOKEN")
 	if app.long(m) == 1:
-		allvars = [f"`{x}`" for x in dir(Config) if x.isupper() and not x in restricted_list]
-		await app.send_edit(m, "**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
+		await app.send_edit(m, "Give me a key & a value to set dv vars.", text_type=["mono"], delme=4)
 
 	elif app.textlen(m) > 4096:
 		await app.send_edit(m, "Text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
@@ -140,11 +133,17 @@ async def alldv_handler(_, m: Message):
 		dict_data.clear()
 
 		for key, value in zip(my_dict.keys(), my_dict.values()):
-			dict_data.append(f"`{key}` = `{value}`\n")
+			dict_data.append(f"`{key}` = `{value}`\n\n")
 
 		await app.send_edit(m, "**All DB VARS:**\n\n" + "".join(dict_data))
 	else:
 		await app.send_edit(m, "There are no database vars (empty) !", text_type=["mono"], delme=4)
 
+
+
+@app.on_message(gen("listdv", allow=["sudo"]))
+async def dvlist_handler(_, m: Message):
+	allvars = [f"`{x}`" for x in app.DVLIST]
+	await app.send_edit(m, "**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
 
 
