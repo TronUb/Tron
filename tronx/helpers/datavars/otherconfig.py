@@ -1,3 +1,18 @@
+
+OTHERDV = [
+	"NO_LOAD",
+	"SUDO_USERS",
+	"SUDO_CMDS",
+	"PMPERMIT",
+	"PM_LIMIT",
+	"PMPERMIT_PIC",
+	"PMPERMIT_TEXT",
+	"PREFIX",
+	"HELP_EMOJI",
+	]
+
+
+
 class OtherConfig(object):
 	def NoLoad(self):
 		""" Get your No load module list """
