@@ -113,11 +113,11 @@ async def createfile_handler(app, m:Message):
 			name = oldmsg.text.split(None, 1)[1]
 			m = await app.send_edit(m, mytext, text_type=["mono"])
 			text = reply.text or reply.caption
-			filepath = await app.create_file(
+			await app.create_file(
 				message=m, 
 				filename=name, 
 				content=text,
-				caption=f"Uploaded by {app.UserMention()}"
+				send=True
 			)
 
 		# if replied to text without file name
@@ -125,11 +125,11 @@ async def createfile_handler(app, m:Message):
 			m = await app.send_edit(m, mytext, text_type=["mono"])
 			name = oldmsg.text.split(None, 1)[1]
 			text = oldmsg.text.split(None, 2)[2]
-			filepath = await app.create_file(
+			await app.create_file(
 				message=m, 
 				filename="file.py", 
 				content=text,
-				caption=f"Uploaded by {app.UserMention()}"
+				send=True
 			)
 
 		# if replied to text with file name
@@ -138,8 +138,7 @@ async def createfile_handler(app, m:Message):
 
 		else:
 			await app.send_edit(m, "Something went wrong !")
-		if filepath:
-			await app.send_document(m.chat.id, filepath, caption=f"Uploaded by {app.UserMention()}")
+
 	except Exception as e:
 		await app.error(m, e)
 
