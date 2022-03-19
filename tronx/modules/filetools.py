@@ -98,49 +98,50 @@ async def unzip_handler(_, m: Message):
 @app.on_message(gen("new", allow =["sudo"]))
 async def createfile_handler(app, m:Message):
 	reply = m.reply_to_message
-	cmd = m.command
-	text = "Making file . . ."
+	mytext = "Making file . . ."
 	oldmsg = m # workaround
+	filepath = None
 
 	try:
 		if app.textlen(m) > 4096:
 			return await app.send_edit(m, "The message is too long. (it must be <= 4096)", delme=4, text_type=["mono"])
 
-		if app.textlen(m) <= 4096 and app.long(m) > 2:
-			m = await app.send_edit(m, text, text_type=["mono"])
-			data = oldmsg.text.split(None, 2)[2]
-			givename = cmd[1]
+		if app.long(m) == 1:
+			return await app.send_edit(m, "Give me filename & content of file after command.", text_type=["mono"], delme=4)
+
+		if reply and app.long(m) >= 2:
+			name = oldmsg.text.split(None, 1)[1]
+			m = await app.send_edit(m, mytext, text_type=["mono"])
+			text = reply.text or reply.caption
 			await app.create_file(
-				message=msg, 
-				filename=givename, 
-				content=data,
-				caption=f"Uploaded by {app.UserMention()}"
+				message=m, 
+				filename=name, 
+				content=text,
+				send=True
 			)
+
 		# if replied to text without file name
-		elif app.long(m) == 1 and reply:
-			m = await app.send_edit(m, text, text_type=["mono"])
-			data = reply.text
+		elif not reply and app.long(m) >= 3:
+			m = await app.send_edit(m, mytext, text_type=["mono"])
+			name = oldmsg.text.split(None, 1)[1]
+			text = oldmsg.text.split(None, 2)[2]
 			await app.create_file(
-				message=msg, 
+				message=m, 
 				filename="file.py", 
-				content=data,
-				caption=f"Uploaded by {app.UserMention()}"
+				content=text,
+				send=True
 			)
+
 		# if replied to text with file name
-		elif app.long(m) > 1 and reply:
-			m = await app.send_edit(m, text, text_type=["mono"])
-			givename = cmd[1]
-			data = reply.text
-			await app.create_file(
-				message=msg, 
-				filename=givename, 
-				content=data,
-				caption=f"Uploaded by {app.UserMention()}"
-			)
+		elif not reply and app.long(m) <= 2:
+			await app.send_edit(m, "Are you dumb, give me the file contents with the file name.", text_type=["mono"], delme=4)
+
 		else:
-			await app.send_edit(m, f"Use cmd correctly: `{app.PREFIX}new [ file name ] [content] | [reply]`\n\nNote: use filename with extention, ex: file.py, file.txt, etc")
+			await app.send_edit(m, "Something went wrong !")
+
 	except Exception as e:
 		await app.error(m, e)
+
 
 
 

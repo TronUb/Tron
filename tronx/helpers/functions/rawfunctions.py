@@ -85,13 +85,13 @@ class RawFunctions(object):
 		self, 
 		message: Message, 
 		e, 
-		edit_error: bool=False
+		edit_error: bool=True
 		):
 		"""
 		params: 
 			1. message (update) :: incoming updates
 			2. error :: occured error
-			3. edit_error: bool, default=False :: edits | sends error message 
+			3. edit_error: bool, default=True :: edits | sends error message 
 
 		usage:
 			use this function at the end of try/except block
@@ -114,9 +114,9 @@ class RawFunctions(object):
 		try:
 			if edit_error:
 				if hasattr(e, "MESSAGE"):
-					await self.send_edit(message, f"[ **{e.CODE}** ] : `{e.MESSAGE}`")
+					await self.send_edit(message, f"`{e.MESSAGE}`")
 				else:
-					await self.send_edit(message, e.args)
+					await self.send_edit(message, e.args[0] if e.args else None)
 
 			await self.send_message(self.LOG_CHAT, teks)
 
@@ -370,7 +370,8 @@ class RawFunctions(object):
 		"""
 
 		try:
-			file = open(f"./downloads/{filename}", "w+")
+			path = f"./downloads/{filename}"
+			file = open(path, "w+")
 			file.write(content)
 			file.close()
 			if send:
@@ -380,13 +381,13 @@ class RawFunctions(object):
 						filename,
 						caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
 					)
-				if os.path.exists(name):
-					os.remove(name)
-				await m.delete()
+				if os.path.exists(path):
+					os.remove(path)
+
 			else:
-				return f"./downloads/{filename}"
+				return path
 		except Exception as e:
-			await self.error(m, e)
+			await self.error(message, e)
 
 
 	def rem_dual(
