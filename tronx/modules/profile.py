@@ -16,12 +16,7 @@ from pyrogram.types import (
 from pyrogram.raw import functions
 from pyrogram.errors import PeerIdInvalid
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
-
+from tronx import app, gen
 
 
 
@@ -38,8 +33,8 @@ app.CMD_HELP.update(
 		"block [username] or [reply to user]" : "Block a user from sending message in your pm.",
 		"unblock [username] or [reply to user]" : "Unblock a user and allow him to send messages in your pm.",
 		"repo" : "Get Tron Userbot official repository link.",
-		"rem [lname] or [username]" : "Remove last name or username from profile.",
-		"set [fname] or [lname ] or [username] or [bio] and [text]" : "Choose a option from command and set anything in your profile.",
+		"rem [lname] | [bio] | [pfp] | [uname]" : "Remove last name or username from profile.",
+		"set [fname] | [lname ] | [uname] | [bio] & [text]" : "Choose a option from command and set anything in your profile.",
 		"uinfo [reply to user]" : "Get Full Info Of A Specific User.\nThis Command Includes More Details.",
 		"sc [reply to user]" : "Find Out Groups Of A Specific User, Reply To That User.",
 		"sg [reply to user]" : "Get name & username history of a particular user in groups or private chats.",
@@ -336,25 +331,22 @@ async def userhistory_handler(_, m: Message):
 
 @app.on_message(gen("set"))
 async def setprofile_handler(_, m: Message):
-	custom = m.command
+	cmd = m.command
 
 	if app.long(m) < 3:
-		return await app.send_edit(m, "Please use text and suffix after command suffix: `fname`, `lname`, `bio`")
-	# set -> fname, lname & bio
+		return await app.send_edit(m, "Please use text and suffix after command suffix: `fname`, `lname`, `bio`, `uname`")
+
+	# set -> fname, lname, bio & uname
 	if app.long(m) > 2:
 		text = m.text.split(None, 2)[2]
 
-		if custom[1] in ["fname", "lname", "bio"]:
-			await setprofile(
-				m, 
-				custom[1], 
-				f"{text[2:]}"
-			)
-		elif custom[1] == "uname":
-			await app.update_username(f"{custom[2]}"
-)
+		if cmd[1] in ["fname", "lname", "bio"]:
+			await setprofile(m, text, text)
+		elif cmd[1] in ["uname"]:
+			await app.update_username(text)
+
 	else:
-		return await app.send_edit(m, f"Please specify a correct suffix.", delme=2)
+		return await app.send_edit(m, f"Please specify a correct suffix.", text_type=["mono"], delme=4)
 
 
 
@@ -362,14 +354,15 @@ async def setprofile_handler(_, m: Message):
 @app.on_message(gen("rem"))
 async def remprofile_handler(_, m: Message):
 	if app.long(m) > 1:
-		cmd = m.command[1]
+		cmd = m.command
+
 	elif app.long(m) == 1:
-		return await app.send_edit(m,"what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`", delme=2)
+		return await app.send_edit(m,"what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`", delme=4)
 	try:
-		if cmd in ["lname", "bio", "pfp", "uname"]:
-			await rmprofile(m, cmd)
+		if cmd[1] in ["lname", "bio", "pfp", "uname"]:
+			await rmprofile(m, cmd[1])
 		else:
-			await app.send_edit(m,"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=2)
+			await app.send_edit(m,"please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=4)
 	except Exception as e:
 		await app.error(m, e)
 
@@ -465,6 +458,6 @@ async def rmprofile(m: Message, args):
 
 @app.on_message(gen("repo", allow = ["sudo"]))
 async def repolink_handler(_, m: Message):
-	await app.send_edit(m, "[Here Is Tronuserbot Repo](https://github.com/beastzx18/Tron)")
+	await app.send_edit(m, "TronUB Repo: [press here](https://github.com/beastzx18/Tron)", disable_web_page_preview=True)
 
 
