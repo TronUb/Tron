@@ -1,3 +1,14 @@
+
+USERDV = [
+	"USER_NAME",
+	"USER_USERNAME",
+	"USER_ID",
+	"USER_PIC",
+	"USER_BIO"
+	]
+
+
+
 class UserConfig(object):
 	def UserName(self):
 		"""returns name of user"""
@@ -21,7 +32,7 @@ class UserConfig(object):
 
 	def UserDc(self):
 		"""returns telegram dc id of user"""
-		return self.dc_id or None
+		return self.getdv("DC_ID") or self.dc_id or None
 
 
 	def UserPic(self):

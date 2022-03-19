@@ -6,11 +6,7 @@ from pyrogram.errors import (
 	UsernameInvalid
 )
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -98,7 +94,7 @@ async def pmpermit_handler(_, m: Message):
 				user = users.get(m.chat.id)
 			else:
 				user = await app.get_users(m.chat.id)
-				users.append({m.chat.id : user}) # whole obj
+				users.append({m.chat.id : user}) # whole object
 
 
 		# log user info to log chat
@@ -107,7 +103,7 @@ async def pmpermit_handler(_, m: Message):
 		msg += f"Name: `{user.first_name}`\n"
 		msg += f"Id: `{user.id}`\n"
 		msg += f"Username: `@{user.username}`\n" if user.username else f"Username: `None`\n"
-		msg += f"Message: `{m.text}`\n"
+		msg += f"Message: `{m.text or m.caption}`\n"
 
 		warns = bool(app.get_warn(user.id))
 
@@ -118,8 +114,8 @@ async def pmpermit_handler(_, m: Message):
 		elif warns is True:
 			warn = int(app.get_warn(user.id))
 			if warn < pmlimit:
-				maximum = warn + 1
-				app.set_warn(user.id, maximum)
+				new_warn = warn + 1
+				app.set_warn(user.id, new_warn)
 				await old_msg(m, user.id) # delete old warns
 				await send_warn(m, user.id) # send new warns
 			elif warn >= pmlimit:
@@ -128,12 +124,12 @@ async def pmpermit_handler(_, m: Message):
 					try:
 						await app.send_message(
 							app.LOG_CHAT,
-							f"{user.first_name} is now blocked for spamming !"
+							f"{user.mention} is now blocked for spamming !"
 						)
 					except PeerIdInvalid:
-						print(f"{user.first_name} was blocked in your pm for spamming.")
+						print(f"{user.first_name} was blocked in your pm for some reason.")
 				else:
-					await app.send_edit(m, f"Failed to block {user.first_name} because of spamming in pm", text_type=["mono"], delme=4)
+					await app.send_edit(m, f"Failed to block {user.mention} because through pmpermit.", text_type=["mono"], delme=4)
 			else:
 				print("Something went wrong in pmpermit")
 	except Exception as e:
@@ -166,9 +162,9 @@ async def approve_handler(_, m: Message):
 				user_data = await app.get_users(cmd[1])
 				user_id = user_data.id
 			except PeerIdInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
+				return await app.send_edit(m, "You have to pass username instead of user id.", text_type=["mono"], delme=4)
 			except UsernameNotOccupied:
-				return await app.send_edit(m, "No user like exists in telegram.", text_type=["mono"], delme=4)
+				return await app.send_edit(m, "This user doesn't exists in telegram.", text_type=["mono"], delme=4)
 			except UsernameInvalid:
 				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
 
@@ -182,7 +178,7 @@ async def approve_handler(_, m: Message):
 	try:
 		m = await app.send_edit(m, f"`Approving` {info.mention} `. . .`")
 		app.set_whitelist(user_id, True)
-		await app.send_edit(m, f"{info.mention} `is now approved for pm.`", delme=4)
+		await app.send_edit(m, f"{info.mention} `is now approved.`", delme=4)
 		app.del_warn(user_id)
 
 		if app.get_msgid(user_id):
@@ -219,7 +215,7 @@ async def diapprove_handler(_, m:Message):
 				user_data = await app.get_users(cmd[1])
 				user_id = user_data.id
 			except PeerIdInvalid:
-				return await app.send_edit(m, "The username | user id is invalid.", text_type=["mono"], delme=4)
+				return await app.send_edit(m, "Pass username instead of user id.", text_type=["mono"], delme=4)
 			except UsernameNotOccupied:
 				return await app.send_edit(m, "This user doesn't exists in telegram.", text_type=["mono"], delme=4)
 			except UsernameInvalid:
@@ -238,11 +234,10 @@ async def diapprove_handler(_, m:Message):
 		try:
 			await app.send_message(
 				app.LOG_CHAT, 
-				f"#disallow\n\n{info.mention} has been disapproved for pm !"
+				f"#disallow\n\n{info.mention} `has been disapproved.`"
 			)
 		except PeerIdInvalid:
-			print(f"{info.first_name} has been disapproved for pm")
+			print(f"{info.first_name} has been disapproved.")
 	else:
 		return await app.send_edit(m, "Sorry there is no user id to disapprove.", text_type=["mono"], delme=4)
-
 
