@@ -85,13 +85,13 @@ class RawFunctions(object):
 		self, 
 		message: Message, 
 		e, 
-		edit_error: bool=False
+		edit_error: bool=True
 		):
 		"""
 		params: 
 			1. message (update) :: incoming updates
 			2. error :: occured error
-			3. edit_error: bool, default=False :: edits | sends error message 
+			3. edit_error: bool, default=True :: edits | sends error message 
 
 		usage:
 			use this function at the end of try/except block
@@ -114,9 +114,9 @@ class RawFunctions(object):
 		try:
 			if edit_error:
 				if hasattr(e, "MESSAGE"):
-					await self.send_edit(message, f"[ **{e.CODE}** ] : `{e.MESSAGE}`")
+					await self.send_edit(message, f"`{e.MESSAGE}`")
 				else:
-					await self.send_edit(message, e.args)
+					await self.send_edit(message, e.args[0] if e.args else None)
 
 			await self.send_message(self.LOG_CHAT, teks)
 
