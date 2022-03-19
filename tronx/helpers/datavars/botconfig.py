@@ -3,6 +3,15 @@ from pyrogram.types import Message
 
 
 
+BOTDV = [
+	"BOT_NAME",
+	"BOT_USERNAME",
+	"BOT_ID",
+	"BOT_BIO",
+	"BOT_PIC"
+	]
+
+
 class BotConfig(object):
 	def BotName(self):
 		"""Get your bot name"""
