@@ -382,11 +382,11 @@ class RawFunctions(object):
 					)
 				if os.path.exists(name):
 					os.remove(name)
-				await m.delete()
+				await message.delete()
 			else:
 				return f"./downloads/{filename}"
 		except Exception as e:
-			await self.error(m, e)
+			await self.error(message, e)
 
 
 	def rem_dual(
