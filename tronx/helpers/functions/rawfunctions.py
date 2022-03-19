@@ -370,7 +370,8 @@ class RawFunctions(object):
 		"""
 
 		try:
-			file = open(f"./downloads/{filename}", "w+")
+			path = f"./downloads/{filename}"
+			file = open(path, "w+")
 			file.write(content)
 			file.close()
 			if send:
@@ -380,11 +381,11 @@ class RawFunctions(object):
 						filename,
 						caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
 					)
-				if os.path.exists(name):
-					os.remove(name)
-				await message.delete()
+				if os.path.exists(path):
+					os.remove(path)
+
 			else:
-				return f"./downloads/{filename}"
+				return path
 		except Exception as e:
 			await self.error(message, e)
 
