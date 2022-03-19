@@ -123,7 +123,7 @@ async def createfile_handler(app, m:Message):
 		# if replied to text without file name
 		elif not reply and app.long(m) >= 3:
 			m = await app.send_edit(m, mytext, text_type=["mono"])
-			name = olsmsg.text.split(None, 1)[1]
+			name = oldmsg.text.split(None, 1)[1]
 			text = oldmsg.text.split(None, 2)[2]
 			await app.create_file(
 				message=m, 
