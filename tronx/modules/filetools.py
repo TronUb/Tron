@@ -100,6 +100,7 @@ async def createfile_handler(app, m:Message):
 	reply = m.reply_to_message
 	mytext = "Making file . . ."
 	oldmsg = m # workaround
+	filepath = None
 
 	try:
 		if app.textlen(m) > 4096:
@@ -112,26 +113,24 @@ async def createfile_handler(app, m:Message):
 			name = oldmsg.text.split(None, 1)[1]
 			m = await app.send_edit(m, mytext, text_type=["mono"])
 			text = reply.text or reply.caption
-			await app.create_file(
+			filepath = await app.create_file(
 				message=m, 
 				filename=name, 
 				content=text,
 				caption=f"Uploaded by {app.UserMention()}"
 			)
-			await m.delete()
 
 		# if replied to text without file name
 		elif not reply and app.long(m) >= 3:
 			m = await app.send_edit(m, mytext, text_type=["mono"])
 			name = oldmsg.text.split(None, 1)[1]
 			text = oldmsg.text.split(None, 2)[2]
-			await app.create_file(
+			filepath = await app.create_file(
 				message=m, 
 				filename="file.py", 
 				content=text,
 				caption=f"Uploaded by {app.UserMention()}"
 			)
-			await m.delete()
 
 		# if replied to text with file name
 		elif not reply and app.long(m) <= 2:
@@ -139,8 +138,11 @@ async def createfile_handler(app, m:Message):
 
 		else:
 			await app.send_edit(m, "Something went wrong !")
+		if filepath:
+			await app.send_document(m.chat.id, filepath, caption=f"Uploaded by {app.UserMention()}")
 	except Exception as e:
 		await app.error(m, e)
+
 
 
 
