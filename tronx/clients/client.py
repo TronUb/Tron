@@ -8,7 +8,7 @@ class SuperClient(Utils, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
-		session_name=self.SESSION,
+		name=self.SESSION,
 		api_id=self.API_ID,
 		api_hash=self.API_HASH,
 		workers=self.WORKERS,
@@ -29,7 +29,7 @@ class SuperClient(Utils, Client):
 		""" Assistant (Nora) """
 		def __init__(self):
 			super().__init__(
-			session_name="Nora",
+			name="Nora",
 			api_id=self.API_ID,
 			api_hash=self.API_HASH,
 			bot_token=self.TOKEN,
