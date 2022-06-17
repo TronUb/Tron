@@ -11,6 +11,7 @@ import requests
 from typing import Union, List
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
+from pyrogram.enums import ParseMode
 
 
 
@@ -214,7 +215,7 @@ class RawFunctions(object):
 		self,
 		message: Message, 
 		text: str, 
-		parse_mode="combine", 
+		parse_mode=ParseMode.DEFAULT, 
 		disable_web_page_preview=False,
 		delme : int=0,
 		text_type: list=[],
