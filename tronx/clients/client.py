@@ -8,9 +8,10 @@ class SuperClient(Utils, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
-		name=self.SESSION,
+		name=self.name,
 		api_id=self.API_ID,
 		api_hash=self.API_HASH,
+		session_string=self.SESSION,
 		workers=self.WORKERS,
 		)
 		self.start()
