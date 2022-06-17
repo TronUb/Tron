@@ -1,14 +1,18 @@
+import random
+import string
 from pyrogram import Client
 from .utils import Utils
 
 
+# temp -
+random_name =  ''.join(random.choices(string.ascii_uppercase + string.digits, k = 7))
 
 
 class SuperClient(Utils, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
-		name=self.name,
+		name=random_name,
 		api_id=self.API_ID,
 		api_hash=self.API_HASH,
 		session_string=self.SESSION,
