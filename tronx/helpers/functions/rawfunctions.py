@@ -214,7 +214,7 @@ class RawFunctions(object):
 		self,
 		message: Message, 
 		text: str, 
-		parse_mode="default", 
+		parse_mode="MarkdownHTML", 
 		disable_web_page_preview=False,
 		delme : int=0,
 		text_type: list=[],
