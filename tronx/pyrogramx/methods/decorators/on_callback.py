@@ -2,31 +2,42 @@ from typing import Callable
 
 import pyrogram
 from pyrogram.filters import Filter
-from pyrogram.scaffold import Scaffold
 
 
-class OnCallbackQuery(Scaffold):
-	def on_callback(
-		self=None,
-		filters=None,
-		group: int = 0
-	) -> callable:
+class OnCallbackQuery:
+    def on_callback_query(
+        self=None,
+        filters=None,
+        group: int = 0
+    ) -> Callable:
+        """Decorator for handling callback queries.
 
-		def decorator(func: Callable) -> Callable:
-			if isinstance(self, pyrogram.Client):
-				self.add_handler(pyrogram.handlers.CallbackQueryHandler(func, filters), group)
-			elif isinstance(self, Filter) or self is None:
-				if not hasattr(func, "handlers"):
-					func.handlers = []
+        This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
+        :obj:`~pyrogram.handlers.CallbackQueryHandler`.
 
-				func.handlers.append(
-					(
-						pyrogram.handlers.CallbackQueryHandler(func, self),
-						group if filters is None else filters
-					)
-				)
+        Parameters:
+            filters (:obj:`~pyrogram.filters`, *optional*):
+                Pass one or more filters to allow only a subset of callback queries to be passed
+                in your function.
 
-			return func
+            group (``int``, *optional*):
+                The group identifier, defaults to 0.
+        """
 
-		return decorator
+        def decorator(func: Callable) -> Callable:
+            if isinstance(self, pyrogram.Client):
+                self.add_handler(pyrogram.handlers.CallbackQueryHandler(func, filters), group)
+            elif isinstance(self, Filter) or self is None:
+                if not hasattr(func, "handlers"):
+                    func.handlers = []
 
+                func.handlers.append(
+                    (
+                        pyrogram.handlers.CallbackQueryHandler(func, self),
+                        group if filters is None else filters
+                    )
+                )
+
+            return func
+
+        return decorator
