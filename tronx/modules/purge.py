@@ -31,23 +31,22 @@ async def purge_handler(_, m:Message):
 
 		messages = await app.get_messages(
 			m.chat.id,
-			range(m.reply_to_message.message_id, m.message_id),
+			range(m.reply_to_message.id, m.id),
 			replies=0
 		)
 
 		msg_id = []
 		msg_id.clear()
 
-		for x in messages:
-			msg_id.append(x.message_id)
+		for msg in messages:
+			msg_id.append(msg.id)
 
 		await app.delete_messages(
 			m.chat.id,
 			msg_id
 		)
 
-		end = datetime.now()
-		sec = (end - start).seconds
+		sec = (datetime.now() - start).seconds
 
 		await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), text_type=["mono"], delme=4)
 	else:
@@ -71,8 +70,8 @@ async def purgeme_handler(_, m:Message):
 	msg_id = []
 	msg_id.clear()
 
-	async for x in app.iter_history(m.chat.id, limit=lim):
-		msg_id.append(x.message_id)
+	async for msg in app.get_chat_history(m.chat.id, limit=lim):
+		msg_id.append(msg.id)
 
 	await app.delete_messages(m.chat.id, message_ids=msg_id[0:lim])
 	sec = (datetime.now() - start).seconds
@@ -85,7 +84,7 @@ async def purgeme_handler(_, m:Message):
 @app.on_message(gen("del", allow = ["sudo", "channel"]))
 async def del_handler(_, m: Message):
 	reply = m.reply_to_message
-	msg_ids = [m.message_id, reply.message_id] if reply else [m.message_id]
+	msg_ids = [m.id, reply.id] if reply else [m.id]
 
 	try:
 		await app.delete_messages(m.chat.id, msg_ids)
