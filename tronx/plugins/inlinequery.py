@@ -1,5 +1,7 @@
 from pyrogram import filters
 
+from pyrogram.enums import ParseMode
+
 from pyrogram.types import (
 	InlineKeyboardButton, 
 	InlineKeyboardMarkup, 
@@ -40,7 +42,7 @@ def inline_result(_, inline_query):
 				title="Tron security system",
 				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
 				caption=app.PmpermitText(),
-				parse_mode="combined",
+				parse_mode=ParseMode.DEFAULT,
 				reply_markup=InlineKeyboardMarkup([approve])
 			)
 			],
@@ -54,7 +56,7 @@ def inline_result(_, inline_query):
 				title="Introduction to tron",
 				description="This is the tron helpdex menu.",
 				caption="**Dex:** Home\n\n**Description:** This is your helpdex use this to navigate in different sub dex, guidence and information is given in each dex.",
-				parse_mode="combined",
+				parse_mode=ParseMode.DEFAULT,
 				reply_markup=InlineKeyboardMarkup([settings, extra, about, close])
 			)
 			],
@@ -68,7 +70,7 @@ def inline_result(_, inline_query):
 				title="Inline alive",
 				description="This is same as alive command, the difference is that this command have inline button.",
 				caption=f"**⛊  Inline Status:**\n\n**⟐** {app.USER_BIO}\n\n**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n**⟜ Tron:** `{app.userbot_version}`\n**⟜ Python:** `{app.python_version}`\n⟜ **Pyrogram:** `{app.pyrogram_version}`\n⟜ **uptime:** `{app.uptime()}\n\n",
-				parse_mode="combined",
+				parse_mode=ParseMode.DEFAULT,
 				reply_markup=InlineKeyboardMarkup([home_back])
 			)
 			],

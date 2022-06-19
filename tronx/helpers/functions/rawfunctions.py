@@ -120,6 +120,7 @@ class RawFunctions(object):
 					await self.send_edit(message, e.args[0] if e.args else None)
 
 			await self.send_message(self.LOG_CHAT, teks)
+			print(e)
 
 		except PeerIdInvalid:
 			self.log.error(teks)
