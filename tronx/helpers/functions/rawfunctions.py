@@ -377,12 +377,11 @@ class RawFunctions(object):
 			file.write(content)
 			file.close()
 			if send:
-				if caption:
-					await self.send_document(
-						message.chat.id,
-						filename,
-						caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
-					)
+				await self.send_document(
+					message.chat.id,
+					path,
+					caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
+				)
 				if os.path.exists(path):
 					os.remove(path)
 
