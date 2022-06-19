@@ -76,7 +76,6 @@ async def helpdex_handler(_, m: Message):
 					query_id=result.query_id, 
 					result_id=result.results[0].id, 
 					disable_notification=True, 
-					hide_via=True
 				)
 				
 				if m.chat.type in ["bot", "private"]:
