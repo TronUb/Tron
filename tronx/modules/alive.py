@@ -46,23 +46,20 @@ async def alive_handler(_, m: Message):
 			await app.send_video(
 				m.chat.id, 
 				pic, 
-				caption=alive_msg, 
-				parse_mode="markdown"
+				caption=alive_msg
 				)
 		elif (pic) and (pic.endswith(".jpg" or ".jpeg" or ".png")):
 			await m.delete()
 			await app.send_photo(
 				m.chat.id, 
 				pic, 
-				caption=alive_msg, 
-				parse_mode="markdown"
+				caption=alive_msg
 				)
 		elif not pic:
 			await app.send_edit(
 				m, 
 				alive_msg, 
 				disable_web_page_preview=True,
-				parse_mode="markdown",
 				)
 	except Exception as e:
 		await app.error(m, e)
