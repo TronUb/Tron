@@ -39,10 +39,10 @@ async def alive_handler(_, m: Message):
 		alive_msg += f"⟜ **Pyrogram:** `{app.pyrogram_version}`\n"
 		alive_msg += f"⟜ **Uptime:** {app.uptime()}\n\n"
 
-		await m.delete()
 		pic = app.UserPic()
 
 		if (pic) and (pic.endswith(".mp4" or ".mkv" or ".gif")):
+			await m.delete()
 			await app.send_video(
 				m.chat.id, 
 				pic, 
@@ -50,6 +50,7 @@ async def alive_handler(_, m: Message):
 				parse_mode="markdown"
 				)
 		elif (pic) and (pic.endswith(".jpg" or ".jpeg" or ".png")):
+			await m.delete()
 			await app.send_photo(
 				m.chat.id, 
 				pic, 
@@ -71,25 +72,27 @@ async def alive_handler(_, m: Message):
 
 @app.on_message(gen("ialive", allow = ["sudo"]), group=1)
 async def inlinealive_handler(_, m: Message):
-	m = await app.send_edit(m, ". . .", text_type=["mono"])
 	try:
-		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
-	except BotInlineDisabled:
-		await app.send_edit(m, "Turning inline mode to on, wait . . .", text_type=["mono"])
-		await app.toggle_inline(m)
-		result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
+		m = await app.send_edit(m, ". . .", text_type=["mono"])
+		try:
+			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
+		except BotInlineDisabled:
+			await app.send_edit(m, "Turning inline mode to on, wait . . .", text_type=["mono"])
+			await app.toggle_inline(m)
+			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 
-	if result:
-		await app.send_inline_bot_result(
-			m.chat.id, 
-			query_id=result.query_id, 
-			result_id=result.results[0].id, 
-			disable_notification=True, 
-			hide_via=True
-		)
-		await m.delete()
-	else:
-		await app.send_edit(m, "Something went wrong, please try again later . . .", delme=2)
+		if result:
+			await app.send_inline_bot_result(
+				m.chat.id, 
+				query_id=result.query_id, 
+				result_id=result.results[0].id, 
+				disable_notification=True, 
+			)
+			await m.delete()
+		else:
+			await app.send_edit(m, "Something went wrong, please try again later . . .", delme=2)
+	except Exception as e:
+		await app.error(m, e)
 
 
 
@@ -112,7 +115,6 @@ async def inlinequote_handler(_, m: Message):
 				query_id=result.query_id, 
 				result_id=result.results[0].id, 
 				disable_notification=True, 
-				hide_via=True
 				)
 			await m.delete()
 		else:
