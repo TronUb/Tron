@@ -19,7 +19,7 @@
     <summary><b>• About</b></summary>
 
 <br></br>
-**This is a telegram userbot with an assistant bot, it is written in Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
+**This is a telegram userbot with an assistant bot, it is written in pure Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
 
 </details>
 
@@ -77,7 +77,7 @@
 
 `nano config.py`
 
-<p>Note: Fill those required values from your value.</p>
+<p>Note: replace or add those required values from given value.</p>
 
 `bash start.sh`
 
