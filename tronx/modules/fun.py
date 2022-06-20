@@ -226,7 +226,7 @@ async def joke_handler(_, m):
 		if bool(data) is False:
 			return app.send_edit(m, "Site is down, please try again later . . .", delme=3, text_type=["mono"])
 		elif data:
-			await app.send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
+			await app.send_edit(m, f"{data}") 
 		else:
 			await app.send_edit(m, "No jokes found !", delme=2, text_type=["mono"])
 	except Exception as e:
