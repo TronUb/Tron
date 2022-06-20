@@ -1,4 +1,5 @@
 import asyncio
+import heroku3
 import requests
 import sys
 from os import environ, execle, path, remove
