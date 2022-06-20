@@ -34,11 +34,11 @@ async def gen_chlog(m):
 	changes = []
 	heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
 	heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
-	last_updated = int(str((heroku_app.updated_at).date()).replace("-", "")) 
+	last_updated = int((str(heroku_app.updated_at).replace("-","").replace(":", "").replace(" ", ""))[:14])
 	recent_updates = requests.get("https://api.github.com/repos/TronUb/Tron/events").json()
 
 	for x in recent_updates:
-		if x.get("payload").get("commits") is not None and int((x.get("created_at"))[:10].replace("-", "")) > last_updated:
+		if x.get("payload").get("commits") is not None and int(x.get("created_at").replace("-", "").replace(":", "").replace("T", "").replace("Z", "")) > last_updated:
 			changes.append(x.get("payload").get("commits")[0].get("message")+"\n")
 
 	if not changes:
