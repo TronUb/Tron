@@ -45,8 +45,12 @@ async def gen_chlog(m):
 		await app.send_edit(m, "Your app is up to date.", text_type=["mono"])
 		return -1
 	else:
-		await app.send_edit(m, "".join(changes))
-		return 0
+		if len("".join(changes)) > 4096:
+			await app.create_file(m, "changelog.txt", "".join(changes), send=True)
+			return 0
+		else:
+			await app.send_edit(m, "".join(changes))
+			return 0
 
         
 
@@ -108,55 +112,13 @@ async def update_handler(_, m):
 		repo.create_remote("upstream", TRON_REPO)
 	except BaseException:
 		pass
+
 	ups_rem = repo.remote("upstream")
 	ups_rem.fetch(ACTIVE_BRANCH)
-	changelog = False
-	if cmd is False:
-		if changelog:
-			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH}):\n\n[CHANGE LOG]:**\n\n{changelog}"
-			if len(changelog_str) > 4096:
-				await app.send_edit(m, "Changelog is too big, view the file below to see it.", text_type=["mono"], delme=6)
-				file = open("up_output.txt", "w+")
-				file.write(changelog_str)
-				file.close()
-				await app.send_document(
-					m.chat.id,
-					"up_output.txt",
-					caption="**[ STATUS ]:** Do `.update now` to update.",
-				)
-				remove("up_output.txt")
-			else:
-				return await app.send_edit(
-					m, 
-					f"{changelog_str}\n\n[ UPDATE ]: Do `.update now` to update.",
-					disable_web_page_preview=True,
-				)
-		else:
-			await app.send_edit(
-				m, 
-				f"**[ STATUS ]:** Your bot is upto date !\n**[ VERSION ]:** `{app.userbot_version}`\n**[ BRANCH ]:** [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH})",
-				disable_web_page_preview=True,
-			)
-			return repo.__del__()
 
-	if app.HEROKU_API_KEY:
-		import heroku3
-
-		heroku = heroku3.from_key(app.HEROKU_API_KEY)
-		heroku_app = None
-		heroku_applications = heroku.apps()
-		if not app.HEROKU_APP_NAME:
-			await app.send_edit(m, "Please set up the [ HEROKU_APP_NAME ] variable to be able to update userbot.", text_type=["mono"], delme=4)
-			return repo.__del__()
-
-		for apps in heroku_applications:
-			if apps.name == app.HEROKU_APP_NAME:
-				heroku_app = apps
-				break
-
-		if heroku_app is None:
-			await app.send_edit(m, "Invalid Heroku credentials for updating userbot.", text_type=["mono"], delme=4)
-			return repo.__del__()
+	if app.HEROKU_API_KEY and app.HEROKU_APP_NAME:
+		heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
+		heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
 
 		m = await app.send_edit(m, "Userbot update in progress, please wait for few minutes . . .", text_type=["mono"])
 		ups_rem.fetch(ACTIVE_BRANCH)
@@ -172,7 +134,9 @@ async def update_handler(_, m):
 		try:
 			remote.push(refspec=f"HEAD:refs/heads/{ACTIVE_BRANCH}", force=True)
 		except GitCommandError as e:
+			print(e)
 			app.log.error(e)
+			return
 
 		await app.send_edit(m, "Successfully Updated, initialing . . .", text_type=["mono"], delme=8)
 
@@ -181,6 +145,7 @@ async def update_handler(_, m):
 			ups_rem.pull(ACTIVE_BRANCH)
 		except GitCommandError:
 			repo.git.reset("--hard", "FETCH_HEAD")
+
 		await install_requirements()
 		await app.send_edit(m,"Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=8)
 
