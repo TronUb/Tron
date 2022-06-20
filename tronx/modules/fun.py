@@ -222,12 +222,10 @@ async def moviequote_handler(_, m):
 async def joke_handler(_, m):
 	try:
 		m = await app.send_edit(m, "Finding a joke . . .", text_type=["mono"])
-		data = requests.get(f"https://official-joke-api.appspot.com/random_joke")
-		one = data.json().get("setup")
-		two = data.json().get("punchline")
+		data = (requests.get("https://icanhazdadjoke.com/slack").json())["attachments"][0]["fallback"]
 		if bool(data) is False:
-			return app.send_edit(m, "Site is down, please try again later . . .", delme=2, text_type=["mono"])
-		if one and two:
+			return app.send_edit(m, "Site is down, please try again later . . .", delme=3, text_type=["mono"])
+		elif data:
 			await app.send_edit(m, f"Person: `{one}`\n\nMe: `{two}`") 
 		else:
 			await app.send_edit(m, "No jokes found !", delme=2, text_type=["mono"])
