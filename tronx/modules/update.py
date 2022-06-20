@@ -1,15 +1,14 @@
 import asyncio
+import heroku3
+import requests
 import sys
 from os import environ, execle, path, remove
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from tronx import app
+from tronx import app, gen
 
-from tronx.helpers import (
-	gen,
-)
 
 
 
@@ -31,13 +30,25 @@ app.CMD_HELP.update(
 TRON_REPO = app.UPSTREAM_REPO
 
 
-async def gen_chlog(repo, diff):
-	ch_log = ""
-	dateform = "On %d/%m/%y at %H:%M:%S"
-	for data in repo.iter_commits(diff):
-		ch_log += f"**#{data.count()}** : {data.committed_datetime.strftime(dateform)} : [{data.summary}]({TRON_REPO.rstrip('/')}/commit/{data}) by `{data.author}`\n"
-	return ch_log
+async def gen_chlog(m):
+	changes = []
+	heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
+	heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
+	last_updated = int(str((heroku_app.updated_at).date()).replace("-", "")) 
+	recent_updates = requests.get("https://api.github.com/repos/TronUb/Tron/events").json()
 
+	for x in recent_updates:
+		if x.get("payload").get("commits") is not None and int((x.get("created_at"))[:10].replace("-", "")) > last_updated:
+			changes.append(x.get("payload").get("commits")[0].get("message")+"\n")
+
+	if not changes:
+		await app.send_edit(m, "Your app is up to date.", text_type=["mono"])
+		return -1
+	else:
+		await app.send_edit(m, "".join(changes))
+		return 0
+
+        
 
 
 
@@ -65,6 +76,9 @@ async def update_handler(_, m):
 
 	if app.long(m) > 1:
 		cmd = m.command
+
+	if await gen_chlog(m) == -1:
+		return 
 
 	try:
 		repo = Repo()
@@ -94,7 +108,7 @@ async def update_handler(_, m):
 		pass
 	ups_rem = repo.remote("upstream")
 	ups_rem.fetch(ACTIVE_BRANCH)
-	changelog = await gen_chlog(repo, f"{ACTIVE_BRANCH}")
+	changelog = False
 	if cmd is False:
 		if changelog:
 			changelog_str = f"**New update is available for [{ACTIVE_BRANCH}]({TRON_REPO}/tree/{ACTIVE_BRANCH}):\n\n[CHANGE LOG]:**\n\n{changelog}"
