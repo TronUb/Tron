@@ -32,6 +32,7 @@ app.CMD_HELP.update(
 		"cat" : "Get random cat images.",
 		"waifu" : "Get random waifu images.",
 		"poto" : "Get profile photos of yours or someone's else.",
+		"dog" : "Get random dog images.",
 		}
 		)
     }
@@ -345,3 +346,14 @@ async def profilepic_handler(_, m):
 			p_id = await app.get_profile_photos(user.id)
 			await send_profile_pic(app, m, p_id=p_id)
 			await m.delete()
+
+
+
+
+@app.on_message(gen("dog", allow = ["sudo"]))
+async def dogpic_handler(_, m):
+	ing_url = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
+	if img_url:
+		await app.send_photo(m.chat.id, img_url)
+	else:
+		await app.send_edit(m, "No dog pics found !", text_type=["mono"])
