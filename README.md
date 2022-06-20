@@ -121,6 +121,9 @@
 </details>
 </details>
 
+Disclaimer: i will not be responsible for anything that happens with your account, if it gets banned or limited it will be your fault, imo nothing happened with my account till now.
+
 <br></br>
+
 • MADE WITH 🎉 BY [࿇•ẞᗴᗩSԵ•࿇](https://t.me/beastzx)
 
