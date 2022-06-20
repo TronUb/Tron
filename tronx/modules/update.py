@@ -71,14 +71,16 @@ async def install_requirements():
 async def update_handler(_, m):
 	cmd = False
 	errtext = "Some problem occurred:\n\n"
-
 	await app.send_edit(m, "Checking for updates, please wait . . .", text_type=["mono"])
 
-	if app.long(m) > 1:
+	if app.long(m) > 1 and m.command[1] == "now":
 		cmd = m.command
+	elif app.long(m) > 1 and m.command[1] != "now":
+		return await app.send_edit(m, "Use `now` after update command")
+	elif app.long(m) == 1:
+		if await gen_chlog(m) == -1:
+			return
 
-	if await gen_chlog(m) == -1:
-		return 
 
 	try:
 		repo = Repo()
