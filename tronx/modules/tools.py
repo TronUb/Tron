@@ -63,7 +63,7 @@ async def wordlink_handler(_, m: Message):
 			return await app.send_edit("Please give some text to search in chat ...")
 
 		else:
-			messages = await app.get_history(m.chat.id)
+			messages = await app.get_chat_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
 			await app.send_edit("Finding word in this chat . . .", text_type=["mono"])
 			for msg in messages:
@@ -211,7 +211,7 @@ async def speedtest_handler(app, m: Message):
 			await app.send_edit(teks)
 		else:
 			await app.send_edit("Something went wrong !", text_type=["mono"], delme=5)
-	elif app.long(m) > 1 and "pic" in m.command[1]:
+	elif app.long() > 1 and "pic" in m.command[1]:
 		await app.send_edit("Calculating Speed (pic) . . .")
 
 		start = datetime.now()
