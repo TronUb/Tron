@@ -23,7 +23,7 @@ app.CMD_HELP.update(
 
 @app.on_message(gen(["song", "music"], allow = ["sudo", "channel"]))
 async def song_handler(_, m: Message):
-	await app.send_edit(m, "Getting song . . .")
+	await app.send_edit("Getting song . . .")
 	try:
 		cmd = m.command
 		reply = m.reply_to_message
@@ -32,7 +32,7 @@ async def song_handler(_, m: Message):
 		elif reply and len(cmd) == 1:
 			song_name = reply.text or reply.caption
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
+			return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
 		song_results = await app.get_inline_bot_results("audio_storm_bot", song_name)
 
@@ -59,10 +59,10 @@ async def song_handler(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", saved.message_id)
 		except TimeoutError:
-			return await app.send_edit(m, "Something went wrong, tru again !")
+			return await app.send_edit("Something went wrong, tru again !")
 	except Exception as e:
-		await app.error(m, e)
-		await app.send_edit(m, "failed to process your request, please check logs")
+		await app.error(e)
+		await app.send_edit("failed to process your request, please check logs")
 
 
 
@@ -70,15 +70,15 @@ async def song_handler(_, m: Message):
 @app.on_message(gen(["dz", "deezer"], allow = ["sudo", "channel"]))
 async def deezer_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m, "Searching on deezer . . .")
+		await app.send_edit("Searching on deezer . . .")
 		cmd = m.command
 		reply = m.reply_to_message
-		if app.long(m) > 1:
+		if app.long() > 1:
 			song_name = m.text.split(None, 1)[1]
-		elif reply and app.long(m) == 1:
+		elif reply and app.long() == 1:
 			song_name = reply.text or reply.caption
-		elif not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Give a song name . . .", delme=3, text_type=["mono"])
+		elif not reply and app.long() == 1:
+			return await app.send_edit("Give a song name . . .", delme=3, text_type=["mono"])
 
 		song_results = await app.get_inline_bot_results("DeezerMusicBot", song_name)
 
@@ -88,7 +88,6 @@ async def deezer_handler(_, m: Message):
 				chat_id="me",
 				query_id=song_results.query_id,
 				result_id=song_results.results[0].id,
-				hide_via=True,
 			)
 
 			# forward as a new message from Saved Messages
@@ -105,10 +104,10 @@ async def deezer_handler(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", [saved.message_id, m.message_id])
 		except TimeoutError:
-			return await app.send_edit(m, "Something went wrong, try again . . .", delme=3, text_type=["mono"])
+			return await app.send_edit("Something went wrong, try again . . .", delme=3, text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, try again !", text_type=["mono"], delme=3)
+		await app.error(e)
+		await app.send_edit("Something went wrong, try again !", text_type=["mono"], delme=3)
 
 
 
@@ -129,12 +128,12 @@ async def lyrics_handler(_, m: Message):
 			elif reply.text and len(cmd) > 1:
 				song_name = m.text.split(None, 1)[1]
 			else:
-				return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
+				return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
 		elif not reply and len(cmd) == 1:
-			return await app.send_edit(m, "Give me a song name . . .", text_type=["mono"], delme=3)
+			return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
-		await app.send_edit(m, f"**Finding lyrics for:** `{song_name}`")
+		await app.send_edit(f"**Finding lyrics for:** `{song_name}`")
 
 		lyrics_results = await app.get_inline_bot_results("ilyricsbot", song_name)
 
@@ -158,7 +157,7 @@ async def lyrics_handler(_, m: Message):
 			# delete the message from Saved Messages
 			await app.delete_messages("me", saved.updates[1].message.id)
 		except TimeoutError:
-			return await app.send_edit(m, "Something went Wrong !", text_type=["mono"], delme=3)
+			return await app.send_edit("Something went Wrong !", text_type=["mono"], delme=3)
 	except Exception as e:
-		await app.error(m, e)
-		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=3)
+		await app.error(e)
+		await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
