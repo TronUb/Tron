@@ -48,7 +48,7 @@ async def kang(_, m: Message):
 			is_anim = True
 		elif replied.sticker:
 			if not replied.sticker.file_name:
-				return await app.send_edit(m, "Sticker has no Name !", text_type=["mono"])
+				return await app.send_edit("Sticker has no Name !", text_type=["mono"])
 
 			emoji_ = replied.sticker.emoji
 			is_anim = replied.sticker.is_animated
@@ -93,7 +93,7 @@ async def kang(_, m: Message):
 			cmd = "/newanimated"
 		exist = False
 		try:
-			exist = await app.send(
+			exist = await app.invoke(
 				GetStickerSet(stickerset=InputStickerSetShortName(short_name=packname))
 			)
 		except StickersetInvalid:
@@ -147,8 +147,7 @@ async def kang(_, m: Message):
 					await app.send_message("Stickers", packname)
 					await asyncio.sleep(0.40)
 					out = f"[kanged](t.me/addstickers/{packname})"
-					await app.send_edit(m, 
-						f"**Sticker** {out} __in a Different Pack__**!**"
+					await app.send_edit(f"**Sticker** {out} __in a Different Pack__**!**"
 					)
 					return
 			await app.send_document("Stickers", photo)
@@ -156,7 +155,7 @@ async def kang(_, m: Message):
 			await asyncio.sleep(0.40)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.", text_type=["mono"])
+				return await app.send_edit("Failed to add sticker, use @Stickers bot to add the sticker manually.", text_type=["mono"])
 
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
@@ -178,7 +177,7 @@ async def kang(_, m: Message):
 			await get_response(m)
 			rsp = await get_response(m)
 			if "Sorry, the file type is invalid." in rsp:
-				return await app.send_edit(m, "Failed to add sticker, use @Stickers bot to add the sticker manually.")
+				return await app.send_edit("Failed to add sticker, use @Stickers bot to add the sticker manually.")
 
 			await app.send_message("Stickers", emoji_)
 			await asyncio.sleep(0.40)
@@ -213,7 +212,7 @@ async def sticker_pack_info_(_, m: Message):
 		return await app.send_edit("Reply to a sticker to get the pack details.", text_type=["mono"])
 
 	await app.send_edit("Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
-	get_stickerset = await app.send(
+	get_stickerset = await app.invoke(
 		GetStickerSet(
 			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
 		)
@@ -255,7 +254,7 @@ def resize_photo(photo: str) -> io.BytesIO:
 
 
 async def get_response(m):
-	return [x async for x in app.iter_history("Stickers", limit=1)][0].text
+	return [x async for x in app.get_chat_history("Stickers", limit=1)][0].text
 
 
 
