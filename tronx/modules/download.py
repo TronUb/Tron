@@ -14,11 +14,7 @@ from datetime import datetime
 from pyrogram import filters, errors
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -45,20 +41,20 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("ls", allow =["sudo"]))
 async def ls_handler(_, m: Message):
-	location = "." if app.long(m) == 1 else m.command[1] if app.long(m) >= 2 else None
+	location = "." if app.long() == 1 else m.command[1] if app.long() >= 2 else None
 
 	location = os.path.abspath(location)
 	if not location.endswith("/"):
 		location += "/"
 	OUTPUT = f"Files in `{location}`:\n\n"
 
-	m = await app.send_edit(m, "Fetching files . . .", text_type=["mono"])
+	await app.send_edit("Fetching files . . .", text_type=["mono"])
 
 	try:
 		files = os.listdir(location)
 		files.sort()  # Sort the files
 	except FileNotFoundError:
-		return await app.send_edit(m, f"No such file or directory {location}", delme=2)
+		return await app.send_edit(f"No such file or directory {location}", delme=2)
 
 	collect = []
 	collect.clear()
@@ -77,15 +73,14 @@ async def ls_handler(_, m: Message):
 	if len(OUTPUT) > 4096:
 		await m.delete()
 		await app.create_file(
-				m, 
 				app, 
 				filename="dict.txt", 
 				text=OUTPUT
 			)
 	elif OUTPUT.endswith("\n\n"):
-		return await app.send_edit(m, f"No files in `{location}`", delme=4)
+		return await app.send_edit(f"No files in `{location}`", delme=4)
 	elif len(OUTPUT) <= 4096:
-		await app.send_edit(m, OUTPUT)
+		await app.send_edit(OUTPUT)
 
 
 
@@ -99,7 +94,7 @@ async def download_handler(_, m: Message):
 			start_t = datetime.now()
 			c_time = time.time()
 
-			m = await app.send_edit(m, "• Downloading . . .", text_type=["mono"])
+			await app.send_edit("• Downloading . . .", text_type=["mono"])
 			location = await app.download_media(
 				message=reply,
 				progress=app.ProgressForPyrogram,
@@ -110,14 +105,14 @@ async def download_handler(_, m: Message):
 			duration = app.GetReadableTime((end_t - start_t).seconds)
 
 			if location is None:
-				await app.send_edit(m, "Download failed, please try again.", text_type=["mono"])
+				await app.send_edit("Download failed, please try again.", text_type=["mono"])
 			else:
-				await app.send_edit(m, f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`",)
+				await app.send_edit(f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`",)
 		except Exception as e:
-			await app.error(m, e)
-			await app.send_edit(m, f"Failed To Download, look in log chat for more info.")
+			await app.error(e)
+			await app.send_edit(f"Failed To Download, look in log chat for more info.")
 
-	elif app.long(m) > 1:
+	elif app.long() > 1:
 		try:
 			start_t = datetime.now()
 			the_url_parts = " ".join(m.command[1:])
@@ -169,22 +164,20 @@ async def download_handler(_, m: Message):
 				except Exception as e:
 					app.log.info(str(e))
 					pass
-			m = await app.send_edit(m, "• Downloading . . .", text_type=["mono"])
+			m = await app.send_edit("• Downloading . . .", text_type=["mono"])
 			if os.path.exists(download_file_path):
 				end_t = datetime.now()
 				ms = (end_t - start_t).seconds
 				await app.send_edit(
-					m,
 					f"**Downloaded to:** `{download_file_path}`\n**Time Taken:** `{ms}` seconds.\nDownload Speed: {round((total_length/ms), 2)}",
 				)
 		except Exception:
 			exc = traceback.format_exc()
 			return await app.send_edit(
-				m, 
 				f"Failed Download!\n\n{exc}"
 				)
 	else:
-		await app.send_edit(m, "Reply to a Telegram Media to download it to local server.", text_type=["mono"], delme=2)
+		await app.send_edit("Reply to a Telegram Media to download it to local server.", text_type=["mono"], delme=2)
 
 
 
@@ -192,14 +185,14 @@ async def download_handler(_, m: Message):
 
 @app.on_message(gen(["upload", "ul"], allow =["sudo"]))
 async def upload_handler(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
-			m = await app.send_edit(m, "Uploading . . .", text_type=["mono"])
+			await app.send_edit("Uploading . . .", text_type=["mono"])
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
-			await app.send_edit(m, f"Uploading `{doc_caption}` . . .")
+			await app.send_edit(f"Uploading `{doc_caption}` . . .")
 
 			await m.reply_document(
 				document=local_file_name,
@@ -212,11 +205,11 @@ async def upload_handler(_, m: Message):
 
 			end_t = datetime.now()
 			ms = (end_t - start_t).seconds
-			await app.send_edit(m, f"Uploaded in `{ms}` seconds.", delme=2)
+			await app.send_edit(f"Uploaded in `{ms}` seconds.", delme=2)
 		else:
-			await app.send_edit(m, "404: directory not found . . .",text_type=["mono"], delme=5)
+			await app.send_edit("404: directory not found . . .",text_type=["mono"], delme=5)
 	else:
-		await app.send_edit(m, f"`{app.PREFIX}upload [file path ]` to upload to current Telegram chat", delme=4)
+		await app.send_edit(f"`{app.PREFIX}upload [file path ]` to upload to current Telegram chat", delme=4)
 
 
 
@@ -224,20 +217,20 @@ async def upload_handler(_, m: Message):
 
 @app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
 async def batchupload_handler(_, m: Message):
-	if app.long(m) == 1:
-		return await app.send_edit(m, "Give me a location to upload files from the directory . . .", delme=2, text_type=["mono"])
+	if app.long() == 1:
+		return await app.send_edit("Give me a location to upload files from the directory . . .", delme=2, text_type=["mono"])
 
-	if app.textlen(m) > 4096:
-		return await app.send_edit(m, "The message is too long. (must be less than 4096 character)", delme=4, text_type=["mono"])
+	if app.textlen() > 4096:
+		return await app.send_edit("The message is too long. (must be less than 4096 character)", delme=4, text_type=["mono"])
 
-	elif app.long(m) > 1:
+	elif app.long() > 1:
 		temp_dir = m.command[1]
 		if not temp_dir.endswith("/"):
 			temp_dir += "/"
 
 	if os.path.exists(temp_dir):
 		try:
-			m = await app.send_edit(m, f"Uploading Files from `{temp_dir}` . . .")
+			await app.send_edit(f"Uploading Files from `{temp_dir}` . . .")
 			files = os.listdir(temp_dir)
 			files.sort()
 			for file in files:
@@ -255,11 +248,11 @@ async def batchupload_handler(_, m: Message):
 						caption=doc_caption,
 						disable_notification=True,
 					)
-					await app.send_edit(m, f"Uploaded all files from Directory `{temp_dir}`", delme=3)
+					await app.send_edit(f"Uploaded all files from Directory `{temp_dir}`", delme=3)
 					app.log.info("Uploaded all files in batch !!")
 
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 	else:
-		return await app.send_edit(m, "404: directory not found . . .", delme=2)
+		return await app.send_edit("404: directory not found . . .", delme=2)
 

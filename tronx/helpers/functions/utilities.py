@@ -174,7 +174,7 @@ class Utilities(AioHttp):
 		file_id = None 
 
 
-		if self.long(msg) <= 1:
+		if self.long() <= 1:
 			return None, None, None, None, None
 
 		if msg.text:
@@ -184,7 +184,7 @@ class Utilities(AioHttp):
 		note_name = raw_text.split()[1]
 
 		# determine what the contents of the filter are - text, image, sticker, etc
-		if self.long(msg) >= 3:
+		if self.long() >= 3:
 			text = raw_text.split(None, 2)[2]
 			message_type = Types.TEXT
 
@@ -215,16 +215,16 @@ class Utilities(AioHttp):
 		return note_name, text, message_type, content 
 
 
-	async def IsAdmin(self, m: Message):
+	async def IsAdmin(self):
 		"""Check if we are an admin."""
-		if not m.from_user:
+		if not self.m.from_user:
 			print(m) # getting from user as nonetype
 			return False
 		ranks = ["administrator", "creator"]
 
 		data = await self.get_chat_member(
-			chat_id=m.chat.id, 
-			user_id=m.from_user.id
+			chat_id=self.m.chat.id, 
+			user_id=self.m.from_user.id
 		)
 
 		return False if not data.status in ranks else True

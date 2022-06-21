@@ -20,26 +20,24 @@ from pyrogram.enums import ParseMode, ChatType
 class RawFunctions(object):
 	async def aexec(
 		self, 
-		message: Message, 
 		code: str
 		):
 		"""
 		params:
-			1. message (update) :: incoming update
-			2. code: str :: your written python code
+			1. code: str :: your written python code
 
 		use:
 			use this function to execute python codes
 
 		ex: (async)
-			await app.aexec(message, "print('Hello, World !')")
+			await app.aexec("print('Hello, World !')")
 		"""
 
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
 		)
-		return await locals()["__aexec"](self, message)
+		return await locals()["__aexec"](self, self.m)
 
 
 	def showdate(
@@ -84,15 +82,13 @@ class RawFunctions(object):
 
 	async def error(
 		self, 
-		message: Message, 
 		e, 
 		edit_error: bool=True
 		):
 		"""
 		params: 
-			1. message (update) :: incoming updates
-			2. error :: occured error
-			3. edit_error: bool, default=True :: edits | sends error message 
+			1. error :: occured error
+			2. edit_error: bool, default=True :: edits | sends error message 
 
 		usage:
 			use this function at the end of try/except block
@@ -101,13 +97,13 @@ class RawFunctions(object):
 			try:
 				await app.send_message(message.chat.id, "This is a test")
 			except Exception as e:
-				await app.error(message, error, edit_error=True) 
+				await app.error(e, edit_error=False) 
 		"""
 
 		teks = f"**Traceback Report:**\n\n"
 		teks += f"**Date:** `{self.showdate()}`\n**Time:** `{self.showtime()}`\n\n"
 		teks += f"`This can be a error in tronuserbot, if you want you can forward this to @tronuserbot_support.`\n\n" 
-		teks += f"**Command:** `{message.text}`\n\n"
+		teks += f"**Command:** `{self.m.text}`\n\n"
 		teks += "`-`" * 30 + "\n\n"
 		teks += f"**SHORT:** \n\n`{e}`\n\n"
 		teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
@@ -115,9 +111,9 @@ class RawFunctions(object):
 		try:
 			if edit_error:
 				if hasattr(e, "MESSAGE"):
-					await self.send_edit(message, f"`{e.MESSAGE}`")
+					await self.send_edit(f"`{e.MESSAGE}`")
 				else:
-					await self.send_edit(message, e.args[0] if e.args else None)
+					await self.send_edit(e.args[0] if e.args else None)
 
 			await self.send_message(self.LOG_CHAT, teks)
 			print(e)
@@ -131,50 +127,46 @@ class RawFunctions(object):
 
 	async def sleep(
 		self, 
-		message: Message, 
 		sec: int=0, 
 		delmsg=False
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
-			2. sec :: time to sleep in seconds
-			3. delme, default=False :: delete the message if it is True
+			1. sec :: time to sleep in seconds
+			2. delme, default=False :: delete the message if it is True
 
 		use: 
 			this function deletes the message after sleeping for a given time,
 			this function blocks the code
 
 		ex: (async)
-			await app.sleep(message, 10, delme=True)
+			await app.sleep(10, delmsg=True)
 		"""
 		msg = None
 		await asyncio.sleep(sec)
-		if delmsg and message.from_user.is_self:
-			msg = await message.delete()
+		if delmsg and self.m.from_user.is_self:
+			msg = await self.m.delete()
 		return msg
 
 
 	async def delete_message(
 		self, 
-		message: Message, 
 		sec: int=0
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
-			2. sec: int, default=0 :: time to sleep in seconds
+			1. sec: int, default=0 :: time to sleep in seconds
 
 		use: 
 			this function deletes a message after given time period
 			this function works without blocking the entire execution
 
 		ex: (async)
-			await app.delete(message, 10)
+			await app.delete(10)
 		"""
 
 		if sec <= 600: # 10 min
-			asyncio.create_task(self.sleep(message, sec=sec, delmsg=True))
+			asyncio.create_task(self.sleep(sec=sec, delmsg=True))
 			return True
 		else:
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
@@ -214,7 +206,6 @@ class RawFunctions(object):
 
 	async def send_edit(
 		self,
-		message: Message, 
 		text: str, 
 		parse_mode=ParseMode.DEFAULT, 
 		disable_web_page_preview=False,
@@ -229,21 +220,19 @@ class RawFunctions(object):
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
-			2. text: str :: text to be edited or sent instead of editing
-			3. disable_web_page_preview: bool, default=False :: web page preview will be shown if True
-			4. delme: int, default=0 :: sleeps for given time and then deletes the message
-			5. mono: bool, default=False :: all text format will become mono
-			6. bold: bool, default=False :: all text format will become bold
-			7. italic: bool, default=False :: all text format will become italic
-			8. underline: bool, defau=False :: all text format will become underlined
+			1. text: str :: text to be edited or sent instead of editing
+			2. disable_web_page_preview: bool, default=False :: web page preview will be shown if True
+			3. delme: int, default=0 :: sleeps for given time and then deletes the message
+			4. mono: bool, default=False :: all text format will become mono
+			5. bold: bool, default=False :: all text format will become bold
+			6. italic: bool, default=False :: all text format will become italic
+			7. underline: bool, defau=False :: all text format will become underlined
 
 		use: 
-			use this function to get realtime date of your location
+			use this function to edit or send a message if failed to edit message 
 
 		ex: (async)
 			await app.send_edit(
-				message, 
 				"This text is sent or edited", 
 				disable_web_page_preview=True,
 				delme=5,
@@ -252,8 +241,8 @@ class RawFunctions(object):
 		"""
 		msg = None
 
-		if message.from_user.is_self:
-			msg = await message.edit(
+		if self.m.from_user.is_self:
+			msg = await self.m.edit(
 				text=self.FormatText(text, format=text_type),
 				parse_mode=parse_mode,
 				disable_web_page_preview=disable_web_page_preview,
@@ -263,7 +252,7 @@ class RawFunctions(object):
 
 		else:
 			msg = await self.send_message(
-				chat_id=message.chat.id, 
+				chat_id=self.m.chat.id, 
 				text=self.FormatText(text, format=text_type),
 				disable_web_page_preview=disable_web_page_preview, 
 				parse_mode=parse_mode,
@@ -276,20 +265,19 @@ class RawFunctions(object):
 
 		try:
 			if delme > 0:
-				asyncio.create_task(self.sleep(message, sec=delme, delmsg=True))
+				asyncio.create_task(self.sleep(sec=delme, delmsg=True))
 
 		except Exception as err:
-			await self.error(m, err)
+			await self.error(err)
 		return msg
 
 
 	async def check_private(
-		self, 
-		message: Message
+		self
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
+			None
 
 		use: 
 			use this to tell that they can't use some commands in private
@@ -298,9 +286,8 @@ class RawFunctions(object):
 			await app.private(message)
 		"""
 
-		if message.chat.type == ChatType.PRIVATE:
+		if self.m.chat.type == ChatType.PRIVATE:
 			await self.send_edit(
-				message, 
 				"Please use these commands in groups.",
 				text_type=["mono"], 
 				delme=4
@@ -310,48 +297,44 @@ class RawFunctions(object):
 
 
 	def long(
-		self, 
-		message: Message
+		self
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
+			None
 
 		use: 
 			this function returns the length of a list containing message splited on spaces
 
 		ex: 
-			if app.long(message) == 1:
-				print("more arguments needed")
-				return
+			if app.long() == 1:
+				print("there is one word in message.text")
 		"""
 
-		text_length = len(message.text.split() or message.caption.split())
+		text_length = len(self.m.text.split() or self.m.caption.split())
 		return text_length if bool(text_length) is True else None
 
 
 	def textlen(
-		self, 
-		message: Message
+		self
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
+			None
 
 		use: 
 			this function returns length of characters in message.text
 
 		ex: 
-			if app.textlen(message) > 4096:
-				print("Text too long")
+			if app.textlen() > 4096:
+				print("Text is too long")
 		"""
 
-		return len([x for x in message.text or message.caption])
+		return len([x for x in self.m.text or self.m.caption or None])
 
 
 	async def create_file(
 		self, 
-		message: Message, 
 		filename: str, 
 		content: str,
 		send: bool=True,
@@ -359,16 +342,15 @@ class RawFunctions(object):
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
-			2. filename: str :: give a filename with some extension or without extension
-			3. text: str :: contents which is going to be written in the file
+			1. filename: str :: give a filename with some extension or without extension
+			2. text: str :: contents which is going to be written in the file
 
 		use: 
 			use this function to create files with any type of extension (.txt, .py, .java, .html, etc),
 			this function also sends the created file.
 
 		ex: (async)
-			await app.create_file(message, "sample.txt", "This file was created with app.create_file() method")
+			await app.create_file("sample.txt", "This file was created by app.create_file() method")
 		"""
 
 		try:
@@ -378,7 +360,7 @@ class RawFunctions(object):
 			file.close()
 			if send:
 				await self.send_document(
-					message.chat.id,
+					self.m.chat.id,
 					path,
 					caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
 				)
@@ -388,7 +370,7 @@ class RawFunctions(object):
 			else:
 				return path
 		except Exception as e:
-			await self.error(message, e)
+			await self.error(e)
 
 
 	def rem_dual(
@@ -426,13 +408,13 @@ class RawFunctions(object):
 			use this function to kick a member from your chat
 
 		ex: (async)
-			await app.kick_user(chat_id, user_id)
+			await app.kick_user(chat_id, user_id, ban_time=120)
 		"""
 
 		try:
 			return await self.ban_chat_member(chat_id, user_id, int(time.time()) + ban_time) 
 		except Exception as e:
-			await self.error(m, e)
+			await self.error(e)
 
 
 	def is_str(
@@ -509,33 +491,30 @@ class RawFunctions(object):
 
 	async def get_last_msg(
 		self, 
-		m: Message, 
 		chat_id, 
 		reverse: bool=False
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
-			2. chat_id: int :: chat id of group or user
-			3. reverse: bool, default=False :: if reverse is True you'll get the oldest message in chat
+			1. chat_id: int :: chat id of group or user
+			2. reverse: bool, default=False :: if reverse is True you'll get the oldest message in chat
 
 		use: 
 			use this function to get last message of the chat or user
 
 		ex: (async)
-			await app.get_last_msg(message, chat_id, reverse=True)
+			await app.get_last_msg(chat_id, reverse=True)
 		"""
 
-		return await self.get_history(chat_id, limit=1, reverse=reverse)
+		return await self.get_chat_history(chat_id, limit=1, reverse=reverse)
 
 
 	async def toggle_inline(
 		self, 
-		message: Message
 		):
 		"""
 		params: 
-			1. message (update) :: incoming update
+			None
 
 		use: 
 			use this function to turn on | off inline mode of your bot
@@ -546,11 +525,11 @@ class RawFunctions(object):
 
 		try:
 			botname = "BotFather"
-			await self.send_edit(message, "Processing command . . .", text_type=["mono"])
+			await self.send_edit("Processing command . . .", text_type=["mono"])
 			await self.send_message(botname, "/mybots") # BotFather (93372553) 
 			await asyncio.sleep(0.50) # floodwaits
 
-			data = await self.get_last_msg(message, botname)
+			data = await self.get_last_msg(botname)
 			usernames = list(data[0].reply_markup.inline_keyboard)[0]
 
 			unames = []
@@ -559,42 +538,42 @@ class RawFunctions(object):
 			for x in usernames:
 				unames.append(x.text)
 
-			await self.send_edit(message, "Choosing bot . . . ", text_type=["mono"])
+			await self.send_edit("Choosing bot . . . ", text_type=["mono"])
 
 			if self.bot.username in unames:
 				await data[0].click(self.bot.username)
 			else:
-				return await self.send_edit(message, "Looks like you don't have a bot please, use your own bot.", text_type=["mono"], delme=4)
+				return await self.send_edit("Looks like you don't have a bot please, use your own bot.", text_type=["mono"], delme=4)
 
-			data = await self.get_last_msg(message, botname)
+			data = await self.get_last_msg(botname)
 
-			await self.send_edit(message, "Pressing Bot Settings . . . ", text_type=["mono"])
+			await self.send_edit("Pressing Bot Settings . . . ", text_type=["mono"])
 
 			await data[0].click("Bot Settings")
 
-			data = await self.get_last_msg(message, botname)
+			data = await self.get_last_msg(botname)
 
-			await self.send_edit(message, "checking whether inline mode is On or Off . . . ", text_type=["mono"])
+			await self.send_edit("checking whether inline mode is On or Off . . . ", text_type=["mono"])
 
 			await data[0].click("Inline Mode")
 
-			data = await self.get_last_msg(message, botname)
+			data = await self.get_last_msg(botname)
 
 			# Turn on inline mode
 			if "Turn on" in str(data[0]):
-				await self.send_edit(message, "Turning Inline mode on . . . ", text_type=["mono"])
+				await self.send_edit("Turning Inline mode on . . . ", text_type=["mono"])
 				await data[0].click("Turn on")
-				await self.send_edit(message, "Inline mode is now turned On.", text_type=["mono"], delme=4)
+				await self.send_edit("Inline mode is now turned On.", text_type=["mono"], delme=4)
 			# Turn inline mode off
 			elif "Turn inline mode off" in str(data[0]):
-				await self.send_edit(message, "Turning Inline mode Off . . .", text_type=["mono"])
+				await self.send_edit("Turning Inline mode Off . . .", text_type=["mono"])
 				await data[0].click("Turn inline mode off")
-				await self.send_edit(message, "Inline mode is now turned Off.", text_type=["mono"], delme=4)
+				await self.send_edit("Inline mode is now turned Off.", text_type=["mono"], delme=4)
 		except YouBlockedUser:
 			await self.unblock_user(botname) # unblock & continue
-			await self.toggle_inline(message) # keep process going
+			await self.toggle_inline() # keep process going
 		except Exception as err:
-			await self.error(message, err)
+			await self.error(err)
 
 
 	def quote(

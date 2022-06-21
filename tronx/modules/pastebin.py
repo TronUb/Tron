@@ -5,9 +5,6 @@ from pyrogram.types import Message
 
 from tronx import app, gen
 
-from tronx.helpers import (
-	gen,
-)
 
 
 
@@ -31,19 +28,18 @@ async def paster_handler(_, m: Message):
 
 	if reply and reply.text or reply.caption:
 		text = reply.text or reply.caption
-	elif not reply and app.long(m) > 1:
+	elif not reply and app.long() > 1:
 		text = m.text.split(None, 1)[1]
-	elif not reply and app.long(m) == 1:
-		return await app.send_edit(m, "Please reply to a message or give some text after command.", text_type=["mono"], delme=4)
+	elif not reply and app.long() == 1:
+		return await app.send_edit("Please reply to a message or give some text after command.", text_type=["mono"], delme=4)
 
-	m = await app.send_edit(m, "Pasting to pastebin . . .", text_type=["mono"])
+	await app.send_edit("Pasting to pastebin . . .", text_type=["mono"])
 	url = await app.HasteBinPaste(text)
 	reply_text = f"**Hastebin** : [Click Here]({url})"
-	delete = (True if app.long(m) > 1 and m.command[1] in ["d", "del"] and reply.from_user.is_self else False)
+	delete = (True if app.long() > 1 and m.command[1] in ["d", "del"] and reply.from_user.is_self else False)
 	if delete:
 			await asyncio.gather(
 				app.send_edit(
-					m,  
 					reply_text, 
 					disable_web_page_preview=True
 					),
@@ -51,7 +47,6 @@ async def paster_handler(_, m: Message):
 			)
 	else:
 		await app.send_edit(
-			m,
 			reply_text,
 			disable_web_page_preview=True
 		)

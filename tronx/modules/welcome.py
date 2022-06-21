@@ -3,11 +3,7 @@ import time
 from pyrogram.types import Message
 from pyrogram import filters
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -60,17 +56,17 @@ async def sendwelcome_handler(_, m: Message):
 				reply_to_message_id=m.message_id
 			)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
 async def savewelcome_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
-	await app.send_edit(m, "Setting this media as a welcome message . . .", text_type=["mono"])
+	await app.send_edit("Setting this media as a welcome message . . .", text_type=["mono"])
 	reply = m.reply_to_message
 	if reply:
 		try:
@@ -83,64 +79,64 @@ async def savewelcome_handler(_, m: Message):
 					app.set_welcome(str(m.chat.id), "#" + file_id, caption)
 				else:
 					app.set_welcome(str(m.chat.id), "#" + file_id)
-				await app.send_edit(m, "Added this media to welcome message . . .", delme=2, text_type=["mono"])
+				await app.send_edit("Added this media to welcome message . . .", delme=2, text_type=["mono"])
 			elif bool(reply.media) is False:
 				app.set_welcome(str(m.chat.id), reply.text.markdown)
-				await app.send_edit(m, "Added this text to welcome message . . .", delme=2, text_type=["mono"])
+				await app.send_edit("Added this text to welcome message . . .", delme=2, text_type=["mono"])
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 			print(e)
 	else:
-		await app.send_edit(m, "Please reply to some media or text to set welcome message . . .", delme=2, text_type=["mono"])      
+		await app.send_edit("Please reply to some media or text to set welcome message . . .", delme=2, text_type=["mono"])      
 
 
 
 
 @app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
 async def deletewelcome_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	try:
-		await app.send_edit(m, "Checking welcome message for this group . . .", text_type=["mono"])
+		await app.send_edit("Checking welcome message for this group . . .", text_type=["mono"])
 		app.del_welcome(str(m.chat.id))
-		await app.send_edit(m, "Successfully deleted welcome message for this chat . . .", delme=2, text_type=["mono"])
+		await app.send_edit("Successfully deleted welcome message for this chat . . .", delme=2, text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
 async def getwelcome_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	try:
-		await app.send_edit(m, "Getting welcome message of this group . . .")
+		await app.send_edit("Getting welcome message of this group . . .")
 		data = app.get_welcome(str(m.chat.id))
 		text = data["file_id"]
 		cap = data["caption"]
 
 		if text is None and cap is None :
-			await app.send_edit(m, "No welcome message was assigned to this group.", text_type=["mono"], delme=3)
+			await app.send_edit("No welcome message was assigned to this group.", text_type=["mono"], delme=3)
 		elif text is not None and cap is None:
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
 					file_id=text.replace("#", ""),
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					)
 				await m.delete()
 			else:
-				await app.send_edit(m, text, text_type=["mono"])
+				await app.send_edit(text, text_type=["mono"])
 		elif text is not None and cap is not None:
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
 					file_id=text.replace("#", ""),
 					caption=cap,
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					)
 				await m.delete()
 	except Exception as e:

@@ -24,27 +24,27 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("zombies", allow = ["sudo", "channel"]))
 async def zombies_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	temp_count = 0
 	admin_count = 0
 	count = 0
 
-	if app.long(m) != 2:
-		m = await app.send_edit(m, "Checking deleted accounts . . .", text_type=["mono"])
+	if app.long() != 2:
+		await app.send_edit("Checking deleted accounts . . .", text_type=["mono"])
 
-		async for x in app.iter_chat_members(chat_id=m.chat.id):
+		async for x in app.get_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
 				temp_count += 1
 
 		if temp_count > 0:
-			await app.send_edit(m, f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.PREFIX}zombies clean` to remove them from group.")
+			await app.send_edit(f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.PREFIX}zombies clean` to remove them from group.")
 		else:
-			await app.send_edit(m, "No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, text_type=["mono"])
+			await app.send_edit("No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, text_type=["mono"])
 
-	elif app.long(m) == 2 and m.command[1] == "clean":
-		m = await app.send_edit(m, "Cleaning deleted accounts . . .", text_type=["mono"])
+	elif app.long() == 2 and m.command[1] == "clean":
+		await app.send_edit("Cleaning deleted accounts . . .", text_type=["mono"])
 
 		async for x in app.iter_chat_members(chat_id=m.chat.id):
 			if x.user.is_deleted:
@@ -56,13 +56,13 @@ async def zombies_handler(_, m: Message):
 					count += 1
 					await asyncio.sleep(0.2)
 				except Exception as e:
-					await app.error(m, e)
-		await app.send_edit(m, f"`Group clean up done !`\n\n**Total:** `{count+admin_count}`\n**Removed:** `{count}`\n**Not Removed:** `{admin_count}`\n\n**Note:** `Not removed accounts can be admins or the owner`")
+					await app.error(e)
+		await app.send_edit(f"`Group clean up done !`\n\n**Total:** `{count+admin_count}`\n**Removed:** `{count}`\n**Not Removed:** `{admin_count}`\n\n**Note:** `Not removed accounts can be admins or the owner`")
 
-	elif app.long(m) == 2 and m.command[1] != "clean":
-		await app.send_edit(m, f"Check `{app.PREFIX}help zombies` to see how it works !")
+	elif app.long() == 2 and m.command[1] != "clean":
+		await app.send_edit(f"Check `{app.PREFIX}help zombies` to see how it works !")
 	else:
-		await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=3)
+		await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
 
 
 

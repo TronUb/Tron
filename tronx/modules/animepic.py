@@ -3,11 +3,7 @@ import requests
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -55,14 +51,14 @@ async def send_gif(m: Message, gif_data):
 			caption=gif_data[1]
 		)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen("animelist", allow = ["sudo"]))
 async def animelist(_, m: Message):
-	await app.send_edit(m, anime_suffix)
+	await app.send_edit(anime_suffix)
 
 
 
@@ -81,14 +77,14 @@ async def nekoanime(_, m: Message):
 			caption = data["artist_name"]
 			)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen("animegif", allow = ["sudo"]))
 async def animegif(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		arg = m.command[1]
 		try:
 			if m.from_user.is_self:
@@ -98,8 +94,8 @@ async def animegif(_, m: Message):
 				data = get_anime_gif(arg)
 				await send_gif(m, data)
 			else:
-				await app.send_edit(m, anime_suffix)
+				await app.send_edit(anime_suffix)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 	else:
-		await app.send_edit(m, f"Give me a suffix, use `{app.PREFIX}animelist` to get suffix.", delme=4)
+		await app.send_edit(f"Give me a suffix, use `{app.PREFIX}animelist` to get suffix.", delme=4)

@@ -28,12 +28,12 @@ app.CMD_HELP.update(
 async def basicgroup_handler(_, m: Message):
 	grpname = None
 	users = None
-	if app.long(m) == 1:
-		return await app.send_edit(m, f"Usage: `{app.PREFIX}bgroup mygroupname`", delme=4)
-	elif app.long(m) > 1:
+	if app.long() == 1:
+		return await app.send_edit(f"Usage: `{app.PREFIX}bgroup mygroupname`", delme=4)
+	elif app.long() > 1:
 		grpname = m.text.split(None, 1)[1]
 		users = "@TheRealPhoenixBot"
-	elif app.long(m) > 2:
+	elif app.long() > 2:
 		grpname = m.text.split(None, 1)[1]
 		users = m.text.split(None, 2)[2].split()
 	else:
@@ -42,13 +42,13 @@ async def basicgroup_handler(_, m: Message):
 
 	try:
 		if grpname:
-			m = await app.send_edit(m, f"Creating a new basic group: `{grpname}`")
+			await app.send_edit(f"Creating a new basic group: `{grpname}`")
 			group = await app.create_group(title=f"{grpname}", users=users)
-			await app.send_edit(m, f"**Created a new basic group:** [{grpname}]({(await app.get_chat(group.id)).invite_link})")
+			await app.send_edit(f"**Created a new basic group:** [{grpname}]({(await app.get_chat(group.id)).invite_link})")
 		else:
-			await app.send_edit(m, "No group name is provided.", text_type=["mono"], delme=4)
+			await app.send_edit("No group name is provided.", text_type=["mono"], delme=4)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -57,12 +57,12 @@ async def basicgroup_handler(_, m: Message):
 async def supergroup_handler(_, m: Message):
 	grpname = None
 	about = None
-	if app.long(m) == 1:
-		return await app.send_edit(m, f"`Usage: {app.PREFIX}sgroup mygroupname`", delme=4)
-	elif app.long(m) > 1:
+	if app.long() == 1:
+		return await app.send_edit(f"`Usage: {app.PREFIX}sgroup mygroupname`", delme=4)
+	elif app.long() > 1:
 		grpname = m.text.split(None, 1)[1]
 		about = ""
-	elif app.long(m) > 2:
+	elif app.long() > 2:
 		grpname = m.text.split(None, 1)[1]
 		about = m.text.split(None, 2)[2]
 	else:
@@ -71,13 +71,13 @@ async def supergroup_handler(_, m: Message):
 
 	try:
 		if grpname:
-			m = await app.send_edit(m, f"Creating a new super group: `{grpname}`")
+			await app.send_edit(f"Creating a new super group: `{grpname}`")
 			group = await app.create_supergroup(title=f"{grpname}", description=about)
-			await app.send_edit(m, f"**Created a new super group:** [{grpname}]({(await app.get_chat(group.id)).invite_link})")
+			await app.send_edit(f"**Created a new super group:** [{grpname}]({(await app.get_chat(group.id)).invite_link})")
 		else:
-			await app.send_edit(m, "No group name is provided.", text_type=["mono"], delme=4)
+			await app.send_edit("No group name is provided.", text_type=["mono"], delme=4)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -87,7 +87,7 @@ async def unreadchat_handler(_, m: Message):
 	try:
 		await asyncio.gather(
 			m.delete(),
-			app.send(
+			app.invoke(
 				functions.messages.MarkDialogUnread(
 					peer=await app.resolve_peer(m.chat.id), 
 					unread=True
@@ -95,7 +95,7 @@ async def unreadchat_handler(_, m: Message):
 			),
 		)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -104,23 +104,23 @@ async def unreadchat_handler(_, m: Message):
 async def channel_handler(_, m: Message):
 	chname = None
 	about = None
-	if app.long(m) == 1:
-		return await app.send_edit(m, f"Usage: `{app.PREFIX}channel [channel name]`", delme=4)
+	if app.long() == 1:
+		return await app.send_edit(f"Usage: `{app.PREFIX}channel [channel name]`", delme=4)
 
-	elif app.long(m) > 1:
+	elif app.long() > 1:
 		chname = m.text.split(None, 1)[1]
 		about = ""
-	elif app.long(m) > 2:
+	elif app.long() > 2:
 		chname = m.text.split(None, 1)[1]
 		about = m.text.split(None, 2)[2]
 
 	try:
 		if chname:
-			m = await app.send_edit(m, f"Creating your channel: `{chname}`")
+			await app.send_edit(f"Creating your channel: `{chname}`")
 			response = await app.create_channel(title=f"{chname}", description=about)
 			if response:
-				await app.send_edit(m, f"**Created a new channel:** [{chname}]({(await app.get_chat(response.id)).invite_link})", disable_web_page_preview=True)
+				await app.send_edit(f"**Created a new channel:** [{chname}]({(await app.get_chat(response.id)).invite_link})", disable_web_page_preview=True)
 			else:
-				await app.send_edit(m, "Couldn't create a channel.")
+				await app.send_edit("Couldn't create a channel.")
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)

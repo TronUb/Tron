@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("reboot", allow = ["sudo"]))
 async def reboot_handler(_, m: Message):
 	try:
-		msg = await app.send_edit(m, "Restarting bot . . .", text_type=["mono"])
+		msg = await app.send_edit("Restarting bot . . .", text_type=["mono"])
 
 		os.execv(sys.executable, ['python'] + sys.argv)
 		await app.edit_message_text(
@@ -36,23 +36,23 @@ async def reboot_handler(_, m: Message):
 		)
 	except Exception as e:
 		await m.edit("Failed to restart userbot !", delme=2, text_type=["mono"])
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen("sleep", allow = ["sudo"]))
 async def sleep_handler(_, m: Message):
-	if app.long(m) == 1:
-		return await app.send_edit(m, "Give me some seconds after command . . .")
+	if app.long() == 1:
+		return await app.send_edit("Give me some seconds after command . . .")
 
-	elif app.long(m) > 1:
+	elif app.long() > 1:
 		arg = m.command[1]
 
 	if arg.isdigit():
 		cmd = int(arg)
 		if cmd > 86400:
-			return await app.send_edit(m, "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", text_type=["mono"], delme=3)
+			return await app.send_edit("Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", text_type=["mono"], delme=3)
 
 		format = {
 			cmd<60:f"{cmd} seconds", 
@@ -66,7 +66,7 @@ async def sleep_handler(_, m: Message):
 				suffix = format[x]
 				break
 
-		await app.send_edit(m, f"Sleeping for {suffix} . . .", delme=cmd)
+		await app.send_edit(f"Sleeping for {suffix} . . .", delme=cmd)
 		time.sleep(cmd) 
 	else:
-		await app.send_edit(m, "Please give me a number not text . . .", delme=3, text_type=["mono"])
+		await app.send_edit("Please give me a number not text . . .", delme=3, text_type=["mono"])

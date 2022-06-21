@@ -11,8 +11,8 @@ app.CMD_HELP.update(
 	{"spam" : (
 		"spam",
 		{
-		"spam [number] [text]" : "You Know The Use Of This Command.", 
-		"dspam [delay] [count] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
+		"spam [count] [text]" : "You Know The Use Of This Command.", 
+		"dspam [count] [delay] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
 		}
 		)
 	}
@@ -25,13 +25,13 @@ app.CMD_HELP.update(
 async def spam_handler(_, m: Message):
 	try:
 		reply = m.reply_to_message
-		reply_to_id = reply.message_id if reply else None
+		reply_to_id = reply.id if reply else None
 		cmd = m.text.split(None, 2)
 
-		if not reply and app.long(m) == 1:
-			await app.send_edit(m, "Reply or give me count & spam text after command.", text_type=["mono"], delme=4)
+		if not reply and app.long() == 1:
+			await app.send_edit("Reply or give me count & spam text after command.", text_type=["mono"], delme=4)
 
-		elif not reply and app.long(m) > 1:
+		elif not reply and app.long() > 1:
 			await m.delete()
 			times = int(cmd[1]) if cmd[1].isdigit() else 0
 			spam_msg = cmd[2]
@@ -46,7 +46,7 @@ async def spam_handler(_, m: Message):
 		elif reply:
 			await m.delete()
 			times = int(cmd[1]) if cmd[1].isdigit() else 0
-			spam_msg = reply.message_id
+			spam_msg = reply.id
 			for x in range(times):
 				await app.copy_message(
 					m.chat.id, 
@@ -54,7 +54,7 @@ async def spam_handler(_, m: Message):
 					spam_msg
 				)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -65,10 +65,10 @@ async def delayspam_handler(_, m: Message):
 		reply = m.reply_to_message
 		cmd = m.command
 
-		if app.long(m) < 3:
-			await app.send_edit(m, f"Use like this: `{app.MyPrefix()[0]}dspam [count spam] [delay time in seconds] [text messages]`")
+		if app.long() < 3:
+			await app.send_edit(f"Use like this: `{app.MyPrefix()[0]}dspam [count spam] [delay time in seconds] [text messages]`")
 
-		elif app.long(m) > 2 and not reply:
+		elif app.long() > 2 and not reply:
 			await m.delete()
 			msg = m.text.split(None, 3)
 			times = int(msg[1]) if msg[1].isdigit() else None
@@ -81,8 +81,8 @@ async def delayspam_handler(_, m: Message):
 				)
 				await asyncio.sleep(sec)
 		else:
-			await app.send_edit(m,"Something wrong in spam command !")
+			await app.send_edit("Something wrong in spam command !")
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 

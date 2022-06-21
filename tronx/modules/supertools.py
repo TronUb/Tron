@@ -43,7 +43,7 @@ async def text_to_voice(m: Message, text):
 	await app.send_voice(
 		m.chat.id, 
 		voice=f"{app.TEMP_DICT}voice.mp3", 
-		reply_to_message_id=m.message_id
+		reply_to_message_id=m.id
 		)
 	await m.delete()
 	os.remove(f"{app.TEMP_DICT}voice.mp3")
@@ -92,36 +92,36 @@ async def tts_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	try:
-		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
+		if not reply and app.long() == 1:
+			return await app.send_edit("Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
 
-		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
+		elif not reply and app.long() > 1:
+			await app.send_edit("Converting text to voice . . .", text_type=["mono"])
 			text = m.text.split(None, 1)[1]
 			await text_to_voice(m, text)
 
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to a text . . .", text_type=["mono"], delme=3)
-			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
+				return await app.send_edit("Please reply to a text . . .", text_type=["mono"], delme=3)
+			await app.send_edit("Converting text to voice . . .", text_type=["mono"])
 			text = reply.text
 			await text_to_voice(m, text)
 
 		else:
-			await app.send_edit(m, "Something went wrong !", text_type=["mono"])
+			await app.send_edit("Something went wrong !", text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen("ud", allow = ["sudo", "channel"]))
 async def ud_handler(_, m:Message):
-	if app.long(m) == 1:
-		return await app.send_edit(m, f"Use: `{app.PREFIX}ud cats`")
+	if app.long() == 1:
+		return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
 
 	try:
-		await app.send_edit(m, f"Searching for `{m.text.split(None, 1)[1]}`")
+		await app.send_edit(f"Searching for `{m.text.split(None, 1)[1]}`")
 		text = m.text.split(None, 1)[1]
 		response = await app.get_json(
 			f"http://api.urbandictionary.com/v0/define?term={text}"
@@ -134,11 +134,11 @@ async def ud_handler(_, m:Message):
 			f"**Meaning:**\n\n`{replace_text(definition)}`\n\n"
 			f"**Example:**\n\n`{replace_text(example)}` "
 		)
-		await app.send_edit(m, resp)
+		await app.send_edit(resp)
 	except IndexError:
-		await app.send_edit(m, "No Results Found !", text_type=["mono"], delme=3)
+		await app.send_edit("No Results Found !", text_type=["mono"], delme=3)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -147,19 +147,19 @@ async def ud_handler(_, m:Message):
 async def shortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
-		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Please give me some link or reply to a link", text_type=["mono"])
+		if not reply and app.long() == 1:
+			return await app.send_edit("Please give me some link or reply to a link", text_type=["mono"])
 
-		if not reply and app.long(m) > 1:
+		if not reply and app.long() > 1:
 			text = m.text.split(None, 1)[1]
 			await shorten_link(m, text)
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to text . . .", text_type=["mono"])
+				return await app.send_edit("Please reply to text . . .", text_type=["mono"])
 			text = reply.text
 			await shorten_link(m, text)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -168,48 +168,48 @@ async def shortlink_handler(_, m: Message):
 async def unshortlink_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
-		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Please give me a da.gd link to convert to orginal link", text_type=["mono"])
+		if not reply and app.long() == 1:
+			return await app.send_edit("Please give me a da.gd link to convert to orginal link", text_type=["mono"])
 
-		elif not reply and app.long(m) > 1:
+		elif not reply and app.long() > 1:
 			text = m.text.split(None, 1)[1]
 			await unshorten_link(m, text)
 
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to a text . . .", text_type=["mono"])
+				return await app.send_edit("Please reply to a text . . .", text_type=["mono"])
 			text = reply.text
 			await unshorten_link(m, text)
 
 		else:
-			await app.send_edit(m, "Something went wrong, try again later !", text_type=["mono"])
+			await app.send_edit("Something went wrong, try again later !", text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
 async def weather_handler(_, m: Message):
-	if app.long(m) == 1:
-		return await app.send_edit(m, "Piro Master Atleast Give Me Some Location !", text_type=["mono"])
+	if app.long() == 1:
+		return await app.send_edit("Piro Master Atleast Give Me Some Location !", text_type=["mono"])
 
-	await app.send_edit(m, "Checking weather . . .", text_type=["mono"])
+	await app.send_edit("Checking weather . . .", text_type=["mono"])
 	location = m.command[1]
 	headers = {'user-agent': 'httpie'}
 	response = requests.get(f"https://wttr.in/{location}?mnTC0&lang={weather_lang_code}", headers=headers)
 	if "Sorry, we processed more than 1M requests today and we ran out of our datasource capacity." in response.text:
-		return await app.send_edit(m, "Too many requests, try again later !", text_type=["mono"])
+		return await app.send_edit("Too many requests, try again later !", text_type=["mono"])
 
 	weather = f"__{escape(response.text)}__"
-	await app.send_edit(m, weather)
+	await app.send_edit(weather)
 
 
 
 
 @app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
 async def webshot_handler(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		try:
 			BASE = "https://render-tron.appspot.com/screenshot/"
 			url = m.command[1] 
@@ -220,7 +220,7 @@ async def webshot_handler(_, m: Message):
 				with open(path, "wb") as file:
 					for chunk in response:
 						file.write(chunk)
-			await app.send_edit(m, "generating pic . . .", text_type=["mono"])
+			await app.send_edit("generating pic . . .", text_type=["mono"])
 			await app.send_document(
 				m.chat.id, 
 				path, 
@@ -229,9 +229,9 @@ async def webshot_handler(_, m: Message):
 			await m.delete()
 			os.remove(path)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 	else:
-		await app.send_edit(m, "Give me the link pro . . .", text_type=["mono"])
+		await app.send_edit("Give me the link pro . . .", text_type=["mono"])
 
 
 
@@ -241,20 +241,20 @@ async def undlt_handler(_, m: Message):
 	collect = []
 	collect.clear()
 
-	if app.long(m) == 1:
+	if app.long() == 1:
 		count = 5
-	elif app.long(m) > 1:
+	elif app.long() > 1:
 		count = m.command[1]
 		if count.isdigit():
 			count = int(count)
 		else:
 			count = 5
 	try:
-		async for x in app.iter_history(m.chat.id, limit=count):
+		async for x in app.get_chat_history(m.chat.id, limit=count):
 			if x.text:
 				collect.append(f"**Message:** `{x.text}`\n\n")
-		await app.send_edit(m, "".join(collect))
+		await app.send_edit("".join(collect))
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 

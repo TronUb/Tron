@@ -6,12 +6,7 @@ from pyrogram.types import (
 	Message
 )
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-	regex,
-)
+from tronx import app, gen, regex
 
 
 
@@ -51,22 +46,25 @@ GET_FORMAT = {
 
 @app.on_message(gen("save", allow = ["sudo"]))
 async def savenote_hanlder(_, m: Message):
-	reply = m.reply_to_message
-	if app.long(m) == 1:
-		return await app.send_edit(m, "A note name is required with command to save a note.", text_type=["mono"])
+	try:
+		reply = m.reply_to_message
+		if app.long() == 1:
+			return await app.send_edit("A note name is required with command to save a note.", text_type=["mono"])
 
-	note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
-	if not note_name:
-		return await app.send_edit(m, "A note name is necessary to save a note !", text_type=["mono"])
+		note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
+		if not note_name:
+			return await app.send_edit("A note name is necessary to save a note !", text_type=["mono"])
 
-	if message_type == app.TEXT:
-		file_id = None
-		teks, button = app.ParseButton(text)
-		if not teks:
-			await app.send_edit(m, f"Text: `{m.text}`\n\nError: There is no text in here !")
+		if message_type == app.TEXT:
+			file_id = None
+			teks, button = app.ParseButton(text)
+			if not teks:
+				await app.send_edit(f"Text: `{m.text}`\n\nError: There is no text in here !")
 
-	app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
-	await app.send_edit(m, "Saved note = **[ `{}` ]**".format(note_name))
+		app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
+		await app.send_edit("Saved note = **[ `{}` ]**".format(note_name))
+	except Exception as e:
+		await app.error(e)
 
 
 
@@ -75,7 +73,7 @@ async def savenote_hanlder(_, m: Message):
 async def getnote_handler(_, m: Message):
 	reply = m.reply_to_message
 	if m.text and m.text.startswith(">"):
-		if app.long(m) == 1:
+		if app.long() == 1:
 			note = m.text.replace(">", "")
 		else:
 			return # no response
@@ -83,7 +81,7 @@ async def getnote_handler(_, m: Message):
 		getnotes = app.get_selfnote(m.from_user.id, note)
 
 		if not getnotes:
-			return await app.send_edit(m, "This note does not exist !")
+			return await app.send_edit("This note does not exist !")
 
 		msg_id = reply.message_id if reply else None
 
@@ -95,9 +93,9 @@ async def getnote_handler(_, m: Message):
 			else:
 				button = False
 			if button:
-				return await app.send_edit(m, "Inline button not supported in this userbot version :(")
+				return await app.send_edit("Inline button not supported in this userbot version :(")
 			else:
-				await app.send_edit(m, teks)
+				await app.send_edit(teks)
 
 		elif getnotes['type'] in (app.STICKER, app.VOICE, app.VIDEO_NOTE, app.CONTACT, app.ANIMATED_STICKER):
 			await m.delete()
@@ -128,7 +126,7 @@ async def getnote_handler(_, m: Message):
 				button = False
 
 			if button:
-				return await app.send_edit(m, "Inline button not supported in this userbot.")
+				return await app.send_edit("Inline button not supported in this userbot.")
 			else:
 				try:
 					if msg_id:
@@ -151,26 +149,26 @@ async def getnote_handler(_, m: Message):
 async def notelist_handler(_, m: Message):	
 	getnotes = app.get_all_selfnotes(m.from_user.id)
 	if not getnotes:
-		return await app.send_edit(m, "There are no saved notes !", text_type=["mono"], delme=4)
+		return await app.send_edit("There are no saved notes !", text_type=["mono"], delme=4)
 
 	notelist = "**NOTEBOOK:**\n\n"
 	for x in getnotes:
 		notelist += f"`>{x}`\n"
 
-	await app.send_edit(m, notelist)
+	await app.send_edit(notelist)
 
 
 
 
 @app.on_message(gen("clear"))
 async def clearnote_handler(_, m: Message):	
-	if app.long(m) <= 1:
-		return await app.send_edit(m, f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`")
+	if app.long() <= 1:
+		return await app.send_edit(f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`")
 
 	notename = m.text.split()[1]
 	getnotes = app.rm_selfnote(m.from_user.id, notename)
 	if not getnotes:
-		return await app.send_edit(m, "This note does not exist!")
+		return await app.send_edit("This note does not exist!")
 	else:
-		await app.send_edit(m, f"Deleted note = **[ `{notename}` ]**")
+		await app.send_edit(f"Deleted note = **[ `{notename}` ]**")
         

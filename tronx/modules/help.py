@@ -3,15 +3,11 @@ import os
 from pyrogram import filters
 from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
 
-from tronx import app
+from tronx import app, gen
 
 from pyrogram.types import (
 	Message,
 	CallbackQuery,
-)
-
-from tronx.helpers import (
-	gen,
 )
 
 
@@ -60,11 +56,11 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 @app.on_message(gen("help", allow =["sudo"]))
 async def helpdex_handler(_, m: Message):
-	args = m.command if app.long(m) > 1 else False
+	args = m.command if app.long() > 1 else False
 
 	try:
 		if args is False:
-			m = await app.send_edit(m, ". . .", text_type=["mono"])
+			await app.send_edit(". . .", text_type=["mono"])
 			result = await app.get_inline_bot_results(
 				app.bot.username, 
 				"#t5r4o9nn6" 
@@ -83,21 +79,21 @@ async def helpdex_handler(_, m: Message):
 				else:
 					app.setdv("DELETE_DEX_ID", helpdex_ids.append({m.chat.id : info.updates[2].message.id}))
 			else:
-				await app.send_edit(m, "Please check your bots inline mode is on or not . . .", delme=3, text_type=["mono"])
+				await app.send_edit("Please check your bots inline mode is on or not . . .", delme=3, text_type=["mono"])
 		elif args:
 
 			module_help = await app.data(args[1])
 			if not module_help:
-				await app.send_edit(m, f"Invalid module name specified, use `{app.PREFIX}mods` to get list of modules", delme=3)
+				await app.send_edit(f"Invalid module name specified, use `{app.PREFIX}mods` to get list of modules", delme=3)
 			else:
-				await app.send_edit(m, f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
+				await app.send_edit(f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
 		else:
-			await app.send_edit(m, "Try again later !", text_type=["mono"], delme=3)
+			await app.send_edit("Try again later !", text_type=["mono"], delme=3)
 	except BotInlineDisabled:
-		await app.toggle_inline(m)
-		await help_menu(client, m)
+		await app.toggle_inline()
+		await helpdex_handler(_, m)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -111,7 +107,7 @@ async def allmodules_handler(_, m: Message):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await app.send_edit(m, "**MODULES OF USERBOT:**\n\n" + "".join(store))
+	await app.send_edit("**MODULES OF USERBOT:**\n\n" + "".join(store))
 
 
 
@@ -125,13 +121,13 @@ async def allplugins_handler(_, m: Message):
 		if not x in ["__pycache__", "__init__.py"]:
 			store.append(x + "\n")
 
-	await app.send_edit(m, "**PLUGINS OF BOT:**\n\n" + "".join(store))
+	await app.send_edit("**PLUGINS OF BOT:**\n\n" + "".join(store))
 
 
 
 
 @app.on_message(gen("inline", allow =["sudo"]))
 async def toggleinline_handler(_, m: Message):
-	return await app.toggle_inline(m)
+	return await app.toggle_inline()
 
 

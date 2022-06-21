@@ -50,10 +50,10 @@ async def imagesauce_handler(_, m: Message):
 	try:
 		reply = m.reply_to_message
 		if not reply:
-			return await app.send_edit(m, "Reply to some media.", text_type=["mono"], delme=4)
+			return await app.send_edit("Reply to some media.", text_type=["mono"], delme=4)
 
 		if reply.photo:
-			m = await app.send_edit(m, "⏳ • Hold on ...")
+			await app.send_edit("⏳ • Hold on ...")
 			savename = "photo_{}_{}.png".format(
 				reply.photo.file_id, 
 				reply.photo.date
@@ -63,7 +63,7 @@ async def imagesauce_handler(_, m: Message):
 				file_name="./downloads/" + savename
 				)
 		elif reply.animation:
-			m = await app.send_edit(m, "⏳ • Hold on ...")
+			await app.send_edit("⏳ • Hold on ...")
 			savename = "giphy_{}-{}.gif".format(
 				reply.animation.date,
 				reply.animation.file_size
@@ -73,16 +73,16 @@ async def imagesauce_handler(_, m: Message):
 				file_name="./downloads/" + savename
 				)
 		else:
-			return await app.send_edit(m, "Only photo & animation media's are supported.", text_type=["mono"], delme=4)
+			return await app.send_edit("Only photo & animation media's are supported.", text_type=["mono"], delme=4)
 
 		searchUrl = 'http://www.google.co.id/searchbyimage/upload'
-		filePath = './downloads/{}'.format(universe)
+		filePath = './downloads/{}'.format(savename)
 		multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
 		response = requests.post(searchUrl, files=multipart, allow_redirects=False)
 		fetchUrl = response.headers['Location']
-		await app.send_edit(m, "Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
+		await app.send_edit("Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -90,12 +90,12 @@ async def imagesauce_handler(_, m: Message):
 @app.on_message(gen("pic", allow =["sudo"]))
 async def yandeximages_handler(_, m: Message):
 	oldmsg = m
-	if app.long(m) == 1:
-		return await app.send_edit(m, "Usage: `.pic cat`", delme=4)
+	if app.long() == 1:
+		return await app.send_edit("Usage: `.pic cat`", delme=4)
 
 	try:
-		if app.long(m) > 1:
-			m = await app.send_edit(m, "Getting image . . .", text_type=["nono"])
+		if app.long() > 1:
+			await app.send_edit("Getting image . . .", text_type=["mono"])
 			photo = oldmsg.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
@@ -109,9 +109,9 @@ async def yandeximages_handler(_, m: Message):
 				hide_via=True
 			)
 		else:
-			await app.send_edit(m, "Failed to get the image, try again later !", text_type=["mono"], delme=4)
+			await app.send_edit("Failed to get the image, try again later !", text_type=["mono"], delme=4)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -119,10 +119,10 @@ async def yandeximages_handler(_, m: Message):
 @app.on_message(gen("img", allow =["sudo"]))
 async def imagesearch_handler(_, m: Message):
 	cmd = m.command
-	if app.long(m) == 1:
-		return await app.send_edit(m, "Please give me some query.", text_type=["mono"], delme=4)
+	if app.long() == 1:
+		return await app.send_edit("Please give me some query.", text_type=["mono"], delme=4)
 
-	if app.long(m) > 2 and bool(cmd[1].isdigit()):
+	if app.long() > 2 and bool(cmd[1].isdigit()):
 		limit = int(cmd[1])
 		query = m.text.split(None, 2)[2]
 	else:
@@ -130,7 +130,7 @@ async def imagesearch_handler(_, m: Message):
 		query = m.text.split(None, 1)[1]
 
 	try:
-		m = await app.send_edit(m, f"**Getting images:** `{query}`")
+		await app.send_edit(f"**Getting images:** `{query}`")
 		bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=False, timeout=60, verbose=False)
 		img_dir = os.path.exists("./images")
 
@@ -138,7 +138,7 @@ async def imagesearch_handler(_, m: Message):
 			for img in os.listdir(f"./images/{query}"):
 				await app.send_photo(m.chat.id, f"./images/{query}/{img}")
 		else:
-			await app.send_edit(m, "No images found !", text_type=["mono"], delme=4)
+			await app.send_edit("No images found !", text_type=["mono"], delme=4)
 
 		if os.path.exists(f"./images/{query}/"):
 			shutil.rmtree(f"./images") # remove folder
@@ -146,6 +146,6 @@ async def imagesearch_handler(_, m: Message):
 		await m.delete()
 
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 

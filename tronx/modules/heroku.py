@@ -53,7 +53,7 @@ else:
 # shut-down dyno 
 @app.on_message(gen("shutdown"))
 async def shutdown_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return 
 
 	try:
@@ -66,13 +66,12 @@ async def shutdown_handler(_, m: Message):
 		pass
 	try:
 		await app.send_edit(
-			m, 
 			"Dynos are truned off, if you want turn them on manually from heroku.com",
 			text_type=["mono"]
 		)
 		heroku_app.process_formation()["worker"].scale(0)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -80,26 +79,24 @@ async def shutdown_handler(_, m: Message):
 # restart your bot 
 @app.on_message(gen("restart"))
 async def restart_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
 	try:
-		m = await app.send_edit(m, "Restarting . . .", text_type=["mono"])
+		await app.send_edit("Restarting . . .", text_type=["mono"])
 		restart = heroku_app.restart()
 		if restart:
 			await app.send_edit(
-				m, 
 				"Restarted . . .!\nPlease wait for 3 min or more to restart userbot . . .", 
 				text_type=["mono"]
 			)
 		else:
 			await app.send_edit(
-				m, 
 				"Failed to restart userbot, try again later . . .",
 				text_type=["mono"]
 			)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -107,11 +104,11 @@ async def restart_handler(_, m: Message):
 # get usage of your dyno hours from heroku
 @app.on_message(gen("usage", allow = ["sudo"]))
 async def dynostats_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
 	Heroku = heroku3.from_key(app.HEROKU_API_KEY)
-	m = await app.send_edit(m, "Checking usage . . .", text_type=["mono"])
+	await app.send_edit("Checking usage . . .", text_type=["mono"])
 	u_id = Heroku.account().id
 	try:
 		if u_id:
@@ -124,7 +121,6 @@ async def dynostats_handler(_, m: Message):
 			r = requests.get(heroku_api + path, headers=headers)
 			if r.status_code != 200:
 				return await app.send_edit(
-					m, 
 					"Error: something bad happened`\n\n" f"> {r.reason}\n",
 					text_type=["mono"]
 				)
@@ -151,7 +147,6 @@ async def dynostats_handler(_, m: Message):
 			AppMinutes = math.floor(AppQuotaUsed % 60)
 
 			await app.send_edit(
-				m, 
 				"**Dyno Usage**:\n\n"
 				f"**Total Dyno Hours:** `550 Hours`\n\n"
 				f"**⧓ Dyno usage for App:** __`{app.HEROKU_APP_NAME}`__\n"
@@ -162,7 +157,7 @@ async def dynostats_handler(_, m: Message):
 				f" |  [ `{percentage}%` ]"
 			)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -170,12 +165,11 @@ async def dynostats_handler(_, m: Message):
 # get list of vars from heroku 
 @app.on_message(gen("vars", allow = ["sudo"]))
 async def herokuvars_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
 	try:
-		m = await app.send_edit(
-			m, 
+		await app.send_edit(
 			"Fetching all vars from Heroku . . .", 
 			text_type=["mono"]
 			)
@@ -189,9 +183,9 @@ async def herokuvars_handler(_, m: Message):
 			msg += f"**{num}**: `{i}`\n"
 
 		msg += f"\n**Total `{num}` vars found.**"
-		await app.send_edit(m, msg)
+		await app.send_edit(msg)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -199,39 +193,35 @@ async def herokuvars_handler(_, m: Message):
 # set vars in heroku 
 @app.on_message(gen("setvar"))
 async def setvar_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
-	if app.long(m) < 3:
+	if app.long() < 3:
 		await app.send_edit(
-			m, 
 			f"`{app.PREFIX}setvar [key] [value]`"
 		)
-	elif app.long(m) >= 3:
+	elif app.long() >= 3:
 		key = m.command[1]
 		value = m.command[2]
 		heroku_vars = heroku_app.config()
 		try:
 			if key and value in heroku_vars:
 				await app.send_edit(
-					m, 
 					f"{key} is already in vars with value {value}"
 				)
 			elif not key in heroku_vars:
 				await app.send_edit(
-					m, 
 					f"Added var •> `{key}` = `{value}`", 
 					disable_web_page_preview=True
 				)
 				heroku_vars[key] = value
 			else:
 				await app.send_edit(
-					m,
 					"Something went wrong, try again later !",
 					text_type=["mono"]
 				)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 
 
 
@@ -239,31 +229,28 @@ async def setvar_handler(_, m: Message):
 # get vars from heroku vars
 @app.on_message(gen("getvar"))
 async def getvar_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
-	if app.long(m) == 1:
+	if app.long() == 1:
 		return await app.send_edit(
-			m, 
 			f"`{app.PREFIX}getvar [key name]`"
 		)
-	elif app.long(m) >= 2:
+	elif app.long() >= 2:
 		key = m.command[1]
 		heroku_vars = heroku_app.config()
 		try:
 			if heroku_vars:
 				await app.send_edit(
-					m, 
 					f"**Key exists:**\n\n`{key}` = `{heroku_vars[key]}`"
 				)
 			else:
 				await app.send_edit(
-					m, 
 					"Failed to get heroku key . . .",
 					text_type=["mono"]
 				)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 
 
 
@@ -271,18 +258,16 @@ async def getvar_handler(_, m: Message):
 # delete vars in heroku 
 @app.on_message(gen("delvar"))
 async def delvar_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
-	if app.long(m) == 1:
+	if app.long() == 1:
 		return await app.send_edit(
-			m, 
 			f"{app.PREFIX}delvar [key name]", 
 			text_type=["mono"]
 		)
-	elif app.long(m) >= 2:
-		m = await app.send_edit(
-			m, 
+	elif app.long() >= 2:
+		await app.send_edit(
 			"Verifying var in heroku config vars . . .", 
 			delme=3, 
 			text_type=["mono"]
@@ -293,7 +278,6 @@ async def delvar_handler(_, m: Message):
 
 		if key not in heroku_vars:
 			return await app.send_edit(
-				m, 
 				f"**`{key}`** does not exist in heroku vars . . .", 
 				delme=3
 			)
@@ -301,15 +285,13 @@ async def delvar_handler(_, m: Message):
 		try:
 			del heroku_vars[key]
 		except Exception as e:
-			return await app.error(m, e)
+			return await app.error(e)
 		await app.send_edit(
-			m, 
 			f"Successfully deleted var = [ {key} ] from heroku vars !", 
 			delme=4
 		)
 	else:
 		await app.send_edit(
-			m, 
 			f"Usage: `{app.PREFIX}delvar [key name]` use this format.",
 			delme=4
 		)
@@ -320,10 +302,10 @@ async def delvar_handler(_, m: Message):
 # get logs from heroku in file format (.txt)
 @app.on_message(gen("logs", allow = ["sudo"]))
 async def logs_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
-	m = await app.send_edit(m, "⏳ • hold on . . .", text_type=["mono"])
+	await app.send_edit("⏳ • hold on . . .", text_type=["mono"])
 	logsdata = heroku_app.get_log()
 	if logsdata:
 		try:
@@ -339,9 +321,9 @@ async def logs_handler(_, m: Message):
 				os.remove(filename)
 			await m.delete()
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 	else:
-		await app.send_edit(m, "Failed to get logs . . .", delme=3)
+		await app.send_edit("Failed to get logs . . .", delme=3)
 
 
 
@@ -349,31 +331,30 @@ async def logs_handler(_, m: Message):
 # get logs from heroku in nekobin link, not as a file 
 @app.on_message(gen(["textlogs", "tlogs"], allow = ["sudo"]))
 async def textlogs_handler(_, m: Message):
-	if await not_heroku(m):
+	if await not_heroku():
 		return
 
-	m = await app.send_edit(m, "⏳ • hold on . . . ", text_type=["mono"])
+	m = await app.send_edit("⏳ • hold on . . . ", text_type=["mono"])
 	logsdata = heroku_app.get_log()
 	if logsdata:
 		try:
 			url = await app.HasteBinPaste(logsdata)
 			text = f"Heroku Logs: [press here]({url})"
-			await app.send_edit(m, text, disable_web_page_preview=True)
+			await app.send_edit(text, disable_web_page_preview=True)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 	else:
-		await app.send_edit(m, f"Failed to get the heroku text logs, try `{app.PREFIX.split()[0]}logs` command.", delme=4)
+		await app.send_edit(f"Failed to get the heroku text logs, try `{app.PREFIX.split()[0]}logs` command.", delme=4)
 
 
 
 
-async def not_heroku(m: Message):
+async def not_heroku():
 	if not (
 		app.HEROKU_APP_NAME
 		and app.HEROKU_API_KEY
 		):
 		return await app.send_edit(
-			m, 
 			"Please fill heroku credentials for this command to work [`HEROKU_APP_NAME`, `HEROKU_API_KEY`"
 		)
 		return True

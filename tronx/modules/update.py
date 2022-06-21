@@ -30,7 +30,7 @@ app.CMD_HELP.update(
 TRON_REPO = app.UPSTREAM_REPO
 
 
-async def gen_chlog(m):
+async def gen_chlog():
 	changes = []
 	heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
 	heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
@@ -42,14 +42,14 @@ async def gen_chlog(m):
 			changes.append(x.get("payload").get("commits")[0].get("message")+"\n")
 
 	if not changes:
-		await app.send_edit(m, "Your app is up to date.", text_type=["mono"])
+		await app.send_edit("Your app is up to date.", text_type=["mono"])
 		return -1
 	else:
 		if len("".join(changes)) > 4096:
-			await app.create_file(m, "changelog.txt", "".join(changes), send=True)
+			await app.create_file("changelog.txt", "".join(changes), send=True)
 			return 0
 		else:
-			await app.send_edit(m, "".join(changes))
+			await app.send_edit("".join(changes))
 			return 0
 
         
@@ -75,25 +75,25 @@ async def install_requirements():
 async def update_handler(_, m):
 	cmd = False
 	errtext = "Some problem occurred:\n\n"
-	await app.send_edit(m, "Checking for updates, please wait . . .", text_type=["mono"])
+	await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
 
-	if app.long(m) > 1 and m.command[1] == "now":
+	if app.long() > 1 and m.command[1] == "now":
 		cmd = m.command
-	elif app.long(m) > 1 and m.command[1] != "now":
-		return await app.send_edit(m, "Use `now` after update command")
-	elif app.long(m) == 1:
-		if await gen_chlog(m) == -1:
+	elif app.long() > 1 and m.command[1] != "now":
+		return await app.send_edit("Use `now` after update command")
+	elif app.long() == 1:
+		if await gen_chlog() == -1:
 			return
 
 
 	try:
 		repo = Repo()
 	except NoSuchPathError as e:
-		await app.send_edit(m, f"{errtext}`{e}`")
+		await app.send_edit(f"{errtext}`{e}`")
 		return repo.__del__()
 
 	except GitCommandError as e:
-		await app.send_edit(m, f"{errtext}`{e}`")
+		await app.send_edit(f"{errtext}`{e}`")
 		return repo.__del__()
 
 	except InvalidGitRepositoryError as e:
@@ -105,7 +105,7 @@ async def update_handler(_, m):
 		repo.heads.master.checkout(True)
 	ACTIVE_BRANCH = repo.active_branch.name
 	if ACTIVE_BRANCH != "master":
-		await app.send_edit(m, f"**[ UPDATER ]:** You are on [ {ACTIVE_BRANCH} ]\n\nPlease change to `master` branch.`")
+		await app.send_edit(f"**[ UPDATER ]:** You are on [ {ACTIVE_BRANCH} ]\n\nPlease change to `master` branch.`")
 		return repo.__del__()
 
 	try:
@@ -120,7 +120,7 @@ async def update_handler(_, m):
 		heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
 		heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
 
-		m = await app.send_edit(m, "Userbot update in progress, please wait for few minutes . . .", text_type=["mono"])
+		await app.send_edit("Userbot update in progress, please wait for few minutes . . .", text_type=["mono"])
 		ups_rem.fetch(ACTIVE_BRANCH)
 		repo.git.reset("--hard", "FETCH_HEAD")
 		heroku_git_url = heroku_app.git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
@@ -138,7 +138,7 @@ async def update_handler(_, m):
 			app.log.error(e)
 			return
 
-		await app.send_edit(m, "Successfully Updated, initialing . . .", text_type=["mono"], delme=8)
+		await app.send_edit("Successfully Updated, initialing . . .", text_type=["mono"], delme=8)
 
 	else:
 		try:
@@ -147,6 +147,6 @@ async def update_handler(_, m):
 			repo.git.reset("--hard", "FETCH_HEAD")
 
 		await install_requirements()
-		await app.send_edit(m,"Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=8)
+		await app.send_edit("Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=8)
 
 

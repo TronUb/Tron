@@ -3,11 +3,7 @@ import time
 from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -31,12 +27,12 @@ app.CMD_HELP.update(
 async def go_offline(_, m: Message):
 	try:
 		start = int(time.time())
-		if app.long(m) >= 2:
+		if app.long() >= 2:
 			reason = m.text.split(None, 1)[1]
 			app.set_afk(True, reason, start) # with reason
-			await app.send_edit(m, f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=2)
+			await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=2)
 
-		elif app.long(m) == 1 and app.long(m) < 4096:
+		elif app.long() == 1 and app.long() < 4096:
 			if app.getdv("AFK_TEXT"):
 				reason = app.getdv("AFK_TEXT")
 			elif app.AFK_TEXT:
@@ -46,13 +42,13 @@ async def go_offline(_, m: Message):
 
 			if reason:
 				app.set_afk(True, reason, start) # with reason
-				await app.send_edit(m, f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=2)
+				await app.send_edit(f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=2)
 			else:
 				app.set_afk(True, "", start) # without reason
-				await app.send_edit(m, f"{app.UserMention()} is now offline.", delme=2)
+				await app.send_edit(f"{app.UserMention()} is now offline.", delme=2)
 
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -108,7 +104,7 @@ async def offline_mention(_, m: Message):
 				parse_mode = "markdown"
 				)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -137,6 +133,6 @@ async def afkme_handler(_, m: Message):
 			app.set_afk(False, "", 0)
 
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 

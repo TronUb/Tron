@@ -2,11 +2,7 @@ import os
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -29,7 +25,7 @@ app.CMD_HELP.update(
 async def mediainfo_handler(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(m, "Please reply to some media to get media info . . .",text_type=["mono"])
+		return await app.send_edit("Please reply to some media to get media info . . .", text_type=["mono"])
 
 	if (app.get_file_id(replied))["type"] == "photo":
 		pie = replied.photo
@@ -43,9 +39,7 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg += " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "video":
 		pie = replied.video
@@ -62,9 +56,7 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "sticker":
 		pie = replied.sticker
@@ -83,9 +75,7 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "document":
 		pie = replied.document
@@ -99,9 +89,7 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "animation":
 		pie = replied.animation
@@ -118,9 +106,7 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "audio":
 		pie = replied.audio
@@ -137,17 +123,13 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "text":
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
 		await app.send_edit(
-			m, 
 			"**⚶ Text Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 
 
@@ -156,23 +138,23 @@ async def mediainfo_handler(_, m: Message):
 @app.on_message(gen("chatinfo", allow = ["sudo"]))
 async def chatinfo_handler(_, m: Message):
 	try:
-		if len(m.command) > 1:
+		if app.long() > 1:
 			chat_u = m.command[1]
 			chat = await app.get_chat(chat_u)
 		else:
-			if m.chat.type == "private":
-				return await app.send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
+			if m.chat.type == ChatType.PRIVATE:
+				return await app.send_edit("Please use it in groups or use `.chatinfo [group username or id]`", delme=3)
 
 			else:
-				chat_v = m.chat.id
-				chat = await app.get_chat(chat_v)
+				chatid = m.chat.id
+				chat = await app.get_chat(chatid)
+		poto = False
 
-		if bool(await app.get_profile_photos(m.chat.id)) is True:
-			poto = await app.get_profile_photos(m.chat.id)
-		else:
-			poto = False
+		async for x in app.get_chat_photo(chat.id):
+			poto = x.file_id
+			break
 
-		m = await app.send_edit(m, "Processing . . .")
+		await app.send_edit("Processing . . .")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
 		data += f"**Title:** `{chat.title}`\n"
@@ -194,13 +176,13 @@ async def chatinfo_handler(_, m: Message):
 		if poto and data:
 			await app.send_cached_media(
 				m.chat.id, 
-				file_id=poto[0].file_id, 
+				file_id=poto, 
 				caption=data
 			)
 			await m.delete()
 		elif not poto:
-			await app.send_edit(m, data)
+			await app.send_edit(data)
 		else:
-			await app.send_edit(m, "Failed to get information of this group . . .", delme=2)
+			await app.send_edit("Failed to get information of this group . . .", delme=2)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)

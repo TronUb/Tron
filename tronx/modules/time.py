@@ -48,18 +48,18 @@ async def today_handler(_, m: Message):
 	text = f"Today is `{today}`, "
 	text += f"{time.strftime('%d %b %Y')}\n" 
 	text += f"Time: {time.strftime('%r')}"
-	await app.send_edit(m,text)
+	await app.send_edit(text)
 
 
 
 
 @app.on_message(gen("time", allow = ["sudo", "channel"]))
 async def time_handler(_, m: Message):
-	await app.send_edit(m, f"Today's time: `{app.showtime()}`")
+	await app.send_edit(f"Today's time: `{app.showtime()}`")
 
 
 
 
 @app.on_message(gen("date", allow = ["sudo", "channel"]))
 async def date_handler(_, m: Message):
-	await app.send_edit(m, f"Today's date: `{app.showdate()}`")
+	await app.send_edit(f"Today's date: `{app.showdate()}`")
