@@ -4,7 +4,7 @@ import html
 
 from pyrogram.types import Message, ChatPermissions, User
 
-from pyrogram.errors import UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied, UsernotMutualContact
+from pyrogram.errors import UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied, UserNotMutualContact
 
 from tronx import app
 
