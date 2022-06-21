@@ -69,17 +69,18 @@ async def sendmodule_handler(app, m: Message):
 async def install_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		return await app.send_edit(m, "Reply to a python file to install . . .", text_type=["mono"], delme=4)
+		return await app.send_edit("Reply to a python file to install . . .", text_type=["mono"], delme=4)
 
 	if reply:
 		if not reply.document.file_name.endswith(".py"):
-			return await app.send_edit("Only (.py) modules can be installed !!", text_type=["mono"], delme=2)
+			return await app.send_edit("Only (.py) modules can be installed !!", text_type=["mono"], delme=3)
+
 		doc_name = reply.document.file_name
 
 		module_loc = (
 			f"tronx/modules/{doc_name}"
 		)
-		await app.send_edit(m, "Installing module . . .", text_type=["mono"])
+		await app.send_edit("Installing module . . .", text_type=["mono"])
 		if os.path.exists(module_loc):
 			return await app.send_edit(f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
 
@@ -89,9 +90,9 @@ async def install_handler(_, m: Message):
 				file_name=module_loc
 			)
 			if download_loc:
-				await app.send_edit(m, f"**Installed module:** `{doc_name}`", delme=5)
+				await app.send_edit(f"**Installed module:** `{doc_name}`", delme=5)
 				data = open(download_loc, "r")
-				await app.aexec(m, data.read())
+				await app.aexec(data.read())
 			else:
 				await app.send_edit(f"Failed to install module {doc_name}", text_type=["mono"], delme=4)
 		except Exception as e:
