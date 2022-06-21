@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 @app.on_message(gen(["purge", "p"], allow = ["sudo", "channel"]))
 async def purge_handler(_, m:Message):
 	if m.reply_to_message:
-		await app.send_edit(m, "purging . . .", text_type=["mono"])
+		await app.send_edit("purging . . .", text_type=["mono"])
 
 		start = datetime.now()
 
@@ -48,24 +48,24 @@ async def purge_handler(_, m:Message):
 
 		sec = (datetime.now() - start).seconds
 
-		await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), text_type=["mono"], delme=4)
+		await app.send_edit("Deleted `{}` messages in `{}` seconds.".format(len(msg_id), sec), text_type=["mono"], delme=4)
 	else:
-		await app.send_edit(m, "Reply to a message to delete all messages from tagged message to bottom message.", delme=4)
+		await app.send_edit("Reply to a message to delete all messages from tagged message to bottom message.", delme=4)
 
 
 
 
 @app.on_message(gen(["purgeme", "purgme", "pgm"], allow = ["sudo", "channel"]))
 async def purgeme_handler(_, m:Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		target = int(m.command[1]) if m.command[1].isdigit() and m.command[1] != 0 else 1
 	else:
-		return await app.send_edit(m, "Give me some number after command to delete messages.", text_type=["mono"], delme=4)
+		return await app.send_edit("Give me some number after command to delete messages.", text_type=["mono"], delme=4)
 
 	start = datetime.now()
 	lim = target + 1  # command msg included
 
-	await app.send_edit(m, f"Deleting {target} messages . . .")
+	await app.send_edit(f"Deleting {target} messages . . .")
 
 	msg_id = []
 	msg_id.clear()
@@ -76,7 +76,7 @@ async def purgeme_handler(_, m:Message):
 	await app.delete_messages(m.chat.id, message_ids=msg_id[0:lim])
 	sec = (datetime.now() - start).seconds
 
-	await app.send_edit(m, "Deleted `{}` messages in `{}` seconds.".format(target, sec), text_type=["mono"], delme=4)
+	await app.send_edit("Deleted `{}` messages in `{}` seconds.".format(target, sec), text_type=["mono"], delme=4)
 
 
 
@@ -89,4 +89,4 @@ async def del_handler(_, m: Message):
 	try:
 		await app.delete_messages(m.chat.id, msg_ids)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
