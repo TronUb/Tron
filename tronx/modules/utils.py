@@ -121,7 +121,6 @@ async def inviteall_handler(_, m):
 		return
 
 	count = 0
-	m = await app.send_edit(m, "⏳ • Hold on . . .", text_type=["mono"])
 
 	if app.long(m) == 1:
 		return await app.send_edit(m, "Give me a group id or username", text_type=["mono"])
@@ -130,6 +129,8 @@ async def inviteall_handler(_, m):
 		group_id = m.command[1] if m.command else None
 	else:
 		return await app.send_edit(m, "I can't invite ghosts, can I ?", text_type=["mono"])
+
+	m = await app.send_edit(m, "⏳ • Hold on . . .", text_type=["mono"])
 
 	try:
 		async for user in app.get_chat_members(group_id):
