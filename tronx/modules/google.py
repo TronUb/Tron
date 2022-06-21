@@ -95,7 +95,7 @@ async def yandeximages_handler(_, m: Message):
 
 	try:
 		if app.long() > 1:
-			await app.send_edit("Getting image . . .", text_type=["nono"])
+			await app.send_edit("Getting image . . .", text_type=["mono"])
 			photo = oldmsg.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
