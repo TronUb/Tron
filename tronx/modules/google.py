@@ -76,7 +76,7 @@ async def imagesauce_handler(_, m: Message):
 			return await app.send_edit("Only photo & animation media's are supported.", text_type=["mono"], delme=4)
 
 		searchUrl = 'http://www.google.co.id/searchbyimage/upload'
-		filePath = './downloads/{}'.format(universe)
+		filePath = './downloads/{}'.format(savename)
 		multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
 		response = requests.post(searchUrl, files=multipart, allow_redirects=False)
 		fetchUrl = response.headers['Location']
