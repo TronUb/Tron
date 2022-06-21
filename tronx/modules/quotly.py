@@ -25,7 +25,7 @@ async def quotly_handler(_, m: Message):
 	if not reply:
 		return await app.send_edit(m, "Reply to any users text message", delme=4)
 
-	m = await app.send_edit(m, "Making a Quote . . .", text_type=["mono"])
+	await app.send_edit("Making a Quote . . .", text_type=["mono"])
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
 	progress = 0
