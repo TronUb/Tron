@@ -185,10 +185,10 @@ async def download_handler(_, m: Message):
 
 @app.on_message(gen(["upload", "ul"], allow =["sudo"]))
 async def upload_handler(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		local_file_name = m.text.split(None, 1)[1]
 		if os.path.exists(local_file_name):
-			m = await app.send_edit("Uploading . . .", text_type=["mono"])
+			await app.send_edit("Uploading . . .", text_type=["mono"])
 			start_t = datetime.now()
 			c_time = time.time()
 			doc_caption = os.path.basename(local_file_name)
@@ -217,7 +217,7 @@ async def upload_handler(_, m: Message):
 
 @app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
 async def batchupload_handler(_, m: Message):
-	if app.long(m) == 1:
+	if app.long() == 1:
 		return await app.send_edit("Give me a location to upload files from the directory . . .", delme=2, text_type=["mono"])
 
 	if app.textlen() > 4096:
