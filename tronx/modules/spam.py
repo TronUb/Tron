@@ -11,8 +11,8 @@ app.CMD_HELP.update(
 	{"spam" : (
 		"spam",
 		{
-		"spam [number] [text]" : "You Know The Use Of This Command.", 
-		"dspam [delay] [count] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
+		"spam [count] [text]" : "You Know The Use Of This Command.", 
+		"dspam [count] [delay] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
 		}
 		)
 	}
@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 async def spam_handler(_, m: Message):
 	try:
 		reply = m.reply_to_message
-		reply_to_id = reply.message_id if reply else None
+		reply_to_id = reply.id if reply else None
 		cmd = m.text.split(None, 2)
 
 		if not reply and app.long() == 1:
@@ -46,7 +46,7 @@ async def spam_handler(_, m: Message):
 		elif reply:
 			await m.delete()
 			times = int(cmd[1]) if cmd[1].isdigit() else 0
-			spam_msg = reply.message_id
+			spam_msg = reply.id
 			for x in range(times):
 				await app.copy_message(
 					m.chat.id, 
