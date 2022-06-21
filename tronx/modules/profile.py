@@ -30,6 +30,7 @@ app.CMD_HELP.update(
 		"profile",
 		{
 		"whois [reply to message]" : "get a small piece of information of a user.",
+		"id" : "Get chat or user id",
 		"block [username] or [reply to user]" : "Block a user from sending message in your pm.",
 		"unblock [username] or [reply to user]" : "Unblock a user and allow him to send messages in your pm.",
 		"repo" : "Get Tron Userbot official repository link.",
@@ -173,11 +174,11 @@ async def get_full_user_info(_, m: Message):
 	elif not reply:
 		user = m.from_user
 
-	pfp = await app.get_profile_photos(user.id)
-	if pfp:
-		p_id = pfp[0].file_id
-	else:
-		p_id = False
+	p_id = False
+
+	async for x in app.get_chat_photos(user.id):
+		p_id = x.file_id
+		
 
 	try:
 		duo = f"**1. ID:** `{user.id}`\n"
@@ -220,7 +221,7 @@ async def tgscan_handler(_, m: Message):
 			m.reply_to_message.message_id
 			)
 		time.sleep(0.5)
-		msg = await app.get_history(
+		msg = await app.get_chat_history(
 			"@tgscanrobot", 
 			limit=1
 			)
@@ -297,17 +298,17 @@ async def userhistory_handler(_, m: Message):
 		is_no_record = False
 		for x in range(8):
 			time.sleep(1)
-			msg = await app.get_history(
+			msg = await app.get_chat_history(
 				"@SangMataInfo_bot", 
 				limit=3
 				)
 			if msg[0].text == "No records found":
 				await app.send_edit("No records found")
 				is_no_record = True
-				await app.read_history("@SangMataInfo_bot")
+				await app.read_chat_history("@SangMataInfo_bot")
 				break
 			if msg[0].from_user.id == 461843263 and msg[1].from_user.id == 461843263 and msg[2].from_user.id == 461843263:
-				await app.read_history("@SangMataInfo_bot")
+				await app.read_chat_history("@SangMataInfo_bot")
 				break
 			else:
 				print("Failed, try again ({})".format(x+1))
@@ -340,7 +341,7 @@ async def setprofile_handler(_, m: Message):
 		text = m.text.split(None, 2)[2]
 
 		if cmd[1] in ["fname", "lname", "bio"]:
-			await setprofile(m, text, text)
+			await setprofile(m, cmd[1], text)
 		elif cmd[1] in ["uname"]:
 			await app.update_username(text)
 
@@ -369,9 +370,9 @@ async def remprofile_handler(_, m: Message):
 
 
 # set your profile stuffs 
-async def setprofile(m: Message, args, kwargs):
+async def setprofile(m: Message, mode, kwargs):
 	# set first name
-	if args == "fname":
+	if mode == "fname":
 		try:
 			await app.update_profile(
 				first_name = f"{kwargs}"
@@ -382,7 +383,7 @@ async def setprofile(m: Message, args, kwargs):
 		except Exception as e:
 			await app.error(e)
 	# set last name
-	elif args == "lname":
+	elif mode == "lname":
 		try:
 			await app.update_profile(
 				last_name = f"{kwargs}"
@@ -393,7 +394,7 @@ async def setprofile(m: Message, args, kwargs):
 		except Exception as e:
 			await app.error(e)
 	# set bio
-	elif args == "bio":
+	elif mode == "bio":
 		try:
 			await app.update_profile(
 				bio = f"{kwargs}"
@@ -450,6 +451,6 @@ async def rmprofile(m: Message, args):
 
 @app.on_message(gen("repo", allow = ["sudo"]))
 async def repolink_handler(_, m: Message):
-	await app.send_edit("TronUB Repo: [press here](https://github.com/beastzx18/Tron)", disable_web_page_preview=True)
+	await app.send_edit("TronUB Repo: [press here](https://github.com/TronUb/Tron)", disable_web_page_preview=True)
 
 
