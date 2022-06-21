@@ -9,11 +9,7 @@ from pyrogram.errors import (
 	MessageTooLong,
 )
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -63,47 +59,47 @@ async def wordlink_handler(_, m: Message):
 	links.clear()
 
 	try:
-		if app.long(m) == 1:
-			return await app.send_edit(m, "Please give some text to search in chat ...")
+		if app.long() == 1:
+			return await app.send_edit("Please give some text to search in chat ...")
 
 		else:
 			messages = await app.get_history(m.chat.id)
 			query = m.text.split(None, 1)[1]
-			m = await app.send_edit(m, "Finding word in this chat . . .", text_type=["mono"])
+			await app.send_edit("Finding word in this chat . . .", text_type=["mono"])
 			for msg in messages:
 				if query in msg.text:
 					links.append(msg.link)
 
-			await app.send_edit(m, f"**FOUND LINKS FOR:** `{query}`\n\n" + "\n".join(links))
+			await app.send_edit(f"**FOUND LINKS FOR:** `{query}`\n\n" + "\n".join(links))
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["cur", "currency"], allow = ["sudo", "channel"]))
 async def currency_handler(_, m: Message):
-	if app.long(m) <= 3:
-		return await app.send_edit(m, f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
+	if app.long() <= 3:
+		return await app.send_edit(f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
 
 	value = m.command[1]
 	cur1 = m.command[2].upper()
 	cur2 = m.command[3].upper()
 	try:
-		m = await app.send_edit(m, f"Converting from `{cur1}` to `{cur2}` . . .")
+		await app.send_edit(f"Converting from `{cur1}` to `{cur2}` . . .")
 		conv = c.convert(int(value), cur1, cur2)
 		text = f"`{value}` `{cur1}` = `{conv:,.2f}` `{cur2}`"
-		await app.send_edit(m, text)
+		await app.send_edit(text)
 	except ValueError as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["temp", "temperature"], allow = ["sudo", "channel"]))
 async def temperature_handler(_, m: Message):
-	if app.long(m) <= 2:
-		return await app.send_edit(m, f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
+	if app.long() <= 2:
+		return await app.send_edit(f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
 
 	temp1 = m.text.split(None, 2)[1]
 	temp2 = m.text.split(None, 2)[2]
@@ -111,15 +107,15 @@ async def temperature_handler(_, m: Message):
 		if temp2 == "f":
 			result = convert_c(temp1)
 			text = "`{}°F` = `{}°C`".format(temp1, result)
-			await app.send_edit(m, text)
+			await app.send_edit(text)
 		elif temp2 == "c":
 			result = convert_f(temp1)
 			text = "`{}°C` = `{}°F`".format(temp1, result)
-			await app.send_edit(m, text)
+			await app.send_edit(text)
 		else:
-			await app.send_edit(m, "Unknown type {}".format(temp2))
+			await app.send_edit("Unknown type {}".format(temp2))
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -131,10 +127,10 @@ async def messagejson_handler(_, m: Message):
 	data = str(reply) if reply else str(m)
 
 	try:
-		await app.send_edit(m, data, text_type=["mono"])
+		await app.send_edit(data, text_type=["mono"])
 	except Exception: # message too long
-		m = await app.send_edit(m, "Sending file . . .", text_type=["mono"])
-		await app.create_file(m, "json.txt", data)
+		m = await app.send_edit("Sending file . . .", text_type=["mono"])
+		await app.create_file("json.txt", data)
 		if m.from_user.is_self:
 			await m.delete()
 
@@ -146,8 +142,8 @@ async def messagelink_handler(_, m: Message):
 	reply = m.reply_to_message
 	message = reply if reply else m
 
-	m = await app.send_edit(m, "Generating message link . . .", text_type=["mono"])
-	await app.send_edit(m, message.link)
+	m = await app.send_edit("Generating message link . . .", text_type=["mono"])
+	await app.send_edit(message.link)
 
 
 
@@ -166,39 +162,39 @@ async def forward_handler(_, m: Message):
 	reply = m.reply_to_message
 	try:
 
-		if reply and app.long(m) == 1:
+		if reply and app.long() == 1:
 			await reply.forward(m.chat.id)
 			delete = True
 
-		elif reply and app.long(m) > 1:
+		elif reply and app.long() > 1:
 			await reply.forward(m.command[1])
 			delete = True
 
-		elif not reply and app.long(m) == 1:
+		elif not reply and app.long() == 1:
 			await m.forward(m.chat.id)
 			delete = True
 
-		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Sir reply to yours or someone's message. to forward.", text_type=["mono"], delme=4)
+		elif not reply and app.long() > 1:
+			await app.send_edit("Sir reply to yours or someone's message. to forward.", text_type=["mono"], delme=4)
 			delete = False
 
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later !", text_type=["mono"], delme=4)
+			await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=4)
 			delete = False
 
 		if m.from_user.is_self and delete:
 			await m.delete()
 
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen(["spt", "speed", "speedtest"], allow = ["sudo", "channel"]))
 async def speedtest_handler(app, m: Message):
-	if app.long(m) == 1:
-		await app.send_edit(m, "Testing speed . . .", text_type=["mono"])
+	if app.long() == 1:
+		await app.send_edit("Testing speed . . .", text_type=["mono"])
 		test = speedtest.Speedtest()
 		test.get_best_server()
 		test.download()
@@ -212,11 +208,11 @@ async def speedtest_handler(app, m: Message):
 		teks += "**SERVER ⊢** `{}`\n".format(result['client']['isp'])
 		teks += "**LOCATION ⊢** `{}, {}`".format(result['server']['name'], result['server']['country'])
 		if teks:
-			await app.send_edit(m, teks)
+			await app.send_edit(teks)
 		else:
-			await app.send_edit(m, "Something went wrong !", text_type=["mono"], delme=5)
+			await app.send_edit("Something went wrong !", text_type=["mono"], delme=5)
 	elif app.long(m) > 1 and "pic" in m.command[1]:
-		m = await app.send_edit(m, "Calculating Speed (pic) . . .")
+		await app.send_edit("Calculating Speed (pic) . . .")
 
 		start = datetime.now()
 		s = speedtest.Speedtest()
@@ -243,7 +239,7 @@ async def speedtest_handler(app, m: Message):
 			)
 			await m.delete()
 		else:
-			await app.send_edit(m, "Something went wrong !", text_type=["mono"], delme=5)
+			await app.send_edit("Something went wrong !", text_type=["mono"], delme=5)
 
 
 
@@ -261,12 +257,12 @@ async def commonchat_handler(_, m):
 			for x in data:
 				collect.append(x["title"] + "\n")
 			if bool(collect):
-				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
+				await app.send_edit(f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
 			else:
-				await app.send_edit(m, f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "`None`")
+				await app.send_edit(f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "`None`")
 		else:
-			await app.send_edit(m, "Please reply to someone . . .", text_type=["mono"], delme=4)
+			await app.send_edit("Please reply to someone . . .", text_type=["mono"], delme=4)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
