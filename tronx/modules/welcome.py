@@ -109,34 +109,34 @@ async def deletewelcome_handler(_, m: Message):
 
 @app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
 async def getwelcome_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	try:
-		await app.send_edit(m, "Getting welcome message of this group . . .")
+		await app.send_edit("Getting welcome message of this group . . .")
 		data = app.get_welcome(str(m.chat.id))
 		text = data["file_id"]
 		cap = data["caption"]
 
 		if text is None and cap is None :
-			await app.send_edit(m, "No welcome message was assigned to this group.", text_type=["mono"], delme=3)
+			await app.send_edit("No welcome message was assigned to this group.", text_type=["mono"], delme=3)
 		elif text is not None and cap is None:
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
 					file_id=text.replace("#", ""),
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					)
 				await m.delete()
 			else:
-				await app.send_edit(m, text, text_type=["mono"])
+				await app.send_edit(text, text_type=["mono"])
 		elif text is not None and cap is not None:
 			if text.startswith("#"):
 				await app.send_cached_media(
 					m.chat.id,
 					file_id=text.replace("#", ""),
 					caption=cap,
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					)
 				await m.delete()
 	except Exception as e:
