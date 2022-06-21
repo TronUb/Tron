@@ -9,7 +9,8 @@ from pyrogram.errors import (
 	PeerIdInvalid, 
 	UsernameNotOccupied, 
 	UserNotMutualContact,
-	UserPrivacyRestricted
+	UserPrivacyRestricted,
+	UserChannelsTooMuch
 )
 
 from tronx import app
@@ -116,6 +117,8 @@ async def invite_handler(_, m):
 		get_user = await app.get_users(user)
 	except (UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied):
 		return await app.send_edit(m, "The username | id seems to be invalid  . . .", text_type=["mono"], delme=4)
+	except UserChannelsTooMuch:
+		return await app.send_edit(m, "The user is in so many groups/channels.", text_type=["mono"], delme=4)
 
 	await app.add_users(get_user.id, m.chat.id)
 	await app.send_edit(m, f"Added {get_user.first_name} to the chat!")
@@ -144,7 +147,7 @@ async def inviteall_handler(_, m):
 				try:
 					if await app.add_chat_members(chat_id=m.chat.id, user_ids=user.user.id):
 						count += 1
-				except (UserNotMutualContact, UserPrivacyRestricted):
+				except (UserNotMutualContact, UserPrivacyRestricted, UserChannelsTooMuch):
 					continue
 
 		await app.send_edit(m, f"Added `{count}` members in this chat.")
