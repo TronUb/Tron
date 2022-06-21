@@ -53,7 +53,7 @@ async def evaluate_handler(_, m: Message):
 	except IndexError:
 		return await app.send_edit("Give me some text (code) to execute . . .", text_type=["mono"], delme=4)
 
-	msg = await app.send_edit(m, "Running . . .", text_type=["mono"])
+	msg = await app.send_edit("Running . . .", text_type=["mono"])
 
 	old_stderr = sys.stderr
 	old_stdout = sys.stdout
