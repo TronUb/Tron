@@ -3,7 +3,7 @@ import asyncio
 import html
 
 from pyrogram.types import Message, ChatPermissions, User
-from pyrogram.enums import chatType
+from pyrogram.enums import ChatType
 from pyrogram.errors import (
 	UserAdminInvalid, 
 	PeerIdInvalid, 
@@ -61,7 +61,7 @@ async def admintitle_handler(_, m: Message):
 				user_name = user.first_name
 				user_chat_info = await app.get_chat_member(m.chat.id, admin)
 				is_admin = user_chat_info.status
-				if is_admin == "member":
+				if is_admin == ChatMemberStatus.MEMBER:
 					await app.send_edit(f"{user_name} is not an admin in this chat, use {app.PREFIX}promote command to promote them.", delme=3, text_type=["mono"])
 				else:
 					await app.set_administrator_title(m.chat.id, admin, title)
@@ -77,7 +77,7 @@ async def admintitle_handler(_, m: Message):
 				user_name = user.from_user.first_name
 				user_chat_info = await app.get_chat_member(m.chat.id, admin)
 				is_admin = user_chat_info.status
-				if is_admin == "member":
+				if is_admin == ChatMemberStatus.MEMBER:
 					await app.send_edit(f"{user_name} is not an admin in this chat . . .", delme=3, text_type=["mono"])
 				else:
 					await app.set_administrator_title(m.chat.id, admin, title)
@@ -217,8 +217,8 @@ async def reportadmin_handler(_, m: Message):
 	group = await app.get_chat(m.chat.id)
 
 	admin = []
-	async for x in app.iter_chat_members(m.chat.id, filter="administrators"):
-		if x.status == "administrator" or x.status == "creator":
+	async for x in app.get_chat_members(m.chat.id, filter="administrators"):
+		if x.status == ChatMemberStatus.ADMINISTRATOR or x.status == ChatMemberStatus.OWNER:
 			if x.user.is_bot is False:
 				admin.append(app.MentionHtml(x.user.id, "\u200b"))
 	await app.send_edit("Reporting . . .", text_type=["mono"])
@@ -277,7 +277,7 @@ async def botlist_handler(_, m: Message):
 
 	bots = []
 	bots.clear()
-	async for x in app.iter_chat_members(chat):
+	async for x in app.get_chat_members(chat):
 		try:
 			bot_info = x.user.first_name + " " + x.user.last_name
 		except:
