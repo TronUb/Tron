@@ -27,11 +27,11 @@ async def song_handler(_, m: Message):
 	try:
 		cmd = m.command
 		reply = m.reply_to_message
-		if len(cmd) > 1:
+		if app.long() > 1:
 			song_name = m.text.split(None, 1)[1]
-		elif reply and len(cmd) == 1:
+		elif reply and app.long() == 1:
 			song_name = reply.text or reply.caption
-		elif not reply and len(cmd) == 1:
+		elif not reply and app.long() == 1:
 			return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
 		song_results = await app.get_inline_bot_results("audio_storm_bot", song_name)
@@ -42,7 +42,6 @@ async def song_handler(_, m: Message):
 				chat_id="me",
 				query_id=song_results.query_id,
 				result_id=song_results.results[0].id,
-				hide_via=True,
 			)
 
 			# forward as a new message from Saved Messages
@@ -92,7 +91,7 @@ async def deezer_handler(_, m: Message):
 
 			# forward as a new message from Saved Messages
 			saved = await app.get_messages("me", int(saved.updates[1].message.id))
-			reply_to = m.reply_to_message.message_id if m.reply_to_message else None
+			reply_to = m.reply_to_message.id if m.reply_to_message else None
 
 			await app.send_audio(
 				chat_id=m.chat.id,
@@ -102,7 +101,7 @@ async def deezer_handler(_, m: Message):
 			)
 
 			# delete the message from Saved Messages
-			await app.delete_messages("me", [saved.message_id, m.message_id])
+			await app.delete_messages("me", [saved.id, m.id])
 		except TimeoutError:
 			return await app.send_edit("Something went wrong, try again . . .", delme=3, text_type=["mono"])
 	except Exception as e:
@@ -120,6 +119,7 @@ async def lyrics_handler(_, m: Message):
 
 		if not reply and len(cmd) > 1:
 			song_name = m.text.split(None, 1)[1]
+
 		elif reply:
 			if reply.audio:
 				song_name = f"{reply.audio.title} {reply.audio.performer}"
@@ -143,7 +143,6 @@ async def lyrics_handler(_, m: Message):
 				chat_id="me",
 				query_id=lyrics_results.query_id,
 				result_id=lyrics_results.results[0].id,
-				hide_via=True,
 			)
 			await asyncio.sleep(0.50)
 
