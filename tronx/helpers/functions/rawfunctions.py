@@ -11,7 +11,7 @@ import requests
 from typing import Union, List
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
-from pyrogram.enums import ParseMode
+from pyrogram.enums import ParseMode, ChatType
 
 
 
@@ -298,10 +298,10 @@ class RawFunctions(object):
 			await app.private(message)
 		"""
 
-		if message.chat.type == "private":
+		if message.chat.type == ChatType.PRIVATE:
 			await self.send_edit(
 				message, 
-				"Please use these commands in groups . . .",
+				"Please use these commands in groups.",
 				text_type=["mono"], 
 				delme=4
 			)
