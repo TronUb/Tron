@@ -25,12 +25,12 @@ async def videoinfo_handler(_, m: Message):
 	reply = m.reply_to_message
 	if reply and reply.text:
 		link = reply.text
-	elif not reply and app.long(m) >= 1:
+	elif not reply and app.long() >= 1:
 		link = m.text.split(None, 1)[1]
-	elif not reply and app.long(m) == 1:
-		return await app.send_edit(m, "Reply to youtube link or give link as a suffix . . .", text_type=["mono"], delme=5)
+	elif not reply and app.long() == 1:
+		return await app.send_edit("Reply to youtube link or give link as a suffix . . .", text_type=["mono"], delme=5)
 
-	await app.send_edit(m, "Getting information . . .", text_type=["mono"])
+	await app.send_edit("Getting information . . .", text_type=["mono"])
 	yt = YouTube(link)
 	thumb_link = yt.thumbnail_url
 	data = f"**Title:** {yt.title}\n\n"
@@ -47,26 +47,26 @@ async def videoinfo_handler(_, m: Message):
 @app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
 async def ytdownload_handler(_, m):
 	reply = m.reply_to_message
-	await app.send_edit(m, "processing link . . .", text_type=["mono"])
+	await app.send_edit("processing link . . .", text_type=["mono"])
 	if not reply:
-		if app.long(m) == 1:
-			return await app.send_edit(m, "Please reply to a yt link or give me link as a suffix . . .", text_type=["mono"], delme=4)
-		elif app.long(m) > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
+		if app.long() == 1:
+			return await app.send_edit("Please reply to a yt link or give me link as a suffix . . .", text_type=["mono"], delme=4)
+		elif app.long() > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
 			link = m.command[1]
 		else:
-			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
+			return await app.send_edit("Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
 	elif reply:
 		if reply.text and reply.text.startswith("http://" or "https://"):
 			link = reply.text
 		else:
-			return await app.send_edit(m, "Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
+			return await app.send_edit("Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
 	else:
-		return await app.send_edit(m, "Something went wrong . . .")
+		return await app.send_edit("Something went wrong . . .")
 
 	yt = YouTube(link)
 	data = yt.streams.all()
 
-	await app.send_edit(m, "**Trying to download **" + f"`{yt.title}`")
+	await app.send_edit("**Trying to download **" + f"`{yt.title}`")
 	for x in data:
 		if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
 			try:
@@ -75,5 +75,5 @@ async def ytdownload_handler(_, m):
 				await m.delete()
 				break
 			except Exception as e:
-				await error(m, e)
+				await error(e)
 
