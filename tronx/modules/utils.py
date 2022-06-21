@@ -134,7 +134,7 @@ async def inviteall_handler(_, m):
 	try:
 		async for user in app.get_chat_members(group_id):
 			if not (user.user.is_bot or user.user.is_deleted):
-				if await app.add_chat_member(chat_id=m.chat.id, user_ids=user.user.id):
+				if await app.add_chat_members(chat_id=m.chat.id, user_ids=user.user.id):
 					count += 1
 
 		await app.send_edit(m, f"Added `{count}` members in this chat.")
