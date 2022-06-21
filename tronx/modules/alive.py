@@ -1,11 +1,7 @@
 from pyrogram.errors import BotInvalid, BotInlineDisabled
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -28,7 +24,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("alive", allow = ["sudo"]), group=0)
 async def alive_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m, ". . .", text_type=["mono"])
+		await app.send_edit(". . .", text_type=["mono"])
 
 		alive_msg = f"\n"
 		if app.UserBio():
@@ -57,7 +53,6 @@ async def alive_handler(_, m: Message):
 				)
 		elif not pic:
 			await app.send_edit(
-				m, 
 				alive_msg, 
 				disable_web_page_preview=True,
 				)
@@ -70,12 +65,12 @@ async def alive_handler(_, m: Message):
 @app.on_message(gen("ialive", allow = ["sudo"]), group=1)
 async def inlinealive_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m, ". . .", text_type=["mono"])
+		await app.send_edit(". . .", text_type=["mono"])
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 		except BotInlineDisabled:
-			await app.send_edit(m, "Turning inline mode to on, wait . . .", text_type=["mono"])
-			await app.toggle_inline(m)
+			await app.send_edit("Turning inline mode to on, wait . . .", text_type=["mono"])
+			await app.toggle_inline()
 			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
 
 		if result:
@@ -87,9 +82,9 @@ async def inlinealive_handler(_, m: Message):
 			)
 			await m.delete()
 		else:
-			await app.send_edit(m, "Something went wrong, please try again later . . .", delme=2)
+			await app.send_edit("Something went wrong, please try again later . . .", delme=2)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
@@ -97,13 +92,13 @@ async def inlinealive_handler(_, m: Message):
 @app.on_message(gen(["quote", "qt"], allow = ["sudo"]), group=2)
 async def inlinequote_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m,". . .", text_type=["mono"])
+		await app.send_edit(". . .", text_type=["mono"])
 		try:
 			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 		except BotInlineDisabled:
-			await app.send_edit(m, "Inline mode off. Turning inline mode on, wait . . .", text_type=["mono"])
+			await app.send_edit("Inline mode off. Turning inline mode on, wait . . .", text_type=["mono"])
 			await asyncio.sleep(1)
-			await app.toggle_inline(m)
+			await app.toggle_inline()
 			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
 
 		if result:
@@ -115,7 +110,7 @@ async def inlinequote_handler(_, m: Message):
 				)
 			await m.delete()
 		else:
-			await app.send_edit(m, "Please try again later !", delme=2, text_type=["mono"])
+			await app.send_edit("Please try again later !", delme=2, text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
