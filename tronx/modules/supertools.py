@@ -191,7 +191,7 @@ async def unshortlink_handler(_, m: Message):
 
 @app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
 async def weather_handler(_, m: Message):
-	if app.long(m) == 1:
+	if app.long() == 1:
 		return await app.send_edit("Piro Master Atleast Give Me Some Location !", text_type=["mono"])
 
 	await app.send_edit("Checking weather . . .", text_type=["mono"])
