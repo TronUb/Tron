@@ -3,7 +3,7 @@ import asyncio
 import html
 
 from pyrogram.types import Message, ChatPermissions, User
-
+from pyrogram.enums import chatType
 from pyrogram.errors import (
 	UserAdminInvalid, 
 	PeerIdInvalid, 
@@ -43,7 +43,7 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("settitle", allow = ["sudo", "channel"]))
 async def admintitle_handler(_, m: Message):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	reply = m.reply_to_message
@@ -96,7 +96,7 @@ async def admintitle_handler(_, m: Message):
 
 @app.on_message(gen("invite", allow = ["sudo", "channel"]))
 async def invite_handler(_, m):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
@@ -122,7 +122,7 @@ async def invite_handler(_, m):
 
 @app.on_message(gen("inviteall", allow = ["sudo", "channel"]))
 async def inviteall_handler(_, m):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	count = 0
@@ -166,7 +166,7 @@ async def adminlist_handler(_, m):
 		try:
 			chat = m.command[1]
 			group = await app.get_chat(chat)
-		except UserAdminInvalid or PeerIdInvalid or UsernameNotOccupied:
+		except (UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied):
 			return await app.send_edit("The username | id seems to be invalid  . . .", text_type=["mono"], delme=4)
 	else:
 		chat = m.chat.id
@@ -180,7 +180,7 @@ async def adminlist_handler(_, m):
 	admin.clear()
 	bot_admin.clear()
 
-	async for x in app.iter_chat_members(m.chat.id, filter="administrators"):
+	async for x in app.get_chat_members(m.chat.id, filter="administrators"):
 		if x.status == "creator":
 			creator.append("{}".format(app.MentionMarkdown(x.user.id, x.user.first_name)))
 		if x.status == "administrator":
@@ -247,18 +247,18 @@ async def tagall_handler(app, m: Message):
 		text = "Hello Everyone "
 	await app.send_edit("Wait . . .")
 
-	async for x in app.iter_chat_members(m.chat.id):
+	async for x in app.get_chat_members(m.chat.id):
 		if x.user.is_bot is False:
 			text += app.MentionHtml(x.user.id, "\u200b")
 	if reply:
 		await app.send_message(m.chat.id, text, reply_to_message_id=reply.message_id, parse_mode="html")
 	else:
-		await app.send_edit(text, parse_mode="html")
+		await app.send_edit(text, parse_mode=ChatType.HTML)
 
 
 
 
-@app.on_message(gen(["bots"], allow = ["sudo"]))
+@app.on_message(gen("bots", allow = ["sudo"]))
 async def botlist_handler(_, m: Message):
 	if await app.check_private():
 		return
@@ -304,7 +304,7 @@ async def botlist_handler(_, m: Message):
 
 @app.on_message(gen("kickme", allow = ["sudo", "channel"]))
 async def leavechat_handler(_, m):
-	if await app.check_private(m):
+	if await app.check_private():
 		return
 
 	try:
@@ -325,7 +325,7 @@ async def membercount_handler(_, m):
 	if app.long() == 1:
 		try:
 			num = await app.get_chat_members_count(m.chat.id)
-			await app.send_edit(f"`{num}` members {m.chat.title}")
+			await app.send_edit(f"`{num}` members in {m.chat.title}")
 		except UsernameNotOccupied or PeerIdInvalid:
 			await app.send_edit("The username | id does not exist . . .", text_type=["mono"])
 	elif app.long() >= 2:
