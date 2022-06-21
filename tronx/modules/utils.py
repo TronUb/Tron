@@ -4,7 +4,13 @@ import html
 
 from pyrogram.types import Message, ChatPermissions, User
 
-from pyrogram.errors import UserAdminInvalid, PeerIdInvalid, UsernameNotOccupied, UserNotMutualContact
+from pyrogram.errors import (
+	UserAdminInvalid, 
+	PeerIdInvalid, 
+	UsernameNotOccupied, 
+	UserNotMutualContact,
+	UserPrivacyRestricted
+)
 
 from tronx import app
 
@@ -138,7 +144,7 @@ async def inviteall_handler(_, m):
 				try:
 					if await app.add_chat_members(chat_id=m.chat.id, user_ids=user.user.id):
 						count += 1
-				except UserNotMutualContact:
+				except (UserNotMutualContact, UserPrivacyRestricted):
 					continue
 
 		await app.send_edit(m, f"Added `{count}` members in this chat.")
