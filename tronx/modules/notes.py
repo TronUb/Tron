@@ -46,22 +46,25 @@ GET_FORMAT = {
 
 @app.on_message(gen("save", allow = ["sudo"]))
 async def savenote_hanlder(_, m: Message):
-	reply = m.reply_to_message
-	if app.long() == 1:
-		return await app.send_edit("A note name is required with command to save a note.", text_type=["mono"])
+	try:
+		reply = m.reply_to_message
+		if app.long() == 1:
+			return await app.send_edit("A note name is required with command to save a note.", text_type=["mono"])
 
-	note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
-	if not note_name:
-		return await app.send_edit("A note name is necessary to save a note !", text_type=["mono"])
+		note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
+		if not note_name:
+			return await app.send_edit("A note name is necessary to save a note !", text_type=["mono"])
 
-	if message_type == app.TEXT:
-		file_id = None
-		teks, button = app.ParseButton(text)
-		if not teks:
-			await app.send_edit(f"Text: `{m.text}`\n\nError: There is no text in here !")
+		if message_type == app.TEXT:
+			file_id = None
+			teks, button = app.ParseButton(text)
+			if not teks:
+				await app.send_edit(f"Text: `{m.text}`\n\nError: There is no text in here !")
 
-	app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
-	await app.send_edit("Saved note = **[ `{}` ]**".format(note_name))
+		app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
+		await app.send_edit("Saved note = **[ `{}` ]**".format(note_name))
+	except Exception as e:
+		await app.error(e)
 
 
 
