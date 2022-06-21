@@ -67,11 +67,11 @@ async def carbon_handler(_, m: Message):
 			else:
 				text = oldmsg.text.split(None, 1)[1]
 				colour= "aqua"
-			await create_carbon(text=text, colour=colour)
+			await create_carbon(m, text=text, colour=colour)
 		except Exception as e:
 			await app.error(e)
 	elif app.textlen() > 4096:
-		await app.send_edit("The text is too long !", delme=2)
+		await app.send_edit("The text is too long !", delme=3)
 
 
 
