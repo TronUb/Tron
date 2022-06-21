@@ -35,7 +35,7 @@ async def dialogstats_handler(_, m: Message):
 		⚙️ • **CHANNELS:** {}
 		"""
 
-		async for x in app.iter_dialogs():
+		async for x in app.get_dialogs():
 			if x.chat.type == "channel":
 				channel += 1
 			if x.chat.type == "bot":
