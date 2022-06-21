@@ -174,7 +174,7 @@ class Utilities(AioHttp):
 		file_id = None 
 
 
-		if self.long(msg) <= 1:
+		if self.long() <= 1:
 			return None, None, None, None, None
 
 		if msg.text:
@@ -184,7 +184,7 @@ class Utilities(AioHttp):
 		note_name = raw_text.split()[1]
 
 		# determine what the contents of the filter are - text, image, sticker, etc
-		if self.long(msg) >= 3:
+		if self.long() >= 3:
 			text = raw_text.split(None, 2)[2]
 			message_type = Types.TEXT
 
