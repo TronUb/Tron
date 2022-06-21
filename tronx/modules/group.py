@@ -87,7 +87,7 @@ async def unreadchat_handler(_, m: Message):
 	try:
 		await asyncio.gather(
 			m.delete(),
-			app.send(
+			app.invoke(
 				functions.messages.MarkDialogUnread(
 					peer=await app.resolve_peer(m.chat.id), 
 					unread=True
