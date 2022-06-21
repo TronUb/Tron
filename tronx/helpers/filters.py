@@ -128,11 +128,12 @@ def gen(
 					message.command = [cmd] + text.split()[1:]
 					if message_owner == "sudo":
 						if not client.SudoCmds(): # empty config -> full command access to sudo
+							client.m = message
 							return True 
 
 						if not cmd in client.SudoCmds():
 							return False
-
+					client.m = message
 					return True
 
 			return False
