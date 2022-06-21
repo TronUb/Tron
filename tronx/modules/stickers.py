@@ -12,11 +12,7 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 from pyrogram.errors import YouBlockedUser, StickersetInvalid
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -59,13 +55,13 @@ async def kang(_, m: Message):
 			if not replied.sticker.file_name.endswith(".tgs"):
 				resize = True
 		else:
-			return await app.send_edit(m, "Unsupported File !", text_type=["mono"])
+			return await app.send_edit("Unsupported File !", text_type=["mono"])
 
-		await app.send_edit(m, f"{random.choice(KANGING_STR)}", text_type=["mono"])
+		await app.send_edit(f"{random.choice(KANGING_STR)}", text_type=["mono"])
 
 		photo = await app.download_media(message=replied)
 	else:
-		return await app.send_edit(m, "I can't kang that . . .", text_type=["mono"])
+		return await app.send_edit("I can't kang that . . .", text_type=["mono"])
 
 	if photo:
 		args = m.command
@@ -106,7 +102,7 @@ async def kang(_, m: Message):
 			try:
 				await app.send_message("Stickers", "/addsticker")
 			except YouBlockedUser:
-				return await app.send_edit(m, "first Unblock @Stickers . . .")
+				return await app.send_edit("first Unblock @Stickers . . .")
 
 			await asyncio.sleep(0.40)
 			await app.send_message("Stickers", packname)
@@ -167,12 +163,12 @@ async def kang(_, m: Message):
 			await get_response(m)
 			await app.send_message("Stickers", "/done")
 		else:
-			await app.send_edit(m, "Brewing a new Pack . . .")
+			await app.send_edit("Brewing a new Pack . . .")
 			try:
 				await asyncio.sleep(0.40)
 				await app.send_message("Stickers", cmd)
 			except YouBlockedUser:
-				return await app.send_edit(m, "first **unblock** @Stickers")
+				return await app.send_edit("first **unblock** @Stickers")
 
 			await app.send_message("Stickers", packnick)
 			await asyncio.sleep(0.40)
@@ -199,7 +195,7 @@ async def kang(_, m: Message):
 			await get_response(m)
 			await app.send_message("Stickers", packname)
 			await asyncio.sleep(0.40)
-		await app.send_edit(m, f"[kanged](t.me/addstickers/{packname})", delme=True)
+		await app.send_edit(f"[kanged](t.me/addstickers/{packname})", delme=True)
 		await app.read_history("Stickers")
 		if os.path.exists(str(photo)):
 			os.remove(photo)
@@ -211,12 +207,12 @@ async def kang(_, m: Message):
 async def sticker_pack_info_(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(m, "I can't fetch info from nothing, can I ?!", text_type=["mono"])
+		return await app.send_edit("I can't fetch info from nothing, can I ?!", text_type=["mono"])
 
 	if not replied.sticker:
-		return await app.send_edit(m, "Reply to a sticker to get the pack details.", text_type=["mono"])
+		return await app.send_edit("Reply to a sticker to get the pack details.", text_type=["mono"])
 
-	await app.send_edit(m, "Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
+	await app.send_edit("Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
 	get_stickerset = await app.send(
 		GetStickerSet(
 			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
@@ -237,7 +233,7 @@ async def sticker_pack_info_(_, m: Message):
 		f"**Stickers In Pack:** `{get_stickerset.set.count}`\n"
 		f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
 	)
-	await app.send_edit(m, out_str)
+	await app.send_edit(out_str)
 
 
 
