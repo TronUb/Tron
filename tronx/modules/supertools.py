@@ -43,7 +43,7 @@ async def text_to_voice(m: Message, text):
 	await app.send_voice(
 		m.chat.id, 
 		voice=f"{app.TEMP_DICT}voice.mp3", 
-		reply_to_message_id=m.message_id
+		reply_to_message_id=m.id
 		)
 	await m.delete()
 	os.remove(f"{app.TEMP_DICT}voice.mp3")
