@@ -252,8 +252,8 @@ class RawFunctions(object):
 		"""
 		msg = None
 
-		if message.from_user.is_self:
-			msg = await message.edit(
+		if self.m.from_user.is_self:
+			msg = await self.m.edit(
 				text=self.FormatText(text, format=text_type),
 				parse_mode=parse_mode,
 				disable_web_page_preview=disable_web_page_preview,
@@ -263,7 +263,7 @@ class RawFunctions(object):
 
 		else:
 			msg = await self.send_message(
-				chat_id=message.chat.id, 
+				chat_id=self.m.chat.id, 
 				text=self.FormatText(text, format=text_type),
 				disable_web_page_preview=disable_web_page_preview, 
 				parse_mode=parse_mode,
@@ -276,10 +276,10 @@ class RawFunctions(object):
 
 		try:
 			if delme > 0:
-				asyncio.create_task(self.sleep(message, sec=delme, delmsg=True))
+				asyncio.create_task(self.sleep(self.m, sec=delme, delmsg=True))
 
 		except Exception as err:
-			await self.error(m, err)
+			await self.error(self.m, err)
 		return msg
 
 
