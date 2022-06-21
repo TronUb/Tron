@@ -380,7 +380,7 @@ async def pin_handler(_, m: Message):
 		cmd = m.command
 		reply = m.reply_to_message
 
-		if app.long(m) > 1:
+		if app.long() > 1:
 				arg = False if cmd[1] == "loud" else True
 
 		if m.chat.type in private:
