@@ -215,7 +215,7 @@ class RawFunctions(object):
 	async def send_edit(
 		self,
 		message: Message = None, 
-		text: str, 
+		text: str = None, 
 		parse_mode=ParseMode.DEFAULT, 
 		disable_web_page_preview=False,
 		delme : int=0,
