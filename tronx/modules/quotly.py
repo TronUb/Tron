@@ -28,24 +28,19 @@ async def quotly_handler(_, m: Message):
 	await app.send_edit("Making a Quote . . .", text_type=["mono"])
 	await reply.forward("@QuotLyBot")
 	is_sticker = True
-	progress = 0
 	while is_sticker:
 		try:
-			msg = await app.get_last_msg(
-				message=m,
-				chat_id="@QuotLyBot", 
-				limit=1
-				)
-			check = msg[0]["sticker"]["file_id"]
-			is_sticker = False
-		except:
+			msg = await app.get_last_msg(chat_id="@QuotLyBot")
+			if msg.sticker and msg.sticker.file_id:
+				is_sticker = False
+		except Exception:
 			await asyncio.sleep(0.5)
-	if msg_id := msg[0]["message_id"]:
+	if msg.id:
 		await asyncio.gather(
 			m.delete(),
 			app.copy_message(
 				m.chat.id, 
 				"@QuotLyBot", 
-				msg_id
+				msg.id
 				)
 			)
