@@ -28,8 +28,8 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("send", allow = ["sudo", "channel"]))
 async def sendmodule_handler(app, m: Message):
-	if app.long(m) > 1:
-		m = await app.send_edit(m, "Checking module . . .", text_type=["mono"])
+	if app.long() > 1:
+		await app.send_edit("Checking module . . .", text_type=["mono"])
 		filename = m.command[1]
 		modulename = f"tronx/modules/{filename}.py"
 		if os.path.exists(modulename):
@@ -44,7 +44,7 @@ async def sendmodule_handler(app, m: Message):
 
 			start = time.time()
 			module_caption = os.path.basename(modulename)
-			m = await app.send_edit(m, f"Uploading {module_caption} . . .")
+			await app.send_edit(f"Uploading {module_caption} . . .")
 
 			try:
 				await app.send_document(
@@ -55,12 +55,12 @@ async def sendmodule_handler(app, m: Message):
 					)
 				await m.delete()
 			except Exception as e:
-				await app.error(m, e)
-				await app.send_edit(m, "Try again later, check log chat . . .", delme=3)
+				await app.error(e)
+				await app.send_edit("Try again later, check log chat . . .", delme=3)
 		else:
-			await app.send_edit(m, "404: plugin not found . . .", delme=2, text_type=["mono"])
+			await app.send_edit("404: plugin not found . . .", delme=2, text_type=["mono"])
 	else:
-		await app.send_edit(m, f"`{app.PREFIX}send [ plugin name ]`  to upload plugin file.", delme=3)
+		await app.send_edit(f"`{app.PREFIX}send [ plugin name ]`  to upload plugin file.", delme=3)
 
 
 
@@ -70,9 +70,10 @@ async def install_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
 		return await app.send_edit(m, "Reply to a python file to install . . .", text_type=["mono"], delme=4)
+
 	if reply:
 		if not reply.document.file_name.endswith(".py"):
-			return await app.send_edit(m, "Only (.py) modules can be installed !!", text_type=["mono"], delme=2)
+			return await app.send_edit("Only (.py) modules can be installed !!", text_type=["mono"], delme=2)
 		doc_name = reply.document.file_name
 
 		module_loc = (
@@ -80,7 +81,7 @@ async def install_handler(_, m: Message):
 		)
 		await app.send_edit(m, "Installing module . . .", text_type=["mono"])
 		if os.path.exists(module_loc):
-			return await app.send_edit(m, f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
+			return await app.send_edit(f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
 
 		try:
 			download_loc = await app.download_media(
@@ -92,9 +93,9 @@ async def install_handler(_, m: Message):
 				data = open(download_loc, "r")
 				await app.aexec(m, data.read())
 			else:
-				await app.send_edit(m, f"Failed to install module {doc_name}", text_type=["mono"], delme=4)
+				await app.send_edit(f"Failed to install module {doc_name}", text_type=["mono"], delme=4)
 		except Exception as e:
-			await app.error(m, e)
+			await app.error(e)
 
 
 
@@ -104,17 +105,17 @@ async def install_handler(_, m: Message):
 async def uninstall_handler(_, m: Message):
 	cmd = m.command
 	try:
-		if app.long(m) > 1:
+		if app.long() > 1:
 			if cmd[1].endswith(".py"):
 				module_loc = f"tronx/modules/{cmd[1]}"
 			elif not cmd[1].endswith(".py"):
 				module_loc = f"tronx/modules/{cmd[1]}.py"
 			if os.path.exists(module_loc):
 				os.remove(module_loc)
-				await app.send_edit(m, f"**Uninstalled module:** {cmd[1]}", delme=5)
+				await app.send_edit(f"**Uninstalled module:** {cmd[1]}", delme=5)
 			else:
-				await app.send_edit(m,"Module doesn't exist !", delme=4, text_type=["mono"])
+				await app.send_edit("Module doesn't exist !", delme=4, text_type=["mono"])
 		else:
-			await app.send_edit(m, "Give me a module name . . .", text_type=["mono"], delme=4)
+			await app.send_edit("Give me a module name . . .", text_type=["mono"], delme=4)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
