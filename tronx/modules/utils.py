@@ -20,7 +20,8 @@ app.CMD_HELP.update(
 		"utils",
 		{
 		"settitle [ @username ] [ title ]" : "Set title of an admin.",
-		"invite [ @username ]" : "Invite a user / bot in your chat.",
+		"invite [ @username ]" : "add a user / bot in your chat.",
+		"inviteall [ @group_username ]" : "add all users (not bots) in your chat.",
 		"admins" : "Get list of admins.",
 		"report [ reply to user ]" : "Report a spammer or idiot.",
 		"all" : "Tag recent 100 members, use carefully.",
@@ -101,9 +102,9 @@ async def invite_handler(_, m):
 	if reply:
 		user = reply.from_user.id
 	elif not reply and app.long(m) > 1:
-		user = m.command[1]
+		user = m.command[1] if m.command else None
 	else:
-		return await app.send_edit(m, "I can't invite ghost, can I ?", text_type=["mono"])
+		return await app.send_edit(m, "I can't invite ghosts, can I ?", text_type=["mono"])
 
 	try:
 		get_user = await app.get_users(user)
@@ -112,6 +113,36 @@ async def invite_handler(_, m):
 
 	await app.add_users(get_user.id, m.chat.id)
 	await app.send_edit(m, f"Added {get_user.first_name} to the chat!")
+
+
+@app.on_message(gen("inviteall", allow = ["sudo", "channel"]))
+async def inviteall_handler(_, m):
+	if await app.check_private(m):
+		return
+
+	count = 0
+	m = await app.send_edit(m, "⏳ • Hold on . . .", text_type=["mono"])
+
+	if app.long(m) == 1:
+		return await app.send_edit(m, "Give me a group id or username", text_type=["mono"])
+
+	elif app.long(m) > 1:
+		group_id = m.command[1] if m.command else None
+	else:
+		return await app.send_edit(m, "I can't invite ghosts, can I ?", text_type=["mono"])
+
+	try:
+		async for user in app.get_chat_members(group_id):
+			if not (user.user.is_bot or user.user.is_deleted):
+				if await app.add_chat_member(chat_id=m.chat.id, user_ids=user.user.id):
+					count += 1
+
+		await app.send_edit(m, f"Added `{count}` members in this chat.")
+
+	except Exception as e:
+		return await app.send_edit(m, "Something went wrong ! . . .", text_type=["mono"], delme=4)
+		await app.error(m, e)
+
 
 
 
