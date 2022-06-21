@@ -52,7 +52,7 @@ async def setdv_handler(_, m: Message):
 
 @app.on_message(gen("deldv", allow =["sudo"]))
 async def deldv_handler(_, m: Message):
-	if app.long(m) == 1:
+	if app.long() == 1:
 		await app.send_edit("Give me some key to delete that a var from database . . . ", text_type=["mono"], delme=2)
 
 	elif app.textlen() > 4096:
