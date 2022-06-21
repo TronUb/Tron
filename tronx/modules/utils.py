@@ -140,6 +140,7 @@ async def inviteall_handler(_, m):
 		await app.send_edit(m, f"Added `{count}` members in this chat.")
 
 	except Exception as e:
+		print(e)
 		return await app.send_edit(m, "Something went wrong ! . . .", text_type=["mono"], delme=4)
 		await app.error(m, e)
 
