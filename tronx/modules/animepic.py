@@ -84,7 +84,7 @@ async def nekoanime(_, m: Message):
 
 @app.on_message(gen("animegif", allow = ["sudo"]))
 async def animegif(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		arg = m.command[1]
 		try:
 			if m.from_user.is_self:
