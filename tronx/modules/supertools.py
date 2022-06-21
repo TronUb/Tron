@@ -209,7 +209,7 @@ async def weather_handler(_, m: Message):
 
 @app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
 async def webshot_handler(_, m: Message):
-	if app.long(m) > 1:
+	if app.long() > 1:
 		try:
 			BASE = "https://render-tron.appspot.com/screenshot/"
 			url = m.command[1] 
