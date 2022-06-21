@@ -232,7 +232,7 @@ async def getvar_handler(_, m: Message):
 	if await not_heroku():
 		return
 
-	if app.long(m) == 1:
+	if app.long() == 1:
 		return await app.send_edit(
 			f"`{app.PREFIX}getvar [key name]`"
 		)
@@ -305,7 +305,7 @@ async def logs_handler(_, m: Message):
 	if await not_heroku():
 		return
 
-	m = await app.send_edit("⏳ • hold on . . .", text_type=["mono"])
+	await app.send_edit("⏳ • hold on . . .", text_type=["mono"])
 	logsdata = heroku_app.get_log()
 	if logsdata:
 		try:
@@ -321,7 +321,7 @@ async def logs_handler(_, m: Message):
 				os.remove(filename)
 			await m.delete()
 		except Exception as e:
-			await app.error()
+			await app.error(e)
 	else:
 		await app.send_edit("Failed to get logs . . .", delme=3)
 
