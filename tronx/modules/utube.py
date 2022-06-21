@@ -47,16 +47,17 @@ async def videoinfo_handler(_, m: Message):
 @app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
 async def ytdownload_handler(_, m):
 	reply = m.reply_to_message
+	cmd = m.command
 	await app.send_edit("processing link . . .", text_type=["mono"])
 	if not reply:
 		if app.long() == 1:
 			return await app.send_edit("Please reply to a yt link or give me link as a suffix . . .", text_type=["mono"], delme=4)
-		elif app.long() > 1 and m.command[1].startswith("http://" or "https://") and not m.command[1].isdigit():
-			link = m.command[1]
+		elif app.long() > 1 and cmd[1].startswith("https://"):
+			link = cmd[1]
 		else:
 			return await app.send_edit("Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
 	elif reply:
-		if reply.text and reply.text.startswith("http://" or "https://"):
+		if reply.text and reply.text.startswith("https://"):
 			link = reply.text
 		else:
 			return await app.send_edit("Please reply to a link or give me the link as a suffix after command . . .", text_type=["mono"], delme=4)
