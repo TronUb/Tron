@@ -506,7 +506,7 @@ class RawFunctions(object):
 			await app.get_last_msg(chat_id, reverse=True)
 		"""
 
-		return await self.get_history(chat_id, limit=1, reverse=reverse)
+		return await self.get_chat_history(chat_id, limit=1, reverse=reverse)
 
 
 	async def toggle_inline(
