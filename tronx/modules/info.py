@@ -25,7 +25,7 @@ app.CMD_HELP.update(
 async def mediainfo_handler(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit("Please reply to some media to get media info . . .",text_type=["mono"])
+		return await app.send_edit("Please reply to some media to get media info . . .", text_type=["mono"])
 
 	if (app.get_file_id(replied))["type"] == "photo":
 		pie = replied.photo
@@ -40,7 +40,6 @@ async def mediainfo_handler(_, m: Message):
 			msg += " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "video":
 		pie = replied.video
@@ -58,7 +57,6 @@ async def mediainfo_handler(_, m: Message):
 			msg +=  " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "sticker":
 		pie = replied.sticker
@@ -78,7 +76,6 @@ async def mediainfo_handler(_, m: Message):
 			msg +=  " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "document":
 		pie = replied.document
@@ -93,7 +90,6 @@ async def mediainfo_handler(_, m: Message):
 			msg +=  " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "animation":
 		pie = replied.animation
@@ -111,7 +107,6 @@ async def mediainfo_handler(_, m: Message):
 			msg +=  " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "audio":
 		pie = replied.audio
@@ -129,14 +124,12 @@ async def mediainfo_handler(_, m: Message):
 			msg +=  " "
 		await app.send_edit(
 			"**⚶ Media Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 	elif (app.get_file_id(replied))["type"] == "text":
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
 		await app.send_edit(
 			"**⚶ Text Information ⚶**\n\n" + msg,
-			parse_mode = "markdown"
 			)
 
 
@@ -149,17 +142,17 @@ async def chatinfo_handler(_, m: Message):
 			chat_u = m.command[1]
 			chat = await app.get_chat(chat_u)
 		else:
-			if m.chat.type == "private":
-				return await app.send_edit(m, "Please use it in groups or use `.chatinfo [group username or id]`", delme=2)
+			if m.chat.type == ChatType.PRIVATE:
+				return await app.send_edit("Please use it in groups or use `.chatinfo [group username or id]`", delme=3)
 
 			else:
-				chat_v = m.chat.id
-				chat = await app.get_chat(chat_v)
+				chatid = m.chat.id
+				chat = await app.get_chat(chatid)
+		poto = False
 
-		if bool(await app.get_profile_photos(m.chat.id)) is True:
-			poto = await app.get_profile_photos(m.chat.id)
-		else:
-			poto = False
+		async for x in app.get_chat_photo(chat.id):
+			poto = x.file_id
+			break
 
 		await app.send_edit("Processing . . .")
 		neel = chat.permissions
@@ -183,7 +176,7 @@ async def chatinfo_handler(_, m: Message):
 		if poto and data:
 			await app.send_cached_media(
 				m.chat.id, 
-				file_id=poto[0].file_id, 
+				file_id=poto, 
 				caption=data
 			)
 			await m.delete()
