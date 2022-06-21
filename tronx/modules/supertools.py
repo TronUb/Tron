@@ -92,36 +92,36 @@ async def tts_handler(_, m: Message):
 	reply = m.reply_to_message
 
 	try:
-		if not reply and app.long(m) == 1:
-			return await app.send_edit(m, "Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
+		if not reply and app.long() == 1:
+			return await app.send_edit("Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
 
-		elif not reply and app.long(m) > 1:
-			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
+		elif not reply and app.long() > 1:
+			await app.send_edit("Converting text to voice . . .", text_type=["mono"])
 			text = m.text.split(None, 1)[1]
 			await text_to_voice(m, text)
 
 		elif reply:
 			if not reply.text:
-				return await app.send_edit(m, "Please reply to a text . . .", text_type=["mono"], delme=3)
-			await app.send_edit(m, "Converting text to voice . . .", text_type=["mono"])
+				return await app.send_edit("Please reply to a text . . .", text_type=["mono"], delme=3)
+			await app.send_edit("Converting text to voice . . .", text_type=["mono"])
 			text = reply.text
 			await text_to_voice(m, text)
 
 		else:
-			await app.send_edit(m, "Something went wrong !", text_type=["mono"])
+			await app.send_edit("Something went wrong !", text_type=["mono"])
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
 
 @app.on_message(gen("ud", allow = ["sudo", "channel"]))
 async def ud_handler(_, m:Message):
-	if app.long(m) == 1:
-		return await app.send_edit(m, f"Use: `{app.PREFIX}ud cats`")
+	if app.long() == 1:
+		return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
 
 	try:
-		await app.send_edit(m, f"Searching for `{m.text.split(None, 1)[1]}`")
+		await app.send_edit(f"Searching for `{m.text.split(None, 1)[1]}`")
 		text = m.text.split(None, 1)[1]
 		response = await app.get_json(
 			f"http://api.urbandictionary.com/v0/define?term={text}"
@@ -134,11 +134,11 @@ async def ud_handler(_, m:Message):
 			f"**Meaning:**\n\n`{replace_text(definition)}`\n\n"
 			f"**Example:**\n\n`{replace_text(example)}` "
 		)
-		await app.send_edit(m, resp)
+		await app.send_edit(resp)
 	except IndexError:
-		await app.send_edit(m, "No Results Found !", text_type=["mono"], delme=3)
+		await app.send_edit("No Results Found !", text_type=["mono"], delme=3)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
 
 
 
