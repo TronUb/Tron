@@ -2,11 +2,7 @@ import os
 
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -29,7 +25,7 @@ app.CMD_HELP.update(
 async def mediainfo_handler(_, m: Message):
 	replied = m.reply_to_message
 	if not replied:
-		return await app.send_edit(m, "Please reply to some media to get media info . . .",text_type=["mono"])
+		return await app.send_edit("Please reply to some media to get media info . . .",text_type=["mono"])
 
 	if (app.get_file_id(replied))["type"] == "photo":
 		pie = replied.photo
@@ -43,7 +39,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg += " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -62,7 +57,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -83,7 +77,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -99,7 +92,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -118,7 +110,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -137,7 +128,6 @@ async def mediainfo_handler(_, m: Message):
 		else:
 			msg +=  " "
 		await app.send_edit(
-			m, 
 			"**⚶ Media Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -145,7 +135,6 @@ async def mediainfo_handler(_, m: Message):
 		msg = "**Types:** Text\n"
 		msg += f"**Text:** `{replied.text}`\n"
 		await app.send_edit(
-			m, 
 			"**⚶ Text Information ⚶**\n\n" + msg,
 			parse_mode = "markdown"
 			)
@@ -156,7 +145,7 @@ async def mediainfo_handler(_, m: Message):
 @app.on_message(gen("chatinfo", allow = ["sudo"]))
 async def chatinfo_handler(_, m: Message):
 	try:
-		if len(m.command) > 1:
+		if app.long() > 1:
 			chat_u = m.command[1]
 			chat = await app.get_chat(chat_u)
 		else:
@@ -172,7 +161,7 @@ async def chatinfo_handler(_, m: Message):
 		else:
 			poto = False
 
-		m = await app.send_edit(m, "Processing . . .")
+		await app.send_edit("Processing . . .")
 		neel = chat.permissions
 		data = "**Chat Info:**\n\n"
 		data += f"**Title:** `{chat.title}`\n"
@@ -199,8 +188,8 @@ async def chatinfo_handler(_, m: Message):
 			)
 			await m.delete()
 		elif not poto:
-			await app.send_edit(m, data)
+			await app.send_edit(data)
 		else:
-			await app.send_edit(m, "Failed to get information of this group . . .", delme=2)
+			await app.send_edit("Failed to get information of this group . . .", delme=2)
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
