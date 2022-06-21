@@ -8,11 +8,7 @@ from requests import post
 from pyrogram import Client
 from pyrogram.types import Message
 
-from tronx import app
-
-from tronx.helpers import (
-	gen,
-)
+from tronx import app, gen
 
 
 
@@ -59,23 +55,23 @@ colour_code = {
 async def carbon_handler(_, m: Message):
 	cmd = m.command
 	oldmsg = m # fixed for-->  m = send_edit() replaces the variable
-	if app.long(m) < 2:
-		return await app.send_edit(m, f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
+	if app.long() < 2:
+		return await app.send_edit(f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
 
-	elif app.textlen(m) <= 4096:
+	elif app.textlen() <= 4096:
 		try:
-			m = await app.send_edit(m, "creating carbon . . .", text_type=["mono"])
+			await app.send_edit("creating carbon . . .", text_type=["mono"])
 			if cmd[1] in colour_code:
 				text = oldmsg.text.split(None, 2)[2]
 				colour = cmd[1]
 			else:
 				text = oldmsg.text.split(None, 1)[1]
 				colour= "aqua"
-			await create_carbon(m, text=text, colour=colour)
+			await create_carbon(text=text, colour=colour)
 		except Exception as e:
-			await app.error(m, e)
-	elif app.textlen(m) > 4096:
-		await app.send_edit(m, "The text is too long !", delme=2)
+			await app.error(e)
+	elif app.textlen() > 4096:
+		await app.send_edit("The text is too long !", delme=2)
 
 
 
@@ -83,7 +79,7 @@ async def carbon_handler(_, m: Message):
 @app.on_message(gen("carblist", allow = ["sudo"]))
 async def carblist_handler(_, m: Message):
 	clist = [f"`{x}`" for x in list(colour_code.keys())]
-	await app.send_edit(m, "**COLOUR CODES:**\n\n" + "\n".join(clist))
+	await app.send_edit("**COLOUR CODES:**\n\n" + "\n".join(clist))
 
 
 
@@ -114,4 +110,4 @@ async def create_carbon(m: Message, text, colour):
 		if os.path.exists(f"./{filename}"):
 			os.remove(filename)
 	else:
-		await app.send_edit(m, "Image Couldn't be retreived.", delme=4, text_type=["mono"])
+		await app.send_edit("Image Couldn't be retreived.", delme=4, text_type=["mono"])
