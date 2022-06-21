@@ -20,7 +20,7 @@ app.CMD_HELP.update(
 @app.on_message(gen("stats", allow = ["sudo"]))
 async def dialogstats_handler(_, m: Message):
 	try:
-		m = await app.send_edit(m, "Getting stats . . .", text_type=["mono"])
+		await app.send_edit("Getting stats . . .", text_type=["mono"])
 
 		bot = 0
 		user = 0
@@ -45,6 +45,6 @@ async def dialogstats_handler(_, m: Message):
 			if x.chat.type == "private":
 				user += 1
 
-		await app.send_edit(m, stat_format.format(app.UserMention(), bot, user, group, channel))
+		await app.send_edit(stat_format.format(app.UserMention(), bot, user, group, channel))
 	except Exception as e:
-		await app.error(m, e)
+		await app.error(e)
