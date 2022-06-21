@@ -68,29 +68,13 @@ async def get_image(m: Message, keyword):
 
 
 
-async def send_profile_pic(app: Client, m: Message, arg=True, p_id=False):
+async def send_profile_pic(m):
 	reply = m.reply_to_message 
-	if not p_id:
-		p_id = await app.get_profile_photos(reply.from_user.id)
-	photo = []
-	photo.clear()
-	if not arg:
-		for x in p_id:
-			await app.send_cached_media(m.chat.id, x["file_id"])
-			time.sleep(0.30)
-	elif arg:
-		for x in p_id:
-			photo.append(x["file_id"])
-			if len(photo) == 5:
-				break
-			else:
-				pass
-		for x in photo:
-			await app.send_cached_media(m.chat.id, x)
-	else:
-		print("failed to send Profile photo")
+	ids = reply.from_user.id if reply else "me"
 
-
+	async for x in app.get_chat_photos(ids):
+		await app.send_cached_media(m.chat.id, x.file_id)
+	
 
 
 @app.on_message(gen(["uns", "unsplash"], allow = ["sudo"]))
@@ -303,52 +287,20 @@ async def waifupic_handler(_, m):
 
 @app.on_message(gen("poto", allow = ["sudo"]))
 async def profilepic_handler(_, m):
-	reply = m.reply_to_message
-	cmd = m.command
-	text = "Getting photo . . ."
-	oldmsg = m
-
-	if reply:
-		try:
-			if app.long() > 1:
-				await app.send_edit(text, text_type=["mono"])
-				if cmd[1] == "all":
-					await send_profile_pic(app, m, False)
-				if cmd[1] != "all":
-					await send_profile_pic(app, m)
-				await m.delete()
-
-			if app.long() == 1:
-				await app.send_edit(text, text_type=["mono"])
-				await send_profile_pic(app, m)
-				await m.delete()
-		except Exception as e:
-			await app.error(e)
-
-	elif not reply:
-		if app.long() > 1:
-			try:
-				await app.send_edit(text, text_type=["mono"])
-				user = await app.get_users(cmd[1])
-				p_id = await app.get_profile_photos(user.id)
-				await send_profile_pic(app, m, p_id=p_id)
-				await m.delete()
-			except UsernameInvalid:
-				await app.send_edit("Sorry this username does not exist . . .", text_type=["mono"])
-
-		elif app.long() == 1:
-			user = m.from_user
-			p_id = await app.get_profile_photos(user.id)
-			await send_profile_pic(app, m, p_id=p_id)
-			await m.delete()
+	await send_profile_pic(m)
 
 
 
 
 @app.on_message(gen("dog", allow = ["sudo"]))
 async def dogpic_handler(_, m):
-	ing_url = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
-	if img_url:
-		await app.send_photo(m.chat.id, img_url)
-	else:
-		await app.send_edit("No dog pics found !", text_type=["mono"])
+	try:
+		img_url = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
+		if img_url:
+			await app.send_photo(m.chat.id, img_url)
+		else:
+			await app.send_edit("No dog pics found !", text_type=["mono"])
+	except Exception as e:
+		await app.error(e)
+
+
