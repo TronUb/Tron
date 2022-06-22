@@ -88,7 +88,7 @@ async def ban_handler(_, m: Message):
 
 		await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
 		if ban_time:
-			await app.ban_chat_member(m.chat.id, user.user.id, time.time() + ban_time)
+			await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
 			await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
 		else:
 			await app.ban_chat_member(m.chat.id, user.user.id)
@@ -169,7 +169,7 @@ async def unban_handler(_, m: Message):
 		else:
 			return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
-		m = await app.send_edit("Unbanning . . .", text_type=["mono"])
+		await app.send_edit("Unbanning . . .", text_type=["mono"])
 		done = await app.unban_chat_member(m.chat.id, user.user.id)
 		if done:
 			await app.send_edit(f"Unbanned {user.user.mention} in this chat.", delme=4)
@@ -186,7 +186,7 @@ async def unban_handler(_, m: Message):
 
 
 
-async def mute_user(chat_id, user_id, duration=0):
+async def mute_user(chat_id, user_id, duration=datetime.now()):
 	return await app.restrict_chat_member(
 		chat_id=chat_id,
 		user_id=user_id,
@@ -250,7 +250,7 @@ async def mute_handler(_, m: Message):
 			return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
 		if mute_time:
-			await mute_user(m.chat.id, user.user.id, int(time.time() + mute_time))
+			await mute_user(m.chat.id, user.user.id, datetime.now() + timedelta(mute_time))
 			await app.send_edit(f"Muted {user.user.mention} for {arg}")
 		else:
 			await mute_user(m.chat.id, user.user.id)
@@ -479,7 +479,6 @@ async def promote_handler(_, m: Message):
 		await app.promote_chat_member(
 			m.chat.id, 
 			user.user.id,
-			is_anonymous=False,
 			can_change_info=True,
 			can_manage_voice_chats=True,
 			can_manage_chat=True,
@@ -536,7 +535,6 @@ async def demote_handler(_, m: Message):
 		await app.promote_chat_member(
 				m.chat.id,
 				user.user.id,
-				is_anonymous=False,
 				can_change_info=False,
 				can_manage_voice_chats=False,
 				can_manage_chat=False,
