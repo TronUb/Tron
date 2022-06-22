@@ -220,7 +220,7 @@ class Utilities(AioHttp):
 		if not self.m.from_user:
 			print(self.m) # getting from user as nonetype
 			return False
-		resp = (await m.chat.get_member("me")).privileges
+		resp = (await self.m.chat.get_member("me")).privileges
 		return True if getattr(resp, privileges) else False
 
 
