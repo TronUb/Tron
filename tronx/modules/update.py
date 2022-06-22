@@ -42,7 +42,7 @@ async def gen_chlog():
 			changes.append(x.get("payload").get("commits")[0].get("message")+"\n")
 
 	if not changes:
-		await app.send_edit("Your app is up to date.", text_type=["mono"])
+		await app.send_edit("Your app is up-to-date.", text_type=["mono"])
 		return -1
 	else:
 		if len("".join(changes)) > 4096:
