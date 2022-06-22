@@ -60,7 +60,7 @@ async def ban_handler(_, m: Message):
 		if app.long() == 1 and not reply:
 			return await app.send_edit("Reply or give some id | username after command.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not an admin here or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -110,7 +110,7 @@ async def banall_handler(_, m: Message):
 		if await app.check_private():
 			return
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		count = 0
@@ -148,7 +148,7 @@ async def unban_handler(_, m: Message):
 		if not reply and app.long() == 1:
 			return await app.send_edit("Reply to a user or give me the username | id of that user.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -221,7 +221,7 @@ async def mute_handler(_, m: Message):
 		if not reply and app.long() == 1:
 			return await app.send_edit("Reply to a user or give me username | id of that user.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -278,7 +278,7 @@ async def unmute_handler(_, m: Message):
 		if not reply and app.long() == 1:
 			return await app.send_edit("Reply to a user or give me the username | id of that user.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -337,7 +337,7 @@ async def kick_handler(_, m: Message):
 		if not reply and app.long() == 1:
 			return await app.send_edit("Reply to a user or give me username | id of that user.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_restrict_members") is False:
 			return await app.send_edit("You're not admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -393,7 +393,7 @@ async def pin_handler(_, m: Message):
 			else:
 				return await app.send_edit("Failed to pin message.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_pin_messages") is False:
 			return await app.send_edit("You're not an admin here or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -457,7 +457,7 @@ async def promote_handler(_, m: Message):
 		if app.long() == 1 and not reply:
 			return await app.send_edit("Reply to user or give me username | id of that user.", text_type=["mono"], delme=4)
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_promote_members") is False:
 			return await app.send_edit("You're not admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
 
 		if reply:
@@ -513,7 +513,7 @@ async def demote_handler(_, m: Message):
 		reply = m.reply_to_message
 		user = False
 
-		if await app.IsAdmin() is False:
+		if await app.IsAdmin("can_promote_members") is False:
 			return await app.send_edit("You're not an admin here or you don't have enough rights.", text_type=["mono"], delme=4)
 
 		if app.long() == 1 and not reply:
