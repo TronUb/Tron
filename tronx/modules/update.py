@@ -85,7 +85,7 @@ async def update_handler(_, m):
 		if await gen_chlog() == -1:
 			return
 
-
+	await app.send_edit("Found update, updating . . .", text_type=["mono"])
 	try:
 		repo = Repo()
 	except NoSuchPathError as e:
