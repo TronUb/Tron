@@ -83,7 +83,7 @@ async def getnote_handler(_, m: Message):
 		if not getnotes:
 			return await app.send_edit("This note does not exist !")
 
-		msg_id = reply.message_id if reply else None
+		msg_id = reply.id if reply else None
 
 		if getnotes['type'] == app.TEXT:
 			teks, button = app.ParseButton(getnotes.get('value'))
@@ -151,7 +151,7 @@ async def notelist_handler(_, m: Message):
 	if not getnotes:
 		return await app.send_edit("There are no saved notes !", text_type=["mono"], delme=4)
 
-	notelist = "**NOTEBOOK:**\n\n"
+	notelist = "**📒 • NOTEBOOK:**\n\n"
 	for x in getnotes:
 		notelist += f"`>{x}`\n"
 
