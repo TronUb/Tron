@@ -79,7 +79,7 @@ async def carbon_handler(_, m: Message):
 @app.on_message(gen("carblist", allow = ["sudo"]))
 async def carblist_handler(_, m: Message):
 	clist = [f"`{x}`" for x in list(colour_code.keys())]
-	await app.send_edit("**COLOUR CODES:**\n\n" + "\n".join(clist))
+	await app.send_edit("**SUPPORTED COLOURS:**\n\n" + "\n".join(clist))
 
 
 
