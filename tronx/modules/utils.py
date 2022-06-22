@@ -365,7 +365,7 @@ async def joinchat_handler(_, m: Message):
 
 @app.on_message(gen("slowmo", allow = ["sudo"]))
 async def slowmode_handler(_, m: Message):
-	if app.check_private():
+	if await app.check_private():
 		return
 
 	if await app.IsAdmin() is True:
