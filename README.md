@@ -65,7 +65,7 @@
 <br></br>
 <p>1. Install termux app in your device ( lastest version )</p>
 
-<p>2. Run The code in the termux that are given below.</p>
+<p>2. Run The code in the termux that is given below.</p>
 
 `apt update & apt upgrade`
 
@@ -111,7 +111,7 @@
 
 *  ```pkg install git```
 
-*  ```git clone https://github.com/beastzx18/Tron```
+*  ```git clone https://github.com/TronUb/Tron.git```
 
 *  ```cd Tron```
 
