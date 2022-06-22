@@ -31,7 +31,7 @@ class Config(object):
 	# temporary download location (required)
 	TEMP_DICT = os.getenv("TEMP_DICT", os.path.abspath(".") + "/downloads/")
 	# official repo for updates
-	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO", "https://github.com/beastzx18/Tron.git")
+	UPSTREAM_REPO = os.getenv("UPSTREAM_REPO", "https://github.com/TronUb/Tron.git")
 # ------------------
 	# heroku api key (required -> if hosted on heroku)
 	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
