@@ -6,11 +6,11 @@
 
 <h2 align="center">Tron Userbot</h2> 
 
-[![CodeQL](https://github.com/TronUb/Tron/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/beastzx18/Tron/actions/workflows/codeql-analysis.yml)
-![Repo Size](https://img.shields.io/github/repo-size/beastzx18/Tron)
-![License](https://img.shields.io/github/license/beastzx18/Tron)
+[![CodeQL](https://github.com/TronUb/Tron/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/TronUb/Tron/actions/workflows/codeql-analysis.yml)
+![Repo Size](https://img.shields.io/github/repo-size/TronUb/Tron)
+![License](https://img.shields.io/github/license/TronUb/Tron)
 ![Python Version](https://img.shields.io/badge/python-3.9.10-aqua)
-![Release](https://img.shields.io/github/v/release/beastzx18/Tron)
+![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 
 
 ### Click below on text
