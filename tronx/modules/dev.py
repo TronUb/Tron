@@ -97,7 +97,7 @@ async def terminal_handler(_, m: Message):
 		text = m.text.split(None, 1)
 		cmd = text[1]
 
-		if "\n" in teks:
+		if "\n" in cmd:
 			code = cmd.split("\n")
 			output = ""
 			for x in code:
