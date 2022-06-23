@@ -117,18 +117,15 @@ async def insult_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit("Please reply to someone, so that i can insult them . . .", delme=2, text_type=["mono"])
+
 	elif reply:
 		try:
-			if app.long() == 1:
-				lang = "en"
-			elif app.long() > 1:
-				lang = m.command[1]
-			data = requests.get(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
-			_data = data.json()
+			lang = "en" if app.long() == 1 else m.command[1] if app.long() > 1
+			data = await app.get_json(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
 
 			await app.send_edit("Insulting . . .", text_type=["mono"])
-			if _data:
-				await app.send_edit(f"`{_data.get('insult')}`")
+			if data:
+				await app.send_edit(f"`{data.get("insult")}`")
 			else:
 				await app.send_edit("No insults found !", delme=4, text_type=["mono"])
 		except Exception as e:
@@ -142,13 +139,14 @@ async def advice_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
 		await app.send_edit("Please reply to someone, so that i can give them a advice . . .", delme=2, text_type=["mono"])
+
 	elif reply:
 		try:
 			await app.send_edit("Finding a good advice . . .", text_type=["mono"])
-			data = requests.get(f"https://api.adviceslip.com/advice")
-			_data = data.json().get("slip").get("advice")
-			if _data:
-				await app.send_edit(f"`{_data}`")
+			data = await app.get_json(f"https://api.adviceslip.com/advice")
+			data = data.get("slip").get("advice")
+			if data:
+				await app.send_edit(f"`{data}`")
 			else:
 				await app.send_edit("No advice found !", delme=2, text_type=["mono"])
 		except Exception as e:
@@ -165,11 +163,11 @@ async def question_handler(_, m):
 	elif reply:
 		try:
 			await app.send_edit("Finding a question . . .", text_type=["mono"])
-			data = requests.get(f"http://jservice.io/api/random")
+			data = await app.get_json(f"http://jservice.io/api/random")
 			question = data.json()[0].get("question")
-			answer = data.json()[0].get("answer")
+			answer = data[0].get("answer")
 			if question and answer:
-				await app.send_edit(f"Question:\n\n`{question}`")
+				await app.send_edit(f"Question:\n\n`{question}`\n\nAnswer in saved message.")
 				await app.send_message("me", f"Answer:\n\n`{answer}`") # answer in saved messages
 			else:
 				await app.send_edit("No question found !", delme=2, text_type=["mono"])
@@ -183,13 +181,13 @@ async def question_handler(_, m):
 async def whattodo_handler(_, m):
 	try:
 		await app.send_edit("Finding a activity . . .", text_type=["mono"])
-		data = requests.get(f"http://www.boredapi.com/api/activity/")
-		act = data.json().get("activity")
-		typ = data.json().get("type")
+		data = await app.get_json(f"http://www.boredapi.com/api/activity/")
+		activity = data.get("activity")
+		type = data.get("type")
 		if act:
-			await app.send_edit(f"Activity: `{act}`\n\nType: `{typ}`") 
+			await app.send_edit(f"Activity: `{activity}`\n\nType: `{type}`") 
 		else:
-			await app.send_edit("No Activity found !", delme=2, text_type=["mono"])
+			await app.send_edit("No Activity found !", delme=3, text_type=["mono"])
 	except Exception as e:
 		await app.error(e)
 
@@ -200,14 +198,14 @@ async def whattodo_handler(_, m):
 async def moviequote_handler(_, m):
 	try:
 		await app.send_edit("Finding a movie quote . . .", text_type=["mono"])
-		data = requests.get(f"https://movie-quote-api.herokuapp.com/v1/quote/")
-		qt = data.json().get("quote")
-		role = data.json().get("role")
-		show = data.json().get("show")
+		data = await app.get_json(f"https://movie-quote-api.herokuapp.com/v1/quote/")
+		qt = data.get("quote")
+		role = data.get("role")
+		show = data.get("show")
 		if qt and role and show:
 			await app.send_edit(f"**Quote:**\n\n`{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
 		else:
-			await app.send_edit("No movie quotes found !", delme=2, text_type=["mono"])
+			await app.send_edit("No movie quotes found !", delme=3, text_type=["mono"])
 	except Exception as e:
 		await app.error(e)
 
@@ -218,7 +216,7 @@ async def moviequote_handler(_, m):
 async def joke_handler(_, m):
 	try:
 		await app.send_edit("Finding a joke . . .", text_type=["mono"])
-		data = (requests.get("https://icanhazdadjoke.com/slack").json())["attachments"][0]["fallback"]
+		data = (await app.get_json("https://icanhazdadjoke.com/slack"))["attachments"][0]["fallback"]
 		if bool(data) is False:
 			return app.send_edit("Site is down, please try again later . . .", delme=3, text_type=["mono"])
 		elif data:
