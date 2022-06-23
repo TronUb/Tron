@@ -125,7 +125,7 @@ async def insult_handler(_, m):
 
 			await app.send_edit("Insulting . . .", text_type=["mono"])
 			if data:
-				await app.send_edit(f"`{data.get("insult")}`")
+				await app.send_edit(f"`{data.get('insult')}`")
 			else:
 				await app.send_edit("No insults found !", delme=4, text_type=["mono"])
 		except Exception as e:
