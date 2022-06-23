@@ -120,7 +120,7 @@ async def insult_handler(_, m):
 
 	elif reply:
 		try:
-			lang = "en" if app.long() == 1 else m.command[1] if app.long() > 1
+			lang = "en" if app.long() == 1 else m.command[1] if app.long() > 1 else ""
 			data = await app.get_json(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
 
 			await app.send_edit("Insulting . . .", text_type=["mono"])
