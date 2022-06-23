@@ -89,14 +89,13 @@ async def imagesauce_handler(_, m: Message):
 
 @app.on_message(gen("pic", allow =["sudo"]))
 async def yandeximages_handler(_, m: Message):
-	oldmsg = m
 	if app.long() == 1:
 		return await app.send_edit("Usage: `.pic cat`", delme=4)
 
 	try:
 		if app.long() > 1:
 			await app.send_edit("Getting image . . .", text_type=["mono"])
-			photo = oldmsg.text.split(None, 1)[1]
+			photo = m.text.split(None, 1)[1]
 			result = await app.get_inline_bot_results(
 				"@pic", 
 				photo
@@ -106,7 +105,6 @@ async def yandeximages_handler(_, m: Message):
 				msg.chat.id, 
 				query_id=result.query_id, 
 				result_id=result.results[random.randint(0, len(result.results))].id, 
-				hide_via=True
 			)
 		else:
 			await app.send_edit("Failed to get the image, try again later !", text_type=["mono"], delme=4)
@@ -122,7 +120,7 @@ async def imagesearch_handler(_, m: Message):
 	if app.long() == 1:
 		return await app.send_edit("Please give me some query.", text_type=["mono"], delme=4)
 
-	if app.long() > 2 and bool(cmd[1].isdigit()):
+	if app.long() > 2 and cmd[1].isdigit():
 		limit = int(cmd[1])
 		query = m.text.split(None, 2)[2]
 	else:
