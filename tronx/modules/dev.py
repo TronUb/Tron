@@ -1,16 +1,14 @@
-import sys
 import os
 import re
+import sys
 import traceback
 import subprocess
 
 from io import StringIO
 
-from pyrogram import filters
 from pyrogram.types import Message
 
-from tronx import app
-from tronx.helpers import gen
+from tronx import app, gen
 
 
 
@@ -47,10 +45,9 @@ async def evaluate_handler(_, m: Message):
 	chat_type = m.chat.type
 	chat_id = m.chat.id
 	text = m.text
+	cmd = text.split(None, 1)[1]
 
-	try:
-		cmd = m.text.split(None, 1)[1]
-	except IndexError:
+	if not cmd:
 		return await app.send_edit("Give me some text (code) to execute . . .", text_type=["mono"], delme=4)
 
 	msg = await app.send_edit("Running . . .", text_type=["mono"])
@@ -82,19 +79,21 @@ async def evaluate_handler(_, m: Message):
 
 
 
-@app.on_message(gen("term", allow =["sudo"]))
+@app.on_message(gen(["term", "shell"], allow =["sudo"]))
 async def terminal_handler(_, m: Message):
+	""" This function is made to run shell commands """
 	if app.long() == 1:
 		return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
-	elif app.textlen() > 4096:
+	if app.textlen() > 4096:
 		return await send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
 	msg = await app.send_edit("Running . . .", text_type=["mono"])
-	args = m.text.split(None, 1)
-	teks = args[1]
+	text = m.text.split(None, 1)
+	cmd = text[1]
+
 	if "\n" in teks:
-		code = teks.split("\n")
+		code = cmd.split("\n")
 		output = ""
 		for x in code:
 			shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", x)
@@ -109,9 +108,9 @@ async def terminal_handler(_, m: Message):
 			output += process.stdout.read()[:-1].decode("utf-8")
 			output += "\n"
 	else:
-		shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", teks)
-		for a in range(len(shell)):
-			shell[a] = shell[a].replace('"', "")
+		shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", cmd)
+		for y in range(len(shell)):
+			shell[y] = shell[y].replace('"', "")
 		try:
 			process = subprocess.Popen(
 				shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -126,6 +125,7 @@ async def terminal_handler(_, m: Message):
 		output = process.stdout.read()[:-1].decode("utf-8")
 	if str(output) == "\n":
 		output = None
+
 	if output:
 		if len(output) > 4096:
 			await app.create_file(filename="term_output.txt", content=output, caption=f"`{m.text}`")
