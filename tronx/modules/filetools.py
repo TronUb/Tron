@@ -27,19 +27,9 @@ app.CMD_HELP.update(
 
 
 
-
-def zipdir(dirName):
-	dice = []
-	for root, directories, files in os.walk(dirName):
-		for filename in files:
-			filePath = os.path.join(root, filename)
-			dice.append(filePath)
-	return filePaths
-
-
 async def unzipfiles(zippath):
 	foldername = zippath.split("/")[-1]
-	extract_path = f"tronx/downloads/{foldername}"
+	extract_path = f"./downloads/{foldername}"
 	shutil.unpack_archive(zippath, extract_path)
 	return extract_path
 
@@ -50,13 +40,13 @@ async def unzipfiles(zippath):
 async def zip_handler(_, m: Message):
 	reply = m.reply_to_message
 	if not reply:
-		return await app.send_edit(f"Reply to some media file . . .", text_type=["mono"], delme=4)
+		return await app.send_edit(f"Reply to a file. . .", text_type=["mono"], delme=4)
 
 	elif reply:
 		if not reply.media:
-			return await app.send_edit("Reply to some media not text . . .", text_type=["mono"])
+			return await app.send_edit("Reply to some media . . .", text_type=["mono"])
 
-		m = await app.send_edit("Zipping . . .", text_type=["mono"])
+		await app.send_edit("Zipping . . .", text_type=["mono"])
 
 		if app.TEMP_DICT:
 			loc = app.TEMP_DICT
@@ -70,21 +60,21 @@ async def zip_handler(_, m: Message):
 		place = dl.replace("/app/downloads/", "") + ".zip"
 		await app.send_edit(f"**Your file is compressed and saved here:** \n`{place}`")
 	else:
-		await app.send_edit("Something went wrong . . .", delme=2, text_type=["mono"])
+		await app.send_edit("Something went wrong . . .", delme=3, text_type=["mono"])
 
 
 
 
 @app.on_message(gen("unzip", allow =["sudo"]))
 async def unzip_handler(_, m: Message):
-	if app.long(m) == 2:
-		if app.long() <= 4096:
+	if app.long() == 2:
+		if app.textlen() <= 4096:
 			loc = m.text.split(None, 1)[1]
 			await app.send_edit("Unzipping file . . .", text_type=["mono"])
 			extract_path = await unzipfiles(loc)
 			await app.send_edit(f"File unzipped and saved here: `{extract_path}`")
-		else:
-			await app.send_edit("Text is too long !", delme=2, text_type=["mono"])
+		elif app.textlen() > 4096:
+			await app.send_edit("Text is too long !", delme=4, text_type=["mono"])
 	else:
 		await app.send_edit("Give me the file path to unzip the file . . .", delme=4, text_type=["mono"])
 
@@ -94,8 +84,7 @@ async def unzip_handler(_, m: Message):
 @app.on_message(gen("new", allow =["sudo"]))
 async def createfile_handler(app, m:Message):
 	reply = m.reply_to_message
-	mytext = "Making file . . ."
-	oldmsg = m # workaround
+	text = "Making file . . ."
 	filepath = None
 
 	try:
@@ -106,9 +95,9 @@ async def createfile_handler(app, m:Message):
 			return await app.send_edit("Give me filename & content of file after command.", text_type=["mono"], delme=4)
 
 		if reply and app.long() >= 2:
-			name = oldmsg.text.split(None, 1)[1]
-			m = await app.send_edit(mytext, text_type=["mono"])
-			text = reply.text or reply.caption
+			name = m.text.split(None, 1)[1]
+			await app.send_edit(mytext, text_type=["mono"])
+			text = reply.text or reply.caption or "None"
 			await app.create_file(
 				filename=name, 
 				content=text,
@@ -118,16 +107,16 @@ async def createfile_handler(app, m:Message):
 		# if replied to text without file name
 		elif not reply and app.long() >= 3:
 			await app.send_edit(mytext, text_type=["mono"])
-			name = oldmsg.text.split(None, 1)[1]
-			text = oldmsg.text.split(None, 2)[2]
+			name = m.text.split(None, 1)[1]
+			text = m.text.split(None, 2)[2]
 			await app.create_file(
-				filename="file.py", 
+				filename=name, 
 				content=text,
 				send=True
 			)
 
 		# if replied to text with file name
-		elif not reply and app.long() <= 2:
+		elif not reply and app.long() == 1:
 			await app.send_edit("Are you dumb, give me the file contents with the file name.", text_type=["mono"], delme=4)
 
 		else:
