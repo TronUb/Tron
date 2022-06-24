@@ -12,6 +12,9 @@ file = configfile()
 
 def ask_information():
 	file.write("class Config:\n") 
+	db_url = createdb()
+	file.write(f"\tDB_URI = {db_url}")
+
 	# api id
 	API_ID = api_id()
 	if API_ID:
@@ -110,6 +113,7 @@ def log_chat():
 		log_chat()
 
 	return data if data else None
+
 
 
 
