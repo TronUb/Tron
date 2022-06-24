@@ -4,15 +4,6 @@ import pkg_resources
 
 
 
-# todo
-if os.uname()[1] == "localhost":
-	response = os.system("pip3 install -r requirements.txt --no-cache-dir")
-	if response == 0:
-		print("Successfully Installed all requirements")
-	else:
-		print("Failed to install requirements")
-
-
 
 
 # if you deployed this userbot using localhost method, then replace all the necessary parts of the variables given below after '=' sign with the required values.

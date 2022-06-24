@@ -18,4 +18,5 @@ def install_requirements():
 
 def install_pillow():
 	os.system("pkg install libjpeg-turbo")
-	os.system("LDFLAGS="-L/system/lib64/" CFLAGS="-I/data/data/com.termux/files/usr/include/" pip install Pillow")
+	os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
+

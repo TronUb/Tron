@@ -11,35 +11,50 @@ file = configfile()
 
 
 def ask_information():
-	if api_id():
-		file.write(f"API_ID = {api_id()}\n")      
+	file.write("class Config:\n") 
+	# api id
+	API_ID = api_id()
+	if API_ID:
+		file.write(f"\tAPI_ID = '{API_ID}'\n")      
 	else:
 		quit(0)
 
-	if api_hash():
-		file.write(f"API_HASH = {api_hash()}\n")      
+	# api hash
+	API_HASH = api_hash()
+	if API_HASH:
+		file.write(f"\tAPI_HASH = '{API_HASH}'\n")      
 	else:
 		quit(0)
 
-	if session():
-		file.write(f"SESSION = {session()}\n")      
+	# session
+	SESSION = session()
+	if SESSION:
+		file.write(f"\tSESSION = '{SESSION}'\n")      
 	else:
 		quit(0)
 
-	if bot_token():
-		file.write(f"BOT_TOKEN = {bot_token()}\n")      
+	# bot token
+	BOT_TOKEN = bot_token()
+	if BOT_TOKEN:
+		file.write(f"\tBOT_TOKEN = '{BOT_TOKEN}'\n")      
 	else:
 		quit(0)
 
-	if prefix():
-		file.write(f"PREFIX = {prefix()}\n")      
+	# prefix
+	PREFIX = prefix()
+	if PREFIX:
+		file.write(f"\tPREFIX = '{PREFIX}'\n")      
 	else:
 		quit(0)
 
-	if log_chat():
-		file.write(f"LOG_CHAT = {log_chat()}\n")      
+	# log chat
+	LOG_CHAT = log_chat()
+	if LOG_CHAT:
+		file.write(f"\tLOG_CHAT = '{LOG_CHAT}'\n")      
 	else:
 		quit(0)
+
+	file.close()
 
 
 def api_id():
@@ -95,7 +110,6 @@ def log_chat():
 		log_chat()
 
 	return data if data else None
-
 
 
 
