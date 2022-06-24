@@ -41,7 +41,7 @@ def ask_information():
 	# bot token
 	BOT_TOKEN = bot_token()
 	if BOT_TOKEN:
-		file.write(f"\tBOT_TOKEN = '{BOT_TOKEN}'\n")      
+		file.write(f"\tTOKEN = '{BOT_TOKEN}'\n")      
 	else:
 		quit(0)
 
@@ -62,7 +62,7 @@ def ask_information():
 	# api id
 	TL_NAME = tl_name()
 	if TL_NAME:
-		file.write(f"\tTL_NAME = {TL_NAME}\n")      
+		file.write(f"\tTL_NAME = '{TL_NAME}'\n")      
 	else:
 		quit(0)
 
