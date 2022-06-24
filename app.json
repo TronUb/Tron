@@ -13,6 +13,7 @@
 	"repository": "https://github.com/beastzx18/Tron/",
 	"website": "https://t.me/tronuserbot",
 	"success_url": "/welcome",
+	"stack": "heroku-22",
 	"env": {
 		"API_ID": {
 			"description": "Login here -> my.telegram.org to get pair of keys",
