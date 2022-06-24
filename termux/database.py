@@ -5,7 +5,13 @@ from config import Config
 
 
 def createdb():
-	if not Config.DB_URI:
+	db = True
+	try:
+		Config.DB_URI
+	except AttributeError:
+		db = False
+
+	if not db:
 		os.system("pkg install postgresql")
 		os.system("clear")
 		os.system("mkdir -p $PREFIX/var/lib/postgresql")
