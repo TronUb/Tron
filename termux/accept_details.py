@@ -15,7 +15,7 @@ file = configfile()
 def ask_information():
 	file.write("class Config:\n\tnew = 'value'\n") 
 	db_url = createdb()
-	file.write(f"\tDB_URI = '{db_url}'")
+	file.write(f"\tDB_URI = '{db_url}'\n")
 
 	# api id
 	API_ID = api_id()
