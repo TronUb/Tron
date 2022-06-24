@@ -13,12 +13,12 @@ file = configfile()
 def ask_information():
 	file.write("class Config:\n") 
 	db_url = createdb()
-	file.write(f"\tDB_URI = {db_url}")
+	file.write(f"\tDB_URI = '{db_url}'")
 
 	# api id
 	API_ID = api_id()
 	if API_ID:
-		file.write(f"\tAPI_ID = '{API_ID}'\n")      
+		file.write(f"\tAPI_ID = {API_ID}\n")      
 	else:
 		quit(0)
 
