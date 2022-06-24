@@ -13,7 +13,7 @@ file = configfile()
 
 
 def ask_information():
-	file.write("class Config:\n") 
+	file.write("class Config:\n\tnew = 'value'\n") 
 	db_url = createdb()
 	file.write(f"\tDB_URI = '{db_url}'")
 
