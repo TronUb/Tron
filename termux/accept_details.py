@@ -59,6 +59,13 @@ def ask_information():
 	else:
 		quit(0)
 
+	# api id
+	TL_NAME = tl_name()
+	if TL_NAME:
+		file.write(f"\tTL_NAME = {TL_NAME}\n")      
+	else:
+		quit(0)
+
 	file.close()
 
 
@@ -117,7 +124,13 @@ def log_chat():
 	return data if data else None
 
 
+def tl_name():
+	data = input("\nEnter your Telegraph Name: ")
+	if not data:
+		print("\nEnter valid details\n")
+		tl_name()
 
+	return data if data else None
 
 
 
