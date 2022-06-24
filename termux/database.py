@@ -23,4 +23,5 @@ def createdb():
 		os.system(f"createuser --superuser --pwprompt {username}")
 		os.system(f"createdb {dbname}")
 		return f"postgres://{username}:{password}@127.0.0.1:5432/{dbname}"
+	os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
 	return None
