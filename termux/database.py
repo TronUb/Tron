@@ -16,5 +16,5 @@ def createdb():
 		dbname = str(input("\nEnter your database name: "))
 		os.system(f"createuser --superuser --pwprompt {username}")
 		os.system(f"createdb {dbname}")
-		return f"postgres://{username}:{password}@{127.0.0.1}:{5432}/{dbname}"
+		return f"postgres://{username}:{password}@127.0.0.1:5432/{dbname}"
 	return None
