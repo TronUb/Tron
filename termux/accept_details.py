@@ -8,18 +8,12 @@ def create_termuxconfig():
 	file.write("class Termuxconfig:\n\ttemp = 'value'")
 	for x in ATTR:
 		myvar = var() # string to variable
-		def ask_info():
-			data = input(f"\nEnter your {x}: ")
-			if data is None:
-				printf("\nEnter valid details")
-				ask_info()
-			else:
-				value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"
-				if data == "DB_URI":
-					value = createdb()
-					    
-				file.write(f"\tmyvar[x] = {value}\n")
-		ask_info()
+		data = input(f"\nEnter your {x}: ")
+		value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"
+		if data == "DB_URI":
+			value = createdb()
+
+		file.write(f"\tmyvar[x] = {value}\n")
 	file.close()
 	return True
 
