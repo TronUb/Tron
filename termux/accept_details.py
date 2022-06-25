@@ -25,7 +25,7 @@ def createdb():
 	os.system("pkg install postgresql")
 	os.system("clear")
 
-	if os.path.exists("$PREFIX/var/lib/postgresql"):
+	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
 		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
 		return None
 	else:
