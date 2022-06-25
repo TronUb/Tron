@@ -1,6 +1,6 @@
 import os
 import re
-import importlib.util
+import pkg_resources
 
 
 
@@ -13,17 +13,20 @@ def install_requirements():
 	os.system("pkg update")
 	os.system("pkg install python3")
 	os.system("pip install wheel")
-	for pkg in dependencies.split():
-		spec = importlib.util.find_spec(pkg.split("=")[0])
+	for x in dependencies.split():
+		installed_packages = [p.project_name for p in pkg_resources.working_set]
+		pkg = x.split("=")[0]
 		if pkg == "pillow":
-			os.system("pkg install libjpeg-turbo")
-			os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
-			os.system("clear")
-			continue
+			if not pkg in installed_packages:
+				print(f"\nInstalling package {x}\n")
+				os.system("pkg install libjpeg-turbo")
+				os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
+				os.system("clear")
+				continue
 
-		if spec is None:
-			print(f"\nInstalling package {pkg}\n")
-			os.system(f"pip3 install {pkg}")
+		if not pkg in installed_packages:
+			print(f"\nInstalling package {x}\n")
+			os.system(f"pip3 install {x}")
 			os.system("clear")
 			
 
