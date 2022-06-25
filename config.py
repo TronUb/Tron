@@ -2,9 +2,10 @@ import os
 
 
 
-termux = None
+termux = object
 if os.uname()[1] == "localhost":
-	termux = True
+	from termux import Termuxconfig
+	inside = Termuxconfig
 	
 
 
@@ -12,7 +13,7 @@ if os.uname()[1] == "localhost":
 # for example edit like 'API_ID = 1234567' instead of 'API_ID = os.getenv("API_ID")'
 # Warning: don't touch anything else given below except the values you wanna change otherwise you'll get errors.
 #-------------------------------------------------------------------------------------------------------------
-class Config(object):
+class Config(inside):
 	""" configuration class """
 	if not termux:
 		# api id of your telegram account (required)
