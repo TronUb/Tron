@@ -8,7 +8,7 @@ install_requirements()
 
 try:
 	from termuxconfig import Termuxconfig
-except ImportError:
+except (ImportError, ModuleNotFoundError):
 	create_termuxconfig()
 	from termuxconfig import Termuxconfig
 
