@@ -102,6 +102,7 @@ def gen(
 			if not text:
 				return False
 
+			print(text) # debug
 			message.command = None
 
 			user = message.from_user if message.from_user else None
