@@ -14,12 +14,10 @@ def create_termuxconfig():
 				printf("\nEnter valid details")
 				ask_info()
 			else:
+				value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"
 				if data == "DB_URI":
 					value = createdb()
-					file.write(f"\tmyvar[x] = {value}\n")
-					continue
-
-				value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"    
+					    
 				file.write(f"\tmyvar[x] = {value}\n")
 		ask_info()
 	file.close()
