@@ -102,7 +102,6 @@ def gen(
 			if not text:
 				return False
 
-			print(text) # debug
 			message.command = None
 
 			user = message.from_user if message.from_user else None
@@ -122,6 +121,7 @@ def gen(
 
 			for prefix in flt.prefixes:
 				if not text.startswith(prefix):
+					print(text, prefix)
 					continue
 
 				cmd = text.split()[0][1:]
@@ -134,7 +134,7 @@ def gen(
 
 						if not cmd in client.SudoCmds():
 							return False
-					print(message.command, text)
+
 					client.m = message
 					return True
 
