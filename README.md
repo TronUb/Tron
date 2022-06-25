@@ -9,7 +9,7 @@
 [![CodeQL](https://github.com/TronUb/Tron/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/TronUb/Tron/actions/workflows/codeql-analysis.yml)
 ![Repo Size](https://img.shields.io/github/repo-size/TronUb/Tron)
 ![License](https://img.shields.io/github/license/TronUb/Tron)
-![Python Version](https://img.shields.io/badge/python-3.9.10-aqua)
+![Python Version](https://img.shields.io/badge/python-3.9.13-aqua)
 ![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 
 
@@ -67,7 +67,7 @@
 
 <p>2. Run The code given below in termux.</p>
 
-`pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && ./start.sh`
+*  ```pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && ./start.sh```
 
 <p>3. Enter your details carefully.</p>
 
@@ -96,17 +96,17 @@
 
 <br></br>
 
-*  `apt update & apt upgrade`
+*  ```apt update & apt upgrade```
 
-*  `pkg install python3`
+*  ```pkg install python3```
 
-*  `pkg install git`
+*  ```pkg install git```
 
-*  `git clone https://github.com/TronUb/Tron.git`
+*  ```git clone https://github.com/TronUb/Tron.git```
 
-*  `cd Tron`
+*  ```cd Tron```
 
-*  `python3 session.py`
+*  ```python3 session.py```
 
 <br></br>
 
