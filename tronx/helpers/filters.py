@@ -133,6 +133,7 @@ def gen(
 
 						if not cmd in client.SudoCmds():
 							return False
+					print(message.command, text)
 					client.m = message
 					return True
 
