@@ -17,7 +17,7 @@ pytz
 py-postgresql
 psycopg2
 CurrencyConverter
-deep_translator
+deep-translator
 gTTS
 git-python
 Wikipedia-API
