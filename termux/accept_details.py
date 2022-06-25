@@ -5,15 +5,15 @@ import os
 def create_termuxconfig():
 	ATTR = ["API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN"]
 	file = open("termuxconfig.py", "w+")
-	file.write("class Termuxconfig:\n\ttemp = 'value'")
+	file.write("class Termuxconfig:\n\ttemp = 'value'\n")
 	for x in ATTR:
 		myvar = vars() # string to variable
 		data = input(f"\nEnter your {x}: ")
-		value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"
+		value = int(data) if data and data == "LOG_CHAT" else -100
 		if data == "DB_URI":
 			value = createdb()
 
-		file.write(f"\tmyvar[x] = {value}\n")
+		file.write(f"\t{myvar[x]} = {value}\n")
 	file.close()
 	return True
 
