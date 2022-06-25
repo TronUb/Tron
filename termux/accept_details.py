@@ -13,7 +13,8 @@ def create_termuxconfig():
 		if data == "DB_URI":
 			value = createdb()
 
-		file.write(f"\t{myvar[x]} = {value}\n")
+		myvar[x] = value
+		file.write(f"\t{x} = {value}\n")
 	file.close()
 	return True
 
