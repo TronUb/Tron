@@ -1,32 +1,28 @@
 import os
-import pkg_resources
 
 
-
-
-# todo
+inside = object
+termux = None
 if os.uname()[1] == "localhost":
-	response = os.system("pip3 install -r requirements.txt --no-cache-dir")
-	if response == 0:
-		print("Successfully Installed all requirements")
-	else:
-		print("Failed to install requirements")
-
-
+	from termux import Termuxconfig
+	inside = Termuxconfig
+	termux = True
+	
 
 
 # if you deployed this userbot using localhost method, then replace all the necessary parts of the variables given below after '=' sign with the required values.
 # for example edit like 'API_ID = 1234567' instead of 'API_ID = os.getenv("API_ID")'
 # Warning: don't touch anything else given below except the values you wanna change otherwise you'll get errors.
 #-------------------------------------------------------------------------------------------------------------
-class Config(object):
+class Config(inside):
 	""" configuration class """
-	# api id of your telegram account (required)
-	API_ID = int(os.getenv("API_ID"))
-	# api hash of your telegram account (required)
-	API_HASH = os.getenv("API_HASH")
-	# create a session using command [ python3 session.py ] or use repl.it (required)
-	SESSION = os.getenv("SESSION")
+	if not termux:
+		# api id of your telegram account (required)
+		API_ID = os.getenv("API_ID")
+		# api hash of your telegram account (required)
+		API_HASH = os.getenv("API_HASH")
+		# create a session using command [ python3 session.py ] or use repl.it (required)
+		SESSION = os.getenv("SESSION")
 # ------------------
 	# temporary download location (required)
 	TEMP_DICT = os.getenv("TEMP_DICT", os.path.abspath(".") + "/downloads/")
@@ -37,15 +33,17 @@ class Config(object):
 	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
 	# heroku app name (required -> if hosted on heroku)
 	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-	# database url (required)
-	DB_URI = os.getenv("DATABASE_URL")
+	if not termux:
+		# database url (required)
+		DB_URI = os.getenv("DATABASE_URL")
 # ------------------
 	# these users can use your userbot
 	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
-	# a group to store logs, etc (required)
-	LOG_CHAT = int(os.getenv("LOG_CHAT"))
+	if not termux:
+		# a group to store logs, etc (required)
+		LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
-	PREFIX = os.getenv("PREFIX", ".")
+	PREFIX = os.getenv("TRIGGER", ".")
 	# for more info visit docs.pyrogram.org, workers section
 	WORKERS = int(os.getenv("WORKERS", 8))
 	# exclude official plugins from installing, give a space between plugin names
@@ -85,8 +83,9 @@ class Config(object):
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# telegram id of bot if failed to get automatically (optional)
 	BOT_ID = os.getenv("BOT_ID")
-	# access token of your bot, without this the bot will not work (required)
-	TOKEN = os.getenv("TOKEN")
+	if not termux:
+		# access token of your bot, without this the bot will not work (required)
+		TOKEN = os.getenv("TOKEN")
 # ---------------------
 	# thumbnail used while uploading plugins, etc. (optional)
 	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")

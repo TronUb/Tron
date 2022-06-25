@@ -30,7 +30,7 @@
 			"value": "",
 			"required": true
 		},
-		"PREFIX": {
+		"TRIGGER": {
 			"description": "This Is The Handler Of Your All Commands You Can Change It To -> [ . , ? ' / + - * ] Any Symbol That You Like.",
 			"value": ".",
 			"required": true
