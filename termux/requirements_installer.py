@@ -23,6 +23,5 @@ def install_requirements():
 			os.system(f"pip3 install {pkg}")
 			
 
-	install_pillow()
 	os.system("clear")
 
