@@ -24,7 +24,7 @@ def install_requirements():
 		if spec is None:
 			print(f"\nInstalling package {pkg}\n")
 			os.system(f"pip3 install {pkg}")
-			os,system("clear")
+			os.system("clear")
 			
 
 	os.system("clear")
