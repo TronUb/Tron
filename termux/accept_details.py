@@ -14,7 +14,7 @@ def create_termuxconfig():
 				printf("\nEnter valid details")
 				ask_info()
 			else:
-				if data = "DB_URI":
+				if data == "DB_URI":
 					value = createdb()
 					file.write(f"\tmyvar[x] = {value}\n")
 					continue
