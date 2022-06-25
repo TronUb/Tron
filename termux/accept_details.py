@@ -7,7 +7,7 @@ def create_termuxconfig():
 	file = open("termuxconfig.py", "w+")
 	file.write("class Termuxconfig:\n\ttemp = 'value'")
 	for x in ATTR:
-		myvar = var() # string to variable
+		myvar = vars() # string to variable
 		data = input(f"\nEnter your {x}: ")
 		value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"
 		if data == "DB_URI":
