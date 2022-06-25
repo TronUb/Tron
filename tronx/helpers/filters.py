@@ -121,7 +121,6 @@ def gen(
 
 			for prefix in flt.prefixes:
 				if not text.startswith(prefix):
-					print(text, prefix)
 					continue
 
 				cmd = text.split()[0][1:]
