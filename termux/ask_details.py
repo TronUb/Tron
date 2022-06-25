@@ -22,22 +22,36 @@ def create_termuxconfig():
 
 
 
+def startdb():
+	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
+		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+
+	else:
+		try:
+			from termuxconfig import Termuxconfig
+		except (ImportError, ModuleNotFoundError):
+			os.system("cd ~ && cd Tron && ./start.sh")
+
+		try:
+			Termuxconfig.DB_URI
+		except AttributeError:
+			file = open("termuxconfig.py", "a")
+			file.write(f"\tDB_URI = {create_db()}\n")
+			file.close()
+
+
 
 def createdb():
 	os.system("pkg install postgresql")
 	os.system("clear")
-
-	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
-		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
-		return None
-	else:
-		os.system("mkdir -p $PREFIX/var/lib/postgresql")
-		os.system("initdb $PREFIX/var/lib/postgresql")
-		username = str(input("\nEnter your database account username: "))
-		password = str(input("\nEnter your database account password: "))
-		dbname = str(input("\nEnter your database name: "))
-		print("\n")
-		os.system(f"createuser --superuser --pwprompt {username}")
-		os.system(f"createdb {dbname}")
-		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
-		return f"'postgres://{username}:{password}@127.0.0.1:5432/{dbname}'"
+	os.system("mkdir -p $PREFIX/var/lib/postgresql")
+	os.system("initdb $PREFIX/var/lib/postgresql")
+	os.system("clear")
+	username = str(input("\nEnter your database account username: "))
+	password = str(input("\nEnter your database account password: "))
+	dbname = str(input("\nEnter your database name: "))
+	print("\n")
+	os.system(f"createuser --superuser --pwprompt {username}")
+	os.system(f"createdb {dbname}")
+	os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+	return f"'postgres://{username}:{password}@127.0.0.1:5432/{dbname}'"
