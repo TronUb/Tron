@@ -14,7 +14,7 @@ def create_termuxconfig():
 			value = createdb()
 
 		myvar[x] = value
-		file.write(f"\t{x.replace('"', "")} = {value}\n")
+		file.write(f"""\t{x.replace('"', "")} = {value}\n""")
 	file.close()
 	return True
 
