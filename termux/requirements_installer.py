@@ -18,12 +18,16 @@ def install_requirements():
 		if pkg == "pillow":
 			os.system("pkg install libjpeg-turbo")
 			os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
+			os.system("clear")
 			continue
 
 		if spec is None:
 			print(f"\nInstalling package {pkg}\n")
 			os.system(f"pip3 install {pkg}")
+			os,system("clear")
 			
 
 	os.system("clear")
+
+
 
