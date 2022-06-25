@@ -2,15 +2,6 @@ import os
 
 
 
-
-try:
-	from termuxconfig import Termuxconfig
-except ImportError:
-	create_termuxconfig()
-	from termuxconfig import Termuxconfig
-
-
-
 def create_termuxconfig():
 	ATTR = ["API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN"]
 	file = open("termuxconfig.py", "w+")
@@ -25,7 +16,6 @@ def create_termuxconfig():
 			else:
 				if data = "DB_URI":
 					value = createdb()
-						if 
 					file.write(f"\tmyvar[x] = {value}\n")
 					continue
 
@@ -33,6 +23,7 @@ def create_termuxconfig():
 				file.write(f"\tmyvar[x] = {value}"\n)
 		ask_info()
 	file.close()
+	return True
 
 
 
@@ -54,4 +45,4 @@ def createdb():
 		os.system(f"createuser --superuser --pwprompt {username}")
 		os.system(f"createdb {dbname}")
 		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
-		return f"postgres://{username}:{password}@127.0.0.1:5432/{dbname}"
+		return f"'postgres://{username}:{password}@127.0.0.1:5432/{dbname}'"
