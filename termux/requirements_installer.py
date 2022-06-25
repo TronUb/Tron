@@ -1,4 +1,5 @@
 import os
+import importlib.util
 
 
 
@@ -11,12 +12,17 @@ def install_requirements():
 	os.system("pkg update")
 	os.system("pkg install python3")
 	os.system("pip install wheel")
-	os.system(f"pip3 install {dependencies}")
+	for pkg in dependencies.split():
+		spec = importlib.util.find_spec(pkg)
+		if pkg == "pillow":
+			os.system("pkg install libjpeg-turbo")
+			os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
+			continue
+
+		if spec is None:
+			os.system(f"pip3 install {pkg}")
+			
+
 	install_pillow()
 	os.system("clear")
-
-
-def install_pillow():
-	os.system("pkg install libjpeg-turbo")
-	os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
 
