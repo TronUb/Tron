@@ -50,6 +50,7 @@ class OtherConfig(object):
 
 	def MyPrefix(self):
 		""" Get list of prefixes (command handlers) """
+		print(self.getdv("PREFIX").split(), self.PREFIX.split())
 		return self.getdv("PREFIX").split() or self.PREFIX.split() or "."
 
 
