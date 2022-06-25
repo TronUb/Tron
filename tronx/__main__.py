@@ -14,8 +14,11 @@ async def start_assistant():
 	"""
 	if app.bot:
 		print("Activating assistant.\n")
-		await app.bot.start()
-		print("Assistant activated.\n")
+		response = await app.bot.start()
+		if response:
+			print("Assistant activated.\n")
+		else:
+			print("Assistant is not activated.\n")
 	else:
 		print("Assistant start unsuccessful, please check that you have given the bot token.\n")
 		print("skipping assistant start !")
@@ -29,8 +32,11 @@ async def start_userbot():
 	"""
 	if app:
 		print("Activating userbot.\n")
-		await app.start()
-		print("Userbot activated.\n")
+		response = await app.start()
+		if response:
+			print("Userbot activated.\n")
+		else:
+			print("Userbot is not activated.\n")
 	else:
 		print("Userbot startup unsuccessful, please check everything again ...")
 		print("Couldn't load modules of userbot")
