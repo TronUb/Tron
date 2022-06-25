@@ -1,11 +1,13 @@
-from .requirements_installer import install_requirements
-from .accept_details import create_termuxconfig
+from .requirements import install_requirements
+from .ask_details import create_termuxconfig
 
 
 
-
+# install dependencies
 install_requirements()
 
+
+# check if previous class exists or not
 try:
 	from termuxconfig import Termuxconfig
 except (ImportError, ModuleNotFoundError):

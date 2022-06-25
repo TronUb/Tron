@@ -35,7 +35,7 @@
 
 <p><blockquote>SESSION</blockquote></p>
 
-<p><blockquote>PREFIX</blockquote></p>
+<p><blockquote>TRIGGER</blockquote></p>
 
 <p><blockquote>LOG_CHAT</blockquote></p>
 
@@ -65,23 +65,13 @@
 <br></br>
 <p>1. Install termux app in your device ( lastest version )</p>
 
-<p>2. Run The code in the termux that is given below.</p>
+<p>2. Run The code given below in termux.</p>
 
-`apt update & apt upgrade`
+`pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && ./start.sh`
 
-`pkg install python git nano`
+<p>3. Enter your details carefully.</p>
 
-`git clone https://github.com/TronUb/Tron`
-
-`cd Tron`
-
-`nano config.py`
-
-<p>Note: replace or add those required values from given value.</p>
-
-`bash start.sh`
-
-<p>3. Done, Have fun using tronuserbot.</p>
+<p>4. Done, Have fun using tronuserbot.</p>
 
 <br></br>
 </details>
@@ -105,17 +95,19 @@
     <summary><b>2. Termux method</b></summary>
 
 <br></br>
-*  ```apt update & apt upgrade```
 
-*  ```pkg install python```
+*  `apt update & apt upgrade`
 
-*  ```pkg install git```
+*  `pkg install python3`
 
-*  ```git clone https://github.com/TronUb/Tron.git```
+*  `pkg install git`
 
-*  ```cd Tron```
+*  `git clone https://github.com/TronUb/Tron.git`
 
-*  ```python3 session.py```
+*  `cd Tron`
+
+*  `python3 session.py`
+
 <br></br>
 
 </details>
