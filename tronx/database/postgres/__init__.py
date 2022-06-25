@@ -1,4 +1,9 @@
-from config import Config
+import os
+
+if os.uname()[1] == "localhost":
+	from termux import Termuxconfig as Config
+else: 
+	from config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
