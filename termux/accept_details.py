@@ -1,143 +1,57 @@
 import os
-from .database import createdb
 
 
 
 
-def configfile():
-	file = open("config.py", "w+")
-	return file
+try:
+	from termuxconfig import Termuxconfig
+except ImportError:
+	create_termuxconfig()
+	from termuxconfig import Termuxconfig
 
 
-file = configfile()
 
+def create_termuxconfig():
+	ATTR = ["API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN"]
+	file = open("termuxconfig.py", "w+")
+	file.write("class Termuxconfig:\n\ttemp = 'value'")
+	for x in ATTR:
+		myvar = var() # string to variable
+		def ask_info():
+			data = input(f"\nEnter your {x}: ")
+			if data is None:
+				printf("\nEnter valid details")
+				ask_info()
+			else:
+				if data = "DB_URI":
+					value = createdb()
+						if 
+					file.write(f"\tmyvar[x] = {value}\n")
+					continue
 
-def ask_information():
-	file.write("class Config:\n\tnew = 'value'\n") 
-	db_url = createdb()
-	file.write(f"\tDB_URI = '{db_url}'\n")
-
-	# api id
-	API_ID = api_id()
-	if API_ID:
-		file.write(f"\tAPI_ID = {API_ID}\n")      
-	else:
-		quit(0)
-
-	# api hash
-	API_HASH = api_hash()
-	if API_HASH:
-		file.write(f"\tAPI_HASH = '{API_HASH}'\n")      
-	else:
-		quit(0)
-
-	# session
-	SESSION = session()
-	if SESSION:
-		file.write(f"\tSESSION = '{SESSION}'\n")      
-	else:
-		quit(0)
-
-	# bot token
-	BOT_TOKEN = bot_token()
-	if BOT_TOKEN:
-		file.write(f"\tTOKEN = '{BOT_TOKEN}'\n")      
-	else:
-		quit(0)
-
-	# prefix
-	PREFIX = prefix()
-	if PREFIX:
-		file.write(f"\tPREFIX = '{PREFIX}'\n")      
-	else:
-		quit(0)
-
-	# log chat
-	LOG_CHAT = log_chat()
-	if LOG_CHAT:
-		file.write(f"\tLOG_CHAT = '{LOG_CHAT}'\n")      
-	else:
-		quit(0)
-
-	# api id
-	TL_NAME = tl_name()
-	if TL_NAME:
-		file.write(f"\tTL_NAME = '{TL_NAME}'\n")      
-	else:
-		quit(0)
-
+				value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"    
+				file.write(f"\tmyvar[x] = {value}"\n)
+		ask_info()
 	file.close()
 
 
-def api_id():
-	data = input("\nEnter your API_ID: ")
-	if (not data) or (not data.isdigit()):
-		print("\nEnter valid details\n")
-		api_id()
-
-	return data if data else None
 
 
+def createdb():
+	os.system("pkg install postgresql")
+	os.system("clear")
 
-def api_hash():
-	data = input("\nEnter your API_HASH: ")
-	if not data:
-		print("\nEnter valid details\n")
-		api_hash()
-
-	return data if data else None
-
-
-def session():
-	data = input("\nEnter your SESSION: ")
-	if not data:
-		print("\nEnter valid details\n")
-		session()
-
-	return data if data else None
-
-
-def bot_token():
-	data = input("\nEnter your TOKEN: ")
-	if not data:
-		print("\nEnter valid details\n")
-		bot_token()
-
-	return data if data else None
-
-
-def prefix():
-	data = input("\nEnter your PREFIX: ")
-	if not data:
-		print("\nEnter valid details\n")
-		prefix()
-
-	return data if data else None
-
-
-def log_chat():
-	data = input("\nEnter your LOG_CHAT: ")
-	if not data:
-		print("\nEnter valid details\n")
-		log_chat()
-
-	return data if data else None
-
-
-def tl_name():
-	data = input("\nEnter your Telegraph Name: ")
-	if not data:
-		print("\nEnter valid details\n")
-		tl_name()
-
-	return data if data else None
-
-
-
-
-
-
-
-
-
-
+	if os.path.exists("$PREFIX/var/lib/postgresql")
+		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+		return None
+	else:
+		os.system("mkdir -p $PREFIX/var/lib/postgresql")
+		os.system("initdb $PREFIX/var/lib/postgresql")
+		username = str(input("\nEnter your database account username: "))
+		password = str(input("\nEnter your database account password: "))
+		dbname = str(input("\nEnter your database name: "))
+		print("\n")
+		os.system(f"createuser --superuser --pwprompt {username}")
+		os.system(f"createdb {dbname}")
+		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+		return f"postgres://{username}:{password}@127.0.0.1:5432/{dbname}"
