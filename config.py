@@ -1,11 +1,12 @@
 import os
 
 
-
-termux = object
+inside = object
+termux = None
 if os.uname()[1] == "localhost":
 	from termux import Termuxconfig
 	inside = Termuxconfig
+	termux = True
 	
 
 
