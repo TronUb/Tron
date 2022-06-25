@@ -20,7 +20,7 @@ def create_termuxconfig():
 					continue
 
 				value = f"{data}" if data == "LOG_CHAT" else f"'{data}'"    
-				file.write(f"\tmyvar[x] = {value}"\n)
+				file.write(f"\tmyvar[x] = {value}\n")
 		ask_info()
 	file.close()
 	return True
