@@ -9,8 +9,8 @@ def create_termuxconfig():
 	for x in ATTR:
 		myvar = vars() # string to variable
 		data = input(f"\nEnter your {x}: ")
-		value = int(data) if data and data == "LOG_CHAT" else data
-		if data == "DB_URI":
+		value = int(data) if data and data == "LOG_CHAT" else f"'{data}'"
+		if x == "DB_URI":
 			value = createdb()
 
 		myvar[x] = value
