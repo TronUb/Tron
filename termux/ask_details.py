@@ -45,7 +45,7 @@ def startdb():
 			Termuxconfig.DB_URI
 		except AttributeError:
 			file = open("termuxconfig.py", "a")
-			file.write(f"\tDB_URI = {create_db()}\n")
+			file.write(f"\tDB_URI = {createdb()}\n")
 			file.close()
 
 
