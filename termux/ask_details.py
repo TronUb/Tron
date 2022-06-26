@@ -32,7 +32,8 @@ def create_termuxconfig():
 
 def startdb():
 	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
-		os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+		if not os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql/postmaster.pid"): 
+			os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
 
 	else:
 		try:
