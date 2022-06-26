@@ -2,8 +2,10 @@ import os
 import platform
 
 
+ostype = platform.uname()
+is_localhost = True is ostype = "localhost" else False   
 
-if platform.uname()[0] in ("Windows", "Linux"):
+if in ("Windows", "Linux") and is_localhost:
 	os.system("python -m termux")
 	from config import Config
 
