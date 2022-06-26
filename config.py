@@ -1,22 +1,22 @@
 import os
+import platform
 
 
 inside = object
-termux = None
-if os.uname()[1] == "localhost":
+linux_or_windows = None
+
+if platform.uname()[0] in ("Windows", "Linux"):
 	from termux import Termuxconfig
 	inside = Termuxconfig
-	termux = True
+	linux_or_windows = True
 	
 
 
-# if you deployed this userbot using localhost method, then replace all the necessary parts of the variables given below after '=' sign with the required values.
-# for example edit like 'API_ID = 1234567' instead of 'API_ID = os.getenv("API_ID")'
-# Warning: don't touch anything else given below except the values you wanna change otherwise you'll get errors.
+
 #-------------------------------------------------------------------------------------------------------------
 class Config(inside):
 	""" configuration class """
-	if not termux:
+	if not linux_or_windows:
 		# api id of your telegram account (required)
 		API_ID = os.getenv("API_ID")
 		# api hash of your telegram account (required)
@@ -33,13 +33,13 @@ class Config(inside):
 	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
 	# heroku app name (required -> if hosted on heroku)
 	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-	if not termux:
+	if not linux_or_windows:
 		# database url (required)
 		DB_URI = os.getenv("DATABASE_URL")
 # ------------------
 	# these users can use your userbot
 	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
-	if not termux:
+	if not linux_or_windows:
 		# a group to store logs, etc (required)
 		LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
@@ -83,7 +83,7 @@ class Config(inside):
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# telegram id of bot if failed to get automatically (optional)
 	BOT_ID = os.getenv("BOT_ID")
-	if not termux:
+	if not linux_or_windows:
 		# access token of your bot, without this the bot will not work (required)
 		TOKEN = os.getenv("TOKEN")
 # ---------------------

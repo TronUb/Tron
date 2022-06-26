@@ -1,9 +1,10 @@
 import os
+import platform
 
 
 
-if os.uname()[1] == "localhost":
-	os.system("python3 -m termux")
+if platform.uname()[0] in ("Windows", "Linux"):
+	os.system("python -m termux")
 	from config import Config
 
 from tronx.clients import app
