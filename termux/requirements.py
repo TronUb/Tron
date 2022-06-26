@@ -10,6 +10,13 @@ dependencies = "Pyrogram==2.0.27 pytube telegraph heroku3 aiohttp aiofiles hacho
 
 
 
+
+def clear():
+	osname = platform.uname()[0]
+	return "cls" if osname == "Windows" else "clear"
+
+
+
 def install_requirements():
 	if osname =="Windows":
 		os.system("scoop update")
@@ -28,16 +35,16 @@ def install_requirements():
 					print("\nInstalling package {x}\n")
 					os.system("pkg install libjpeg-turbo")
 					os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
-					os.system("clear")
+					os.system(clear())
 					continue
 
 		if not pkg in installed_packages:
 			print(f"\nInstalling package {x}\n")
 			os.system(f"pip3 install {x}")
-			os.system("clear")
+			os.system(clear())
 			
 
-	os.system("clear")
+	os.system(clear())
 
 
 

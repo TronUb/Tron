@@ -1,4 +1,12 @@
 import os
+import platform
+
+
+
+
+def clear():
+	osname = platform.uname()[0]
+	return "cls" if osname == "Windows" else "clear"
 
 
 
@@ -43,10 +51,10 @@ def startdb():
 
 def createdb():
 	os.system("pkg install postgresql")
-	os.system("clear")
+	os.system(clear())
 	os.system("mkdir -p $PREFIX/var/lib/postgresql")
 	os.system("initdb $PREFIX/var/lib/postgresql")
-	os.system("clear")
+	os.system(clear())
 	username = str(input("\nEnter your database account username: "))
 	password = str(input("\nEnter your database account password: "))
 	dbname = str(input("\nEnter your database name: "))
