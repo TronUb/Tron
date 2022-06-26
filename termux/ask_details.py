@@ -34,6 +34,8 @@ def startdb():
 	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
 		if not os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql/postmaster.pid"): 
 			os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+		else:
+			os.system("rm /data/data/com.termux/files/usr/var/lib/postgresql/potsmaster.pid")
 
 	else:
 		try:
