@@ -15,15 +15,12 @@ def create_termuxconfig():
 	file = open("termuxconfig.py", "w+")
 	file.write("class Termuxconfig:\n\ttemp = 'value'\n")
 	for x in ATTR:
-		myvar = vars() # string to variable
 		if x == "DB_URI":
 			value = createdb()
 		else:
 			data = input(f"\nEnter your {x}: ")
 			value = int(data) if data and data == "LOG_CHAT" else f"'{data}'"
-		
 
-		myvar[x] = value
 		file.write(f"""\t{x.replace('"', "")} = {value}\n""")
 	file.close()
 	return True
