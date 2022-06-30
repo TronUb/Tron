@@ -15,7 +15,7 @@ from tronx.helpers import Helpers
 class Utils(Methods, Config, Database, Helpers):
 	# versions /
 
-	userbot_version = "v.0.0.5"
+	userbot_version = "v.0.1.0"
 	assistant_version = "v.0.0.1"
 	python_version = str(platform.python_version())
 	pyrogram_version = str(pyro_version)
