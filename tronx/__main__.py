@@ -1,10 +1,11 @@
 import asyncio
+import nest_asyncio
 from pyrogram import idle
 from tronx.clients import app
 
 
 
-
+nest_asyncio.apply() # fix
 loop = asyncio.get_event_loop()
 
 
