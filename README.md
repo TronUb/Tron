@@ -98,9 +98,9 @@
 
 *  ```apt update & apt upgrade```
 
-*  ```pkg install python3```
+*  ```pkg install python3 git```
 
-*  ```pkg install git```
+
 
 *  ```git clone https://github.com/TronUb/Tron.git```
 
@@ -113,7 +113,7 @@
 </details>
 </details>
 
-Disclaimer: i will not be responsible for anything that happens with your account, if it gets banned or limited it will be your fault, imo nothing happened with my account till now.
+Warning ⚠️: i will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
 
 <br></br>
 
