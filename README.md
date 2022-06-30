@@ -50,19 +50,17 @@
     <summary><b>• Deployment [ 2 methods ]</b></summary>
 
 <br></br>
-<details>
-    <summary><b>1. Deploy on Heroku</b></summary>
 
-<br></br>
+<b>1. Deploy on Heroku</b>
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-</details>
-
-
-<details>
-    <summary><b>2. Deploy on Termux</b></summary>
+---
 
 <br></br>
+
+<b>2. Deploy on Termux</b>
+
 <p>1. Install termux app in your device ( lastest version )</p>
 
 <p>2. Run The code given below in termux.</p>
@@ -73,47 +71,35 @@
 
 <p>4. Done, Have fun using tronuserbot.</p>
 
+---
+
 <br></br>
-</details>
 </details>
 
 <details>
-    <summary><b>• Session [ 2 methods ]</b></summary>
+<summary><b>• Session [ 2 methods ]</b></summary>
 
 <br></br>
-<details>
-    <summary><b>1. Repl method</b></summary>
+<b>1. Repl method</b>
+
+[![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20Here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot-Session?v=1)
+
+---
 
 <br></br>
-[![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot-Session?v=1)
-<br></br>
 
+<b>2. Termux method</b>
+
+* Run the given command in termux
+
+*  ```apt update && apt upgrade && pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && python3 session.py```
+
+---
+
+<br></br>
 </details>
 
-
-<details>
-    <summary><b>2. Termux method</b></summary>
-
-<br></br>
-
-*  ```apt update & apt upgrade```
-
-*  ```pkg install python3 git```
-
-
-
-*  ```git clone https://github.com/TronUb/Tron.git```
-
-*  ```cd Tron```
-
-*  ```python3 session.py```
-
-<br></br>
-
-</details>
-</details>
-
-Warning ⚠️: i will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
+Warning ⚠️: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
 
 <br></br>
 
