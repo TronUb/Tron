@@ -10,10 +10,10 @@
 		"pyrogram",
 		"productivity"
 	],
-	"repository": "https://github.com/beastzx18/Tron/",
+	"repository": "https://github.com/TronUb/Tron",
 	"website": "https://t.me/tronuserbot",
 	"success_url": "/welcome",
-	"stack": "heroku-22",
+	"stack": "container",
 	"env": {
 		"API_ID": {
 			"description": "Login here -> my.telegram.org to get pair of keys",
@@ -31,12 +31,12 @@
 			"required": true
 		},
 		"TRIGGER": {
-			"description": "This Is The Handler Of Your All Commands You Can Change It To -> [ . , ? ' / + - * ] Any Symbol That You Like.",
+			"description": "This Is The Command Triggering Button Of Your All Commands. You Can Change It To -> [ . , ? ' / + - * ] Any Symbol That You Like.",
 			"value": ".",
 			"required": true
 		},   
 		"HEROKU_API_KEY": {
-			"description": "Your heroku api key, Go To Heroku >> Profile Icon >> Account settings >> Scroll Down >> Reveal >> Copy.",
+			"description": "Your heroku api key, Go To Heroku Dashboard >> Profile Icon >> Account settings >> Scroll Down >> Reveal >> Tap, Hold & Copy.",
 			"value": "",
 			"required": true
 		},
@@ -73,4 +73,3 @@
 		}
 	]
 }
-
