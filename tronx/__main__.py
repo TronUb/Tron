@@ -13,7 +13,7 @@ async def start_assistant():
 	"""
 	this function starts the pyrogram bot client.
 	"""
-	if app.bot:
+	if app and app.bot:
 		print("Activating assistant.\n")
 		response = await app.bot.start()
 		if response:
@@ -40,17 +40,18 @@ async def start_userbot():
 			print("Userbot is not activated.\n")
 	else:
 		print("Userbot startup unsuccessful, please check everything again ...")
-		print("Couldn't load modules of userbot")
+		print("Quiting ...")
+		quit(0)
 
 
 
 
 async def start_bot():
 	""" 
-	This function uses 'start_assistant' & 'start_userbot' with 
-	clients custom 'import_module' to start clients & import modules.
+	This is the main startup function to start both clients i.e assistant & userbot.
+	It also imports modules & plugins for assistant & userbot.
 	"""
-	print("___________________________________. Welcome to Tron corporation .___________________________________\n\n\n")
+	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
 	print("PLUGINS: Installing.\n\n")
 	plugins = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	print(f"\n\n{plugins} plugins Loaded\n\n")
@@ -59,7 +60,7 @@ async def start_bot():
 	print(f"\n\n{modules} modules Loaded\n\n")
 	await start_assistant()
 	await start_userbot()
-	print("You successfully deployed Tronuserbot, try .ping or .alive to test it.")
+	print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 	await idle() # block execution
 
 
