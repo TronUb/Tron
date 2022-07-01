@@ -19,7 +19,7 @@ async def broadcast_message(_, m: Message):
 
 	for ids in [int(x) for x in app.getdv("BOT_STARTED_ID").split()]:
 		try:
-			await app.bot.resolve(ids)
+			await app.bot.resolve_peer(ids)
 			done = await app.bot.send_message(ids, text)
 			if done:
 				count += 1
