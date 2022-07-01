@@ -1,8 +1,24 @@
 from tronx import app
-from pyrogram.filters import command, user
+from pyrogram.filters import command, user, private
 from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
 
+
+
+
+@app.on_message(private)
+async def botstartedusers(_, m: Message):    
+	if m.from_user:
+		varexists = app.getdv("BOT_STARTED_ID")    
+		if varexists:
+			if m.from_user.id in [int(x) for x in varexists.split()]:  
+				return 
+
+			newvalue = varexists + " " + str(m.from_user.id)
+		else:
+			newvalue = str(m.from_user.id)
+
+		app.setdv("BOT_STARTED_ID", newvalue)
 
 
 
