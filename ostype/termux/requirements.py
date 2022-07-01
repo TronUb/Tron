@@ -1,5 +1,5 @@
 import os
-import platform
+from time import sleep
 import pkg_resources
 
 
@@ -12,29 +12,35 @@ def clear():
 
 
 def install_requirements():
-	os.system("apt update && apt upgrade && pkg update")
-	os.system("pip install wheel")
+	clear()
+	print("updating and upgrading ...\n\n")
+	sleep(0.5)
+	os.system("apt update && apt upgrade")
+	clear()
+
+	print("Installing python3 ...\n\n")
+	sleep(0.5)
+	os.system("apt install python3")
+	os.system("pip3 install wheel")
+	clear()
 
 	for x in dependencies.split():
 		installed_packages = [p.project_name for p in pkg_resources.working_set]
 		pkg = x.split("=")[0]
-		if pkg == "Pillow":
-			if not pkg in installed_packages:
-				print(f"\nInstalling package {x}\n")
-				if osname == "Linux": # termux pillow installation
-					print("\nInstalling package {x}\n")
-					os.system("pkg install libjpeg-turbo")
-					os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip install Pillow")
-					clear()
-					continue
 
 		if not pkg in installed_packages:
-			print(f"\nInstalling package {x}\n")
+			if pkg == "Pillow":
+				print("\nInstalling package {x}\n\n")
+				os.system("pkg install libjpeg-turbo")
+				os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/' pip3 install Pillow")
+				clear()
+				continue
+
+			print(f"\nInstalling package {x}\n\n")
 			os.system(f"pip3 install {x}")
 			clear()
-			
-
 	clear()
+	return True
 
 
 
