@@ -1,12 +1,12 @@
 from tronx import app
-from pyrogram.filters import command, user, private, bot
+from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
 
 
 
 
-@app.bot.on_message(private & ~bot, group=9)
+@app.bot.on_message(~filters.bot & filters.private & filters.text)
 async def botstartedusers(_, m: Message):    
 	if m.from_user and m.text == "/start":
 		varexists = app.getdv("BOT_STARTED_ID")    
@@ -22,7 +22,7 @@ async def botstartedusers(_, m: Message):
 
 
 
-@app.bot.on_message(command("broadcast") & user(app.id))    
+@app.bot.on_message(filters.command("broadcast") & filters.user(app.id))    
 async def broadcast_message(_, m: Message):
 	tlen = len(m.text.split())
 	
