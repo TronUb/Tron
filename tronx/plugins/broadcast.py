@@ -6,7 +6,7 @@ from pyrogram.errors import PeerIdInvalid
 
 
 
-@app.bot.on_message(private & ~bot, group=0)
+@app.bot.on_message(private & ~bot, group=9)
 async def botstartedusers(_, m: Message):    
 	if m.from_user and m.text == "/start":
 		varexists = app.getdv("BOT_STARTED_ID")    
