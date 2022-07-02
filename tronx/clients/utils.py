@@ -42,8 +42,6 @@ class Utils(Methods, Config, Database, Helpers):
 	StartTime = time.time()
 
 	# debugging /
-	logging.getLogger("pyrogram.syncer").setLevel(logging.CRITICAL) # turn off pyrogram logging
-	logging.getLogger("pyrogram").setLevel(logging.CRITICAL)
 	
 	logging.basicConfig(filename="tronuserbot.log", format="%(asctime)s %(message)s", filemode="w")
 	log = logging.getLogger()
