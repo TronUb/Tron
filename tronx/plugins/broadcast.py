@@ -6,7 +6,7 @@ from pyrogram.errors import PeerIdInvalid
 
 
 
-@app.bot.on_message(filters.command("broadcast") & filters.user(app.id))    
+@app.bot.on_message(filters.command("broadcast") & filters.user(app.id), group=-1)    
 async def broadcast_message(_, m: Message):
 	tlen = len(m.text.split())
 	
