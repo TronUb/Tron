@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from pyrogram import idle
 from tronx.clients import app
 
@@ -59,8 +60,9 @@ async def start_bot():
 
 
 if __name__ == '__main__':
-	loop = asyncio.get_event_loop()
+	with warnings.catch_warnings():
+		warnings.simplefilter("ignore")
+		loop = asyncio.get_event_loop()
+
 	loop.run_until_complete(start_bot())
-
-
 
