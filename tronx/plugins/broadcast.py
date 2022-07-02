@@ -6,22 +6,6 @@ from pyrogram.errors import PeerIdInvalid
 
 
 
-@app.bot.on_message(filters.private & filters.text)
-async def botstartedusers(_, m: Message):    
-	if m.from_user and m.text == "/start":
-		varexists = app.getdv("BOT_STARTED_ID")    
-		if varexists:
-			if m.from_user.id in [int(x) for x in varexists.split()]:  
-				return 
-
-			newvalue = varexists + " " + str(m.from_user.id)
-		else:
-			newvalue = str(m.from_user.id)
-
-		app.setdv("BOT_STARTED_ID", newvalue)
-
-
-
 @app.bot.on_message(filters.command("broadcast") & filters.user(app.id))    
 async def broadcast_message(_, m: Message):
 	tlen = len(m.text.split())
@@ -42,3 +26,20 @@ async def broadcast_message(_, m: Message):
 		except PeerIdInvalid:
 			pass
 	await app.bot.send_message(m.from_user.id, f"Broadcast done, messages sent to {count} users.")
+
+
+
+
+@app.bot.on_message(filters.private & filters.text)
+async def botstartedusers(_, m: Message):    
+	if m.from_user and m.text == "/start":
+		varexists = app.getdv("BOT_STARTED_ID")    
+		if varexists:
+			if m.from_user.id in [int(x) for x in varexists.split()]:  
+				return 
+
+			newvalue = varexists + " " + str(m.from_user.id)
+		else:
+			newvalue = str(m.from_user.id)
+
+		app.setdv("BOT_STARTED_ID", newvalue)
