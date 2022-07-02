@@ -241,7 +241,7 @@ async def batchupload_handler(_, m: Message):
 					required_file_name = temp_dir + file
 					thumb_image_path = await app.IsThumbExists(required_file_name)
 					doc_caption = os.path.basename(required_file_name)
-					log.info(f"Uploading {required_file_name} from {temp_dir} to Telegram.")
+					app.log.info(f"Uploading {required_file_name} from {temp_dir} to Telegram.")
 
 					await app.send_document(
 						chat_id=m.chat.id,
