@@ -41,6 +41,7 @@ async def addsudo_handler(_, m: Message):
 @app.on_message(gen("listsudo", allow = ["sudo"]))
 async def getsudo_handler(_, m: Message):
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
+	sudo_list = "No sudos added." if not sudo_list else sudo_list
 	await app.send_edit("**Available Sudo id:**\n\n" + "\n".join(sudo_list))
 
 
@@ -51,7 +52,7 @@ async def delsudo_handler(_, m: Message):
 	reply = m.reply_to_message
 	user_id = str(reply.from_user.id)
 	if not reply:
-		return await app.send_edit("Reply to a user to add him in sudo list", text_type=["mono"], delme=4)  
+		return await app.send_edit("Reply to a user to remove him from sudo list.", text_type=["mono"], delme=4)  
 
 	sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
 	if user_id in sudo_list:

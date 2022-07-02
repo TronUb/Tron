@@ -102,7 +102,7 @@ async def yandeximages_handler(_, m: Message):
 			)
 			await m.delete()
 			saved = await app.send_inline_bot_result(
-				msg.chat.id, 
+				m.chat.id, 
 				query_id=result.query_id, 
 				result_id=result.results[random.randint(0, len(result.results))].id, 
 			)

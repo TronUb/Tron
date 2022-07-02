@@ -76,5 +76,5 @@ async def ytdownload_handler(_, m):
 				await m.delete()
 				break
 			except Exception as e:
-				await error(e)
+				await app.error(e)
 

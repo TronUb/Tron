@@ -181,11 +181,11 @@ async def question_handler(_, m):
 async def whattodo_handler(_, m):
 	try:
 		await app.send_edit("Finding a activity . . .", text_type=["mono"])
-		data = await app.get_json(f"http://www.boredapi.com/api/activity/")
-		activity = data.get("activity")
-		type = data.get("type")
+		act = await app.get_json(f"http://www.boredapi.com/api/activity/")
+		activity = act.get("activity")
+		_type = act.get("type")
 		if act:
-			await app.send_edit(f"Activity: `{activity}`\n\nType: `{type}`") 
+			await app.send_edit(f"Activity: `{activity}`\n\nType: `{_type}`") 
 		else:
 			await app.send_edit("No Activity found !", delme=3, text_type=["mono"])
 	except Exception as e:

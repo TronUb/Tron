@@ -5,7 +5,7 @@ import platform
 inside = object
 linux_or_windows = None
 ostype = platform.uname()
-is_localhost = True if ostype[1] == "localhost" else False
+is_localhost = True if ostype[1] == "localhost" else None
 
 if ostype[0] in ("Windows", "Linux") and is_localhost:
 	from termux import Termuxconfig
