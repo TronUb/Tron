@@ -5,8 +5,7 @@ import platform
 
 
 def clear():
-	osname = platform.uname()[0]
-	return "cls" if osname == "Windows" else "clear"
+	os.system("clear")
 
 
 
@@ -16,7 +15,7 @@ def create_termuxconfig():
 	file.write("class Termuxconfig:\n\ttemp = 'value'\n")
 	for x in ATTR:
 		if x == "DB_URI":
-			value = createdb()
+			value = _createdb()
 		else:
 			data = input(f"\nEnter your {x}: ")
 			value = int(data) if data and data == "LOG_CHAT" else f"'{data}'"
@@ -28,7 +27,7 @@ def create_termuxconfig():
 
 
 
-def startdb():
+def _startdb():
 	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
 		if not os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql/postmaster.pid"): 
 			os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
@@ -43,17 +42,17 @@ def startdb():
 			Termuxconfig.DB_URI
 		except AttributeError:
 			file = open("termuxconfig.py", "a")
-			file.write(f"\tDB_URI = {createdb()}\n")
+			file.write(f"\tDB_URI = {_createdb()}\n")
 			file.close()
 
 
 
-def createdb():
+def _createdb():
 	os.system("pkg install postgresql")
-	os.system(clear())
+	clear()
 	os.system("mkdir -p $PREFIX/var/lib/postgresql")
 	os.system("initdb $PREFIX/var/lib/postgresql")
-	os.system(clear())
+	clear()
 	username = str(input("\nEnter your database account username: "))
 	password = str(input("\nEnter your database account password: "))
 	dbname = str(input("\nEnter your database name: "))

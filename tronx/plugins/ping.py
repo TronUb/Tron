@@ -7,7 +7,7 @@ from tronx import app
 
 
 
-@app.bot.on_message(filters.command("ping"))
+@app.bot.on_message(filters.command("ping"), group=-1)
 async def bot_ping(_, m: Message):
 	if not m.chat.type in ["supergroup", "group"]:
 		start = datetime.now()

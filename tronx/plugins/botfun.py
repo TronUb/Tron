@@ -11,7 +11,7 @@ cmd_handler = ["+", "-"]
 
 
 
-@app.bot.on_message(filters.command(numbers, cmd_handler) & filters.group)
+@app.bot.on_message(filters.command(numbers, cmd_handler) & filters.group, group=-1)
 async def increment_decrement(_, m):
 	reply = m.reply_to_message
 
