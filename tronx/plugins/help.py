@@ -24,7 +24,7 @@ home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]
 
 
 # /start command for bot
-@app.bot.on_message(filters.command("help"))
+@app.bot.on_message(filters.command("help"), group=-1)
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id == app.id:
