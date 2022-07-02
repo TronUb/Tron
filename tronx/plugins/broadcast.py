@@ -30,7 +30,7 @@ async def broadcast_message(_, m: Message):
 
 
 
-@app.bot.on_message(filters.private & filters.text)
+@app.bot.on_message(filters.private & filters.text, group=1)
 async def botstartedusers(_, m: Message):    
 	if m.from_user and m.text == "/start":
 		varexists = app.getdv("BOT_STARTED_ID")    
