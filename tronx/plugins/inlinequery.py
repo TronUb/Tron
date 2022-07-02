@@ -17,24 +17,12 @@ from tronx import app
 
 
 
-settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = app.BuildKeyboard(([["About", "open-about-dex"]]))
-close = app.BuildKeyboard(([["Close", "close-dex"]]))
-approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
-global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
-home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
-
-
-
-
-
 
 # via bot messages
 @app.bot.on_inline_query(filters.user(app.id))
 def inline_result(_, inline_query):
 	query = inline_query.query
-	if query.startswith("#p0e3r4m8i8t5"):
+	if query.startswith("#pmpermit"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
@@ -43,12 +31,12 @@ def inline_result(_, inline_query):
 				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
 				caption=app.PmpermitText(),
 				parse_mode=ParseMode.DEFAULT,
-				reply_markup=InlineKeyboardMarkup([approve])
+				reply_markup=InlineKeyboardMarkup([app.BuildKeyboard(([["Approve", "approve-tab"]]))])
 			)
 			],
 		cache_time=1
 		)
-	elif query.startswith("#t5r4o9nn6"):
+	elif query.startswith("#helpdex"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
@@ -57,12 +45,19 @@ def inline_result(_, inline_query):
 				description="This is the tron helpdex menu.",
 				caption="**Dex:** Home\n\n**Description:** This is your helpdex use this to navigate in different sub dex, guidence and information is given in each dex.",
 				parse_mode=ParseMode.DEFAULT,
-				reply_markup=InlineKeyboardMarkup([settings, extra, about, close])
+				reply_markup=InlineKeyboardMarkup(
+					[
+						app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"])),
+						app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"])),
+						app.BuildKeyboard(([["About", "about-tab"]])),
+						app.BuildKeyboard(([["Close", "close-tab"]]))
+					]
+				)
 			)
 			],
 		cache_time=1
 		)
-	elif query.startswith("#i2l8v3"):
+	elif query.startswith("#ialive"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultPhoto(
@@ -71,12 +66,12 @@ def inline_result(_, inline_query):
 				description="This is same as alive command, the difference is that this command have inline button.",
 				caption=f"**⛊  Inline Status:**\n\n**⟐** {app.USER_BIO}\n\n**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n**⟜ Tron:** `{app.userbot_version}`\n**⟜ Python:** `{app.python_version}`\n⟜ **Pyrogram:** `{app.pyrogram_version}`\n⟜ **uptime:** `{app.uptime()}\n\n",
 				parse_mode=ParseMode.DEFAULT,
-				reply_markup=InlineKeyboardMarkup([home_back])
+				reply_markup=InlineKeyboardMarkup([app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))])
 			)
 			],
 		cache_time=1
 		)
-	elif query.startswith("#q7o5e"):
+	elif query.startswith("#quote"):
 		inline_query.answer(
 		results=[
 			InlineQueryResultArticle(
