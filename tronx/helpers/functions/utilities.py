@@ -13,7 +13,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
-from typing import List
+from typing import List, Union
 from re import escape, sub
 
 from pyrogram.types import Message, User, InlineKeyboardButton
@@ -87,7 +87,7 @@ class Utilities(AioHttp):
 					self.HelpEmoji(),
 					x.replace("_", " ").title(),
 				),
-				callback_data="modulelist_{}|{}".format(x, page_number),
+				callback_data="modulelist-{}|{}".format(x, page_number),
 			)
 			for x in help_modules
 		]
@@ -539,14 +539,14 @@ class Utilities(AioHttp):
 			# get a random TTL from the duration
 			ttl = str(random.randint(0, duration - 1))
 
-			thumb_image_path = GenTgThumb(await take_screen_shot(file_name, ttl))
+			thumb_image_path = self.GenTgThumb(await take_screen_shot(file_name, ttl))
 		else:
 			thumb_image_path = None
 		return thumb_image_path
 
 
 # run shell commands
-	async def RunCommand(self, shell_command: List) -> (str, str):
+	async def RunCommand(self, shell_command: List) -> str:
 		process = await asyncio.create_subprocess_exec(
 			*shell_command,
 			stdout=asyncio.subprocess.PIPE,
@@ -559,7 +559,7 @@ class Utilities(AioHttp):
 
 
 # extract user id & first name from msg
-	async def ExtractUser(self, msg: Message) -> (int, str):
+	async def ExtractUser(self, msg: Message) -> Union[int, str]:
 		"""extracts the user from a message"""
 		user_id = None
 		user_first_name = None
@@ -608,4 +608,4 @@ class Utilities(AioHttp):
 					url = f"https://hastebin.com/raw/{key}"
 					return url if key else None
 		except Exception as e:
-			await app.error(m, e)
+			await self.error(e)

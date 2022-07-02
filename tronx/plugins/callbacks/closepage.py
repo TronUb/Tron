@@ -15,7 +15,7 @@ from tronx import app
 
 
 
-@app.bot.on_callback_query(filters.regex("close-dex"))
+@app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
@@ -24,12 +24,12 @@ async def _close(_, cb: CallbackQuery):
 			[
 				[
 					InlineKeyboardButton(
-						"Open", callback_data="open-start-dex",
+						"Open", callback_data="home-tab",
 					)
 				],
 				[
 					InlineKeyboardButton(
-						"Delete", callback_data="delete-dex",
+						"Delete", callback_data="delete-tab",
 					)
 				]
 			]

@@ -1,5 +1,6 @@
-from pyrogram.errors import BotInvalid, BotInlineDisabled
+import asyncio
 from pyrogram.types import Message
+from pyrogram.errors import BotInvalid, BotInlineDisabled
 
 from tronx import app, gen
 
@@ -67,11 +68,11 @@ async def inlinealive_handler(_, m: Message):
 	try:
 		await app.send_edit(". . .", text_type=["mono"])
 		try:
-			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
+			result = await app.get_inline_bot_results(app.bot.username, "#ialive")
 		except BotInlineDisabled:
 			await app.send_edit("Turning inline mode to on, wait . . .", text_type=["mono"])
 			await app.toggle_inline()
-			result = await app.get_inline_bot_results(app.bot.username, "#i2l8v3")
+			result = await app.get_inline_bot_results(app.bot.username, "#ialive")
 
 		if result:
 			await app.send_inline_bot_result(
@@ -94,12 +95,12 @@ async def inlinequote_handler(_, m: Message):
 	try:
 		await app.send_edit(". . .", text_type=["mono"])
 		try:
-			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
+			result = await app.get_inline_bot_results(app.bot.username, "#quote")
 		except BotInlineDisabled:
 			await app.send_edit("Inline mode off. Turning inline mode on, wait . . .", text_type=["mono"])
 			await asyncio.sleep(1)
 			await app.toggle_inline()
-			result = await app.get_inline_bot_results(app.bot.username, "#q7o5e")
+			result = await app.get_inline_bot_results(app.bot.username, "#quote")
 
 		if result:
 			await app.send_inline_bot_result(

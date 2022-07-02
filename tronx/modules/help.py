@@ -1,6 +1,7 @@
 import os
 
 from pyrogram import filters
+from pyrogram.enums import ChatType
 from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
 
 from tronx import app, gen
@@ -28,10 +29,10 @@ app.CMD_HELP.update(
 )
 
 
-helpdex_ids = [x for x in app.getdv("DELETE_DEX_ID").strip("[]").split("," " ") if bool(app.getdv("DELETE_DEX_ID"))]
+helpdex_ids = [x for x in app.getdv("DELETE_TAB_ID").strip("[]").split("," " ") if bool(app.getdv("DELETE_TAB_ID"))]
 
 
-@app.bot.on_callback_query(filters.regex("delete-dex"))
+@app.bot.on_callback_query(filters.regex("delete-tab"))
 @app.alert_user 
 async def delete_helpdex(_, cb: CallbackQuery):
 	if not bool(helpdex_ids):
@@ -46,7 +47,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 					if y in ("None", "none", None):
 						continue
 					await app.delete_messages(int(y), x[y])
-					app.deldv("DELETE_DEX_ID") # empty var
+					app.deldv("DELETE_TAB_ID") # empty var
 		except Exception as e:
 			app.log.error(e)
 
@@ -63,7 +64,7 @@ async def helpdex_handler(_, m: Message):
 			await app.send_edit(". . .", text_type=["mono"])
 			result = await app.get_inline_bot_results(
 				app.bot.username, 
-				"#t5r4o9nn6" 
+				"#helpdex" 
 			)
 			if result:
 				await m.delete()
@@ -74,10 +75,10 @@ async def helpdex_handler(_, m: Message):
 					disable_notification=True, 
 				)
 				
-				if m.chat.type in ["bot", "private"]:
-					app.setdv("DELETE_DEX_ID", helpdex_ids.append({m.chat.id : info.updates[1].message.id}))
+				if m.chat.type in [ChatType.BOT, ChatType.PRIVATE]:
+					app.setdv("DELETE_TAB_ID", helpdex_ids.append({m.chat.id : info.updates[1].message.id}))
 				else:
-					app.setdv("DELETE_DEX_ID", helpdex_ids.append({m.chat.id : info.updates[2].message.id}))
+					app.setdv("DELETE_TAB_ID", helpdex_ids.append({m.chat.id : info.updates[2].message.id}))
 			else:
 				await app.send_edit("Please check your bots inline mode is on or not . . .", delme=3, text_type=["mono"])
 		elif args:

@@ -15,7 +15,7 @@ from tronx import app
 
 
 
-@app.bot.on_callback_query(filters.regex("stats-dex"))
+@app.bot.on_callback_query(filters.regex("stats-tab"))
 @app.alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(

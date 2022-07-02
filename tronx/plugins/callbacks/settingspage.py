@@ -15,7 +15,7 @@ from tronx import app
 
 
 
-@app.bot.on_callback_query(filters.regex("open-settings-dex"))
+@app.bot.on_callback_query(filters.regex("settings-tab"))
 @app.alert_user
 async def _settings(_, cb):
 	await cb.edit_message_text(
@@ -24,20 +24,20 @@ async def _settings(_, cb):
 			[
 				[
 					InlineKeyboardButton(
-						"Restart bot", callback_data="restart-tron",
+						"Restart bot", callback_data="restart-tab",
 					),
 				],
 				[
 					InlineKeyboardButton(
-						"Shutdown bot", callback_data="shutdown-tron",
+						"Shutdown bot", callback_data="shutdown-tab",
 					)
 				],
 				[
 					InlineKeyboardButton(
-						"Update bot", callback_data="update-tron",
+						"Update bot", callback_data="update-tab",
 					)
 				],
-				app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"])),
+				app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"])),
 			]
 		),
 	)

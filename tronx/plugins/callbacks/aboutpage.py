@@ -15,7 +15,7 @@ from tronx import app
 
 
 
-@app.bot.on_callback_query(filters.regex("open-about-dex"))
+@app.bot.on_callback_query(filters.regex("about-tab"))
 @app.alert_user
 async def _about(_, cb):
 	await cb.edit_message_text(
