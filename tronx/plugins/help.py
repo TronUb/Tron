@@ -22,7 +22,7 @@ global_command = app.BuildKeyboard(([["• Global Commands •", "global-command
 
 
 # /start command for bot
-@app.bot.on_message(filters.command("help"))
+@app.bot.on_message(filters.command("help"), group=-1)
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id == app.id:
