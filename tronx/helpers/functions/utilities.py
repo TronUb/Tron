@@ -73,11 +73,11 @@ class AioHttp(Types):
 
 
 class Utilities(AioHttp):
-	def HelpDex(self, page_number, loaded_modules, prefix):
+	def HelpDex(self, page_number, allmodules, prefix):
 		rows = 4
 		column = 2
 		help_modules = []
-		for mod in loaded_modules:
+		for mod in allmodules:
 			if not mod.startswith("_"):
 				help_modules.append(mod)
 		help_modules = sorted(help_modules)
@@ -103,14 +103,14 @@ class Utilities(AioHttp):
 				(
 					InlineKeyboardButton(
 						text="❰ Prev",
-						callback_data="{}_prev({})".format(
+						callback_data="{}-prev({})".format(
 							prefix, mod_page
 						),
 					),
-					InlineKeyboardButton(text="Back", callback_data=f"open-start-dex"),
+					InlineKeyboardButton(text="Back", callback_data=f"home-tab"),
 					InlineKeyboardButton(
 						text="Next ❱",
-						callback_data="{}_next({})".format(
+						callback_data="{}-next({})".format(
 							prefix, mod_page
 						),
 					),
@@ -267,8 +267,6 @@ class Utilities(AioHttp):
 
 	def HumanBytes(self, size: int) -> str:
 		""" converts bytes into human readable format """
-		# https://stackoverflow.com/a/49361727/4723940
-		# 2**10 = 1024
 		if not size:
 			return ""
 		power = 2 ** 10
@@ -447,6 +445,7 @@ class Utilities(AioHttp):
 
 
 	def GetArg(self, m: Message):
+		" get args "
 		msg = m.text
 		msg = msg.replace(" ", "", 1) if msg[1] == " " else msg
 		split = msg[1:].replace("\n", " \n").split(" ")
@@ -456,12 +455,13 @@ class Utilities(AioHttp):
 
 
 	def GetArgs(self, m: Message):
+		" get text args "
 		try:
 			msg = m.text
 		except AttributeError:
 			pass
 		if not msg:
-			return False
+			return None
 		msg = msg.split(maxsplit=1)	
 		if len(msg) <= 1:
 			return []
@@ -473,8 +473,9 @@ class Utilities(AioHttp):
 		return list(filter(lambda x: len(x) > 0, split))
 
 
-	def SpeedConvert(self, size):
-		power = 2**10
+	def SpeedConvert(self, bytesize) -> str:
+		" converts bytes into kb, mb, gb, tb "
+		power = 2**10 # 1024
 		zero = 0
 		units = {
 			0: '',
@@ -482,13 +483,14 @@ class Utilities(AioHttp):
 			2: 'Mb/s',
 			3: 'Gb/s',
 			4: 'Tb/s'}
-		while size > power:
-			size /= power
+		while bytesize > power:
+			bytesize /= power
 			zero += 1
-		return f"{round(size, 2)} {units[zero]}"
+		return f"{round(bytesize, 2)} {units[zero]}"
 
 
 	def GetReadableTime(self, seconds: int) -> str:
+		" get time formated from seconds "
 		count = 0
 		ping_time = ""
 		time_list = []
@@ -513,8 +515,8 @@ class Utilities(AioHttp):
 		return ping_time
 
 
-# generates thumbnail of download telegram media
 	def GenTgThumb(self, downloaded_file_name: str) -> str:
+		" generates thumbnail of downloaded telegram media "
 		Image.open(downloaded_file_name).convert("RGB").save(downloaded_file_name)
 		metadata = extractMetadata(createParser(downloaded_file_name))
 		height = 0
@@ -526,8 +528,8 @@ class Utilities(AioHttp):
 		return downloaded_file_name
 
 
-# get thumbnail of file if it exists
 	async def IsThumbExists(self, file_name: str):
+		" get thumbnail of file if it exists "
 		thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
 		if os.path.exists(thumb_image_path):
 			thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
@@ -545,8 +547,8 @@ class Utilities(AioHttp):
 		return thumb_image_path
 
 
-# run shell commands
 	async def RunCommand(self, shell_command: List) -> str:
+		" run shell commands "
 		process = await asyncio.create_subprocess_exec(
 			*shell_command,
 			stdout=asyncio.subprocess.PIPE,
@@ -558,33 +560,32 @@ class Utilities(AioHttp):
 		return t_response, e_response
 
 
-# extract user id & first name from msg
 	async def ExtractUser(self, msg: Message) -> Union[int, str]:
 		"""extracts the user from a message"""
 		user_id = None
-		user_first_name = None
+		first_name = None
 		reply = msg.reply_to_message
 
 		if reply:
 			if reply.from_user:
 				user_id = reply.from_user.id
-				user_first_name = reply.from_user.first_name
+				first_name = reply.from_user.first_name
 
 		elif not reply:
 			if msg.from_user:
 				user_id = msg.from_user.id
-				user_first_name = msg.from_user.first_name
+				first_name = msg.from_user.first_name
 
-		return user_id, user_first_name
+		return user_id, first_name
 
 
-# get chat type
 	def ChatType(self, m: Message):
+		" get chat type "
 		return m.chat.type
 
 
-# get formated text (html)
-	def FormatText(self, text, format=[]): 
+	def FormatText(self, text, format=[]):
+		" get formated text (html) "
 		for x in format:
 			format_dict = {
 			"mono" : f"<code>{text}</code>", 
@@ -597,8 +598,8 @@ class Utilities(AioHttp):
 		return text
 
 
-# paste anything to pasting site
 	async def HasteBinPaste(self, text):
+		" paste anything to pasting site "
 		try:
 			async with aiohttp.ClientSession() as session:
 				async with session.post(
