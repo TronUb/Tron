@@ -43,7 +43,7 @@ async def start_bot():
 	""" This is the main startup function to start both clients i.e assistant & userbot.
 	It also imports modules & plugins for assistant & userbot. """
 
-	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
+	app.log.info(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
 	print("PLUGINS: Installing.\n\n")
 	plugins = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	plugins += app.import_module("tronx/plugins/callbacks/", exclude=app.NoLoad()) 
@@ -53,7 +53,7 @@ async def start_bot():
 	print(f"\n\n{modules} modules Loaded\n\n")
 	await start_assistant()
 	await start_userbot()
-	print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
+	app.log.info("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 	await idle() # block execution
 
 
@@ -63,6 +63,7 @@ if __name__ == '__main__':
 	with warnings.catch_warnings():
 		warnings.simplefilter("ignore")
 		loop = asyncio.get_event_loop()
-
 	loop.run_until_complete(start_bot())
+
+
 
