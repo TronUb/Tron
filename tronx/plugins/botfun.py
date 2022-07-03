@@ -14,44 +14,47 @@ cmd_handler = ["+", "-"]
 
 @app.bot.on_message(filters.command(numbers, cmd_handler))
 async def increment_decrement(_, m):
-	reply = m.reply_to_message
-	if not m.chat.type in [ChatType.SUPERGROUP, ChatType.GROUP]:
-		return
+	try:
+		reply = m.reply_to_message
+		if not m.chat.type in [ChatType.SUPERGROUP, ChatType.GROUP]:
+			return
 
-	if reply and (reply.from_user.is_self) or (reply.from_user.is_bot):
-		return
+		if reply and (reply.from_user.is_self) or (reply.from_user.is_bot):
+			return
 
-	if reply:
-		prefix = [x for x in m.text]
-		if str(reply.from_user.id) in collect:
-			if prefix[0] == "+":
-				data = collect.get(str(reply.from_user.id)) 
-				collect.update({str(reply.from_user.id) : str(int(data) + int(prefix[1]))})
-				await app.bot.send_message(
-					m.chat.id,
-					f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increments"
-				)
-			elif prefix[0] == "-":
-				data = collect.get(str(reply.from_user.id)) 
-				collect.update({str(reply.from_user.id) : str(int(data) - int(prefix[1]))})
-				await app.bot.send_message(
-					m.chat.id,
-					f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " increments"
-				)
-		elif str(reply.from_user.id) not in collect:
-			if prefix[0] == "+":
-				data = {str(reply.from_user.id) : str(1)}
-				collect.update(data)
-				await app.bot.send_message(
-					m.chat.id,
-					f"{reply.from_user.first_name}: 1 increments"
-				) 
-			elif prefix[0] == "-":
-				data = {str(reply.from_user.id) : str(-1)}
-				collect.update(data)
-				await app.bot.send_message(
-					m.chat.id,
-					f"{reply.from_user.first_name}: 1 increments"
-				) 
+		if reply:
+			prefix = [x for x in m.text]
+			if str(reply.from_user.id) in collect:
+				if prefix[0] == "+":
+					data = collect.get(str(reply.from_user.id)) 
+					collect.update({str(reply.from_user.id) : str(int(data) + int(prefix[1]))})
+					await app.bot.send_message(
+						m.chat.id,
+						f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increments"
+					)
+				elif prefix[0] == "-":
+					data = collect.get(str(reply.from_user.id)) 
+					collect.update({str(reply.from_user.id) : str(int(data) - int(prefix[1]))})
+					await app.bot.send_message(
+						m.chat.id,
+						f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " increments"
+					)
+			elif str(reply.from_user.id) not in collect:
+				if prefix[0] == "+":
+					data = {str(reply.from_user.id) : str(1)}
+					collect.update(data)
+					await app.bot.send_message(
+						m.chat.id,
+						f"{reply.from_user.first_name}: 1 increments"
+					) 
+				elif prefix[0] == "-":
+					data = {str(reply.from_user.id) : str(-1)}
+					collect.update(data)
+					await app.bot.send_message(
+						m.chat.id,
+						f"{reply.from_user.first_name}: 1 increments"
+					)
+	except Exception as e:
+		await app.error(e)
 
 
