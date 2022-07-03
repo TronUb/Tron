@@ -1,15 +1,17 @@
 FROM python:3
 
+RUN python3 -m venv .venv
+
+RUN source .venv/bin/activate
+
 COPY . /workspace
 
 WORKDIR /workspace
 
-RUN python3 -m pip install --upgrade pip
-
 RUN apt-get update --no-install-recommends --yes
 
-RUN pip3 install -r requirements.txt  
+RUN python3 -m pip install --upgrade pip
 
-ENV PYTHONPATH "${PYTHONPATH}:/workspace"
+RUN pip3 install -r requirements.txt  
 
 CMD ["python3", "-m", "tronx"]
