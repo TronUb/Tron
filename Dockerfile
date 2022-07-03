@@ -1,9 +1,5 @@
 FROM python:3
 
-RUN python3 -m venv .venv
-
-RUN ./.venv/bin/activate
-
 COPY . /workspace
 
 WORKDIR /workspace
