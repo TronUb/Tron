@@ -5,6 +5,7 @@ from tronx import app
 
 
 
+
 collect = {}
 
 numbers = [f"{x}" for x in range(1, 10)]
