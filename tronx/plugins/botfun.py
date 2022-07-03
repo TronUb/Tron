@@ -1,4 +1,5 @@
 from pyrogram import filters
+from pyrogram.enums import ChatType
 
 from tronx import app
 
@@ -11,14 +12,15 @@ cmd_handler = ["+", "-"]
 
 
 
-@app.bot.on_message(filters.command(numbers, cmd_handler) & filters.group, group=5)
+@app.bot.on_message(filters.command(numbers, cmd_handler))
 async def increment_decrement(_, m):
 	reply = m.reply_to_message
-	await app.send_message(app.LOG_CHAT, "catching botfun.py commands.")
+	if not m.chat.type in [ChatType.SUPERGROUP, ChatType.GROUP]:
+		return
+
 	if reply and (reply.from_user.is_self) or (reply.from_user.is_bot):
 		return
 
-	await app.send_message(app.LOG_CHAT, "catching botfun.py commands.")
 	if reply:
 		prefix = [x for x in m.text]
 		if str(reply.from_user.id) in collect:
