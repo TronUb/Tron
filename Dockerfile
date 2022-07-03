@@ -2,7 +2,7 @@ FROM python:3
 
 RUN python3 -m venv .venv
 
-RUN source .venv/bin/activate
+RUN ./.venv/bin/activate
 
 COPY . /workspace
 
