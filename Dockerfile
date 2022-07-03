@@ -1,8 +1,10 @@
 FROM python:3
 
-COPY . /app
+COPY . /workspace
 
-WORKDIR /app
+WORKDIR /workspace
+
+RUN apt-get update --no-install-recommends --yes
 
 RUN python3 -m pip install --upgrade pip
 

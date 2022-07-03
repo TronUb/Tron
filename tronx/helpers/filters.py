@@ -102,6 +102,9 @@ def gen(
 			if not text:
 				return False
 
+			if message.forward_date: # forwarded messages can't be edited
+				return False
+
 			message.command = None
 
 			user = message.from_user if message.from_user else None
@@ -113,9 +116,11 @@ def gen(
 
 			if not message_owner:
 				return False
+			
+			if message_owner == "sudo":
+				if not "sudo" in allow:
+					return False
 
-			if message.forward_date: # forwarded messages can't be edited
-				return False
 
 			flt.prefixes = client.MyPrefix() # workaround
 
@@ -126,8 +131,10 @@ def gen(
 				cmd = text.split()[0][1:]
 				if cmd in flt.commands:
 					message.command = [cmd] + text.split()[1:]
+
+					# for sudo users 
 					if message_owner == "sudo":
-						if not client.SudoCmds(): # empty config -> full command access to sudo
+						if not client.SudoCmds(): # empty list -> full command access to sudo
 							client.m = message
 							return True 
 

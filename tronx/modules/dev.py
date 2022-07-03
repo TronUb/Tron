@@ -38,7 +38,7 @@ async def evaluate_handler(_, m: Message):
 
 	try:
 		if app.textlen() > 4096:
-			return await send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
+			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
 		global reply, chat_id, chat_type
 
@@ -91,7 +91,7 @@ async def terminal_handler(_, m: Message):
 			return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
 		if app.textlen() > 4096:
-			return await send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
+			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
 		msg = await app.send_edit("Running . . .", text_type=["mono"])
 		text = m.text.split(None, 1)

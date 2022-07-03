@@ -109,7 +109,7 @@ async def kang(_, m: Message):
 			limit = "50" if is_anim else "120"
 			while limit in await get_response(m):
 				pack += 1
-				packname = f"a{user.id}_by_zect_{pack}"
+				packname = f"a{m.from_user.id}_by_tron_{pack}"
 				packnick = f"{custom_packnick} Vol.{pack}"
 				if is_anim:
 					packname += "_anim"

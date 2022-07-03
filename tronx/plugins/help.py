@@ -11,13 +11,11 @@ from tronx import app
 
 
 
-settings = app.BuildKeyboard((["• Settings •", "open-settings-dex"], ["• Modules •", "tron-dex-2"]))
-extra = app.BuildKeyboard((["• Extra •", "open-extra-dex"], ["• Stats •", "open-stats-dex"]))
-about = app.BuildKeyboard(([["About", "open-about-dex"]]))
-close = app.BuildKeyboard(([["Close", "close-dex"]]))
-approve = app.BuildKeyboard(([["Approve", "approve-user"]]))
-global_command = app.BuildKeyboard(([["• Global commands •", "global-commands"]]))
-home_back = app.BuildKeyboard((["Home", "close-dex"], ["Back", "open-start-dex"]))
+settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"]))
+extra = app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
+about = app.BuildKeyboard(([["About", "about-tab"]]))
+close = app.BuildKeyboard(([["Close", "close-tab"]]))
+global_command = app.BuildKeyboard(([["• Global Commands •", "global-commands-tab"]]))
 
 
 

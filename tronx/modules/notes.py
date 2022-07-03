@@ -6,6 +6,8 @@ from pyrogram.types import (
 	Message
 )
 
+from pyrogram import errors
+
 from tronx import app, gen, regex
 
 
@@ -101,9 +103,9 @@ async def getnote_handler(_, m: Message):
 			await m.delete()
 			try:
 				if msg_id:
-					await GET_FORMAT[getnotes['type']](message.chat.id, getnotes['file'], reply_to_message_id=msg_id)
+					await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], reply_to_message_id=msg_id)
 				else:
-					await GET_FORMAT[getnotes['type']](message.chat.id, getnotes['file'])
+					await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'])
 			except errors.exceptions.bad_request_400.BadRequest:
 				msg = await app.get_messages(m.chat.id, getnotes['message_id'])
 				note_name, text, message_type, content = app.FetchNoteType(msg)

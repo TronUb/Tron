@@ -84,7 +84,7 @@ async def unzip_handler(_, m: Message):
 @app.on_message(gen("new", allow =["sudo"]))
 async def createfile_handler(app, m:Message):
 	reply = m.reply_to_message
-	text = "Making file . . ."
+	mytext = "Making file . . ."
 	filepath = None
 
 	try:

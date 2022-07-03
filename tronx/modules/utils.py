@@ -3,7 +3,7 @@ import asyncio
 import html
 
 from pyrogram.types import Message, ChatPermissions, User
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import (
 	UserAdminInvalid, 
 	PeerIdInvalid, 
