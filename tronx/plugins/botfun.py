@@ -9,11 +9,11 @@ from tronx import app
 collect = {}
 
 numbers = [f"{x}" for x in range(1, 10)]
-cmd_handler = ["+", "-"]
+cmd_handlers = ["+", "-"]
 
 
 
-@app.bot.on_message(filters.command(numbers, cmd_handler))
+@app.bot.on_message(filters.command(numbers, cmd_handlers), group=1)
 async def increment_decrement(_, m):
 	try:
 		reply = m.reply_to_message
@@ -40,7 +40,7 @@ async def increment_decrement(_, m):
 						m.chat.id,
 						f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " increments"
 					)
-			elif str(reply.from_user.id) not in collect:
+			else:
 				if prefix[0] == "+":
 					data = {str(reply.from_user.id) : str(1)}
 					collect.update(data)
