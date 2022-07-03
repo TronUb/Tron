@@ -63,7 +63,6 @@ if __name__ == '__main__':
 	with warnings.catch_warnings():
 		warnings.simplefilter("ignore")
 		loop = asyncio.get_event_loop()
-
 	loop.run_until_complete(start_bot())
 
 
