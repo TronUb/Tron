@@ -14,7 +14,7 @@ SQLAlchemy==1.3.23
 TgCrypto
 httpx
 pytz
-py-postgresql
+postgresql
 psycopg2
 CurrencyConverter
 deep-translator
