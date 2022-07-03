@@ -10,6 +10,8 @@ RUN apt-get update --no-install-recommends --yes
 
 RUN apt-get install libpq-dev --no-install-recommends --yes  
 
+RUN apt-get install gcc --no-install-recommends --yes  
+
 RUN pip3 install -r requirements.txt  
 
 ENV PYTHONPATH "${PYTHONPATH}:/workspace"
