@@ -15,18 +15,20 @@ from tronx import app
 
 
 
-@app.bot.on_message(filters.command("eval") & filters.private & filters.user([app.id] + app.SudoUsers()), group=-2)
+@app.bot.on_message(filters.command("eval") & filters.private & filters.user(app.id), group=-1)
 async def bot_evaluate_handler(_, m: Message):
 	""" This function is made for executing python codes """
 
 	try:
-		user_id = m.from_user.id if m.from_user else None
 		# double protection
-		if user_id != app.id or user_id not in app.SudoUsers():
+		if m.chat.id != app.id:
 			return
 
 		text = m.text
-		cmd = text.split(None, 1)[1]
+		try:
+			cmd = text.split(None, 1)[1]
+		except IndexError:
+			cmd = None
 
 		if not cmd:
 			return await app.bot.send_message(m.chat.id, "Give me some text (code) to execute . . .")
