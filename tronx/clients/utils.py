@@ -25,7 +25,7 @@ class Utils(Methods, Config, Database, Helpers):
 
 	# userbot /
 	userbot_name = "Tron"
-	userbot_version = "v.0.1.0"
+	userbot_version = "v.0.1.1"
 
 	# containers /
 	CMD_HELP = {}
