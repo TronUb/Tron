@@ -16,8 +16,8 @@ anime_list = ["baka", "bite", "blush", "bored", "cry", "cuddle", "dance", "facep
 
 
 app.CMD_HELP.update(
-	{"animepic": (
-		"animepic",
+	{"anime": (
+		"anime",
 		{
 		"npic" : "Get a anime neko girl image.",
 		"animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
@@ -33,13 +33,14 @@ app.CMD_HELP.update(
 
 
 def get_anime_gif(arg):
-	data = requests.get(f"https://nekos.best/api/v1/{arg}").text
-	img = json.loads(data)["url"]
-	text = json.loads(data)["anime_name"]
+	data = requests.get(f"https://nekos.best/api/v2/{arg}").json()
+	data = data["results"][0]
+	img = data["url"]
+	text = data["anime_name"]
 	if img and text:
 		return [img, text]
 	else:
-		return False
+		return None
 
 
 
@@ -69,8 +70,8 @@ async def nekoanime(_, m: Message):
 		if m.from_user.is_self:
 			await m.delete()
 
-		data = requests.get("https://nekos.best/api/v1/nekos").text
-		data = json.loads(data)
+		data = requests.get("https://nekos.best/api/v2/neko").json()
+		data = data[0]
 		await app.send_photo(
 			m.chat.id,
 			data["url"],
