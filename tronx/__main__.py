@@ -1,7 +1,8 @@
+from tronx.clients import app
+from pyrogram import idle
 import asyncio
 import warnings
-from pyrogram import idle
-from tronx.clients import app
+
 
 
 
@@ -43,7 +44,7 @@ async def start_bot():
 	""" This is the main startup function to start both clients i.e assistant & userbot.
 	It also imports modules & plugins for assistant & userbot. """
 
-	app.log.info(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
+	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
 	print("PLUGINS: Installing.\n\n")
 	plugins = app.import_module("tronx/plugins/", exclude=app.NoLoad())
 	plugins += app.import_module("tronx/plugins/callbacks/", exclude=app.NoLoad()) 
@@ -53,7 +54,7 @@ async def start_bot():
 	print(f"\n\n{modules} modules Loaded\n\n")
 	await start_assistant()
 	await start_userbot()
-	app.log.info("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
+	print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 	await idle() # block execution
 
 
