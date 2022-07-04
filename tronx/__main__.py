@@ -1,7 +1,9 @@
 from tronx.clients import app
 from pyrogram import idle
+from pyrogram.types import BotCommand
 import asyncio
 import warnings
+
 
 
 
@@ -9,6 +11,23 @@ import warnings
 async def start_assistant():
 	""" this function starts the pyrogram bot client. """
 	if app and app.bot:
+		botcmd = [
+			["start", "check whether bot is on or not."],
+			["help", "Get your helpdex."],
+			["ping", "Get server response speed & uptime."],
+			["id", "Get ids of users / groups."],
+			["quote", "get inline anime quotes."],
+			["broadcast", "send messages to users who have started your bot."],
+			["eval", "evaluate python codes."]
+		]
+		cmds = [x.command for x in await app.bot.get_bot_commands()]
+		botcmdkeys = [y[0] for y in botcmd]
+		
+		if cmds != botcmdkeys:
+			print("Setting bot commands.\n")
+			await app.bot.set_bot_commands([[BotCommand(y[0], y[1])] for y in botcmds])
+			print("Added bot commands.\n")
+
 		print("Activating assistant.\n")
 		response = await app.bot.start()
 		if response:
