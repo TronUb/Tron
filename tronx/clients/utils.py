@@ -20,8 +20,6 @@ class Utils(Methods, Config, Database, Helpers):
 	# assistant /
 	assistant_name = "Nora"
 	assistant_version = "v.0.0.1"
-	assistant_age = "19"
-	assistant_gender = "Female"
 
 	# userbot /
 	userbot_name = "Tron"
@@ -38,12 +36,12 @@ class Utils(Methods, Config, Database, Helpers):
 	# other /
 	message_ids = {}
 	PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
-	Repo = "https://github.com/beastzx18/Tron.git"
+	Repo = "https://github.com/TronUb/Tron.git"
 	StartTime = time.time()
 
 	# debugging /
 	
-	logging.basicConfig(filename="tronuserbot.log", format="%(asctime)s %(message)s", filemode="w")
+	logging.basicConfig(filename="tronuserbot.txt", format="%(asctime)s %(message)s", filemode="w")
 	log = logging.getLogger()
 	log.setLevel(logging.DEBUG)
 
