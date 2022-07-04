@@ -46,6 +46,6 @@ which are related to tronuserbot then just ask in [support group](https://t.me/t
 @app.alert_user
 async def _about(_, cb):
 	await cb.edit_message_media(
-		media=InputMediaPhoto(media="https://telegra.ph/file/78b76373a83bc7d07f7a5.jpg", caption=about_text),
+		media=InputMediaPhoto(media="https://telegra.ph/file/0da8394d27f76c39a0a9c.jpg", caption=about_text),
 		reply_markup=InlineKeyboardMarkup([app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
 	)
