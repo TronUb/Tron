@@ -12,7 +12,7 @@ from tronx.helpers import Helpers
 
 
 
-class Utils(Methods, Config, Database, Helpers):
+class ClassManager(Methods, Config, Database, Helpers):
 	# versions /
 	python_version = str(platform.python_version())
 	pyrogram_version = str(pyrogram_version)

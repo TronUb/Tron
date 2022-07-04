@@ -26,3 +26,4 @@ qrcode
 bing-image-downloader
 pysimplelog
 nest-asyncio
+uvloop

@@ -1,11 +1,14 @@
 from tronx.clients import app
 from pyrogram import idle
+import uvloop
 import asyncio
 import warnings
 
 
 
 
+# performance boost
+uvloop.install()
 
 async def start_assistant():
 	""" this function starts the pyrogram bot client. """
