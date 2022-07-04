@@ -29,7 +29,7 @@ async def start_assistant():
 		
 			if cmds != botcmdkeys:
 				print("Setting bot commands.\n")
-				await app.bot.set_bot_commands([[BotCommand(y[0], y[1])] for y in botcmds])
+				await app.bot.set_bot_commands([[BotCommand(y[0], y[1])] for y in botcmd])
 				print("Added bot commands.\n")
 		
 		else:
