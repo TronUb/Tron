@@ -25,7 +25,6 @@ app.CMD_HELP.update(
 @app.on_message(gen("alive", allow = ["sudo"]), group=0)
 async def alive_handler(_, m: Message):
 	try:
-		print("Alive command has been used !")
 		await app.send_edit(". . .", text_type=["mono"])
 
 		alive_msg = f"\n"
