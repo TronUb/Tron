@@ -55,6 +55,7 @@ async def bot_evaluate_handler(_, m: Message):
 
 		if len(final_output) > 4096:
 			location = await app.create_file(filename="eval_output.txt", content=str(final_output), caption=f"`{m.text}`", send=False)
+			await app.bot.send_document(m.chat.id, location)
 			await msg.delete()
 		else:
 			await msg.edit(final_output)
