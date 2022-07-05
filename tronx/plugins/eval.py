@@ -21,7 +21,7 @@ async def bot_evaluate_handler(_, m: Message):
 
 	try:
 		# double protection
-		if m.chat.id != app.id:
+		if m.from_user.id != app.id:
 			return
 
 		text = m.text
