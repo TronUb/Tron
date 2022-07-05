@@ -39,8 +39,6 @@ async def evaluate_handler(_, m: Message):
 		if app.textlen() > 4096:
 			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
-		global reply, chat_id, chat_type
-
 		reply = m.reply_to_message
 		chat_type = m.chat.type
 		chat_id = m.chat.id
