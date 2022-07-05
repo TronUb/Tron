@@ -27,16 +27,15 @@ app.CMD_HELP.update(
 
 
 
-bot = app.bot
-p = print
-
-
 
 @app.on_message(gen(["eval", "e"], allow =["sudo"]))
 async def evaluate_handler(_, m: Message):
 	""" This function is made to execute python codes """
 
 	try:
+		global p
+		p = print
+
 		if app.textlen() > 4096:
 			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
