@@ -58,5 +58,5 @@ def _createdb():
 	print("\n")
 	os.system(f"createuser --superuser --pwprompt {username}")
 	os.system(f"createdb {dbname}")
-	os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+	os.system("pg_ctl -D $PREFIX/var/lib/postgresql restart")
 	return f"'postgres://{username}:{password}@127.0.0.1:5432/{dbname}'"
