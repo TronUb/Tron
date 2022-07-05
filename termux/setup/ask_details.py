@@ -27,22 +27,20 @@ def create_termuxconfig():
 
 
 def _startdb():
-	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"):
-		if not os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql/postmaster.pid"): 
-			os.system("pg_ctl -D $PREFIX/var/lib/postgresql start")
+	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"): 
+		print("\nStarting postgres server.\n\n")
+		os.system("pg_ctl -D $PREFIX/var/lib/postgresql restart")
 
 	else:
-		try:
-			from termuxconfig import Termuxconfig
-		except (ImportError, ModuleNotFoundError):
-			os.system("cd ~ && cd Tron && ./start.sh")
+		choice = input("\npostgres dependent file does not exist, enter all details again [y/n]: ")
+		if choice in ("y", "Y", ""):
+			clear()
+			create_termuxconfig()
+		else:
+			print("Quiting process ...")
+			os.system("cd ~")
+			clear()
 
-		try:
-			Termuxconfig.DB_URI
-		except AttributeError:
-			file = open("termuxconfig.py", "a")
-			file.write(f"\tDB_URI = {_createdb()}\n")
-			file.close()
 
 
 
@@ -52,9 +50,9 @@ def _createdb():
 	os.system("mkdir -p $PREFIX/var/lib/postgresql")
 	os.system("initdb $PREFIX/var/lib/postgresql")
 	clear()
-	username = str(input("\nEnter your database account username: "))
-	password = str(input("\nEnter your database account password: "))
-	dbname = str(input("\nEnter your database name: "))
+	username = str(input("\nEnter your postgres account username: "))
+	password = str(input("\nEnter your postgres account password: "))
+	dbname = str(input("\nEnter your postgres database name: "))
 	print("\n")
 	os.system(f"createuser --superuser --pwprompt {username}")
 	os.system(f"createdb {dbname}")
