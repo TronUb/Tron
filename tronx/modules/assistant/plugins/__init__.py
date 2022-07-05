@@ -21,5 +21,3 @@ def __list_all_plugins():
 
 PLUGINS = sorted(__list_all_plugins())
 __all__ = PLUGINS + ["PLUGINS"]
-
-print(os.getcwd())
