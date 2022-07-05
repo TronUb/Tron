@@ -12,7 +12,7 @@ def clear():
 def create_termuxconfig():
 	ATTR = ["API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN"]
 	file = open("termuxconfig.py", "w+")
-	file.write("class Termuxconfig:\n\ttemp = 'value'\n")
+	file.write("class TermuxConfig:\n\ttemp = 'value'\n")
 	for x in ATTR:
 		if x == "DB_URI":
 			value = _createdb()
@@ -22,7 +22,6 @@ def create_termuxconfig():
 
 		file.write(f"""\t{x.replace('"', "")} = {value}\n""")
 	file.close()
-	return True
 
 
 
