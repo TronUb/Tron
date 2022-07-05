@@ -30,6 +30,8 @@ def _startdb():
 	if os.path.exists("/data/data/com.termux/files/usr/var/lib/postgresql"): 
 		print("\nStarting postgres server.\n\n")
 		os.system("pg_ctl -D $PREFIX/var/lib/postgresql restart")
+		clear()
+		print("Starting . . .\n\n")
 
 	else:
 		choice = input("\npostgres dependent file does not exist, enter all details again [y/N]: ")
