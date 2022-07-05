@@ -1,22 +1,17 @@
-import os
 import re
-import time
 
 from typing import (
 	Union, 
 	List, 
-	Dict, 
 	Pattern
 )
 
 from pyrogram.filters import create
-from pyrogram import filters, Client
+from pyrogram import Client
 from pyrogram.types import (
 	Message, 
 	CallbackQuery, 
 	InlineQuery, 
-	InlineKeyboardMarkup, 
-	ReplyKeyboardMarkup, 
 	Update
 )
 

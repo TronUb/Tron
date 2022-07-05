@@ -1,5 +1,5 @@
-from .requirements import install_requirements
-from .ask_details import create_termuxconfig, startdb   
+from .setup.requirements import install_requirements
+from .setup.ask_details import create_termuxconfig, startdb   
 
 
 

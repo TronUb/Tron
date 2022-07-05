@@ -1,22 +1,12 @@
 import os
 import sys
-import platform
 
 
-# for termux deployment // check if its android device
+# for termux deployments 
+# check if the current device is android
 if hasattr(sys, "getandroidapilevel"):
-	ostype = "android"
-	os.system("cd ostype && python3 -m termux")
+	os.system("python3 -m termux")
 	from config import Config
-
-elif platform.uname()[0] == "Linux":
-	ostype = "linux"
-
-elif platform.uname()[0] == "Windows":
-	ostype = "windows"
-else:
-
-	ostype = "unknown"
 
 
 from tronx.clients import app

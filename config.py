@@ -3,14 +3,12 @@ import platform
 
 
 inside = object
-linux_or_windows = None
-ostype = platform.uname()
-is_localhost = True if ostype[1] == "localhost" else None
+is_termux = None
+if hasattr(sys, "getandroidapilevel"):
+    from termux import TermuxConfig
+    is_termux = True
+    inside = TermuxConfig
 
-if ostype[0] in ("Windows", "Linux") and is_localhost:
-	from termux import Termuxconfig
-	inside = Termuxconfig
-	linux_or_windows = True
 	
 
 
@@ -18,7 +16,7 @@ if ostype[0] in ("Windows", "Linux") and is_localhost:
 #-------------------------------------------------------------------------------------------------------------
 class Config(inside):
 	""" configuration class """
-	if not linux_or_windows:
+	if not is_termux:
 		# api id of your telegram account (required)
 		API_ID = os.getenv("API_ID")
 		# api hash of your telegram account (required)
@@ -35,13 +33,13 @@ class Config(inside):
 	HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
 	# heroku app name (required -> if hosted on heroku)
 	HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-	if not linux_or_windows:
+	if not is_termux:
 		# database url (required)
 		DB_URI = os.getenv("DATABASE_URL")
 # ------------------
 	# these users can use your userbot
 	SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
-	if not linux_or_windows:
+	if not is_termux:
 		# a group to store logs, etc (required)
 		LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
@@ -51,7 +49,7 @@ class Config(inside):
 	# exclude official plugins from installing, give a space between plugin names
 	NO_LOAD = [int(x) for x in os.getenv("NO_LOAD", "").split()] # splits on spaces
 	# default reason for afk plugin
-	AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Now !")
+	AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Right Now !")
 # ------------------
 	# add True to enable (default: False)
 	PMPERMIT = os.getenv("PMPERMIT", False)
@@ -77,24 +75,24 @@ class Config(inside):
 # --------------------
 	# this bio will be shown in '/help' menu (default: official bio from bot) 
 	BOT_BIO = os.getenv("BOT_BIO")
-	# your assistants custom name (default: NORA)
-	BOT_NAME = os.getenv("BOT_NAME", "NORA")
+	# your assistants custom name (default: Nora)
+	BOT_NAME = os.getenv("BOT_NAME", "Nora")
 	# your assistants alive pic (optional)
 	BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/48f5dc15d51ea7f721275.jpg")
 	# provide this if bot fails to get username of bot (optional)
 	BOT_USERNAME = os.getenv("BOT_USERNAME")
 	# telegram id of bot if failed to get automatically (optional)
 	BOT_ID = os.getenv("BOT_ID")
-	if not linux_or_windows:
+	if not is_termux:
 		# access token of your bot, without this the bot will not work (required)
 		TOKEN = os.getenv("TOKEN")
 # ---------------------
 	# thumbnail used while uploading plugins, etc. (optional)
-	THUMB_PIC = os.getenv("THUMB_PIC", "material/images/tron.png")
+	THUMB_PIC = os.getenv("THUMB_PIC", "./resources/images/tron.png")
 # ---------------------
 	# your telegraph account name (default: Tronuserbot)
-	TL_NAME = os.getenv("TL_NAME")
+	TL_NAME = os.getenv("TL_NAME", "Tron UserBot")
 	# this will be shown before (as a prefix) the texts in the help dex (default: None)
-	HELP_EMOJI = os.getenv("HELP_EMOJI")
+	HELP_EMOJI = os.getenv("HELP_EMOJI", "")
 
 

@@ -820,4 +820,4 @@ class RawFunctions(object):
 		"""
 
 		"Available" if self.DB_URI else "Unavailable"
-
+  
