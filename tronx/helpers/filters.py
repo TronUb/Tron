@@ -136,12 +136,14 @@ def gen(
 					if message_owner == "sudo":
 						if not client.SudoCmds(): # empty list -> full command access to sudo
 							client.m = message
+							client.bot.m = message
 							return True 
 
 						if not cmd in client.SudoCmds():
 							return False
 
 					client.m = message
+					client.bot.m = message
 					return True
 
 			return False
