@@ -15,7 +15,7 @@ from tronx import app
 
 
 
-@app.bot.on_message(filters.command("eval") & filters.private & filters.user(app.id), group=-1)
+@app.bot.on_message(filters.command("eval") & filters.user(app.id), group=-1)
 async def bot_evaluate_handler(_, m: Message):
 	""" This function is made for executing python codes """
 
