@@ -29,7 +29,7 @@ class Bot(ClassManager, Client):
 
 
 
-class SuperClient(ClassManager, Client, Bot):
+class SuperClient(ClassManager, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
