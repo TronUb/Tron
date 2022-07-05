@@ -32,7 +32,7 @@ def _startdb():
 		os.system("pg_ctl -D $PREFIX/var/lib/postgresql restart")
 
 	else:
-		choice = input("\npostgres dependent file does not exist, enter all details again [y/n]: ")
+		choice = input("\npostgres dependent file does not exist, enter all details again [y/N]: ")
 		if choice in ("y", "Y", ""):
 			clear()
 			create_termuxconfig()
@@ -50,11 +50,7 @@ def _createdb():
 	os.system("mkdir -p $PREFIX/var/lib/postgresql")
 	os.system("initdb $PREFIX/var/lib/postgresql")
 	clear()
-	username = str(input("\nEnter your postgres account username: "))
-	password = str(input("\nEnter your postgres account password: "))
-	dbname = str(input("\nEnter your postgres database name: "))
-	print("\n")
-	os.system(f"createuser --superuser --pwprompt {username}")
-	os.system(f"createdb {dbname}")
+	os.system(f"createdb u0_a402")
 	os.system("pg_ctl -D $PREFIX/var/lib/postgresql restart")
-	return f"'postgres://{username}:{password}@127.0.0.1:5432/{dbname}'"
+	clear()
+	return f"'postgres://u0_a402:trust@127.0.0.1:5432/u0_a402'"
