@@ -1,5 +1,5 @@
 import os
-import platform
+import sys
 
 
 inside = object
