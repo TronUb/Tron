@@ -82,7 +82,7 @@ def inline_result(_, inline_query):
 					[
 						[
 							InlineKeyboardButton(
-								"More", callback_data="more-anime-quotes"
+								"More", callback_data="animequote-tab"
 							)
 						],
 					]

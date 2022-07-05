@@ -1,6 +1,5 @@
 import re
 import os
-import time
 import html
 import math
 import json
@@ -9,12 +8,12 @@ import random
 import asyncio
 import aiohttp 
 
+from time import time
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
 from typing import List, Union
-from re import escape, sub
 
 from pyrogram.types import Message, User, InlineKeyboardButton
 from pyrogram.errors import MessageNotModified, FloodWait
@@ -280,7 +279,7 @@ class Utilities(AioHttp):
 
 	async def ProgressForPyrogram(self, current, total, ud_type, message, start):
 		""" generic progress display for Telegram Upload / Download status """
-		now = time.time()
+		now = time()
 		diff = now - start
 		if round(diff % 10.00) == 0 or current == total:
 			# if round(current / total * 100, 0) % 5 == 0:
