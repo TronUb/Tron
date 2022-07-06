@@ -23,7 +23,7 @@ class ClassManager(Methods, Config, Database, Helpers):
 
 	# userbot /
 	userbot_name = "Tron"
-	userbot_version = "v.0.1.1"
+	userbot_version = "v.0.1.2"
 
 	# containers /
 	CMD_HELP = {}
