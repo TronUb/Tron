@@ -33,7 +33,7 @@ async def bot_anime_quotes(_, m):
 			[
 				[
 					InlineKeyboardButton(
-						"More", callback_data="more-anime-quotes"
+						"More", callback_data="animequote-tab"
 					)
 				],
 			]
