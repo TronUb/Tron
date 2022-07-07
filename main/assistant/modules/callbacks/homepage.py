@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -30,10 +31,10 @@ async def _start(_, cb):
 	await cb.edit_message_media(
 		media=InputMediaPhoto(media=app.BotPic(), caption=homepage_text),
 		reply_markup=InlineKeyboardMarkup([
-                app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"])),
-                app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"])),
-                app.BuildKeyboard(([["About", "about-tab"]])),
-                app.BuildKeyboard(([["Close", "close-tab"]]))
+                bot.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"])),
+            	bot.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"])),
+                bot.BuildKeyboard(([["About", "about-tab"]])),
+                bot.BuildKeyboard(([["Close", "close-tab"]]))
 		]
 		),
 	)

@@ -18,7 +18,7 @@ from main.assistant.client import bot
 @bot.on_callback_query(filters.regex("animequote-tab"))
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
-		app.quote(),
+		bot.quote(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

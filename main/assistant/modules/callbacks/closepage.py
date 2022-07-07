@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -19,7 +20,7 @@ from main.assistant.client import bot
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
-		text=app.closed_menu_string(),
+		text=bot.closed_menu_string(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

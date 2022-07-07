@@ -11,8 +11,8 @@ from pyrogram.types import (
 	CallbackQuery, 
 	Message,
 )
-
-from tronx import app
+from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -31,7 +31,7 @@ def inline_result(_, inline_query):
 				description="This is tron security system, it helps you to stop spammers from spamming in your dm.",
 				caption=app.PmpermitText(),
 				parse_mode=ParseMode.DEFAULT,
-				reply_markup=InlineKeyboardMarkup([app.BuildKeyboard(([["Approve", "approve-tab"]]))])
+				reply_markup=InlineKeyboardMarkup([bot.BuildKeyboard(([["Approve", "approve-tab"]]))])
 			)
 			],
 		cache_time=1
@@ -47,10 +47,10 @@ def inline_result(_, inline_query):
 				parse_mode=ParseMode.DEFAULT,
 				reply_markup=InlineKeyboardMarkup(
 					[
-						app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"])),
-						app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"])),
-						app.BuildKeyboard(([["About", "about-tab"]])),
-						app.BuildKeyboard(([["Close", "close-tab"]]))
+						bot.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"])),
+						bot.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"])),
+						bot.BuildKeyboard(([["About", "about-tab"]])),
+						bot.BuildKeyboard(([["Close", "close-tab"]]))
 					]
 				)
 			)
@@ -66,7 +66,7 @@ def inline_result(_, inline_query):
 				description="This is same as alive command, the difference is that this command have inline button.",
 				caption=f"**⛊  Inline Status:**\n\n**⟐** {app.USER_BIO}\n\n**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n**⟜ Tron:** `{app.userbot_version}`\n**⟜ Python:** `{app.python_version}`\n⟜ **Pyrogram:** `{app.pyrogram_version}`\n⟜ **uptime:** `{app.uptime()}\n\n",
 				parse_mode=ParseMode.DEFAULT,
-				reply_markup=InlineKeyboardMarkup([app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))])
+				reply_markup=InlineKeyboardMarkup([bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))])
 			)
 			],
 		cache_time=1

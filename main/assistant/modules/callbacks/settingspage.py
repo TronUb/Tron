@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -37,7 +38,7 @@ async def _settings(_, cb):
 						"Update bot", callback_data="update-tab",
 					)
 				],
-				app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"])),
+				bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"])),
 			]
 		),
 	)

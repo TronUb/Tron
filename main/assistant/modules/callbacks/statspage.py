@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -19,6 +20,6 @@ from main.assistant.client import bot
 @app.alert_user
 async def _stats(_, cb):
 	await cb.edit_message_text(
-		text=app.stat_string(),
+		text=bot.stat_string(),
 		reply_markup=InlineKeyboardMarkup([app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
 	)

@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -55,8 +56,8 @@ async def _restart_core(_, cb):
 			]
 		),
 	)
-	access = heroku3.from_key(app.HEROKU_API_KEY)
-	application = access.apps()[app.HEROKU_APP_NAME]
+	access = heroku3.from_key(bot.HEROKU_API_KEY)
+	application = access.apps()[bot.HEROKU_APP_NAME]
 	restart = application.restart()
 	if not restart:
 		await cb.edit_message_text(
