@@ -10,6 +10,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
