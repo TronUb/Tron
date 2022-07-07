@@ -3,7 +3,7 @@ import warnings
 from pyrogram import idle
 from pyrogram.types import BotCommand
 from .userbot import app
-from .assistant import bot
+from .assistant.client import bot
 
 
 
