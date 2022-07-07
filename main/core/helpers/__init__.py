@@ -1,8 +1,7 @@
-from .userbot.containers import Containers
-from .userbot.functions import Functions
-from .userbot.decorators import Decorators
-from .userbot.configs import Configs
-from .userbot.filters import gen, regex
+from .containers import Containers
+from .functions import Functions
+from .decorators import Decorators
+from .configs import Configs
 
 
 
