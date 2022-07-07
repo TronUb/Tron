@@ -1,9 +1,9 @@
-from tronx.database.postgres.afk_sql import AFKSQL
-from tronx.database.postgres.notes_sql import NOTESSQL
-from tronx.database.postgres.pmpermit_sql import PMPERMITSQL
-from tronx.database.postgres.dv_sql import DVSQL
-from tronx.database.postgres.welcome_sql import WELCOMESQL
-from tronx.database.postgres.filters_sql import FILTERSSQL
+from main.core.database.postgres.afk_sql import AFKSQL
+from main.core.database.postgres.notes_sql import NOTESSQL
+from main.core.database.postgres.pmpermit_sql import PMPERMITSQL
+from main.core.database.postgres.dv_sql import DVSQL
+from main.core.database.postgres.welcome_sql import WELCOMESQL
+from main.core.database.postgres.filters_sql import FILTERSSQL
 
 
 
