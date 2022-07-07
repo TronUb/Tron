@@ -6,6 +6,7 @@ from pyrogram.types import (
 )
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -25,7 +26,7 @@ global_command = bot.BuildKeyboard(([["• Global Commands •", "global-command
 @bot.on_message(filters.command("help"), group=-1)
 async def start(_, m: Message):
 	if m.from_user:
-		if m.from_user.id == bot.id:
+		if m.from_user.id == app.id:
 			# bot pic
 			if bot.BotPic().endswith(".jpg" or "png" or "jpeg"):
 				info = await bot.send_photo(
@@ -54,7 +55,7 @@ async def start(_, m: Message):
 					),
 				)
 
-		elif m.from_user.id != bot.id:
+		elif m.from_user.id != app.id:
 			info = await bot.send_photo(
 				m.chat.id,
 				"./resources/images/tron.png",
