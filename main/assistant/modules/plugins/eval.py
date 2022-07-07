@@ -10,6 +10,7 @@ from pyrogram.types import Message
 from pyrogram import filters
 
 from main.assistant.client import bot
+from main.userbot.client import app
 
 
 
@@ -54,10 +55,10 @@ async def bot_evaluate_handler(_, m: Message):
 		final_output = f"**• COMMAND:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
 
 		if len(final_output) > 4096:
-			location = await app.create_file(filename="eval_output.txt", content=str(final_output), caption=f"`{m.text}`", send=False)
+			location = await bot.create_file(filename="eval_output.txt", content=str(final_output), caption=f"`{m.text}`", send=False)
 			await bot.send_document(m.chat.id, location)
 			await msg.delete()
 		else:
 			await msg.edit(final_output)
 	except Exception as e:
-		await app.error(e)
+		await bot.error(e)

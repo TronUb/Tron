@@ -239,6 +239,9 @@ class RawFunctions(object):
 				mono=True
 			)
 		"""
+		if self == self.bot:
+			
+			return
 		msg = None
 
 		if self.m.from_user.is_self:
