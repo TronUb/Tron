@@ -9,7 +9,7 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import app
+from main.userbot.client import app
 
 
 
