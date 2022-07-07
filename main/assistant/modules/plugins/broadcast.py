@@ -1,7 +1,9 @@
-from main.assistant.client import bot
 from pyrogram import filters
 from pyrogram.types import Message
+from main.assistant.client import bot
+from main.userbot.client import app
 from pyrogram.errors import PeerIdInvalid
+
 
 
 

@@ -57,6 +57,6 @@ async def increment_decrement(_, m):
 						f"{reply.from_user.first_name}: 1 increments"
 					)
 	except Exception as e:
-		await app.error(e)
+		await bot.error(e)
 
 

@@ -9,7 +9,6 @@ if hasattr(sys, "getandroidapilevel"):
     is_termux = True
     inside = TermuxConfig
 
-	
 
 
 
