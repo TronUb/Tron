@@ -14,7 +14,7 @@ async def send_response(_, m: Message):
 
 
 
-@bot.on_message(filters.new_chat_members & filters.group, group=1)
+@app.bot.on_message(filters.new_chat_members & filters.group, group=1)
 async def added_to_group_msg(_, m: Message):
 	if m.new_chat_members[0].is_self:
 		try:
