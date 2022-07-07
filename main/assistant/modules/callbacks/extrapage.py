@@ -9,7 +9,6 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
@@ -18,7 +17,7 @@ from main.userbot.client import app
 
 
 
-@bot.on_callback_query(filters.regex("extra-tab"))
+@app.bot.on_callback_query(filters.regex("extra-tab"))
 @app.alert_user
 async def _extra(_, cb):
 	await cb.edit_message_text(

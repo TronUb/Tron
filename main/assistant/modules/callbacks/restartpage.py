@@ -9,14 +9,14 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-@bot.on_callback_query(filters.regex("restart-tab"))
+
+@app.bot.on_callback_query(filters.regex("restart-tab"))
 @app.alert_user
 async def _restart_tron(_, cb):
 	await cb.edit_message_text(
@@ -41,7 +41,7 @@ async def _restart_tron(_, cb):
 	)
 
 
-@bot.on_callback_query(filters.regex("confirm-restart-tab"))
+@app.bot.on_callback_query(filters.regex("confirm-restart-tab"))
 @app.alert_user
 async def _restart_core(_, cb):
 	await cb.edit_message_text(
@@ -56,8 +56,8 @@ async def _restart_core(_, cb):
 			]
 		),
 	)
-	access = heroku3.from_key(bot.HEROKU_API_KEY)
-	application = access.apps()[bot.HEROKU_APP_NAME]
+	access = heroku3.from_key(app.HEROKU_API_KEY)
+	application = access.apps()[app.HEROKU_APP_NAME]
 	restart = application.restart()
 	if not restart:
 		await cb.edit_message_text(

@@ -9,14 +9,13 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-@bot.on_callback_query(filters.regex("update-tab"))
+@app.bot.on_callback_query(filters.regex("update-tab"))
 @app.alert_user
 async def _update_callback(_, cb):
 	await cb.answer(

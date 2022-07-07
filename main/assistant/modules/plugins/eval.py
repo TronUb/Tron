@@ -9,14 +9,13 @@ from io import StringIO
 from pyrogram.types import Message
 from pyrogram import filters
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-@bot.on_message(filters.command("eval") & filters.user(app.id), group=-1)
+@app.bot.on_message(filters.command("eval") & filters.user(app.id), group=-1)
 async def bot_evaluate_handler(_, m: Message):
 	""" This function is made for executing python codes """
 
@@ -32,9 +31,9 @@ async def bot_evaluate_handler(_, m: Message):
 			cmd = None
 
 		if not cmd:
-			return await bot.send_message(m.chat.id, "Give me some text (code) to execute . . .")
+			return await app.bot.send_message(m.chat.id, "Give me some text (code) to execute . . .")
 
-		msg = await bot.send_message(m.chat.id, "Running . . .")
+		msg = await app.bot.send_message(m.chat.id, "Running . . .")
 
 		old_stderr = sys.stderr
 		old_stdout = sys.stdout
@@ -55,10 +54,10 @@ async def bot_evaluate_handler(_, m: Message):
 		final_output = f"**• COMMAND:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
 
 		if len(final_output) > 4096:
-			location = await bot.create_file(filename="eval_output.txt", content=str(final_output), caption=f"`{m.text}`", send=False)
-			await bot.send_document(m.chat.id, location)
+			location = await app.create_file(filename="eval_output.txt", content=str(final_output), caption=f"`{m.text}`", send=False)
+			await app.bot.send_document(m.chat.id, location)
 			await msg.delete()
 		else:
 			await msg.edit(final_output)
 	except Exception as e:
-		await bot.error(e)
+		await app.error(e)

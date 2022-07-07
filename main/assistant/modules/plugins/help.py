@@ -5,34 +5,33 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-settings = bot.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"]))
-extra = bot.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
-about = bot.BuildKeyboard(([["About", "about-tab"]]))
-close = bot.BuildKeyboard(([["Close", "close-tab"]]))
-global_command = bot.BuildKeyboard(([["• Global Commands •", "global-commands-tab"]]))
+settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"]))
+extra = app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
+about = app.BuildKeyboard(([["About", "about-tab"]]))
+close = app.BuildKeyboard(([["Close", "close-tab"]]))
+global_command = app.BuildKeyboard(([["• Global Commands •", "global-commands-tab"]]))
 
 
 
 
 
-# /start command for bot
-@bot.on_message(filters.command("help"), group=-1)
+# /help command for bot
+@app.bot.on_message(filters.command("help"), group=-1)
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id == app.id:
 			# bot pic
-			if bot.BotPic().endswith(".jpg" or "png" or "jpeg"):
+			if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
 				info = await bot.send_photo(
 					m.chat.id,
-					bot.BotPic(),
-					bot.BotBio(m),
+					app.BotPic(),
+					app.BotBio(m),
 					reply_markup=InlineKeyboardMarkup(
 						[ settings, extra, about, close ]
 					),
@@ -40,23 +39,23 @@ async def start(_, m: Message):
 			elif bot.BotPic().endswith(".mp4" or ".gif"):
 				info = await bot.send_photo(
 					m.chat.id,
-					bot.BotPic(),
-					bot.BotBio(m),
+					app.BotPic(),
+					app.BotBio(m),
 					reply_markup=InlineKeyboardMarkup(
 						[ settings, extra, about, close ]
 					),
 				)
 			else:
-				info = await bot.send_message(
+				info = await app.bot.send_message(
 					m.chat.id,
-					bot.BotBio(m),
+					app.BotBio(m),
 					reply_markup=InlineKeyboardMarkup(
 					[ settings, extra, about, close ]
 					),
 				)
 
 		elif m.from_user.id != app.id:
-			info = await bot.send_photo(
+			info = await app.bot.send_photo(
 				m.chat.id,
 				"./resources/images/tron.png",
 				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
@@ -64,7 +63,7 @@ async def start(_, m: Message):
 					[global_command]
 				),
 			)
-		bot.message_ids.update({info.chat.id : info.message_id})
+		app.message_ids.update({info.chat.id : info.message_id})
 	else:
 		return
 

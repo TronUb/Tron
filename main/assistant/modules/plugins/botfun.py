@@ -1,4 +1,4 @@
-from main.assistant.client import bot
+from main.userbot.client import app
 
 from pyrogram import filters
 from pyrogram.enums import ChatType
@@ -14,7 +14,7 @@ cmd_handlers = ["+", "-"]
 
 
 
-@bot.on_message(filters.command(numbers, cmd_handlers) & filters.group, group=1)
+@app.bot.on_message(filters.command(numbers, cmd_handlers) & filters.group, group=1)
 async def increment_decrement(_, m):
 	try:
 		reply = m.reply_to_message
@@ -30,14 +30,14 @@ async def increment_decrement(_, m):
 				if prefix[0] == "+":
 					data = collect.get(str(reply.from_user.id)) 
 					collect.update({str(reply.from_user.id) : str(int(data) + int(prefix[1]))})
-					await bot.send_message(
+					await app.bot.send_message(
 						m.chat.id,
 						f"{reply.from_user.first_name}: " + str(int(data) + int(prefix[1])) + " increments"
 					)
 				elif prefix[0] == "-":
 					data = collect.get(str(reply.from_user.id)) 
 					collect.update({str(reply.from_user.id) : str(int(data) - int(prefix[1]))})
-					await bot.send_message(
+					await app.bot.send_message(
 						m.chat.id,
 						f"{reply.from_user.first_name}: " + str(int(data) - int(prefix[1])) + " increments"
 					)
@@ -45,18 +45,18 @@ async def increment_decrement(_, m):
 				if prefix[0] == "+":
 					data = {str(reply.from_user.id) : str(1)}
 					collect.update(data)
-					await bot.send_message(
+					await app.bot.send_message(
 						m.chat.id,
 						f"{reply.from_user.first_name}: 1 increments"
 					) 
 				elif prefix[0] == "-":
 					data = {str(reply.from_user.id) : str(-1)}
 					collect.update(data)
-					await bot.send_message(
+					await app.bot.send_message(
 						m.chat.id,
 						f"{reply.from_user.first_name}: 1 increments"
 					)
 	except Exception as e:
-		await bot.error(e)
+		await app.error(e)
 
 

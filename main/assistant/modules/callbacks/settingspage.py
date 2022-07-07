@@ -8,15 +8,13 @@ from pyrogram.types import (
 	CallbackQuery, 
 	Message,
 )
-
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-@bot.on_callback_query(filters.regex("settings-tab"))
+@app.bot.on_callback_query(filters.regex("settings-tab"))
 @app.alert_user
 async def _settings(_, cb):
 	await cb.edit_message_text(
@@ -38,7 +36,7 @@ async def _settings(_, cb):
 						"Update bot", callback_data="update-tab",
 					)
 				],
-				bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"])),
+				app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"])),
 			]
 		),
 	)

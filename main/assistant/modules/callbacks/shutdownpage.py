@@ -10,7 +10,6 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
@@ -18,7 +17,7 @@ from main.userbot.client import app
 
 
 
-@bot.on_callback_query(filters.regex("shutdown-tab"))
+@app.bot.on_callback_query(filters.regex("shutdown-tab"))
 @app.alert_user
 async def _shutdown_tron(_, cb):
 	await cb.edit_message_text(
@@ -44,7 +43,7 @@ async def _shutdown_tron(_, cb):
 	)
 
 
-@bot.on_callback_query(filters.regex("confirm-shutdown"))
+@app.bot.on_callback_query(filters.regex("confirm-shutdown"))
 @app.alert_user
 async def _shutdown_core(_, cb):
 	await cb.edit_message_text(

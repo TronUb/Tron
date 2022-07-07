@@ -1,4 +1,4 @@
-from main.assistant.client import bot
+from main.userbot.client import app
 
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -7,16 +7,16 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
-@bot.on_message(filters.command("id"), group=-1)
+@app.bot.on_message(filters.command("id"), group=-1)
 async def chat_user_id(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await bot.send_message(
+		await app.bot.send_message(
 			m.chat.id,
 			f"**{m.from_user.first_name}:** `{m.from_user.id}`\n**{m.chat.title}:** `{m.chat.id}`"
 		)
 	elif reply:
-		await bot.send_message(
+		await app.bot.send_message(
 			m.chat.id,
 			f"**{m.from_user.first_name}:** `{m.from_user.id}`\n**{m.chat.title}:** `{m.chat.id}`\n**{reply.from_user.first_name}:** `{reply.from_user.id}`"
 		)
@@ -24,11 +24,11 @@ async def chat_user_id(_, m):
 
 
 
-@bot.on_message(filters.command("quote"), group=-1)
+@app.bot.on_message(filters.command("quote"), group=-1)
 async def bot_anime_quotes(_, m):
-	await bot.send_message(
+	await app.bot.send_message(
 		m.chat.id,
-		bot.quote(),
+		app.quote(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

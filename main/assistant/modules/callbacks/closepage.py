@@ -9,18 +9,17 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
 
 
 
-@bot.on_callback_query(filters.regex("close-tab"))
+@app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
-		text=bot.closed_menu_string(),
+		text=app.closed_menu_string(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

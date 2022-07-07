@@ -9,16 +9,16 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
+from main.assistant.client import app
 
 
 
 
 
-@bot.on_callback_query(filters.regex("animequote-tab"))
+@app.bot.on_callback_query(filters.regex("animequote-tab"))
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
-		bot.quote(),
+		app.quote(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

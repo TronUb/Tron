@@ -10,5 +10,5 @@ if hasattr(sys, "getandroidapilevel"):
 
 
 from main.userbot.client import app
-from main.assistant.client import bot
+bot = app.bot
 from main.core.filters import gen, regex

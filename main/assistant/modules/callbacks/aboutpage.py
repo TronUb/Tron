@@ -9,7 +9,6 @@ from pyrogram.types import (
 	Message,
 )
 
-from main.assistant.client import bot
 from main.userbot.client import app
 
 
@@ -21,13 +20,13 @@ about_text = f"""
 
 **[ Personal Info ]:**
 
-**Name:** {bot.assistant_name}
+**Name:** {app.assistant_name}
 
 **[ Versions ]:**
 
-**Python:** {bot.python_version}
-**Pyrogram:** {bot.pyrogram_version}
-**Assistant:**  {bot.assistant_version}
+**Python:** {app.python_version}
+**Pyrogram:** {app.pyrogram_version}
+**Assistant:**  {app.assistant_version}
 
 **[ About ]:**
 
@@ -44,10 +43,10 @@ which are related to tronuserbot then just ask in [support group](https://t.me/t
 
 
 
-@bot.on_callback_query(filters.regex("about-tab"))
+@app.bot.on_callback_query(filters.regex("about-tab"))
 @app.alert_user
 async def _about(_, cb):
 	await cb.edit_message_media(
 		media=InputMediaPhoto(media="./resources/images/nora.png", caption=about_text),
-		reply_markup=InlineKeyboardMarkup([bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
+		reply_markup=InlineKeyboardMarkup([app.bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
 	)
