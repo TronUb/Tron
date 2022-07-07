@@ -2,7 +2,7 @@ import asyncio
 import warnings
 from pyrogram import idle
 from pyrogram.types import BotCommand
-from .userbot import app
+from main.userbot import app
 
 
 
