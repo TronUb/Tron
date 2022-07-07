@@ -3,7 +3,6 @@ import warnings
 from pyrogram import idle
 from pyrogram.types import BotCommand
 from .userbot import app
-from .assistant.client import bot
 
 
 
@@ -11,9 +10,9 @@ from .assistant.client import bot
 
 async def start_assistant():
 	""" this function starts the pyrogram bot client. """
-	if bot:
+	if app and app.bot:
 		print("Activating assistant.\n")
-		response = await bot.start()
+		response = await app.bot.start()
 		if response:
 			print("Assistant activated.\n")
 			botcmd = [
@@ -30,7 +29,7 @@ async def start_assistant():
 		
 			if cmds != botcmdkeys:
 				print("Setting bot commands.\n")
-				await bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
+				await app.bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
 				print("Added bot commands.\n")
 		
 		else:
@@ -66,22 +65,18 @@ async def start_bot():
 	It also imports modules & plugins for assistant & userbot. """
 
 	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
-
-	await start_assistant()
 	print("PLUGINS: Installing.\n\n")
-	botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
-	app.import_module("main/assistant/modules/callbacks/", display_module=False)
-	app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
-	print(f"\n\n{botplugins} plugins Loaded\n\n")
- 
-	await start_userbot()
+	plugins = app.import_module("tronx/modules/assistant/plugins/", exclude=app.NoLoad())
+	app.import_module("tronx/modules/assistant/callbacks/", display_module=False)
+	app.import_module("tronx/modules/assistant/inlinequeries/", display_module=False)
+	print(f"\n\n{plugins} plugins Loaded\n\n")
 	print("MODULES: Installing.\n\n")
-	plugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
-	print(f"\n\n{plugins} modules Loaded\n\n")
-
+	modules = app.import_module("tronx/modules/userbot/plugins/", exclude=app.NoLoad())
+	print(f"\n\n{modules} modules Loaded\n\n")
+	await start_assistant()
+	await start_userbot()
 	print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 	await idle() # block execution
-
 
 
 
