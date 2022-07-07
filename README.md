@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/beastzx18/Tron">
-        <img src="resources/images/tron-round.png" height="300" width="300" alt="Tron">
+        <img src="main/core/resources/images/tron-round.png" height="300" width="300" alt="TronUb">
     </a>
 </p>
 
@@ -17,13 +17,13 @@
 ![Commit since](https://img.shields.io/github/commits-since/TronUb/Tron/0.0.1/master)
 
 
-### Click below on text
+<h2>click below to expand</h2>
 
 <details>
     <summary><b>• About</b></summary>
 
 <br></br>
-**This is a telegram userbot with an assistant bot, it is written in pure Python using** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
+**This is a telegram userbot with an assistant bot, it is written in pure Python using** Dan's [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
 
 </details>
 
@@ -51,7 +51,7 @@
 
 
 <details>
-    <summary><b>• Deployment [ 2 methods ]</b></summary>
+    <summary><b>• Deployment ( 2 methods )</b></summary>
 
 <br></br>
 
@@ -69,7 +69,7 @@
 
 <p>2. Run The code given below in termux.</p>
 
-*  ```pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && ./start.sh```
+*  ```cd $HOME && pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd Tron && ./start.sh```
 
 <p>3. Enter your details carefully.</p>
 
@@ -81,7 +81,7 @@
 </details>
 
 <details>
-<summary><b>• Session [ 2 methods ]</b></summary>
+<summary><b>• Session ( 2 methods )</b></summary>
 
 <br></br>
 <b>1. Repl method</b>
@@ -96,14 +96,14 @@
 
 * Run the given command in termux
 
-*  ```apt update && apt upgrade && pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd ~ && cd Tron && python3 session.py```
+*  ```apt update && apt upgrade && pkg install python3 git && cd $HOME && git clone https://github.com/TronUb/Tron.git && cd Tron && python3 session.py```
 
 ---
 
 <br></br>
 </details>
 
-Warning ⚠️: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
+<b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
 
 <br></br>
 

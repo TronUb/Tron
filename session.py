@@ -13,11 +13,11 @@ Get the following values by logging to,
 
 https://my.telegram.org
 
-Required:
+Requirements:
   
   1. API_ID
   2. API_HASH
-  3. PHONE NUMBER (WITH COUNTRY CODE, EX: +911234567891)
+  3. PHONE NUMBER (WITH COUNTRY CODE, EX: +911034567891)
   
 """
 
@@ -33,7 +33,6 @@ while not (API_ID.isdigit() and len(API_ID) == 7):
 
 
 
-# hexadecimal number
 API_HASH = input("\nEnter API HASH: ")
 
 
