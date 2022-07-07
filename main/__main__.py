@@ -3,6 +3,7 @@ import warnings
 from pyrogram import idle
 from pyrogram.types import BotCommand
 from .userbot import app
+from .assistant import bot
 
 
 
@@ -10,9 +11,9 @@ from .userbot import app
 
 async def start_assistant():
 	""" this function starts the pyrogram bot client. """
-	if app and app.bot:
+	if bot:
 		print("Activating assistant.\n")
-		response = await app.bot.start()
+		response = await bot.start()
 		if response:
 			print("Assistant activated.\n")
 			botcmd = [
@@ -24,12 +25,12 @@ async def start_assistant():
 				["broadcast", "send messages to users who have started your bot."],
 				["eval", "evaluate python codes."]
 			]
-			cmds = [x.command for x in await app.bot.get_bot_commands()]
+			cmds = [x.command for x in await bot.get_bot_commands()]
 			botcmdkeys = [y[0] for y in botcmd]
 		
 			if cmds != botcmdkeys:
 				print("Setting bot commands.\n")
-				await app.bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
+				await bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
 				print("Added bot commands.\n")
 		
 		else:
@@ -65,16 +66,19 @@ async def start_bot():
 	It also imports modules & plugins for assistant & userbot. """
 
 	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
+
+	await start_assistant()
 	print("PLUGINS: Installing.\n\n")
-	plugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
+	botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
 	app.import_module("main/assistant/modules/callbacks/", display_module=False)
 	app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
-	print(f"\n\n{plugins} plugins Loaded\n\n")
-	print("MODULES: Installing.\n\n")
-	modules = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
-	print(f"\n\n{modules} modules Loaded\n\n")
-	await start_assistant()
+	print(f"\n\n{botplugins} plugins Loaded\n\n")
+ 
 	await start_userbot()
+	print("MODULES: Installing.\n\n")
+	plugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
+	print(f"\n\n{plugins} modules Loaded\n\n")
+
 	print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 	await idle() # block execution
 
