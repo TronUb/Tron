@@ -1,8 +1,8 @@
-from tronx.clients import app
-from pyrogram import idle
-from pyrogram.types import BotCommand
 import asyncio
 import warnings
+from pyrogram import idle
+from pyrogram.types import BotCommand
+from .userbot import app
 
 
 
@@ -66,12 +66,12 @@ async def start_bot():
 
 	print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
 	print("PLUGINS: Installing.\n\n")
-	plugins = app.import_module("tronx/modules/assistant/plugins/", exclude=app.NoLoad())
-	app.import_module("tronx/modules/assistant/callbacks/", display_module=False)
-	app.import_module("tronx/modules/assistant/inlinequeries/", display_module=False)
+	plugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
+	app.import_module("main/assistant/modules/callbacks/", display_module=False)
+	app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
 	print(f"\n\n{plugins} plugins Loaded\n\n")
 	print("MODULES: Installing.\n\n")
-	modules = app.import_module("tronx/modules/userbot/plugins/", exclude=app.NoLoad())
+	modules = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
 	print(f"\n\n{modules} modules Loaded\n\n")
 	await start_assistant()
 	await start_userbot()
@@ -82,7 +82,7 @@ async def start_bot():
 
 
 if __name__ == '__main__':
-	with warnings.catch_warnings():
+	with warnings.catch_warnings(): # DeprecationWarning (termux deployment)
 		warnings.simplefilter("ignore")
 		loop = asyncio.get_event_loop()
 	loop.run_until_complete(start_bot())

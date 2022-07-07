@@ -1,18 +1,17 @@
 import time
+import logging 
 import platform
 
-import logging 
 from config import Config
 from telegraph import Telegraph
-from tronx.pyrogramx.methods import Methods
+from main.core import Core
 from pyrogram import __version__ as pyrogram_version
-from tronx.database import Database
-from tronx.helpers import Helpers
 
 
 
 
-class ClassManager(Methods, Config, Database, Helpers):
+
+class ClassManager(Core, Config):
 	# versions /
 	python_version = str(platform.python_version())
 	pyrogram_version = str(pyrogram_version)

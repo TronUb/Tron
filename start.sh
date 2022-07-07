@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 -m tronx
+python3 -m main
