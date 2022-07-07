@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/beastzx18/Tron">
-        <img src="resources/images/tron-round.png" height="300" width="300" alt="Tron">
+        <img src="main/core/resources/images/tron-round.png" height="300" width="300" alt="Tron">
     </a>
 </p>
 
