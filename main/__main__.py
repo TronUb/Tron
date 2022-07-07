@@ -24,7 +24,7 @@ async def start_assistant():
 				["broadcast", "send messages to users who have started your bot."],
 				["eval", "evaluate python codes."]
 			]
-			cmds = [x.command for x in await bot.get_bot_commands()]
+			cmds = [x.command for x in await app.bot.get_bot_commands()]
 			botcmdkeys = [y[0] for y in botcmd]
 		
 			if cmds != botcmdkeys:
