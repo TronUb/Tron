@@ -9,7 +9,7 @@ from pyrogram.errors import (
 	MessageTooLong,
 )
 
-from tronx import app, gen
+from main import app, gen
 
 
 

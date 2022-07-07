@@ -19,7 +19,7 @@ from tronx import app
 
 
 # via bot messages
-@app.bot.on_inline_query(filters.user(app.id))
+@bot.on_inline_query(filters.user(app.id))
 def inline_result(_, inline_query):
 	query = inline_query.query
 	if query.startswith("#pmpermit"):

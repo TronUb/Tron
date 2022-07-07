@@ -7,7 +7,7 @@ import heroku3
 from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
 
-from tronx import app, gen
+from main import app, gen
 
 
 

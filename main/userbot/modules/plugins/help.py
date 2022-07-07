@@ -4,7 +4,7 @@ from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
 
-from tronx import app, gen
+from main import app, gen
 
 from pyrogram.types import (
 	Message,

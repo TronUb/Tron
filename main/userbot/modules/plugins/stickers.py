@@ -12,7 +12,7 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 from pyrogram.errors import YouBlockedUser, StickersetInvalid
 
-from tronx import app, gen
+from main import app, gen
 
 
 

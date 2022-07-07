@@ -12,7 +12,7 @@ from pyrogram.errors import (
 	UsernameNotOccupied,
 )
 
-from tronx import app, gen
+from main import app, gen
 
 
 

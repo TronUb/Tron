@@ -9,14 +9,14 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
 
 
 # modules dex
-@app.bot.on_callback_query(filters.regex("modules-tab"))
+@bot.on_callback_query(filters.regex("modules-tab"))
 @app.alert_user
 async def modules(_, cb):
 	btn = app.HelpDex(0, app.CMD_HELP, "navigate")
@@ -27,7 +27,7 @@ async def modules(_, cb):
 
 
 # next page
-@app.bot.on_callback_query(filters.regex(pattern="navigate-next\((.+?)\)"))
+@bot.on_callback_query(filters.regex(pattern="navigate-next\((.+?)\)"))
 @app.alert_user
 async def give_next_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
@@ -38,7 +38,7 @@ async def give_next_page(_, cb):
 
 
 # previous page
-@app.bot.on_callback_query(filters.regex(pattern="navigate-prev\((.+?)\)"))
+@bot.on_callback_query(filters.regex(pattern="navigate-prev\((.+?)\)"))
 @app.alert_user
 async def give_old_page(_, cb):
 	current_page_number = int(cb.matches[0].group(1))
@@ -47,7 +47,7 @@ async def give_old_page(_, cb):
 
 
 # back from modules dex to home
-@app.bot.on_callback_query(filters.regex(pattern="back-to-modules-page-(.*)"))
+@bot.on_callback_query(filters.regex(pattern="back-to-modules-page-(.*)"))
 @app.alert_user
 async def get_back(_, cb):
 	page_number = int(cb.matches[0].group(1))
@@ -57,7 +57,7 @@ async def get_back(_, cb):
 
 
 # modules plugin page information
-@app.bot.on_callback_query(filters.regex(pattern="modulelist-(.*)"))
+@bot.on_callback_query(filters.regex(pattern="modulelist-(.*)"))
 @app.alert_user
 async def give_plugin_cmds(_, cb):
 	plugin_name, page_number = cb.matches[0].group(1).split("|", 1)

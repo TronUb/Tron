@@ -16,7 +16,7 @@ from pyrogram.types import (
 from pyrogram.raw import functions
 from pyrogram.errors import PeerIdInvalid
 
-from tronx import app, gen
+from main import app, gen
 
 
 

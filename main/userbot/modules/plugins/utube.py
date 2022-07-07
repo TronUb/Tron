@@ -1,4 +1,4 @@
-from tronx import app, gen
+from main import app, gen
 
 from pytube import YouTube
 from pyrogram.types import Message

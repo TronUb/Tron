@@ -9,13 +9,13 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
 
 
-@app.bot.on_callback_query(filters.regex("animequote-tab"))
+@bot.on_callback_query(filters.regex("animequote-tab"))
 async def _more_anime_quotes(_, cb):
 	await cb.edit_message_text(
 		app.quote(),

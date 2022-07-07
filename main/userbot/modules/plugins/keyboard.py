@@ -3,7 +3,7 @@ from pyrogram.types import (
 	InlineKeyboardButton,
 )
 
-from tronx import app, gen
+from main import app, gen
 
 
 

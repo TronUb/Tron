@@ -8,7 +8,7 @@ from pyrogram.types import (
 
 from pyrogram import errors
 
-from tronx import app, gen, regex
+from main import app, gen, regex
 
 
 

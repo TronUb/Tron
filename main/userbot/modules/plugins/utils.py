@@ -13,7 +13,7 @@ from pyrogram.errors import (
 	UserChannelsTooMuch
 )
 
-from tronx import app, gen
+from main import app, gen
 
 
 

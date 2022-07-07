@@ -7,7 +7,7 @@ import requests
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 
-from tronx import app, gen
+from main import app, gen
 
 
 

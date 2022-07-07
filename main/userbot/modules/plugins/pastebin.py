@@ -3,7 +3,7 @@ import aiohttp
 
 from pyrogram.types import Message
 
-from tronx import app, gen
+from main import app, gen
 
 
 

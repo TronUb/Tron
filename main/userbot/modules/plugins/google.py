@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from bing_image_downloader import downloader as bing_downloader
 from pyrogram.types import Message
 
-from tronx import app, gen
+from main import app, gen
 
 
 

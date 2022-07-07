@@ -5,7 +5,7 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
@@ -22,13 +22,13 @@ global_command = app.BuildKeyboard(([["• Global Commands •", "global-command
 
 
 # /start command for bot
-@app.bot.on_message(filters.command("help"), group=-1)
+@bot.on_message(filters.command("help"), group=-1)
 async def start(_, m: Message):
 	if m.from_user:
 		if m.from_user.id == app.id:
 			# bot pic
 			if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
-				info = await app.bot.send_photo(
+				info = await bot.send_photo(
 					m.chat.id,
 					app.BotPic(),
 					app.BotBio(m),
@@ -37,7 +37,7 @@ async def start(_, m: Message):
 					),
 				)
 			elif app.BotPic().endswith(".mp4" or ".gif"):
-				info = await app.bot.send_photo(
+				info = await bot.send_photo(
 					m.chat.id,
 					app.BotPic(),
 					app.BotBio(m),
@@ -46,7 +46,7 @@ async def start(_, m: Message):
 					),
 				)
 			else:
-				info = await app.bot.send_message(
+				info = await bot.send_message(
 					m.chat.id,
 					app.BotBio(m),
 					reply_markup=InlineKeyboardMarkup(
@@ -55,7 +55,7 @@ async def start(_, m: Message):
 				)
 
 		elif m.from_user.id != app.id:
-			info = await app.bot.send_photo(
+			info = await bot.send_photo(
 				m.chat.id,
 				"./resources/images/tron.png",
 				f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",

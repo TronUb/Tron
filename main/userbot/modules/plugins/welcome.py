@@ -3,7 +3,7 @@ import time
 from pyrogram.types import Message
 from pyrogram import filters
 
-from tronx import app, gen
+from main import app, gen
 
 
 

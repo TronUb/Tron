@@ -9,5 +9,5 @@ if hasattr(sys, "getandroidapilevel"):
 	from config import Config
 
 
-from tronx.clients import app
-from tronx.helpers import gen, regex
+from main.userbot.client import app
+from main.core.filters import gen, regex

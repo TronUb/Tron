@@ -9,7 +9,7 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
@@ -17,7 +17,7 @@ from tronx import app
 
 
 
-@app.bot.on_callback_query(filters.regex("extra-tab"))
+@bot.on_callback_query(filters.regex("extra-tab"))
 @app.alert_user
 async def _extra(_, cb):
 	await cb.edit_message_text(

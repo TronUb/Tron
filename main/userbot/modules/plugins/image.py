@@ -11,7 +11,7 @@ from pyrogram import filters, Client
 from pyrogram.errors import UsernameInvalid
 from pyrogram.types import Message
 
-from tronx import app, gen
+from main import app, gen
 
 
 

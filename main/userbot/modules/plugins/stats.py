@@ -1,5 +1,4 @@
-from tronx import app
-from tronx.helpers import gen
+from main import app, gen
 from pyrogram.types import Message
 
 

@@ -9,7 +9,7 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
@@ -24,7 +24,7 @@ homepage_text = f"""
 
 
 
-@app.bot.on_callback_query(filters.regex("home-tab"))
+@bot.on_callback_query(filters.regex("home-tab"))
 @app.alert_user
 async def _start(_, cb):
 	await cb.edit_message_media(

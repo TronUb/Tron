@@ -2,7 +2,7 @@ from deep_translator import GoogleTranslator
 
 from pyrogram.types import Message
 
-from tronx import app, gen
+from main import app, gen
 
 
 

@@ -6,7 +6,7 @@ from pyrogram.errors import (
 	UsernameInvalid
 )
 
-from tronx import app, gen
+from main import app, gen
 
 
 

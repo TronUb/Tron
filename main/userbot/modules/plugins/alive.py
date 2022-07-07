@@ -2,7 +2,7 @@ import asyncio
 from pyrogram.types import Message
 from pyrogram.errors import BotInvalid, BotInlineDisabled
 
-from tronx import app, gen
+from main import app, gen
 
 
 

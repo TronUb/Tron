@@ -9,13 +9,13 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
 
 
-@app.bot.on_callback_query(filters.regex("update-tab"))
+@bot.on_callback_query(filters.regex("update-tab"))
 @app.alert_user
 async def _update_callback(_, cb):
 	await cb.answer(

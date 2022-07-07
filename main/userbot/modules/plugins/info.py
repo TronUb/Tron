@@ -2,7 +2,7 @@ import os
 
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
-from tronx import app, gen
+from main import app, gen
 
 
 

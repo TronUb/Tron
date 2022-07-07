@@ -9,7 +9,8 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
+
 
 
 about_text = f"""
@@ -42,7 +43,7 @@ which are related to tronuserbot then just ask in [support group](https://t.me/t
 
 
 
-@app.bot.on_callback_query(filters.regex("about-tab"))
+@bot.on_callback_query(filters.regex("about-tab"))
 @app.alert_user
 async def _about(_, cb):
 	await cb.edit_message_media(

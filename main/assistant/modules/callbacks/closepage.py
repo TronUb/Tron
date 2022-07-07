@@ -9,13 +9,13 @@ from pyrogram.types import (
 	Message,
 )
 
-from tronx import app
+from main.assistant.client import bot
 
 
 
 
 
-@app.bot.on_callback_query(filters.regex("close-tab"))
+@bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
 	await cb.edit_message_text(
