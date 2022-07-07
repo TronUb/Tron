@@ -28,7 +28,7 @@ async def start(_, m: Message):
 		if m.from_user.id == app.id:
 			# bot pic
 			if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
-				info = await bot.send_photo(
+				info = await app.bot.send_photo(
 					m.chat.id,
 					app.BotPic(),
 					app.BotBio(m),
@@ -37,7 +37,7 @@ async def start(_, m: Message):
 					),
 				)
 			elif bot.BotPic().endswith(".mp4" or ".gif"):
-				info = await bot.send_photo(
+				info = await app.bot.send_photo(
 					m.chat.id,
 					app.BotPic(),
 					app.BotBio(m),
