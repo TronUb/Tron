@@ -22,7 +22,7 @@ class ClassManager(Core, Config):
 
 	# userbot /
 	userbot_name = "Tron"
-	userbot_version = "v.0.1.2"
+	userbot_version = "v.0.1.3"
 
 	# containers /
 	CMD_HELP = {}
