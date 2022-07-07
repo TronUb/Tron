@@ -23,6 +23,6 @@ async def added_to_group_msg(_, m: Message):
 				"Thank You for adding me in this group !\nUse /help to know my features."
 			)
 		except Exception as e:
-			await app.error(m, e)
+			await bot.error(m, e)
 	else:
 		return

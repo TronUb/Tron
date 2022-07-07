@@ -28,7 +28,7 @@ async def chat_user_id(_, m):
 async def bot_anime_quotes(_, m):
 	await bot.send_message(
 		m.chat.id,
-		app.quote(),
+		bot.quote(),
 		reply_markup=InlineKeyboardMarkup(
 			[
 				[

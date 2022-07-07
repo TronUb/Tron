@@ -16,7 +16,7 @@ async def bot_ping(_, m: Message):
 		ms = (end - start).microseconds / 1000
 		await bot.send_message(
 			m.chat.id,
-			f"Pong !\n`{ms}`\nUptime: `{app.uptime()}`"
+			f"Pong !\n`{ms}`\nUptime: `{bot.uptime()}`"
 		)
 	elif m.chat.type in ["supergroup", "group"]:
 		start = datetime.now()
@@ -26,7 +26,7 @@ async def bot_ping(_, m: Message):
 		)
 		end = datetime.now()
 		ms = (end - start).microseconds / 1000
-		await msg.edit(f"Pong !\n`{ms}`\nUptime: `{app.uptime()}`")
+		await msg.edit(f"Pong !\n`{ms}`\nUptime: `{bot.uptime()}`")
 
 
 
