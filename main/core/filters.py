@@ -116,10 +116,7 @@ def gen(
 				if not "sudo" in allow:
 					return False
 
-			if not triggers: # empty list
-				flt.triggers = client.Trigger() 
-			else:
-				flt.triggers = triggers
+			flt.triggers = triggers or client.Trigger() or ["."]
 
 			for trigger in flt.triggers:
 				if not text.startswith(trigger):
