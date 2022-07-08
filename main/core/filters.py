@@ -83,12 +83,12 @@ def regex(
 # custom command filter
 def gen(
 	commands: Union[str, List[str]], 
-	triggers: Union[str, List[str]] = [],
+	prefixes: Union[str, List[str]] = [],
 	case_sensitive: bool = True, 
 	allow: list = []
 	):
 
-	# modified function of pyrogram.filters.command filter function
+	# modified function of pyrogram.filters.command
 	async def func(flt, client: Client, message: Message):
 
 		try:
@@ -116,10 +116,11 @@ def gen(
 				if not "sudo" in allow:
 					return False
 
-			flt.triggers = triggers or client.Trigger() or ["."]
 
-			for trigger in flt.triggers:
-				if not text.startswith(trigger):
+			flt.prefixes = prefixes or client.Trigger() or ["."] # workaround
+
+			for prefix in flt.prefixes:
+				if not text.startswith(prefix):
 					continue
 
 				cmd = text.split()[0][1:]
@@ -130,12 +131,14 @@ def gen(
 					if message_owner == "sudo":
 						if not client.SudoCmds(): # empty list -> full command access to sudo
 							client.m = message
+							client.bot.m = message
 							return True 
 
 						if not cmd in client.SudoCmds():
 							return False
 
 					client.m = message
+					client.bot.m = message
 					return True
 
 			return False
@@ -145,15 +148,14 @@ def gen(
 	commands = commands if isinstance(commands, list) else [commands]
 	commands = {c if case_sensitive else c.lower() for c in commands}
 
-	triggers = [] if triggers is None else triggers
-	triggers = triggers if isinstance(triggers, list) else [triggers]
-	triggers = set(triggers) if triggers else {""}
+	prefixes = [] if prefixes is None else prefixes
+	prefixes = prefixes if isinstance(prefixes, list) else [prefixes]
+	prefixes = set(prefixes) if prefixes else {""}
 
 	return create(
 		func,
 		"MessageCommandFilter",
 		commands=commands,
-		prefixes=triggers,
+		prefixes=prefixes,
 		case_sensitive=case_sensitive
 	)
-
