@@ -10,7 +10,7 @@ import requests
 
 from typing import Union, List
 from pyrogram.types import Message
-from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
+from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid, BotMethodInvalid
 from pyrogram.enums import ParseMode, ChatType
 
 
@@ -240,8 +240,8 @@ class RawFunctions(object):
 			)
 		"""
 		if self == self.bot:
-			
-			return
+			raise BotMethodInvalid
+
 		msg = None
 
 		if self.m.from_user.is_self:
