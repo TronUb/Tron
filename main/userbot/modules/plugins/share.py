@@ -31,7 +31,7 @@ async def sendmodule_handler(app, m: Message):
 	if app.long() > 1:
 		await app.send_edit("Checking module . . .", text_type=["mono"])
 		filename = m.command[1]
-		modulename = f"tronx/modules/{filename}.py"
+		modulename = f"main/userbot/modules/plugins/{filename}.py"
 		if os.path.exists(modulename):
 			thumb_image = await app.IsThumbExists(modulename)
 
@@ -60,7 +60,7 @@ async def sendmodule_handler(app, m: Message):
 		else:
 			await app.send_edit("404: plugin not found . . .", delme=2, text_type=["mono"])
 	else:
-		await app.send_edit(f"`{app.PREFIX}send [ plugin name ]`  to upload plugin file.", delme=3)
+		await app.send_edit(f"`{app.Trigger()[0]}send [ plugin name ]`  to upload plugin file.", delme=3)
 
 
 
