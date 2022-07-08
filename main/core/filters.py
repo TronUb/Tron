@@ -117,7 +117,7 @@ def gen(
 					return False
 
 
-			flt.prefixes = client.MyPrefix() # workaround
+			flt.prefixes = client.Trigger() or ["."] # workaround
 
 			for prefix in flt.prefixes:
 				if not text.startswith(prefix):
@@ -159,4 +159,3 @@ def gen(
 		prefixes=prefixes,
 		case_sensitive=case_sensitive
 	)
-

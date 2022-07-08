@@ -10,7 +10,7 @@ import requests
 
 from typing import Union, List
 from pyrogram.types import Message
-from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid
+from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid, BotMethodInvalid
 from pyrogram.enums import ParseMode, ChatType
 
 
@@ -32,6 +32,8 @@ class RawFunctions(object):
 		ex: (async)
 			await app.aexec("print('Hello, World !')")
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		exec(
 			f"async def __aexec(self, m): "
@@ -99,6 +101,8 @@ class RawFunctions(object):
 			except Exception as e:
 				await app.error(e, edit_error=False) 
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		teks = f"**Traceback Report:**\n\n"
 		teks += f"**Date:** `{self.showdate()}`\n**Time:** `{self.showtime()}`\n\n"
@@ -142,6 +146,9 @@ class RawFunctions(object):
 		ex: (async)
 			await app.sleep(10, delmsg=True)
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
+
 		msg = None
 		await asyncio.sleep(sec)
 		if delmsg and self.m.from_user.is_self:
@@ -164,6 +171,8 @@ class RawFunctions(object):
 		ex: (async)
 			await app.delete(10)
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		if sec <= 600: # 10 min
 			asyncio.create_task(self.sleep(sec=sec, delmsg=True))
@@ -239,9 +248,9 @@ class RawFunctions(object):
 				mono=True
 			)
 		"""
-		if self == self.bot:
-			
-			return
+		if self.is_bot:
+			raise BotMethodInvalid
+
 		msg = None
 
 		if self.m.from_user.is_self:
@@ -288,6 +297,8 @@ class RawFunctions(object):
 		ex: (async)
 			await app.private(message)
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		if self.m.chat.type == ChatType.PRIVATE:
 			await self.send_edit(
@@ -313,6 +324,8 @@ class RawFunctions(object):
 			if app.long() == 1:
 				print("there is one word in message.text")
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		text_length = len(self.m.text.split() or self.m.caption.split())
 		return text_length if bool(text_length) is True else None
@@ -332,6 +345,8 @@ class RawFunctions(object):
 			if app.textlen() > 4096:
 				print("Text is too long")
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		return len([x for x in self.m.text or self.m.caption or None])
 
@@ -525,6 +540,8 @@ class RawFunctions(object):
 		ex: (async)
 			await app.toggle_inline()
 		"""
+		if self.is_bot:
+			raise BotMethodInvalid
 
 		try:
 			botname = "BotFather"
@@ -635,12 +652,12 @@ class RawFunctions(object):
 		media = ["photo", "video", "audio", "document", "sticker", "animation"]
 	
 		for x in media:
-			if message and message[x]:
-				if message["caption"]:
-					return {"data":(message[x]).file_id, "caption":message.caption, "type":x}
+			if message and getattr(message, x, False):
+				if getattr(message, "caption"):
+					return {"data":(getattr(message, x)).file_id, "caption":message.caption, "type":x}
 				else:
-					return {"data":(message[x]).file_id, "caption":None, "type":x}
-			elif message["text"]:
+					return {"data":(getattr(message, x)).file_id, "caption":None, "type":x}
+			elif getattr(message, "text", False):
 				return {"data":message.text, "caption":None, "type":"text"}
 		return {"data":None, "caption":None, "type":None}
 
@@ -703,7 +720,7 @@ class RawFunctions(object):
 			await app.user_exists(user_id, chat_id)
 		"""
 
-		async for x in self.iter_chat_members(chat_id):
+		async for x in self.get_chat_members(chat_id):
 			if x.user.id == user_id:
 				return True
 		return False

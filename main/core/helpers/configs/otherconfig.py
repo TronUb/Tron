@@ -3,10 +3,6 @@ OTHERDV = [
 	"NO_LOAD",
 	"SUDO_USERS",
 	"SUDO_CMDS",
-	"PMPERMIT",
-	"PM_LIMIT",
-	"PMPERMIT_PIC",
-	"PMPERMIT_TEXT",
 	"PREFIX",
 	"HELP_EMOJI",
 	]
@@ -29,9 +25,9 @@ class OtherConfig(object):
 
 
 
-	def MyPrefix(self):
+	def Trigger(self):
 		""" Get list of prefixes (command handlers) """
-		return self.getdv("PREFIX").split() or self.PREFIX.split() or "."
+		return self.getdv("TRIGGER").split() or self.TRIGGER.split() or "."
 
 
 	def HelpEmoji(self):

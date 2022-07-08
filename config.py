@@ -42,7 +42,7 @@ class Config(inside):
 		# a group to store logs, etc (required)
 		LOG_CHAT = int(os.getenv("LOG_CHAT"))
 	# command handler, if you give (exclamation symbol = !) then you can do like this command: !ping => result: pong !
-	PREFIX = os.getenv("TRIGGER", ".")
+	TRIGGER = os.getenv("TRIGGER", ".")
 	# for more info visit docs.pyrogram.org, workers section
 	WORKERS = int(os.getenv("WORKERS", 8))
 	# exclude official plugins from installing, give a space between plugin names
