@@ -86,7 +86,6 @@ def gen(
 	triggers: Union[str, List[str]] = [],
 	case_sensitive: bool = True, 
 	allow: list = []
-	**kwargs
 	):
 
 	# modified function of pyrogram.filters.command filter function
