@@ -2,14 +2,14 @@ import random
 import string
 from pyrogram import Client
 from main.assistant.client import Bot
-from .classmanager import ClassManager
+from main.core import Core
 
 
 # temp -
 random_name =  ''.join(random.choices(string.ascii_uppercase + string.digits, k = 7))
 
 
-class SuperClient(ClassManager, Client):
+class SuperClient(Core, Client):
 	""" Userbot (tron) """
 	def __init__(self):
 		super().__init__(
