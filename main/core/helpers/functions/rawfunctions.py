@@ -205,7 +205,7 @@ class RawFunctions(object):
 				self.CMD_HELP.get(modules)[1].values()
 				):
 				module_data.append(
-					f"CMD: `{self.PREFIX}{x}`\nINFO: `{y}`\n\n"
+					f"CMD: `{self.Trigger()}{x}`\nINFO: `{y}`\n\n"
 					)
 			return module_data
 		except Exception as e:
