@@ -1,13 +1,8 @@
-from .database import Database
-from .helpers import Helpers
-from .newpyrogram import Methods
+from main.core.classes.classmanager import ClassManager
 
 
 
-class Core(
-    Database,
-    Helpers,
-    Methods
-):
+
+class Core(ClassManager):
     pass
     

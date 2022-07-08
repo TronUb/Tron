@@ -4,14 +4,17 @@ import platform
 
 from config import Config
 from telegraph import Telegraph
-from main.core import Core
 from pyrogram import __version__ as pyrogram_version
+from main.core.database import Database
+from main.core.helpers import Helpers
+from main.core.newpyrogram import Methods
 
 
 
 
 
-class ClassManager(Core, Config):
+
+class ClassManager(Config, Helpers, Database, Methods):
 	# versions /
 	python_version = str(platform.python_version())
 	pyrogram_version = str(pyrogram_version)

@@ -239,7 +239,7 @@ class RawFunctions(object):
 				mono=True
 			)
 		"""
-		if self == self.bot:
+		if self.is_bot:
 			raise BotMethodInvalid
 
 		msg = None
