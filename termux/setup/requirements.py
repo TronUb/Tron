@@ -64,7 +64,7 @@ def install_requirements():
 			if pkg == "Pillow":
 				print(f"\nInstalling package {x}\n\n")
 				shell("pkg install libjpeg-turbo")
-				shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/') 
+				shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'") 
 				shell("pip3 install Pillow")
 				clear()
 				continue
