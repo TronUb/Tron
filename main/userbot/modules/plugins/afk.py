@@ -115,7 +115,7 @@ async def afkme_handler(_, m: Message):
 	try:
 		# don't break afk while going offline
 		if m.text:
-			if m.text.startswith(f"{app.TRIGGER}afk"):
+			if m.text.startswith(f"{app.Trigger()}afk"):
 				return
 			elif "#afk" in m.text:
 				return
