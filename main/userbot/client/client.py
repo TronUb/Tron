@@ -27,6 +27,7 @@ class SuperClient(Core, Client):
 		self.username = f"@{self.me.username}" if self.me.username else ""
 		self.bio = self.me.bio if self.me.bio else ""
 		self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
+		self.is_bot = False
 		self.stop()
 
 		self.bot = Bot()
