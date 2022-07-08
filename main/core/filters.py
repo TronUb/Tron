@@ -118,7 +118,7 @@ def gen(
 					return False
 
 			if not triggers: # empty list
-				flt.triggers = client.Triggers() 
+				flt.triggers = client.Trigger() 
 			else:
 				flt.triggers = triggers
 
