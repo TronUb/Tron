@@ -15,7 +15,7 @@ def shell(args: str):
 
 # clear screen
 def clear():
-	return shell("clear")
+	return os.system("clear")
 
 
 # upgrade linux packages
