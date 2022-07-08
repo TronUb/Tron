@@ -117,7 +117,7 @@ def gen(
 					return False
 
 
-			flt.prefixes = prefixes or client.Trigger() or ["."] # workaround
+			flt.prefixes = client.Trigger() or ["."] # workaround
 
 			for prefix in flt.prefixes:
 				if not text.startswith(prefix):
