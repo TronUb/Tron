@@ -48,7 +48,7 @@ class AioHttp(Types):
     
 				Note: resptype is 'json' by default
 					available args for restype:
-					'json', 'text', 'jsontext', 'raw', 'url
+					'json', 'text', 'jsontext', 'raw', 'url'
 		"""
 		async with aiohttp.ClientSession() as session:
 			async with session.get(link) as resp:
@@ -57,7 +57,7 @@ class AioHttp(Types):
 					returntype = resptype if resptype and resptype in stored.keys() else stored.get("json")
 					if returntype == "jsontext":
 						return json.loads(await resp.text())
-					return getattr(resp, returntype, None)()
+					return await getattr(resp, returntype, None)()
 				except ContentTypeError:
 					return json.loads(await resp.text())
 
