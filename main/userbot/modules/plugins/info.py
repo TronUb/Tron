@@ -148,9 +148,10 @@ async def chatinfo_handler(_, m: Message):
 			else:
 				chatid = m.chat.id
 				chat = await app.get_chat(chatid)
+
 		poto = False
 
-		async for x in app.get_chat_photo(chat.id):
+		async for x in app.get_chat_photos(chat.id):
 			poto = x.file_id
 			break
 

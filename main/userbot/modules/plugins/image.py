@@ -129,7 +129,7 @@ async def stoi_handler(_, m):
 		if reply.sticker:
 			if not reply.sticker.is_animated:
 				filename = f"{app.TEMP_DICT}sticker.jpg"
-				await app.send_edit("`Converting To Image...`")
+				msg = await app.send_edit("`Converting To Image...`")
 				await app.download_media(
 					message=reply, 
 					file_name=filename
@@ -137,15 +137,15 @@ async def stoi_handler(_, m):
 				await app.send_photo(
 					m.chat.id, 
 					filename, 
-					reply_to_message_id=reply.message_id
+					reply_to_message_id=reply.id
 					)
-				await m.delete()
+				await msg.delete()
 				if os.path.exists(filename):
 					os.remove(filename)
 			else:
-				await app.send_edit("Animated Stickers are Not Supported!", delme=2, text_type=["mono"])
+				await app.send_edit("Animated Stickers are Not Supported!", delme=3, text_type=["mono"])
 		else:
-			await app.send_edit("Reply to a sticker please !", delme=2, text_type=["mono"])
+			await app.send_edit("Reply to a sticker please !", delme=3, text_type=["mono"])
 
 
 
@@ -154,7 +154,7 @@ async def stoi_handler(_, m):
 async def itos_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await app.send_edit("Reply to a image.", text_type=["mono"], delme=4)
+		await app.send_edit("Reply to a image.", text_type=["mono"], delme=3)
 
 	elif reply:
 		if reply.photo or reply.document.file_name.endswith(".png" or ".jpg" or "jpeg"):
@@ -168,7 +168,7 @@ async def itos_handler(_, m):
 				await app.send_sticker(
 					m.chat.id, 
 					filename, 
-					reply_to_message_id=reply.message_id)
+					reply_to_message_id=reply.id)
 				await m.delete()
 				if os.path.exists(filename):
 					os.remove(filename)
@@ -287,7 +287,9 @@ async def waifupic_handler(_, m):
 
 @app.on_message(gen("poto", allow = ["sudo"]))
 async def profilepic_handler(_, m):
+    msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
 	await send_profile_pic(m)
+	await msg.delete()
 
 
 

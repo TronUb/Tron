@@ -3,6 +3,7 @@ from pyrogram.types import (
 	InlineKeyboardButton,
 )
 
+from pyrogram.enums import ChatType
 from main import app, gen
 
 
@@ -10,8 +11,7 @@ from main import app, gen
 
 @app.on_message(gen("kbd", allow = ["sudo"]))
 async def create_keyboard(_, m):
-	await m.delete()
-	if m.chat.type == "bot":
+	if m.chat.type == ChatType.BOT:
 		return await app.send_edit("Sorry you can't use it here", delme=3, text_type=["mono"])
 
 	if not await app.user_exists(app.bot.id, m.chat.id):
@@ -32,5 +32,6 @@ async def create_keyboard(_, m):
 				]
 				)
 			)
+		await m.delete()
 	else:
 		await app.send_edit(f"`{app.Trigger()[0]}kbd [ Button text ] [ Button url ] [ Text ]`")

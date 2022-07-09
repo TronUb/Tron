@@ -165,13 +165,16 @@ class Utilities(AioHttp):
 		file_id = None 
 
 
-		if self.long() <= 1:
+		if self.long() == 1:
 			return None, None, None, None, None
 
 		if msg.text:
 			raw_text = msg.text.markdown 
-		else:
+		elif msg.caption:
 			raw_text = msg.caption.markdown
+		else:
+			raw_text = None
+
 		note_name = raw_text.split()[1]
 
 		# determine what the contents of the filter are - text, image, sticker, etc
