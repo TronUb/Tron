@@ -37,7 +37,10 @@ async def evaluate_handler(_, m: Message):
 		p = print
 
 		if app.textlen() > 4096:
-			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
+			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=3)
+
+		if app.long() == 1:
+			return await app.send_edit("Give me some text (code) to execute . . .", text_type=["mono"], delme=4)
 
 		reply = m.reply_to_message
 		chat_type = m.chat.type
@@ -45,10 +48,7 @@ async def evaluate_handler(_, m: Message):
 		text = m.text
 		cmd = text.split(None, 1)[1]
 
-		if not cmd:
-			return await app.send_edit("Give me some text (code) to execute . . .", text_type=["mono"], delme=4)
-
-		msg = await app.send_edit("Running . . .", text_type=["mono"])
+		msg = await app.send_edit("Executing . . .", text_type=["mono"])
 
 		old_stderr = sys.stderr
 		old_stdout = sys.stdout
@@ -90,7 +90,7 @@ async def terminal_handler(_, m: Message):
 		if app.textlen() > 4096:
 			return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
 
-		msg = await app.send_edit("Running . . .", text_type=["mono"])
+		msg = await app.send_edit("Running in shell . . .", text_type=["mono"])
 		text = m.text.split(None, 1)
 		cmd = text[1]
 

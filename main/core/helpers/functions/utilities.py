@@ -54,10 +54,10 @@ class AioHttp(Types):
 			async with session.get(link) as resp:
 				stored = {"json":"json", "text":"text", "jsontext":"text", "raw":"read", "url":"url"}
 				try:
-					returntype = resptype if resptype and resptype in stored else stored.get("json")
+					returntype = resptype if resptype and resptype in stored.keys() else stored.get("json")
 					if returntype == "jsontext":
 						return json.loads(await resp.text())
-					return getattr(resp, returntype, None)
+					return getattr(resp, returntype, None)()
 				except ContentTypeError:
 					return json.loads(await resp.text())
 

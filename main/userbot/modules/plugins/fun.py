@@ -166,7 +166,7 @@ async def advice_handler(_, m):
 async def question_handler(_, m):
 	reply = m.reply_to_message
 	if not reply:
-		await app.send_edit("Please reply to someone, so that i can ask them a question . . .", delme=2, text_type=["mono"])
+		await app.send_edit("Please reply to someone, so that i can ask them a question . . .", delme=3, text_type=["mono"])
 
 	elif reply:
 		try:
