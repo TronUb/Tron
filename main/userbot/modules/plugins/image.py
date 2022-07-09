@@ -287,7 +287,7 @@ async def waifupic_handler(_, m):
 
 @app.on_message(gen("poto", allow = ["sudo"]))
 async def profilepic_handler(_, m):
-    msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
+	msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
 	await send_profile_pic(m)
 	await msg.delete()
 
