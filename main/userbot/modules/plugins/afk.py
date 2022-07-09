@@ -33,12 +33,7 @@ async def go_offline(_, m: Message):
 			await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=3)
 
 		elif app.long() == 1 and app.long() < 4096:
-			if app.getdv("AFK_TEXT"):
-				reason = app.getdv("AFK_TEXT")
-			elif app.AFK_TEXT:
-				reason = app.AFK_TEXT # config.AFK_TEXT
-			else:
-				reason = False
+			reason = app.AfkText()
 
 			if reason:
 				app.set_afk(True, reason, start) # with reason
@@ -105,7 +100,7 @@ async def offline_mention(_, m: Message):
 
 
 
-@app.on_message(filters.me & filters.text filters.outgoing & ~filters.channel, group=2)
+@app.on_message(filters.me & filters.text & filters.outgoing & ~filters.channel, group=2)
 async def unafk_handler(_, m: Message):
 	try:
 		# don't break afk while using afk command
