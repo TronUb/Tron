@@ -57,7 +57,7 @@ class AioHttp(Types):
 					returntype = resptype if resptype and resptype in stored else stored.get("json")
 					if returntype == "jsontext":
 						return json.loads(await resp.text())
-					return await getattr(resp, returntype, None)
+					return getattr(resp, returntype, None)
 				except ContentTypeError:
 					return json.loads(await resp.text())
 
