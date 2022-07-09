@@ -15,9 +15,11 @@ from PIL import Image
 
 from typing import List, Union
 
+# exceptions
 from pyrogram.types import Message, User, InlineKeyboardButton
 from pyrogram.errors import MessageNotModified, FloodWait
 
+from aiohttp.client_exceptions import ContentTypeError
 
 
 
@@ -39,35 +41,25 @@ class Types(object):
 
 class AioHttp(Types):
 	@staticmethod
-	async def get_json(link):
+	async def GetRequest(link: str="", resptype: str=""):
+		""" args:
+				link: str = ""
+				resptype: str = "json"
+    
+				Note: resptype is 'json' by default
+					available args for restype:
+					'json', 'text', 'jsontext', 'raw', 'url
+		"""
 		async with aiohttp.ClientSession() as session:
 			async with session.get(link) as resp:
-				return await resp.json()
-
-	@staticmethod
-	async def get_text(link):
-		async with aiohttp.ClientSession() as session:
-			async with session.get(link) as resp:
-				return await resp.text()
-
-	@staticmethod
-	async def get_json_from_text(link):
-		async with aiohttp.ClientSession() as session:
-			async with session.get(link) as resp:
-				text = await resp.text()
-				return json.loads(text)
-
-	@staticmethod
-	async def get_raw(link):
-		async with aiohttp.ClientSession() as session:
-			async with session.get(link) as resp:
-				return await resp.read()
-
-	@staticmethod
-	async def get_url(link):
-		async with aiohttp.ClientSession() as session:
-			async with session.get(link) as resp:
-				return resp.url
+				stored = {"json":"json", "text":"text", "jsontext":"text", "raw":"read", "url":"url"}
+				try:
+					returntype = resptype if resptype and resptype in stored else stored.get("json")
+					if returntype == "jsontext":
+						return json.loads(await resp.text())
+					return await getattr(resp, returntype, None)
+				except ContentTypeError:
+					return json.loads(await resp.text())
 
 
 
