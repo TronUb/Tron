@@ -71,7 +71,7 @@ async def nekoanime(_, m: Message):
 			await m.delete()
 
 		data = requests.get("https://nekos.best/api/v2/neko").json()
-		data = data[0]
+		data = data["results"][0]
 		await app.send_photo(
 			m.chat.id,
 			data["url"],
@@ -99,4 +99,4 @@ async def animegif(_, m: Message):
 		except Exception as e:
 			await app.error(e)
 	else:
-		await app.send_edit(f"Give me a suffix, use `{app.PREFIX}animelist` to get suffix.", delme=4)
+		await app.send_edit(f"Give me a suffix, use `{app.Trigger()[0]}animelist` to get suffix.", delme=3)
