@@ -13,7 +13,7 @@ app.CMD_HELP.update(
 	{"afk": (
 		"afk",
 		{
-		"afk" : "leave your chats untouchable, stop yourself from chatting . . ."
+		"afk" : "A best tool to measure the duration of your inactivity in telegram. Stop yourself from chatting in telegram.\n\n U can still talk in chats, if it is really important use #afk in texts so that your afk doesn't break."
 		}
 		)
 	}
@@ -30,7 +30,7 @@ async def go_offline(_, m: Message):
 		if app.long() >= 2:
 			reason = m.text.split(None, 1)[1]
 			app.set_afk(True, reason, start) # with reason
-			await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=2)
+			await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=3)
 
 		elif app.long() == 1 and app.long() < 4096:
 			if app.getdv("AFK_TEXT"):
@@ -42,10 +42,10 @@ async def go_offline(_, m: Message):
 
 			if reason:
 				app.set_afk(True, reason, start) # with reason
-				await app.send_edit(f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=2)
+				await app.send_edit(f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=3)
 			else:
 				app.set_afk(True, "", start) # without reason
-				await app.send_edit(f"{app.UserMention()} is now offline.", delme=2)
+				await app.send_edit(f"{app.UserMention()} is now offline.", delme=3)
 
 	except Exception as e:
 		await app.error(e)
@@ -54,14 +54,11 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-@app.on_message(~filters.bot & ~filters.channel & filters.private | filters.mentioned, group=1)
+@app.on_message(~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned, group=1)
 async def offline_mention(_, m: Message):
 	try:
 		get = app.get_afk()
 		if get and get["afk"]: 
-			if m.from_user.id == app.id:
-				return
-
 			if "-" in str(m.chat.id):
 				cid = str(m.chat.id)[4:]
 			else:
@@ -73,14 +70,14 @@ async def offline_mention(_, m: Message):
 				msg = await app.send_message(
 					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.UserMention(), otime, get['reason']),
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					) 
 				await app.delete(msg, 3)
 			elif get["afktime"] and not get["reason"]:
 				msg = await app.send_message(
 					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}".format(app.UserMention(), otime),
-					reply_to_message_id=m.message_id
+					reply_to_message_id=m.id
 					)
 				await app.delete(msg, 3)
 			content, message_type = app.GetMessageType(m)
@@ -99,9 +96,8 @@ async def offline_mention(_, m: Message):
 				**Id:** {m.from_user.id}\n
 				**Group:** `{m.chat.title}`\n
 				**Message:** `{text[:4096]}`\n
-				[Go to message](https://t.me/c/{cid}/{m.message_id})
-				""",
-				parse_mode = "markdown"
+				[Go to message](https://t.me/c/{cid}/{m.id})
+				"""
 				)
 	except Exception as e:
 		await app.error(e)
@@ -109,18 +105,16 @@ async def offline_mention(_, m: Message):
 
 
 
-# come back online
-@app.on_message(filters.me & ~filters.channel, group=2)
-async def afkme_handler(_, m: Message):
+@app.on_message(filters.me & filters.text filters.outgoing & ~filters.channel, group=2)
+async def unafk_handler(_, m: Message):
 	try:
-		# don't break afk while going offline
+		# don't break afk while using afk command
+		commands = [f"{x}afk" for x in app.Trigger()]
 		if m.text:
-			if m.text.startswith(f"{app.Trigger()}afk"):
+			if m.text.split()[0] in commands:
 				return
 			elif "#afk" in m.text:
 				return
-		elif m.media:
-			pass
 
 		get = app.get_afk()
 		if get and get["afk"] and filters.outgoing:
