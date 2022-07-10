@@ -267,7 +267,6 @@ class RawFunctions(object):
 					reply_markup=reply_markup,
 					entities=entities
 				)
-				self.m = msg
 
 			else:
 				# for sudo users send message's instead of editing their message
