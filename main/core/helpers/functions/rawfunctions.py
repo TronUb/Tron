@@ -261,8 +261,11 @@ class RawFunctions(object):
 				reply_markup=reply_markup,
 				entities=entities
 			)
+			self.m = msg
 
 		else:
+			# for sudo users send message instead of editing their message
+			# which is not possible for us to edit someone else's message
 			msg = await self.send_message(
 				chat_id=self.m.chat.id, 
 				text=self.FormatText(text, format=text_type),
@@ -274,8 +277,10 @@ class RawFunctions(object):
 				reply_markup=reply_markup,
 				entities=entities
 			)
-		self.m = msg # sudo msg testing
+   			self.m = msg # assign new message to m attribute
+			self.m.from_user.is_self = True # sent in private msg's doesnt have this attribute
 
+  
 		try:
 			if delme > 0:
 				asyncio.create_task(self.sleep(sec=delme, delmsg=True))
