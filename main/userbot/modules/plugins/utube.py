@@ -4,6 +4,9 @@ from pytube import YouTube
 from pyrogram.types import Message
 from pyrogram.enums import MessageEntityType
 
+from PIL import Image
+from pySmartDL import SmartDL
+
 
 
 
@@ -18,6 +21,22 @@ app.CMD_HELP.update(
 		)
 	}
 )
+
+
+
+def ResizeImage(path: str):
+	img = Image.open(path)
+	img.thumbnail((320, 320))
+	photo = app.TEMP_DICT+"youtube_photo.jpg"
+	img.save(photo)
+	return photo
+
+
+
+def PyDownload(url: str):
+	obj = SmartDL(url, app.TEMP_DICT, progress_bar=False)
+	obj.start()
+	return obj.get_dest()
 
 
 
@@ -77,13 +96,15 @@ async def ytvideodl_handler(_, m):
 
 		yt = YouTube(link)
 		data = yt.streams.all()
+		path = PyDownload(yt.thumbnail_url)
+		thumbnail = ResizeImage(path)
 		video_found = False
 		msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
 		for x in data:
 			if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
 				video_found =True
 				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp4")
-				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=yt.thumbnail_url)
+				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
 				await msg.delete()
 				break
 
@@ -117,13 +138,15 @@ async def ytvideodl_handler(_, m):
 
 		yt = YouTube(link)
 		data = yt.streams.filter(only_audio=True)
+		path = PyDownload(yt.thumbnail_url)
+		thumbnail = ResizeImage(path)
 		audio_found = False
 		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
 		for x in data:
 			if x.mime_type == "audio/webm" and x.abr == "160kbps" or x.abr == "128kbps" or x.abr == "70kbps":
 				audio_found = True
 				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
-				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`", thumb=yt.thumbnail_url)
+				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`", thumb=thumbnail)
 				await msg.delete()
 				break
 
