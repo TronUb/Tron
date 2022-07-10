@@ -61,12 +61,11 @@ async def ping_handler(_, m: Message):
 			cmd = m.command
 			count = int(cmd[1]) if cmd[1] and cmd[1].isdigit() else 0
 			if count <= 1:
-				return await app.send_edit(f"Use `{app.UserPrefix().split()[0]}ping` for pings less than 1.", delme=4)
+				return await app.send_edit(f"Use `{app.Trigger()[0]}ping` for pings less than 1.", delme=3)
 
 			else:
 				try:
-					num = int(count) + 1
-					for x in range(1, num):
+					for x in range(count):
 						await infinite()
 						await app.send_edit(". . .", text_type=["mono"])
 						await asyncio.sleep(0.30)
