@@ -23,30 +23,33 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("yvinfo", allow = ["sudo", "channel"]))
 async def ytvideoinfo_handler(_, m: Message):
-	args = app.GetArgs()
-	if args:
-		if args.text and args.text.entities:
-			entity = args.text.entities
-			if isinstance(entity[0].type,  MessageEntityType.URL):
-				i = entity[0]
-				link = args.text[i.offset:i.length+i.offset] # get link from text
+	try:
+		args = app.GetArgs()
+		if args:
+			if args.text and args.text.entities:
+				entity = args.text.entities
+				if isinstance(entity[0].type,  MessageEntityType.URL):
+					i = entity[0]
+					link = args.text[i.offset:i.length+i.offset] # get link from text
+				else:
+					link = args.text
 			else:
 				link = args.text
 		else:
-			link = args.text
-	else:
-		return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
+			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
-	await app.send_edit("Getting information . . .", text_type=["mono"])
-	yt = YouTube(link)
-	thumb_link = yt.thumbnail_url
-	data = f"**Title:** {yt.title}\n\n"
-	data += f"**Duration:** {app.GetReadableTime(yt.length)}\n\n"
-	data += f"**Description:** {yt.description}\n\n"
-	data += f"**Views:** {yt.views}\n\n"
-	data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
+		await app.send_edit("Getting information . . .", text_type=["mono"])
+		yt = YouTube(link)
+		thumb_link = yt.thumbnail_url
+		data = f"**Title:** {yt.title}\n\n"
+		data += f"**Duration:** {app.GetReadableTime(yt.length)}\n\n"
+		data += f"**Description:** {yt.description}\n\n"
+		data += f"**Views:** {yt.views}\n\n"
+		data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
 
-	await app.send_photo(m.chat.id, thumb_link, caption=data)
+		await app.send_photo(m.chat.id, thumb_link, caption=data)
+	except Exception as e:
+		await app.error(e)
 
 
 
