@@ -95,7 +95,7 @@ async def ytvideodl_handler(_, m):
 			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
 		yt = YouTube(link)
-		data = yt.streams.all()
+		data = yt.streams.filter(only_video=True)
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
 		video_found = False
