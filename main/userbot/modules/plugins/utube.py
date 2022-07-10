@@ -120,7 +120,7 @@ async def ytvideodl_handler(_, m):
 		found_audio = False
 		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
 		for x in data:
-			if x.abr == "160kbps" or x.abr == "128kbps":
+			if x.mime_type == "audio/webm" and x.abr == "160kbps" or x.abr == "128kbps" or x.abr == "70kbps":
 				found_audio = True
 				loc = x.download()
 				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`")
