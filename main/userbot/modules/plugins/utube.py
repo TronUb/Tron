@@ -87,7 +87,7 @@ async def ytvideodl_handler(_, m):
 				await msg.delete()
 				break
 
-		if not found_video:
+		if not video_found:
 			await app.send_edit("I didn't found any good quality video of this YouTube link", text_type=["mono"], delme=3)   
 	except Exception as e:
 		await app.error(e)
@@ -117,17 +117,17 @@ async def ytvideodl_handler(_, m):
 
 		yt = YouTube(link)
 		data = yt.streams.filter(only_audio=True)
-		found_audio = False
+		audio_found = False
 		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
 		for x in data:
 			if x.mime_type == "audio/webm" and x.abr == "160kbps" or x.abr == "128kbps" or x.abr == "70kbps":
-				found_audio = True
+				audio_found = True
 				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
 				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`", thumb=yt.thumbnail_url)
 				await msg.delete()
 				break
 
-		if not found_audio:
+		if not audio_found:
 			await app.send_edit("I didn't find any good quality audio of this youtube video.", text_type=["mono"], delme=3)  
 	except Exception as e:
 		await app.error(e)
