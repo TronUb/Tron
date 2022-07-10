@@ -274,6 +274,7 @@ class RawFunctions(object):
 				reply_markup=reply_markup,
 				entities=entities
 			)
+			self.m = msg # sudo msg testing
 
 		try:
 			if delme > 0:

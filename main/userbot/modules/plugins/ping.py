@@ -40,7 +40,6 @@ data = [
 ]
 
 pings = []
-pings.clear()
 
 
 
@@ -72,6 +71,7 @@ async def ping_handler(_, m: Message):
 						await app.send_edit(". . .", text_type=["mono"])
 						await asyncio.sleep(0.30)
 					await app.send_edit("".join(pings))
+					pings.clear()
 				except Exception as e:
 					await app.error(e)
 		else:
