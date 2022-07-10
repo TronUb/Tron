@@ -82,7 +82,7 @@ async def ytvideodl_handler(_, m):
 		for x in data:
 			if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
 				video_found =True
-				loc = x.download(app.TEMP_DICT, f"{yt.title.split(".")[0]}.mp4")
+				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp4")
 				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title)
 				await msg.delete()
 				break
@@ -122,7 +122,7 @@ async def ytvideodl_handler(_, m):
 		for x in data:
 			if x.mime_type == "audio/webm" and x.abr == "160kbps" or x.abr == "128kbps" or x.abr == "70kbps":
 				found_audio = True
-				loc = x.download(app.TEMP_DICT, f"{yt.title.split(".")[0]}.mp3")
+				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
 				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`")
 				await msg.delete()
 				break
