@@ -251,36 +251,47 @@ class RawFunctions(object):
 		if self.is_bot:
 			raise BotMethodInvalid
 
-		msg = None
+		try:
+			msg = None
 
-		if self.m.from_user.is_self:
-			msg = await self.m.edit(
-				text=self.FormatText(text, format=text_type),
-				parse_mode=parse_mode,
-				disable_web_page_preview=disable_web_page_preview,
-				reply_markup=reply_markup,
-				entities=entities
-			)
+			# in private chats messages dont have from_user attribute
+			if self.m and self.m.chat and self.m.chat.type == ChatType.PRIVATE:
+				self.m = await self.get_messages(self.m.chat.id, self.m.id)
 
-		else:
-			msg = await self.send_message(
-				chat_id=self.m.chat.id, 
-				text=self.FormatText(text, format=text_type),
-				disable_web_page_preview=disable_web_page_preview, 
-				parse_mode=parse_mode,
-				reply_to_message_id=reply_to_message_id,
-				schedule_date=schedule_date,
-				protect_content=protect_content,
-				reply_markup=reply_markup,
-				entities=entities
-			)
 
+			if self.m.from_user and self.m.from_user.is_self:
+				msg = await self.m.edit(
+					text=self.FormatText(text, format=text_type),
+					parse_mode=parse_mode,
+					disable_web_page_preview=disable_web_page_preview,
+					reply_markup=reply_markup,
+					entities=entities
+				)
+
+			else:
+				# for sudo users send message's instead of editing their message
+				# it is not possible for us to edit someone else's message
+				msg = await self.send_message(
+					chat_id=self.m.chat.id, 
+					text=self.FormatText(text, format=text_type),
+					disable_web_page_preview=disable_web_page_preview, 
+					parse_mode=parse_mode,
+					reply_to_message_id=reply_to_message_id,
+					schedule_date=schedule_date,
+					protect_content=protect_content,
+					reply_markup=reply_markup,
+					entities=entities
+				)
+				self.m = msg # assign new message to m attribute
+		except Exception as e:
+			await self.error(e)
+  
 		try:
 			if delme > 0:
 				asyncio.create_task(self.sleep(sec=delme, delmsg=True))
 
-		except Exception as err:
-			await self.error(err)
+		except Exception as e:
+			await self.error(e)
 		return msg
 
 
@@ -304,7 +315,7 @@ class RawFunctions(object):
 			await self.send_edit(
 				"Please use these commands in groups.",
 				text_type=["mono"], 
-				delme=4
+				delme=3
 			)
 			return True
 		return False
@@ -348,7 +359,7 @@ class RawFunctions(object):
 		if self.is_bot:
 			raise BotMethodInvalid
 
-		return len([x for x in self.m.text or self.m.caption or None])
+		return len([x for x in self.m.text or self.m.caption or []])
 
 
 	async def create_file(

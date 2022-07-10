@@ -94,7 +94,7 @@ async def kang(_, m: Message):
 		exist = False
 		try:
 			exist = await app.invoke(
-				GetStickerSet(stickerset=InputStickerSetShortName(short_name=packname))
+				GetStickerSet(stickerset=InputStickerSetShortName(short_name=packname), hash=0)
 			)
 		except StickersetInvalid:
 			pass
@@ -109,7 +109,7 @@ async def kang(_, m: Message):
 			limit = "50" if is_anim else "120"
 			while limit in await get_response(m):
 				pack += 1
-				packname = f"a{m.from_user.id}_by_tron_{pack}"
+				packname = f"a{m.from_user.id}_by_tronub_{pack}"
 				packnick = f"{custom_packnick} Vol.{pack}"
 				if is_anim:
 					packname += "_anim"
@@ -136,9 +136,8 @@ async def kang(_, m: Message):
 					if is_anim:
 						await asyncio.sleep(0.40)
 						await get_response(m)
-						await app.send_message(
-							"Stickers", f"<{packnick}>", parse_mode=None
-						)
+						await app.send_message("Stickers", f"<{packnick}>")
+
 					await asyncio.sleep(0.40)
 					await get_response(m)
 					await app.send_message("Stickers", "/skip")
@@ -167,7 +166,7 @@ async def kang(_, m: Message):
 				await asyncio.sleep(0.40)
 				await app.send_message("Stickers", cmd)
 			except YouBlockedUser:
-				return await app.send_edit("first **unblock** @Stickers")
+				return await app.send_edit("first unblock @Stickers.")
 
 			await app.send_message("Stickers", packnick)
 			await asyncio.sleep(0.40)
@@ -186,7 +185,7 @@ async def kang(_, m: Message):
 			if is_anim:
 				await asyncio.sleep(0.40)
 				await get_response(m)
-				await app.send_message("Stickers", f"<{packnick}>", parse_mode=None)
+				await app.send_message("Stickers", f"<{packnick}>")
 				await asyncio.sleep(0.40)
 			await get_response(m)
 			await app.send_message("Stickers", "/skip")
@@ -194,7 +193,7 @@ async def kang(_, m: Message):
 			await get_response(m)
 			await app.send_message("Stickers", packname)
 			await asyncio.sleep(0.40)
-		await app.send_edit(f"[kanged](t.me/addstickers/{packname})", delme=True)
+		await app.send_edit(f"Sticker [kanged](t.me/addstickers/{packname})", delme=True)
 		await app.read_history("Stickers")
 		if os.path.exists(str(photo)):
 			os.remove(photo)
@@ -214,7 +213,8 @@ async def sticker_pack_info_(_, m: Message):
 	await app.send_edit("Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
 	get_stickerset = await app.invoke(
 		GetStickerSet(
-			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
+			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name),
+			hash=0
 		)
 	)
 	pack_emojis = []
