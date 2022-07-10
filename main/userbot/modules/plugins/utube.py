@@ -11,8 +11,9 @@ app.CMD_HELP.update(
 	{"utube": (
 		"utube",
 		{
-		"yvinfo [link]" : "Get a youtube video information . . .",
-		"yvdl [link]" : "Download any video from YouTube . . ."
+		"ytvinfo [ link | reply ]" : "Get a youtube video information.",
+		"ytvdl [ link | reply ]" : "Download any video from YouTube.",
+		"ytadl [ link | reply ]" : "Download audios of any video from YouTube."
 		}
 		)
 	}
@@ -21,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("yvinfo", allow = ["sudo", "channel"]))
+@app.on_message(gen("ytvinfo", allow = ["sudo", "channel"]))
 async def ytvideoinfo_handler(_, m: Message):
 	try:
 		args = app.GetArgs()
@@ -54,7 +55,7 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
+@app.on_message(gen("ytvdl", allow = ["sudo", "channel"]))
 async def ytvideodl_handler(_, m):
 	try:
 		reply = m.reply_to_message
@@ -76,14 +77,58 @@ async def ytvideodl_handler(_, m):
 
 		yt = YouTube(link)
 		data = yt.streams.all()
-
-		await app.send_edit("**Trying to download **" + f"`{yt.title}`")
+		video_found = False
+		msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
 		for x in data:
 			if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
+				video_found =True
 				loc = x.download()
 				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title)
 				await msg.delete()
 				break
+
+		if not found_video:
+			await app.send_edit("I didn't found any good quality video of this YouTube link", text_type=["mono"], delme=3)   
+	except Exception as e:
+		await app.error(e)
+
+
+
+
+@app.on_message(gen("ytadl", allow = ["sudo", "channel"]))
+async def ytvideodl_handler(_, m):
+	try:
+		reply = m.reply_to_message
+		cmd = m.command
+		msg = await app.send_edit("processing link . . .", text_type=["mono"])
+		args = app.GetArgs()
+		if args:
+			if args.text and args.text.entities:
+				entity = args.text.entities
+				if entity[0].type == MessageEntityType.URL:
+					i = entity[0]
+					link = args.text[i.offset:i.length+i.offset] # get link from text
+				else:
+					link = args.text
+			else:
+				link = args.text
+		else:
+			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
+
+		yt = YouTube(link)
+		data = yt.streams.filter(only_audio=True)
+		found_audio = False
+		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
+		for x in data:
+			if x.abr == "160kbps" or x.abr == "128kbps":
+				found_audio = True
+				loc = x.download()
+				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`")
+				await msg.delete()
+				break
+
+		if not found_audio:
+			await app.send_edit("I didn't find any good quality audio of this youtube video.", text_type=["mono"], delme=3)  
 	except Exception as e:
 		await app.error(e)
 
