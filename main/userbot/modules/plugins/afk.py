@@ -23,7 +23,6 @@ app.CMD_HELP.update(
 
 
 handlers = []
-handlers.clear()
 
 
 
@@ -125,6 +124,7 @@ async def unafk_handler(_, m: Message):
 			)
 			app.set_afk(False, "", 0)
 			remove_afkhandler()
+			handlers.clear()
 
 	except Exception as e:
 		await app.error(e)
