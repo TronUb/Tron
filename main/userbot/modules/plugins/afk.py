@@ -147,4 +147,5 @@ def add_afkhandler(client, message):
 
 
 def remove_afkhandler():
-	app.remove_handler(*handlers[0], *handlers[1])
+	app.remove_handler(*handlers[0])
+	app.remove_handler(*handlers[1])
