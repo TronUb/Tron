@@ -277,7 +277,7 @@ class RawFunctions(object):
 				reply_markup=reply_markup,
 				entities=entities
 			)
-   			self.m = msg # assign new message to m attribute
+			self.m = msg # assign new message to m attribute
 			self.m.from_user.is_self = True # sent in private msg's doesnt have this attribute
 
   
