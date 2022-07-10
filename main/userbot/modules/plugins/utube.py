@@ -43,7 +43,7 @@ async def ytvideoinfo_handler(_, m: Message):
 		thumb_link = yt.thumbnail_url
 		data = f"**Title:** {yt.title}\n\n"
 		data += f"**Duration:** {app.GetReadableTime(yt.length)}\n\n"
-		data += f"**Description:** {yt.description}\n\n"
+		data += f"**Description:** {yt.description[:4092]}...\n\n"
 		data += f"**Views:** {yt.views}\n\n"
 		data += f"**Age Restricted:** {'Yes' if yt.age_restricted else 'No'}"
 
