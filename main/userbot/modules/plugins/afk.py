@@ -146,4 +146,4 @@ def remove_afkhandler():
 		app.remove_handler(*handlers[0])
 		app.remove_handler(*handlers[1])
 	except IndexError:
-     pass
+    	pass
