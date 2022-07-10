@@ -28,7 +28,7 @@ async def ytvideoinfo_handler(_, m: Message):
 		if args:
 			if args.text and args.text.entities:
 				entity = args.text.entities
-				if isinstance(entity[0].type,  MessageEntityType.URL):
+				if entity[0].type == MessageEntityType.URL:
 					i = entity[0]
 					link = args.text[i.offset:i.length+i.offset] # get link from text
 				else:
