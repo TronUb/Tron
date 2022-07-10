@@ -256,7 +256,7 @@ class RawFunctions(object):
 
 			# in private chats messages dont have from_user attribute
 			if self.m and self.m.chat and self.m.chat.type == ChatType.PRIVATE:
-				self.m = await self.get_messages(self.m.chat.id, self.m.i
+				self.m = await self.get_messages(self.m.chat.id, self.m.id)
 
 
 			if self.m.from_user and self.m.from_user.is_self:
