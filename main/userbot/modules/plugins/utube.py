@@ -22,24 +22,20 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("yvinfo", allow = ["sudo", "channel"]))
-async def videoinfo_handler(_, m: Message):
-	reply = m.reply_to_message
-	if reply and reply.text:
-		if reply.entities:
-			entity = reply.entities[0]
-			if isinstance(entity, MessageEntityType.URL):
-				link = reply.text[entity.offset:entity.length+entity.offsef]
+async def ytvideoinfo_handler(_, m: Message):
+	args = app.GetArgs()
+	if args:
+		if args.text and args.text.entities:
+			entity = args.text.entities
+			if isinstance(entity[0].type,  MessageEntityType.URL):
+				i = entity[0]
+				link = args.text[i.offset:i.length+i.offset] # get link from text
 			else:
-				link = reply.text
+				link = args.text
 		else:
-			link = reply.text
-
-	elif not reply and app.long() >= 1:
-		link = m.text.split(None, 1)[1]
-
-	elif app.long() == 1:
-		return await app.send_edit("Reply to youtube link or give link as a suffix . . .", text_type=["mono"], delme=3)
-
+			link = args.text
+	else:
+		return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
 	await app.send_edit("Getting information . . .", text_type=["mono"])
 	yt = YouTube(link)
@@ -56,7 +52,7 @@ async def videoinfo_handler(_, m: Message):
 
 
 @app.on_message(gen("yvdl", allow = ["sudo", "channel"]))
-async def ytdownload_handler(_, m):
+async def ytvideodl_handler(_, m):
 	reply = m.reply_to_message
 	cmd = m.command
 	await app.send_edit("processing link . . .", text_type=["mono"])
