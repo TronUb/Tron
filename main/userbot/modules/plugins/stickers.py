@@ -214,7 +214,8 @@ async def sticker_pack_info_(_, m: Message):
 	await app.send_edit("Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
 	get_stickerset = await app.invoke(
 		GetStickerSet(
-			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
+			stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name),
+			hash=0
 		)
 	)
 	pack_emojis = []
