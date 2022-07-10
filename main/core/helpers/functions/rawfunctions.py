@@ -254,9 +254,7 @@ class RawFunctions(object):
 		try:
 			msg = None
    
-			if self.m and not getattr(self.m, "from_user"):
-				# messages sent in private chats dont have from_user attribute
-				# get that attribute by this method
+			if self.m.chat.type == ChatType.PRIVATE:
 				self.m = self.get_messages(self.m.chat.id, self.m.id) 
 
 			if self.m.from_user.is_self:
