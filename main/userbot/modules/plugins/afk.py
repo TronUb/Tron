@@ -71,14 +71,14 @@ async def offline_mention(_, m: Message):
 					"Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.UserMention(), otime, get['reason']),
 					reply_to_message_id=m.id
 					) 
-				await app.delete(msg, 3)
+				await app.delete_message(3)
 			elif get["afktime"] and not get["reason"]:
 				msg = await app.send_message(
 					m.chat.id,
 					"Sorry {} is currently offline !\n**Time:** {}".format(app.UserMention(), otime),
 					reply_to_message_id=m.id
 					)
-				await app.delete(msg, 3)
+				await app.delete_message(3)
 
 			text = m.text if m.text else ""
 			cid = m.chat.id if m.chat and m.chat.id else 0
