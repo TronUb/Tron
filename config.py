@@ -12,7 +12,7 @@ if hasattr(sys, "getandroidapilevel"):
 
 
 
-#-------------------------------------------------------------------------------------------------------------
+# ------------------
 class Config(inside):
 	""" configuration class """
 	if not is_termux:
