@@ -255,7 +255,7 @@ class RawFunctions(object):
 			msg = None
    
 			if self.m.chat.type == ChatType.PRIVATE:
-				self.m = self.get_messages(self.m.chat.id, self.m.id) 
+				self.m = await self.get_messages(self.m.chat.id, self.m.id) 
 
 			if self.m.from_user.is_self:
 				msg = await self.m.edit(
