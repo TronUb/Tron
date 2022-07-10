@@ -253,6 +253,11 @@ class RawFunctions(object):
 
 		try:
 			msg = None
+   
+			if self.m and not getattr(self.m, "from_user"):
+				# messages sent in private chats dont have from_user attribute
+				# get that attribute by this method
+				self.m = self.get_messages(self.m.chat.id, self.m.id) 
 
 			if self.m.from_user.is_self:
 				msg = await self.m.edit(
@@ -265,8 +270,8 @@ class RawFunctions(object):
 				self.m = msg
 
 			else:
-				# for sudo users send message instead of editing their message
-				# which is not possible for us to edit someone else's message
+				# for sudo users send message's instead of editing their message
+				# it is not possible for us to edit someone else's message
 				msg = await self.send_message(
 					chat_id=self.m.chat.id, 
 					text=self.FormatText(text, format=text_type),
@@ -279,7 +284,6 @@ class RawFunctions(object):
 					entities=entities
 				)
 				self.m = msg # assign new message to m attribute
-				self.m.from_user.is_self = True # sent in private msg's doesnt have this attribute
 		except Exception as e:
 			await self.error(e)
   
