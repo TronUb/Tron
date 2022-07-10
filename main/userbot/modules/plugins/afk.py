@@ -79,14 +79,9 @@ async def offline_mention(_, m: Message):
 					reply_to_message_id=m.id
 					)
 				await app.delete(msg, 3)
-			content, message_type = app.GetMessageType(m)
-			if message_type == app.TEXT:
-				if m.text:
-					text = m.text
-				else:
-					text = m.caption
-			else:
-				text = message_type.name
+
+			text = m.text if m.text else ""
+			cid = m.chat.id if m.chat and m.chat.id else 0
 
 			await app.send_message(
 				app.LOG_CHAT, 
@@ -147,5 +142,8 @@ def add_afkhandler(client, message):
 
 
 def remove_afkhandler():
-	app.remove_handler(*handlers[0])
-	app.remove_handler(*handlers[1])
+	try:
+		app.remove_handler(*handlers[0])
+		app.remove_handler(*handlers[1])
+	except IndexError:
+     pass

@@ -116,7 +116,7 @@ class Utilities(AioHttp):
 	
 		if include_text is True:
 			if msg.text or msg.caption:
-				content = None
+				content = msg
 				message_type = Types.TEXT
 
 		elif msg.sticker: 
