@@ -438,33 +438,14 @@ class Utilities(AioHttp):
 		return "%s %s" % (s, size_name[i])
 
 
-	def GetArg(self, m: Message):
-		" get args "
-		msg = m.text
-		msg = msg.replace(" ", "", 1) if msg[1] == " " else msg
-		split = msg[1:].replace("\n", " \n").split(" ")
-		if " ".join(split[1:]).strip() == "":
-			return ""
-		return " ".join(split[1:])
-
-
-	def GetArgs(self, m: Message):
-		" get text args "
-		try:
-			msg = m.text
-		except AttributeError:
-			pass
-		if not msg:
-			return None
-		msg = msg.split(maxsplit=1)	
-		if len(msg) <= 1:
-			return []
-		msg = msg[1]
-		try:
-			split = shlex.split(msg)
-		except ValueError:
-			return msg  # Cannot split, let's assume that it's just one long message
-		return list(filter(lambda x: len(x) > 0, split))
+	def GetArgs(self):
+		reply = self.m.reply_to_message
+		if reply:
+			return reply
+		elif not reply:
+			if self.long() > 1:
+				return self.m
+		return type("argclass", (object,), {"text" : None})()
 
 
 	def SpeedConvert(self, bytesize) -> str:
