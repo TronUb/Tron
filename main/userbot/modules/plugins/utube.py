@@ -27,7 +27,7 @@ async def videoinfo_handler(_, m: Message):
 	if reply and reply.text:
 		if reply.entities:
 			entity = reply.entities[0]
-			if isinstance(entity, MessageEntityType.URL)
+			if isinstance(entity, MessageEntityType.URL):
 				link = reply.text[entity.offset:entity.length+entity.offsef]
 			else:
 				link = reply.text
@@ -70,7 +70,7 @@ async def ytdownload_handler(_, m):
 	elif reply:
 		if reply.text and reply.entities:
 			entity = reply.entities[0]
-			if isinstance(entity, MessageEntityType.URL)
+			if isinstance(entity, MessageEntityType.URL):
 				link = reply.text[entity.offset:entity.length+entity.offsef]
 			else:
 				link = reply.text
