@@ -2,6 +2,7 @@ import time
 
 from pyrogram import filters
 from pyrogram.types import Message
+from pyrogram.handlers import MessageHandler
 
 from main import app, gen
 
@@ -21,6 +22,9 @@ app.CMD_HELP.update(
 
 
 
+handlers = []
+handlers.clear()
+
 
 
 @app.on_message(gen("afk", allow = ["sudo"]), group=0)
@@ -30,6 +34,7 @@ async def go_offline(_, m: Message):
 		if app.long() >= 2:
 			reason = m.text.split(None, 1)[1]
 			app.set_afk(True, reason, start) # with reason
+			await add_afkhandler(_, m)
 			await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=3)
 
 		elif app.long() == 1 and app.long() < 4096:
@@ -37,9 +42,11 @@ async def go_offline(_, m: Message):
 
 			if reason:
 				app.set_afk(True, reason, start) # with reason
+				await add_afkhandler(_, m)
 				await app.send_edit(f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=3)
 			else:
 				app.set_afk(True, "", start) # without reason
+				await add_afkhandler(_, m)
 				await app.send_edit(f"{app.UserMention()} is now offline.", delme=3)
 
 	except Exception as e:
@@ -47,9 +54,7 @@ async def go_offline(_, m: Message):
 
 
 
-
 # notify mentioned users
-@app.on_message(~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned, group=1)
 async def offline_mention(_, m: Message):
 	try:
 		get = app.get_afk()
@@ -100,7 +105,6 @@ async def offline_mention(_, m: Message):
 
 
 
-@app.on_message(filters.me & filters.text & filters.outgoing & ~filters.channel, group=2)
 async def unafk_handler(_, m: Message):
 	try:
 		# don't break afk while using afk command
@@ -120,8 +124,27 @@ async def unafk_handler(_, m: Message):
 				f"{app.UserMention()} is now online !\n**Offline Time:** `{afk_time}`"
 			)
 			app.set_afk(False, "", 0)
+			await remove_afkhandler()
 
 	except Exception as e:
 		await app.error(e)
 
 
+
+
+
+async def add_afkhandler(client, message):
+	handlers.append(await app.add_handler(MessageHandler(
+		callback=offline_mention, 
+		filters=~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned), 
+		1
+	))
+	handlers.append(await app.add_handler(MessageHandler(
+		callback=unafk_handler, 
+		filters=filters.me & filters.text & filters.outgoing & ~filters.channel),
+		2
+	))
+
+
+async def remove_afkhandler():
+	await app.remove_handler(*handlers[0], *handlers[1])
