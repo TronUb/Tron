@@ -114,7 +114,7 @@ async def ytvideodl_handler(_, m):
 						temp.append(btn[0])
 					if len(temp) == 3:
 						buttons.append(temp)
-						temp.clear()
+						temp = []
 
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
