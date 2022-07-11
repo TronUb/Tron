@@ -55,20 +55,20 @@ class Config(Inside):
     # command trigger, it works like this: .ping => result: pong !
     TRIGGER = os.getenv("TRIGGER", ".")
     # for more info visit docs.pyrogram.org, workers section
-    WORKERS = int(os.getenv("WORKERS", 8))
+    WORKERS = int(os.getenv("WORKERS", "8"))
     # exclude official plugins from installing, give a space between plugin names
     NO_LOAD = [int(x) for x in os.getenv("NO_LOAD", "").split()] # splits on spaces
     # default reason for afk plugin
     AFK_TEXT = os.getenv("AFK_TEXT", "I am busy Right Now !")
 # ------------------
     # add True to enable (default: False)
-    PMPERMIT = os.getenv("PMPERMIT", False)
+    PMPERMIT = os.getenv("PMPERMIT", None)
     # pmpermit pic (optional)
     PMPERMIT_PIC = os.getenv("PMPERMIT_PIC", "https://telegra.ph/file/eb4d05653b1e6b4798cbb.jpg")
     # custom  pmpermit security text (optional)
     PMPERMIT_TEXT = os.getenv("PMPERMIT_TEXT", _PMPERMIT_TEXT)
     # pmpermit warn limit (optional)
-    PM_LIMIT = int(os.getenv("PM_LIMIT", 4))
+    PM_LIMIT = int(os.getenv("PM_LIMIT", "4"))
     # this is used to get your accurate time
     TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
 # -------------------
