@@ -1,8 +1,8 @@
 from main import app, gen
 
 from pytube import YouTube
-from pyrogram.types import Message
-from pyrogram.enums import MessageEntityType
+from pyrogram.types import Message, InlineKeyboardMarkup
+from pyrogram.enums import MessageEntityType, ChatType
 
 from PIL import Image
 from pySmartDL import SmartDL
@@ -77,9 +77,9 @@ async def ytvideoinfo_handler(_, m: Message):
 @app.on_message(gen("ytvdl", allow = ["sudo", "channel"]))
 async def ytvideodl_handler(_, m):
 	try:
+		msg = await app.send_edit("processing link . . .", text_type=["mono"])
 		reply = m.reply_to_message
 		cmd = m.command
-		msg = await app.send_edit("processing link . . .", text_type=["mono"])
 		args = app.GetArgs()
 		if args:
 			if args.text and args.text.entities:
@@ -95,9 +95,32 @@ async def ytvideodl_handler(_, m):
 			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
 		yt = YouTube(link)
-		data = yt.streams.filter(only_video=True)
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
+		await msg.delete()
+
+		data = yt.streams.filter(only_video=True)
+		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
+			if await user_exists(m.chat.id, app.bot.id):
+				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
+				buttons = [self.BuildKeyboard(([[data[x].res, str(data[x].itag)], [data[x+1].res, str(data[x+1].itag)], [data[x+2].res, str(data[x+1].itag)]])) for x in range(len(data) - 2)]
+				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
+				await botmsg.delete()
+				app.utubeobject = data
+
+				async def utube_callback(client, cb):
+					if int(cb.data) in [int(x.itag) for x in client.utubeobject]:
+						obj = client.utubeobject.get_by_tag(int(cb.data))
+						filename = f"{obj.title.split('.')[0]}.mp4"
+						loc = obj.download(client.TEMP_DICT, filename)
+						await client.bot.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
+						await cb.message.delete()
+						if client.handler:
+							client.remove_handler(*client.handler)
+
+				app.handler = app.add_handler(CallbackQueryHandler(callback=utube_callback, filter=filters.regex(r"\d+"))
+				return True
+
 		video_found = False
 		msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
 		for x in data:
