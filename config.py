@@ -15,7 +15,7 @@ if hasattr(sys, "getandroidapilevel"):
 
 
 
-pmpermit_text = """
+_PMPERMIT_TEXT = """
 Hey ! This is [Tron Userbot](https://t.me/tronuserbot) Security System.
 **You will be blocked if you spammed my owner's pm**
 Currently My Owner is busy ! So Wait Until He Arrives. 
@@ -66,7 +66,7 @@ class Config(Inside):
     # pmpermit pic (optional)
     PMPERMIT_PIC = os.getenv("PMPERMIT_PIC", "https://telegra.ph/file/eb4d05653b1e6b4798cbb.jpg")
     # custom  pmpermit security text (optional)
-    PMPERMIT_TEXT = os.getenv("PMPERMIT_TEXT", pmpermit_text)
+    PMPERMIT_TEXT = os.getenv("PMPERMIT_TEXT", _PMPERMIT_TEXT)
     # pmpermit warn limit (optional)
     PM_LIMIT = int(os.getenv("PM_LIMIT", 4))
     # this is used to get your accurate time
