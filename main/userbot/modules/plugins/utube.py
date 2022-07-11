@@ -100,11 +100,10 @@ async def ytvideodl_handler(_, m):
 		await msg.delete()
 
 		data = yt.streams.filter(only_video=True)
-		
 		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
 			if await app.user_exists(m.chat.id, app.bot.id):
 				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
-				buttons = [app.BuildKeyboard(([[data[x].res, str(data[x].itag)], [data[x+1].res, str(data[x+1].itag)], [data[x+2].res, str(data[x+1].itag)]])) for x in range(len(data) - 2) if getattr(data[x], "res", False)]
+				buttons = [app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)], [str(data[x+1].resolution), str(data[x+1].itag)], [str(data[x+2].resolution), str(data[x+2].itag)]])) for x in range(len(data) - 2) if getattr(data[x], "resolution", False)]
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
 				app.utubeobject = data
