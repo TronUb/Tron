@@ -30,4 +30,5 @@ class SuperClient(Core, Client):
 		self.is_bot = False
 		self.stop()
 
+                self.utubeobject = object
 		self.bot = Bot()
