@@ -132,7 +132,7 @@ async def ytvideodl_handler(_, m):
 						if client.handler:
 							client.remove_handler(*client.handler)
 
-				app.handler = app.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex("242")))
+				app.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
 				return True
 
 		video_found = False
