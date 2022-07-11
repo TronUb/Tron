@@ -119,19 +119,14 @@ async def ytvideodl_handler(_, m):
 
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
-				app.utubeobject = data
+				app.bot.utubeobject = data
 
 				async def utube_callback(client, cb):
-					print(f"This message is from utube_callback\n\n{cb.data}")
 					try:
-						if int(cb.data):
-							print("above obj creation.")
+						if int(cb.data) in [int(x.itag) for x in client.utubeobject]:
 							obj = client.utubeobject.get_by_itag(int(cb.data))
-							print("assigning obj")
 							filename = f"{obj.title.split('.')[0]}.mp4"
-							print("downloading video.")
 							loc = obj.download(client.TEMP_DICT, filename)
-							print("send youtube video")
 							await client.bot.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
 							await cb.message.delete()
 							if client.handler:
