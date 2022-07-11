@@ -123,18 +123,22 @@ async def ytvideodl_handler(_, m):
 
 				async def utube_callback(client, cb):
 					print(f"This message is from utube_callback\n\n{cb.data}")
-					if int(cb.data):
-						print("above obj creation.")
-						obj = client.utubeobject.get_by_itag(int(cb.data))
-						print("assigning obj")
-						filename = f"{obj.title.split('.')[0]}.mp4"
-						print("downloading video.")
-						loc = obj.download(client.TEMP_DICT, filename)
-						print("send youtube video")
-						await client.bot.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
-						await cb.message.delete()
-						if client.handler:
-							client.remove_handler(*client.handler)
+					try:
+						if int(cb.data):
+							print("above obj creation.")
+							obj = client.utubeobject.get_by_itag(int(cb.data))
+							print("assigning obj")
+							filename = f"{obj.title.split('.')[0]}.mp4"
+							print("downloading video.")
+							loc = obj.download(client.TEMP_DICT, filename)
+							print("send youtube video")
+							await client.bot.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
+							await cb.message.delete()
+							if client.handler:
+								client.remove_handler(*client.handler)
+					except Exception as e:
+						print(e)
+						await client.error(e)
 
 				app.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
 				return True
