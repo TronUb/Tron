@@ -123,7 +123,7 @@ async def ytvideodl_handler(_, m):
 
 				async def utube_callback(client, cb):
 					print(f"This message is from utube_callback\n\n{cb.data}")
-					if int(cb.data) in [int(x.itag) for x in client.utubeobject]:
+					if int(cb.data):
 						print("above obj creation.")
 						obj = client.utubeobject.get_by_tag(int(cb.data))
 						print("assigning obj")
