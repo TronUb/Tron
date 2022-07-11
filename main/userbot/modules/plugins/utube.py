@@ -109,7 +109,6 @@ async def ytvideodl_handler(_, m):
 				temp = []
 
 				for x in range(len(data)):
-					temp = []
 					btn = app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)]]))
 					if len(temp) < 3:
 						temp.append(btn[0])
