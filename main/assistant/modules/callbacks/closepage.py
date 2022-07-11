@@ -1,12 +1,13 @@
-import heroku3
+"""
+This file is for closed page inline help menu.
+"""
 
 from pyrogram import filters
 
 from pyrogram.types import (
-	InlineKeyboardButton, 
-	InlineKeyboardMarkup, 
-	CallbackQuery, 
-	Message,
+	InlineKeyboardButton,
+	InlineKeyboardMarkup,
+	CallbackQuery
 )
 
 from main.userbot.client import app
@@ -18,20 +19,22 @@ from main.userbot.client import app
 @app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
-	await cb.edit_message_text(
-		text=app.closed_menu_string(),
-		reply_markup=InlineKeyboardMarkup(
-			[
-				[
-					InlineKeyboardButton(
-						"Open", callback_data="home-tab",
-					)
-				],
-				[
-					InlineKeyboardButton(
-						"Delete", callback_data="delete-tab",
-					)
-				]
-			]
-		),
-	)
+    await cb.edit_message_text(
+        text=app.closed_menu_string(),
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="Open",
+                        callback_data="home-tab"
+                    )
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="Delete",
+                        callback_data="delete-tab"
+                    )
+                ]
+            ]
+        )
+    )
