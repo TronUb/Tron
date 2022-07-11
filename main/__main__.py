@@ -1,3 +1,8 @@
+"""
+Run after main.__init__.py, this file starts
+and loads plugins for both assistant & userbot.
+"""
+
 import sys
 import asyncio
 import warnings
@@ -83,6 +88,3 @@ if __name__ == '__main__':
         warnings.simplefilter("ignore")
         loop = asyncio.get_event_loop()
     loop.run_until_complete(start_bot())
-
-
-
