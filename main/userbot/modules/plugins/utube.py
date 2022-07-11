@@ -1,6 +1,7 @@
 from main import app, gen
 
 from pytube import YouTube
+from pyrogram.handlers import CallbackQueryHandler
 from pyrogram.types import Message, InlineKeyboardMarkup
 from pyrogram.enums import MessageEntityType, ChatType
 
@@ -103,7 +104,14 @@ async def ytvideodl_handler(_, m):
 		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
 			if await app.user_exists(m.chat.id, app.bot.id):
 				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
-				buttons = [app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)], [str(data[x+1].resolution), str(data[x+1].itag)], [str(data[x+2].resolution), str(data[x+2].itag)]])) for x in range(len(data) - 2) if getattr(data[x], "resolution", False)]
+
+				temp = []
+				for x in range(len(data)):
+					btn = app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)]]))
+					if btn not in temp:
+						temp.append(btn)
+				buttons = [[temp[x], temp[x+1], temp[x+2]] for x in range(len(temp) - 2)]
+
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
 				app.utubeobject = data
