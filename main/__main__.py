@@ -30,13 +30,13 @@ async def start_assistant():
 
             if cmds != botcmdkeys:
                 print("Setting bot commands.\n")
-                    await app.bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
-                        print("Added bot commands.\n")
-                else:
-                        print("Assistant is not activated.\n")
-	else:
-            print("Assistant start unsuccessful, please check that you have given the bot token.\n")
-            print("skipping assistant start !")
+                await app.bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
+                print("Added bot commands.\n")
+        else:
+            print("Assistant is not activated.\n")
+    else:
+        print("Assistant start unsuccessful, please check that you have given the bot token.\n")
+        print("skipping assistant start !")
 
 
 
