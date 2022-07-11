@@ -51,5 +51,14 @@ which are related to tronuserbot then just ask in
 async def _about(_, cb: CallbackQuery):
     await cb.edit_message_media(
         media=InputMediaPhoto(media="main/core/resources/images/nora.png", caption=ABOUT_TEXT),
-        reply_markup=InlineKeyboardMarkup([app.bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
+        reply_markup=InlineKeyboardMarkup(
+            [
+                app.bot.BuildKeyboard(
+                    (
+                        ["Home", "close-tab"],
+                        ["Back", "home-tab"]
+                    )
+                )
+            ]
+        )
     )

@@ -2,8 +2,6 @@
 This page gives inline anime quotes.
 """
 
-import heroku3
-
 from pyrogram import filters
 
 from pyrogram.types import (
@@ -26,7 +24,7 @@ async def _anime_quotes(_, cb: CallbackQuery):
             [
                 [
                     InlineKeyboardButton(
-                        text="More", 
+                        text="More",
                         callback_data="animequote-tab",
                     )
                 ]

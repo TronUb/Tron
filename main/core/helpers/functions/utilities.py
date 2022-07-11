@@ -78,7 +78,7 @@ class Utilities(AioHttp):
 					self.HelpEmoji(),
 					x.replace("_", " ").title(),
 				),
-				callback_data="modulelist-{}|{}".format(x, page_number),
+				callback_data="pluginlist-{}|{}".format(x, page_number),
 			)
 			for x in help_modules
 		]
