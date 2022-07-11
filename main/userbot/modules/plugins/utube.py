@@ -106,6 +106,7 @@ async def ytvideodl_handler(_, m):
 				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
 
 				buttons = []
+				temp = []
 
 				for x in range(len(data)):
 					temp = []
