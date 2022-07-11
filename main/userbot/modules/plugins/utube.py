@@ -130,19 +130,16 @@ async def ytvideodl_handler(_, m):
 						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
 							botmsg = await client.send_message(cb.message.chat.id, "`Uploading video . . .`")
 							obj = client.utubeobject.get_by_itag(int(cb.data))
-							filename = f"{obj.title.split('.')[0]}.mp4"
-							loc = obj.download(client.TEMP_DICT, filename)
-							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
+							loc = obj.download(client.TEMP_DICT)
+							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
 							await botmsg.delete()
-							if client.handler:
-								client.remove_handler(*client.handler)
 						else:
 							await cb.answer("The message is expired.", show_alert=True)
 					except Exception as e:
 						print(e)
 						await client.error(e)
 
-				app.bot.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
 				return True
 
 		video_found = False
