@@ -99,12 +99,11 @@ async def ytvideodl_handler(_, m):
 		yt = YouTube(link)
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
-		await msg.delete()
-
 		data = yt.streams.filter(only_video=True)
+
 		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
 			if await app.user_exists(m.chat.id, app.bot.id):
-				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
+				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
 
 				buttons = []
 				temp = []
@@ -117,13 +116,17 @@ async def ytvideodl_handler(_, m):
 						buttons.append(temp)
 						temp = []
 
-				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
+				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
 				app.bot.utubeobject = data
 
 				async def utube_callback(client, cb):
 					try:
-						if int(cb.data) in [int(x.itag) for x in client.utubeobject]:
+						if not cb.from_user.id == m.from_user.id:
+							await cb.answer("You're not allowed.", show_alert=True
+							return False
+
+						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
 							obj = client.utubeobject.get_by_itag(int(cb.data))
 							filename = f"{obj.title.split('.')[0]}.mp4"
 							loc = obj.download(client.TEMP_DICT, filename)
@@ -131,11 +134,14 @@ async def ytvideodl_handler(_, m):
 							await cb.message.delete()
 							if client.handler:
 								client.remove_handler(*client.handler)
+						else:
+							await cb.answer("The message is expired.", show_alert=True)
 					except Exception as e:
 						print(e)
 						await client.error(e)
 
-				app.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
+				app.bot.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
+				await msg.delete()
 				return True
 
 		video_found = False
