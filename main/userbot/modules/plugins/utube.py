@@ -106,11 +106,15 @@ async def ytvideodl_handler(_, m):
 				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
 
 				temp = []
+				buttons = []
+
 				for x in range(len(data)):
 					btn = app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)]]))
-					if btn not in temp:
-						temp.append(btn)
-				buttons = [[temp[x], temp[x+1], temp[x+2]] for x in range(len(temp) - 2)]
+					if len(temp) < 3:
+						temp.append(btn[0])
+					if len(temp) == 3:
+						buttons.append(temp)
+						temp.clear()
 
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="Available formats", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
