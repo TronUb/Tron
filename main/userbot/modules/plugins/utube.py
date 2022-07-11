@@ -123,7 +123,7 @@ async def ytvideodl_handler(_, m):
 				async def utube_callback(client, cb):
 					try:
 						if not cb.from_user.id == m.from_user.id:
-							await cb.answer("You're not allowed.", show_alert=True
+							await cb.answer("You're not allowed.", show_alert=True)
 							return False
 
 						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
