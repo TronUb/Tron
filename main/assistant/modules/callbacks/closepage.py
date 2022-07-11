@@ -19,6 +19,7 @@ from main.userbot.client import app
 @app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
+    print(cb)
     await cb.edit_message_text(
         text=app.closed_menu_string(),
         reply_markup=InlineKeyboardMarkup(
