@@ -24,7 +24,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Config(Inside):
+class Config(Inside): # pylint: disable=too-few-public-methods
     """ configuration class """
     if not IS_TERMUX:
         # api id of your telegram account (required)
