@@ -125,7 +125,7 @@ async def ytvideodl_handler(_, m):
 					print(f"This message is from utube_callback\n\n{cb.data}")
 					if int(cb.data):
 						print("above obj creation.")
-						obj = client.utubeobject.get_by_tag(int(cb.data))
+						obj = client.utubeobject.get_by_itag(int(cb.data))
 						print("assigning obj")
 						filename = f"{obj.title.split('.')[0]}.mp4"
 						print("downloading video.")
