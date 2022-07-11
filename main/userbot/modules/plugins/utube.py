@@ -127,7 +127,7 @@ async def ytvideodl_handler(_, m):
 							obj = client.utubeobject.get_by_itag(int(cb.data))
 							filename = f"{obj.title.split('.')[0]}.mp4"
 							loc = obj.download(client.TEMP_DICT, filename)
-							await client.bot.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
+							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
 							await cb.message.delete()
 							if client.handler:
 								client.remove_handler(*client.handler)
