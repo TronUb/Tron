@@ -99,7 +99,7 @@ async def ytvideodl_handler(_, m):
 		yt = YouTube(link)
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
-		data = yt.streams.filter(only_video=True)
+		data = yt.streams.filter(mime_type="video/mp4")
 
 		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
 			if await app.user_exists(m.chat.id, app.bot.id):
@@ -116,7 +116,8 @@ async def ytvideodl_handler(_, m):
 						buttons.append(temp)
 						temp = []
 
-				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption="**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
+				await msg.delete()
+				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
 				app.bot.utubeobject = data
 
@@ -131,7 +132,6 @@ async def ytvideodl_handler(_, m):
 							filename = f"{obj.title.split('.')[0]}.mp4"
 							loc = obj.download(client.TEMP_DICT, filename)
 							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + filename, thumb=thumbnail)
-							await cb.message.delete()
 							if client.handler:
 								client.remove_handler(*client.handler)
 						else:
@@ -141,7 +141,6 @@ async def ytvideodl_handler(_, m):
 						await client.error(e)
 
 				app.bot.handler = app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
-				await msg.delete()
 				return True
 
 		video_found = False
