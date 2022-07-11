@@ -1,12 +1,15 @@
+"""
+This page gives inline anime quotes.
+"""
+
 import heroku3
 
 from pyrogram import filters
 
 from pyrogram.types import (
-	InlineKeyboardButton, 
-	InlineKeyboardMarkup, 
-	CallbackQuery, 
-	Message,
+	InlineKeyboardButton,
+	InlineKeyboardMarkup,
+	CallbackQuery
 )
 
 from main.userbot.client import app
@@ -16,17 +19,17 @@ from main.userbot.client import app
 
 
 @app.bot.on_callback_query(filters.regex("animequote-tab"))
-async def _more_anime_quotes(_, cb):
-	await cb.edit_message_text(
-		app.quote(),
-		reply_markup=InlineKeyboardMarkup(
-			[
-				[
-					InlineKeyboardButton(
-						"More", 
-						callback_data="animequote-tab",
-					),
-				]
-			]
-		),
-	)
+async def _anime_quotes(_, cb: CallbackQuery):
+    await cb.edit_message_text(
+        app.quote(),
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="More", 
+                        callback_data="animequote-tab",
+                    )
+                ]
+            ]
+        ),
+    )
