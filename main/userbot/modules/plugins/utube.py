@@ -130,6 +130,9 @@ async def ytvideodl_handler(_, m):
 						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
 							botmsg = await client.send_message(cb.message.chat.id, "`Uploading video . . .`")
 							obj = client.utubeobject.get_by_itag(int(cb.data))
+							if not obj.includes_audio_track:
+								await cb.answer("Note: This video doesn't have audio.", show_alert=True)
+
 							loc = obj.download(client.TEMP_DICT)
 							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
 							await botmsg.delete()
