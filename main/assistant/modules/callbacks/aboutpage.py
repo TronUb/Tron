@@ -7,8 +7,7 @@ from pyrogram import filters
 from pyrogram.types import (
 	InlineKeyboardMarkup,
 	InputMediaPhoto,
-	CallbackQuery,
-	Message,
+	CallbackQuery
 )
 
 from main.userbot.client import app
