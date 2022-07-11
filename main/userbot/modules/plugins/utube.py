@@ -105,10 +105,10 @@ async def ytvideodl_handler(_, m):
 			if await app.user_exists(m.chat.id, app.bot.id):
 				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="processing link . . .")
 
-				temp = []
 				buttons = []
 
 				for x in range(len(data)):
+					temp = []
 					btn = app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)]]))
 					if len(temp) < 3:
 						temp.append(btn[0])
