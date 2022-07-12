@@ -213,7 +213,7 @@ async def colourtemplate_handler(_, m: Message):
 				w, h = 60, 30
 				if app.long() > 2:
 					args = app.GetArgs()
-					w, h = args[1], args[2]
+					w, h = args[2], args[3]
 
 				picname = f"{app.TEMP_DICT}colour_image.png"
 				img = Image.new(
