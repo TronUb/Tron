@@ -141,7 +141,7 @@ async def ytvideodl_handler(_, m):
 				await botmsg.delete()
 				app.bot.utubeobject = data
 
-				async def utube_callback(client, cb):
+				async def utube_video_callback(client, cb):
 					try:
 						if not cb.from_user.id == m.from_user.id:
 							await cb.answer("You're not allowed.", show_alert=True)
@@ -162,7 +162,7 @@ async def ytvideodl_handler(_, m):
 						print(e)
 						await client.error(e)
 
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"\d+")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_video_callback, filters=filters.regex(r"\d+")))
 				return True
 
 		video_found = False
@@ -216,6 +216,58 @@ async def ytvideodl_handler(_, m):
 
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
+
+		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
+			if await app.user_exists(m.chat.id, app.bot.id):
+				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
+
+				buttons = []
+				temp = []
+
+				for x in range(len(data)):
+					name = data[x]
+
+					btn = app.BuildKeyboard(([
+						[
+							str(name.abr), 
+							str(name.itag)
+						]
+					]))
+
+					if len(temp) < 3:
+						temp.append(btn[0])
+					if len(temp) == 3:
+						buttons.append(temp)
+						temp = []
+
+				await msg.delete()
+				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
+				await botmsg.delete()
+				app.bot.utubeobject = data
+
+				async def utube_audio_callback(client, cb):
+					try:
+						if not cb.from_user.id == m.from_user.id:
+							await cb.answer("You're not allowed to this.", show_alert=True)
+							return False
+
+						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
+							botmsg = await client.send_message(cb.message.chat.id, "`Uploading audio . . .`")
+							obj = client.utubeobject.get_by_itag(int(cb.data))
+							
+							loc = obj.download(client.TEMP_DICT)
+							await client.send_audio(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
+							await botmsg.delete()
+						else:
+							await cb.answer("The message is expired.", show_alert=True)
+					except Exception as e:
+						print(e)
+						await client.error(e)
+
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"\d+")))
+				return True
+
+
 		audio_found = False
 		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
 		for x in data:
