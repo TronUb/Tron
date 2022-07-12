@@ -19,8 +19,7 @@ app.CMD_HELP.update(
 		"utube",
 		{
 		"ytvinfo [ link | reply ]" : "Get a youtube video information.",
-		"ytvdl [ link | reply ]" : "Download any video from YouTube.",
-		"ytadl [ link | reply ]" : "Download audios of any video from YouTube."
+		"ytmdl [ link | reply ] [ -a ]" : "Download any video/audio from YouTube Use flag -a to download audio. If your bot is present in chat, by default you'll get inline results.",
 		}
 		)
 	}
@@ -181,7 +180,7 @@ async def ytvideodl_handler(_, m):
 
 		media_found = False
 		msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
-		media_type = "audio" if app.long() > 1 and "-a" in m.command[1] else "video"
+		media_type = "audio" if app.long() > 1 and "-a" in m.text else "video"
 
 		for x in data:
 			if media_type == "video":
@@ -193,7 +192,7 @@ async def ytvideodl_handler(_, m):
 					break
 
 			elif media_type == "audio":
-				if x.type == "audio" and x.abr in ("128kbps", "160kbps", "250kbps") and x.mime_type == "video/webm":
+				if x.type == "audio" and x.abr in ("128kbps", "160kbps", "250kbps", "70kbps") and x.mime_type in ("audio/webm", "audio/mpeg"):
 					media_found =True
 					loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
 					await app.send_audoo(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
