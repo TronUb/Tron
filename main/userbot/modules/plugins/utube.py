@@ -1,6 +1,8 @@
 from main import app, gen
 
 from pytube import YouTube
+from pytube.exceptions import LiveStreamError
+
 from pyrogram import filters
 from pyrogram.handlers import CallbackQueryHandler
 from pyrogram.types import Message, InlineKeyboardMarkup
@@ -26,10 +28,10 @@ app.CMD_HELP.update(
 
 
 
-def ResizeImage(path: str):
+def ResizeImage(path: str, size: tuple=(320, 320)):
 	img = Image.open(path)
-	img.thumbnail((320, 320))
-	photo = app.TEMP_DICT+"youtube_photo.jpg"
+	img.thumbnail(size)
+	photo = app.TEMP_DICT+"photo.jpg"
 	img.save(photo)
 	return photo
 
@@ -83,6 +85,7 @@ async def ytvideodl_handler(_, m):
 		reply = m.reply_to_message
 		cmd = m.command
 		args = app.GetArgs()
+
 		if args:
 			if args.text and args.text.entities:
 				entity = args.text.entities
@@ -99,7 +102,16 @@ async def ytvideodl_handler(_, m):
 		yt = YouTube(link)
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
-		data = yt.streams.filter(mime_type="video/mp4")
+
+		try:
+			data = yt.streams.filter(mime_type="video/mp4")
+		except LiveStreamError:
+			await app.send_edit(
+				"The owner of this channel is doing live stream, can't download the video.",
+				text_type=["mono"],
+				delme=3
+			)
+			return
 
 		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
 			if await app.user_exists(m.chat.id, app.bot.id):
@@ -109,7 +121,15 @@ async def ytvideodl_handler(_, m):
 				temp = []
 
 				for x in range(len(data)):
-					btn = app.BuildKeyboard(([[str(data[x].resolution), str(data[x].itag)]]))
+					name = data[x]
+
+					btn = app.BuildKeyboard(([
+						[
+							str(name.resolution) + " 🔇" if not name.includes_audio_track else str(name.resolution), 
+							str(name.itag)
+						]
+					]))
+
 					if len(temp) < 3:
 						temp.append(btn[0])
 					if len(temp) == 3:
@@ -175,7 +195,7 @@ async def ytvideodl_handler(_, m):
 				entity = args.text.entities
 				if entity[0].type == MessageEntityType.URL:
 					i = entity[0]
-					link = args.text[i.offset:i.length+i.offset] # get link from text
+					link = args.text[i.offset : i.length + i.offset] # get link from text
 				else:
 					link = args.text
 			else:
@@ -184,7 +204,16 @@ async def ytvideodl_handler(_, m):
 			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
 		yt = YouTube(link)
-		data = yt.streams.filter(only_audio=True)
+		try:
+			data = yt.streams.filter(only_audio=True)
+		except LiveStreamError:
+			await app.send_edit(
+				"The owner of this channel is doing live stream, can't download the video.",
+				text_type=["mono"],
+				delme=3
+			)
+			return
+
 		path = PyDownload(yt.thumbnail_url)
 		thumbnail = ResizeImage(path)
 		audio_found = False
@@ -201,4 +230,3 @@ async def ytvideodl_handler(_, m):
 			await app.send_edit("I didn't find any good quality audio of this youtube video.", text_type=["mono"], delme=3)  
 	except Exception as e:
 		await app.error(e)
-
