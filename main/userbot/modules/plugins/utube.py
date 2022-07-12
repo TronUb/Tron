@@ -263,7 +263,7 @@ async def ytvideodl_handler(_, m):
 						print(e)
 						await client.error(e)
 
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"^\d+.v$")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"^\d+")))
 				return True
 
 
