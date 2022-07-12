@@ -26,7 +26,7 @@ def update_upgrade(msg: str, clear_screen: bool=True):
 	print(shell("apt upgrade"))
 	if clear_screen:
 		clear()
-	return output
+	return True
 
 
 # check & install python if not installed
