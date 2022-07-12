@@ -27,5 +27,6 @@ class Bot(Core, Client):
         self.bio = self.me.bio if self.me.bio else ""
         self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
         self.is_bot = True
-        self.utubeobject = object
+        self.utube_audio_object = object
+        self.utube_video_object = object
         self.stop()
