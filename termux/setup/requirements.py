@@ -22,8 +22,8 @@ def clear():
 def update_upgrade(msg: str, clear_screen: bool=True):
 	clear()
 	print(msg + "\n\n")
-	output = shell("apt update") + "\n\n"
-	output += shell("apt upgrade")
+	print(shell("apt update"))
+	print(shell("apt upgrade"))
 	if clear_screen:
 		clear()
 	return output
@@ -34,8 +34,8 @@ def check_python(msg: str):
 	print(msg + "\n\n")
 	output = shell("python3 -V")
 	if "No command python3 found" in output:
-		print("\n\nPython is not installed: installing . . .\n\n")
-		shell("apt install python3")
+		print("Python is not installed: installing . . .\n\n")
+		print(shell("apt install python3"))
 		clear()
 	else:
 		print("Python is already installed.")
@@ -45,7 +45,7 @@ def check_python(msg: str):
 
 # install wheel 
 def install_wheel():
-	return shell("pip3 install wheel")
+	print(shell("pip3 install wheel"))
 	clear()
 	
 
@@ -63,14 +63,14 @@ def install_requirements():
 		if not pkg in installed_packages:
 			if pkg == "Pillow":
 				print(f"\nInstalling package {x}\n\n")
-				shell("pkg install libjpeg-turbo")
-				shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'") 
-				shell("pip3 install Pillow")
+				print(shell("pkg install libjpeg-turbo"))
+				print(shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'"))
+				print(shell("pip3 install Pillow"))
 				clear()
 				continue
 
 			print(f"\nInstalling package {x}\n\n")
-			shell(f"pip3 install {x}")
+			print(shell(f"pip3 install {x}"))
 			clear()
 	clear()
 	return True
