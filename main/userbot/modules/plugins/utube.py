@@ -143,15 +143,16 @@ async def ytvideodl_handler(_, m):
 
 				async def utube_video_callback(client, cb):
 					try:
+						if re.match(r"^\d+.a", cb.data):
+							return
+						
 						if not cb.from_user.id == m.from_user.id:
 							await cb.answer("You're not allowed.", show_alert=True)
 							return False
 
 						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
 							botmsg = await client.send_message(cb.message.chat.id, "`Uploading video . . .`")
-							obj = client.utubeobject.get_by_itag(int(cb.data))
-							if not obj.includes_audio_track:
-								await cb.answer("Note: This video doesn't have audio.", show_alert=True)
+							obj = client.utubeobject.get_by_itag(int(cb.data.split(".")[0]))
 
 							loc = obj.download(client.TEMP_DICT)
 							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
@@ -162,7 +163,7 @@ async def ytvideodl_handler(_, m):
 						print(e)
 						await client.error(e)
 
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_video_callback, filters=filters.regex(r"\d+")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_video_callback, filters=filters.regex(r"^\d+.v")))
 				return True
 
 		video_found = False
@@ -230,7 +231,7 @@ async def ytvideodl_handler(_, m):
 					btn = app.BuildKeyboard(([
 						[
 							str(name.abr), 
-							str(name.itag)
+							str(name.itag)+".a"
 						]
 					]))
 
@@ -247,13 +248,16 @@ async def ytvideodl_handler(_, m):
 
 				async def utube_audio_callback(client, cb):
 					try:
+						if re.match(r"^\d+.v", cb.data):
+							return
+						
 						if not cb.from_user.id == m.from_user.id:
 							await cb.answer("You're not allowed to this.", show_alert=True)
 							return False
 
 						if (int(cb.data) in [int(x.itag) for x in client.utubeobject]):
 							botmsg = await client.send_message(cb.message.chat.id, "`Uploading audio . . .`")
-							obj = client.utubeobject.get_by_itag(int(cb.data))
+							obj = client.utubeobject.get_by_itag(int(cb.data.split(".")[0]))
 							
 							loc = obj.download(client.TEMP_DICT, f"{obj.title.split('.')[0]}.mp3")
 							await client.send_audio(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
@@ -264,7 +268,7 @@ async def ytvideodl_handler(_, m):
 						print(e)
 						await client.error(e)
 
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"\d+")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"^\d+.v$")))
 				return True
 
 
