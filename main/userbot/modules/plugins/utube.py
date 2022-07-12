@@ -45,6 +45,7 @@ def PyDownload(url: str):
 
 
 
+
 @app.on_message(gen("ytvinfo", allow = ["sudo", "channel"]))
 async def ytvideoinfo_handler(_, m: Message):
 	try:
@@ -78,7 +79,7 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytvdl", allow = ["sudo", "channel"]))
+@app.on_message(gen("ytmdl", allow = ["sudo", "channel"]))
 async def ytvideodl_handler(_, m):
 	try:
 		msg = await app.send_edit("processing link . . .", text_type=["mono"])
@@ -104,10 +105,10 @@ async def ytvideodl_handler(_, m):
 		thumbnail = ResizeImage(path)
 
 		try:
-			data = yt.streams.filter(mime_type="video/mp4")
+			data = yt.streams
 		except LiveStreamError:
 			await app.send_edit(
-				"The owner of this channel is doing live stream, can't download the video.",
+				"The owner of this channel is doing live stream, can't download the media.",
 				text_type=["mono"],
 				delme=3
 			)
@@ -122,13 +123,23 @@ async def ytvideodl_handler(_, m):
 
 				for x in range(len(data)):
 					name = data[x]
-
-					btn = app.BuildKeyboard(([
-						[
-							str(name.resolution) + " 🔇" if not name.includes_audio_track else str(name.resolution), 
-							str(name.itag)
-						]
-					]))
+					
+					if name.resolution:
+						btn = app.BuildKeyboard(([
+							[
+								str(name.resolution) + " 🔇" if not name.includes_audio_track else str(name.resolution), 
+								str(name.itag)
+							]
+						]))
+					elif name.abr:
+						btn = app.BuildKeyboard(([
+							[
+								str(name.abr), 
+								str(name.itag)
+							]
+						]))
+					else:
+						continue
 
 					if len(temp) < 3:
 						temp.append(btn[0])
@@ -137,11 +148,11 @@ async def ytvideodl_handler(_, m):
 						temp = []
 
 				await msg.delete()
-				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
+				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title}", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
 				app.bot.utube_video_object = data
 
-				async def utube_video_callback(client, cb):
+				async def utube_callback(client, cb):
 					try:
 						
 						if not cb.from_user.id == m.from_user.id:
@@ -149,11 +160,15 @@ async def ytvideodl_handler(_, m):
 							return False
 
 						if (int(cb.data) in [int(x.itag) for x in client.utube_video_object]):
-							botmsg = await client.send_message(cb.message.chat.id, "`Uploading video . . .`")
-							obj = client.utube_video_object.get_by_itag(int(cb.data.split(".")[0]))
+							obj = client.utube_video_object.get_by_itag(int(cb.data))
+							botmsg = await client.send_message(cb.message.chat.id, f"`Uploading {obj.type} . . .`")
 
-							loc = obj.download(client.TEMP_DICT)
-							await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
+							if obj.type == "video":
+								loc = obj.download(client.TEMP_DICT)
+								await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
+							elif obj.type == "audio":
+								loc = obj.download(client.TEMP_DICT, f"{obj.title.split('.')[0]}.mp3")
+								await client.send_video(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
 							await botmsg.delete()
 						else:
 							await cb.answer("The message is expired.", show_alert=True)
@@ -161,123 +176,31 @@ async def ytvideodl_handler(_, m):
 						print(e)
 						await client.error(e)
 
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_video_callback, filters=filters.regex(r"^\d+")))
+				app.bot.add_handler(CallbackQueryHandler(callback=utube_callback, filters=filters.regex(r"^\d+")))
 				return True
 
-		video_found = False
+		media_found = False
 		msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
+		media_type = "audio" if app.long() > 1 and "-a" in m.command[1] else "video"
+
 		for x in data:
-			if x.type == "video" and x.resolution in ("720p" or "1080p") and x.mime_type == "video/mp4":
-				video_found =True
-				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp4")
-				await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
-				await msg.delete()
-				break
+			if media_type == "video":
+				if x.type == "video" and x.resolution in ("720p", "1080p") and x.mime_type == "video/mp4":
+					media_found =True
+					loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp4")
+					await app.send_video(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
+					await msg.delete()
+					break
 
-		if not video_found:
-			await app.send_edit("I didn't found any good quality video of this YouTube link", text_type=["mono"], delme=3)   
-	except Exception as e:
-		await app.error(e)
+			elif media_type == "audio":
+				if x.type == "audio" and x.abr in ("128kbps", "160kbps", "250kbps") and x.mime_type == "video/webm":
+					media_found =True
+					loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
+					await app.send_audoo(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
+					await msg.delete()
+					break
 
-
-
-
-@app.on_message(gen("ytadl", allow = ["sudo", "channel"]))
-async def ytvideodl_handler(_, m):
-	try:
-		reply = m.reply_to_message
-		cmd = m.command
-		msg = await app.send_edit("processing link . . .", text_type=["mono"])
-		args = app.GetArgs()
-		if args:
-			if args.text and args.text.entities:
-				entity = args.text.entities
-				if entity[0].type == MessageEntityType.URL:
-					i = entity[0]
-					link = args.text[i.offset : i.length + i.offset] # get link from text
-				else:
-					link = args.text
-			else:
-				link = args.text
-		else:
-			return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
-
-		yt = YouTube(link)
-		try:
-			data = yt.streams.filter(only_audio=True)
-		except LiveStreamError:
-			await app.send_edit(
-				"The owner of this channel is doing live stream, can't download the video.",
-				text_type=["mono"],
-				delme=3
-			)
-			return
-
-		path = PyDownload(yt.thumbnail_url)
-		thumbnail = ResizeImage(path)
-
-		if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
-			if await app.user_exists(m.chat.id, app.bot.id):
-				botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
-
-				buttons = []
-				temp = []
-
-				for x in range(len(data)):
-					name = data[x]
-
-					btn = app.BuildKeyboard(([
-						[
-							str(name.abr), 
-							str(name.itag)
-						]
-					]))
-
-					if len(temp) < 3:
-						temp.append(btn[0])
-					if len(temp) == 3:
-						buttons.append(temp)
-						temp = []
-
-				await msg.delete()
-				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title.split('.')[0]}.mp4", reply_markup=InlineKeyboardMarkup(buttons))
-				await botmsg.delete()
-				app.bot.utube_audio_object = data
-
-				async def utube_audio_callback(client, cb):
-					try:
-						if not cb.from_user.id == m.from_user.id:
-							await cb.answer("You're not allowed to this.", show_alert=True)
-							return False
-
-						if (int(cb.data) in [int(x.itag) for x in client.utube_audio_object]):
-							botmsg = await client.send_message(cb.message.chat.id, "`Uploading audio . . .`")
-							obj = client.utube_audio_object.get_by_itag(int(cb.data.split(".")[0]))
-							
-							loc = obj.download(client.TEMP_DICT, f"{obj.title.split('.')[0]}.mp3")
-							await client.send_audio(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
-							await botmsg.delete()
-						else:
-							await cb.answer("The message is expired.", show_alert=True)
-					except Exception as e:
-						print(e)
-						await client.error(e)
-
-				app.bot.add_handler(CallbackQueryHandler(callback=utube_audio_callback, filters=filters.regex(r"^\d+")))
-				return True
-
-
-		audio_found = False
-		msg = await app.send_edit("**Trying to download: **" + f"`{yt.title}`")
-		for x in data:
-			if x.mime_type == "audio/webm" and x.abr == "160kbps" or x.abr == "128kbps" or x.abr == "70kbps":
-				audio_found = True
-				loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
-				await app.send_audio(m.chat.id, loc, caption=f"**Title:**\n\n`{yt.title}`", thumb=thumbnail)
-				await msg.delete()
-				break
-
-		if not audio_found:
-			await app.send_edit("I didn't find any good quality audio of this youtube video.", text_type=["mono"], delme=3)  
+		if not media_found:
+			await app.send_edit(f"I didn't found any good quality {media_type} of this YouTube link", text_type=["mono"], delme=3)   
 	except Exception as e:
 		await app.error(e)
