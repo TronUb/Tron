@@ -168,7 +168,7 @@ async def ytvideodl_handler(_, m):
 								await client.send_video(chat_id=cb.message.chat.id, video=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
 							elif obj.type == "audio":
 								loc = obj.download(client.TEMP_DICT, f"{obj.title.split('.')[0]}.mp3")
-								await client.send_video(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
+								await client.send_audio(chat_id=cb.message.chat.id, audio=loc, caption="**Title:**\n\n" + loc.split("/")[-1], thumb=thumbnail)
 							await botmsg.delete()
 						else:
 							await cb.answer("The message is expired.", show_alert=True)
