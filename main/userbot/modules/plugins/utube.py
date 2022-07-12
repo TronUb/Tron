@@ -149,7 +149,7 @@ async def ytvideodl_handler(_, m):
 				await msg.delete()
 				await app.bot.send_photo(chat_id=m.chat.id, photo=path, caption=f"**Title:** {yt.title}", reply_markup=InlineKeyboardMarkup(buttons))
 				await botmsg.delete()
-				app.bot.utube_video_object = data
+				app.bot.utube_object = data
 
 				async def utube_callback(client, cb):
 					try:
@@ -158,8 +158,8 @@ async def ytvideodl_handler(_, m):
 							await cb.answer("You're not allowed.", show_alert=True)
 							return False
 
-						if (int(cb.data) in [int(x.itag) for x in client.utube_video_object]):
-							obj = client.utube_video_object.get_by_itag(int(cb.data))
+						if (int(cb.data) in [int(x.itag) for x in client.utube_object]):
+							obj = client.utube_object.get_by_itag(int(cb.data))
 							botmsg = await client.send_message(cb.message.chat.id, f"`Uploading {obj.type} . . .`")
 
 							if obj.type == "video":
