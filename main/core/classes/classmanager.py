@@ -40,6 +40,7 @@ class ClassManager(Config, Helpers, Database, Methods):
 	PIC = "https://telegra.ph/file/38eec8a079706b8c19eae.mp4"
 	Repo = "https://github.com/TronUb/Tron.git"
 	StartTime = time.time()
+	utube_object = object
 
 	# debugging /
 	
