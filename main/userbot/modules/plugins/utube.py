@@ -195,7 +195,7 @@ async def ytvideodl_handler(_, m):
 				if x.type == "audio" and x.abr in ("128kbps", "160kbps", "250kbps", "70kbps") and x.mime_type in ("audio/webm", "audio/mpeg"):
 					media_found =True
 					loc = x.download(app.TEMP_DICT, f"{yt.title.split('.')[0]}.mp3")
-					await app.send_audoo(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
+					await app.send_audio(m.chat.id, loc, caption="**Title:**\n\n" + yt.title, thumb=thumbnail)
 					await msg.delete()
 					break
 
