@@ -1,19 +1,21 @@
-import heroku3
+"""
+Inline about page for help menu.
+"""
 
 from pyrogram import filters
 
 from pyrogram.types import (
-	InlineKeyboardMarkup, 
+	InlineKeyboardMarkup,
 	InputMediaPhoto,
-	CallbackQuery, 
-	Message,
+	CallbackQuery
 )
 
 from main.userbot.client import app
 
 
 
-about_text = f"""
+
+ABOUT_TEXT = f"""
 **Dex:** About
 
 **Location:** /home/about
@@ -35,7 +37,8 @@ I am your friendly assistant,
 i will help you as much as you need. 
 You can ask me for any help related to your userbot. 
 If you have any suggestions or you're facing any problems 
-which are related to tronuserbot then just ask in [support group](https://t.me/tronuserbot_support)
+which are related to tronuserbot then just ask in 
+[support group](https://t.me/tronuserbot_support)
 """
 
 
@@ -45,8 +48,17 @@ which are related to tronuserbot then just ask in [support group](https://t.me/t
 
 @app.bot.on_callback_query(filters.regex("about-tab"))
 @app.alert_user
-async def _about(_, cb):
-	await cb.edit_message_media(
-		media=InputMediaPhoto(media="main/core/resources/images/nora.png", caption=about_text),
-		reply_markup=InlineKeyboardMarkup([app.bot.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))]),
-	)
+async def _about(_, cb: CallbackQuery):
+    await cb.edit_message_media(
+        media=InputMediaPhoto(media="main/core/resources/images/nora.png", caption=ABOUT_TEXT),
+        reply_markup=InlineKeyboardMarkup(
+            [
+                app.bot.BuildKeyboard(
+                    (
+                        ["Home", "close-tab"],
+                        ["Back", "home-tab"]
+                    )
+                )
+            ]
+        )
+    )

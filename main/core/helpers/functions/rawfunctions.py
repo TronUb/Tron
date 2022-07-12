@@ -716,13 +716,13 @@ class RawFunctions(object):
 
 	async def user_exists(
 		self, 
-		user_id: Union[int, str],
-		chat_id: Union[int, str]
+		chat_id: Union[int, str],
+		user_id: Union[int, str]
 		):
 		"""
 		params: 
-			1. user_id: int :: id of a telegram user
-			2. chat :: id of telegram chat
+			1. chat_id: int :: id of a telegram chat
+			2. chat :: id of a telegram user
 
 		use: 
 			use this function to check whether a user exists in a group or not
