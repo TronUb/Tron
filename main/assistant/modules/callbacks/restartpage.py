@@ -23,9 +23,7 @@ from main.userbot.client import app
 @app.alert_user
 async def _restart_tron(_, cb: CallbackQuery):
     await cb.edit_message_text(
-        text="""**Dex:** press confirm to restart.\n\n
-            **Location:** /home/settings/restart bot/confirm\n\nPress the Confirm button to restart userbot ...
-            """,
+        text=app.restart_tab_string("`Press confirm to restart.`"),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -53,10 +51,7 @@ async def _restart_tron(_, cb: CallbackQuery):
 @app.alert_user
 async def _restart_core(_, cb: CallbackQuery):
     await cb.edit_message_text(
-        text="""**Dex:** restarting . . .\n\n
-            **Location:** /home/settings/restart bot/confirm\n\n
-            **Process:** `Restarting bot... please wait...`
-            """,
+        text=app.restart_tab_string("`Trying to restart userbot . . .`"),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -73,10 +68,7 @@ async def _restart_core(_, cb: CallbackQuery):
     restart = application.restart()
     if not restart:
         await cb.edit_message_text(
-            text="""**Dex:** Restarting . . .\n\n
-                **Location:** /home/settings/restart bot/confirm\n\n
-                **Process:** `Failed to restart userbot, please do it manually !!`
-                """,
+            text=app.restart_tab_string("`Failed to restart, restart manually . . .`"),
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -90,10 +82,7 @@ async def _restart_core(_, cb: CallbackQuery):
         )
     else:
         await cb.edit_message_text(
-            text="""**Dex:** Restarting . . .\n\n
-                **Location:** /home/settings/restart bot/confirm\n\n
-                **Process:** `Please wait 2-3 minutes to reboot userbot...`
-                """,
+            text=app.restart_tab_string("`Please wait 2-3 minutes to reboot userbot . . .`"),
             reply_markup=InlineKeyboardMarkup(
                 [
                     [

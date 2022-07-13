@@ -129,7 +129,7 @@ async def stoi_handler(_, m):
 		if reply.sticker:
 			if not reply.sticker.is_animated:
 				filename = f"{app.TEMP_DICT}sticker.jpg"
-				msg = await app.send_edit("`Converting To Image...`")
+				msg = await app.send_edit("Converting To Image ...", text_type=["mono"])
 				await app.download_media(
 					message=reply, 
 					file_name=filename
@@ -210,14 +210,19 @@ async def colourtemplate_handler(_, m: Message):
 	elif app.long() > 1:
 		if app.textlen() <= 4096:
 			try:
+				w, h = 60, 30
+				if app.long() > 2:
+					args = app.GetArgs().text.split()
+					w, h = args[2], args[3]
+
 				picname = f"{app.TEMP_DICT}colour_image.png"
 				img = Image.new(
 					"RGB", 
-					(60, 30), 
+					(w, h), 
 					color = f"{m.command[1]}"
 					)
 				img.save(picname)
-				await app.send_edit("Making colour . . .", text_type=["mono"])
+				await app.send_edit(f"Making {m.command[1]} template . . .", text_type=["mono"])
 				await app.send_photo(
 					m.chat.id,
 					picname
@@ -228,7 +233,7 @@ async def colourtemplate_handler(_, m: Message):
 			except Exception as e:
 				await app.error(e)
 		else:
-			await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
+			await app.send_edit("Something went wrong !", text_type=["mono"], delme=3)
 
 
 
@@ -303,6 +308,7 @@ async def dogpic_handler(_, m):
 		else:
 			await app.send_edit("No dog pics found !", text_type=["mono"])
 	except Exception as e:
+		await app.send_edit("No dog pics Found !", text_type=["mono"])
 		await app.error(e)
 
 

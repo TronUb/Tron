@@ -15,22 +15,12 @@ from main.userbot.client import app
 
 
 
-HOMEPAGE_TEXT = """
-**Dex:** Home
-
-**Description:** This is your helpdex use to navigate in different sub dex to information.
-"""
-
-
-
-
-
 
 @app.bot.on_callback_query(filters.regex("home-tab"))
 @app.alert_user
 async def _start(_, cb: CallbackQuery):
     await cb.edit_message_media(
-        media=InputMediaPhoto(media=app.BotPic(), caption=HOMEPAGE_TEXT),
+        media=InputMediaPhoto(media=app.BotPic(), caption=app.home_tab_string()),
         reply_markup=InlineKeyboardMarkup([
                 app.BuildKeyboard(
                     (

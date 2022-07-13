@@ -7,6 +7,7 @@ import traceback
 import subprocess
 import importlib
 import requests
+import pyrogram
 
 from typing import Union, List
 from pyrogram.types import Message
@@ -35,6 +36,7 @@ class RawFunctions(object):
 		if self.is_bot:
 			raise BotMethodInvalid
 
+		globals().update({"app":self, "bot":self.bot})
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))

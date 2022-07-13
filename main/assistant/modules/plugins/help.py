@@ -11,11 +11,11 @@ from main.userbot.client import app
 
 
 
-settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "modules-tab"]))
+settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "plugins-tab"]))
 extra = app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
 about = app.BuildKeyboard(([["About", "about-tab"]]))
 close = app.BuildKeyboard(([["Close", "close-tab"]]))
-global_command = app.BuildKeyboard(([["• Global Commands •", "global-commands-tab"]]))
+global_command = app.BuildKeyboard(([["• Public Commands •", "public-commands-tab"]]))
 
 
 

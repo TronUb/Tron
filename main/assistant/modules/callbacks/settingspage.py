@@ -19,7 +19,7 @@ from main.userbot.client import app
 @app.alert_user
 async def _settings(_, cb: CallbackQuery):
     await cb.edit_message_text(
-        text="**Dex:** Settings\n\n**Location:** /home/settings",
+        text=app.settings_tab_string(),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
