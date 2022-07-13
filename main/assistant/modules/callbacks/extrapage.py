@@ -26,7 +26,7 @@ async def _extra(_, cb: CallbackQuery):
                 [
                     InlineKeyboardButton(
                         text="• Public commands •",
-                        callback_data="public-commands-tab"
+                        callback_data="ubpublic-commands-tab"
                     )
                 ],
                 [
