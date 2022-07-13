@@ -9,12 +9,12 @@ from main.core.database.postgres.filters_sql import FILTERSSQL
 
 
 class Database(
-	AFKSQL,
-	NOTESSQL,
-	PMPERMITSQL,
-	DVSQL,
-	WELCOMESQL,
-	FILTERSSQL
-	):
-	pass
-	
+    AFKSQL,
+    NOTESSQL,
+    PMPERMITSQL,
+    DVSQL,
+    WELCOMESQL,
+    FILTERSSQL
+    ):
+    pass
+    

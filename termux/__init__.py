@@ -9,10 +9,10 @@ install_requirements()
 
 # check if previous class exists or not
 try:
-	from termuxconfig import TermuxConfig
+    from termuxconfig import TermuxConfig
 except (ImportError, ModuleNotFoundError):
-	create_termuxconfig()
-	from termuxconfig import TermuxConfig     
+    create_termuxconfig()
+    from termuxconfig import TermuxConfig     
 
 _startdb()
 

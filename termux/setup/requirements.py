@@ -10,70 +10,70 @@ dependencies = "Pyrogram==2.0.27 pytube telegraph heroku3 aiohttp aiofiles hacho
 
 # run shell commands
 def shell(args: str):
-	return subprocess.run(args.split(), capture_output=True).stdout.decode("ascii")
+    return subprocess.run(args.split(), capture_output=True).stdout.decode("ascii")
 
 
 # clear screen
 def clear():
-	return os.system("clear")
+    return os.system("clear")
 
 
 # upgrade linux packages
 def update_upgrade(msg: str, clear_screen: bool=True):
-	clear()
-	print(msg + "\n\n")
-	print(shell("apt update"))
-	print(shell("apt upgrade"))
-	if clear_screen:
-		clear()
-	return True
+    clear()
+    print(msg + "\n\n")
+    print(shell("apt update"))
+    print(shell("apt upgrade"))
+    if clear_screen:
+        clear()
+    return True
 
 
 # check & install python if not installed
 def check_python(msg: str):
-	print(msg + "\n\n")
-	output = shell("python3 -V")
-	if "No command python3 found" in output:
-		print("Python is not installed: installing . . .\n\n")
-		print(shell("apt install python3"))
-		clear()
-	else:
-		print("Python is already installed.")
-		sleep(1)
-		clear()
+    print(msg + "\n\n")
+    output = shell("python3 -V")
+    if "No command python3 found" in output:
+        print("Python is not installed: installing . . .\n\n")
+        print(shell("apt install python3"))
+        clear()
+    else:
+        print("Python is already installed.")
+        sleep(1)
+        clear()
 
 
 # install wheel 
 def install_wheel():
-	print(shell("pip3 install wheel"))
-	clear()
-	
+    print(shell("pip3 install wheel"))
+    clear()
+    
 
 
 # install requirements 
 def install_requirements():
-	update_upgrade("Updating and upgrading ...")
-	check_python("Checking python . . .")
-	install_wheel()
+    update_upgrade("Updating and upgrading ...")
+    check_python("Checking python . . .")
+    install_wheel()
 
-	for x in dependencies.split():
-		installed_packages = [p.project_name for p in pkg_resources.working_set]
-		pkg = x.split("=")[0]
+    for x in dependencies.split():
+        installed_packages = [p.project_name for p in pkg_resources.working_set]
+        pkg = x.split("=")[0]
 
-		if not pkg in installed_packages:
-			if pkg == "Pillow":
-				print(f"\nInstalling package {x}\n\n")
-				print(shell("pkg install libjpeg-turbo"))
-				print(shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'"))
-				print(shell("pip3 install Pillow"))
-				clear()
-				continue
+        if not pkg in installed_packages:
+            if pkg == "Pillow":
+                print(f"\nInstalling package {x}\n\n")
+                print(shell("pkg install libjpeg-turbo"))
+                print(shell("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'"))
+                print(shell("pip3 install Pillow"))
+                clear()
+                continue
 
-			print(f"\nInstalling package {x}\n\n")
-			print(shell(f"pip3 install {x}"))
-			clear()
-	clear()
-	return True
+            print(f"\nInstalling package {x}\n\n")
+            print(shell(f"pip3 install {x}"))
+            clear()
+    clear()
+    return True
 
 
 

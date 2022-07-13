@@ -9,11 +9,11 @@ from .herokuconfig import HerokuConfig, HEROKUDV
 
 
 class Configs(
-	BotConfig,
-	OtherConfig,
-	PmpermitConfig,
-	UserConfig,
-	AfkConfig,
-	HerokuConfig
-	):
-	DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV + HEROKUDV  
+    BotConfig,
+    OtherConfig,
+    PmpermitConfig,
+    UserConfig,
+    AfkConfig,
+    HerokuConfig
+    ):
+    DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV + HEROKUDV  
