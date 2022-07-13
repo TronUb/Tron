@@ -108,4 +108,16 @@ class Strings(object):
 		return text
 
 
+	def ialive_tab_string(self):
+		text = f"**⛊  Inline Status:**\n\n"
+		text += f"**⟐** {app.USER_BIO}\n\n"
+		text += f"**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n"
+		text += f"**⟜ Tron:** `{app.userbot_version}`\n"
+		text += f"**⟜ Python:** `{app.python_version}`\n"
+		text += f"**⟜ Pyrogram:** `{app.pyrogram_version}`\n"
+		text += f"**⟜ uptime:** `{app.uptime()}`\n"
+
+		return text
+
+
 
