@@ -5,7 +5,7 @@ This file is for closed page inline help menu.
 from pyrogram import filters
 
 from pyrogram.types import (
-	InlineKeyboardButton,
+	InputMediaPhoto,
 	InlineKeyboardMarkup,
 	CallbackQuery
 )
@@ -19,9 +19,11 @@ from main.userbot.client import app
 @app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def _close(_, cb: CallbackQuery):
-    print(cb)
-    await cb.edit_message_text(
-        text=app.close_tab_string(),
+    await cb.edit_message_media(
+        media=InputMediaPhoto(
+            media="https://raw.githubusercontent.com/TronUb/Tron/beta/main/core/resources/images/tron-vertical.png", 
+            caption=app.close_tab_string()
+        ),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
