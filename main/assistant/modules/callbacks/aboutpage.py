@@ -21,7 +21,7 @@ from main.userbot.client import app
 async def _about(_, cb: CallbackQuery):
     await cb.edit_message_media(
         media=InputMediaPhoto(
-            media="https://raw.githubusercontent.com/TronUb/Tron/beta/main/core/resources/images/nora.png", 
+            media="main/core/resources/images/nora.png", 
             caption=app.about_tab_string()
         ),
         reply_markup=InlineKeyboardMarkup(
