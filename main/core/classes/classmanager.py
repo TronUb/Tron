@@ -46,7 +46,7 @@ class ClassManager(Config, Helpers, Database, Methods):
     
     logging.basicConfig(filename="tronuserbot.txt", format="%(asctime)s %(message)s", filemode="w")
     log = logging.getLogger()
-    log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
 
     # telegraph /
     telegraph = Telegraph()
