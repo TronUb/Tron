@@ -47,7 +47,7 @@ class ClassManager(Config, Helpers, Database, Methods):
     
    
     logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
-    logging.getLogger("pyrogram.session.session").setLevel(logging.WARNING)  
+    logging.getLogger("session").setLevel(logging.WARNING)  
     log = logging.getLogger()
 
     # telegraph /
