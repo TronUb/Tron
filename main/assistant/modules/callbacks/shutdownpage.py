@@ -2,9 +2,6 @@
 This file creates pages for userbot shutdown>
 """
 
-import sys
-import heroku3
-
 from pyrogram import filters
 
 from pyrogram.types import (
