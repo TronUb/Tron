@@ -42,5 +42,5 @@ class BotConfig(object):
 
     def BotPic(self):
         """Get your bot pic url"""
-        return self.getdv("BOT_PIC") or self.BOT_PIC or None
+        return self.getdv("BOT_PIC") or self.BOT_PIC or "main/core/resources/images/homepage.png" or None
     
