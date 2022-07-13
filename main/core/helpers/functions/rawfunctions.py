@@ -867,6 +867,9 @@ class RawFunctions(object):
 		ex: 
 			app.heroku_app()
 		"""
+		if not (self.HerokuApiKey() and self.HerokuAppName()):
+			return None
+
 		account = heroku3.from_key(self.HerokuApiKey())
 		return account.apps()[self.HerokuAppName()]
 
