@@ -184,7 +184,7 @@ class RawFunctions(object):
 			self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
 
-	async def data(
+	async def PluginData(
 		self, 
 		modules: str
 		):
