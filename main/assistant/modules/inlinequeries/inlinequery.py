@@ -55,7 +55,7 @@ def inline_result(_, inline_query):
                         app.BuildKeyboard(
                             (
                                 ["• Settings •", "settings-tab"],
-                                ["• Modules •", "plugins-tab"]
+                                ["• Plugins •", "plugins-tab"]
                             )
                         ),
                         app.BuildKeyboard(

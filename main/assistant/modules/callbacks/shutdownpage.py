@@ -2,9 +2,6 @@
 This file creates pages for userbot shutdown>
 """
 
-import sys
-import heroku3
-
 from pyrogram import filters
 
 from pyrogram.types import (
@@ -51,50 +48,31 @@ async def _shutdown_tron(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex("confirm-shutdown"))
 @app.alert_user
 async def _shutdown_core(_, cb):
+    back_button=InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text="Back",
+                    callback_data="settings-tab"
+                )
+            ]
+        ]
+    )
+
     await cb.edit_message_text(
         text=app.shutdown_tab_string("`Trying to shutdown userbot . . .`"),
-        reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="Back",
-                        callback_data="settings-tab"
-                    )
-                ]
-            ]
-        )
+        reply_markup=back_button
     )
-    access = heroku3.from_key(app.HEROKU_API_KEY)
-    application = access.apps()[app.HEROKU_APP_NAME]
-    if not application:
+
+    if not app.heroku_app():
         await cb.edit_message_text(
             text=app.shutdown_tab_string("`Failed to shutdown userbot . . .`"),
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Back",
-                            callback_data="settings-tab"
-                        )
-                    ]
-                ]
-            )
+            reply_markup=back_button
         )
     else:
-        if application:
-            application.process_formation()["worker"].scale(0)
-            await cb.edit_message_text(
-                text=app.shutdown_tab_string("`Successfully shutdown userbot . . .`"),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="Back",
-                                callback_data="settings-tab"
-                            )
-                        ]
-                    ]
-                )
-            )
-        else:
-            sys.exit(0)
+        res = app.heroku_app().process_formation()["worker"].scale(0)
+        process = "Successfully" if res else "Unsuccessfully"
+        await cb.edit_message_text(
+            text=app.shutdown_tab_string(f"`Shutdown {process} . . .`"),
+            reply_markup=back_button
+        )
