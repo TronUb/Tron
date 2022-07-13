@@ -17,7 +17,7 @@ from main.userbot.client import app
 
 
 
-@app.bot.on_callback_query(filters.regex("public-commands-tab"))
+@app.bot.on_callback_query(filters.regex("ubpublic-commands-tab"))
 @app.alert_user
 async def _public_commands(_, cb: CallbackQuery):
     await cb.edit_message_text(
@@ -38,7 +38,7 @@ async def _public_commands(_, cb: CallbackQuery):
 
 
 
-@app.bot.on_callback_query(filters.regex("global-commands-tab"))
+@app.bot.on_callback_query(filters.regex("public-commands-tab"))
 async def _global_commands(_, cb):
     await cb.edit_message_text(
         text=app.public_tab_string(),
@@ -47,7 +47,7 @@ async def _global_commands(_, cb):
                 [
                     InlineKeyboardButton(
                         text="Back",
-                        callback_data="back-to-info"
+                        callback_data="back-to-public"
                     )
                 ]
             ]
@@ -55,7 +55,7 @@ async def _global_commands(_, cb):
     )
 
 
-@app.bot.on_callback_query(filters.regex("back-to-info"))
+@app.bot.on_callback_query(filters.regex("back-to-public"))
 async def _back_to_info(_, cb):
     await cb.edit_message_text(
         text="You can use these public commands, check below.",
@@ -64,7 +64,7 @@ async def _back_to_info(_, cb):
                 [
                     InlineKeyboardButton(
                         text="• View commands •",
-                        callback_data="global-commands-tab"
+                        callback_data="public-commands-tab"
                     )
                 ]
             ]
