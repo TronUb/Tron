@@ -21,7 +21,7 @@ from main.userbot.client import app
 async def _close(_, cb: CallbackQuery):
     print(cb)
     await cb.edit_message_text(
-        text=app.closed_menu_string(),
+        text=app.close_tab_string(),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
