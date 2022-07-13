@@ -53,8 +53,7 @@ async def give_old_page(_, cb: CallbackQuery):
 async def get_back(_, cb: CallbackQuery):
     page_number = int(cb.matches[0].group(1))
     btn = app.HelpDex(page_number, app.CMD_HELP, "navigate")
-    text = app.plugin_tab_string(),
-    await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(btn))
+    await cb.edit_message_text(text=app.plugin_tab_string(), reply_markup=InlineKeyboardMarkup(btn))
 
 
 # plugin page information
