@@ -38,7 +38,8 @@ class RawFunctions(object):
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n")),
-			globals()
+			globals(),
+			locals()
 		)
 		return await locals()["__aexec"](self, self.m)
 
