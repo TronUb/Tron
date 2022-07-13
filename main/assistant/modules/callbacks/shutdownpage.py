@@ -84,7 +84,7 @@ async def _shutdown_core(_, cb):
         if application:
             application.process_formation()["worker"].scale(0)
             await cb.edit_message_text(
-                text=app.shutdown_tab_string("`Successfully restarted userbot . . .`"),
+                text=app.shutdown_tab_string("`Successfully shutdown userbot . . .`"),
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
