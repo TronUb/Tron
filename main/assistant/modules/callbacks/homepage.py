@@ -25,7 +25,7 @@ async def _start(_, cb: CallbackQuery):
                 app.BuildKeyboard(
                     (
                         ["• Settings •", "settings-tab"],
-                        ["• Modules •", "modules-tab"]
+                        ["• Plugins •", "plugins-tab"]
                     )
                 ),
                 app.BuildKeyboard(
