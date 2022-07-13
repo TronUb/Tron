@@ -19,7 +19,7 @@ from main.userbot.client import app
 
 @app.bot.on_callback_query(filters.regex("restart-tab"))
 @app.alert_user
-async def _restart_tron(_, cb: CallbackQuery):
+async def _restart_userbot(_, cb: CallbackQuery):
     await cb.edit_message_text(
         text=app.restart_tab_string("`Press confirm to restart.`"),
         reply_markup=InlineKeyboardMarkup(
@@ -47,7 +47,7 @@ async def _restart_tron(_, cb: CallbackQuery):
 
 @app.bot.on_callback_query(filters.regex("confirm-restart-tab"))
 @app.alert_user
-async def _restart_core(_, cb: CallbackQuery):
+async def _confirm_restart(_, cb: CallbackQuery):
     back_button = InlineKeyboardMarkup(
         [
             [
@@ -69,7 +69,10 @@ async def _restart_core(_, cb: CallbackQuery):
             reply_markup=back_button
         )
     else:
+        res = app.heroku_app().restart()
+        text = "`Please wait 2-3 minutes to restart userbot . . .`"
+        final_text = text if res else "`Failed to restart userbot, do it manually . . .`"
         await cb.edit_message_text(
-            text=app.restart_tab_string("`Please wait 2-3 minutes to restart userbot . . .`"),
+            text=app.restart_tab_string(final_text),
             reply_markup=back_button
         )
