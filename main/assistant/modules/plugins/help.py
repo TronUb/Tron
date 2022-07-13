@@ -27,45 +27,41 @@ async def start(_, m: Message):
     if m.from_user:
         if m.from_user.id == app.id:
             # bot pic
-            if app.BotPic().endswith(".jpg" or "png" or "jpeg"):
+            buttons=InlineKeyboardMarkup(
+                [ settings, extra, about, close ]
+            ),
+            botpic = app.BotPic().split(".")[-1] # extension of media
+            if botpic in ("jpg", "png", "jpeg"):
                 info = await app.bot.send_photo(
                     m.chat.id,
                     app.BotPic(),
                     app.BotBio(m),
-                    reply_markup=InlineKeyboardMarkup(
-                        [ settings, extra, about, close ]
-                    ),
+                    reply_markup=buttons
                 )
-            elif bot.BotPic().endswith(".mp4" or ".gif"):
-                info = await app.bot.send_photo(
+            elif botpic in ("mp4", "gif"):
+                info = await app.bot.send_video(
                     m.chat.id,
                     app.BotPic(),
                     app.BotBio(m),
-                    reply_markup=InlineKeyboardMarkup(
-                        [ settings, extra, about, close ]
-                    ),
+                    reply_markup=buttons
                 )
             else:
                 info = await app.bot.send_message(
                     m.chat.id,
                     app.BotBio(m),
-                    reply_markup=InlineKeyboardMarkup(
-                    [ settings, extra, about, close ]
-                    ),
+                    reply_markup=buttons
                 )
 
         elif m.from_user.id != app.id:
             info = await app.bot.send_photo(
                 m.chat.id,
-                "./resources/images/tron.png",
+                "main/core/resources/images/tron.png",
                 f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
                 reply_markup=InlineKeyboardMarkup(
                     [global_command]
                 ),
             )
-        app.message_ids.update({info.chat.id : info.message_id})
-    else:
-        return
+        app.message_ids.update({info.chat.id : info.id})
 
 
 
