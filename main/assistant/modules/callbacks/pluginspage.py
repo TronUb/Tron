@@ -22,10 +22,7 @@ from main.userbot.client import app
 async def plugins_page(_, cb: CallbackQuery):
     btn = app.HelpDex(0, app.CMD_HELP, "navigate")
     await cb.edit_message_text(
-        text=f"""**Dex:** Plugins \n\n
-            **Location:** /home/plugins\n\n
-            **Plugins:** `{len(app.CMD_HELP)}`
-            """,
+        text=app.plugin_tab_string(),
         reply_markup=InlineKeyboardMarkup(btn)
     )
 
@@ -56,7 +53,7 @@ async def give_old_page(_, cb: CallbackQuery):
 async def get_back(_, cb: CallbackQuery):
     page_number = int(cb.matches[0].group(1))
     buttons = app.HelpDex(page_number, app.CMD_HELP, "navigate")
-    text = f"**Dex:** Plugins\n\nLocation: /home/plugins\n\n**Plugins:** `{len(app.CMD_HELP)}`"
+    text = app.plugin_tab_string(),
     await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons))
 
 
