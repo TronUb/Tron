@@ -82,7 +82,7 @@ async def _restart_core(_, cb: CallbackQuery):
         )
     else:
         await cb.edit_message_text(
-            text=app.restart_tab_string("`Please wait 2-3 minutes to reboot userbot . . .`")
+            text=app.restart_tab_string("`Please wait 2-3 minutes to reboot userbot . . .`"),
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
