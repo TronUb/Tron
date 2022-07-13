@@ -24,10 +24,7 @@ from main.userbot.client import app
 @app.alert_user
 async def _shutdown_tron(_, cb: CallbackQuery):
     await cb.edit_message_text(
-        text="""**Dex:** press confirm to shutdown.\n\n
-            **Location:** /home/settings/shutdown bot/confirm\n\n
-            **Process:** Press the Confirm button to shutdown the userbot ...
-            """,
+        text=app.shutdown_tab_string("`Press confirm to shutdown userbot.`"),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -55,9 +52,7 @@ async def _shutdown_tron(_, cb: CallbackQuery):
 @app.alert_user
 async def _shutdown_core(_, cb):
     await cb.edit_message_text(
-        text="""**Dex:** shutdown in process.\n\n
-            **Location:** /home/settings/shutdown bot/confirm\n\n`Turning the userbot off, please wait ...`
-            """,
+        text=app.shutdown_tab_string("`Trying to shutdown userbot . . .`"),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -73,10 +68,7 @@ async def _shutdown_core(_, cb):
     application = access.apps()[app.HEROKU_APP_NAME]
     if not application:
         await cb.edit_message_text(
-            text="""**Dex:** shutdown in process.\n\n
-                **Location:** /home/settings/shutdown bot/confirm\n\n
-                **Process:** `Failed to turn userbot off, please do it manually !!`
-                """,
+            text=app.shutdown_tab_string("`Failed to shutdown userbot . . .`"),
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -92,10 +84,7 @@ async def _shutdown_core(_, cb):
         if application:
             application.process_formation()["worker"].scale(0)
             await cb.edit_message_text(
-                text="""**Dex:** shutdown in process.\n\n
-                    **Location:** /home/settings/shutdown bot/confirm\n\n
-                    **Process:** `Turned off the userbot... If Needed then please turn on the bot manually ...`
-                    """,
+                text=app.shutdown_tab_string("`Successfully restarted userbot . . .`"),
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
