@@ -2,6 +2,7 @@ import time
 import logging 
 import platform
 
+import pyrogram
 from config import Config
 from telegraph import Telegraph
 from pyrogram import __version__ as pyrogram_version
@@ -46,6 +47,7 @@ class ClassManager(Config, Helpers, Database, Methods):
     
    
     logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
+    logging.getLogger("pyrogram.session.session").setLevel(logging.WARNING)  
     log = logging.getLogger()
 
     # telegraph /
