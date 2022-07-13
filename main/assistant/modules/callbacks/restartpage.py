@@ -2,8 +2,6 @@
 This file creates userbot restarting page.
 """
 
-import heroku3
-
 from pyrogram import filters
 
 from pyrogram.types import (
@@ -50,47 +48,28 @@ async def _restart_tron(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex("confirm-restart-tab"))
 @app.alert_user
 async def _restart_core(_, cb: CallbackQuery):
+    back_button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text="Back",
+                    callback_data="settings-tab"
+                )
+            ]
+        ]
+    )
+
     await cb.edit_message_text(
         text=app.restart_tab_string("`Trying to restart userbot . . .`"),
-        reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="Back",
-                        callback_data="settings-tab"
-                    )
-                ]
-            ]
-        )
+        reply_markup=back_button
     )
-    access = heroku3.from_key(app.HEROKU_API_KEY)
-    application = access.apps()[app.HEROKU_APP_NAME]
-    restart = application.restart()
-    if not restart:
+    if not app.heroku_app():
         await cb.edit_message_text(
-            text=app.restart_tab_string("`Failed to restart, restart manually . . .`"),
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Back",
-                            callback_data="settings-tab"
-                        )
-                    ]
-                ]
-            )
+            text=app.restart_tab_string("`Heroku requirements missing (heroku - key, app name), restart manually . . .`"),
+            reply_markup=back_button
         )
     else:
         await cb.edit_message_text(
-            text=app.restart_tab_string("`Please wait 2-3 minutes to reboot userbot . . .`"),
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Back",
-                            callback_data="settings-tab"
-                        )
-                    ]
-                ]
-            )
+            text=app.restart_tab_string("`Please wait 2-3 minutes to restart userbot . . .`"),
+            reply_markup=back_button
         )
