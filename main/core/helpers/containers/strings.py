@@ -21,7 +21,7 @@ class Strings(object):
 		return text
 
 
-	def closed_tab_string(self):
+	def close_tab_string(self):
 		text = "Welcome to Tron.\n"
 		text += "This is your Helpdex, Tap on open button to get more buttons,\n"
 		text += "which will help you to understand  operate your userbot & assistant ( LARA )\n"
