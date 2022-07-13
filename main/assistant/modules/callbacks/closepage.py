@@ -22,7 +22,7 @@ from main.userbot.client import app
 async def _close(_, cb: CallbackQuery):
     await cb.edit_message_media(
         media=InputMediaPhoto(
-            media="https://raw.githubusercontent.com/TronUb/Tron/beta/main/core/resources/images/tron-vertical.png", 
+            media="main/core/resources/images/tron-vertical.png", 
             caption=app.close_tab_string()
         ),
         reply_markup=InlineKeyboardMarkup(
