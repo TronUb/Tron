@@ -74,7 +74,7 @@ class Strings(object):
 
 
 	def settings_tab_string(self):
-		tex = "**Dex:** Settings\n\n"
+		text = "**Dex:** Settings\n\n"
 		text += "**Location:** /home/settings"
 
 		return text
