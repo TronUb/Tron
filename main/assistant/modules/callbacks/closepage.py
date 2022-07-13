@@ -5,9 +5,10 @@ This file is for closed page inline help menu.
 from pyrogram import filters
 
 from pyrogram.types import (
-	InputMediaPhoto,
-	InlineKeyboardMarkup,
-	CallbackQuery
+    InputMediaPhoto,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    CallbackQuery
 )
 
 from main.userbot.client import app
