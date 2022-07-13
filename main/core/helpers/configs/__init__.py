@@ -3,6 +3,7 @@ from .otherconfig import OtherConfig, OTHERDV
 from .userconfig import UserConfig, USERDV
 from .pmpermitconfig import PmpermitConfig, PMPERMITDV
 from .afkconfig import AfkConfig, AFKDV
+from .herokuconfig import HerokuConfig, HEROKUDV
 
 
 
@@ -12,6 +13,7 @@ class Configs(
 	OtherConfig,
 	PmpermitConfig,
 	UserConfig,
-	AfkConfig
+	AfkConfig,
+	HerokuConfig
 	):
-	DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV   
+	DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV + HEROKUDV  
