@@ -29,7 +29,7 @@ async def start(_, m: Message):
             # bot pic
             buttons=InlineKeyboardMarkup(
                 [ settings, extra, about, close ]
-            ),
+            )
             botpic = app.BotPic().split(".")[-1] # extension of media
             if botpic in ("jpg", "png", "jpeg"):
                 info = await app.bot.send_photo(
