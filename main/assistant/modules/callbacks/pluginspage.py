@@ -32,10 +32,10 @@ async def plugins_page(_, cb: CallbackQuery):
 @app.alert_user
 async def give_next_page(_, cb: CallbackQuery):
     current_page_number = int(cb.matches[0].group(1))
-    buttons = app.HelpDex(current_page_number + 1, app.CMD_HELP, "navigate")
+    btn = app.HelpDex(current_page_number + 1, app.CMD_HELP, "navigate")
     print(cb.matches[0])
     print(dir(cb.matches[0]))
-    await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+    await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
 
 
 # previous page
@@ -43,8 +43,8 @@ async def give_next_page(_, cb: CallbackQuery):
 @app.alert_user
 async def give_old_page(_, cb: CallbackQuery):
     current_page_number = int(cb.matches[0].group(1))
-    buttons = app.HelpDex(current_page_number - 1, app.CMD_HELP, "navigate")
-    await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+    btn = app.HelpDex(current_page_number - 1, app.CMD_HELP, "navigate")
+    await cb.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
 
 
 # back from plugin dex to home
@@ -52,9 +52,9 @@ async def give_old_page(_, cb: CallbackQuery):
 @app.alert_user
 async def get_back(_, cb: CallbackQuery):
     page_number = int(cb.matches[0].group(1))
-    buttons = app.HelpDex(page_number, app.CMD_HELP, "navigate")
+    btn = app.HelpDex(page_number, app.CMD_HELP, "navigate")
     text = app.plugin_tab_string(),
-    await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons))
+    await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(btn))
 
 
 # plugin page information
@@ -62,10 +62,10 @@ async def get_back(_, cb: CallbackQuery):
 @app.alert_user
 async def give_plugin_cmds(_, cb: CallbackQuery):
     plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
-    plugs = await app.data(plugin_name)
-    help_string = f"MODULE: {plugin_name}\n\n" + "".join(plugs)
+    plugs = await app.PluginData(plugin_name)
+    cmd_string = f"**PLUGIN:** {plugin_name}\n\n" + "".join(plugs)
     await cb.edit_message_text(
-        help_string,
+        cmd_string,
         reply_markup=InlineKeyboardMarkup(
             [
                 [
