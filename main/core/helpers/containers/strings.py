@@ -121,3 +121,9 @@ class Strings(object):
 
 
 
+	def pmpermit_tab_string(self):
+		text = "Not implemented yet."
+
+		return text
+
+
