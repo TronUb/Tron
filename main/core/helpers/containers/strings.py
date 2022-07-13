@@ -3,11 +3,11 @@ class Strings(object):
 		text = "**Dex:** About\n"
 		text += "**Location:** /home/about\n"
 		text += "**[ Personal Info ]:**\n\n"
-		text += f"**Name:** {app.assistant_name}\n"
+		text += f"**Name:** {self.assistant_name}\n"
 		text += "**[ Versions ]:**\n\n"
-		text += f"**Python:** {app.python_version}\n"
-		text += f"**Pyrogram:** {app.pyrogram_version}\n"
-		text += f"**Assistant:**  {app.assistant_version}\n"
+		text += f"**Python:** {self.python_version}\n"
+		text += f"**Pyrogram:** {self.pyrogram_version}\n"
+		text += f"**Assistant:**  {self.assistant_version}\n"
 		text += "**[ About ]:**\n\n"
 
 		text += "I am Nora made by ࿇•ẞᗴᗩSԵ•࿇.\n"
@@ -110,12 +110,12 @@ class Strings(object):
 
 	def ialive_tab_string(self):
 		text = f"**⛊  Inline Status:**\n\n"
-		text += f"**⟐** {app.USER_BIO}\n\n"
-		text += f"**⟜ Owner**: [{app.name}](https://t.me/{app.username})\n"
-		text += f"**⟜ Tron:** `{app.userbot_version}`\n"
-		text += f"**⟜ Python:** `{app.python_version}`\n"
-		text += f"**⟜ Pyrogram:** `{app.pyrogram_version}`\n"
-		text += f"**⟜ uptime:** `{app.uptime()}`\n"
+		text += f"**⟐** {self.USER_BIO}\n\n"
+		text += f"**⟜ Owner**: [{self.name}](https://t.me/{self.username})\n"
+		text += f"**⟜ Tron:** `{self.userbot_version}`\n"
+		text += f"**⟜ Python:** `{self.python_version}`\n"
+		text += f"**⟜ Pyrogram:** `{self.pyrogram_version}`\n"
+		text += f"**⟜ uptime:** `{self.uptime()}`\n"
 
 		return text
 
