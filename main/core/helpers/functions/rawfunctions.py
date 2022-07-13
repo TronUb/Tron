@@ -2,6 +2,7 @@ import os
 import pytz
 import time
 import datetime
+import heroku3
 import asyncio
 import traceback
 import subprocess
@@ -853,4 +854,20 @@ class RawFunctions(object):
 		"""
 
 		"Available" if self.DB_URI else "Unavailable"
-  
+
+
+	def heroku_app(self):
+		"""
+		params:
+			None
+
+		use:
+			use this function to get acess of your heroku app
+
+		ex: 
+			app.heroku_app()
+		"""
+		account = heroku3.from_key(self.HerokuApiKey())
+		return account.apps()[self.HerokuAppName()]
+
+
