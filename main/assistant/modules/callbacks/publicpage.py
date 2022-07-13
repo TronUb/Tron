@@ -21,14 +21,7 @@ from main.userbot.client import app
 @app.alert_user
 async def _public_commands(_, cb: CallbackQuery):
     await cb.edit_message_text(
-        text="""**Dex:** Extra
-            **Location:** /home/extra/public commands
-            **COMMAND:** /start\n**USAGE:** Check that bot is on or off.\n\n
-            **COMMAND:** /help\n**USAGE:** Need help? Type this command.\n\n
-            **COMMAND:** /id\n**USAGE:** Get your id and chat id.\n\n
-            **COMMAND:** /quote\n**USAGE:** Get random anime character quote with a “more” inline button to change random quote infinitely.\n\n
-            **COMMAND:** /ping\n**USAGE:** Test the speed of our bot and get results.\n\n
-            """,
+        text=app.public_tab_string(),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -48,13 +41,7 @@ async def _public_commands(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex("global-commands-tab"))
 async def _global_commands(_, cb):
     await cb.edit_message_text(
-        text="""**Dex:** Public commands\n\n
-            COMMAND: /start \n**USAGE:** Check that bot is on or off.\n\n
-            **COMMAND:** /help\n**USAGE:** Need help? Type this command.\n\n
-            **COMMAND:** /quote\n**USAGE:** Get random anime character quote with a “more” inline button to change random quote infinitely.\n\n
-            **COMMAND:** /ping\n**USAGE:** Test the speed of our bot and get results.\n\n
-            **COMMAND:** /id\n**USAGE:** Get id of group and user.
-            """,
+        text=app.public_tab_string(),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
