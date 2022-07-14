@@ -94,32 +94,13 @@ def gen(
 
         try:
             text = message.text or message.caption or None
+            message.command = None
 
             if not text:
                 return False
 
             if message.forward_date: # forwarded messages can't be edited
                 return False
-
-            message.command = None
-
-            user = message.from_user if message.from_user else None
-
-            if not user:
-                if message.outgoing: # for channels
-                    client.m = message
-                    client.bot.m = message
-                    return True
-                return False
-
-            message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
-
-            if not message_owner:
-                return False
-            
-            if message_owner == "sudo":
-                if not "sudo" in allow:
-                    return False
 
 
             flt.prefixes = client.Trigger() or ["."] # workaround
@@ -130,20 +111,34 @@ def gen(
 
                 cmd = text.split()[0][1:]
                 if cmd in flt.commands:
+                    user = message.from_user if message.from_user else None
+
+                    if not user:
+                        if message.outgoing: # for channels
+                            client.m = client.bot.m = message
+                            return True
+                        return False
+
+                    message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
+
+                    if not message_owner:
+                        return False
+
                     message.command = [cmd] + text.split()[1:]
 
                     # for sudo users 
                     if message_owner == "sudo":
+                        if not "sudo" in allow:
+                            return False
+
                         if not client.SudoCmds(): # empty list -> full command access to sudo
-                            client.m = message
-                            client.bot.m = message
+                            client.m = client.bot.m = message
                             return True 
 
                         if not cmd in client.SudoCmds():
                             return False
 
-                    client.m = message
-                    client.bot.m = message
+                    client.m = client.bot.m = message
                     return True
 
             return False
