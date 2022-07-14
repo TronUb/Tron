@@ -1,5 +1,4 @@
-from termux.setup.requirements import install_requirements
-from termux.setup.ask_details import create_termuxconfig, _startdb   
+from termux.setup.requirements import install_requirements  
 
 
 
@@ -14,7 +13,6 @@ except (ImportError, ModuleNotFoundError):
     create_termuxconfig()
     from termuxconfig import TermuxConfig     
 
-_startdb()
 
 
 
