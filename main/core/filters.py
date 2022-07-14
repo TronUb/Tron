@@ -86,10 +86,19 @@ def gen(
     commands: Union[str, List[str]], 
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True, 
-    allow: list = []
+    allow: list = [],
+    exclude: list = []
     ):
 
-    # modified function of pyrogram.filters.command
+    """
+    modified function of pyrogram.filters.command
+
+    params:
+           commands: single command or list of commands 
+           prefixes: single prefix or list of prefixes
+           case_sensitive: True | False
+           exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
+    """
     async def func(flt, client: Client, message: Message):
 
         try:
@@ -126,9 +135,25 @@ def gen(
 
                     message.command = [cmd] + text.split()[1:]
 
+                    if message.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
+                        if "group" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.CHANNEL:
+                        if "channel" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.PRIVATE:
+                        if "private" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.BOT:
+                        if "bot" in exclude:
+                            return False
+
                     # for sudo users 
                     if message_owner == "sudo":
-                        if not "sudo" in allow:
+                        if "sudo" in exclude:
                             return False
 
                         if not client.SudoCmds(): # empty list -> full command access to sudo
