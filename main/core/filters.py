@@ -106,7 +106,7 @@ def gen(
             user = message.from_user if message.from_user else None
 
             if not user:
-                if m.outgoing: # for channels
+                if message.outgoing: # for channels
                     return True
                 return False
 
