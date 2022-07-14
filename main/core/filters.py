@@ -107,6 +107,8 @@ def gen(
 
             if not user:
                 if message.outgoing: # for channels
+                    client.m = message
+                    client.bot.m = message
                     return True
                 return False
 
