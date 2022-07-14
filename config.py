@@ -1,6 +1,5 @@
 """ Configuration file to get secure data we need """
 
-
 import os
 import sys
 
@@ -88,7 +87,7 @@ class Config(Inside): # pylint: disable=too-few-public-methods
     # your assistants custom name (default: Nora)
     BOT_NAME = os.getenv("BOT_NAME", "Nora")
     # your assistants alive pic (optional)
-    BOT_PIC = os.getenv("BOT_PIC", "https://telegra.ph/file/48f5dc15d51ea7f721275.jpg")
+    BOT_PIC = os.getenv("BOT_PIC")
     # provide this if bot fails to get username of bot (optional)
     BOT_USERNAME = os.getenv("BOT_USERNAME")
     # telegram id of bot if failed to get automatically (optional)
