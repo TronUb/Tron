@@ -853,7 +853,7 @@ class RawFunctions(object):
 			app.db_status()
 		"""
 
-		"Available" if self.DB_URI else "Unavailable"
+		return "Available" if hasattr(self, "DB_URI") and self.DB_URI else "Unavailable"
 
 
 	def heroku_app(self):
