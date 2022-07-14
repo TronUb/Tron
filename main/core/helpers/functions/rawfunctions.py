@@ -261,9 +261,15 @@ class RawFunctions(object):
 			if self.m and self.m.chat and self.m.chat.type == ChatType.PRIVATE:
 				self.m = await self.get_messages(self.m.chat.id, self.m.id)
 
-
 			if self.m.from_user and self.m.from_user.is_self:
-				msg = await self.m.edit(
+				is_self = True
+			elif self.m.outgoing: # for channels
+				is_self = True
+			else:
+				is_self = False
+
+			if is_self:
+				await self.m.edit(
 					text=self.FormatText(text, format=text_type),
 					parse_mode=parse_mode,
 					disable_web_page_preview=disable_web_page_preview,
