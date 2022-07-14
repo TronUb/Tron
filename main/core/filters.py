@@ -8,6 +8,7 @@ from typing import (
 
 from pyrogram.filters import create
 from pyrogram import Client
+from pyrogram.enums import ChatType
 from pyrogram.types import (
     Message, 
     CallbackQuery, 
@@ -92,6 +93,7 @@ def gen(
     async def func(flt, client: Client, message: Message):
 
         try:
+            print(message)
             text = message.text or message.caption or None
 
             if not text:
