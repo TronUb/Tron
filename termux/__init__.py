@@ -1,5 +1,5 @@
-from termux.setup.requirements import install_requirements  
-
+from termux.setup.install import install_requirements  
+from termux.setup.getconfig import create_termuxconfig
 
 
 # install dependencies
