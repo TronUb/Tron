@@ -2,6 +2,7 @@
 
 import os
 import sys
+import platform
 import subprocess
 from time import sleep
 import pkg_resources
@@ -79,10 +80,32 @@ def install_requirements():
     return True
 
 
+def create_termuxconfig():
+    ATTR = ("API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN")
+    file = open("termuxconfig.py", "w+")
+    file.write("class TermuxConfig:\n\ttemp = 'value'\n")
+    for x in ATTR:
+        if x == "DB_URI":
+            continue
+            data = input(f"\nEnter your {x}: ")
+            value = int(data) if data and data == "LOG_CHAT" else f"'{data}'"
+
+        file.write(f"""\t{x.replace('"', "")} = {value}\n""")
+    file.close()
+
+
 
 # --- begin ---
 
 install_requirements()
+
+if shell("uname -n") in ("localhost"):
+    try:
+        from termuxconfig import TermuxConfig
+    except (ImportError, ModuleNotFoundError):
+        create_termuxconfig()
+        from termuxconfig import TermuxConfig     
+
 
 from main.userbot.client import app
 bot = app.bot
