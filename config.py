@@ -7,7 +7,7 @@ import platform
 Inside = object
 IS_TERMUX = None
 if platform.uname()[1] in ("localhost"):
-    from termux import TermuxConfig
+    from termuxconfig import TermuxConfig
     IS_TERMUX = True
     Inside = TermuxConfig
 
