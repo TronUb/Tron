@@ -1,12 +1,12 @@
 """ Configuration file to get secure data we need """
 
 import os
-import sys
+import platform
 
 
 Inside = object
 IS_TERMUX = None
-if hasattr(sys, "getandroidapilevel"):
+if platform.uname()[1] in ("localhost"):
     from termux import TermuxConfig
     IS_TERMUX = True
     Inside = TermuxConfig
