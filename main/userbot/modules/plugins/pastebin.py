@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["paste", "bin"], allow = ["sudo"]))
+@app.on_message(gen(["paste", "bin"], exclude = ["sudo"]))
 async def paster_handler(_, m: Message):
     reply = m.reply_to_message
 

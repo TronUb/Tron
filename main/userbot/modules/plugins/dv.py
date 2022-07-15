@@ -25,13 +25,13 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("setdv", allow =["sudo"]))
+@app.on_message(gen("setdv", exclude =["sudo"]))
 async def setdv_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me a key & a value to set dv vars.", text_type=["mono"], delme=4)
 
     elif app.textlen() > 4096:
-        await app.send_edit("Text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
+        await app.send_edit("Text is too long. only 4096 characters are excludeed.", text_type=["mono"], delme=4)
 
     elif app.long() == 2:
         await app.send_edit("Please give me key with a value.", text_type=["mono"], delme=4)  
@@ -50,13 +50,13 @@ async def setdv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("deldv", allow =["sudo"]))
+@app.on_message(gen("deldv", exclude =["sudo"]))
 async def deldv_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some key to delete that a var from database . . . ", text_type=["mono"], delme=2)
 
     elif app.textlen() > 4096:
-        await app.send_edit("text is too long. only 4096 characters are allowed.", text_type=["mono"], delme=4)
+        await app.send_edit("text is too long. only 4096 characters are excludeed.", text_type=["mono"], delme=4)
 
     elif app.long() > 1:
         keys = "**Deleted vars:**\n\n"
@@ -71,7 +71,7 @@ async def deldv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("getdv", allow =["sudo"]))
+@app.on_message(gen("getdv", exclude =["sudo"]))
 async def getdv_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some key to get value that a var from database . . . ", text_type=["mono"], delme=2)
@@ -90,7 +90,7 @@ async def getdv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pm", allow =["sudo"]))
+@app.on_message(gen("pm", exclude =["sudo"]))
 async def pm_handler(_, m: Message):
     arg = m.command
     if app.long() == 1:
@@ -124,7 +124,7 @@ async def pm_handler(_, m: Message):
 
 
 
-@app.on_message(gen("alldv", allow =["sudo"]))
+@app.on_message(gen("alldv", exclude =["sudo"]))
 async def alldv_handler(_, m: Message):
     if bool(app.getalldv()) is True:
         await app.send_edit("Getting all database vars . . .", text_type=["mono"])
@@ -141,7 +141,7 @@ async def alldv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listdv", allow=["sudo"]))
+@app.on_message(gen("listdv", exclude=["sudo"]))
 async def dvlist_handler(_, m: Message):
     allvars = [f"`{x}`" for x in app.DVLIST]
     await app.send_edit("**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))

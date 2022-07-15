@@ -51,7 +51,7 @@ colour_code = {
 
 
 
-@app.on_message(gen(["carbon", "carb"], allow = ["sudo"]))
+@app.on_message(gen(["carbon", "carb"], exclude = ["sudo"]))
 async def carbon_handler(_, m: Message):
     cmd = m.command
     oldmsg = m # fixed for-->  m = send_edit() replaces the variable
@@ -76,7 +76,7 @@ async def carbon_handler(_, m: Message):
 
 
 
-@app.on_message(gen("carblist", allow = ["sudo"]))
+@app.on_message(gen("carblist", exclude = ["sudo"]))
 async def carblist_handler(_, m: Message):
     clist = [f"`{x}`" for x in list(colour_code.keys())]
     await app.send_edit("**SUPPORTED COLOURS:**\n\n" + "\n".join(clist))

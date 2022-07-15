@@ -24,7 +24,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["tgm", "telegraph"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["tgm", "telegraph"], exclude = ["sudo", "channel"]))
 async def telegraph_handler(_, m:Message):
     reply = m.reply_to_message
     filesize = 5242880

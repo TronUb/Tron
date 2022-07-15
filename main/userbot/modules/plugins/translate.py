@@ -23,7 +23,7 @@ gtl = GoogleTranslator()
 
 
 
-@app.on_message(gen(["tr", "tl", "translate"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["tr", "tl", "translate"], exclude = ["sudo", "channel"]))
 async def translate_handler(_, m: Message):
     reply = m.reply_to_message
     cmd = m.command
@@ -66,7 +66,7 @@ async def translate(lang, text):
 
 
 
-@app.on_message(gen(["trlist", "tllist", "translatelist"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["trlist", "tllist", "translatelist"], exclude = ["sudo", "channel"]))
 async def translatelang_handler(_, m):
     data = []
     data.clear()

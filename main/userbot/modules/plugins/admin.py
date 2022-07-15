@@ -47,7 +47,7 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 
-@app.on_message(gen("ban", allow = ["sudo", "channel"]))
+@app.on_message(gen("ban", exclude = ["sudo", "channel"]))
 async def ban_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -105,7 +105,7 @@ async def ban_handler(_, m: Message):
 
 
 
-@app.on_message(gen("banall", allow = ["channel"]))
+@app.on_message(gen("banall", exclude = ["channel"]))
 async def banall_handler(_, m: Message):
     try: 
         if await app.check_private():
@@ -137,7 +137,7 @@ async def banall_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unban", allow = ["sudo", "channel"]))
+@app.on_message(gen("unban", exclude = ["sudo", "channel"]))
 async def unban_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -208,7 +208,7 @@ async def mute_user(chat_id, user_id, duration=datetime.now()):
 
 
 
-@app.on_message(gen("mute", allow = ["sudo"]))
+@app.on_message(gen("mute", exclude = ["sudo"]))
 async def mute_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -267,7 +267,7 @@ async def mute_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unmute", allow = ["sudo"]))
+@app.on_message(gen("unmute", exclude = ["sudo"]))
 async def unmute_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -326,7 +326,7 @@ async def unmute_handler(_, m: Message):
 
 
 
-@app.on_message(gen("kick", allow = ["sudo", "channel"]))
+@app.on_message(gen("kick", exclude = ["sudo", "channel"]))
 async def kick_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -374,7 +374,7 @@ async def kick_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pin", allow = ["sudo", "channel"]))
+@app.on_message(gen("pin", exclude = ["sudo", "channel"]))
 async def pin_handler(_, m: Message):
     try:
         arg = True
@@ -413,7 +413,7 @@ async def pin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unpin", allow = ["sudo", "channel"]))
+@app.on_message(gen("unpin", exclude = ["sudo", "channel"]))
 async def unpin_handler(_, m: Message):
     try:
         cmd = m.command
@@ -446,7 +446,7 @@ async def unpin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("promote", allow = ["sudo", "channel"]))
+@app.on_message(gen("promote", exclude = ["sudo", "channel"]))
 async def promote_handler(_, m: Message):
     try:
         if await app.check_private():
@@ -504,7 +504,7 @@ async def promote_handler(_, m: Message):
 
 
 
-@app.on_message(gen("demote", allow = ["sudo", "channel"]))
+@app.on_message(gen("demote", exclude = ["sudo", "channel"]))
 async def demote_handler(_, m: Message):
     try:
         if await app.check_private():

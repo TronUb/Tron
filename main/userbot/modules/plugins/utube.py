@@ -45,7 +45,7 @@ def PyDownload(url: str):
 
 
 
-@app.on_message(gen("ytvinfo", allow = ["sudo", "channel"]))
+@app.on_message(gen("ytvinfo", exclude = ["sudo", "channel"]))
 async def ytvideoinfo_handler(_, m: Message):
     try:
         args = app.GetArgs()
@@ -78,7 +78,7 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytmdl", allow = ["sudo", "channel"]))
+@app.on_message(gen("ytmdl", exclude = ["sudo", "channel"]))
 async def ytvideodl_handler(_, m):
     try:
         msg = await app.send_edit("processing link . . .", text_type=["mono"])
@@ -155,7 +155,7 @@ async def ytvideodl_handler(_, m):
                     try:
                         
                         if not cb.from_user.id == m.from_user.id:
-                            await cb.answer("You're not allowed.", show_alert=True)
+                            await cb.answer("You're not excludeed.", show_alert=True)
                             return False
 
                         if (int(cb.data) in [int(x.itag) for x in client.utube_object]):

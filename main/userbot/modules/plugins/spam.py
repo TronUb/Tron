@@ -21,7 +21,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("spam", allow = ["sudo"]))
+@app.on_message(gen("spam", exclude = ["sudo"]))
 async def spam_handler(_, m: Message):
     try:
         reply = m.reply_to_message
@@ -59,7 +59,7 @@ async def spam_handler(_, m: Message):
 
 
 
-@app.on_message(gen("dspam", allow = ["sudo"]))
+@app.on_message(gen("dspam", exclude = ["sudo"]))
 async def delayspam_handler(_, m: Message):
     try:
         reply = m.reply_to_message

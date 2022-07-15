@@ -39,7 +39,7 @@ app.CMD_HELP.update(
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@app.on_message(gen("ls", allow =["sudo"]))
+@app.on_message(gen("ls", exclude =["sudo"]))
 async def ls_handler(_, m: Message):
     """ function to show directory files and folders """
 
@@ -86,7 +86,7 @@ async def ls_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["download", "dl"], allow =["sudo"]))
+@app.on_message(gen(["download", "dl"], exclude =["sudo"]))
 async def download_handler(_, m: Message):
     """ function to download media """
 
@@ -181,7 +181,7 @@ async def download_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["upload", "ul"], allow =["sudo"]))
+@app.on_message(gen(["upload", "ul"], exclude =["sudo"]))
 async def upload_handler(_, m: Message):
     """ function to upload files from downloads """
 
@@ -215,7 +215,7 @@ async def upload_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["batchup", "bcp"], allow =["sudo"]))
+@app.on_message(gen(["batchup", "bcp"], exclude =["sudo"]))
 async def batchupload_handler(_, m: Message):
     """ function to upload files of a directory """
 

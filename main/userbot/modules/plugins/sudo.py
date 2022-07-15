@@ -38,7 +38,7 @@ async def addsudo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listsudo", allow = ["sudo"]))
+@app.on_message(gen("listsudo", exclude = ["sudo"]))
 async def getsudo_handler(_, m: Message):
     sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
     sudo_list = "No sudos added." if not sudo_list else sudo_list

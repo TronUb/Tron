@@ -9,7 +9,7 @@ from main import app, gen
 
 
 
-@app.on_message(gen("kbd", allow = ["sudo"]))
+@app.on_message(gen("kbd", exclude = ["sudo"]))
 async def create_keyboard(_, m):
     if m.chat.type == ChatType.BOT:
         return await app.send_edit("Sorry you can't use it here", delme=3, text_type=["mono"])

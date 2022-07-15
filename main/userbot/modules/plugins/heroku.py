@@ -102,7 +102,7 @@ async def restart_handler(_, m: Message):
 
 
 # get usage of your dyno hours from heroku
-@app.on_message(gen("usage", allow = ["sudo"]))
+@app.on_message(gen("usage", exclude = ["sudo"]))
 async def dynostats_handler(_, m: Message):
     if await not_heroku():
         return
@@ -163,7 +163,7 @@ async def dynostats_handler(_, m: Message):
 
 
 # get list of vars from heroku 
-@app.on_message(gen("vars", allow = ["sudo"]))
+@app.on_message(gen("vars", exclude = ["sudo"]))
 async def herokuvars_handler(_, m: Message):
     if await not_heroku():
         return
@@ -300,7 +300,7 @@ async def delvar_handler(_, m: Message):
 
 
 # get logs from heroku in file format (.txt)
-@app.on_message(gen("logs", allow = ["sudo"]))
+@app.on_message(gen("logs", exclude = ["sudo"]))
 async def logs_handler(_, m: Message):
     if await not_heroku():
         return
@@ -329,7 +329,7 @@ async def logs_handler(_, m: Message):
 
 
 # get logs from heroku in nekobin link, not as a file 
-@app.on_message(gen(["textlogs", "tlogs"], allow = ["sudo"]))
+@app.on_message(gen(["textlogs", "tlogs"], exclude = ["sudo"]))
 async def textlogs_handler(_, m: Message):
     if await not_heroku():
         return

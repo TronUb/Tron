@@ -44,7 +44,7 @@ pings = []
 
 
 
-@app.on_message(gen(["ping", "pong"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["ping", "pong"], exclude = ["sudo", "channel"]))
 async def ping_handler(_, m: Message):
     try:
 

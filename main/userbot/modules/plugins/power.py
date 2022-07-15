@@ -23,7 +23,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("reboot", allow = ["sudo"]))
+@app.on_message(gen("reboot", exclude = ["sudo"]))
 async def reboot_handler(_, m: Message):
     try:
         msg = await app.send_edit("Restarting bot . . .", text_type=["mono"])
@@ -41,7 +41,7 @@ async def reboot_handler(_, m: Message):
 
 
 
-@app.on_message(gen("sleep", allow = ["sudo"]))
+@app.on_message(gen("sleep", exclude = ["sudo"]))
 async def sleep_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Give me some seconds after command . . .")

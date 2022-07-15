@@ -71,7 +71,7 @@ async def install_requirements():
 
 
 
-@app.on_message(gen("update", allow = ["sudo", "channel"]))
+@app.on_message(gen("update", exclude = ["sudo", "channel"]))
 async def update_handler(_, m):
     try:
         cmd = False

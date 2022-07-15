@@ -32,7 +32,7 @@ app.CMD_HELP.update(
         "whois [reply to message]" : "get a small piece of information of a user.",
         "id" : "Get chat or user id",
         "block [username] or [reply to user]" : "Block a user from sending message in your pm.",
-        "unblock [username] or [reply to user]" : "Unblock a user and allow him to send messages in your pm.",
+        "unblock [username] or [reply to user]" : "Unblock a user and exclude him to send messages in your pm.",
         "repo" : "Get Tron Userbot official repository link.",
         "rem [lname] | [bio] | [pfp] | [uname]" : "Remove last name or username from profile.",
         "set [fname] | [lname ] | [uname] | [bio] & [text]" : "Choose a option from command and set anything in your profile.",
@@ -68,7 +68,7 @@ def FullName(user: User):
 
 
 
-@app.on_message(gen("whois", allow = ["sudo"]))
+@app.on_message(gen("whois", exclude = ["sudo"]))
 async def whois(_, m: Message):
     reply = m.reply_to_message
     cmd = m.command
@@ -118,7 +118,7 @@ async def whois(_, m: Message):
 
 
 
-@app.on_message(gen("id", allow = ["sudo"]))
+@app.on_message(gen("id", exclude = ["sudo"]))
 async def id(_, m: Message):
     await app.send_edit("Getting id . . .", text_type=["mono"])
     cmd = m.command
@@ -145,7 +145,7 @@ async def id(_, m: Message):
 
 
 
-@app.on_message(gen(["men", "mention"], allow = ["sudo"]))
+@app.on_message(gen(["men", "mention"], exclude = ["sudo"]))
 async def mention_user(_, m: Message):
     if app.long() < 3:
         return await app.send_edit("Incorrect command use.\n\n**Example** : `.men @beastzx Tronuserbot`")
@@ -162,7 +162,7 @@ async def mention_user(_, m: Message):
 
 
 
-@app.on_message(gen("uinfo", allow = ["sudo"]))
+@app.on_message(gen("uinfo", exclude = ["sudo"]))
 async def get_full_user_info(_, m: Message):
     msg = await app.send_edit("scrapping info . . .", text_type=["mono"])
     reply = m.reply_to_message
@@ -209,7 +209,7 @@ async def get_full_user_info(_, m: Message):
 
 
 
-@app.on_message(gen(["sc", "scan"], allow = ["sudo"]))
+@app.on_message(gen(["sc", "scan"], exclude = ["sudo"]))
 async def tgscan_handler(_, m: Message):
     if m.reply_to_message:
         await app.send_edit("Checking database . . .")
@@ -235,7 +235,7 @@ async def tgscan_handler(_, m: Message):
 
 
 
-@app.on_message(gen("block", allow = ["sudo"]))
+@app.on_message(gen("block", exclude = ["sudo"]))
 async def block_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -257,7 +257,7 @@ async def block_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unblock", allow = ["sudo"]))
+@app.on_message(gen("unblock", exclude = ["sudo"]))
 async def unblock_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -279,7 +279,7 @@ async def unblock_handler(_, m: Message):
 
 
 
-@app.on_message(gen("sg", allow = ["sudo"]))
+@app.on_message(gen("sg", exclude = ["sudo"]))
 async def usernamehistory_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -447,7 +447,7 @@ async def rmprofile(m: Message, args):
 
 
 
-@app.on_message(gen("repo", allow = ["sudo"]))
+@app.on_message(gen("repo", exclude = ["sudo"]))
 async def repolink_handler(_, m: Message):
     await app.send_edit("TronUB Repo: [press here](https://github.com/TronUb/Tron)", disable_web_page_preview=True)
 

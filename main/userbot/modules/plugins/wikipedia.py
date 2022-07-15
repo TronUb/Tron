@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("wiki", allow = ["sudo", "channel"]))
+@app.on_message(gen("wiki", exclude = ["sudo", "channel"]))
 async def wikipedia_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some query to search on wikipedia . . .", text_type=["mono"], delme=True)

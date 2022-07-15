@@ -26,7 +26,7 @@ handlers = []
 
 
 
-@app.on_message(gen("afk", allow = ["sudo"]), group=0)
+@app.on_message(gen("afk", exclude = ["sudo"]), group=0)
 async def go_offline(_, m: Message):
     try:
         start = int(time.time())
