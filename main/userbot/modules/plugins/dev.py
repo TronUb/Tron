@@ -28,7 +28,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["eval", "e"], allow =["sudo"]))
+@app.on_message(gen(["eval", "e"], exclude =["sudo"]))
 async def evaluate_handler(_, m: Message):
     """ This function is made to execute python codes """
 
@@ -37,7 +37,7 @@ async def evaluate_handler(_, m: Message):
         p = print
 
         if app.textlen() > 4096:
-            return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=3)
+            return await app.send_edit("Your message is too long ! only 4096 characters are excludeed", text_type=["mono"], delme=3)
 
         if app.long() == 1:
             return await app.send_edit("Give me some text (code) to execute . . .", text_type=["mono"], delme=4)
@@ -79,7 +79,7 @@ async def evaluate_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["term", "shell"], allow =["sudo"]))
+@app.on_message(gen(["term", "shell"], exclude =["sudo"]))
 async def terminal_handler(_, m: Message):
     """ This function is made to run shell commands """
 
@@ -88,7 +88,7 @@ async def terminal_handler(_, m: Message):
             return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
         if app.textlen() > 4096:
-            return await app.send_edit("Your message is too long ! only 4096 characters are allowed", text_type=["mono"], delme=4)
+            return await app.send_edit("Your message is too long ! only 4096 characters are excludeed", text_type=["mono"], delme=4)
 
         msg = await app.send_edit("Running in shell . . .", text_type=["mono"])
         text = m.text.split(None, 1)

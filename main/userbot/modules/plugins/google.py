@@ -45,7 +45,7 @@ def get_soup(url,header):
 
 
 
-@app.on_message(gen("sauce", allow =["sudo"]))
+@app.on_message(gen("sauce", exclude =["sudo"]))
 async def imagesauce_handler(_, m: Message):
     try:
         reply = m.reply_to_message
@@ -78,7 +78,7 @@ async def imagesauce_handler(_, m: Message):
         searchUrl = 'http://www.google.co.id/searchbyimage/upload'
         filePath = './downloads/{}'.format(savename)
         multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
-        response = requests.post(searchUrl, files=multipart, allow_redirects=False)
+        response = requests.post(searchUrl, files=multipart, exclude_redirects=False)
         fetchUrl = response.headers['Location']
         await app.send_edit("Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
     except Exception as e:
@@ -87,7 +87,7 @@ async def imagesauce_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pic", allow =["sudo"]))
+@app.on_message(gen("pic", exclude =["sudo"]))
 async def yandeximages_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Usage: `.pic cat`", delme=4)
@@ -114,7 +114,7 @@ async def yandeximages_handler(_, m: Message):
 
 
 
-@app.on_message(gen("img", allow =["sudo"]))
+@app.on_message(gen("img", exclude =["sudo"]))
 async def imagesearch_handler(_, m: Message):
     cmd = m.command
     if app.long() == 1:

@@ -41,7 +41,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("settitle", allow = ["sudo", "channel"]))
+@app.on_message(gen("settitle", exclude = ["sudo", "channel"]))
 async def admintitle_handler(_, m: Message):
     if await app.check_private():
         return
@@ -94,7 +94,7 @@ async def admintitle_handler(_, m: Message):
 
 
 
-@app.on_message(gen("invite", allow = ["sudo", "channel"]))
+@app.on_message(gen("invite", exclude = ["sudo", "channel"]))
 async def invite_handler(_, m):
     if await app.check_private():
         return
@@ -120,7 +120,7 @@ async def invite_handler(_, m):
     await app.send_edit(f"Added {get_user.first_name} to the chat!")
 
 
-@app.on_message(gen("inviteall", allow = ["sudo", "channel"]))
+@app.on_message(gen("inviteall", exclude = ["sudo", "channel"]))
 async def inviteall_handler(_, m):
     if await app.check_private():
         return
@@ -155,7 +155,7 @@ async def inviteall_handler(_, m):
 
 
 
-@app.on_message(gen(["admins", "adminlist"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["admins", "adminlist"], exclude = ["sudo", "channel"]))
 async def adminlist_handler(_, m):
     if await app.check_private():
         return
@@ -204,7 +204,7 @@ async def adminlist_handler(_, m):
 
 
 
-@app.on_message(gen("report", allow = ["sudo", "channel"]))
+@app.on_message(gen("report", exclude = ["sudo", "channel"]))
 async def reportadmin_handler(_, m: Message):
     if await app.check_private():
         return
@@ -235,7 +235,7 @@ async def reportadmin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("all", allow = ["sudo"]))
+@app.on_message(gen("all", exclude = ["sudo"]))
 async def tagall_handler(app, m: Message):
     if await app.check_private():
         return
@@ -258,7 +258,7 @@ async def tagall_handler(app, m: Message):
 
 
 
-@app.on_message(gen("bots", allow = ["sudo"]))
+@app.on_message(gen("bots", exclude = ["sudo"]))
 async def botlist_handler(_, m: Message):
     if await app.check_private():
         return
@@ -302,7 +302,7 @@ async def botlist_handler(_, m: Message):
 
 
 
-@app.on_message(gen("kickme", allow = ["sudo", "channel"]))
+@app.on_message(gen("kickme", exclude = ["sudo", "channel"]))
 async def leavechat_handler(_, m):
     if await app.check_private():
         return
@@ -317,7 +317,7 @@ async def leavechat_handler(_, m):
 
 
 
-@app.on_message(gen("members", allow = ["sudo", "channel"]))
+@app.on_message(gen("members", exclude = ["sudo", "channel"]))
 async def membercount_handler(_, m):
     if await app.check_private():
         return
@@ -341,7 +341,7 @@ async def membercount_handler(_, m):
 
 
 
-@app.on_message(gen("join", allow = ["sudo", "channel"]))
+@app.on_message(gen("join", exclude = ["sudo", "channel"]))
 async def joinchat_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some chat id | username after command . . .", text_type=["mono"], delme=5)
@@ -358,12 +358,12 @@ async def joinchat_handler(_, m: Message):
         except Exception as e:
             await app.error(e)
     elif app.long() > 4096:
-        await app.send_edit("Maximum 4096 characters allowed . . .", text_type=["mono"], delme=5)
+        await app.send_edit("Maximum 4096 characters excludeed . . .", text_type=["mono"], delme=5)
 
 
 
 
-@app.on_message(gen("slowmo", allow = ["sudo"]))
+@app.on_message(gen("slowmo", exclude = ["sudo"]))
 async def slowmode_handler(_, m: Message):
     if await app.check_private():
         return
@@ -379,7 +379,7 @@ async def slowmode_handler(_, m: Message):
             elif int(sec) not in [10, 30, 60, 300, 900, 3600]:
                 return await app.send_edit("Please choose seconds from here: [`10`, `30`, `60`, `300`, `900`, `3600`]")
         elif app.long() > 4096:
-            return await app.send_edit("Only 4096 characters are allowed . . .", text_type=["mono"], delme=3)
+            return await app.send_edit("Only 4096 characters are excludeed . . .", text_type=["mono"], delme=3)
 
         try:
             sec = int(sec)

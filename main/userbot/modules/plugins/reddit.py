@@ -22,13 +22,13 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["r", "reddit"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["r", "reddit"], exclude = ["sudo", "channel"]))
 async def reddit_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Please give me some query to search on reddit.", delme=2)
 
     elif app.textlen() > 4096:
-        return await app.send_edit("Too long query, only 4096 characters are allowed !", text_type=["mono"], delme=2)
+        return await app.send_edit("Too long query, only 4096 characters are excludeed !", text_type=["mono"], delme=2)
 
     elif app.long() > 1:
         try:

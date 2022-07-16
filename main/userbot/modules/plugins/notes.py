@@ -46,7 +46,7 @@ GET_FORMAT = {
 
 
 
-@app.on_message(gen("save", allow = ["sudo"]))
+@app.on_message(gen("save", exclude = ["sudo"]))
 async def savenote_hanlder(_, m: Message):
     try:
         reply = m.reply_to_message
@@ -147,7 +147,7 @@ async def getnote_handler(_, m: Message):
 
 
 
-@app.on_message(gen("notes", allow = ["sudo"]))
+@app.on_message(gen("notes", exclude = ["sudo"]))
 async def notelist_handler(_, m: Message):	
     getnotes = app.get_all_selfnotes(m.from_user.id)
     if not getnotes:

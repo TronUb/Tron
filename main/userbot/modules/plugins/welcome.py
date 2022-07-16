@@ -61,7 +61,7 @@ async def sendwelcome_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["setwelcome", "setwc"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["setwelcome", "setwc"], exclude = ["sudo", "channel"]))
 async def savewelcome_handler(_, m: Message):
     if await app.check_private():
         return
@@ -92,7 +92,7 @@ async def savewelcome_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["delwelcome", "delwc"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["delwelcome", "delwc"], exclude = ["sudo", "channel"]))
 async def deletewelcome_handler(_, m: Message):
     if await app.check_private():
         return
@@ -107,7 +107,7 @@ async def deletewelcome_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["getwelcome", "getwc"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["getwelcome", "getwc"], exclude = ["sudo", "channel"]))
 async def getwelcome_handler(_, m: Message):
     if await app.check_private():
         return

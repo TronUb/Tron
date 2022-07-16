@@ -19,7 +19,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["q"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["q"], exclude = ["sudo", "channel"]))
 async def quotly_handler(_, m: Message):
     reply = m.reply_to_message
     if not reply:

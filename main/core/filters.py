@@ -8,6 +8,7 @@ from typing import (
 
 from pyrogram.filters import create
 from pyrogram import Client
+from pyrogram.enums import ChatType
 from pyrogram.types import (
     Message, 
     CallbackQuery, 
@@ -82,39 +83,32 @@ def regex(
 
 # custom command filter
 def gen(
-    commands: Union[str, List[str]], 
+    commands: Union[str, List[str]],
     prefixes: Union[str, List[str]] = [],
-    case_sensitive: bool = True, 
-    allow: list = []
+    case_sensitive: bool = True,
+    exclude: list = []
     ):
 
-    # modified function of pyrogram.filters.command
+    """
+    modified function of pyrogram.filters.command
+
+    params:
+           commands: single command or list of commands 
+           prefixes: single prefix or list of prefixes
+           case_sensitive: True | False
+           exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
+    """
     async def func(flt, client: Client, message: Message):
 
         try:
             text = message.text or message.caption or None
+            message.command = None
 
             if not text:
                 return False
 
             if message.forward_date: # forwarded messages can't be edited
                 return False
-
-            message.command = None
-
-            user = message.from_user if message.from_user else None
-
-            if not user:
-                return False
-
-            message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
-
-            if not message_owner:
-                return False
-            
-            if message_owner == "sudo":
-                if not "sudo" in allow:
-                    return False
 
 
             flt.prefixes = client.Trigger() or ["."] # workaround
@@ -125,20 +119,50 @@ def gen(
 
                 cmd = text.split()[0][1:]
                 if cmd in flt.commands:
+                    user = message.from_user if message.from_user else None
+
+                    if not user:
+                        if message.outgoing: # for channels
+                            client.m = client.bot.m = message
+                            return True
+                        return False
+
+                    message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
+
+                    if not message_owner:
+                        return False
+
                     message.command = [cmd] + text.split()[1:]
+
+                    if message.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
+                        if "group" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.CHANNEL:
+                        if "channel" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.PRIVATE:
+                        if "private" in exclude:
+                            return False
+
+                    if message.chat.type == ChatType.BOT:
+                        if "bot" in exclude:
+                            return False
 
                     # for sudo users 
                     if message_owner == "sudo":
+                        if "sudo" in exclude:
+                            return False
+
                         if not client.SudoCmds(): # empty list -> full command access to sudo
-                            client.m = message
-                            client.bot.m = message
+                            client.m = client.bot.m = message
                             return True 
 
                         if not cmd in client.SudoCmds():
                             return False
 
-                    client.m = message
-                    client.bot.m = message
+                    client.m = client.bot.m = message
                     return True
 
             return False

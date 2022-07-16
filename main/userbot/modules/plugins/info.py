@@ -21,7 +21,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("minfo", allow = ["sudo"]))
+@app.on_message(gen("minfo", exclude = ["sudo"]))
 async def mediainfo_handler(_, m: Message):
     replied = m.reply_to_message
     if not replied:
@@ -135,7 +135,7 @@ async def mediainfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("chatinfo", allow = ["sudo"]))
+@app.on_message(gen("chatinfo", exclude = ["sudo"]))
 async def chatinfo_handler(_, m: Message):
     try:
         if app.long() > 1:

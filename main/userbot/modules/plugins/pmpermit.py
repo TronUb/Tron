@@ -77,7 +77,7 @@ async def pmpermit_handler(_, m: Message):
         is_user = False
         pmlimit = app.PmpermitLimit()
 
-        if bool(app.Pmpermit()) is False or m.chat.is_verified: # allow verified accounts
+        if bool(app.Pmpermit()) is False or m.chat.is_verified: # exclude verified accounts
             return
 
         if bool(app.get_whitelist(m.chat.id)) is True:
@@ -138,7 +138,7 @@ async def pmpermit_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["a", "approve"], allow = ["sudo"]), group=0)
+@app.on_message(gen(["a", "approve"], exclude = ["sudo"]), group=0)
 async def approve_handler(_, m: Message):
     if m.chat.type == "bot":
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
@@ -191,7 +191,7 @@ async def approve_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove"], allow = ["sudo"]), group=-2)
+@app.on_message(gen(["da", "disapprove"], exclude = ["sudo"]), group=-2)
 async def diapprove_handler(_, m:Message):
     if m.chat.type == "bot":
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
@@ -234,7 +234,7 @@ async def diapprove_handler(_, m:Message):
         try:
             await app.send_message(
                 app.LOG_CHAT, 
-                f"#disallow\n\n{info.mention} `has been disapproved.`"
+                f"#disexclude\n\n{info.mention} `has been disapproved.`"
             )
         except PeerIdInvalid:
             print(f"{info.first_name} has been disapproved.")

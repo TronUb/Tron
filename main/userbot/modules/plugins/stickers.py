@@ -31,7 +31,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("kang", allow = ["sudo", "channel", "forward"]))
+@app.on_message(gen("kang", exclude = ["sudo", "channel", "forward"]))
 async def kang(_, m: Message):
     replied = m.reply_to_message
     photo = None
@@ -201,7 +201,7 @@ async def kang(_, m: Message):
 
 
 
-@app.on_message(gen("stinfo", allow = ["sudo"]))
+@app.on_message(gen("stinfo", exclude = ["sudo"]))
 async def sticker_pack_info_(_, m: Message):
     replied = m.reply_to_message
     if not replied:

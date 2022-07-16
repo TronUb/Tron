@@ -15,7 +15,7 @@ settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Module
 extra = app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
 about = app.BuildKeyboard(([["About", "about-tab"]]))
 close = app.BuildKeyboard(([["Close", "close-tab"]]))
-global_command = app.BuildKeyboard(([["• Public Commands •", "public-commands-tab"]]))
+public = app.BuildKeyboard(([["• Public Commands •", "public-commands-tab"]]))
 
 
 
@@ -55,10 +55,10 @@ async def start(_, m: Message):
         elif m.from_user.id != app.id:
             info = await app.bot.send_photo(
                 m.chat.id,
-                "main/core/resources/images/tron.png",
+                "main/core/resources/images/tron-square.png",
                 f"Hey {m.from_user.mention} You are eligible to use me. There are some commands you can use, check below.",
                 reply_markup=InlineKeyboardMarkup(
-                    [global_command]
+                    [public]
                 ),
             )
         app.message_ids.update({info.chat.id : info.id})

@@ -72,7 +72,7 @@ async def unshorten_link(m: Message, text):
         else:
             r = requests.get(
                 text, 
-                allow_redirects=False
+                exclude_redirects=False
             )
             if str(r.status_code).startswith("3"):
                 fakelink = r.headers["Location"]
@@ -87,7 +87,7 @@ async def unshorten_link(m: Message, text):
 
 
 
-@app.on_message(gen("tts", allow = ["sudo", "channel"]))
+@app.on_message(gen("tts", exclude = ["sudo", "channel"]))
 async def tts_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -115,7 +115,7 @@ async def tts_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ud", allow = ["sudo", "channel"]))
+@app.on_message(gen("ud", exclude = ["sudo", "channel"]))
 async def ud_handler(_, m:Message):
     if app.long() == 1:
         return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
@@ -143,7 +143,7 @@ async def ud_handler(_, m:Message):
 
 
 
-@app.on_message(gen("short", allow = ["sudo", "channel"]))
+@app.on_message(gen("short", exclude = ["sudo", "channel"]))
 async def shortlink_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -164,7 +164,7 @@ async def shortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["unshort", "noshort"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["unshort", "noshort"], exclude = ["sudo", "channel"]))
 async def unshortlink_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -189,7 +189,7 @@ async def unshortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["wtr", "weather"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["wtr", "weather"], exclude = ["sudo", "channel"]))
 async def weather_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Piro Master Atleast Give Me Some Location !", text_type=["mono"])
@@ -207,7 +207,7 @@ async def weather_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["ws", "webshot"], allow = ["sudo", "channel"]))
+@app.on_message(gen(["ws", "webshot"], exclude = ["sudo", "channel"]))
 async def webshot_handler(_, m: Message):
     if app.long() > 1:
         try:
@@ -236,7 +236,7 @@ async def webshot_handler(_, m: Message):
 
 
 
-@app.on_message(gen("undlt", allow = ["sudo"]))
+@app.on_message(gen("undlt", exclude = ["sudo"]))
 async def undlt_handler(_, m: Message):
     collect = []
     collect.clear()

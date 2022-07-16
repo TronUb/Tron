@@ -26,7 +26,7 @@ app.CMD_HELP.update(
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-@app.on_message(gen("send", allow = ["sudo", "channel"]))
+@app.on_message(gen("send", exclude = ["sudo", "channel"]))
 async def sendmodule_handler(app, m: Message):
     if app.long() > 1:
         await app.send_edit("Checking module . . .", text_type=["mono"])

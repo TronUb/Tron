@@ -24,7 +24,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["bgroup", "bgp"], allow =["sudo"]))
+@app.on_message(gen(["bgroup", "bgp"], exclude =["sudo"]))
 async def basicgroup_handler(_, m: Message):
     grpname = None
     users = None
@@ -53,7 +53,7 @@ async def basicgroup_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["sgroup", "sgp"], allow =["sudo"]))
+@app.on_message(gen(["sgroup", "sgp"], exclude =["sudo"]))
 async def supergroup_handler(_, m: Message):
     grpname = None
     about = None
@@ -82,7 +82,7 @@ async def supergroup_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["unread", "un"], allow =["sudo"]))
+@app.on_message(gen(["unread", "un"], exclude =["sudo"]))
 async def unreadchat_handler(_, m: Message):
     try:
         await asyncio.gather(
@@ -100,7 +100,7 @@ async def unreadchat_handler(_, m: Message):
 
 
 
-@app.on_message(gen("channel", allow =["sudo"]))
+@app.on_message(gen("channel", exclude =["sudo"]))
 async def channel_handler(_, m: Message):
     chname = None
     about = None

@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("zombies", allow = ["sudo", "channel"]))
+@app.on_message(gen("zombies", exclude = ["sudo", "channel"]))
 async def zombies_handler(_, m: Message):
     if await app.check_private():
         return
