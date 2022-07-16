@@ -97,9 +97,9 @@ def create_termuxconfig():
 
 # --- begin ---
 
-install_requirements()
 
 if shell("uname -n") in ("localhost"):
+    install_requirements()
     try:
         from termuxconfig import TermuxConfig
     except (ImportError, ModuleNotFoundError):
