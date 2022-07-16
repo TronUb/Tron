@@ -83,7 +83,7 @@ async def helpdex_handler(_, m: Message):
                 await app.send_edit("Please check your bots inline mode is on or not . . .", delme=3, text_type=["mono"])
         elif args:
 
-            module_help = await app.data(args[1])
+            module_help = await app.PluginData(args[1])
             if not module_help:
                 await app.send_edit(f"Invalid module name specified, use `{app.PREFIX}mods` to get list of modules", delme=3)
             else:
