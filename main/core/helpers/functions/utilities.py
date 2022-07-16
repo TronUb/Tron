@@ -516,7 +516,7 @@ class Utilities(AioHttp):
 			# get a random TTL from the duration
 			ttl = str(random.randint(0, duration - 1))
 
-			thumb_image_path = self.GenTgThumb(await take_screen_shot(file_name, ttl))
+			thumb_image_path = self.GenTgThumb(file_name)
 		else:
 			thumb_image_path = None
 		return thumb_image_path
