@@ -878,5 +878,3 @@ class RawFunctions(object):
 
 		account = heroku3.from_key(self.HerokuApiKey())
 		return account.apps()[self.HerokuAppName()]
-
-
