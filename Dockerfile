@@ -1,5 +1,13 @@
 FROM python:3
 
+RUN python3 -m venv root
+
+WORKDIR root/bin/
+
+RUN chmod +x activate
+
+RUN . ./activate
+
 COPY . /workspace
 
 WORKDIR /workspace
