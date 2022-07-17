@@ -71,12 +71,12 @@ async def install_handler(_, m: Message):
 
     if reply:
         if not reply.document.file_name.endswith(".py"):
-            return await app.send_edit("Only (.py) modules can be installed !!", text_type=["mono"], delme=3)
+            return await app.send_edit("Only (.py) plugins can be installed !!", text_type=["mono"], delme=3)
 
         doc_name = reply.document.file_name
 
         module_loc = (
-            f"tronx/modules/{doc_name}"
+            f"./main/userbot/modules/plugins/{doc_name}"
         )
         await app.send_edit("Installing module . . .", text_type=["mono"])
         if os.path.exists(module_loc):
@@ -106,15 +106,15 @@ async def uninstall_handler(_, m: Message):
     try:
         if app.long() > 1:
             if cmd[1].endswith(".py"):
-                module_loc = f"tronx/modules/{cmd[1]}"
+                module_loc = f"./main/userbot/modules/plugins/{cmd[1]}"
             elif not cmd[1].endswith(".py"):
-                module_loc = f"tronx/modules/{cmd[1]}.py"
+                module_loc = f"./main/userbot/modules/plugins/{cmd[1]}.py"
             if os.path.exists(module_loc):
                 os.remove(module_loc)
-                await app.send_edit(f"**Uninstalled module:** {cmd[1]}", delme=5)
+                await app.send_edit(f"**Uninstalled module:** {cmd[1]}", delme=3)
             else:
                 await app.send_edit("Module doesn't exist !", delme=4, text_type=["mono"])
         else:
-            await app.send_edit("Give me a module name . . .", text_type=["mono"], delme=4)
+            await app.send_edit("Give me a module name . . .", text_type=["mono"], delme=3)
     except Exception as e:
         await app.error(e)
