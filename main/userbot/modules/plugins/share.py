@@ -33,14 +33,12 @@ async def sendmodule_handler(app, m: Message):
         filename = m.command[1]
         modulename = f"main/userbot/modules/plugins/{filename}.py"
         if os.path.exists(modulename):
-            thumb_image = await app.IsThumbExists(modulename)
-
-            if thumb_image:
-                thumb_pic = thumb_image
-            elif app.getdv("THUMB_PIC"):
+            if app.getdv("THUMB_PIC"):
                 thumb_pic = app.getdv("THUMB_PIC")
-            else:
+            elif app.THUMB_PIC:
                 thumb_pic = app.THUMB_PIC
+            else:
+                thumb_pic = None
 
             start = time.time()
             module_caption = os.path.basename(modulename)
