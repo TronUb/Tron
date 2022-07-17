@@ -796,9 +796,9 @@ class RawFunctions(object):
 
 
 	def import_module(
-		self, 
-		path: str, 
-		exclude: list=[], 
+		self,
+		path: str,
+		exclude: list=[],
 		display_module: bool=True
 		):
 		"""
