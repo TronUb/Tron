@@ -42,6 +42,7 @@ class ClassManager(Config, Helpers, Database, Methods):
     Repo = "https://github.com/TronUb/Tron.git"
     StartTime = time.time()
     utube_object = object
+    callback_user = None
 
     # debugging /
     
