@@ -56,7 +56,7 @@ async def carbon_handler(_, m: Message):
     cmd = m.command
     oldmsg = m # fixed for-->  m = send_edit() replaces the variable
     if app.long() < 2:
-        return await app.send_edit(f"Usage:\n\n`{app.PREFIX}carbon [colour] [text]`\n`{app.PREFIX}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
+        return await app.send_edit(f"Usage:\n\n`{app.Trigger()[0]}carbon [colour] [text]`\n`{app.Trigger()[0]}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
 
     elif app.textlen() <= 4096:
         try:

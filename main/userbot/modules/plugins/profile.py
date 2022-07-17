@@ -72,7 +72,7 @@ def FullName(user: User):
 async def whois(_, m: Message):
     reply = m.reply_to_message
     cmd = m.command
-    msg = await app.send_edit("Finding details . . .", text_type=["mono"])
+    await app.send_edit("Finding details . . .", text_type=["mono"])
 
     if reply:
         get_user = reply.from_user.id
@@ -87,7 +87,10 @@ async def whois(_, m: Message):
     except PeerIdInvalid:
         return await app.send_edit("I don't know that User.", text_type=["mono"], delme=3)
 
-    pfp = await app.get_profile_photos(user.id)
+    async for x in app.get_chat_photos(user.id):
+        pfp = x.file_id
+        break
+
     if not pfp:
         await app.send_edit(
             infotext.format(
@@ -103,7 +106,7 @@ async def whois(_, m: Message):
     else:
         await app.send_cached_media(
             m.chat.id, 
-            file_id = pfp[0].file_id,
+            file_id = pfp,
             caption=infotext.format(
                 FullName(user),
                 user.id,
@@ -113,7 +116,7 @@ async def whois(_, m: Message):
                 user.dc_id
             )
         )
-        await msg.delete()
+        await m.delete()
 
 
 
@@ -164,7 +167,7 @@ async def mention_user(_, m: Message):
 
 @app.on_message(gen("uinfo", exclude = ["sudo"]))
 async def get_full_user_info(_, m: Message):
-    msg = await app.send_edit("scrapping info . . .", text_type=["mono"])
+    await app.send_edit("scrapping info . . .", text_type=["mono"])
     reply = m.reply_to_message
 
     if reply:
@@ -176,6 +179,7 @@ async def get_full_user_info(_, m: Message):
 
     async for x in app.get_chat_photos(user.id):
         p_id = x.file_id
+        break
         
 
     try:
@@ -199,7 +203,7 @@ async def get_full_user_info(_, m: Message):
                 file_id=p_id, 
                 caption=duo
             )
-            await msg.delete()
+            await m.delete()
         elif p_id is False:
             await app.send_edit(duo)
     except Exception as e:

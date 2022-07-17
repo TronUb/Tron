@@ -529,8 +529,7 @@ class RawFunctions(object):
 
 	async def get_last_msg(
 		self, 
-		chat_id, 
-		reverse: bool=False
+		chat_id
 		):
 		"""
 		params: 
@@ -544,7 +543,8 @@ class RawFunctions(object):
 			await app.get_last_msg(chat_id, reverse=True)
 		"""
 
-		return await self.get_chat_history(chat_id, limit=1, reverse=reverse)
+		async for x in self.get_chat_history(chat_id, limit=1):
+			return x
 
 
 	async def toggle_inline(
@@ -796,9 +796,9 @@ class RawFunctions(object):
 
 
 	def import_module(
-		self, 
-		path: str, 
-		exclude: list=[], 
+		self,
+		path: str,
+		exclude: list=[],
 		display_module: bool=True
 		):
 		"""

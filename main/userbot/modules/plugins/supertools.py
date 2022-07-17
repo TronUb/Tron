@@ -123,7 +123,7 @@ async def ud_handler(_, m:Message):
     try:
         await app.send_edit(f"Searching for `{m.text.split(None, 1)[1]}`")
         text = m.text.split(None, 1)[1]
-        response = await app.get_json(
+        response = await app.GetRequest(
             f"http://api.urbandictionary.com/v0/define?term={text}"
         )
         word = response["list"][0]["word"]
