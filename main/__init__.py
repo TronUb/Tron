@@ -9,21 +9,24 @@ import pkg_resources
 
 
 
-dependencies = "Pyrogram==2.0.27 pytube telegraph heroku3 aiohttp aiofiles hachoir Pillow bs4 covid pySmartDL pyDownload SQLAlchemy==1.3.23 TgCrypto httpx pytz py-postgresql psycopg2 CurrencyConverter deep-translator gTTS git-python Wikipedia-API speedtest-cli==2.1.3 qrcode bing-image-downloader pysimplelog" 
 
+DEPENDENCIES = open("requirements.txt", "r").read()
 
 # run shell commands
 def shell(args: str):
+    """ run shell commands """
     return subprocess.run(args.split(), capture_output=True).stdout.decode("ascii")
 
 
 # clear screen
 def clear():
+    """ clear terminal screen """
     return os.system("clear")
 
 
 # upgrade linux packages
 def update_upgrade(msg: str, clear_screen: bool=True):
+    """ update & upgrade packages """
     clear()
     print(msg + "\n\n")
     os.system("apt update")
@@ -35,6 +38,10 @@ def update_upgrade(msg: str, clear_screen: bool=True):
 
 # check & install python if not installed
 def check_python(msg: str):
+    """ 
+    check python installation, install python
+    if not found.
+    """
     print(msg + "\n\n")
     output = shell("python3 -V")
     if "No command python3 found" in output:
@@ -47,20 +54,22 @@ def check_python(msg: str):
         clear()
 
 
-# install wheel 
+# install wheel
 def install_wheel():
+    """ install wheel for building pip packages """
     os.system("pip3 install wheel")
     clear()
-    
 
 
-# install requirements 
+
+# install requirements
 def install_requirements():
+    """ install all required dependencies """
     update_upgrade("Updating and upgrading ...")
     check_python("Checking python . . .")
     install_wheel()
 
-    for x in dependencies.split():
+    for x in DEPENDENCIES.split():
         installed_packages = [p.project_name for p in pkg_resources.working_set]
         pkg = x.split("=")[0]
 
@@ -68,7 +77,8 @@ def install_requirements():
             if pkg == "Pillow":
                 print(f"\nInstalling package {x}\n\n")
                 os.system("pkg install libjpeg-turbo")
-                os.system("LDFLAGS='-L/system/lib64/' CFLAGS='-I/data/data/com.termux/files/usr/include/'")
+                os.system("LDFLAGS='-L/system/lib64/'")
+                os.system("CFLAGS='-I/data/data/com.termux/files/usr/include/'")
                 os.system("pip3 install Pillow")
                 clear()
                 continue
@@ -77,10 +87,13 @@ def install_requirements():
             os.system(f"pip3 install {x}")
             clear()
     clear()
-    return True
 
 
 def create_termuxconfig():
+    """
+    this function creates a file and stores all
+    the necessary configuration variables inside it.
+    """
     ATTR = ("API_ID", "API_HASH", "SESSION", "DB_URI", "LOG_CHAT", "TOKEN")
     file = open("termuxconfig.py", "w+")
     file.write("class TermuxConfig:\n\ttemp = 'value'\n")
@@ -104,7 +117,7 @@ if shell("uname -n") in ("localhost"):
         from termuxconfig import TermuxConfig
     except (ImportError, ModuleNotFoundError):
         create_termuxconfig()
-        from termuxconfig import TermuxConfig     
+        from termuxconfig import TermuxConfig
 
 
 from main.userbot.client import app
