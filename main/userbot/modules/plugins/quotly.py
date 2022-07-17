@@ -11,7 +11,7 @@ app.CMD_HELP.update(
     {"quotly" : (
         "quotly",
         {
-        "q [reply to message]" : "Make Image Of Your Texts." 
+        "q [color] [reply to message]" : "Make Stickers Of Your Texts." 
         }
         )
     }
@@ -25,22 +25,28 @@ async def quotly_handler(_, m: Message):
     if not reply:
         return await app.send_edit(m, "Reply to any users text message", delme=4)
 
-    await app.send_edit("Making a Quote . . .", text_type=["mono"])
-    await reply.forward("@QuotLyBot")
+    if app.long() > 1:
+        color = m.text.split(None, 1)[1]
+    else:
+        color = "black"
+
+    msg_one = await app.send_edit("Making a Quote . . .", text_type=["mono"])
+    await app.send_message("QuotLyBot", f"/qcolor {color}")
+    await reply.forward("QuotLyBot")
     is_sticker = True
     while is_sticker:
         try:
-            msg = await app.get_last_msg(chat_id="@QuotLyBot")
+            msg = await app.get_last_msg(chat_id="QuotLyBot")
             if msg.sticker and msg.sticker.file_id:
                 is_sticker = False
         except Exception:
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.10)
     if msg.id:
         await asyncio.gather(
-            m.delete(),
+            msg_one.delete(),
             app.copy_message(
                 m.chat.id, 
                 "@QuotLyBot", 
                 msg.id
                 )
-            )
+        )
