@@ -97,7 +97,7 @@ class Config(Inside): # pylint: disable=too-few-public-methods
         TOKEN = os.getenv("TOKEN")
 # ---------------------
     # thumbnail used while uploading plugins, etc. (optional)
-    THUMB_PIC = os.getenv("THUMB_PIC", "./resources/images/tron.png")
+    THUMB_PIC = os.getenv("THUMB_PIC", "./main/core/resources/images/tron-square.png")
 # ---------------------
     # your telegraph account name (default: Tronuserbot)
     TL_NAME = os.getenv("TL_NAME", "Tron UserBot")
