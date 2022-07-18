@@ -23,7 +23,16 @@
     <summary><b>• About</b></summary>
 
 <br></br>
-**This is a telegram userbot with an assistant bot, it is written in pure Python using** Dan's [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
+**This is a telegram userbot which is written in pure python language and it is based on Dan's** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
+
+**Now let's understand what is a userbot ?**
+
+**A userbot is simple program to automate your telegram account. Userbots are same as telegram bots.**
+**the difference is that all the functionality & features of a bot is provided in a telegram user account.**
+
+**You might be thinking, what can a userbot do ? well userbots can do a lots of things for example downloading a video/audio from 
+YouTube, making telegram stickers, stopping unknown users from messaging us, image processing, etc. A userbot is not limited 
+to its features it can be extended more and more, it can do more beyond its limits.**
 
 </details>
 
@@ -33,19 +42,30 @@
         <b>• Necessary vars</b>
     </summary>
 <br></br>
+
 <p><blockquote>API_ID</blockquote></p>
+get this value from https://my.telegram.org
 
 <p><blockquote>API_HASH</blockquote></p>
+get this value from https://my.telegram.org
 
 <p><blockquote>SESSION</blockquote></p>
+create session from session methods given below 
 
 <p><blockquote>TRIGGER</blockquote></p>
+by default its dot (.) 
+change it to any single symbol you like
 
 <p><blockquote>LOG_CHAT</blockquote></p>
+make a private group and get its chat id
 
 <p><blockquote>TIME_ZONE</blockquote></p>
+by default its Asia/Kolkata, change it 
+your time zone
 
 <p><blockquote>TOKEN</blockquote></p>
+create a bot at https://t.me/BotFather 
+and get its bot token
 
 </details>
 
@@ -103,7 +123,7 @@
 <br></br>
 </details>
 
-<b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, imo nothing happened with my account until now.
+<b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens.
 
 <br></br>
 
