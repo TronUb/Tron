@@ -126,6 +126,15 @@ async def inline_result(_, inline_query):
 
         user_id = user.id
 
+        old = app.bot.whisper_ids.get(str(user_id))
+        if old:
+            number = str(int(sorted(old)[-1])+1) # last updated msg number
+            old.update({number:text[1]}) # new message
+        else:
+            number = 0
+            app.bot.whisper_ids.update({user_id:{number:text[1]}}) # first message
+
+
         await inline_query.answer(
         results=[
             InlineQueryResultArticle(
@@ -137,7 +146,7 @@ async def inline_result(_, inline_query):
                         [
                             InlineKeyboardButton(
                                 text="show message 🔐", 
-                                callback_data=f"{app.id}|{user_id}"
+                                callback_data=f"{app.id}|{user_id}|{number}"
                             )
                         ],
                     ]
@@ -146,14 +155,18 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-        app.bot.whisper_ids.update({str(user_id):text[1]})
 
         async def whisper_callback(client, cb):
                     try:
-                        user_ids = cb.data.split("|")
-                        if str(cb.from_user.id) in user_ids:
+                        ids = cb.data.split("|")
+                        if str(cb.from_user.id) in ids:
                             whisper_msg = client.whisper_ids.get(user_ids[1])
                             if whisper_msg:
+                                num = get(ids[-1])
+                            else:
+                                num = None
+
+                            if num:
                                 await cb.answer(whisper_msg, show_alert=True)
                                 return True
                             else:
