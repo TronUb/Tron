@@ -129,11 +129,8 @@ async def inline_result(_, inline_query):
         old = app.bot.whisper_ids.get(str(user_id))
         if old:
             number = str(int(sorted(old)[-1])+1) # last updated msg number
-            old.update({number:text[1]}) # new message
         else:
             number = str(0)
-            app.bot.whisper_ids.update({str(user_id):{number:text[1]}}) # first message
-
 
         await inline_query.answer(
         results=[
@@ -155,6 +152,12 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
+
+        # update values when results are sent
+        if int(number) > 0:
+             old.update({number:text[1]}) # new message
+        else:
+            app.bot.whisper_ids.update({str(user_id):{number:text[1]}}) # first message
 
         async def whisper_callback(client, cb):
                     try:
