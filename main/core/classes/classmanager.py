@@ -43,6 +43,7 @@ class ClassManager(Config, Helpers, Database, Methods):
     StartTime = time.time()
     utube_object = object
     callback_user = None
+    whisper_ids = {}
 
     # debugging /
     
