@@ -86,7 +86,7 @@
 <br></br>
 <b>1. Repl method</b>
 
-[![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20Here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot-Session?v=1)
+[![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20Here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot?v=1)
 
 ---
 
