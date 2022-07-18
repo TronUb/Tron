@@ -21,8 +21,8 @@ app.CMD_HELP.update(
         "help [ module name ]" : "Get commands info of that plugin.",
         "help" : "Get your inline help dex.",
         "inline" : "Toggle inline mode to On or Off of your bot through @BotFather",
-        "mods" : "Get list of available module names",
-        "plugs" : "Get list of available plugin names",
+        "uplugs" : "Get list of available userbot plugin names",
+        "aplugs" : "Get list of available assistant plugin names",
         }
         )
     }
@@ -56,7 +56,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 @app.on_message(gen("help", exclude =["sudo"]))
-async def helpdex_handler(_, m: Message):
+async def helpmenu_handler(_, m: Message):
     args = m.command if app.long() > 1 else False
 
     try:
@@ -85,7 +85,7 @@ async def helpdex_handler(_, m: Message):
 
             module_help = await app.PluginData(args[1])
             if not module_help:
-                await app.send_edit(f"Invalid module name specified, use `{app.PREFIX}mods` to get list of modules", delme=3)
+                await app.send_edit(f"Invalid module name specified, use `{app.Trigger()[0]}mods` to get list of modules", delme=3)
             else:
                 await app.send_edit(f"**MODULE:** {args[1]}\n\n" + "".join(module_help))
         else:
@@ -100,29 +100,29 @@ async def helpdex_handler(_, m: Message):
 
 
 # get all module name
-@app.on_message(gen("mods", exclude =["sudo"]))
-async def allmodules_handler(_, m: Message):
+@app.on_message(gen("uplugs", exclude =["sudo"]))
+async def uplugs_handler(_, m: Message):
     store = []
     store.clear()
-    for x in os.listdir("tronx/modules/"):
+    for x in os.listdir("main/userbot/modules/plugins/"):
         if not x in ["__pycache__", "__init__.py"]:
             store.append(x + "\n")
 
-    await app.send_edit("**MODULES OF USERBOT:**\n\n" + "".join(store))
+    await app.send_edit("**PLUGINS OF USERBOT:**\n\n" + "".join(store))
 
 
 
 
 # get all plugins name
-@app.on_message(gen("plugs", exclude =["sudo"]))
-async def allplugins_handler(_, m: Message):
+@app.on_message(gen("aplugs", exclude =["sudo"]))
+async def aplugs_handler(_, m: Message):
     store = []
     store.clear()
-    for x in os.listdir("tronx/plugins/"):
+    for x in os.listdir("main/assistant/modules/plugins/"):
         if not x in ["__pycache__", "__init__.py"]:
             store.append(x + "\n")
 
-    await app.send_edit("**PLUGINS OF BOT:**\n\n" + "".join(store))
+    await app.send_edit("**PLUGINS OF ASSISTANT:**\n\n" + "".join(store))
 
 
 
