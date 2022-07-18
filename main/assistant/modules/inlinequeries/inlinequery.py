@@ -146,7 +146,7 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-        app.bot.whisper_ids.update({str(user_id):text[0]})
+        app.bot.whisper_ids.update({str(user_id):text[1]})
 
         async def whisper_callback(client, cb):
                     try:
