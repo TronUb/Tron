@@ -178,4 +178,4 @@ async def inline_result(_, inline_query):
                     except Exception as e:
                         print(e)
 
-        return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+")))
+        return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+[|]\d+")))
