@@ -22,10 +22,10 @@ from main.userbot.client import app
 
 # via bot messages
 @app.bot.on_inline_query(filters.user(app.id))
-def inline_result(_, inline_query):
+async def inline_result(_, inline_query):
     query = inline_query.query
     if query.startswith("#pmpermit"):
-        inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
                 photo_url=app.PmpermitPic(),
@@ -43,7 +43,7 @@ def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#helpdex"):
-        inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
                 photo_url=app.BotPic(),
@@ -73,7 +73,7 @@ def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#ialive"):
-        inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
                 photo_url=app.ialive_pic(),
@@ -90,7 +90,7 @@ def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#quote"):
-        inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultArticle(
                 title="Tron Inline anime quotes",
@@ -126,7 +126,7 @@ def inline_result(_, inline_query):
 
         user_id = user.id
 
-        inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultArticle(
                 title="whisper message.",
