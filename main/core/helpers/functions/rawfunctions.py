@@ -37,7 +37,11 @@ class RawFunctions(object):
 		if self.is_bot:
 			raise BotMethodInvalid
 
-		globals().update({"app":self, "bot":self.bot})
+		globals().update({
+			"app":self, 
+			"bot":self.bot, 
+			"reply":self.m.reply_to_message,
+		})
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
