@@ -77,22 +77,21 @@ async def update_handler(_, m):
         errtext = "Some problem occurred:\n\n"
         await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
 
-        if app.long() > 1 and m.command[1] == "now":
-            cmd = m.command
-        elif app.long() > 1 and m.command[1] != "now":
-            return await app.send_edit("Use `now` after update command")
+        if app.long() > 1:
+            if m.command[1] != "now":
+                return await app.send_edit("Use `now` after update command" text_type=["mono"], delme=3)
+
         elif app.long() == 1:
-            await gen_chlog()
-            return
+            return await gen_chlog()
 
         try:
             repo = Repo()
         except NoSuchPathError as e:
-            await app.send_edit(f"{errtext}`{e}`")
+            await app.send_edit(f"{errtext}:\n\n`{e}`")
             return repo.__del__()
 
         except GitCommandError as e:
-            await app.send_edit(f"{errtext}`{e}`")
+            await app.send_edit(f"{errtext}:\n\n`{e}`")
             return repo.__del__()
 
         except InvalidGitRepositoryError as e:
