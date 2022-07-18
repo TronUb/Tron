@@ -152,7 +152,7 @@ async def inline_result(_, inline_query):
                     try:
                         user_ids = cb.data.split("|")
                         if str(cb.from_user.id) in user_ids:
-                            whisper_msg = client.whisper_ids.get(user_ids[0])
+                            whisper_msg = client.whisper_ids.get(user_ids[1])
                             if whisper_msg:
                                 await cb.answer(whisper_msg, show_alert=True)
                                 return True
