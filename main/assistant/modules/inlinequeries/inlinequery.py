@@ -106,7 +106,7 @@ def inline_result(_, inline_query):
                     ]
                 )
             )
-        ]
+        ],
         cache_time=1
         )
     elif query.startswith("@"):
@@ -143,7 +143,7 @@ def inline_result(_, inline_query):
                     ]
                 )
             )
-        ]
+        ],
         cache_time=1
         )
         app.bot.whisper_ids.update({str(user_id):text[0]})
