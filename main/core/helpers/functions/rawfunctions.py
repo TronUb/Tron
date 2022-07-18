@@ -10,6 +10,7 @@ import importlib
 import requests
 import pyrogram
 
+from datetime import timedelta
 from typing import Union, List
 from pyrogram.types import Message
 from pyrogram.errors import YouBlockedUser, MessageIdInvalid, PeerIdInvalid, BotMethodInvalid
@@ -440,7 +441,7 @@ class RawFunctions(object):
 		self, 
 		chat_id: Union[str, int], 
 		user_id: Union[str, int], 
-		ban_time: int=30
+		ban_time: int=31
 		):
 		"""
 		params: 
@@ -455,7 +456,7 @@ class RawFunctions(object):
 		"""
 
 		try:
-			return await self.ban_chat_member(chat_id, user_id, int(time.time()) + ban_time) 
+			return await self.ban_chat_member(chat_id, user_id, datetime.datetime.now() + timedelta(seconds=ban_time)) 
 		except Exception as e:
 			await self.error(e)
 
