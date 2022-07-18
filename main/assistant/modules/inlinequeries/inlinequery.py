@@ -163,6 +163,6 @@ async def inline_result(_, inline_query):
                         else:
                             await cb.answer("You're not allowed to view this message", show_alert=True)
                     except Exception as e:
-                        await client.error(e)
+                        print(e)
 
         return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+")))
