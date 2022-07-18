@@ -37,7 +37,11 @@ class RawFunctions(object):
 		if self.is_bot:
 			raise BotMethodInvalid
 
-		globals().update({"app":self, "bot":self.bot})
+		globals().update({
+			"app":self, 
+			"bot":self.bot, 
+			"reply":self.m.reply_to_message,
+		})
 		exec(
 			f"async def __aexec(self, m): "
 			+ "".join(f"\n {l}" for l in code.split("\n"))
@@ -269,13 +273,14 @@ class RawFunctions(object):
 				is_self = False
 
 			if is_self:
-				await self.m.edit(
+				msg = await self.m.edit(
 					text=self.FormatText(text, format=text_type),
 					parse_mode=parse_mode,
 					disable_web_page_preview=disable_web_page_preview,
 					reply_markup=reply_markup,
 					entities=entities
 				)
+				self.m = msg
 
 			else:
 				# for sudo users send message's instead of editing their message
