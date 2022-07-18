@@ -131,8 +131,8 @@ async def inline_result(_, inline_query):
             number = str(int(sorted(old)[-1])+1) # last updated msg number
             old.update({number:text[1]}) # new message
         else:
-            number = 0
-            app.bot.whisper_ids.update({user_id:{number:text[1]}}) # first message
+            number = str(0)
+            app.bot.whisper_ids.update({str(user_id):{number:text[1]}}) # first message
 
 
         await inline_query.answer(
