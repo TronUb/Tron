@@ -3,6 +3,7 @@ This file gives inline results with bot having via botusername tag.
 """
 
 from pyrogram import filters
+from pyrogram.handlers import CallbackQueryHandler
 from pyrogram.enums import ParseMode
 from pyrogram.errors import PeerIdInvalid
 from pyrogram.types import (
