@@ -2,6 +2,7 @@ import asyncio
 import heroku3
 import requests
 import sys
+import re
 from os import environ, execle, path, remove
 
 from git import Repo
@@ -32,10 +33,8 @@ TRON_REPO = app.UPSTREAM_REPO
 
 async def gen_chlog():
     changes = []
-    heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
-    heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
-    last_updated = int((str(heroku_app.updated_at).replace("-","").replace(":", "").replace(" ", ""))[:14])
-    recent_updates = requests.get("https://api.github.com/repos/TronUb/Tron/events").json()
+    last_updated = int(re.sub(r"[- + : \s]", "", str(app.heroku_app().updated_at))[:14])
+    recent_updates = app.GetRequest("https://api.github.com/repos/TronUb/Tron/events")
 
     for x in recent_updates:
         if x.get("payload").get("commits") is not None and int(x.get("created_at").replace("-", "").replace(":", "").replace("T", "").replace("Z", "")) > last_updated:
@@ -50,7 +49,7 @@ async def gen_chlog():
             return 0
         else:
             await app.send_edit("".join(changes))
-            return 0
+            return 1
 
         
 
@@ -83,10 +82,9 @@ async def update_handler(_, m):
         elif app.long() > 1 and m.command[1] != "now":
             return await app.send_edit("Use `now` after update command")
         elif app.long() == 1:
-            if await gen_chlog() == -1:
-                return
+            await gen_chlog()
+            return
 
-        await app.send_edit("Found update, updating . . .", text_type=["mono"])
         try:
             repo = Repo()
         except NoSuchPathError as e:
