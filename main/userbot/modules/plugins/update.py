@@ -1,12 +1,11 @@
 import asyncio
-import heroku3
-import requests
-import sys
-import re
-from os import environ, execle, path, remove
 
 from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+from git.exc import (
+    GitCommandError,
+    InvalidGitRepositoryError,
+    NoSuchPathError
+)
 
 from main import app, gen
 
@@ -19,7 +18,7 @@ app.CMD_HELP.update(
         "update",
         {
         "update" : "To check if new update is available or not.",
-        "update [ now ]" : "To update userbot to latest version."
+        "update [ now ] [ branch ]" : "To update userbot to latest version."
         }
         )
     }
@@ -77,7 +76,6 @@ async def update_handler(_, m):
         remote = "upstream"
 
         cmd = m.text.split()
-        args = m.text.split(None, 1)
 
         errtext = "Some problem occurred:\n\n"
         await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
@@ -85,11 +83,11 @@ async def update_handler(_, m):
         if len(cmd) == 1:
             return await gen_chlog()
         elif len(cmd) > 1:
-            if args[1] != "now":
+            if cmd[1] != "now":
                 return await app.send_edit("type 'now' after update command to confirm update", text_type=["mono"], delme=3)
-        elif len(cmd) > 2:
-            if args[1] == "now":
-                branch = m.text.split(None, 2)[2]
+            elif cmd[1] == "now":
+                if len(cmd) > 2:
+                    branch = cmd[2]
 
         try:
             repo = Repo()
