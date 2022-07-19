@@ -83,7 +83,7 @@ async def update_handler(_, m):
             return await gen_chlog()
         elif len(cmd) > 1:
             if args[1] != "now":
-                return app.send_edit("type 'now' after update command to confirm update", text_type=["mono"], delme=3)
+                return await app.send_edit("type 'now' after update command to confirm update", text_type=["mono"], delme=3)
         elif len(cmd) > 2:
             if args[1] == "now":
                 branch = m.text.split(None, 2)[2]
