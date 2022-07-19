@@ -4,7 +4,11 @@ import html
 from datetime import datetime, timedelta
 
 from pyrogram.enums import ChatMemberStatus
-from pyrogram.types import Message, ChatPermissions
+from pyrogram.types import (
+    Message, 
+    ChatPermissions,
+    ChatPrivileges
+)
 
 from pyrogram.errors import (
     UserAdminInvalid, 
@@ -481,6 +485,7 @@ async def promote_handler(_, m: Message):
         await app.promote_chat_member(
             m.chat.id, 
             user.user.id,
+            privileges=ChatPrivileges(
             can_change_info=True,
             can_manage_voice_chats=True,
             can_manage_chat=True,
@@ -490,7 +495,8 @@ async def promote_handler(_, m: Message):
             can_promote_members=False,
             can_restrict_members=True,
             can_pin_messages=True,
-            can_post_messages=True,
+            can_post_messages=True
+            )
         )
         app.send_edit("Promoting . . .", text_type=["mono"])
         await app.send_edit(f"Promoted {user.user.mention} in this chat !")
@@ -537,6 +543,7 @@ async def demote_handler(_, m: Message):
         await app.promote_chat_member(
                 m.chat.id,
                 user.user.id,
+                privileges=ChatPrivileges(
                 can_change_info=False,
                 can_manage_voice_chats=False,
                 can_manage_chat=False,
@@ -546,7 +553,8 @@ async def demote_handler(_, m: Message):
                 can_promote_members=False,
                 can_restrict_members=False,
                 can_pin_messages=False,
-                can_post_messages=False,
+                can_post_messages=False
+                )
         )
         await app.send_edit("Demoting . . .", text_type=["mono"])
         await app.send_edit(f"Demoted {user.user.mention} in this chat !")
