@@ -1,3 +1,4 @@
+import re
 import asyncio
 
 from git import Repo
@@ -18,7 +19,7 @@ app.CMD_HELP.update(
         "update",
         {
         "update" : "To check if new update is available or not.",
-        "update [ now ] [ branch ]" : "To update userbot to latest version."
+        "update [ now ]" : "To update userbot to latest version."
         }
         )
     }
@@ -85,9 +86,6 @@ async def update_handler(_, m):
         elif len(cmd) > 1:
             if cmd[1] != "now":
                 return await app.send_edit("type 'now' after update command to confirm update", text_type=["mono"], delme=3)
-            elif cmd[1] == "now":
-                if len(cmd) > 2:
-                    branch = cmd[2]
 
         try:
             repo = Repo()
