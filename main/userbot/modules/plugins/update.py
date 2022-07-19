@@ -73,20 +73,20 @@ async def install_requirements():
 @app.on_message(gen("update", exclude = ["sudo", "channel"]))
 async def update_handler(_, m):
     try:
-        cmd = False
-        text = m.text.split(None, 1)
+        branch = "master"
+        cmd = m.text.split()
+        args = m.text.split(None, 1)
         errtext = "Some problem occurred:\n\n"
         await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
 
-        try:
-            if app.long() > 1:
-                if text[1] != "now":
-                    return await app.send_edit("Use `now` after update command", text_type=["mono"], delme=3)
-
-            elif app.long() == 1:
-                return await gen_chlog()
-        except IndexError:
-            pass
+        if len(cmd)  == 1:
+            return await gen_chlog()
+        elif len(cmd) > 1:
+            if args[1] != "now":
+                return app.send_edit("type 'now' after update command to confirm update", text_type=["mono"], delme=3)
+        elif len(cmd) > 2:
+            if args[1] == "now":
+                branch = m.text.split(None, 2)[2]
 
         try:
             repo = Repo()
@@ -102,13 +102,18 @@ async def update_handler(_, m):
             repo = Repo.init()
             origin = repo.create_remote("upstream", TRON_REPO)
             origin.fetch()
-            repo.create_head("master", origin.refs.master)
-            repo.heads.master.set_tracking_branch(origin.refs.master)
-            repo.heads.master.checkout(True)
+
+            try:
+                remote_ref = getattr(origin.refs, branch)
+                head = getattr(repo.heads, branch)
+            except AttributeError:
+                return await app.send_edit(f"No branch {branch} found !", text_type=["mono"], delme=3)
+
+            repo.create_head(branch, remote_ref)
+            head.set_tracking_branch(remote_ref)
+            head.checkout(True)
         ACTIVE_BRANCH = repo.active_branch.name
-        if ACTIVE_BRANCH != "master":
-            await app.send_edit(f"**[ UPDATER ]:** You are on [ {ACTIVE_BRANCH} ]\n\nPlease change to `master` branch.`")
-            return repo.__del__()
+        await app.send_edit(f"Updating userbot to {ACTIVE_BRANCH} branch . . .", text_type=["mono"])
 
         try:
             repo.create_remote("upstream", TRON_REPO)
@@ -118,14 +123,10 @@ async def update_handler(_, m):
         ups_rem = repo.remote("upstream")
         ups_rem.fetch(ACTIVE_BRANCH)
 
-        if app.HEROKU_API_KEY and app.HEROKU_APP_NAME:
-            heroku_conn = heroku3.from_key(app.HEROKU_API_KEY)
-            heroku_app = heroku_conn.apps()[app.HEROKU_APP_NAME]
-
-            await app.send_edit("Userbot update in progress, please wait for few minutes . . .", text_type=["mono"])
-            ups_rem.fetch(ACTIVE_BRANCH)
+        if app.heroku_app():
+            await app.send_edit("Found update, updating . . .", text_type=["mono"])
             repo.git.reset("--hard", "FETCH_HEAD")
-            heroku_git_url = heroku_app.git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
+            heroku_git_url = app.heroku_app().git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
 
             if "heroku" in repo.remotes:
                 remote = repo.remote("heroku")
@@ -138,9 +139,9 @@ async def update_handler(_, m):
             except GitCommandError as e:
                 print(e)
                 app.log.error(e)
-                return
+                return await app.send_edit("Failed to updste userbot . . .", text_type=["mono"], delme=3)
 
-            await app.send_edit("Successfully Updated, initialing . . .", text_type=["mono"], delme=8)
+            await app.send_edit("Successfully Updated, initialing . . .", text_type=["mono"], delme=5)
 
         else:
             try:
