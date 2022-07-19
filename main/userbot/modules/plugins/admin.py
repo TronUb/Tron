@@ -487,7 +487,7 @@ async def promote_handler(_, m: Message):
             user.user.id,
             privileges=ChatPrivileges(
             can_change_info=True,
-            can_manage_voice_chats=True,
+            can_manage_video_chats=True,
             can_manage_chat=True,
             can_delete_messages=True,
             can_edit_messages=True,
@@ -545,7 +545,7 @@ async def demote_handler(_, m: Message):
                 user.user.id,
                 privileges=ChatPrivileges(
                 can_change_info=False,
-                can_manage_voice_chats=False,
+                can_manage_video_chats=False,
                 can_manage_chat=False,
                 can_delete_messages=False,
                 can_edit_messages=False,
