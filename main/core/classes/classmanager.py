@@ -22,7 +22,7 @@ class ClassManager(Config, Helpers, Database, Methods):
 
     # assistant /
     assistant_name = "Nora"
-    assistant_version = "v.0.0.2"
+    assistant_version = "v.0.0.3"
 
     # userbot /
     userbot_name = "Tron"
