@@ -212,9 +212,11 @@ class Utilities(AioHttp):
 	async def IsAdmin(self, privileges):
 		"""Check if we are an admin."""
 		if not self.m.from_user:
-			print(self.m) # getting from user as nonetype
 			return False
 		resp = (await self.m.chat.get_member("me")).privileges
+		if resp is None:
+			return False
+
 		return True if getattr(resp, privileges) else False
 
 
