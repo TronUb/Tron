@@ -3,6 +3,7 @@ import asyncio
 import html
 from datetime import datetime, timedelta
 
+from pyrogram.enums import ChatMemberStatus
 from pyrogram.types import Message, ChatPermissions
 
 from pyrogram.errors import (
@@ -22,7 +23,7 @@ app.CMD_HELP.update(
         "admin", 
         {
         "ban [username | id | reply] [time]" : "bans a user, use it as timeban too",
-        "banall [confirm]" : "Ban all members in by one command",
+        "banall [confirm]" : "Ban all members in chat by one command",
         "unban" : "unbans a user",
         "mute [username | id | reply] [time]" : "restricts a user from talking in groups",
         "unmute" : "unrestricts a user from talking in groups",
@@ -112,7 +113,7 @@ async def banall_handler(_, m: Message):
             return
 
         if await app.IsAdmin("can_restrict_members") is False:
-            return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=4)
+            return await app.send_edit("You're not an admin or you don't have enough admin rights.", text_type=["mono"], delme=3)
 
         count = 0
         data = []
@@ -122,8 +123,8 @@ async def banall_handler(_, m: Message):
             return await app.send_edit("Use '`confirm`' text after command to ban all members.", text_type=["mono"], delme=4)
 
         elif app.long() > 1 and m.command[1] == "confirm":
-            async for x in app.iter_chat_members(m.chat.id):
-                if x.status == "member":
+            async for x in app.get_chat_members(m.chat.id):
+                if x.status == ChatMemberStatus.MEMBER:
                     await app.ban_chat_member(m.chat.id, x.user.id)
                     count += 1
                     await app.send_edit(f"Banned {x.user.mention} . . .")
