@@ -100,7 +100,7 @@ async def update_handler(_, m):
 
         except InvalidGitRepositoryError as e:
             repo = Repo.init()
-            origin = repo.create_remote("upstream", TRON_REPO)
+            origin = repo.create_remote(branch, TRON_REPO)
             origin.fetch()
 
             try:
