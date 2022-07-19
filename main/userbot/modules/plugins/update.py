@@ -74,6 +74,7 @@ async def install_requirements():
 async def update_handler(_, m):
     try:
         branch = "master"
+        remote = "upstream"
         cmd = m.text.split()
         args = m.text.split(None, 1)
         errtext = "Some problem occurred:\n\n"
@@ -100,16 +101,22 @@ async def update_handler(_, m):
 
         except InvalidGitRepositoryError as e:
             repo = Repo.init()
-            origin = repo.create_remote(branch, TRON_REPO)
+            # create remote
+
+            try:
+                origin = getattr(repo.remotes, remote)
+            except AttributeError:
+                origin = repo.create_remote(remote, TRON_REPO)
+
             origin.fetch()
 
             try:
                 remote_ref = getattr(origin.refs, branch)
-                head = getattr(repo.heads, branch)
             except AttributeError:
                 return await app.send_edit(f"No branch {branch} found !", text_type=["mono"], delme=3)
 
             repo.create_head(branch, remote_ref)
+            head = getattr(repo.heads, branch)
             head.set_tracking_branch(remote_ref)
             head.checkout(True)
         ACTIVE_BRANCH = repo.active_branch.name
