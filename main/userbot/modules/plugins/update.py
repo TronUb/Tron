@@ -75,12 +75,14 @@ async def update_handler(_, m):
     try:
         branch = "master"
         remote = "upstream"
+
         cmd = m.text.split()
         args = m.text.split(None, 1)
+
         errtext = "Some problem occurred:\n\n"
         await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
 
-        if len(cmd)  == 1:
+        if len(cmd) == 1:
             return await gen_chlog()
         elif len(cmd) > 1:
             if args[1] != "now":
@@ -102,10 +104,11 @@ async def update_handler(_, m):
         except InvalidGitRepositoryError as e:
             repo = Repo.init()
             # create remote
-
             try:
+                # check if remote exists
                 origin = getattr(repo.remotes, remote)
             except AttributeError:
+                # else create one
                 origin = repo.create_remote(remote, TRON_REPO)
 
             origin.fetch()
@@ -119,16 +122,12 @@ async def update_handler(_, m):
             head = getattr(repo.heads, branch)
             head.set_tracking_branch(remote_ref)
             head.checkout(True)
+
         ACTIVE_BRANCH = repo.active_branch.name
         await app.send_edit(f"Updating userbot to {ACTIVE_BRANCH} branch . . .", text_type=["mono"])
 
-        try:
-            repo.create_remote(remote, TRON_REPO)
-        except BaseException:
-            pass
-
-        ups_rem = repo.remote(remote)
-        ups_rem.fetch(ACTIVE_BRANCH)
+        upstream = repo.remote(remote)
+        upstream.fetch(ACTIVE_BRANCH)
 
         if app.heroku_app():
             await app.send_edit("Found update, updating . . .", text_type=["mono"])
@@ -145,19 +144,18 @@ async def update_handler(_, m):
                 remote.push(refspec=f"HEAD:refs/heads/{ACTIVE_BRANCH}", force=True)
             except GitCommandError as e:
                 print(e)
-                app.log.error(e)
-                return await app.send_edit("Failed to updste userbot . . .", text_type=["mono"], delme=3)
+                return await app.send_edit("Couldn't update userbot . . .", text_type=["mono"], delme=3)
 
             await app.send_edit("Successfully Updated, initialing . . .", text_type=["mono"], delme=5)
 
         else:
             try:
-                ups_rem.pull(ACTIVE_BRANCH)
+                upstream.pull(ACTIVE_BRANCH)
             except GitCommandError:
                 repo.git.reset("--hard", "FETCH_HEAD")
 
             await install_requirements()
-            await app.send_edit("Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=8)
+            await app.send_edit("Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=5)
     except Exception as e:
         await app.error(e)
 
