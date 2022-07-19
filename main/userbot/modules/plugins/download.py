@@ -23,11 +23,9 @@ app.CMD_HELP.update(
     {"download" : (
         "download",
         {
-        "ls" : "Find file location in the local directories.",
+        "ls [path]" : "Find file location in the local directories.",
         "download [Reply to media]" : "Downloads media files in local server.",
-        "dl [reply to file]" : "Downloads media files in local server.",
         "upload [path]" : "Upload files from local server to telegram",
-        "ul [path]" : "Upload files from local server to telegram.",
         "batchup [path]" : "Upload batch files from a local directories."
         }
         )
@@ -39,7 +37,7 @@ app.CMD_HELP.update(
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@app.on_message(gen("ls", exclude =["sudo"]))
+@app.on_message(gen("ls", exclude=["sudo"]))
 async def ls_handler(_, m: Message):
     """ function to show directory files and folders """
 
@@ -86,7 +84,7 @@ async def ls_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["download", "dl"], exclude =["sudo"]))
+@app.on_message(gen(["download", "dl"], exclude=["sudo"]))
 async def download_handler(_, m: Message):
     """ function to download media """
 
@@ -129,7 +127,7 @@ async def download_handler(_, m: Message):
             downloader.start(blocking=False)
             c_time = time.time()
             while not downloader.isFinished():
-                total_length = downloader.filesize if downloader.filesize else None
+                total_length = downloader.filesize if downloader.filesize else 0
                 downloaded = downloader.get_dl_size()
                 display_message = ""
                 now = time.time()
@@ -181,7 +179,7 @@ async def download_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["upload", "ul"], exclude =["sudo"]))
+@app.on_message(gen(["upload", "ul"], exclude=["sudo"]))
 async def upload_handler(_, m: Message):
     """ function to upload files from downloads """
 
@@ -215,7 +213,7 @@ async def upload_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["batchup", "bcp"], exclude =["sudo"]))
+@app.on_message(gen(["batchup", "bcp"], exclude=["sudo"]))
 async def batchupload_handler(_, m: Message):
     """ function to upload files of a directory """
 
