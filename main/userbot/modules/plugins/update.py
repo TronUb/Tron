@@ -116,11 +116,11 @@ async def update_handler(_, m):
         await app.send_edit(f"Updating userbot to {ACTIVE_BRANCH} branch . . .", text_type=["mono"])
 
         try:
-            repo.create_remote("upstream", TRON_REPO)
+            repo.create_remote(branch, TRON_REPO)
         except BaseException:
             pass
 
-        ups_rem = repo.remote("upstream")
+        ups_rem = repo.remote(branch)
         ups_rem.fetch(ACTIVE_BRANCH)
 
         if app.heroku_app():
