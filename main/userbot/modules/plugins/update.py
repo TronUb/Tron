@@ -74,12 +74,16 @@ async def install_requirements():
 async def update_handler(_, m):
     try:
         cmd = False
+        text = text.split(None, 1)
         errtext = "Some problem occurred:\n\n"
         await app.send_edit("Checking for updates, please wait . . .", text_type=["mono"])
 
-        if app.long() > 1:
-            if m.command[1] != "now":
-                return await app.send_edit("Use `now` after update command", text_type=["mono"], delme=3)
+        try:
+            if app.long() > 1:
+                if text[1] != "now":
+                    return await app.send_edit("Use `now` after update command", text_type=["mono"], delme=3)
+        except IndexError:
+            pass
 
         elif app.long() == 1:
             return await gen_chlog()
