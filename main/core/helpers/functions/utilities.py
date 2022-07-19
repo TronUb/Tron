@@ -15,9 +15,17 @@ from PIL import Image
 
 from typing import List, Union
 
-# exceptions
-from pyrogram.types import Message, User, InlineKeyboardButton
-from pyrogram.errors import MessageNotModified, FloodWait
+from pyrogram.raw import functions
+from pyrogram.types import (
+	Message,
+	User,
+	InlineKeyboardButton
+)
+from pyrogram.errors import (
+	MessageNotModified,
+	FloodWait,
+	MessageEmpty
+)
 
 from aiohttp.client_exceptions import ContentTypeError
 
@@ -212,17 +220,25 @@ class Utilities(AioHttp):
 	async def IsAdmin(self, privileges):
 		"""Check if we are an admin."""
 		if not self.m.from_user:
-			return False
-		resp = (await self.m.chat.get_member("me")).privileges
+			raise Exception("message is None in app.IsAdmin method")
+
+		resp = (await self.invoke(
+				functions.channels.GetParticipant(
+					channel=await self.resolve_peer(self.m.chat.id),
+					participant=await self.resolve_peer(self.id)
+				)
+			)
+			).participant.admin_rights
+
 		if resp is None:
-			return False
+			raise Exception("app.IsAdmin returned None")
 
 		return True if getattr(resp, privileges) else False
 
 
 	async def IsReply(self, msg: Message):
 		"""Check if the message is a reply to another user."""
-		return True if msg.reply_to_message is True else False
+		return True if msg.reply_to_message else False
 		
 
 	def ClearString(self, msg: str):
