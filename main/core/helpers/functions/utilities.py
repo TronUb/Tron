@@ -16,6 +16,7 @@ from PIL import Image
 from typing import List, Union
 
 from pyrogram.raw import functions
+from pyrogram.raw import types
 from pyrogram.types import (
 	Message,
 	User,
@@ -228,12 +229,15 @@ class Utilities(AioHttp):
 					participant=await self.resolve_peer(self.id)
 				)
 			)
-			).participant.admin_rights
+			).participant
+
+		if not isinstance(resp, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)):
+			return False
 
 		if resp is None:
 			raise Exception("app.IsAdmin returned None")
 
-		return True if getattr(resp, privileges) else False
+		return True if getattr(resp.admin_rights, privileges) else False
 
 
 	async def IsReply(self, msg: Message):
