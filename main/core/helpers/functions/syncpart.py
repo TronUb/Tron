@@ -322,7 +322,7 @@ class SyncPart(Types):
     def import_module(
         self,
         path: str,
-        exclude: list=List,
+        exclude: list=[],
         display_module: bool=True
         ):
         """
