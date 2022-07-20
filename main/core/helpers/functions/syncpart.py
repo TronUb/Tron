@@ -799,7 +799,7 @@ class SyncPart(Types):
         return m.chat.type
 
 
-    def FormatText(self, text, textformat=List):
+    def FormatText(self, text, textformat=[]):
         " get formated text (html) "
         for x in textformat:
             format_dict = {
