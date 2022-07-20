@@ -350,7 +350,7 @@ class AsyncPart(object):
         parse_mode=ParseMode.DEFAULT,
         disable_web_page_preview=False,
         delme : int=0,
-        text_type: list=List,
+        text_type: list=[],
         disable_notification: bool=False,
         reply_to_message_id: int=0,
         schedule_date: int=0,
