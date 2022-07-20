@@ -1,11 +1,12 @@
-from .rawfunctions import RawFunctions
-from .utilities import Utilities
+from .asyncpart import AsyncPart
+from .syncpart import SyncPart
 
 
 
 
 class Functions(
-	RawFunctions,
-	Utilities
+    AsyncPart,
+    SyncPart
 ):
-	pass
+    """ functions class """
+    pass
