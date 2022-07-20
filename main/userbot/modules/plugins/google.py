@@ -31,10 +31,6 @@ headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
 
-def get_soup(url, header):
-    return BeautifulSoup(urllib.request.urlopen(urllib.request(url,headers=header)),'html.parser')
-
-
 
 
 @app.on_message(gen("sauce", exclude =["sudo"]))
@@ -67,12 +63,20 @@ async def imagesauce_handler(_, m: Message):
         else:
             return await app.send_edit("Only photo & animation media's are supported.", text_type=["mono"], delme=4)
 
+        # get url
         searchUrl = 'http://www.google.co.id/searchbyimage/upload'
         filePath = './downloads/{}'.format(savename)
         multiPart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
         response = requests.post(searchUrl, files=multiPart, headers=headers)
         getUrl = response.url
-        await app.send_edit("Results: [Tap Here]({})".format(getUrl), disable_web_page_preview = True)
+
+        # get results in text
+        text = requests.get(getUrl, headers=headers).text
+        soup = BeautifulSoup(text, "html.parser")
+        find = soup.find_all("div", {"class":"r5a77d"})[0]
+        textResults = find.text
+
+        await app.send_edit("Results: [{}]({})".format(textResults, getUrl), disable_web_page_preview = True)
     except Exception as e:
         await app.error(e)
 
