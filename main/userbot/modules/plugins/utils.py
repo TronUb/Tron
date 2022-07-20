@@ -127,13 +127,13 @@ async def inviteall_handler(_, m):
 
     count = 0
 
-    if app.long(m) == 1:
+    if app.long() == 1:
         return await app.send_edit("Give me a group id or username", text_type=["mono"])
 
     elif app.long() > 1:
         group_id = m.command[1] if m.command else None
     else:
-        return await app.send_edit("I can't invite ghosts, can I ?", text_type=["mono"])
+        return await app.send_edit("Something weird happened, check log chat.", text_type=["mono"])
 
     await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
 
