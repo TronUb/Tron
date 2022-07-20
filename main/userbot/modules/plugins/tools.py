@@ -255,7 +255,7 @@ async def commonchat_handler(_, m):
 
             data = await app.get_common_chats(reply.from_user.id)
             for x in data:
-                collect.append(x["title"] + "\n")
+                collect.append(getattr(x, "title") + "\n")
             if bool(collect):
                 await app.send_edit(f"**Common chats with:** `{reply.from_user.first_name}`\n\n" + "".join(collect))
             else:

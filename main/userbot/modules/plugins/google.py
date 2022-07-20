@@ -1,13 +1,7 @@
-import os
-import re
-import time
-import json
 import random
-import asyncio
 import shutil
 import urllib
 import requests
-import http.cookiejar
 
 from bs4 import BeautifulSoup
 from bing_image_downloader import downloader as bing_downloader
@@ -33,15 +27,9 @@ app.CMD_HELP.update(
 
 
 
-search_url = "http://www.google.com"
-
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
-
-def get_soup(url,header):
-    return BeautifulSoup(urllib.request.urlopen(urllib.request(url,headers=header)),'html.parser')
-
 
 
 
@@ -75,12 +63,20 @@ async def imagesauce_handler(_, m: Message):
         else:
             return await app.send_edit("Only photo & animation media's are supported.", text_type=["mono"], delme=4)
 
+        # get url
         searchUrl = 'http://www.google.co.id/searchbyimage/upload'
         filePath = './downloads/{}'.format(savename)
-        multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
-        response = requests.post(searchUrl, files=multipart, exclude_redirects=False)
-        fetchUrl = response.headers['Location']
-        await app.send_edit("Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
+        multiPart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
+        response = requests.post(searchUrl, files=multiPart, headers=headers)
+        getUrl = response.url
+
+        # get results in text
+        text = requests.get(getUrl, headers=headers).text
+        soup = BeautifulSoup(text, "html.parser")
+        find = soup.find_all("div", {"class":"r5a77d"})[0]
+        textResults = find.text
+
+        await app.send_edit("Results: [{}]({})".format(textResults, getUrl), disable_web_page_preview = True)
     except Exception as e:
         await app.error(e)
 
@@ -129,7 +125,15 @@ async def imagesearch_handler(_, m: Message):
 
     try:
         await app.send_edit(f"**Getting images:** `{query}`")
-        bing_downloader.download(query, limit=limit,  output_dir="images", adult_filter_off=True, force_replace=False, timeout=60, verbose=False)
+        bing_downloader.download(
+            query,
+            limit=limit,
+            output_dir="images",
+            adult_filter_off=True,
+            force_replace=False,
+            timeout=60,
+            verbose=False
+        )
         img_dir = os.path.exists("./images")
 
         if img_dir:
