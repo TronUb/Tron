@@ -78,7 +78,7 @@ async def imagesauce_handler(_, m: Message):
         searchUrl = 'http://www.google.co.id/searchbyimage/upload'
         filePath = './downloads/{}'.format(savename)
         multipart = {'encoded_image': (filePath, open(filePath, 'rb')), 'image_content': ''}
-        response = requests.post(searchUrl, files=multipart, allow_redirects=True)
+        response = requests.post(searchUrl, files=multipart, headers=headers)
         fetchUrl = response.headers['Location']
         await app.send_edit("Results: [Tap Here]({})".format(fetchUrl), disable_web_page_preview = True)
     except Exception as e:
