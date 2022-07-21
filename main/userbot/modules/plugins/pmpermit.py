@@ -206,7 +206,7 @@ async def diapprove_handler(_, m:Message):
     if m.chat.type == ChatType.PRIVATE:
         user_id = m.chat.id
 
-    elif m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP)::
+    elif m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         if reply:
             user_id = reply.from_user.id
 
