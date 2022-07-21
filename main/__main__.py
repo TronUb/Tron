@@ -63,6 +63,23 @@ async def start_userbot():
 
 
 
+async def send_start():
+    await app.bot.send_message(
+        app.LOG_CHAT,
+        "The userbot is online now.",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                InlineKeyboardButton(
+                    text="Repo",
+                    url="https://github.com/TronUb/Tron"
+                )
+            ]
+        )
+    )
+
+
+
+
 async def start_bot():
     """ This is the main startup function to start both clients i.e assistant & userbot.
     It also imports modules & plugins for assistant & userbot. """
@@ -79,6 +96,16 @@ async def start_bot():
     await start_assistant()
     await start_userbot()
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
+
+    try:
+        await send_start()
+    except PeerIdInvalid:
+        await app.get_chat(app.LOG_CHAT)
+        await app.send_message(
+            app.LOG_CHAT,
+            "The userbot is online now."
+        )
+
     await idle() # block execution
 
 
