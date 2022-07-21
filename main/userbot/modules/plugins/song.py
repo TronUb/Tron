@@ -143,14 +143,14 @@ async def lyrics_handler(_, m: Message):
         await app.send_edit(f"**Finding lyrics for:** `{song_name}`")
 
         url = "https://www.google.com/search?q="
-        raw = requests.get(url+song_name.replace(" ", "%20"), headers=headers).text
+        raw = requests.get(url + song_name.replace(" ", "%20") + "%20lyrics", headers=headers).text
         soup = BeautifulSoup(raw, "html.parser")
         content = soup.find_all("div", {"class":"ujudUb"})
 
         if not content:
                 return await app.send_edit(f"No lyrics found ! for song: {song_name}", text_type=["mono"], delme=3)
         else:
-                await app.send_edit("".join([x.text for x in lyrics]), text_type=["mono"])
+                await app.send_edit("".join([x.text for x in content]), text_type=["mono"])
     except Exception as e:
         await app.error(e)
         await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
