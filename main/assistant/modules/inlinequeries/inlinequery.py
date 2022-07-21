@@ -19,6 +19,23 @@ from main.userbot.client import app
 
 
 
+async def create_articles():
+    cmds = []
+    info = app.CMD_HELP
+
+    for x in [info.get(x) for x in info]:
+        cmds.append(
+            InlineQueryResultArticle(
+                title=x[0],
+                input_message_content=InputTextMessageContent(
+                    "".join(await app.PluginData(x[0]))
+                )
+            )
+        )
+    return cmds
+
+
+
 
 # via bot messages
 @app.bot.on_inline_query(filters.user(app.id))
@@ -182,3 +199,9 @@ async def inline_result(_, inline_query):
                         print(e)
 
         return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+[|]\d+")))
+
+    else:
+        await inline_query.answer(
+        results=await create_articles(),
+        cache_time=1
+        )
