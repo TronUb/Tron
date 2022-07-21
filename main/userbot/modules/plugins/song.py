@@ -2,6 +2,9 @@ import asyncio
 from pyrogram.types import Message
 
 from main import app, gen
+import requests
+
+from bs4 import BeautifulSoup
 
 
 
@@ -18,6 +21,10 @@ app.CMD_HELP.update(
     }
 )
 
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
+}
 
 
 
@@ -135,28 +142,15 @@ async def lyrics_handler(_, m: Message):
 
         await app.send_edit(f"**Finding lyrics for:** `{song_name}`")
 
-        lyrics_results = await app.get_inline_bot_results("ilyricsbot", song_name)
+        url = "https://www.google.com/search?q="
+        raw = requests.get(url + song_name.replace(" ", "%20") + "%20lyrics", headers=headers).text
+        soup = BeautifulSoup(raw, "html.parser")
+        content = soup.find_all("div", {"class":"ujudUb"})
 
-        try:
-            # send to cloud because hide_via doesn't work sometimes
-            saved = await app.send_inline_bot_result(
-                chat_id="me",
-                query_id=lyrics_results.query_id,
-                result_id=lyrics_results.results[0].id,
-            )
-            await asyncio.sleep(0.50)
-
-            # forward from Saved Messages
-            await app.copy_message(
-                chat_id=m.chat.id,
-                from_chat_id="me",
-                message_id=saved.updates[1].message.id,
-            )
-
-            # delete the message from Saved Messages
-            await app.delete_messages("me", saved.updates[1].message.id)
-        except TimeoutError:
-            return await app.send_edit("Something went Wrong !", text_type=["mono"], delme=3)
+        if not content:
+                return await app.send_edit(f"No lyrics found ! for song: {song_name}", text_type=["mono"], delme=3)
+        else:
+                await app.send_edit("".join([x.text for x in content]), text_type=["mono"])
     except Exception as e:
         await app.error(e)
         await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
