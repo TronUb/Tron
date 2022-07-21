@@ -185,7 +185,7 @@ async def approve_handler(_, m: Message):
         app.del_warn(user_id)
 
         if app.get_msgid(user_id):
-            await old_msg(user_id)
+            await old_msg(m, user_id)
 
     except Exception as e:
         await app.send_edit(f"Something went wrong.", text_type=["mono"], delme=4)
