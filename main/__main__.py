@@ -77,10 +77,12 @@ async def send_start():
         "The userbot is online now.",
         reply_markup=InlineKeyboardMarkup(
             [
-                InlineKeyboardButton(
-                    text="Repo",
-                    url="https://github.com/TronUb/Tron"
-                )
+                [
+                    InlineKeyboardButton(
+                        text="Repo",
+                        url="https://github.com/TronUb/Tron"
+                    )
+                ]
             ]
         )
     )
