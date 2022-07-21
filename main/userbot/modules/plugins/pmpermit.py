@@ -1,4 +1,7 @@
+""" A security system which keeps spammers away """
+
 from pyrogram import filters
+from pyrogram.enums import ChatType
 from pyrogram.types import Message
 from pyrogram.errors import (
     PeerIdInvalid, 
@@ -140,17 +143,17 @@ async def pmpermit_handler(_, m: Message):
 
 @app.on_message(gen(["a", "approve"], exclude = ["sudo"]), group=0)
 async def approve_handler(_, m: Message):
-    if m.chat.type == "bot":
+    if m.chat.type == ChatType.BOT:
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
 
     reply = m.reply_to_message
     cmd = m.command
     user_data = False
 
-    if m.chat.type == "private":
+    if m.chat.type == ChatType.PRIVATE:
         user_id = m.chat.id
 
-    elif m.chat.type != "private":
+    elif m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         if reply:
             user_id = reply.from_user.id
     
@@ -193,17 +196,17 @@ async def approve_handler(_, m: Message):
 
 @app.on_message(gen(["da", "disapprove"], exclude = ["sudo"]), group=-2)
 async def diapprove_handler(_, m:Message):
-    if m.chat.type == "bot":
+    if m.chat.type == ChatType.BOT:
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
 
     reply = m.reply_to_message
     cmd = m.command
     user_data = False
 
-    if m.chat.type == "private":
+    if m.chat.type == ChatType.PRIVATE:
         user_id = m.chat.id
 
-    elif m.chat.type != "private":
+    elif m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP)::
         if reply:
             user_id = reply.from_user.id
 
@@ -234,7 +237,7 @@ async def diapprove_handler(_, m:Message):
         try:
             await app.send_message(
                 app.LOG_CHAT, 
-                f"#disexclude\n\n{info.mention} `has been disapproved.`"
+                f"#disapprove\n\n{info.mention} `has been disapproved.`"
             )
         except PeerIdInvalid:
             print(f"{info.first_name} has been disapproved.")
