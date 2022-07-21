@@ -79,8 +79,8 @@ async def send_start():
             [
                 [
                     InlineKeyboardButton(
-                        text="Repo",
-                        url="https://github.com/TronUb/Tron"
+                        text="Support Group",
+                        url="t.me/tronubsupport"
                     )
                 ]
             ]
