@@ -7,7 +7,12 @@ import sys
 import asyncio
 import warnings
 from pyrogram import idle
-from pyrogram.types import BotCommand
+from pyrogram.types import (
+    BotCommand,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
+from pyrogram.errors import PeerIdInvalid
 from main.userbot import app
 
 
