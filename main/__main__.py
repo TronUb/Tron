@@ -12,7 +12,10 @@ from pyrogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup
 )
-from pyrogram.errors import PeerIdInvalid
+from pyrogram.errors import (
+    PeerIdInvalid,
+    ChannelInvalid
+)
 from main.userbot import app
 
 
@@ -104,7 +107,7 @@ async def start_bot():
 
     try:
         await send_start()
-    except PeerIdInvalid:
+    except (ChannelInvalid, PeerIdInvalid):
         await app.get_chat(app.LOG_CHAT)
         await app.send_message(
             app.LOG_CHAT,
