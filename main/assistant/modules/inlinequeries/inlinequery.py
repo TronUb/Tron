@@ -23,7 +23,7 @@ async def create_articles():
     cmds = []
     info = app.CMD_HELP
 
-    for x in [info.get(x) for x in info]:
+    for x in sorted([info.get(x) for x in info]):
         cmds.append(
             InlineQueryResultArticle(
                 title=x[0],
