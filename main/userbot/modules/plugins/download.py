@@ -35,9 +35,8 @@ app.CMD_HELP.update(
 
 
 
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@app.on_message(gen("ls", exclude=["sudo"]))
+@app.on_message(gen("ls"))
 async def ls_handler(_, m: Message):
     """ function to show directory files and folders """
 
@@ -84,7 +83,7 @@ async def ls_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["download", "dl"], exclude=["sudo"]))
+@app.on_message(gen(["download", "dl"]))
 async def download_handler(_, m: Message):
     """ function to download media """
 
