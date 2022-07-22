@@ -22,8 +22,8 @@ async def spotify_now():
         return {}
 
     info = data["item"]
-    name = "**Song:**" + " " + info["name"] + "\n\n"
-    artist = "**Artists:**" + " " + ", ".join([x["name"] for x in info["album"]["artists"]]) + "\n\n"
+    name = "**Song:**" + " " + info["name"] + "\n"
+    artist = "**Artists:**" + " " + ", ".join([x["name"] for x in info["album"]["artists"]]) + "\n"
     image_url = info["album"]["images"][0]["url"]
     track_url = info["external_urls"]["spotify"]
 
@@ -76,6 +76,7 @@ async def spotify_handler(_, m: Message):
             photo=data["image_url"],
             caption=caption+track_url
         )
+        await m.delete()
     except Exception as e:
         await app.error(e)
 
