@@ -51,7 +51,7 @@ colour_code = {
 
 
 
-@app.on_message(gen(["carbon", "carb"], exclude = ["sudo"]))
+@app.on_message(gen(["carbon", "carb"]))
 async def carbon_handler(_, m: Message):
     cmd = m.command
     oldmsg = m # fixed for-->  m = send_edit() replaces the variable
