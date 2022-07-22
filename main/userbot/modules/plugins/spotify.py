@@ -50,7 +50,7 @@ async def spotify_handler(_, m: Message):
         caption = f"**{app.name}**\n"
         caption += "`is listening to`\n\n"
         caption += f"**{data['song_name']}**\n"
-        caption += f"**By** `{data['artist_name']}`\n\n"
+        caption += f"`{data['artist_name']}`\n\n"
         track_url = data["track_url"]
 
         if m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
