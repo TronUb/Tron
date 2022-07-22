@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("alive", exclude = ["sudo"]))
+@app.on_message(gen("alive"))
 async def alive_handler(_, m: Message):
     try:
         await app.send_edit(". . .", text_type=["mono"])
