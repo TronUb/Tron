@@ -1,10 +1,7 @@
 from main import app, gen
 
 from pyrogram.types import Message
-from pyrogram.enums.ChatType import (
-    SUPERGROUP,
-    GROUP
-)
+from pyrogram.enums import ChatType 
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton
@@ -56,7 +53,7 @@ async def spotify_handler(_, m: Message):
         caption += f"**By** `{data['artist_name']}`\n\n"
         track_url = data["track_url"]
 
-        if m.chat.type in (SUPERGROUP, GROUP):
+        if m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
             if await app.user_exists(m.chat.id, app.bot.id):
                 return await app.bot.send_photo(
                     m.chat.id,
