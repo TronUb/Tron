@@ -5,6 +5,7 @@ OTHERDV = [
     "SUDO_CMDS",
     "PREFIX",
     "HELP_EMOJI",
+    "SPOTIFY_TOKEN"
     ]
 
 
@@ -39,6 +40,10 @@ class OtherConfig(object):
         """ returns a list of command names """
         return self.getdv("SUDO_CMDS").split() or []
 
+
+    def SpotifyToken(self):
+        """ returns your spotify token """
+        return self.getdv("SPOTIFY_TOKEN") or self.SPOTIFY_TOKEN or {}
 
 
 

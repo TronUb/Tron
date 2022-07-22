@@ -103,3 +103,6 @@ class Config(Inside): # pylint: disable=too-few-public-methods
     TL_NAME = os.getenv("TL_NAME", "Tron UserBot")
     # this will be shown before (as a prefix) the texts in the help dex (default: None)
     HELP_EMOJI = os.getenv("HELP_EMOJI", "")
+# ---------------------
+    # spotify token for spotify now
+    SPOTIFY_TOKEN = os.getenv("SPOTIFY_TOKEN")
