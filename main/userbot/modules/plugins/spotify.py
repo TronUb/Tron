@@ -47,10 +47,10 @@ async def spotify_handler(_, m: Message):
         if not data:
             return await app.send_edit("You are not listening to anything.", text_type=["mono"], delme=3)
 
-        caption = f"**{app.name}**\n"
-        caption += "`is listening to`\n\n"
-        caption += f"**{data['song_name']}**\n"
-        caption += f"`{data['artist_name']}`\n\n"
+        caption = f"{app.name}\n"
+        caption += "is listening to\n\n"
+        caption += f"{data['song_name']}\n"
+        caption += f"{data['artist_name']}\n\n"
         track_url = data["track_url"]
 
         if m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
