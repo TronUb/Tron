@@ -396,6 +396,13 @@ class AsyncPart(object):
             else:
                 is_self = False
 
+            if len(text) > 4096:
+                return await self.send_edit(
+                    "Message text is too long.",
+                    text_type=["mono"],
+                    delme=3
+                )
+
             if is_self:
                 msg = await self.m.edit(
                     text=self.FormatText(text, textformat=text_type),
