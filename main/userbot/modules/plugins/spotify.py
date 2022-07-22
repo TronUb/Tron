@@ -22,8 +22,8 @@ async def spotify_now():
         return {}
 
     info = data["item"]
-    name = "**Song:** " + info["name"] + "\n\n"
-    artist = "**Artists:** " + ", ".join([x["name"] for x in info["album"]["artists"]]) + "\n\n"
+    name = "**Song:**" + " " + info["name"] + "\n\n"
+    artist = "**Artists:**" + " " + ", ".join([x["name"] for x in info["album"]["artists"]]) + "\n\n"
     image_url = info["album"]["images"][0]["url"]
     track_url = info["external_urls"]["spotify"]
 
