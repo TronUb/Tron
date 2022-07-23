@@ -8,10 +8,24 @@ from main import app, gen
 
 
 
+app.CMD_HELP.update(
+    {"heroku" : (
+        "heroku",
+        {
+        "kbd [button text] [url] [caption]" : "get bot custom keyboards",
+        }
+        )
+    }
+)
 
-@app.on_message(gen("kbd", exclude = ["sudo"]))
+
+
+@app.on_message(gen(["kbd", "keyboard"]))
 async def create_keyboard(_, m):
-    if m.chat.type == ChatType.BOT:
+    if not app.GetArgs():
+        return await app.send_edit("Give me some args, format: [cmd] [button text] [url] [caption]", delme=3, text_type=["mono"])
+
+    if m.chat.type in (ChatType.BOT, ChatType.PRIVATE):
         return await app.send_edit("Sorry you can't use it here", delme=3, text_type=["mono"])
 
     if not await app.user_exists(app.bot.id, m.chat.id):
