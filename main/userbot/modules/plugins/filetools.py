@@ -36,7 +36,7 @@ async def unzipfiles(zippath):
 
 
 
-@app.on_message(gen("zip", exclude =["sudo"]))
+@app.on_message(gen("zip"))
 async def zip_handler(_, m: Message):
     reply = m.reply_to_message
     if not reply:
@@ -65,7 +65,7 @@ async def zip_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unzip", exclude =["sudo"]))
+@app.on_message(gen("unzip"))
 async def unzip_handler(_, m: Message):
     if app.long() == 2:
         if app.textlen() <= 4096:
@@ -81,7 +81,7 @@ async def unzip_handler(_, m: Message):
 
 
 
-@app.on_message(gen("new", exclude =["sudo"]))
+@app.on_message(gen("new"))
 async def createfile_handler(app, m:Message):
     reply = m.reply_to_message
     mytext = "Making file . . ."

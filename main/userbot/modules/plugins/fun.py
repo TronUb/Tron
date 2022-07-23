@@ -31,7 +31,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("slap", exclude =["sudo"]))
+@app.on_message(gen("slap"))
 async def slap_handler(_, m):
     reply = m.reply_to_message
     if reply:
@@ -70,7 +70,7 @@ async def slap_handler(_, m):
 
 
 
-@app.on_message(gen(["upcase"], exclude =["sudo"]))
+@app.on_message(gen(["upcase"]))
 async def uppercase_handler(_, m):
     try:
         reply = m.reply_to_message
@@ -91,7 +91,7 @@ async def uppercase_handler(_, m):
 
 
 
-@app.on_message(gen("type", exclude =["sudo"]))
+@app.on_message(gen("type"))
 async def type_handler(_, m):
     try:
         if app.long() > 1:
@@ -141,7 +141,7 @@ async def insult_handler(_, m):
 
 
 
-@app.on_message(gen("advice", exclude =["sudo"]))
+@app.on_message(gen("advice"))
 async def advice_handler(_, m):
     reply = m.reply_to_message
     if not reply:
@@ -162,7 +162,7 @@ async def advice_handler(_, m):
 
 
 
-@app.on_message(gen("qs", exclude =["sudo"]))
+@app.on_message(gen("qs"))
 async def question_handler(_, m):
     reply = m.reply_to_message
     if not reply:
@@ -185,7 +185,7 @@ async def question_handler(_, m):
 
 
 
-@app.on_message(gen("wtd", exclude =["sudo"]))
+@app.on_message(gen("wtd"))
 async def whattodo_handler(_, m):
     try:
         await app.send_edit("Finding a activity . . .", text_type=["mono"])
@@ -202,7 +202,7 @@ async def whattodo_handler(_, m):
 
 
 
-@app.on_message(gen("mqt", exclude =["sudo"]))
+@app.on_message(gen("mqt"))
 async def moviequote_handler(_, m):
     try:
         await app.send_edit("Finding a movie quote . . .", text_type=["mono"])
@@ -220,7 +220,7 @@ async def moviequote_handler(_, m):
 
 
 
-@app.on_message(gen("joke", exclude =["sudo"]))
+@app.on_message(gen("joke"))
 async def joke_handler(_, m):
     try:
         await app.send_edit("Finding a joke . . .", text_type=["mono"])

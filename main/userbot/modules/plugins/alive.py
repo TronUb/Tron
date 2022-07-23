@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("alive", exclude = ["sudo"]))
+@app.on_message(gen("alive"))
 async def alive_handler(_, m: Message):
     try:
         await app.send_edit(". . .", text_type=["mono"])
@@ -63,7 +63,7 @@ async def alive_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ialive", exclude = ["sudo"]))
+@app.on_message(gen("ialive"))
 async def inlinealive_handler(_, m: Message):
     try:
         await app.send_edit(". . .", text_type=["mono"])
@@ -90,7 +90,7 @@ async def inlinealive_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["quote", "qt"], exclude = ["sudo"]))
+@app.on_message(gen(["quote", "qt"]))
 async def inlinequote_handler(_, m: Message):
     try:
         await app.send_edit(". . .", text_type=["mono"])

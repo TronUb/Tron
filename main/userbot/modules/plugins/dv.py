@@ -90,7 +90,7 @@ async def getdv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pm", exclude =["sudo"]))
+@app.on_message(gen("pm"))
 async def pm_handler(_, m: Message):
     arg = m.command
     if app.long() == 1:
@@ -141,7 +141,7 @@ async def alldv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listdv", exclude=["sudo"]))
+@app.on_message(gen("listdv"))
 async def dvlist_handler(_, m: Message):
     allvars = [f"`{x}`" for x in app.DVLIST]
     await app.send_edit("**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))
