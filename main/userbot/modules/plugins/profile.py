@@ -68,7 +68,7 @@ def FullName(user: User):
 
 
 
-@app.on_message(gen("whois", exclude = ["sudo"]))
+@app.on_message(gen("whois"))
 async def whois(_, m: Message):
     reply = m.reply_to_message
     cmd = m.command
@@ -121,7 +121,7 @@ async def whois(_, m: Message):
 
 
 
-@app.on_message(gen("id", exclude = ["sudo"]))
+@app.on_message(gen("id"))
 async def id(_, m: Message):
     await app.send_edit("Getting id . . .", text_type=["mono"])
     cmd = m.command
@@ -165,7 +165,7 @@ async def mention_user(_, m: Message):
 
 
 
-@app.on_message(gen("uinfo", exclude = ["sudo"]))
+@app.on_message(gen("uinfo"))
 async def get_full_user_info(_, m: Message):
     await app.send_edit("scrapping info . . .", text_type=["mono"])
     reply = m.reply_to_message
@@ -213,7 +213,7 @@ async def get_full_user_info(_, m: Message):
 
 
 
-@app.on_message(gen(["sc", "scan"], exclude = ["sudo"]))
+@app.on_message(gen(["sc", "scan"]))
 async def tgscan_handler(_, m: Message):
     if m.reply_to_message:
         await app.send_edit("Checking database . . .")
@@ -239,7 +239,7 @@ async def tgscan_handler(_, m: Message):
 
 
 
-@app.on_message(gen("block", exclude = ["sudo"]))
+@app.on_message(gen("block"))
 async def block_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -261,7 +261,7 @@ async def block_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unblock", exclude = ["sudo"]))
+@app.on_message(gen("unblock"))
 async def unblock_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -283,7 +283,7 @@ async def unblock_handler(_, m: Message):
 
 
 
-@app.on_message(gen("sg", exclude = ["sudo"]))
+@app.on_message(gen("sg"))
 async def usernamehistory_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -330,7 +330,7 @@ async def usernamehistory_handler(_, m: Message):
 
 
 
-@app.on_message(gen("set"))
+@app.on_message(gen("set", exclude=["sudo"]))
 async def setprofile_handler(_, m: Message):
     cmd = m.command
 
@@ -352,7 +352,7 @@ async def setprofile_handler(_, m: Message):
 
 
 
-@app.on_message(gen("rem"))
+@app.on_message(gen("rem", exclude=["sudo"]))
 async def remprofile_handler(_, m: Message):
     if app.long() > 1:
         cmd = m.command
@@ -412,7 +412,7 @@ async def setprofile(m: Message, mode, kwargs):
 
 
 
-# lost everything
+# remove everything
 async def rmprofile(m: Message, args):
     # delete last name
     if args == "lname":
@@ -451,7 +451,7 @@ async def rmprofile(m: Message, args):
 
 
 
-@app.on_message(gen("repo", exclude = ["sudo"]))
+@app.on_message(gen("repo"))
 async def repolink_handler(_, m: Message):
     await app.send_edit("TronUB Repo: [press here](https://github.com/TronUb/Tron)", disable_web_page_preview=True)
 
