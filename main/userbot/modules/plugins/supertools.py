@@ -87,7 +87,7 @@ async def unshorten_link(m: Message, text):
 
 
 
-@app.on_message(gen("tts", exclude = ["sudo", "channel"]))
+@app.on_message(gen("tts"))
 async def tts_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -115,7 +115,7 @@ async def tts_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ud", exclude = ["sudo", "channel"]))
+@app.on_message(gen("ud"))
 async def ud_handler(_, m:Message):
     if app.long() == 1:
         return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
@@ -143,7 +143,7 @@ async def ud_handler(_, m:Message):
 
 
 
-@app.on_message(gen("short", exclude = ["sudo", "channel"]))
+@app.on_message(gen("short"))
 async def shortlink_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -164,7 +164,7 @@ async def shortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["unshort", "noshort"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["unshort", "noshort"]))
 async def unshortlink_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -189,7 +189,7 @@ async def unshortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["wtr", "weather"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["wtr", "weather"]))
 async def weather_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Piro Master Atleast Give Me Some Location !", text_type=["mono"])
@@ -207,7 +207,7 @@ async def weather_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["ws", "webshot"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["ws", "webshot"]))
 async def webshot_handler(_, m: Message):
     if app.long() > 1:
         try:
@@ -236,7 +236,7 @@ async def webshot_handler(_, m: Message):
 
 
 
-@app.on_message(gen("undlt", exclude = ["sudo"]))
+@app.on_message(gen("undlt"))
 async def undlt_handler(_, m: Message):
     collect = []
     collect.clear()
