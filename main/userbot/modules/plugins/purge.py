@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["purge", "p"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["purge", "p"]))
 async def purge_handler(_, m:Message):
     if m.reply_to_message:
         await app.send_edit("purging . . .", text_type=["mono"])
@@ -55,7 +55,7 @@ async def purge_handler(_, m:Message):
 
 
 
-@app.on_message(gen(["purgeme", "purgme", "pgm"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["purgeme", "purgme", "pgm"]))
 async def purgeme_handler(_, m:Message):
     if app.long() > 1:
         target = int(m.command[1]) if m.command[1].isdigit() and m.command[1] != 0 else 1
@@ -81,7 +81,7 @@ async def purgeme_handler(_, m:Message):
 
 
 
-@app.on_message(gen("del", exclude = ["sudo", "channel"]))
+@app.on_message(gen("del"))
 async def del_handler(_, m: Message):
     reply = m.reply_to_message
     msg_ids = [m.id, reply.id] if reply else [m.id]
