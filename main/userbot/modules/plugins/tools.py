@@ -53,7 +53,7 @@ def convert_c(celsius):
 
 
 
-@app.on_message(gen("wlink", exclude = ["sudo", "channel"]))
+@app.on_message(gen("wlink"))
 async def wordlink_handler(_, m: Message):
     links = []
     links.clear()
@@ -77,7 +77,7 @@ async def wordlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["cur", "currency"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["cur", "currency"]))
 async def currency_handler(_, m: Message):
     if app.long() <= 3:
         return await app.send_edit(f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
@@ -96,7 +96,7 @@ async def currency_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["temp", "temperature"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["temp", "temperature"]))
 async def temperature_handler(_, m: Message):
     if app.long() <= 2:
         return await app.send_edit(f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
@@ -120,7 +120,7 @@ async def temperature_handler(_, m: Message):
 
 
 
-@app.on_message(gen("json", exclude = ["sudo", "channel", "forward"]))
+@app.on_message(gen("json"))
 async def messagejson_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -137,7 +137,7 @@ async def messagejson_handler(_, m: Message):
 
 
 
-@app.on_message(gen("mlink", exclude = ["sudo", "channel"]))
+@app.on_message(gen("mlink"))
 async def messagelink_handler(_, m: Message):
     reply = m.reply_to_message
     message = reply if reply else m
@@ -157,7 +157,7 @@ async def saved_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["fwd", "frwd"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["fwd", "frwd"]))
 async def forward_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -191,7 +191,7 @@ async def forward_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["spt", "speed", "speedtest"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["spt", "speed", "speedtest"]))
 async def speedtest_handler(app, m: Message):
     if app.long() == 1:
         await app.send_edit("Testing speed . . .", text_type=["mono"])
@@ -245,7 +245,7 @@ async def speedtest_handler(app, m: Message):
 
 
 
-@app.on_message(gen(["cc", "cchats"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["cc", "cchats"]))
 async def commonchat_handler(_, m):
     try:
         reply = m.reply_to_message
