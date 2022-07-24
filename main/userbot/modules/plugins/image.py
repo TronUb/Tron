@@ -77,7 +77,7 @@ async def send_profile_pic(m):
     
 
 
-@app.on_message(gen(["uns", "unsplash"], exclude = ["sudo"]))
+@app.on_message(gen(["uns", "unsplash"]))
 async def unsplash_handler(_, m: Message):
     cmd = m.command
     if app.long() == 1:
@@ -119,7 +119,7 @@ async def unsplash_handler(_, m: Message):
 
 
 
-@app.on_message(gen("stoi", exclude = ["sudo"]))
+@app.on_message(gen("stoi"))
 async def stoi_handler(_, m):
     reply = m.reply_to_message
     if not reply:
@@ -150,7 +150,7 @@ async def stoi_handler(_, m):
 
 
 
-@app.on_message(gen("itos", exclude = ["sudo"]))
+@app.on_message(gen("itos"))
 async def itos_handler(_, m):
     reply = m.reply_to_message
     if not reply:
@@ -180,7 +180,7 @@ async def itos_handler(_, m):
 
 
 
-@app.on_message(gen(["qc", "qrcode"], exclude = ["sudo"]))
+@app.on_message(gen(["qc", "qrcode"]))
 async def qrcode_handler(_, m):
         try:
             picname = f"{app.TEMP_DICT}qrcode.jpg"
@@ -202,7 +202,7 @@ async def qrcode_handler(_, m):
 
 
 
-@app.on_message(gen(["colour", "color"], exclude = ["sudo"]))
+@app.on_message(gen(["colour", "color"]))
 async def colourtemplate_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Please give some colour name after command . . .", delme=3)
@@ -238,7 +238,7 @@ async def colourtemplate_handler(_, m: Message):
 
 
 
-@app.on_message(gen("cat", exclude = ["sudo"]))
+@app.on_message(gen("cat"))
 async def catpic_handler(_, m):
     try:
         await m.delete()
@@ -253,7 +253,7 @@ async def catpic_handler(_, m):
 
 
 
-@app.on_message(gen("waifu", exclude = ["sudo"]))
+@app.on_message(gen("waifu"))
 async def waifupic_handler(_, m):
     text = "Finding waifu . . ."
     try:
@@ -290,7 +290,7 @@ async def waifupic_handler(_, m):
 
 
 
-@app.on_message(gen("poto", exclude = ["sudo"]))
+@app.on_message(gen("poto"))
 async def profilepic_handler(_, m):
     msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
     await send_profile_pic(m)
@@ -299,7 +299,7 @@ async def profilepic_handler(_, m):
 
 
 
-@app.on_message(gen("dog", exclude = ["sudo"]))
+@app.on_message(gen("dog"))
 async def dogpic_handler(_, m):
     try:
         img_url = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
