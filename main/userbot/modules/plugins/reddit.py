@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen(["r", "reddit"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["r", "reddit"]))
 async def reddit_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Please give me some query to search on reddit.", delme=2)
