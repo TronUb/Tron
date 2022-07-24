@@ -18,7 +18,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("stats", exclude = ["sudo"]))
+@app.on_message(gen("stats"))
 async def dialogstats_handler(_, m: Message):
     try:
         await app.send_edit("Getting stats . . .", text_type=["mono"])
