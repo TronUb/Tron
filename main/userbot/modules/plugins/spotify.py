@@ -37,7 +37,7 @@ async def spotify_now():
 
 
 
-@app.on_message(gen("now", exclude=["sudo", "channel"]))
+@app.on_message(gen("now"))
 async def spotify_handler(_, m: Message):
     try:
         if not app.SpotifyToken():
