@@ -45,7 +45,7 @@ def PyDownload(url: str):
 
 
 
-@app.on_message(gen("ytvinfo", exclude = ["sudo", "channel"]))
+@app.on_message(gen("ytvinfo"))
 async def ytvideoinfo_handler(_, m: Message):
     try:
         args = app.GetArgs()
@@ -78,7 +78,7 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytmdl", exclude = ["sudo", "channel"]))
+@app.on_message(gen("ytmdl"))
 async def ytvideodl_handler(_, m):
     try:
         msg = await app.send_edit("processing link . . .", text_type=["mono"])
