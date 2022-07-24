@@ -24,7 +24,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("today", exclude = ["sudo"]))
+@app.on_message(gen("today"))
 async def today_handler(_, m: Message):
     weekday = datetime.datetime.today().weekday()
     if weekday == 0:
@@ -53,13 +53,13 @@ async def today_handler(_, m: Message):
 
 
 
-@app.on_message(gen("time", exclude = ["sudo", "channel"]))
+@app.on_message(gen("time"))
 async def time_handler(_, m: Message):
     await app.send_edit(f"Today's time: `{app.showtime()}`")
 
 
 
 
-@app.on_message(gen("date", exclude = ["sudo", "channel"]))
+@app.on_message(gen("date"))
 async def date_handler(_, m: Message):
     await app.send_edit(f"Today's date: `{app.showdate()}`")
