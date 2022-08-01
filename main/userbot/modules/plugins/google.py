@@ -33,7 +33,7 @@ headers = {
 
 
 
-@app.on_message(gen("sauce", exclude =["sudo"]))
+@app.on_message(gen("sauce"))
 async def imagesauce_handler(_, m: Message):
     try:
         reply = m.reply_to_message
@@ -83,7 +83,7 @@ async def imagesauce_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pic", exclude =["sudo"]))
+@app.on_message(gen("pic"))
 async def yandeximages_handler(_, m: Message):
     if app.long() == 1:
         return await app.send_edit("Usage: `.pic cat`", delme=4)
@@ -110,7 +110,7 @@ async def yandeximages_handler(_, m: Message):
 
 
 
-@app.on_message(gen("img", exclude =["sudo"]))
+@app.on_message(gen("img"))
 async def imagesearch_handler(_, m: Message):
     cmd = m.command
     if app.long() == 1:

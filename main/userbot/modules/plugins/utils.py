@@ -94,7 +94,7 @@ async def admintitle_handler(_, m: Message):
 
 
 
-@app.on_message(gen("invite", exclude = ["sudo", "channel"]))
+@app.on_message(gen("invite"))
 async def invite_handler(_, m):
     if await app.check_private():
         return
@@ -155,7 +155,7 @@ async def inviteall_handler(_, m):
 
 
 
-@app.on_message(gen(["admins", "adminlist"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["admins", "adminlist"]))
 async def adminlist_handler(_, m):
     if await app.check_private():
         return
@@ -258,7 +258,7 @@ async def tagall_handler(app, m: Message):
 
 
 
-@app.on_message(gen("bots", exclude = ["sudo"]))
+@app.on_message(gen("bots"))
 async def botlist_handler(_, m: Message):
     if await app.check_private():
         return
@@ -317,7 +317,7 @@ async def leavechat_handler(_, m):
 
 
 
-@app.on_message(gen("members", exclude = ["sudo", "channel"]))
+@app.on_message(gen("members"))
 async def membercount_handler(_, m):
     if await app.check_private():
         return
@@ -341,7 +341,7 @@ async def membercount_handler(_, m):
 
 
 
-@app.on_message(gen("join", exclude = ["sudo", "channel"]))
+@app.on_message(gen("join", exclude=["sudo"]))
 async def joinchat_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some chat id | username after command . . .", text_type=["mono"], delme=5)
@@ -363,7 +363,7 @@ async def joinchat_handler(_, m: Message):
 
 
 
-@app.on_message(gen("slowmo", exclude = ["sudo"]))
+@app.on_message(gen("slowmo"))
 async def slowmode_handler(_, m: Message):
     if await app.check_private():
         return

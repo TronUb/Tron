@@ -46,7 +46,7 @@ GET_FORMAT = {
 
 
 
-@app.on_message(gen("save", exclude = ["sudo"]))
+@app.on_message(gen("save"))
 async def savenote_hanlder(_, m: Message):
     try:
         reply = m.reply_to_message
@@ -147,7 +147,7 @@ async def getnote_handler(_, m: Message):
 
 
 
-@app.on_message(gen("notes", exclude = ["sudo"]))
+@app.on_message(gen("notes"))
 async def notelist_handler(_, m: Message):	
     getnotes = app.get_all_selfnotes(m.from_user.id)
     if not getnotes:
@@ -162,7 +162,7 @@ async def notelist_handler(_, m: Message):
 
 
 
-@app.on_message(gen("clear"))
+@app.on_message(gen("clear", exclude=["sudo"]))
 async def clearnote_handler(_, m: Message):	
     if app.long() <= 1:
         return await app.send_edit(f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`")

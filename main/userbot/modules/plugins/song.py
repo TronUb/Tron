@@ -28,7 +28,7 @@ headers = {
 
 
 
-@app.on_message(gen(["song", "music"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["song", "music"]))
 async def song_handler(_, m: Message):
     await app.send_edit("Getting song . . .")
     try:
@@ -73,7 +73,7 @@ async def song_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["dz", "deezer"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["dz", "deezer"]))
 async def deezer_handler(_, m: Message):
     try:
         await app.send_edit("Searching on deezer . . .")
@@ -118,7 +118,7 @@ async def deezer_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["ly", "lyrics"], exclude = ["sudo", "channel"]))
+@app.on_message(gen(["ly", "lyrics"]))
 async def lyrics_handler(_, m: Message):
     try:
         cmd = m.command

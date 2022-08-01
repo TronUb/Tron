@@ -55,7 +55,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 
 
 
-@app.on_message(gen("help", exclude =["sudo"]))
+@app.on_message(gen("help"))
 async def helpmenu_handler(_, m: Message):
     args = m.command if app.long() > 1 else False
 
@@ -100,7 +100,7 @@ async def helpmenu_handler(_, m: Message):
 
 
 # get all module name
-@app.on_message(gen("uplugs", exclude =["sudo"]))
+@app.on_message(gen("uplugs"))
 async def uplugs_handler(_, m: Message):
     store = []
     store.clear()
@@ -114,7 +114,7 @@ async def uplugs_handler(_, m: Message):
 
 
 # get all plugins name
-@app.on_message(gen("aplugs", exclude =["sudo"]))
+@app.on_message(gen("aplugs"))
 async def aplugs_handler(_, m: Message):
     store = []
     store.clear()
@@ -127,7 +127,7 @@ async def aplugs_handler(_, m: Message):
 
 
 
-@app.on_message(gen("inline", exclude =["sudo"]))
+@app.on_message(gen("inline"))
 async def toggleinline_handler(_, m: Message):
     return await app.toggle_inline()
 

@@ -19,7 +19,7 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("addsudo"))
+@app.on_message(gen("addsudo", exclude=["sudo"]))
 async def addsudo_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -38,7 +38,7 @@ async def addsudo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listsudo", exclude = ["sudo"]))
+@app.on_message(gen("listsudo"))
 async def getsudo_handler(_, m: Message):
     sudo_list = [x for x in app.getdv("SUDO_USERS").split()]
     sudo_list = "No sudos added." if not sudo_list else sudo_list
@@ -47,7 +47,7 @@ async def getsudo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("delsudo"))
+@app.on_message(gen("delsudo", exclude=["sudo"]))
 async def delsudo_handler(_, m: Message):
     reply = m.reply_to_message
     user_id = str(reply.from_user.id)

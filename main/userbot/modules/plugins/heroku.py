@@ -51,7 +51,7 @@ else:
 
 
 # shut-down dyno 
-@app.on_message(gen("shutdown"))
+@app.on_message(gen("shutdown", exclude=["sudo"]))
 async def shutdown_handler(_, m: Message):
     if await not_heroku():
         return 
@@ -77,7 +77,7 @@ async def shutdown_handler(_, m: Message):
 
 
 # restart your bot 
-@app.on_message(gen("restart"))
+@app.on_message(gen("restart", exclude=["sudo"]))
 async def restart_handler(_, m: Message):
     if await not_heroku():
         return
@@ -102,7 +102,7 @@ async def restart_handler(_, m: Message):
 
 
 # get usage of your dyno hours from heroku
-@app.on_message(gen("usage", exclude = ["sudo"]))
+@app.on_message(gen("usage"))
 async def dynostats_handler(_, m: Message):
     if await not_heroku():
         return
@@ -163,7 +163,7 @@ async def dynostats_handler(_, m: Message):
 
 
 # get list of vars from heroku 
-@app.on_message(gen("vars", exclude = ["sudo"]))
+@app.on_message(gen("vars"))
 async def herokuvars_handler(_, m: Message):
     if await not_heroku():
         return
@@ -191,7 +191,7 @@ async def herokuvars_handler(_, m: Message):
 
 
 # set vars in heroku 
-@app.on_message(gen("setvar"))
+@app.on_message(gen("setvar", exclude=["sudo"]))
 async def setvar_handler(_, m: Message):
     if await not_heroku():
         return
@@ -227,7 +227,7 @@ async def setvar_handler(_, m: Message):
 
 
 # get vars from heroku vars
-@app.on_message(gen("getvar"))
+@app.on_message(gen("getvar", exclude=["sudo"]))
 async def getvar_handler(_, m: Message):
     if await not_heroku():
         return
@@ -256,7 +256,7 @@ async def getvar_handler(_, m: Message):
 
 
 # delete vars in heroku 
-@app.on_message(gen("delvar"))
+@app.on_message(gen("delvar", exclude=["sudo"]))
 async def delvar_handler(_, m: Message):
     if await not_heroku():
         return
@@ -300,7 +300,7 @@ async def delvar_handler(_, m: Message):
 
 
 # get logs from heroku in file format (.txt)
-@app.on_message(gen("logs", exclude = ["sudo"]))
+@app.on_message(gen("logs"))
 async def logs_handler(_, m: Message):
     if await not_heroku():
         return
@@ -329,7 +329,7 @@ async def logs_handler(_, m: Message):
 
 
 # get logs from heroku in nekobin link, not as a file 
-@app.on_message(gen(["textlogs", "tlogs"], exclude = ["sudo"]))
+@app.on_message(gen(["textlogs", "tlogs"]))
 async def textlogs_handler(_, m: Message):
     if await not_heroku():
         return

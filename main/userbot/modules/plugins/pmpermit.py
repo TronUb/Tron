@@ -141,7 +141,7 @@ async def pmpermit_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["a", "approve"], exclude = ["sudo"]), group=0)
+@app.on_message(gen(["a", "approve"]), group=0)
 async def approve_handler(_, m: Message):
     if m.chat.type == ChatType.BOT:
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
@@ -194,7 +194,7 @@ async def approve_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove"], exclude = ["sudo"]), group=-2)
+@app.on_message(gen(["da", "disapprove"]), group=-2)
 async def diapprove_handler(_, m:Message):
     if m.chat.type == ChatType.BOT:
         return await app.send_edit("No need to approve innocent bots !", text_type=["mono"], delme=4)
