@@ -127,7 +127,7 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-    elif re.match(r"(@[a-z|A-Z|0-9]+|\d+) [|] (.+)", query):
+    elif re.match(r"(@[\w]+|[\d]+) \| (.+)", query):
         text = None
         user = None
         user_id = None
