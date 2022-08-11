@@ -93,9 +93,9 @@ async def ytvideodl_handler(_, m):
                     i = entity[0]
                     link = args.text[i.offset:i.length+i.offset] # get link from text
                 else:
-                    link = args.text
+                    link = args.text.split(None, 1)[1]
             else:
-                link = args.text
+                link = args.text.split(None, 1)[1]
         else:
             return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
 
