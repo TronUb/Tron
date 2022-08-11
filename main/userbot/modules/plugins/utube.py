@@ -84,7 +84,7 @@ async def ytmdl_handler(_, m):
         msg = await app.send_edit("processing link . . .", text_type=["mono"])
         reply = m.reply_to_message
         cmd = m.command
-        args = app.GetArgs()
+        args = app.GetArgs(m)
         print(args)
 
         if not args:
