@@ -1,3 +1,5 @@
+""" This file is useless ig """
+
 import os
 
 
@@ -17,4 +19,3 @@ def __list_all_modules():
 
 
 MODULES = sorted(__list_all_modules())
-
