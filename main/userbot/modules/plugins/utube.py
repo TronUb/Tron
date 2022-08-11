@@ -85,6 +85,7 @@ async def ytmdl_handler(_, m):
         reply = m.reply_to_message
         cmd = m.command
         args = app.GetArgs()
+        print(args)
 
         if not args:
             return await app.send_edit(
@@ -107,10 +108,18 @@ async def ytmdl_handler(_, m):
                 delme=3
             )
 
+        link = None
         entity = args.text.entities
         if entity[0].type == MessageEntityType.URL:
             i = entity[0]
             link = args.text[i.offset:i.length+i.offset] # get link from text
+
+        if not link:
+            return await app.send_edit(
+                "There is no link.",
+                text_type=["mono"],
+                delme=3
+            )
 
         yt = YouTube(link)
         path = PyDownload(yt.thumbnail_url)
