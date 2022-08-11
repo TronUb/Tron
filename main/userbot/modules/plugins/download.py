@@ -196,7 +196,7 @@ async def upload_handler(_, m: Message):
         method = "reply_document"
         for x in range(len(extensions)):
             for y in range(len(extensions[x])):
-                if local_file_name.endswith(extensions[x][y])
+                if local_file_name.endswith(extensions[x][y]):
                     method = extensions[x][-1]
 
         if os.path.exists(local_file_name):
