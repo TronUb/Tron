@@ -79,25 +79,38 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 @app.on_message(gen("ytmdl"))
-async def ytvideodl_handler(_, m):
+async def ytmdl_handler(_, m):
     try:
         msg = await app.send_edit("processing link . . .", text_type=["mono"])
         reply = m.reply_to_message
         cmd = m.command
         args = app.GetArgs()
 
-        if args:
-            if args.text and args.text.entities:
-                entity = args.text.entities
-                if entity[0].type == MessageEntityType.URL:
-                    i = entity[0]
-                    link = args.text[i.offset:i.length+i.offset] # get link from text
-                else:
-                    link = args.text.split(None, 1)[1]
-            else:
-                link = args.text.split(None, 1)[1]
-        else:
-            return await app.send_edit("Reply or give args after command.", text_type=["mono"], delme=3)
+        if not args:
+            return await app.send_edit(
+                "Reply or give args after command.",
+                text_type=["mono"],
+                delme=3
+            )
+
+        if not args.text:
+            return await app.send_edit(
+                "there is not text in this command.",
+                text_type=["mono"],
+                delme=3
+            )
+
+        if not args.text.entities:
+            return await app.send_edit(
+                "There are no youtube urls in message or wrong youtube link.",
+                text_type=["mono"],
+                delme=3
+            )
+
+        entity = args.text.entities
+        if entity[0].type == MessageEntityType.URL:
+            i = entity[0]
+            link = args.text[i.offset:i.length+i.offset] # get link from text
 
         yt = YouTube(link)
         path = PyDownload(yt.thumbnail_url)
@@ -106,12 +119,11 @@ async def ytvideodl_handler(_, m):
         try:
             data = yt.streams
         except LiveStreamError:
-            await app.send_edit(
+            return await app.send_edit(
                 "The owner of this channel is doing live stream, can't download the media.",
                 text_type=["mono"],
                 delme=3
             )
-            return
 
         if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
             if await app.user_exists(m.chat.id, app.bot.id):
