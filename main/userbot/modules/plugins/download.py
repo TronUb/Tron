@@ -182,31 +182,55 @@ async def download_handler(_, m: Message):
 async def upload_handler(_, m: Message):
     """ function to upload files from downloads """
 
+    photo_ext = (".jpeg", "jpg", ".png", ".gif", "reply_photo")
+    video_ext = (".mp4", ".mkv", "reply_video")
+    sticker_ext = (".webp", "reply_sticker")
+    audio_ext = (".ogg", ".flac", ".mp3", "reply_audio")
+    animation_ext = (".tgs", "reply_animation")
+
+    extensions = (photo_ext, video_ext, sticker_ext, audio_ext, animation_ext)
+
     if app.long() > 1:
         local_file_name = m.text.split(None, 1)[1]
+
+        method = "reply_document"
+        for x in range(len(extensions)):
+            for y in range(len(extensions[x])):
+                if local_file_name.endswith(extensions[x][y])
+                    method = extensions[x][-1]
+
         if os.path.exists(local_file_name):
             await app.send_edit("Uploading . . .", text_type=["mono"])
-            start_t = datetime.now()
-            c_time = time.time()
+            start_t = datetime.now())
             doc_caption = os.path.basename(local_file_name)
+            c_time = time.time(
             await app.send_edit(f"Uploading `{doc_caption}` . . .")
 
-            await m.reply_document(
-                document=local_file_name,
-                caption=doc_caption,
-                disable_notification=True,
-                reply_to_message_id=m.id,
-                progress=app.ProgressForPyrogram,
-                progress_args=("Uploading file . . .", m, c_time),
-            )
+            if method == "reply_sticker":
+                await m.reply_sticker(
+                    local_file_name,
+                    disable_notification=True,
+                    reply_to_message_id=m.id,
+                    progress=app.ProgressForPyrogram,
+                    progress_args=("Uploading file . . .", m, c_time),
+                )
+            else:
+                await getattr(m, method, None)(
+                    local_file_name,
+                    caption=doc_caption,
+                    disable_notification=True,
+                    reply_to_message_id=m.id,
+                    progress=app.ProgressForPyrogram,
+                    progress_args=("Uploading file . . .", m, c_time),
+                )
 
             end_t = datetime.now()
             ms = (end_t - start_t).seconds
             await app.send_edit(f"Uploaded in `{ms}` seconds.", delme=4)
         else:
-            await app.send_edit("404: directory not found . . .",text_type=["mono"], delme=5)
+            await app.send_edit("404: directory not found . . .",text_type=["mono"], delme=4)
     else:
-        await app.send_edit(f"`{app.PREFIX}upload [file path ]` to upload to current Telegram chat", delme=4)
+        await app.send_edit(f"`{app.Trigger()[0]}upload [file path ]` to upload to current Telegram chat", delme=4)
 
 
 
