@@ -85,7 +85,6 @@ async def ytmdl_handler(_, m):
         reply = m.reply_to_message
         cmd = m.command
         args = app.GetArgs(m)
-        print(args)
 
         if not args:
             return await app.send_edit(
