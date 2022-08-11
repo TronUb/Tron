@@ -2,6 +2,7 @@
 This file gives inline results with bot having via botusername tag.
 """
 
+import re
 from pyrogram import filters
 from pyrogram.handlers import CallbackQueryHandler
 from pyrogram.enums import ParseMode
@@ -126,7 +127,7 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-    elif query.startswith("@"):
+    elif re.match(r"(@[\w]+|[\d]+) \| (.+)", query):
         text = None
         user = None
         user_id = None
