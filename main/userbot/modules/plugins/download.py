@@ -201,9 +201,9 @@ async def upload_handler(_, m: Message):
 
         if os.path.exists(local_file_name):
             await app.send_edit("Uploading . . .", text_type=["mono"])
-            start_t = datetime.now())
+            start_t = datetime.now()
             doc_caption = os.path.basename(local_file_name)
-            c_time = time.time(
+            c_time = time.time()
             await app.send_edit(f"Uploading `{doc_caption}` . . .")
 
             if method == "reply_sticker":
