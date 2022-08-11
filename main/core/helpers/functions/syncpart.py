@@ -729,7 +729,9 @@ class SyncPart(Types):
         return "%s %s" % (s, size_name[i])
 
 
-    def GetArgs(self):
+    def GetArgs(self, message=None):
+        if message:
+            return message
         reply = self.m.reply_to_message
         if reply:
             return reply
