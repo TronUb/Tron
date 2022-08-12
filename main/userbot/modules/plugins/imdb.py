@@ -48,14 +48,14 @@ async def imdb_handler(_, m: Message):
 
         title = movie.get("long imdb title")
         year = movie.get("year") if movie.get("year") else nodata
-        duration = movie.get('runtimes')[0] + "min" + f" | {year}" if movie.get('runtimes') else nodata
-        genres = " ".join(f"`{x}`" for x in movie.get("genres")) if movie.get("genres") else nodata
+        duration = movie.get('runtimes')[0] + " min" + f" | {year}" if movie.get('runtimes') else nodata
+        genres = ", ".join(f"`{x}`" for x in movie.get("genres")) if movie.get("genres") else nodata
         votes = movie.get("votes") if movie.get("votes") else nodata
         rating = movie.get("rating") if movie.get("rating") else nodata + " " + f"(by {votes})"
         country = " ".join(f"`{x}`" for x in movie.get("countries")) if movie.get("countries") else nodata
-        language = " ".join(f"`{x}`" for x in movie.get("languages")) if movie.get("languages") else nodata
-        director = " ".join(f"`{x.get('name')}`" for x in movie.get("director")) if movie.get("director") else nodata
-        music_director = " ".join(f"`{x.get('name')}`" for x in movie.get("composer")) if movie.get("composer") else nodata
+        language = ", ".join(f"`{x}`" for x in movie.get("languages")) if movie.get("languages") else nodata
+        director = ", ".join(f"`{x.get('name')}`" for x in movie.get("director")) if movie.get("director") else nodata
+        music_director = ", ".join(f"`{x.get('name')}`" for x in movie.get("composer")) if movie.get("composer") else nodata
         writer = " ".join(f"`{x.get('name')}`" for x in movie.get('writer')) if movie.get('writer') else nodata
         budget = box_office.get("Budget") if box_office.get("Budget") else nodata
         _owus = box_office.get("Opening Weekend United States")
