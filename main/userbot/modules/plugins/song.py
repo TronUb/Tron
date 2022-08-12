@@ -145,12 +145,22 @@ async def lyrics_handler(_, m: Message):
         url = "https://www.google.com/search?q="
         raw = requests.get(url + song_name.replace(" ", "%20") + "%20lyrics", headers=headers).text
         soup = BeautifulSoup(raw, "html.parser")
-        content = soup.find_all("div", {"class":"ujudUb"})
+        content = soup.find_all("div", {"class":"uOId3b"})
+        artist_name = str(content[-1]).split(" -")[0]
+
+        lyrics = await app.GetRequest(f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}")
+        link = app.telegraph.create_page(
+                app.name,
+                html_content=lyrics["lyrics"]
+       )
 
         if not content:
                 return await app.send_edit(f"No lyrics found ! for song: {song_name}", text_type=["mono"], delme=3)
         else:
-                await app.send_edit("".join([x.text for x in content]), text_type=["mono"])
+                await app.send_edit(
+                        f"**Lyrics Link: [Press Here](https://telegra.ph/{link.get('path')})**",
+                        disable_web_page_preview=True
+                )
     except Exception as e:
         await app.error(e)
         await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
