@@ -38,19 +38,20 @@ async def imdb_handler(_, m: Message):
         i = imdb.Cinemagoer()
         results = i.search_movie(movie_name)[0]
         movie = i.get_movie(results.movieID)
-
-        box_office = movie["box office"]
-        cover_url = app.PyDownload(movie["full-size cover url"])
-
+        
         # default values
         nodata = "No Data"
+
+        box_office = movie.get("box office") if movie.get("box office") else None
+        cover_url = app.PyDownload(movie["full-size cover url"])
+
 
         title = movie.get("long imdb title")
         year = movie.get("year") if movie.get("year") else nodata
         duration = movie.get('runtimes')[0] + "min" + f" | {year}" if movie.get('runtimes') else nodata
         genres = " ".join(f"`{x}`" for x in movie.get("genres")) if movie.get("genres") else nodata
         votes = movie.get("votes") if movie.get("votes") else nodata
-        rating = movie.get("rating") + " " + f"(by {votes})"
+        rating = movie.get("rating") if movie.get("rating") else nodata + " " + f"(by {votes})"
         country = " ".join(f"`{x}`" for x in movie.get("countries")) if movie.get("countries") else nodata
         language = " ".join(f"`{x}`" for x in movie.get("languages")) if movie.get("languages") else nodata
         director = " ".join(f"`{x['name']}`" for x in movie.get("director")) if movie.get("director") else nodata
@@ -58,8 +59,8 @@ async def imdb_handler(_, m: Message):
         writer = " ".join(f"`{x['name']}`" for x in movie.get('writer')) if movie.get('writer') else nodata
         stars = " ".join(f"`{x['name']}`" for x in movie.get("cast")) if movie.get("cast") else nodata
         budget = box_office.get("Budget") if box_office.get("Budget") else nodata
-        owus = box_office["Opening Weekend United States"] if box_office["Opening Weekend United States"] else nodata
-        cwg = box_office["Cumulative Worldwide Gross"] if box_office["Cumulative Worldwide Gross"] else nodata
+        owus = box_office["Opening Weekend United States"] if box_office else nodata
+        cwg = box_office["Cumulative Worldwide Gross"] if box_office else nodata
         plot = "".join(movie.get("plot")) if movie.get("plot") else nodata
 
         caption = f"**Title:** `{title}`\n"
