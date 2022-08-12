@@ -13,7 +13,7 @@ app.CMD_HELP.update(
     {"broadcast" : (
         "broadcast",
         {
-        "alive" : "Broadcast messages in user chats, group chats."
+        "broadcast" : "Broadcast messages in user chats, group chats."
         }
         )
     }
@@ -21,10 +21,10 @@ app.CMD_HELP.update(
 
 
 
-async def broadcast(dialog, args):
+async def broadcast(dialog, text):
     app.send_message(
         dialog.chat.id,
-        args.text.split(None, 1)[1]
+        text
     )
 
 
@@ -35,6 +35,7 @@ async def broadcast_handler(_, m: Message):
         args = app.GetArgs(m)
         users = 0
         groups = 0
+        text = args.text.split(None, 1)[1]
 
         if not args:
             return await app.send_edit(
@@ -47,10 +48,10 @@ async def broadcast_handler(_, m: Message):
 
             async for x in app.get_dialogs():
                 if x.chat.type == ChatType.PRIVATE:
-                    await broadcast(x, args)
+                    await broadcast(x, text)
                     users += 1
                 elif x.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
-                    await broadcast(x, args)
+                    await broadcast(x, text)
                     groups += 1
 
         except PeerIdInvalid:
