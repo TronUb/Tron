@@ -41,6 +41,9 @@ async def imdb_handler(_, m: Message):
 
         # default values
         nodata = "No Data"
+        
+        if not movie:
+            return await app.send_edit("No results found.", text_type=["mono"], delme=3)
 
         box_office = movie.get("box office") if movie.get("box office") else None
         cover_url = app.PyDownload(movie["full-size cover url"])
