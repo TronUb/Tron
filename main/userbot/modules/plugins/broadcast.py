@@ -46,6 +46,7 @@ async def broadcast_handler(_, m: Message):
 
         try:
 
+            await app.send_edit("Broadcasting messages . . .", text_type=["mono"])
             async for x in app.get_dialogs():
                 if x.chat.type == ChatType.PRIVATE:
                     await broadcast(x, text)
