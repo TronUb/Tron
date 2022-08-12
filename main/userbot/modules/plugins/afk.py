@@ -1,3 +1,7 @@
+# pylint: disable=W0703, C0103
+
+""" afk module """
+
 import time
 
 from pyrogram import filters
@@ -14,7 +18,7 @@ app.CMD_HELP.update(
     {"afk": (
         "afk",
         {
-        "afk" : "A best tool to measure the duration of your inactivity in telegram. Stop yourself from chatting in telegram.\n\n U can still talk in chats, if it is really important use #afk in texts so that your afk doesn't break."
+        "afk" : "away from keyboard, use `#afk` for important talk."
         }
         )
     }
@@ -28,12 +32,13 @@ handlers = []
 
 @app.on_message(gen("afk", exclude = ["sudo"]), group=0)
 async def go_offline(_, m: Message):
+    """ afk handler for afk plugin """
     try:
         start = int(time.time())
         if app.long() >= 2:
             reason = m.text.split(None, 1)[1]
             app.set_afk(True, reason, start) # with reason
-            add_afkhandler(_, m)
+            add_afkhandler()
             await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=3)
 
         elif app.long() == 1 and app.long() < 4096:
@@ -41,11 +46,14 @@ async def go_offline(_, m: Message):
 
             if reason:
                 app.set_afk(True, reason, start) # with reason
-                add_afkhandler(_, m)
-                await app.send_edit(f"{app.UserMention()} is now offline.\nBecause: {reason}", delme=3)
+                add_afkhandler()
+                await app.send_edit(
+                    f"{app.UserMention()} is now offline.\nBecause: {reason}",
+                    delme=3
+                )
             else:
                 app.set_afk(True, "", start) # without reason
-                add_afkhandler(_, m)
+                add_afkhandler()
                 await app.send_edit(f"{app.UserMention()} is now offline.", delme=3)
 
     except Exception as e:
@@ -55,9 +63,10 @@ async def go_offline(_, m: Message):
 
 # notify mentioned users
 async def offline_mention(_, m: Message):
+    """ offine mention function for afk plugin """
     try:
         get = app.get_afk()
-        if get and get["afk"]: 
+        if get and get["afk"]:
             if "-" in str(m.chat.id):
                 cid = str(m.chat.id)[4:]
             else:
@@ -66,16 +75,16 @@ async def offline_mention(_, m: Message):
             end = int(time.time())
             otime = app.GetReadableTime(end - get["afktime"])
             if get["reason"] and get["afktime"]:
-                msg = await app.send_message(
+                await app.send_message(
                     m.chat.id,
-                    "Sorry {} is currently offline !\n**Time:** {}\n**Because:** {}".format(app.UserMention(), otime, get['reason']),
+                    f"Sorry {app.UserMention()} is currently offline !\n**Time:** {otime}\n**Because:** {get['reason']}",
                     reply_to_message_id=m.id
-                    ) 
+                    )
                 await app.delete_message(3)
             elif get["afktime"] and not get["reason"]:
-                msg = await app.send_message(
+                await app.send_message(
                     m.chat.id,
-                    "Sorry {} is currently offline !\n**Time:** {}".format(app.UserMention(), otime),
+                    f"Sorry {app.UserMention()} is currently offline !\n**Time:** {otime}",
                     reply_to_message_id=m.id
                     )
                 await app.delete_message(3)
@@ -84,7 +93,7 @@ async def offline_mention(_, m: Message):
             cid = m.chat.id if m.chat and m.chat.id else 0
 
             await app.send_message(
-                app.LOG_CHAT, 
+                app.LOG_CHAT,
                 f"""#mention\n\n
                 **User:** `{m.from_user.first_name}`\n
                 **Id:** {m.from_user.id}\n
@@ -100,6 +109,7 @@ async def offline_mention(_, m: Message):
 
 
 async def unafk_handler(_, m: Message):
+    """ unafk function for afk plugin """
     try:
         # don't break afk while using afk command
         commands = [f"{x}afk" for x in app.Trigger()]
@@ -113,8 +123,8 @@ async def unafk_handler(_, m: Message):
         if get and get["afk"] and filters.outgoing:
             end = int(time.time())
             afk_time = app.GetReadableTime(end - get["afktime"])
-            msg = await app.send_message(
-                m.chat.id, 
+            await app.send_message(
+                m.chat.id,
                 f"{app.UserMention()} is now online !\n**Offline Time:** `{afk_time}`"
             )
             app.set_afk(False, "", 0)
@@ -128,20 +138,22 @@ async def unafk_handler(_, m: Message):
 
 
 
-def add_afkhandler(client, message):
+def add_afkhandler():
+    """ add afk function for afk plugin """
     handlers.append(app.add_handler(MessageHandler(
-        callback=offline_mention, 
-        filters=~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned), 
+        callback=offline_mention,
+        filters=~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned),
         1
     ))
     handlers.append(app.add_handler(MessageHandler(
-        callback=unafk_handler, 
+        callback=unafk_handler,
         filters=filters.me & filters.text & filters.outgoing & ~filters.channel),
         2
     ))
 
 
 def remove_afkhandler():
+    """ afk handler remover function """
     try:
         app.remove_handler(*handlers[0])
         app.remove_handler(*handlers[1])

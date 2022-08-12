@@ -9,7 +9,6 @@ Pillow
 bs4
 covid
 pySmartDL
-pyDownload
 SQLAlchemy==1.3.23
 TgCrypto
 httpx
@@ -25,3 +24,4 @@ qrcode
 bing-image-downloader
 pyfy
 uvloop
+cinemagoer
