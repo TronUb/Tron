@@ -36,7 +36,7 @@ async def imdb_handler(_, m: Message):
         movie_name = args.text.split(None, 1)[1]
 
         i = imdb.Cinemagoer()
-        results = i.search_movie(movie_name)
+        results = i.search_movie(movie_name)[0]
         movie = i.get_movie(results.movieID)
 
         box_office = movie["box office"]
