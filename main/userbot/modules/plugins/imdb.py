@@ -57,11 +57,18 @@ async def imdb_handler(_, m: Message):
         caption += f"> **Opening Weekend United States:** `{box_office['Opening Weekend United States']}`\n"
         caption += f"> **Cumulative Worldwide Gross:** `{box_office['Cumulative Worldwide Gross']}`\n"
         caption += f"**Story Outline:** `{movie['plot'][0][:100]+'...'}`\n"
+        
+        link = app.telegraph.create_page(
+            app.name,
+            html_content=caption
+        )
+        
+        url = f"https://telegra.ph/{link.get('path')}"
 
         complete = await app.send_photo(
             m.chat.id,
             photo=cover_url,
-            caption=caption
+            caption=f"[Results]({url})"
         )
 
         if complete:
