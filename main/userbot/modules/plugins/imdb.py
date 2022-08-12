@@ -72,4 +72,4 @@ async def imdb_handler(_, m: Message):
                 text_type=["mono"]
             )
     except Exception as e:
-        await app.error(m, e)
+        await app.error(e)

@@ -58,7 +58,7 @@ async def alive_handler(_, m: Message):
                 disable_web_page_preview=True,
                 )
     except Exception as e:
-        await app.error(m, e)
+        await app.error(e)
 
 
 
