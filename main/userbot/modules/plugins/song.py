@@ -149,7 +149,7 @@ async def lyrics_handler(_, m: Message):
         artist_name = str(content[-1]).split(" -")[0]
 
         lyrics = await app.GetRequest(f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}")
-        print(lyrics, content, artist_name, song_name)
+        print(artist_name, "/", song_name)
 
         if not lyrics.get("lyrics"):
                 return await app.send_edit("No lyrics found.", text_type=["mono"], delme=3)
