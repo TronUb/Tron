@@ -143,7 +143,7 @@ async def lyrics_handler(_, m: Message):
         await app.send_edit(f"**Finding lyrics for:** `{song_name}`")
 
         url = "https://www.google.com/search?q="
-        raw = requests.get(url + song_name.replace(" ", "%20") + "%20lyrics", headers=headers).text
+        raw = requests.get(url + song_name.replace(" ", "%20") + "%20artist", headers=headers).text
         soup = BeautifulSoup(raw, "html.parser")
         content = soup.find_all("div", {"class":"uOId3b"})
         artist_name = str(content[-1]).split(" -")[0]
@@ -151,7 +151,7 @@ async def lyrics_handler(_, m: Message):
         lyrics = await app.GetRequest(f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}")
         link = app.telegraph.create_page(
                 app.name,
-                html_content=lyrics["lyrics"]
+                html_content=lyrics.get("lyrics")
        )
 
         if not content:
