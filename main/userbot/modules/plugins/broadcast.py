@@ -22,7 +22,7 @@ app.CMD_HELP.update(
 
 
 async def broadcast(dialog, text):
-    app.send_message(
+    await app.send_message(
         dialog.chat.id,
         text
     )
@@ -32,7 +32,7 @@ async def broadcast(dialog, text):
 async def broadcast_handler(_, m: Message):
     """ broadcast handler for broadcast plugin """
     try:
-        args = app.GetArgs(m)
+        args = app.GetArgs()
         users = 0
         groups = 0
         text = args.text.split(None, 1)[1]
