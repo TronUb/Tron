@@ -24,3 +24,4 @@ qrcode
 bing-image-downloader
 pyfy
 uvloop
+cinemagoer
