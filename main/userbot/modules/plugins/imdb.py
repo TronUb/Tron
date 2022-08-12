@@ -38,7 +38,7 @@ async def imdb_handler(_, m: Message):
         i = imdb.Cinemagoer()
         results = i.search_movie(movie_name)[0]
         movie = i.get_movie(results.movieID)
-        
+
         # default values
         nodata = "No Data"
 
@@ -54,10 +54,9 @@ async def imdb_handler(_, m: Message):
         rating = movie.get("rating") if movie.get("rating") else nodata + " " + f"(by {votes})"
         country = " ".join(f"`{x}`" for x in movie.get("countries")) if movie.get("countries") else nodata
         language = " ".join(f"`{x}`" for x in movie.get("languages")) if movie.get("languages") else nodata
-        director = " ".join(f"`{x['name']}`" for x in movie.get("director")) if movie.get("director") else nodata
-        music_director = " ".join(f"`{x['name']}`" for x in movie.get("composer")) if movie.get("composer") else nodata
-        writer = " ".join(f"`{x['name']}`" for x in movie.get('writer')) if movie.get('writer') else nodata
-        stars = " ".join(f"`{x['name']}`" for x in movie.get("cast")) if movie.get("cast") else nodata
+        director = " ".join(f"`{x.get('name')}`" for x in movie.get("director")) if movie.get("director") else nodata
+        music_director = " ".join(f"`{x.get('name')}`" for x in movie.get("composer")) if movie.get("composer") else nodata
+        writer = " ".join(f"`{x.get('name')}`" for x in movie.get('writer')) if movie.get('writer') else nodata
         budget = box_office.get("Budget") if box_office.get("Budget") else nodata
         owus = box_office["Opening Weekend United States"] if box_office else nodata
         cwg = box_office["Cumulative Worldwide Gross"] if box_office else nodata
@@ -72,7 +71,6 @@ async def imdb_handler(_, m: Message):
         caption += f"**Director:** {director}\n"
         caption += f"**Music Director:** {music_director}\n"
         caption += f"**Writer:** {writer}\n"
-        caption += f"**Stars:** {stars}\n"
         caption += "**Box Office:** \n"
         caption += f"> **Budget:** `{budget}`\n"
         caption += f"> **Opening Weekend United States:** `{owus}`\n"
