@@ -58,8 +58,11 @@ async def imdb_handler(_, m: Message):
         music_director = " ".join(f"`{x.get('name')}`" for x in movie.get("composer")) if movie.get("composer") else nodata
         writer = " ".join(f"`{x.get('name')}`" for x in movie.get('writer')) if movie.get('writer') else nodata
         budget = box_office.get("Budget") if box_office.get("Budget") else nodata
-        owus = box_office["Opening Weekend United States"] if box_office else nodata
-        cwg = box_office["Cumulative Worldwide Gross"] if box_office else nodata
+        _owus = box_office.get("Opening Weekend United States")
+        owus = _owus if _owus and box_office else nodata
+        _cwg = box_office.get("Cumulative Worldwide Gross")
+        cwg = _cwg if _cwg and box_office else nodata
+        
         plot = "".join(movie.get("plot")) if movie.get("plot") else nodata
 
         caption = f"**Title:** `{title}`\n"
