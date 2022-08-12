@@ -56,7 +56,7 @@ async def imdb_handler(_, m: Message):
         caption += f"> **Budget:** `{box_office['Budget']}`\n"
         caption += f"> **Opening Weekend United States:** `{box_office['Opening Weekend United States']}`\n"
         caption += f"> **Cumulative Worldwide Gross:** `{box_office['Cumulative Worldwide Gross']}`\n"
-        caption += f"**Story Outline:** `{movie['plot'][:1500][0]+'...'}`\n"
+        caption += f"**Story Outline:** `{movie['plot'][:800][0]+'...'}`\n"
 
         complete = await app.send_photo(
             m.chat.id,
