@@ -9,7 +9,6 @@ from pyrogram.types import Message, InlineKeyboardMarkup
 from pyrogram.enums import MessageEntityType, ChatType
 
 from PIL import Image
-from pySmartDL import SmartDL
 
 
 
@@ -33,13 +32,6 @@ def ResizeImage(path: str, size: tuple=(320, 320)):
     photo = app.TEMP_DICT+"photo.jpg"
     img.save(photo)
     return photo
-
-
-
-def PyDownload(url: str):
-    obj = SmartDL(url, app.TEMP_DICT, progress_bar=False)
-    obj.start()
-    return obj.get_dest()
 
 
 
@@ -121,7 +113,7 @@ async def ytmdl_handler(_, m):
             )
 
         yt = YouTube(link)
-        path = PyDownload(yt.thumbnail_url)
+        path = app.PyDownload(yt.thumbnail_url)
         thumbnail = ResizeImage(path)
 
         try:

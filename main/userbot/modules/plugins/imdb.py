@@ -40,7 +40,7 @@ async def imdb_handler(_, m: Message):
         movie = i.get_movie(results.movieID)
 
         box_office = movie["box office"]
-        cover_url = movie["full-size cover url"]
+        cover_url = app.PyDownload(movie["full-size cover url"])
 
         caption = f"**Title:** `{movie['long imdb title']}`\n"
         caption += f"**Duration:** `{movie['runtimes'][0]} min | {movie['year']}`\n"

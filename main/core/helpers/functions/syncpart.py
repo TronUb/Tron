@@ -25,6 +25,8 @@ import heroku3
 import requests
 import pytz
 
+from pySmartDL import SmartDL
+
 
 
 
@@ -813,3 +815,9 @@ class SyncPart(Types):
             }
             text = format_dict.get(x)
         return text
+
+
+    def PyDownload(self, url: str):
+        obj = SmartDL(url, self.TEMP_DICT, progress_bar=False)
+        obj.start()
+        return obj.get_dest()
