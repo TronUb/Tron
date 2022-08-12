@@ -2,7 +2,10 @@
 
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
-from pyrogram.errors import PeerIdInvalid 
+from pyrogram.errors import (
+    PeerIdInvalid,
+    ChatWriteForbidden
+)
 
 from main import app, gen
 
@@ -55,7 +58,7 @@ async def broadcast_handler(_, m: Message):
                     await broadcast(x, text)
                     groups += 1
 
-        except PeerIdInvalid:
+        except (PeerIdInvalid, ChatWriteForbidden):
             pass
 
         await app.send_edit(f"Broadcasted messages to {users} users & {groups} groups.", delme=4)
