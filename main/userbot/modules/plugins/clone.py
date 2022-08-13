@@ -124,7 +124,11 @@ async def revert_handler(_, m: Message):
                 delme=3
             )
 
-        # set your profile pictures
+        # remove old profile photos
+        async for x in app.get_chat_photos("me"):
+            await app.delete_profile_photos(x.file_id)
+
+        # set your original profile pictures
         for url in photo:
             await app.set_profile_photo(
                 photo=app.PyDownload(url)
