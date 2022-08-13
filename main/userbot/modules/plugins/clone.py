@@ -43,7 +43,7 @@ async def clone_handler(_, m: Message):
         profile_data = {}
 
         if not app.getdv("PROFILE_DATA"):
-            async for x in app.get_chat_photos("me"):
+            async for x in app.get_chat_photos(app.id):
                 profile_photos.append(x.file_id)
 
             profile_data.update(
