@@ -732,11 +732,19 @@ class SyncPart(Types):
 
 
     def GetArgs(self, message=None):
+        reply = self.m.reply_to_message
+
         if message:
             return message
-        reply = self.m.reply_to_message
-        if reply:
+
+        elif reply:
+            setattr(
+                reply,
+                "text",
+                self.m.text.split(None, 1)[0] + " " + reply.text
+            )
             return reply
+
         elif not reply:
             if self.long() > 1:
                 return self.m
