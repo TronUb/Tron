@@ -9,7 +9,7 @@ from main.core import Core
 
 
 # temp -
-random_name =  ''.join(random.choices(string.ascii_uppercase + string.digits, k = 7))
+random_name =  "".join(random.choices(string.ascii_uppercase + string.digits, k = 7))
 
 
 class SuperClient(Core, Client):

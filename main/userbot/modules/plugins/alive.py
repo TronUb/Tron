@@ -1,6 +1,8 @@
+""" alive plugin """
+
 import asyncio
 from pyrogram.types import Message
-from pyrogram.errors import BotInvalid, BotInlineDisabled
+from pyrogram.errors import BotInlineDisabled
 
 from main import app, gen
 
@@ -13,7 +15,7 @@ app.CMD_HELP.update(
         {
         "alive" : "Normal alive, in which you will get userbot status without inline buttons.",
         "ialive" : "Inline alive that contains your & your userbot status.",
-        "qt" : "Get inline quotes with a inline 'more' button."
+        "iqt" : "Get inline quotes with a inline 'more' button."
         }
         )
     }
@@ -24,10 +26,11 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("alive"))
 async def alive_handler(_, m: Message):
+    """ alive handler for alive plugin """
     try:
         await app.send_edit(". . .", text_type=["mono"])
 
-        alive_msg = f"\n"
+        alive_msg = "\n"
         if app.UserBio():
             alive_msg += f"⦿ {app.UserBio()}\n\n"
         alive_msg += f"⟜ **Owner:** {app.UserMention()}\n"
@@ -41,20 +44,20 @@ async def alive_handler(_, m: Message):
         if (pic) and (pic.endswith(".mp4" or ".mkv" or ".gif")):
             await m.delete()
             await app.send_video(
-                m.chat.id, 
-                pic, 
+                m.chat.id,
+                pic,
                 caption=alive_msg
                 )
         elif (pic) and (pic.endswith(".jpg" or ".jpeg" or ".png")):
             await m.delete()
             await app.send_photo(
-                m.chat.id, 
-                pic, 
+                m.chat.id,
+                pic,
                 caption=alive_msg
                 )
         elif not pic:
             await app.send_edit(
-                alive_msg, 
+                alive_msg,
                 disable_web_page_preview=True,
                 )
     except Exception as e:
@@ -65,6 +68,7 @@ async def alive_handler(_, m: Message):
 
 @app.on_message(gen("ialive"))
 async def inlinealive_handler(_, m: Message):
+    """  inline alive handler for alive plugin """
     try:
         await app.send_edit(". . .", text_type=["mono"])
         try:
@@ -76,10 +80,10 @@ async def inlinealive_handler(_, m: Message):
 
         if result:
             await app.send_inline_bot_result(
-                m.chat.id, 
-                query_id=result.query_id, 
-                result_id=result.results[0].id, 
-                disable_notification=True, 
+                m.chat.id,
+                query_id=result.query_id,
+                result_id=result.results[0].id,
+                disable_notification=True,
             )
             await m.delete()
         else:
@@ -90,24 +94,28 @@ async def inlinealive_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["quote", "qt"]))
+@app.on_message(gen(["iquote", "iqt"]))
 async def inlinequote_handler(_, m: Message):
+    """  inline quote handler for alive plugin """
     try:
         await app.send_edit(". . .", text_type=["mono"])
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#quote")
         except BotInlineDisabled:
-            await app.send_edit("Inline mode off. Turning inline mode on, wait . . .", text_type=["mono"])
+            await app.send_edit(
+                "Inline mode off. Turning inline mode on, wait . . .",
+                text_type=["mono"]
+            )
             await asyncio.sleep(1)
             await app.toggle_inline()
             result = await app.get_inline_bot_results(app.bot.username, "#quote")
 
         if result:
             await app.send_inline_bot_result(
-                m.chat.id, 
-                query_id=result.query_id, 
-                result_id=result.results[0].id, 
-                disable_notification=True, 
+                m.chat.id,
+                query_id=result.query_id,
+                result_id=result.results[0].id,
+                disable_notification=True,
                 )
             await m.delete()
         else:

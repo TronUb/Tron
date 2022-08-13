@@ -36,6 +36,8 @@ async def clone_handler(_, m: Message):
                 delme=3
             )
 
+        reply = reply.from_user
+
         await app.send_edit("cloning . . .", text_type=["mono"], delme=3)
 
         # save your detials first
