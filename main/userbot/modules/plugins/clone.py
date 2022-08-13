@@ -36,14 +36,14 @@ async def clone_handler(_, m: Message):
                 delme=3
             )
 
-        await app.send_edit("cloning . . .", text_type=["mono"], delme=3)
+        await app.send_edit("cloning . . .", text_type=["mono"])
 
         # save your detials first
         profile_photos = {}
         profile_data = {}
 
         if not app.getdv("PROFILE_DATA"):
-            async for x in [x.file_id async for x in app.get_chat_photos("me")][::-1]:
+            async for x in [x async for x in app.get_chat_photos("me")][::-1]:
                 profile_photos.update(x.file_id)
 
             profile_data.update(
