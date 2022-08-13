@@ -44,10 +44,7 @@ async def clone_handler(_, m: Message):
 
         if not app.getdv("PROFILE_DATA"):
             async for x in app.get_chat_photos(app.id):
-                url = await app.download_media(
-                    m.chat.id,
-                    x.file_id
-                    )
+                url = await app.download_media(x.file_id)
                 response = upload_file(url)
                 profile_photos.append(f"https://telegra.ph{response[0]}")
 
