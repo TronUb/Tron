@@ -39,12 +39,12 @@ async def clone_handler(_, m: Message):
         await app.send_edit("cloning . . .", text_type=["mono"])
 
         # save your detials first
-        profile_photos = {}
+        profile_photos = []
         profile_data = {}
 
         if not app.getdv("PROFILE_DATA"):
             async for x in app.get_chat_photos("me"):
-                profile_photos.update(x.file_id)
+                profile_photos.append(x.file_id)
 
             profile_data.update(
                 {
