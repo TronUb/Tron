@@ -2,7 +2,7 @@
 
 import json
 from pyrogram.types import Message
-
+from telegraph import upload_file
 from main import app, gen
 
 
@@ -44,7 +44,12 @@ async def clone_handler(_, m: Message):
 
         if not app.getdv("PROFILE_DATA"):
             async for x in app.get_chat_photos(app.id):
-                profile_photos.append(x.file_id)
+                url = await app.download_media(
+                    m.chat.id,
+                    x.file_id
+                    )
+                response = upload_file(url)
+                profile_photos.append(f"https://telegra.ph{response[0]}")
 
             profile_data.update(
                 {
@@ -123,9 +128,9 @@ async def revert_handler(_, m: Message):
             )
 
         # set your profile pictures
-        for file_id in photo:
+        for url in photo:
             await app.set_profile_photo(
-                photo=await app.download_media(file_id)
+                photo=app.PyDownload(url)
             )
 
         # set your bio, first name, last name
