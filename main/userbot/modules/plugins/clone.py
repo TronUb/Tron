@@ -13,7 +13,7 @@ app.CMD_HELP.update(
         "clone",
         {
         "clone [reply]" : "clone your friends account for fun.",
-        "revert" : "unclone your account to normal."
+        "revert [reply]" : "unclone your account to normal."
         }
         )
     }
@@ -31,12 +31,10 @@ async def clone_handler(_, m: Message):
 
         if not reply:
             return await app.send_edit(
-                "Reply to someone so i can clone them.",
+                "Reply to someone so that i can clone there .",
                 text_type=["mono"],
                 delme=3
             )
-
-        reply = reply.from_user
 
         await app.send_edit("cloning . . .", text_type=["mono"], delme=3)
 
@@ -64,7 +62,7 @@ async def clone_handler(_, m: Message):
             await app.delete_profile_photos(x.file_id)
 
         # set your new profile photos
-        for file_id in [x.file_id async for x in app.get_chat_photos(reply.id)][::-1]:
+        for file_id in [x.file_id async for x in app.get_chat_photos(reply.from_user.id)][::-1]:
             await app.set_profile_photo(
                 photo=await app.download_media(file_id)
             )
@@ -72,8 +70,8 @@ async def clone_handler(_, m: Message):
         # set your bio, first name, last name
         user = await app.get_chat(reply.from_user.id)
         await app.update_profile(
-            first_name=reply.first_name,
-            last_name=reply.last_name if reply.last_name else "",
+            first_name=reply.from_user.first_name,
+            last_name=reply.from_user.last_name if reply.from_user.last_name else "",
             bio=user.bio if user.bio else ""
         )
 
@@ -111,6 +109,18 @@ async def revert_handler(_, m: Message):
         last_name = data.get("last_name")
         bio = data.get("bio")
         photo = data.get("photo")
+
+        if not (
+            first_name or
+            last_name or
+            bio or
+            photo or
+            ):
+            await app.send_edit(
+                "Some profile information is missing.",
+                text_type=["mono"],
+                delme=3
+            )
 
         # set your profile pictures
         for file_id in photo:
