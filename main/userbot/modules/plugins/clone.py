@@ -146,5 +146,7 @@ async def revert_handler(_, m: Message):
             delme=3
         )
 
+        app.deldv("PROFILE_DATA") # delete for another use
+
     except Exception as e:
         await app.error(e)
