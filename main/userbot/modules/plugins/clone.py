@@ -114,7 +114,7 @@ async def revert_handler(_, m: Message):
             first_name or
             last_name or
             bio or
-            photo or
+            photo
             ):
             await app.send_edit(
                 "Some profile information is missing.",
