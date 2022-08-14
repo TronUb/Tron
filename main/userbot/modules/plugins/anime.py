@@ -1,4 +1,5 @@
-import json
+""" anime plugin """
+
 import requests
 
 from pyrogram.types import Message
@@ -10,7 +11,35 @@ from main import app, gen
 
 
 anime_suffix = "`baka`\n`bite`\n`blush`\n`bored`\n`cry`\n`cuddle`\n`dance`\n`facepalm`\n`feed`\n`happy`\n`highfive`\n`hug`\n`kiss`\n`laugh`\n`pat`\n`poke`\n`pout`\n`shrug`\n`slap`\n`sleep`\n`smile`\n`stare`\n`think`\n`thumbsup`\n`tickle`\n`wave`\n`wink`"
-anime_list = ["baka", "bite", "blush", "bored", "cry", "cuddle", "dance", "facepalm", "feed", "happy", "highfive", "hug", "kiss", "laugh", "pat", "poke", "pout", "shrug", "slap", "sleep", "smile", "stare", "think", "thumbsup", "tickle", "wave", "wink"]
+anime_list = [
+    "baka",
+    "bite",
+    "blush",
+    "bored",
+    "cry",
+    "cuddle",
+    "dance",
+    "facepalm",
+    "feed",
+    "happy",
+    "highfive",
+    "hug",
+    "kiss",
+    "laugh",
+    "pat",
+    "poke",
+    "pout",
+    "shrug",
+    "slap",
+    "sleep",
+    "smile",
+    "stare",
+    "think",
+    "thumbsup",
+    "tickle",
+    "wave",
+    "wink"
+]
 
 
 
@@ -59,13 +88,15 @@ async def send_gif(m: Message, gif_data):
 
 @app.on_message(gen("animelist"))
 async def animelist(_, m: Message):
+    """ animelist function """
     await app.send_edit(anime_suffix)
 
 
 
-    
+
 @app.on_message(gen(["nekopic", "npic"]))
-async def nekoanime(_, m: Message):
+async def nekopic_handler(_, m: Message):
+    """ nekopic handler for anime plugin """
     try:
         if m.from_user.is_self:
             await m.delete()
@@ -84,7 +115,8 @@ async def nekoanime(_, m: Message):
 
 
 @app.on_message(gen("animegif"))
-async def animegif(_, m: Message):
+async def animegif_handler(_, m: Message):
+    """ animegif handler for anime plugin """
     if app.long() > 1:
         arg = m.command[1]
         try:
@@ -99,4 +131,7 @@ async def animegif(_, m: Message):
         except Exception as e:
             await app.error(e)
     else:
-        await app.send_edit(f"Give me a suffix, use `{app.Trigger()[0]}animelist` to get suffix.", delme=3)
+        await app.send_edit(
+            f"Give me a suffix, use `{app.Trigger()[0]}animelist` to get suffix.",
+            delme=3
+        )

@@ -1,11 +1,11 @@
+""" carbon plugin """
+
 import os
-import time
 import shutil
 import urllib
 
 from requests import post
 
-from pyrogram import Client
 from pyrogram.types import Message
 
 from main import app, gen
@@ -53,10 +53,14 @@ colour_code = {
 
 @app.on_message(gen(["carbon", "carb"]))
 async def carbon_handler(_, m: Message):
+    """ carbon handler for carbon plugin """
     cmd = m.command
     oldmsg = m # fixed for-->  m = send_edit() replaces the variable
     if app.long() < 2:
-        return await app.send_edit(f"Usage:\n\n`{app.Trigger()[0]}carbon [colour] [text]`\n`{app.Trigger()[0]}carbon [text]`\n\n**Note:** Default colour is aqua", delme=4)
+        return await app.send_edit(
+            f"Usage:\n\n`{app.Trigger()[0]}carbon [colour] [text]`\n`{app.Trigger()[0]}carbon [text]`\n\n**Note:** Default colour is aqua",
+            delme=4
+        )
 
     elif app.textlen() <= 4096:
         try:
@@ -78,6 +82,7 @@ async def carbon_handler(_, m: Message):
 
 @app.on_message(gen("carblist", exclude = ["sudo"]))
 async def carblist_handler(_, m: Message):
+    """ carbon list handler for carbon plugin """
     clist = [f"`{x}`" for x in list(colour_code.keys())]
     await app.send_edit("**SUPPORTED COLOURS:**\n\n" + "\n".join(clist))
 
@@ -85,6 +90,7 @@ async def carblist_handler(_, m: Message):
 
 
 async def create_carbon(m: Message, text, colour):
+    """ carbon creating function for carbon plugin """
     reply = m.reply_to_message
     json = {"backgroundColor": f"{colour_code.get(colour)}",
         "theme": "Dracula",

@@ -25,6 +25,7 @@ app.CMD_HELP.update(
 
 
 async def broadcast(dialog, text):
+    """ broadcast function """
     res = await app.send_message(
         dialog.chat.id,
         text
@@ -54,10 +55,12 @@ async def broadcast_handler(_, m: Message):
             async for x in app.get_dialogs():
                 if x.chat.type == ChatType.PRIVATE:
                     done = await broadcast(x, text)
-                    if done: users += 1
+                    if done:
+                        users += 1
                 elif x.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
                     done = await broadcast(x, text)
-                    if done: groups += 1
+                    if done:
+                        groups += 1
 
         except (PeerIdInvalid, ChatWriteForbidden):
             pass
