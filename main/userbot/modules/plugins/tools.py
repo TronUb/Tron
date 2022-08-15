@@ -1,13 +1,12 @@
-import speedtest
+""" tools plugin """
 
 from datetime import datetime
 
 from currency_converter import CurrencyConverter
 
 from pyrogram.types import Message
-from pyrogram.errors import (
-    MessageTooLong,
-)
+
+import speedtest
 
 from main import app, gen
 
@@ -21,9 +20,9 @@ app.CMD_HELP.update(
         "wlink" : "Get message links which contain the query word.",
         "cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
         "temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
-        "json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.", 
+        "json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.",
         "mlink [reply to message]" : "Use this to get message links. both private and public groups.",
-        "saved [reply to message]" : "Save Media To Your Telegram Cloud Storage \ Saved Messages.",
+        "saved [reply to message]" : r"Save Media To Your Telegram Cloud Storage \ Saved Messages.",
         "fwd [reply to message]" : "Forward messages to same group or other groups.",
         "spt" : "Check Hosted Server Speed, use [pic] after command to get image of speedtest.",
         "cchats" : "Get common chats to the replied user."
@@ -40,21 +39,22 @@ c = CurrencyConverter()
 
 # For converting
 def convert_f(fahrenheit):
+    """ convert f function for tools plugin """
     f = float(fahrenheit)
-    f = (f*9/5)+32
-    return(f)
+    return (f*9/5)+32
 
 
 def convert_c(celsius):
+    """ convert c function for tools plugin """
     c = float(celsius)
-    c = (c-32)*5/9
-    return(c)
+    return (c-32)*5/9
 
 
 
 
 @app.on_message(gen("wlink"))
 async def wordlink_handler(_, m: Message):
+    """ wordlink handler for tools plugin """
     links = []
     links.clear()
 
@@ -79,8 +79,11 @@ async def wordlink_handler(_, m: Message):
 
 @app.on_message(gen(["cur", "currency"]))
 async def currency_handler(_, m: Message):
+    """ currency handler for tools plugin """
     if app.long() <= 3:
-        return await app.send_edit(f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`")
+        return await app.send_edit(
+            f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`"
+        )
 
     value = m.command[1]
     cur1 = m.command[2].upper()
@@ -192,7 +195,7 @@ async def forward_handler(_, m: Message):
 
 
 @app.on_message(gen(["spt", "speed", "speedtest"]))
-async def speedtest_handler(app, m: Message):
+async def speedtest_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Testing speed . . .", text_type=["mono"])
         test = speedtest.Speedtest()

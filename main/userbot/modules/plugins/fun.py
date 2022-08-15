@@ -1,9 +1,9 @@
+""" fun plugin """
+
 import time
-import json
 import random
 import asyncio
 
-from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 
 from main import app, gen
@@ -33,6 +33,7 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("slap"))
 async def slap_handler(_, m):
+    """ slap handler for fun plugin """
     reply = m.reply_to_message
     if reply:
         try:
@@ -41,7 +42,7 @@ async def slap_handler(_, m):
             user = reply.from_user
             if user.is_self:
                 return await app.send_edit("You cant slap youself.", text_type=["mono"], delme=3)
-   
+
             user = user.mention
             me = app.UserMention()
 
@@ -65,13 +66,18 @@ async def slap_handler(_, m):
         except Exception as e:
             await app.error(e)
     else:
-        await app.send_edit("Reply to a friend to use harsh words to insult him", text_type=["mono"], delme=3)
+        await app.send_edit(
+            "Reply to a friend to use harsh words to insult him",
+            text_type=["mono"],
+            delme=3
+        )
 
 
 
 
 @app.on_message(gen(["upcase"]))
 async def uppercase_handler(_, m):
+    """ uppercase handler for fun plugin """
     try:
         reply = m.reply_to_message
         if reply:
@@ -82,7 +88,11 @@ async def uppercase_handler(_, m):
                 text = m.text.split(None, 1)[1].upper()
                 await app.send_edit(text)
             elif app.long() == 1:
-                await app.send_edit("Please give me some text after command or reply to someone.", text_type=["mono"],  delme= 3)
+                await app.send_edit(
+                    "Please give me some text after command or reply to someone.",
+                    text_type=["mono"],
+                    delme= 3
+                )
         else:
             return await app.send_edit("upcase command Error !", text_type=["mono"], delme=4)
     except Exception as e:
@@ -93,13 +103,14 @@ async def uppercase_handler(_, m):
 
 @app.on_message(gen("type"))
 async def type_handler(_, m):
+    """ type handler for fu plugin """
     try:
         if app.long() > 1:
             text = [x for x in m.text.split(None, 1)[1]]
         else:
             return await app.send_edit("Some text is required to show in typing animation", delme=3)
 
-        tbp = "" 
+        tbp = ""
         typing_symbol = "▒"
         for i in range(len(text)):
             try:
@@ -118,9 +129,14 @@ async def type_handler(_, m):
 
 @app.on_message(gen("insult", exclude =["sudo"]))
 async def insult_handler(_, m):
+    """ insult handler for fun plugin """
     reply = m.reply_to_message
     if not reply:
-        await app.send_edit("Please reply to someone, so that i can insult them.", text_type=["mono"], delme=3)
+        await app.send_edit(
+            "Please reply to someone, so that i can insult them.",
+            text_type=["mono"],
+            delme=3
+        )
 
     elif reply:
         try:
@@ -128,7 +144,9 @@ async def insult_handler(_, m):
                 return await app.send_edit("You cant insult youself.", text_type=["mono"], delme=3)
 
             lang = "en" if app.long() == 1 else m.command[1] if app.long() > 1 else "en"
-            data = await app.GetRequest(f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json")
+            data = await app.GetRequest(
+                f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json"
+            )
 
             await app.send_edit("Insulting . . .", text_type=["mono"])
             if data:
@@ -143,9 +161,14 @@ async def insult_handler(_, m):
 
 @app.on_message(gen("advice"))
 async def advice_handler(_, m):
+    """ advice handler for fun plugin """
     reply = m.reply_to_message
     if not reply:
-        await app.send_edit("Please reply to someone, so that i can give them a advice . . .", delme=3, text_type=["mono"])
+        await app.send_edit(
+            "Please reply to someone, so that i can give them a advice . . .",
+            delme=3,
+            text_type=["mono"]
+        )
 
     elif reply:
         try:
@@ -164,14 +187,19 @@ async def advice_handler(_, m):
 
 @app.on_message(gen("qs"))
 async def question_handler(_, m):
+    """ question handler for fun plugin """
     reply = m.reply_to_message
     if not reply:
-        await app.send_edit("Please reply to someone, so that i can ask them a question . . .", delme=3, text_type=["mono"])
+        await app.send_edit(
+            "Please reply to someone, so that i can ask them a question . . .",
+            delme=3,
+            text_type=["mono"]
+        )
 
     elif reply:
         try:
             await app.send_edit("Finding a question . . .", text_type=["mono"])
-            data = await app.GetRequest(f"http://jservice.io/api/random")
+            data = await app.GetRequest("http://jservice.io/api/random")
             question = data[0].get("question")
             answer = data[0].get("answer")
             if question and answer:
@@ -187,13 +215,14 @@ async def question_handler(_, m):
 
 @app.on_message(gen("wtd"))
 async def whattodo_handler(_, m):
+    """ what to do handler for fun plugin """
     try:
         await app.send_edit("Finding a activity . . .", text_type=["mono"])
-        act = await app.GetRequest(f"http://www.boredapi.com/api/activity/")
+        act = await app.GetRequest("http://www.boredapi.com/api/activity/")
         activity = act.get("activity")
         _type = act.get("type")
         if act:
-            await app.send_edit(f"Activity: `{activity}`\n\nType: `{_type}`") 
+            await app.send_edit(f"Activity: `{activity}`\n\nType: `{_type}`")
         else:
             await app.send_edit("No Activity found !", delme=3, text_type=["mono"])
     except Exception as e:
@@ -204,14 +233,15 @@ async def whattodo_handler(_, m):
 
 @app.on_message(gen("mqt"))
 async def moviequote_handler(_, m):
+    """ movie quote handler for fun plugin """
     try:
         await app.send_edit("Finding a movie quote . . .", text_type=["mono"])
-        data = await app.GetRequest(f"https://movie-quote-api.herokuapp.com/v1/quote/")
+        data = await app.GetRequest("https://movie-quote-api.herokuapp.com/v1/quote/")
         qt = data.get("quote")
         role = data.get("role")
         show = data.get("show")
         if qt and role and show:
-            await app.send_edit(f"**Quote:**\n\n`{qt}`\n\nRole: `{role}`\n\nShow: `{show}`") 
+            await app.send_edit(f"**Quote:**\n\n`{qt}`\n\nRole: `{role}`\n\nShow: `{show}`")
         else:
             await app.send_edit("No movie quotes found !", delme=3, text_type=["mono"])
     except Exception as e:
@@ -222,16 +252,21 @@ async def moviequote_handler(_, m):
 
 @app.on_message(gen("joke"))
 async def joke_handler(_, m):
+    """ joke handler for fun plugin """
     try:
         await app.send_edit("Finding a joke . . .", text_type=["mono"])
-        data = (await app.GetRequest("https://icanhazdadjoke.com/slack"))["attachments"][0]["fallback"]
+        data = (await app.GetRequest("https://icanhazdadjoke.com/slack")
+            )["attachments"][0]["fallback"]
         if not data:
-            return app.send_edit("Site is down, please try again later . . .", delme=3, text_type=["mono"])
+            return app.send_edit(
+                "Site is down, please try again later . . .",
+                delme=3,
+                text_type=["mono"]
+            )
         elif data:
-            await app.send_edit(f"{data}") 
+            await app.send_edit(f"{data}")
         else:
             await app.send_edit("No jokes found !", delme=3, text_type=["mono"])
     except Exception as e:
         await app.send_edit("Joke site is down, try again later.", text_type=["mono"], delme=3)
         await app.error(e)
-

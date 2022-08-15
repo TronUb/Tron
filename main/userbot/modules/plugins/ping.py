@@ -1,3 +1,5 @@
+""" ping pplugin """
+
 import random
 import asyncio
 
@@ -25,17 +27,17 @@ app.CMD_HELP.update(
 
 
 # animations
-data = [ 
-    "🕜", 
-    "🕡", 
-    "🕦", 
-    "🕣", 
-    "🕥", 
-    "🕧", 
-    "🕓", 
-    "🕔", 
-    "🕒", 
-    "🕑", 
+data = [
+    "🕜",
+    "🕡",
+    "🕦",
+    "🕣",
+    "🕥",
+    "🕧",
+    "🕓",
+    "🕔",
+    "🕒",
+    "🕑",
     "🕐"
 ]
 
@@ -46,6 +48,7 @@ pings = []
 
 @app.on_message(gen(["ping", "pong"]))
 async def ping_handler(_, m: Message):
+    """ ping handler for ping plugin """
     try:
 
         if app.long() == 1:
@@ -54,18 +57,21 @@ async def ping_handler(_, m: Message):
             end = datetime.now()
             m_s = (end - start).microseconds / 1000
             await app.send_edit(
-                f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention()}", 
+                f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention()}",
                 disable_web_page_preview=True
             )
         elif app.long() == 2:
             cmd = m.command
             count = int(cmd[1]) if cmd[1] and cmd[1].isdigit() else 0
             if count <= 1:
-                return await app.send_edit(f"Use `{app.Trigger()[0]}ping` for pings less than 1.", delme=3)
+                return await app.send_edit(
+                    f"Use `{app.Trigger()[0]}ping` for pings less than 1.",
+                    delme=3
+                )
 
             else:
                 try:
-                    for x in range(count):
+                    for _ in range(count):
                         await infinite()
                         await app.send_edit(". . .", text_type=["mono"])
                         await asyncio.sleep(0.30)
@@ -83,12 +89,11 @@ async def ping_handler(_, m: Message):
 
 # function to create lots of pings
 async def infinite():
+    """ infinite function for ping plugin """
     start = datetime.now()
-    await app.send_edit(random.choice(data)) # MessageNotModified 
+    await app.send_edit(random.choice(data)) # MessageNotModified
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
     msg = f"Pöng !\n{m_s} ms\n⧑ {app.UserMention()}\n\n"
     pings.append(msg)
     return True
-
-

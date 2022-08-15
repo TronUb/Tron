@@ -41,7 +41,7 @@ async def imdb_handler(_, m: Message):
 
         # default values
         nodata = "No Data"
-        
+
         if not movie:
             return await app.send_edit("No results found.", text_type=["mono"], delme=3)
 
@@ -60,12 +60,12 @@ async def imdb_handler(_, m: Message):
         director = ", ".join(f"`{x.get('name')}`" for x in movie.get("director")) if movie.get("director") else nodata
         music_director = ", ".join(f"`{x.get('name')}`" for x in movie.get("composer")) if movie.get("composer") else nodata
         writer = " ".join(f"`{x.get('name')}`" for x in movie.get('writer')) if movie.get('writer') else nodata
-        budget = box_office.get("Budget") if box_office.get("Budget") else nodata
+        budget = box_office.get("Budget") if box_office and box_office.get("Budget") else nodata
         _owus = box_office.get("Opening Weekend United States")
         owus = _owus if _owus and box_office else nodata
         _cwg = box_office.get("Cumulative Worldwide Gross")
         cwg = _cwg if _cwg and box_office else nodata
-        
+
         plot = "".join(movie.get("plot")) if movie.get("plot") else nodata
 
         caption = f"**Title:** `{title}`\n"

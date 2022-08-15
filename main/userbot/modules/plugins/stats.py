@@ -1,7 +1,9 @@
-from main import app, gen
+""" stats plugin """
+
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
 
+from main import app, gen
 
 
 
@@ -20,6 +22,7 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("stats"))
 async def dialogstats_handler(_, m: Message):
+    """ dialogstats handler for stats plugin """
     try:
         await app.send_edit("Getting stats . . .", text_type=["mono"])
 

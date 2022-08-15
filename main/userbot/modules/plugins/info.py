@@ -1,4 +1,4 @@
-import os
+""" info plugin """
 
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
@@ -11,21 +11,25 @@ app.CMD_HELP.update(
     {"info" : (
         "info",
         {
-        "minfo [reply to media]" : "Check media info including text information.", 
+        "minfo [reply to media]" : "Check media info including text information.",
         "chatinfo" : "Get chats information."
         }
         )
     }
-) 
+)
 
 
 
 
 @app.on_message(gen("minfo"))
 async def mediainfo_handler(_, m: Message):
+    """ mediainfo handler for info plugin """
     replied = m.reply_to_message
     if not replied:
-        return await app.send_edit("Please reply to some media to get media info . . .", text_type=["mono"])
+        return await app.send_edit(
+            "Please reply to some media to get media info . . .",
+            text_type=["mono"]
+        )
 
     if (app.get_file_id(replied))["type"] == "photo":
         pie = replied.photo
@@ -137,13 +141,17 @@ async def mediainfo_handler(_, m: Message):
 
 @app.on_message(gen("chatinfo"))
 async def chatinfo_handler(_, m: Message):
+    """ chatinfo handler for info plugin """
     try:
         if app.long() > 1:
             chat_u = m.command[1]
             chat = await app.get_chat(chat_u)
         else:
             if m.chat.type == ChatType.PRIVATE:
-                return await app.send_edit("Please use it in groups or use `.chatinfo [group username or id]`", delme=3)
+                return await app.send_edit(
+                    "Please use it in groups or use `.chatinfo [group username or id]`",
+                    delme=3
+                )
 
             else:
                 chatid = m.chat.id
@@ -166,18 +174,18 @@ async def chatinfo_handler(_, m: Message):
             data += f"**Username:** `@{chat.username}`\n"
         data += f"**Members:** `{chat.members_count}`\n"
         data += f"**Description:** `{chat.description}`\n"
-        data += f"**Permissions:**\n\n"
+        data += "**Permissions:**\n\n"
         data += f"**Send Messages:** `{neel.can_send_messages}`\n"
         data += f"**Send Media:** `{neel.can_send_media_messages}`\n"
-        data += f"**Web Page Preview:** `{neel.can_add_web_page_previews}`\n"  
+        data += f"**Web Page Preview:** `{neel.can_add_web_page_previews}`\n"
         data += f"**Send Polls:** `{neel.can_send_polls}`\n"
         data += f"**Change Group Info:** `{neel.can_change_info}`\n"
         data += f"**Invite Users:** `{neel.can_invite_users}`\n"
         data += f"**Pin Messages:** `{neel.can_pin_messages}`\n"
         if poto and data:
             await app.send_cached_media(
-                m.chat.id, 
-                file_id=poto, 
+                m.chat.id,
+                file_id=poto,
                 caption=data
             )
             await m.delete()

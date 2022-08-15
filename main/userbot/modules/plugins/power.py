@@ -1,3 +1,5 @@
+""" power plugin """
+
 import os
 import sys
 import time
@@ -14,7 +16,7 @@ app.CMD_HELP.update(
         "power",
         {
         "reboot" : "restarts the userbot through sys. (not heroku)",
-        "sleep [seconds]" : "The bot sleeps with your desired given input.\n**Note:** input must be less than <= 86400 seconds", 
+        "sleep [seconds]" : "The bot sleeps with your desired given input.\n**Note:** input must be less than <= 86400 seconds",
         }
         )
     }
@@ -25,6 +27,7 @@ app.CMD_HELP.update(
 
 @app.on_message(gen("reboot", exclude = ["sudo"]))
 async def reboot_handler(_, m: Message):
+    """ reboot handler for power plugin """
     try:
         msg = await app.send_edit("Restarting bot . . .", text_type=["mono"])
 
@@ -43,6 +46,7 @@ async def reboot_handler(_, m: Message):
 
 @app.on_message(gen("sleep", exclude = ["sudo"]))
 async def sleep_handler(_, m: Message):
+    """ sleep handler for power plugin """
     if app.long() == 1:
         return await app.send_edit("Give me some seconds after command . . .")
 
@@ -52,21 +56,25 @@ async def sleep_handler(_, m: Message):
     if arg.isdigit():
         cmd = int(arg)
         if cmd > 86400:
-            return await app.send_edit("Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .", text_type=["mono"], delme=3)
+            return await app.send_edit(
+                "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .",
+                text_type=["mono"],
+                delme=3
+            )
 
-        format = {
-            cmd<60:f"{cmd} seconds", 
-            cmd>=60:f"{cmd//60} minutes", 
+        formats = {
+            cmd<60:f"{cmd} seconds",
+            cmd>=60:f"{cmd//60} minutes",
             cmd>=3600:f"{cmd//3600} hours"
             }
 
         suffix = "`null`"
-        for x in format.keys(): # very small loop
+        for x in formats: # very small loop
             if x:
-                suffix = format[x]
+                suffix = formats[x]
                 break
 
         await app.send_edit(f"Sleeping for {suffix} . . .", delme=cmd)
-        time.sleep(cmd) 
+        time.sleep(cmd)
     else:
         await app.send_edit("Please give me a number not text . . .", delme=3, text_type=["mono"])

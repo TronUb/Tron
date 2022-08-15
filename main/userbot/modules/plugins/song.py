@@ -1,10 +1,12 @@
-import asyncio
+""" song plugin """
+
+import requests
 from pyrogram.types import Message
 
-from main import app, gen
-import requests
-
 from bs4 import BeautifulSoup
+
+from main import app, gen
+
 
 
 
@@ -30,6 +32,7 @@ headers = {
 
 @app.on_message(gen(["song", "music"]))
 async def song_handler(_, m: Message):
+    """ song handler for song plugin """
     await app.send_edit("Getting song . . .")
     try:
         cmd = m.command
@@ -75,6 +78,7 @@ async def song_handler(_, m: Message):
 
 @app.on_message(gen(["dz", "deezer"]))
 async def deezer_handler(_, m: Message):
+    """ deezer handler for song plugin """
     try:
         await app.send_edit("Searching on deezer . . .")
         cmd = m.command
@@ -110,7 +114,11 @@ async def deezer_handler(_, m: Message):
             # delete the message from Saved Messages
             await app.delete_messages("me", [saved.id, m.id])
         except TimeoutError:
-            return await app.send_edit("Something went wrong, try again . . .", delme=3, text_type=["mono"])
+            return await app.send_edit(
+                "Something went wrong, try again . . .",
+                delme=3,
+                text_type=["mono"]
+            )
     except Exception as e:
         await app.error(e)
         await app.send_edit("Something went wrong, try again !", text_type=["mono"], delme=3)
@@ -120,6 +128,7 @@ async def deezer_handler(_, m: Message):
 
 @app.on_message(gen(["ly", "lyrics"]))
 async def lyrics_handler(_, m: Message):
+    """ lyrics handler for song plugin """
     try:
         cmd = m.command
         reply = m.reply_to_message
@@ -146,13 +155,13 @@ async def lyrics_handler(_, m: Message):
         raw = requests.get(url + song_name.replace(" ", "%20") + "%20artist", headers=headers).text
         soup = BeautifulSoup(raw, "html.parser")
         content = soup.find_all("div", {"class":"uOId3b"})
-        artist_name = str(content[-1]).split(" -")[0]
+        artist_name = str(content[-1]).split(" -", maxsplit=1)[0]
 
         lyrics = await app.GetRequest(f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}")
         print(artist_name, "/", song_name)
 
         if not lyrics.get("lyrics"):
-                return await app.send_edit("No lyrics found.", text_type=["mono"], delme=3)
+            return await app.send_edit("No lyrics found.", text_type=["mono"], delme=3)
 
         link = app.telegraph.create_page(
                 app.name,
@@ -160,12 +169,20 @@ async def lyrics_handler(_, m: Message):
        )
 
         if not content:
-                return await app.send_edit(f"No lyrics found ! for song: {song_name}", text_type=["mono"], delme=3)
+            return await app.send_edit(
+                f"No lyrics found ! for song: {song_name}",
+                text_type=["mono"],
+                delme=3
+            )
         else:
-                await app.send_edit(
-                        f"**Lyrics Link: [Press Here](https://telegra.ph/{link.get('path')})**",
-                        disable_web_page_preview=True
-                )
+            await app.send_edit(
+                    f"**Lyrics Link: [Press Here](https://telegra.ph/{link.get('path')})**",
+                    disable_web_page_preview=True
+            )
     except Exception as e:
         await app.error(e)
-        await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
+        await app.send_edit(
+            "Something went wrong, please try again later !",
+            text_type=["mono"],
+            delme=3
+        )

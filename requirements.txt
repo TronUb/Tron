@@ -25,3 +25,4 @@ bing-image-downloader
 pyfy
 uvloop
 cinemagoer
+moviepy

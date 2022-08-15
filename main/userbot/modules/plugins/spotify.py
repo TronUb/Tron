@@ -1,7 +1,7 @@
-from main import app, gen
+""" spotify plugin """
 
 from pyrogram.types import Message
-from pyrogram.enums import ChatType 
+from pyrogram.enums import ChatType
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton
@@ -9,10 +9,13 @@ from pyrogram.types import (
 
 from pyfy import AsyncSpotify
 
+from main import app, gen
+
 
 
 
 async def spotify_now():
+    """ spotify now function for spotify plugin """
     token = app.SpotifyToken()
 
     spt = AsyncSpotify(token)
@@ -39,13 +42,22 @@ async def spotify_now():
 
 @app.on_message(gen("now"))
 async def spotify_handler(_, m: Message):
+    """ spotify handler for spotify plugin """
     try:
         if not app.SpotifyToken():
-            return await app.send_edit("Please fill `SPOTIFY_TOKEN var.", text_type=["mono"], delme=3)
+            return await app.send_edit(
+                "Please fill `SPOTIFY_TOKEN var.",
+                text_type=["mono"],
+                delme=3
+            )
 
         data = await spotify_now()
         if not data:
-            return await app.send_edit("You are not listening to anything.", text_type=["mono"], delme=3)
+            return await app.send_edit(
+                "You are not listening to anything.",
+                text_type=["mono"],
+                delme=3
+            )
 
         caption = f"{app.name}\n"
         caption += "is listening to\n\n"
@@ -79,4 +91,3 @@ async def spotify_handler(_, m: Message):
         await m.delete()
     except Exception as e:
         await app.error(e)
-

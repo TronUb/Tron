@@ -1,8 +1,7 @@
-import re
+""" share plugin """
+
 import os
 import time
-
-from datetime import datetime
 
 from pyrogram.types import Message
 
@@ -27,7 +26,8 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("send"))
-async def sendmodule_handler(app, m: Message):
+async def sendplugin_handler(_, m: Message):
+    """ send plugin handler for share plugin """
     if app.long() > 1:
         await app.send_edit("Checking module . . .", text_type=["mono"])
         filename = m.command[1]
@@ -58,20 +58,32 @@ async def sendmodule_handler(app, m: Message):
         else:
             await app.send_edit("404: plugin not found . . .", delme=2, text_type=["mono"])
     else:
-        await app.send_edit(f"`{app.Trigger()[0]}send [ plugin name ]`  to upload plugin file.", delme=3)
+        await app.send_edit(
+            f"`{app.Trigger()[0]}send [ plugin name ]`  to upload plugin file.",
+            delme=3
+        )
 
 
 
 
 @app.on_message(gen("install"))
 async def install_handler(_, m: Message):
+    """ install handler for share plugin """
     reply = m.reply_to_message
     if not reply:
-        return await app.send_edit("Reply to a python file to install . . .", text_type=["mono"], delme=4)
+        return await app.send_edit(
+            "Reply to a python file to install . . .",
+            text_type=["mono"],
+            delme=4
+        )
 
     if reply:
         if not reply.document.file_name.endswith(".py"):
-            return await app.send_edit("Only (.py) plugins can be installed !!", text_type=["mono"], delme=3)
+            return await app.send_edit(
+                "Only (.py) plugins can be installed !!",
+                text_type=["mono"],
+                delme=3
+            )
 
         doc_name = reply.document.file_name
 
@@ -80,11 +92,14 @@ async def install_handler(_, m: Message):
         )
         await app.send_edit("Installing module . . .", text_type=["mono"])
         if os.path.exists(module_loc):
-            return await app.send_edit(f"Module `{doc_name}` already exists ! skipping installation !", delme=5)
+            return await app.send_edit(
+                f"Module `{doc_name}` already exists ! skipping installation !",
+                delme=4
+            )
 
         try:
             download_loc = await app.download_media(
-                message=reply, 
+                message=reply,
                 file_name=module_loc
             )
             if download_loc:
@@ -92,7 +107,11 @@ async def install_handler(_, m: Message):
                 data = open(download_loc, "r")
                 await app.aexec(data.read())
             else:
-                await app.send_edit(f"Failed to install module {doc_name}", text_type=["mono"], delme=4)
+                await app.send_edit(
+                    f"Failed to install module {doc_name}",
+                    text_type=["mono"],
+                    delme=4
+                )
         except Exception as e:
             await app.error(e)
 
@@ -102,6 +121,7 @@ async def install_handler(_, m: Message):
 
 @app.on_message(gen("uninstall"))
 async def uninstall_handler(_, m: Message):
+    """ uninstal handler for share plugin """
     cmd = m.command
     try:
         if app.long() > 1:
