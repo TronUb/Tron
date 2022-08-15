@@ -1,14 +1,13 @@
+""" image plugin """
+
 import os
-import time
+import json
 import asyncio
 import qrcode
 import requests
-import json
 
-from PIL import Image, ImageOps, ImageDraw, ImageFont
+from PIL import Image
 
-from pyrogram import filters, Client
-from pyrogram.errors import UsernameInvalid
 from pyrogram.types import Message
 
 from main import app, gen
@@ -53,6 +52,7 @@ COLOUR_CODE = {
 
 
 async def get_image(m: Message, keyword):
+    """ getimage function for image plugin """
     await app.send_edit(
         "Getting Picture . . .",
         text_type=["mono"]
@@ -61,7 +61,7 @@ async def get_image(m: Message, keyword):
         f"https://source.unsplash.com/1600x900/?{keyword}"
         )
     await asyncio.gather(
-        m.delete(), 
+        m.delete(),
         app.send_photo(m.chat.id, str(img))
         )
 
@@ -69,22 +69,32 @@ async def get_image(m: Message, keyword):
 
 
 async def send_profile_pic(m):
-    reply = m.reply_to_message 
+    """ sendprofilepic function for image plugin """
+    reply = m.reply_to_message
     ids = reply.from_user.id if reply else "me"
 
     async for x in app.get_chat_photos(ids):
         await app.send_cached_media(m.chat.id, x.file_id)
-    
+
 
 
 @app.on_message(gen(["uns", "unsplash"]))
 async def unsplash_handler(_, m: Message):
+    """ unsplash handler for image """
     cmd = m.command
     if app.long() == 1:
-        await app.send_edit(m, "Give me some query after command . . .", text_type=["mono"], delme=4)
+        await app.send_edit(
+            "Give me some query after command . . .",
+            text_type=["mono"],
+            delme=4
+        )
     elif app.long() == 2:
         if cmd[1].isdigit():
-            return await app.send_edit(m, "Sorry but give me a text query.", text_type=["mono"], delme=4)
+            return await app.send_edit(
+                "Sorry but give me a text query.",
+                text_type=["mono"],
+                delme=4
+            )
         else:
             keyword = cmd[1]
         await get_image(m, keyword)
@@ -96,7 +106,7 @@ async def unsplash_handler(_, m: Message):
                 await app.send_edit("Getting images . . .", text_type=["mono"])
                 second = int(cmd[1]) + 1
                 keyword = cmd[2]
-                for x in range(1, second):
+                for _ in range(1, second):
                     img = await app.get_url(
                         f"https://source.unsplash.com/1600x900/?{keyword}"
                         )
@@ -110,9 +120,17 @@ async def unsplash_handler(_, m: Message):
                 if m.from_user.is_self:
                     await m.delete()
             else:
-                await app.send_edit("Sorry numbers are not excludeed to be a search query.", delme=4, text_type=["mono"])  
+                await app.send_edit(
+                    "Sorry numbers are not excludeed to be a search query.",
+                    delme=4,
+                    text_type=["mono"]
+                )
         else:
-            await app.send_edit("Give me count number of how many images you need.", delme=4, text_type=["mono"])
+            await app.send_edit(
+                "Give me count number of how many images you need.",
+                delme=4,
+                text_type=["mono"]
+            )
     else:
         return app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
@@ -121,6 +139,7 @@ async def unsplash_handler(_, m: Message):
 
 @app.on_message(gen("stoi"))
 async def stoi_handler(_, m):
+    """ stoi handler for image plugin """
     reply = m.reply_to_message
     if not reply:
         await app.send_edit("reply to a sticker.", text_type=["mono"], delme=3)
@@ -131,19 +150,23 @@ async def stoi_handler(_, m):
                 filename = f"{app.TEMP_DICT}sticker.jpg"
                 msg = await app.send_edit("Converting To Image ...", text_type=["mono"])
                 await app.download_media(
-                    message=reply, 
+                    message=reply,
                     file_name=filename
                     )
                 await app.send_photo(
-                    m.chat.id, 
-                    filename, 
+                    m.chat.id,
+                    filename,
                     reply_to_message_id=reply.id
                     )
                 await msg.delete()
                 if os.path.exists(filename):
                     os.remove(filename)
             else:
-                await app.send_edit("Animated Stickers are Not Supported!", delme=3, text_type=["mono"])
+                await app.send_edit(
+                    "Animated Stickers are Not Supported!",
+                    delme=3,
+                    text_type=["mono"]
+                )
         else:
             await app.send_edit("Reply to a sticker please !", delme=3, text_type=["mono"])
 
@@ -152,6 +175,7 @@ async def stoi_handler(_, m):
 
 @app.on_message(gen("itos"))
 async def itos_handler(_, m):
+    """ itos handler for image plugin """
     reply = m.reply_to_message
     if not reply:
         await app.send_edit("Reply to a image.", text_type=["mono"], delme=3)
@@ -162,18 +186,22 @@ async def itos_handler(_, m):
                 await app.send_edit("Converting To Sticker . . .", text_type=["mono"])
                 filename = f"{app.TEMP_DICT}sticker.webp"
                 await app.download_media(
-                    message=reply, 
+                    message=reply,
                     file_name=filename
                     )
                 await app.send_sticker(
-                    m.chat.id, 
-                    filename, 
+                    m.chat.id,
+                    filename,
                     reply_to_message_id=reply.id)
                 await m.delete()
                 if os.path.exists(filename):
                     os.remove(filename)
             else:
-                await app.send_edit("video and animated Stickers Not Supported!", delme=3, text_type=["mono"])
+                await app.send_edit(
+                    "video and animated Stickers Not Supported!",
+                    delme=3,
+                    text_type=["mono"]
+                )
         else:
             await app.send_edit("Reply to supported media . . .", delme=3, text_type=["mono"])
 
@@ -182,28 +210,31 @@ async def itos_handler(_, m):
 
 @app.on_message(gen(["qc", "qrcode"]))
 async def qrcode_handler(_, m):
-        try:
-            picname = f"{app.TEMP_DICT}qrcode.jpg"
-            img = qrcode.make(m.command[1:])
-            img.save(
-                picname
-                )
-            await app.send_edit("Making qrcode . . .", text_type=["mono"])
-            await app.send_document(
-                m.chat.id, 
-                picname
-                )
-            if os.path.exists(picname):
-                os.remove(picname)
-            await m.delete()
-        except Exception as e:
-            await app.error(e)
+    """ qrcode handler for image plugin """
+    try:
+        picname = f"{app.TEMP_DICT}qrcode.jpg"
+        img = qrcode.make(m.command[1:])
+        img.save(
+            picname
+        )
+        await app.send_edit("Making qrcode . . .", text_type=["mono"])
+        await app.send_document(
+            m.chat.id,
+            picname
+        )
+        if os.path.exists(picname):
+            os.remove(picname)
+
+        await m.delete()
+    except Exception as e:
+        await app.error(e)
 
 
 
 
 @app.on_message(gen(["colour", "color"]))
 async def colourtemplate_handler(_, m: Message):
+    """ colourtemplate handler for image plugin """
     if app.long() == 1:
         await app.send_edit("Please give some colour name after command . . .", delme=3)
 
@@ -217,8 +248,8 @@ async def colourtemplate_handler(_, m: Message):
 
                 picname = f"{app.TEMP_DICT}colour_image.png"
                 img = Image.new(
-                    "RGB", 
-                    (w, h), 
+                    "RGB",
+                    (w, h),
                     color = f"{m.command[1]}"
                     )
                 img.save(picname)
@@ -259,7 +290,7 @@ async def waifupic_handler(_, m):
     try:
         if app.long() == 1:
             await app.send_edit(text, text_type=["mono"])
-            data = requests.get(f"https://api.waifu.pics/sfw/waifu")
+            data = requests.get("https://api.waifu.pics/sfw/waifu")
             photo = data.json().get("url")
             if photo:
                 await app.send_photo(m.chat.id, photo)
@@ -268,7 +299,7 @@ async def waifupic_handler(_, m):
                 await app.send_edit("No waifu found !", delme=3)
         elif app.long() > 1 and m.command[1] == "nsfw":
             await app.send_edit(text, text_type=["mono"])
-            data = requests.get(f"https://api.waifu.pics/nsfw/waifu")
+            data = requests.get("https://api.waifu.pics/nsfw/waifu")
             photo = data.json().get("url")
             if photo:
                 await app.send_photo("me", photo)
@@ -277,7 +308,7 @@ async def waifupic_handler(_, m):
                 await app.send_edit("No waifu found !", delme=3)
         elif app.long() > 1 and m.command[1] != "nsfw":
             await app.send_edit(text, text_type=["mono"])
-            data = requests.get(f"https://api.waifu.pics/sfw/waifu")
+            data = requests.get("https://api.waifu.pics/sfw/waifu")
             photo = data.json().get("url")
             if photo:
                 await app.send_photo(m.chat.id, photo)
@@ -310,5 +341,3 @@ async def dogpic_handler(_, m):
     except Exception as e:
         await app.send_edit("No dog pics Found !", text_type=["mono"])
         await app.error(e)
-
-

@@ -1,5 +1,6 @@
+""" reddit plugin """
+
 import os
-import json
 import random
 import requests
 from pyrogram.types import Message
@@ -24,18 +25,25 @@ app.CMD_HELP.update(
 
 @app.on_message(gen(["r", "reddit"]))
 async def reddit_handler(_, m: Message):
+    """ reddit handler for reddit plugin """
     if app.long() == 1:
         return await app.send_edit("Please give me some query to search on reddit.", delme=2)
 
     elif app.textlen() > 4096:
-        return await app.send_edit("Too long query, only 4096 characters are excludeed !", text_type=["mono"], delme=2)
+        return await app.send_edit(
+            "Too long query, only 4096 characters are excludeed !",
+            text_type=["mono"],
+            delme=3
+        )
 
     elif app.long() > 1:
         try:
             query = m.text.split(None, 1)[1]
             await app.send_edit("Getting reddit images . . .", text_type=["mono"])
             url = f"https://old.reddit.com/r/{query}.json"
-            headers = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"}   
+            headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
+            }
             data = requests.get(url, headers=headers).json()
 
             for ch in data["data"]["children"]:
@@ -60,4 +68,3 @@ async def reddit_handler(_, m: Message):
 
         except Exception as e:
             await app.error(e)
-

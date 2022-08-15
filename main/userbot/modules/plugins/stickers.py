@@ -1,3 +1,5 @@
+""" stickers plugin """
+
 import io
 import os
 import time
@@ -21,7 +23,7 @@ app.CMD_HELP.update(
     {"stickers" : (
         "stickers",
         {
-        "kang [reply to sticker]" : "Adds sticker to your pack or creates new sticker pack.", 
+        "kang [reply to sticker]" : "Adds sticker to your pack or creates new sticker pack.",
         "stinfo [ reply to sticker ]" : "Get sticker pack info."
         }
         )
@@ -32,7 +34,8 @@ app.CMD_HELP.update(
 
 
 @app.on_message(gen("kang"))
-async def kang(_, m: Message):
+async def kang_handler(_, m: Message):
+    """ kang handler for stickers plugin """
     replied = m.reply_to_message
     photo = None
     emoji_ = None
@@ -114,7 +117,9 @@ async def kang(_, m: Message):
                 if is_anim:
                     packname += "_anim"
                     packnick += " (Animated)"
-                await app.send_edit(m, "Switching to Pack " + str(pack) + " due to insufficient space") 
+                await app.send_edit(
+                    "Switching to Pack " + str(pack) + " due to insufficient space"
+                )
 
                 await app.send_message("Stickers", packname)
                 if await get_response(m) == "Invalid pack selected":
@@ -154,7 +159,10 @@ async def kang(_, m: Message):
             await asyncio.sleep(0.40)
             rsp = await get_response(m)
             if "Sorry, the file type is invalid." in rsp:
-                return await app.send_edit("Failed to add sticker, use @Stickers bot to add the sticker manually.", text_type=["mono"])
+                return await app.send_edit(
+                    "Failed to add sticker, use @Stickers bot to add the sticker manually.",
+                    text_type=["mono"]
+                )
 
             await app.send_message("Stickers", emoji_)
             await asyncio.sleep(0.40)
@@ -176,7 +184,9 @@ async def kang(_, m: Message):
             await get_response(m)
             rsp = await get_response(m)
             if "Sorry, the file type is invalid." in rsp:
-                return await app.send_edit("Failed to add sticker, use @Stickers bot to add the sticker manually.")
+                return await app.send_edit(
+                    "Failed to add sticker, use @Stickers bot to add the sticker manually."
+                )
 
             await app.send_message("Stickers", emoji_)
             await asyncio.sleep(0.40)
@@ -202,15 +212,22 @@ async def kang(_, m: Message):
 
 
 @app.on_message(gen("stinfo"))
-async def sticker_pack_info_(_, m: Message):
+async def stinfo_handler(_, m: Message):
+    """ stickerinfo handler for stickers plugin """
     replied = m.reply_to_message
     if not replied:
         return await app.send_edit("I can't fetch info from nothing, can I ?!", text_type=["mono"])
 
     if not replied.sticker:
-        return await app.send_edit("Reply to a sticker to get the pack details.", text_type=["mono"])
+        return await app.send_edit(
+            "Reply to a sticker to get the pack details.",
+            text_type=["mono"]
+        )
 
-    await app.send_edit("Fetching details of the sticker pack, please wait . . .", text_type=["mono"])
+    await app.send_edit(
+        "Fetching details of the sticker pack, please wait . . .",
+        text_type=["mono"]
+    )
     get_stickerset = await app.invoke(
         GetStickerSet(
             stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name),
@@ -254,6 +271,7 @@ def resize_photo(photo: str) -> io.BytesIO:
 
 
 async def get_response(m):
+    """ get response function for stickers plugin """
     return [x async for x in app.get_chat_history("Stickers", limit=1)][0].text
 
 
@@ -271,6 +289,3 @@ KANGING_STR = (
     "Arresting This Sticker...",
     "Me Piro Steel Ur Stkr, Hehehe... "
 )
-
-
-

@@ -1,14 +1,17 @@
-import time
-
-from pyrogram.types import (
-    InlineKeyboardMarkup, 
-    InlineKeyboardButton, 
-    Message
-)
+""" notes plugin """
 
 from pyrogram import errors
 
-from main import app, gen, regex
+from pyrogram.types import (
+    InlineKeyboardMarkup,
+    Message
+)
+
+from main import (
+    app,
+    gen,
+    regex
+)
 
 
 
@@ -17,7 +20,7 @@ app.CMD_HELP.update(
     {"notes" : (
         "notes",
         {
-        "save [note mame ] [reply to message]" : "Save A Note Of Any Type Of Media In Your Database.", 
+        "save [note mame ] [reply to message]" : "Save A Note Of Any Type Of Media In Your Database.",
         ">" : "Get Your Note. Example: `>mynote`, Where mynote is note name and command ( >)",
         "notes" : "Get Your Saved Note List.",
         "clear" : "Delete A Note."
@@ -48,14 +51,21 @@ GET_FORMAT = {
 
 @app.on_message(gen("save"))
 async def savenote_hanlder(_, m: Message):
+    """ savenote handler for notes plugin """
     try:
         reply = m.reply_to_message
         if app.long() == 1:
-            return await app.send_edit("A note name is required with command to save a note.", text_type=["mono"])
+            return await app.send_edit(
+                "A note name is required with command to save a note.",
+                text_type=["mono"]
+            )
 
         note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
         if not note_name:
-            return await app.send_edit("A note name is necessary to save a note !", text_type=["mono"])
+            return await app.send_edit(
+                "A note name is necessary to save a note !",
+                text_type=["mono"]
+            )
 
         if message_type == app.TEXT:
             file_id = None
@@ -64,7 +74,7 @@ async def savenote_hanlder(_, m: Message):
                 await app.send_edit(f"Text: `{m.text}`\n\nError: There is no text in here !")
 
         app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
-        await app.send_edit("Saved note = **[ `{}` ]**".format(note_name))
+        await app.send_edit(f"Saved note = **[ `{note_name}` ]**")
     except Exception as e:
         await app.error(e)
 
@@ -73,6 +83,7 @@ async def savenote_hanlder(_, m: Message):
 
 @app.on_message(regex(">"))
 async def getnote_handler(_, m: Message):
+    """ getnote handler for notes plugin """
     reply = m.reply_to_message
     if m.text and m.text.startswith(">"):
         if app.long() == 1:
@@ -148,7 +159,8 @@ async def getnote_handler(_, m: Message):
 
 
 @app.on_message(gen("notes"))
-async def notelist_handler(_, m: Message):	
+async def notelist_handler(_, m: Message):
+    """ notelist handler for notes plugin """
     getnotes = app.get_all_selfnotes(m.from_user.id)
     if not getnotes:
         return await app.send_edit("There are no saved notes !", text_type=["mono"], delme=4)
@@ -163,9 +175,12 @@ async def notelist_handler(_, m: Message):
 
 
 @app.on_message(gen("clear", exclude=["sudo"]))
-async def clearnote_handler(_, m: Message):	
+async def clearnote_handler(_, m: Message):
+    """ clearnote handler for notes plugin """
     if app.long() <= 1:
-        return await app.send_edit(f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`")
+        return await app.send_edit(
+            f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`"
+        )
 
     notename = m.text.split()[1]
     getnotes = app.rm_selfnote(m.from_user.id, notename)
@@ -173,4 +188,3 @@ async def clearnote_handler(_, m: Message):
         return await app.send_edit("This note does not exist!")
     else:
         await app.send_edit(f"Deleted note = **[ `{notename}` ]**")
-        

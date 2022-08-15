@@ -1,6 +1,6 @@
+""" telegraph plugin """
+
 import os
-import time
-import asyncio
 
 from telegraph import upload_file
 
@@ -11,14 +11,14 @@ from main import app, gen
 
 
 
-app.CMD_HELP.update( 
+app.CMD_HELP.update(
     {"telegraph" : (
         "telegraph",
         {
-        "tgm [reply to message | media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)." 
+        "tgm [reply to message | media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)."
         }
         )
-    } 
+    }
 )
 
 
@@ -26,12 +26,13 @@ app.CMD_HELP.update(
 
 @app.on_message(gen(["tgm", "telegraph"]))
 async def telegraph_handler(_, m:Message):
+    """ telegraph handler for supertools plugin """
     reply = m.reply_to_message
     filesize = 5242880
     # if not replied
     if not reply:
-        await app.send_edit(f"Please reply to media / text . . .", text_type=["mono"])
-    # replied to text 
+        await app.send_edit("Please reply to media / text . . .", text_type=["mono"])
+    # replied to text
     elif reply.text:
         if len(reply.text) <= 4096:
             await app.send_edit("⏳• Hold on . . .", text_type=["mono"])
@@ -70,14 +71,16 @@ async def telegraph_handler(_, m:Message):
             except Exception as e:
                 return await app.error(e)
             await app.send_edit(
-                f"**Telegraph Link: [Press Here](https://telegra.ph{response[0]})**", 
+                f"**Telegraph Link: [Press Here](https://telegra.ph{response[0]})**",
                 disable_web_page_preview=True
                 )
             if os.path.exists(loc):
                 os.remove(loc)
         else:
-            await app.send_edit("Please check the file format or file size , it must be less than 5 mb . . .", text_type=["mono"])
+            await app.send_edit(
+                "Please check the file format or file size , it must be less than 5 mb . . .",
+                text_type=["mono"]
+            )
     else:
         # if replied to unsupported media
         await app.send_edit("Sorry, The File is not supported !", delme=2, text_type=["mono"])
-

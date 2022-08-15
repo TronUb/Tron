@@ -1,19 +1,14 @@
-import os
+""" profile plugin """
+
 import time
-import math
-import asyncio
 
 from functools import partial
-from datetime import datetime
 
 from pyrogram.types import (
-    Message, 
-    User, 
-    InlineKeyboardMarkup, 
-    InlineKeyboardButton
+    Message,
+    User
     )
 
-from pyrogram.raw import functions
 from pyrogram.errors import PeerIdInvalid
 
 from main import app, gen
@@ -63,13 +58,15 @@ infotext = """
 
 
 def FullName(user: User):
+    """ fullname function for profile plugin """
     return user.first_name + " " + user.last_name if user.last_name else user.first_name
 
 
 
 
 @app.on_message(gen("whois"))
-async def whois(_, m: Message):
+async def whois_handler(_, m: Message):
+    """ whois handler for profile plugin """
     reply = m.reply_to_message
     cmd = m.command
     await app.send_edit("Finding details . . .", text_type=["mono"])
@@ -105,7 +102,7 @@ async def whois(_, m: Message):
         )
     else:
         await app.send_cached_media(
-            m.chat.id, 
+            m.chat.id,
             file_id = pfp,
             caption=infotext.format(
                 FullName(user),
@@ -122,7 +119,8 @@ async def whois(_, m: Message):
 
 
 @app.on_message(gen("id"))
-async def id(_, m: Message):
+async def id_handler(_, m: Message):
+    """ id handler for profile plugin """
     await app.send_edit("Getting id . . .", text_type=["mono"])
     cmd = m.command
     reply = m.reply_to_message
@@ -149,9 +147,12 @@ async def id(_, m: Message):
 
 
 @app.on_message(gen(["men", "mention"], exclude = ["sudo"]))
-async def mention_user(_, m: Message):
+async def mentionuser_handler(_, m: Message):
+    """ mentionuser handler for profile plugin """
     if app.long() < 3:
-        return await app.send_edit("Incorrect command use.\n\n**Example** : `.men @beastzx Tronuserbot`")
+        return await app.send_edit(
+            "Incorrect command use.\n\n**Example** : `.men @beastzx Tronuserbot`"
+        )
 
     try:
         user = await app.get_users(m.command[1])
@@ -167,6 +168,7 @@ async def mention_user(_, m: Message):
 
 @app.on_message(gen("uinfo"))
 async def get_full_user_info(_, m: Message):
+    """ get full user info function for profile plugin """
     await app.send_edit("scrapping info . . .", text_type=["mono"])
     reply = m.reply_to_message
 
@@ -180,7 +182,7 @@ async def get_full_user_info(_, m: Message):
     async for x in app.get_chat_photos(user.id):
         p_id = x.file_id
         break
-        
+
 
     try:
         duo = f"**1. ID:** `{user.id}`\n"
@@ -199,8 +201,8 @@ async def get_full_user_info(_, m: Message):
 
         if p_id:
             await app.send_cached_media(
-                m.chat.id, 
-                file_id=p_id, 
+                m.chat.id,
+                file_id=p_id,
                 caption=duo
             )
             await m.delete()
@@ -215,16 +217,17 @@ async def get_full_user_info(_, m: Message):
 
 @app.on_message(gen(["sc", "scan"]))
 async def tgscan_handler(_, m: Message):
+    """ tgscan handler for profile plugin """
     if m.reply_to_message:
         await app.send_edit("Checking database . . .")
         await app.forward_messages(
-            "@tgscanrobot", 
-            m.chat.id, 
+            "@tgscanrobot",
+            m.chat.id,
             m.reply_to_message.id
             )
         time.sleep(0.5)
         msg = await app.get_chat_history(
-            "@tgscanrobot", 
+            "@tgscanrobot",
             limit=1
             )
         if msg:
@@ -241,6 +244,7 @@ async def tgscan_handler(_, m: Message):
 
 @app.on_message(gen("block"))
 async def block_handler(_, m: Message):
+    """ block handler for profile plugin """
     reply = m.reply_to_message
 
     if app.long() >= 2 and not reply:
@@ -263,6 +267,7 @@ async def block_handler(_, m: Message):
 
 @app.on_message(gen("unblock"))
 async def unblock_handler(_, m: Message):
+    """ unblock handler for profile plugin """
     reply = m.reply_to_message
 
     if app.long() >= 2 and not reply:
@@ -285,23 +290,28 @@ async def unblock_handler(_, m: Message):
 
 @app.on_message(gen("sg"))
 async def usernamehistory_handler(_, m: Message):
+    """ usernamehistory handler for profile plugin """
     reply = m.reply_to_message
 
     if not reply:
-        await app.send_edit("Reply to a user to get history of name / username.", text_type=["mono"], delme=2)
+        await app.send_edit(
+            "Reply to a user to get history of name / username.",
+            text_type=["mono"],
+            delme=2
+        )
 
     elif reply:
         await app.send_edit("Checking History . . .", text_type=["mono"])
         await app.forward_messages(
-            "@SangMataInfo_bot", 
-            m.chat.id, 
+            "@SangMataInfo_bot",
+            m.chat.id,
             reply.id
             )
         is_no_record = False
         for x in range(8):
             time.sleep(1)
             msg = await app.get_chat_history(
-                "@SangMataInfo_bot", 
+                "@SangMataInfo_bot",
                 limit=3
                 )
             if msg[0].text == "No records found":
@@ -309,18 +319,25 @@ async def usernamehistory_handler(_, m: Message):
                 is_no_record = True
                 await app.read_chat_history("@SangMataInfo_bot")
                 break
-            if msg[0].from_user.id == 461843263 and msg[1].from_user.id == 461843263 and msg[2].from_user.id == 461843263:
+            if (msg[0].from_user.id == 461843263 and
+                msg[1].from_user.id == 461843263 and
+                msg[2].from_user.id == 461843263):
                 await app.read_chat_history("@SangMataInfo_bot")
                 break
             else:
-                print("Failed, try again ({})".format(x+1))
+                print(f"Failed, try again ({x+1})")
                 continue
         if is_no_record:
             return
         history_name = "1. " + msg[2].text.split("\n\n1. ")[1]
         username_history = "1. " + msg[1].text.split("\n\n1. ")[1]
-        text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(m.reply_to_message.from_user.first_name, m.reply_to_message.from_user.id, m.reply_to_message.from_user.id) + history_name
-        if app.textlen() <= 4096 and len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906:
+        text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(
+            reply.from_user.first_name,
+            reply.from_user.id,
+            reply.from_user.id) + history_name
+        if (app.textlen() <= 4096 and
+            len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906
+            ):
             text += "\n\n**Username History**\n\n" + username_history
             await app.send_edit(text)
         else:
@@ -332,10 +349,13 @@ async def usernamehistory_handler(_, m: Message):
 
 @app.on_message(gen("set", exclude=["sudo"]))
 async def setprofile_handler(_, m: Message):
+    """ setprofile handler for profile plugin """
     cmd = m.command
 
     if app.long() < 3:
-        return await app.send_edit("Please use text and suffix after command suffix: `fname`, `lname`, `bio`, `uname`")
+        return await app.send_edit(
+            "Please use text and suffix after command suffix: `fname`, `lname`, `bio`, `uname`"
+        )
 
     # set -> fname, lname, bio & uname
     if app.long() > 2:
@@ -347,32 +367,40 @@ async def setprofile_handler(_, m: Message):
             await app.update_username(text)
 
     else:
-        return await app.send_edit(f"Please specify a correct suffix.", text_type=["mono"], delme=3)
+        return await app.send_edit("Please specify a correct suffix.", text_type=["mono"], delme=3)
 
 
 
 
 @app.on_message(gen("rem", exclude=["sudo"]))
 async def remprofile_handler(_, m: Message):
+    """ rmprofile handler for profile plugin """
     if app.long() > 1:
         cmd = m.command
 
     elif app.long(m) == 1:
-        return await app.send_edit("what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`", delme=3)
+        return await app.send_edit(
+            "what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`",
+            delme=3
+        )
 
     try:
         if cmd[1] in ["lname", "bio", "pfp", "uname"]:
             await rmprofile(m, cmd[1])
         else:
-            await app.send_edit("please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`", delme=3)
+            await app.send_edit(
+                "please use from the list:\n\n`lname`\n`bio`\n`pfp`\n`uname`",
+                delme=3
+            )
     except Exception as e:
         await app.error(e)
 
 
 
 
-# set your profile stuffs 
+# set your profile stuffs
 async def setprofile(m: Message, mode, kwargs):
+    """ setprofile handler for profile plugin """
     # set first name
     if mode == "fname":
         try:
@@ -414,6 +442,7 @@ async def setprofile(m: Message, mode, kwargs):
 
 # remove everything
 async def rmprofile(m: Message, args):
+    """ rmprofile function for profile plugin """
     # delete last name
     if args == "lname":
         await app.update_profile(
@@ -453,6 +482,8 @@ async def rmprofile(m: Message, args):
 
 @app.on_message(gen("repo"))
 async def repolink_handler(_, m: Message):
-    await app.send_edit("TronUB Repo: [press here](https://github.com/TronUb/Tron)", disable_web_page_preview=True)
-
-
+    """ repolink handler for profile plugin """
+    await app.send_edit(
+        "TronUB Repo: [press here](https://github.com/TronUb/Tron)",
+        disable_web_page_preview=True
+    )
