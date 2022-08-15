@@ -59,8 +59,14 @@ async def videocut_handler(_, m: Message):
                 text_type=["mono"],
                 delme=3
             )
-
-        cut_time = args.text.split(None, 1)[1]
+        try:
+            cut_time = args.text.split(None, 1)[1]
+        except IndexError:
+            return await app.send_edit(
+                "Give me the duration you want to cut.",
+                text_type=["mono"],
+                delme=3
+            )
 
         await app.send_edit(
             "Downloading video . . .",
@@ -82,7 +88,7 @@ async def videocut_handler(_, m: Message):
 
         if os.path.exists(vname):
             msg = await app.send_edit(
-                "Ssnding new video . . .",
+                "Sending new video . . .",
                 text_type=["mono"]
             )
             await app.send_video(
