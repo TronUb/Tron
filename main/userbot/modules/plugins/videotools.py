@@ -72,21 +72,6 @@ async def videocut_handler(_, m: Message):
                 "The duration time is wrong, use `hh:mm:ss`"
             )
 
-        t_list = [int(x) for x in cut_time.split(":")]
-        try:
-            dv_time = t_list[0]*60*60 + t_list[1]*60 + t_list[2]
-        except IndexError:
-            return await sendit(
-                "The duration time is wrong, use `hh:mm:ss`"
-            )
-
-        v_time = reply.video.duration
-
-        if dv_time > v_time:
-            return await sendit(
-                "The given duration can't be greater than the video duration."
-            )
-
         await app.send_edit(
             "Downloading video . . .",
             text_type=["mono"]
@@ -96,6 +81,20 @@ async def videocut_handler(_, m: Message):
             "Cutting video . . .",
             text_type=["mono"]
         )
+
+        v_time = clip.duration
+        t_list = [int(x) for x in cut_time.split(":")]
+        try:
+            dv_time = t_list[0]*60*60 + t_list[1]*60 + t_list[2]
+        except IndexError:
+            return await sendit(
+                "The duration time is wrong, use `hh:mm:ss`"
+            )
+
+        if dv_time > v_time:
+            return await sendit(
+                "The given duration can't be greater than the video duration."
+            )
 
         clip = clip.set_duration(cut_time)
         await app.send_edit(
