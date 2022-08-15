@@ -37,7 +37,14 @@ async def videocut_handler(_, m: Message):
         text_type=["mono"]
     )
 
-    if not (reply or reply.video):
+    if not reply:
+        return await app.send_edit(
+            "Reply to a video . . .",
+            text_type=["mono"],
+            delme=3
+        )
+
+    if not reply.video:
         return await app.send_edit(
             "Reply to a video . . .",
             text_type=["mono"],
