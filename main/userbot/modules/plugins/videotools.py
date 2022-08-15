@@ -67,7 +67,7 @@ async def videocut_handler(_, m: Message):
                 "Give me the duration you want to cut."
             )
 
-        if not ":" in args:
+        if not ":" in cut_time:
             return await sendit(
                 "The duration time is wrong, use `hh:mm:ss`"
             )
