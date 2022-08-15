@@ -25,6 +25,13 @@ def Video(path):
     return VideoFileClip(path)
 
 
+async def sendit(text):
+    return await app.send_edit(
+        text,
+        text_type=["mono"],
+        delme=3
+    )
+
 
 @app.on_message(gen("vcut"))
 async def videocut_handler(_, m: Message):
@@ -39,33 +46,45 @@ async def videocut_handler(_, m: Message):
         )
 
         if not reply:
-            return await app.send_edit(
-                "Reply to a video . . .",
-                text_type=["mono"],
-                delme=3
+            return await sendit(
+                "Reply to a video . . ."
             )
 
         if not reply.video:
-            return await app.send_edit(
-                "Reply to a video . . .",
-                text_type=["mono"],
-                delme=3
+            return await sendit(
+                "Reply to a video . . ."
             )
 
         args = app.GetArgs(m)
         if not args:
-            return await app.send_edit(
-                "Something went wrong, try again later.",
-                text_type=["mono"],
-                delme=3
+            return await sendit(
+                "Something went wrong, try again later."
             )
         try:
             cut_time = args.text.split(None, 1)[1]
         except IndexError:
-            return await app.send_edit(
-                "Give me the duration you want to cut.",
-                text_type=["mono"],
-                delme=3
+            return await sendit(
+                "Give me the duration you want to cut."
+            )
+
+        if not ":" in args:
+            return await sendit(
+                "The duration time is wrong, use `hh:mm:ss`"
+            )
+
+        t_list = [int(x) for x in cut_time.split(":")]
+        try:
+            dv_time = t_list[0]*60*60 + t_list[1]*60 + t_list[2]
+        except IndexError:
+            return await sendit(
+                "The duration time is wrong, use `hh:mm:ss`"
+            )
+
+        v_time = reply.video.duration
+
+        if dv_time > v_time:
+            return await sendit(
+                "The given duration can't be greater than the video duration."
             )
 
         await app.send_edit(
