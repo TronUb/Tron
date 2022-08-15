@@ -1,6 +1,8 @@
 import os
 from moviepy.editor import *
 
+from pyrogram.types import Message
+
 from main import app, gen
 
 
@@ -42,7 +44,7 @@ async def videocut_handler(_, m: Message):
             delme=3
         )
 
-    args = app.GetArgs()
+    args = app.GetArgs(m)
     if not args:
         return await app.send_edit(
             "Something went wrong, try again later.",
