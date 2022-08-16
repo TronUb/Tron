@@ -307,4 +307,3 @@ async def videocut_handler(_, m: Message):
         )
     except Exception as e:
         await app.error(e)
-
