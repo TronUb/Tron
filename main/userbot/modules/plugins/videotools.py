@@ -304,7 +304,7 @@ async def videocut_handler(_, m: Message):
         await send_video(
             filename,
             "Failed to cut sub clip of video, try again later !"
-        ))
+        )
     except Exception as e:
         await app.error(e)
 
