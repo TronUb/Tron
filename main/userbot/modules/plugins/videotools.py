@@ -1,4 +1,5 @@
 import os
+import re
 from moviepy.editor import *
 
 from pyrogram.types import Message
@@ -21,11 +22,15 @@ app.CMD_HELP.update(
 
 
 
+
+pattern = r"([0-9]{2}:){2}[0-9]{2}"
+
+
 def Video(path):
     return VideoFileClip(path)
 
 
-async def sendit(text):
+async def send_delete(text):
     return await app.send_edit(
         text,
         text_type=["mono"],
@@ -33,42 +38,68 @@ async def sendit(text):
     )
 
 
+def not_reply(message):
+    reply = message.reply_to_message
+
+    if not reply:
+        return None
+    
+    if not reply.video:
+        return None
+
+
+async def send_video(filename, text):
+    if os.path.exists(filename):
+        msg = await app.send_edit(
+            "Sending new video . . .",
+            text_type=["mono"]
+        )
+        await app.send_video(
+            m.chat.id,
+            filename
+        )
+        os.remove(filename)
+        return await msg.delete()
+    else:
+        return await send_delete(
+            text
+        )
+
+
+
+
 @app.on_message(gen("vcut"))
 async def videocut_handler(_, m: Message):
     """ video cut hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
-        vname = "./downloads/cutvideo.mp4"
-    
+        filename = "./downloads/cutvideo.mp4"
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
         )
 
-        if not reply:
-            return await sendit(
-                "Reply to a video . . ."
-            )
-
-        if not reply.video:
-            return await sendit(
+        if not_reply(m):
+            return await send_delete(
                 "Reply to a video . . ."
             )
 
         args = app.GetArgs(m)
         if not args:
-            return await sendit(
+            return await send_delete(
                 "Something went wrong, try again later."
             )
+
         try:
             cut_time = args.text.split(None, 1)[1]
         except IndexError:
-            return await sendit(
+            return await send_delete(
                 "Give me the duration you want to cut."
             )
 
-        if not ":" in cut_time:
-            return await sendit(
+        if not re.match(pattern, cut_time):
+            return await send_delete(
                 "The duration time is wrong, use `hh:mm:ss`"
             )
 
@@ -87,12 +118,12 @@ async def videocut_handler(_, m: Message):
         try:
             dv_time = t_list[0]*60*60 + t_list[1]*60 + t_list[2]
         except IndexError:
-            return await sendit(
+            return await send_delete(
                 "The duration time is wrong, use `hh:mm:ss`"
             )
 
         if dv_time > v_time:
-            return await sendit(
+            return await send_delete(
                 "The given duration can't be greater than the video duration."
             )
 
@@ -102,25 +133,12 @@ async def videocut_handler(_, m: Message):
             text_type=["mono"]
         )
 
-        clip.write_videofile(vname)
+        clip.write_videofile(filename)
 
-        if os.path.exists(vname):
-            msg = await app.send_edit(
-                "Sending new video . . .",
-                text_type=["mono"]
-            )
-            await app.send_video(
-                m.chat.id,
-                vname
-            )
-            os.remove(vname)
-            await msg.delete()
-        else:
-            await app.send_edit(
-                "Failed to cut video, try again !",
-                text_type=["mono"],
-                delme=3
-            )
+        await send_video(
+            filename,
+            "Failed to cut video, try again later !"
+        )
     except Exception as e:
         await app.error(e)
 
@@ -133,24 +151,18 @@ async def videoinvert_handler(_, m: Message):
         reply = m.reply_to_message
         filename = "./downloads/invertvideo.mp4"
 
-        if not reply:
+        if not_reply(m):
             return await app.send_edit(
                 "Reply to a video sir . . .",
                 text_type=["mono"],
                 delme=3
             )
 
-        if not reply.video:
-            return await app.send_edit(
-                "Reply to a video sir . . .",
-                text_type=["mono"],
-                delme=3
-            )
         await app.send_edit(
             "Downloading video . . .",
             text_type=["mono"]
         )
-        clip = VideoFileClip(await reply.download())
+        clip = Video(await reply.download())
 
         await app.send_edit(
             "Inverting video . . .",
@@ -164,23 +176,10 @@ async def videoinvert_handler(_, m: Message):
         )
         clip.write_videofile(filename)
 
-        if os.path.exists(filename):
-            msg = await app.send_edit(
-                "Sending new video . . .",
-                text_type=["mono"]
-            )
-            await app.send_video(
-                m.chat.id,
-                filename
-            )
-            os.remove(filename)
-            await msg.delete()
-        else:
-            await app.send_edit(
-                "Failed to invert video, try again !",
-                text_type=["mono"],
-                delme=3
-            )
+        await send_video(
+            filename,
+            "Failed to invert video, try again later !"
+        )
     except Exception as e:
         await app.error(e)
 
@@ -211,7 +210,7 @@ async def videomute_handler(_, m: Message):
             "Downloading video . . .",
             text_type=["mono"]
         )
-        clip = VideoFileClip(await reply.download())
+        clip = Video(await reply.download())
 
         await app.send_edit(
             "Muting audio of this video . . .",
@@ -225,23 +224,10 @@ async def videomute_handler(_, m: Message):
         )
         clip.write_videofile(filename)
 
-        if os.path.exists(filename):
-            msg = await app.send_edit(
-                "Sending new video . . .",
-                text_type=["mono"]
-            )
-            await app.send_video(
-                m.chat.id,
-                filename
-            )
-            os.remove(filename)
-            await msg.delete()
-        else:
-            await app.send_edit(
-                "Failed to invert video, try again !",
-                text_type=["mono"],
-                delme=3
-            )
+        await send_video(
+            filename,
+            "Failed to mute video, try again later !"
+        )
     except Exception as e:
         await app.error(e)
 
@@ -258,31 +244,28 @@ async def videocut_handler(_, m: Message):
             text_type=["mono"]
         )
 
-        if not reply:
-            return await sendit(
-                "Reply to a video . . ."
-            )
-
-        if not reply.video:
-            return await sendit(
+        if not_reply(m):
+            return await send_delete(
                 "Reply to a video . . ."
             )
 
         args = app.GetArgs(m)
         if not args:
-            return await sendit(
+            return await send_delete(
                 "Something went wrong, try again later."
             )
         try:
             start_time = args.text.split(None, 1)[1]
             end_time = args.text.split(None, 2)[2]
         except IndexError:
-            return await sendit(
+            return await send_delete(
                 "Give me the proper subclip duration."
             )
 
-        if not ":" in start_time or end_time:
-            return await sendit(
+        if not (re.match(pattern, start_time) or
+            re.match(pattern, end_time)
+            ):
+            return await send_delete(
                 "The duration time is wrong, use `hh:mm:ss`"
             )
 
@@ -299,14 +282,14 @@ async def videocut_handler(_, m: Message):
         v_time = clip.duration
         t_list = [int(x) for x in end_time.split(":")]
         try:
-            dv_time = t_list[0]*60*60 + t_list[1]*60 + t_list[2]
+            dv_time = (t_list[0]*60*60) + (t_list[1]*60) + t_list[2]
         except IndexError:
-            return await sendit(
+            return await send_delete(
                 "The duration time is wrong, use `hh:mm:ss`"
             )
 
         if dv_time > v_time:
-            return await sendit(
+            return await send_delete(
                 "The given duration can't be greater than the video duration."
             )
 
@@ -318,23 +301,10 @@ async def videocut_handler(_, m: Message):
 
         clip.write_videofile(filename)
 
-        if os.path.exists(filename):
-            msg = await app.send_edit(
-                "Sending new video . . .",
-                text_type=["mono"]
-            )
-            await app.send_video(
-                m.chat.id,
-                vname
-            )
-            os.remove(filename)
-            await msg.delete()
-        else:
-            await app.send_edit(
-                "Failed to cut sub clip of video, try again !",
-                text_type=["mono"],
-                delme=3
-            )
+        await send_video(
+            filename,
+            "Failed to cut sub clip of video, try again later !"
+        ))
     except Exception as e:
         await app.error(e)
-app.on_message
+
