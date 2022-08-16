@@ -123,3 +123,63 @@ async def videocut_handler(_, m: Message):
             )
     except Exception as e:
         await app.error(e)
+
+
+
+@app.on_message(gen("vinvert"))
+async def videoinvert_handler(_, m: Message):
+    """ video color inverting hanlder for videotools plugin  """
+    try:
+        reply = m.reply_to_message
+        filename = "./downloads/invertvideo.mp4"
+
+        if not reply:
+            return await app.send_edit(
+                "Reply to a video sir . . .",
+                text_type=["mono"],
+                delme=3
+            )
+
+        if not reply.video:
+            return await app.send_edit(
+                "Reply to a video sir . . .",
+                text_type=["mono"],
+                delme=3
+            )
+        await app.send_edit(
+            "Downloading video . . .",
+            text_type=["mono"]
+        )
+        clip = VideoFileClip(await reply.download())
+
+        await app.send_edit(
+            "Inverting video . . .",
+            text_type=["mono"]
+        )
+        clip = clip.invert_colors()
+
+        await app.send_edit(
+            "Downloading video . . .",
+            text_type=["mono"]
+        )
+        clip.write_videofile(filename)
+
+        if os.path.exists(filename):
+            msg = await app.send_edit(
+                "Sending new video . . .",
+                text_type=["mono"]
+            )
+            await app.send_video(
+                m.chat.id,
+                filename
+            )
+            os.remove(filename)
+            await msg.delete()
+        else:
+            await app.send_edit(
+                "Failed to invert video, try again !",
+                text_type=["mono"],
+                delme=3
+            )
+    except Exception as e:
+        await app.error(e)
