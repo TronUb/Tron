@@ -370,7 +370,7 @@ async def vafadein_handler(_, m: Message):
         )
 
         v_time = clip.duration
-        if duration > v_time:
+        if int(duration) > v_time:
             return await send_delete(
                 "The given duration can't be greater than the video duration."
             )
@@ -439,7 +439,7 @@ async def vafadeout_handler(_, m: Message):
             text_type=["mono"]
         )
 
-        if duration > clip.duration:
+        if int(duration) > clip.duration:
             return await send_delete(
                 "The given duration can't be greater than the video duration."
             )
@@ -487,7 +487,7 @@ async def vsetaudio_handler(_, m: Message):
                 "Something went wrong, try again later."
             )
         try:
-            _, audio_path = args.text.split()
+            _, audio_path = args.text.split(None, 1)
         except IndexError:
             return await send_delete(
                 "Give me the proper fade out duration."
