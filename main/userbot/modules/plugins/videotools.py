@@ -13,7 +13,11 @@ app.CMD_HELP.update(
     {"dev" : (
         "dev",
         {
-        "vcut":"Cut video at desired duration, cut format: `00:02:30`",
+        "vcut [reply] [hh:mm:ss]":"Cut video at desired duration, cut format: `00:02:30`",
+        "vinvert [reply]":"Invert colour of video",
+        "vmute [reply]":"Mute audio of downloaded video",
+        "vsubclip [reply] [hh:mm:ss] [hh:mm:ss]":"Cut sub clip of a video"
+
         
         }
         )
@@ -48,14 +52,14 @@ def not_reply(message):
         return None
 
 
-async def send_video(filename, text):
+async def send_video(message, filename, text):
     if os.path.exists(filename):
         msg = await app.send_edit(
             "Sending new video . . .",
             text_type=["mono"]
         )
         await app.send_video(
-            m.chat.id,
+            message.chat.id,
             filename
         )
         os.remove(filename)
@@ -136,6 +140,7 @@ async def videocut_handler(_, m: Message):
         clip.write_videofile(filename)
 
         await send_video(
+            m,
             filename,
             "Failed to cut video, try again later !"
         )
@@ -177,6 +182,7 @@ async def videoinvert_handler(_, m: Message):
         clip.write_videofile(filename)
 
         await send_video(
+            m,
             filename,
             "Failed to invert video, try again later !"
         )
@@ -225,6 +231,7 @@ async def videomute_handler(_, m: Message):
         clip.write_videofile(filename)
 
         await send_video(
+            m,
             filename,
             "Failed to mute video, try again later !"
         )
@@ -234,7 +241,7 @@ async def videomute_handler(_, m: Message):
 
 @app.on_message(gen("vsubclip"))
 async def videocut_handler(_, m: Message):
-    """ video cut hanlder for videotools plugin  """
+    """ video sub clip cut hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
         filename = "./downloads/subclipvideo.mp4"
@@ -302,6 +309,7 @@ async def videocut_handler(_, m: Message):
         clip.write_videofile(filename)
 
         await send_video(
+            m,
             filename,
             "Failed to cut sub clip of video, try again later !"
         )
