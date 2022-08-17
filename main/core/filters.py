@@ -80,13 +80,36 @@ def regex(
 
 
 
+# gen reply checker
+async def is_reply(message, client):
+    if reply and not message.reply:
+        await client.send_edit(
+            "Reply to something . . .",
+            text_type=["mono"],
+            delme=3
+        )
+        return False
+    elif reply and message.reply:
+        reply_attr = getattr(message.reply, reply_type)
+        if reply_type and reply_attr:
+            await client.send_edit(
+                f"Reply to {reply_type}",
+                text_type=["mono"],
+                delme=3
+            )
+            return False
+
+    return True
+
 
 # custom command filter
 def gen(
     commands: Union[str, List[str]],
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
-    exclude: list = []
+    exclude: list = [],
+    reply = False,
+    reply_type = None
     ):
 
     """
@@ -97,12 +120,15 @@ def gen(
            prefixes: single prefix or list of prefixes
            case_sensitive: True | False
            exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
+           reply: True | False
+           reply_type: message type (video, audio, etc)
     """
     async def func(flt, client: Client, message: Message):
 
         try:
             text = message.text or message.caption or None
             message.command = None
+            message.reply = message.reply_to_message
 
             if not text:
                 return False
@@ -124,6 +150,11 @@ def gen(
                     if not user:
                         if message.outgoing: # for channels
                             client.m = client.bot.m = message
+
+                            # reply condition
+                            if not await is_reply(message, client):
+                                return False
+
                             return True
                         return False
 
@@ -157,12 +188,22 @@ def gen(
 
                         if not client.SudoCmds(): # empty list -> full command access to sudo
                             client.m = client.bot.m = message
-                            return True 
+
+                            # reply conditions
+                            if not await is_reply(message, client):
+                                return False
+
+                            return True
 
                         if not cmd in client.SudoCmds():
                             return False
 
                     client.m = client.bot.m = message
+
+                    # reply conditions
+                    if not await is_reply(message, client):
+                        return False
+
                     return True
 
             return False
