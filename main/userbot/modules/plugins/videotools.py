@@ -375,7 +375,7 @@ async def vafadein_handler(_, m: Message):
                 "The given duration can't be greater than the video duration."
             )
 
-        clip = clip.audio_fadein(duration)
+        clip = clip.audio_fadein(int(duration))
         await app.send_edit(
             "Saving new video . . .",
             text_type=["mono"]
@@ -444,7 +444,7 @@ async def vafadeout_handler(_, m: Message):
                 "The given duration can't be greater than the video duration."
             )
 
-        clip = clip.audio_fadeout(duration)
+        clip = clip.audio_fadeout(int(duration))
         await app.send_edit(
             "Saving new video . . .",
             text_type=["mono"]
@@ -502,7 +502,6 @@ async def vsetaudio_handler(_, m: Message):
             "Downloading video . . .",
             text_type=["mono"]
         )
-        audio
         clip = Video(await reply.download())
         await app.send_edit(
             "Adding a new audio to the video . . .",
