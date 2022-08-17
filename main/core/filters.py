@@ -81,7 +81,7 @@ def regex(
 
 
 # gen reply checker
-async def is_reply(message, client):
+async def is_reply(client, message, reply):
     if reply and not message.reply:
         await client.send_edit(
             "Reply to something . . .",
@@ -152,10 +152,11 @@ def gen(
                             client.m = client.bot.m = message
 
                             # reply condition
-                            if not await is_reply(message, client):
+                            if not await is_reply(client, message, reply):
                                 return False
 
                             return True
+
                         return False
 
                     message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
@@ -190,7 +191,7 @@ def gen(
                             client.m = client.bot.m = message
 
                             # reply conditions
-                            if not await is_reply(message, client):
+                            if not await is_reply(client, message, reply):
                                 return False
 
                             return True
@@ -201,7 +202,7 @@ def gen(
                     client.m = client.bot.m = message
 
                     # reply conditions
-                    if not await is_reply(message, client):
+                    if not await is_reply(client, message, reply):
                         return False
 
                     return True
