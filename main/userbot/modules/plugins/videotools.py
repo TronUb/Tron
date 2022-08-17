@@ -262,8 +262,7 @@ async def videocut_handler(_, m: Message):
                 "Something went wrong, try again later."
             )
         try:
-            start_time = args.text.split(None, 1)[1]
-            end_time = args.text.split(None, 2)[2]
+            _, start_time, end_time = args.text.split()
         except IndexError:
             return await send_delete(
                 "Give me the proper subclip duration."
