@@ -111,7 +111,7 @@ async def max_argcount(client, message, max_args):
         message.text.split()[max_args]
     except IndexError:
         await client.send_edit(
-            "Reply to something . . .",
+            "Give me more arguments . . .",
             text_type=["mono"],
             delme=3
         )
