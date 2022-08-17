@@ -10,8 +10,8 @@ from main import app, gen
 
 
 app.CMD_HELP.update(
-    {"dev" : (
-        "dev",
+    {"videotools" : (
+        "videotools",
         {
         "vcut [reply] [hh:mm:ss]":"Cut video at desired duration, cut format: `00:02:30`",
         "vinvert [reply]":"Invert colour of video",
