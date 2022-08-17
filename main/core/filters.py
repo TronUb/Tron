@@ -91,7 +91,7 @@ async def is_reply(client, message, reply, reply_type):
         return False
     elif reply and message.reply:
         reply_attr = getattr(message.reply, reply_type)
-        if reply_type and reply_attr:
+        if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}",
                 text_type=["mono"],
