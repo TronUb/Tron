@@ -16,9 +16,10 @@ app.CMD_HELP.update(
         "vcut [reply] [hh:mm:ss]":"Cut video at desired duration, cut format: `00:02:30`",
         "vinvert [reply]":"Invert colour of video",
         "vmute [reply]":"Mute audio of downloaded video",
-        "vsubclip [reply] [hh:mm:ss] [hh:mm:ss]":"Cut sub clip of a video"
-
-        
+        "vsubclip [reply] [hh:mm:ss] [hh:mm:ss]":"Cut sub clip of a video",
+        "vafadein [reply] [duration]":"Add fade in effect to the audio of the video.",
+        "vafadeout [reply] [duration]":"Add fade out effect to the audio of the video.",
+        "vsetaudio [reply] [audio path]":"Set a new audio to video."
         }
         )
     }
@@ -32,6 +33,10 @@ pattern = r"([0-9]{2}:){2}[0-9]{2}"
 
 def Video(path):
     return VideoFileClip(path)
+
+
+def Audio(path):
+    return AudioFileClip(path)
 
 
 async def send_delete(text):
@@ -73,7 +78,7 @@ async def send_video(message, filename, text):
 
 
 @app.on_message(gen("vcut"))
-async def videocut_handler(_, m: Message):
+async def vcut_handler(_, m: Message):
     """ video cut hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
@@ -150,7 +155,7 @@ async def videocut_handler(_, m: Message):
 
 
 @app.on_message(gen("vinvert"))
-async def videoinvert_handler(_, m: Message):
+async def vinvert_handler(_, m: Message):
     """ video color inverting hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
@@ -193,7 +198,7 @@ async def videoinvert_handler(_, m: Message):
 
 
 @app.on_message(gen("vmute"))
-async def videomute_handler(_, m: Message):
+async def vmute_handler(_, m: Message):
     """ video muting hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
@@ -239,8 +244,9 @@ async def videomute_handler(_, m: Message):
         await app.error(e)
 
 
+
 @app.on_message(gen("vsubclip"))
-async def videocut_handler(_, m: Message):
+async def vsubclip_handler(_, m: Message):
     """ video sub clip cut hanlder for videotools plugin  """
     try:
         reply = m.reply_to_message
@@ -311,6 +317,211 @@ async def videocut_handler(_, m: Message):
             m,
             filename,
             "Failed to cut sub clip of video, try again later !"
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+
+
+@app.on_message(gen("vafadein"))
+async def vafadein_handler(_, m: Message):
+    """ video's audio fade in hanlder for videotools plugin  """
+    try:
+        reply = m.reply_to_message
+        filename = "./downloads/fadeinvideo.mp4"
+    
+        await app.send_edit(
+            "Processing . . .",
+            text_type=["mono"]
+        )
+
+        if not_reply(m):
+            return await send_delete(
+                "Reply to a video . . ."
+            )
+
+        args = app.GetArgs(m)
+        if not args:
+            return await send_delete(
+                "Something went wrong, try again later."
+            )
+        try:
+            _, duration = args.text.split()
+        except IndexError:
+            return await send_delete(
+                "Give me the proper fade in duration."
+            )
+
+        if not duration.isdigit():
+            return await send_delete(
+                "The duration must be a integer (seconds)."
+            )
+
+        await app.send_edit(
+            "Downloading video . . .",
+            text_type=["mono"]
+        )
+        clip = Video(await reply.download())
+        await app.send_edit(
+            "Adding fade in to video . . .",
+            text_type=["mono"]
+        )
+
+        v_time = clip.duration
+        if duration > v_time:
+            return await send_delete(
+                "The given duration can't be greater than the video duration."
+            )
+
+        clip = clip.audio_fadein(duration)
+        await app.send_edit(
+            "Saving new video . . .",
+            text_type=["mono"]
+        )
+
+        clip.write_videofile(filename)
+
+        await send_video(
+            m,
+            filename,
+            "Failed to add fade in effect in video, try again later !"
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+
+
+@app.on_message(gen("vafadeout"))
+async def vafadeout_handler(_, m: Message):
+    """ video's audio fade out hanlder for videotools plugin  """
+    try:
+        reply = m.reply_to_message
+        filename = "./downloads/fadeoutvideo.mp4"
+    
+        await app.send_edit(
+            "Processing . . .",
+            text_type=["mono"]
+        )
+
+        if not_reply(m):
+            return await send_delete(
+                "Reply to a video . . ."
+            )
+
+        args = app.GetArgs(m)
+        if not args:
+            return await send_delete(
+                "Something went wrong, try again later."
+            )
+        try:
+            _, duration = args.text.split()
+        except IndexError:
+            return await send_delete(
+                "Give me the proper fade out duration."
+            )
+
+        if not duration.isdigit():
+            return await send_delete(
+                "The duration must be a integer (seconds)."
+            )
+
+        await app.send_edit(
+            "Downloading video . . .",
+            text_type=["mono"]
+        )
+        clip = Video(await reply.download())
+        await app.send_edit(
+            "Adding fade out to video . . .",
+            text_type=["mono"]
+        )
+
+        if duration > clip.duration:
+            return await send_delete(
+                "The given duration can't be greater than the video duration."
+            )
+
+        clip = clip.audio_fadeout(duration)
+        await app.send_edit(
+            "Saving new video . . .",
+            text_type=["mono"]
+        )
+
+        clip.write_videofile(filename)
+
+        await send_video(
+            m,
+            filename,
+            "Failed to add fade out effect in video audio, try again later !"
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+
+
+@app.on_message(gen("vsetaudio"))
+async def vsetaudio_handler(_, m: Message):
+    """ set audio to video hanlder for videotools plugin  """
+    try:
+        reply = m.reply_to_message
+        filename = "./downloads/setaudiovideo.mp4"
+    
+        await app.send_edit(
+            "Processing . . .",
+            text_type=["mono"]
+        )
+
+        if not_reply(m):
+            return await send_delete(
+                "Reply to a video . . ."
+            )
+
+        args = app.GetArgs(m)
+        if not args:
+            return await send_delete(
+                "Something went wrong, try again later."
+            )
+        try:
+            _, audio_path = args.text.split()
+        except IndexError:
+            return await send_delete(
+                "Give me the proper fade out duration."
+            )
+
+        if not os.path.exists(audio_path):
+            return await send_delete(
+                "The audio doesn't exist."
+            )
+
+        await app.send_edit(
+            "Downloading video . . .",
+            text_type=["mono"]
+        )
+        audio
+        clip = Video(await reply.download())
+        await app.send_edit(
+            "Adding a new audio to the video . . .",
+            text_type=["mono"]
+        )
+
+        audio = Audio(audio_path)
+        clip = clip.set_audio(audio)
+        await app.send_edit(
+            "Saving new video . . .",
+            text_type=["mono"]
+        )
+
+        clip.write_videofile(filename)
+
+        await send_video(
+            m,
+            filename,
+            "Failed to add fade out effect in video audio, try again later !"
         )
     except Exception as e:
         await app.error(e)
