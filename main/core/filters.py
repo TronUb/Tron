@@ -81,7 +81,7 @@ def regex(
 
 
 # gen reply checker
-async def is_reply(client, message, reply):
+async def is_reply(client, message, reply, reply_type):
     if reply and not message.reply:
         await client.send_edit(
             "Reply to something . . .",
@@ -152,7 +152,7 @@ def gen(
                             client.m = client.bot.m = message
 
                             # reply condition
-                            if not await is_reply(client, message, reply):
+                            if not await is_reply(client, message, reply, reply_type):
                                 return False
 
                             return True
@@ -191,7 +191,7 @@ def gen(
                             client.m = client.bot.m = message
 
                             # reply conditions
-                            if not await is_reply(client, message, reply):
+                            if not await is_reply(client, message, reply, reply_type):
                                 return False
 
                             return True
@@ -202,7 +202,7 @@ def gen(
                     client.m = client.bot.m = message
 
                     # reply conditions
-                    if not await is_reply(client, message, reply):
+                    if not await is_reply(client, message, reply, reply_type):
                         return False
 
                     return True
