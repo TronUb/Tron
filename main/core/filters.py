@@ -102,14 +102,35 @@ async def is_reply(client, message, reply, reply_type):
     return True
 
 
+# gen arguments count checker
+async def max_argcount(client, message, max_args):
+    if max_args == 0:
+        return True
+
+    try:
+        message.text.split()[max_args]
+    except IndexError:
+        await client.send_edit(
+            "Reply to something . . .",
+            text_type=["mono"],
+            delme=3
+        )
+        return False
+
+    return True
+
+
+
+
 # custom command filter
 def gen(
     commands: Union[str, List[str]],
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
     exclude: list = [],
-    reply = False,
-    reply_type = None
+    reply: bool = False,
+    reply_type: str = None,
+    max_args: int = 0
     ):
 
     """
@@ -122,6 +143,7 @@ def gen(
            exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
            reply: True | False
            reply_type: message type (video, audio, etc)
+           max_args: int (default = 0)
     """
     async def func(flt, client: Client, message: Message):
 
@@ -153,6 +175,10 @@ def gen(
 
                             # reply condition
                             if not await is_reply(client, message, reply, reply_type):
+                                return False
+
+                            # max argument count condition
+                            if not await max_argcount(client, message, max_args):
                                 return False
 
                             return True
@@ -190,9 +216,14 @@ def gen(
                         if not client.SudoCmds(): # empty list -> full command access to sudo
                             client.m = client.bot.m = message
 
-                            # reply conditions
+                            # reply condition
                             if not await is_reply(client, message, reply, reply_type):
                                 return False
+
+                            # max argument count condition
+                            if not await max_argcount(client, message, max_args):
+                                return False
+
 
                             return True
 
@@ -201,8 +232,12 @@ def gen(
 
                     client.m = client.bot.m = message
 
-                    # reply conditions
+                    # reply condition
                     if not await is_reply(client, message, reply, reply_type):
+                        return False
+
+                    # max argument count condition 
+                    if not await max_argcount(client, message, max_args):
                         return False
 
                     return True
