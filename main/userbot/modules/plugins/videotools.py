@@ -51,10 +51,13 @@ def not_reply(message):
     reply = message.reply_to_message
 
     if not reply:
-        return None
+        return True
     
     if not reply.video:
-        return None
+        return True
+
+    return None
+
 
 
 async def send_video(message, filename, text):
