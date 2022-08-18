@@ -123,9 +123,8 @@ async def terminal_handler(_, m: Message):
                 output += "\n"
         else:
             shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", cmd)
-            i = list(enumerate(shell))
-            for y in i:
-                shell[i[y]] = shell[i[y]].replace('"', "")
+            for y in range(len(shell)):
+                shell[i] = shell[i].replace('"', "")
             try:
                 process = subprocess.Popen(
                     shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
