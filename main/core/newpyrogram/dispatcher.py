@@ -209,7 +209,7 @@ class Dispatcher:
                 async with lock:
                     for group in self.groups.values():
                         for handler in group:
-                            hanlder_callback = args = None
+                            handler_callback = args = None
 
                             if isinstance(handler, handler_type):
                                 try:
