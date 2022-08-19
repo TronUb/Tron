@@ -27,6 +27,9 @@ log = logging.getLogger(__name__)
 
 
 
+
+
+
 class Dispatcher:
     """ Custom tron dispatcher """
     NEW_MESSAGE_UPDATES = (UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage)
@@ -206,8 +209,7 @@ class Dispatcher:
                 async with lock:
                     for group in self.groups.values():
                         for handler in group:
-                            args = None
-                            handler_callback = None
+                            hanlder_callback = args = None
 
                             if isinstance(handler, handler_type):
                                 try:
@@ -226,18 +228,16 @@ class Dispatcher:
                             try:
                                 if inspect.iscoroutinefunction(handler.callback):
                                     if isinstance(args[0], Message):
-                                        user = args[0].from_user if args[0].from_user else None
-                                        if user and not user.is_self:
-                                            if user.id in self.client.SudoUsers():
-                                                  args = (await self.client.send_message(
-                                                      args[0].chat.id,
-                                                      ". . ."
-                                                  ),)
-                                                  handler_callback = True
-                                                  await handler.callback(self.client, *args)
+                                        args = (await self.client.send_message(
+                                            args[0].chat.id,
+                                            "Hold on . . ."
+                                            ),)
+                                        await handler.callback(self.client, *args)
+                                        handler_callback = True
 
                                     if not handler_callback:
                                         await handler.callback(self.client, *args)
+
                                 else:
                                     await self.loop.run_in_executor(
                                         self.client.executor,
