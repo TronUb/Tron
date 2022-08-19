@@ -135,16 +135,28 @@ async def delsudo_handler(_, m: Message):
 
     sudo_list = json.loads(sudo_list)
 
-    common_sudos = [x for x in sudo_list.get("common").values()]
-    dev_sudos = [x for x in sudo_list.get("dev").values()]
+    common_sudos = sudo_list.get("common").values()
+    dev_sudos = sudo_list.get("dev").values()
 
-    if user_id in common_sudos:
-        sudo_list.get("common").remove(user_id)
-        app.setdv("SUDO_USERS", sudo_list)
-    elif user_id in dev_sudos:
-        sudo_list.get("dev").remove(user_id)
-        app.setdv("SUDO_USERS", sudo_list)
-    else:
+    user_exists = 0
+
+    for x in common_sudos:
+        if str(common_sudos.get(k)) == user_id:
+            sudo_list.get("common").pop(x)
+            app.setdv("SUDO_USERS", sudo_list)
+            user_exists += 1
+            break
+
+    if task:
+        for y in dev_sudos:
+            if dev_sudos.get(y) == user_id:
+                sudo_list.get("dev").pop(y)
+                app.setdv("SUDO_USERS", sudo_list)
+                user_exists += 1
+                break
+                
+
+    if not task:
         return await app.send_edit(
             "This user is not in sudo list",
             text_type=["mono"],
