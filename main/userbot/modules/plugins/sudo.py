@@ -52,10 +52,27 @@ async def addsudo_handler(_, m: Message):
 
     sudo_list = app.getdv("SUDO_USERS")
     if sudo_list:
-        sudo_list = json.loads(sudo_list).get(sudo_type)
+        sudo_list = json.loads(sudo_list)
+        dev_sudos = list(sudo_list.get("dev").values())
+        common_sudos = list(sudo_list.get("dev").values())
+
+        if user_id in dev_sudos:
+            return await app.send_edit(
+                "The user is already in sudo list as dev sudo.",
+                text_type=["mono"],
+                delme=3
+            )
+
+        elif user_id in common_sudos:
+            return await app.send_edit(
+                "The user is already in sudo list as dev sudo.",
+                text_type=["mono"],
+                delme=3
+            )
+
         sudo_list.update(
             {
-                len(sudo_list) + 1: user_id
+                len(sudo_list.get(sudo_type)) + 1: user_id
             }
         )
         all_sudos = json.dumps(sudo_list)
