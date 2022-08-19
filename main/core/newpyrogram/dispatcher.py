@@ -233,7 +233,8 @@ class Dispatcher:
                                                       args[0].chat.id,
                                                       ". . ."
                                                   ),)
-                                                  handler_callback = await handler.callback(self.client, *args)
+                                                  handler_callback = True
+                                                  await handler.callback(self.client, *args)
 
                                     if not handler_callback:
                                         await handler.callback(self.client, *args)
