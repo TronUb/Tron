@@ -103,8 +103,8 @@ async def getsudo_handler(_, m: Message):
 
     sudo_list = json.loads(sudo_list)
 
-    common_sudos = list(sudo_list[sudo_types[0]].values())
-    dev_sudos = list(sudo_list[sudo_types[1]].values())
+    common_sudos = [str(x) for x in sudo_list[sudo_types[0]].values()]
+    dev_sudos = [str(x) for x in sudo_list[sudo_types[1]].values()]
 
     sudos = "dev sudos:\n\n{}\n\ncommon sudos:{}".format("\n".join(dev_sudos), "\n".join(common_sudos))
     await app.send_edit("**Available Sudo id:**\n" + sudos)
@@ -135,14 +135,15 @@ async def delsudo_handler(_, m: Message):
 
     sudo_list = json.loads(sudo_list)
 
-    common_sudos = ["common"] + [x for x in sudo_list[sudo_types[0]]]
-    dev_sudos = ["dev"] + [x for x in sudo_list[sudo_types[1]]]
+    common_sudos = [x for x in sudo_list.get("common").values()]
+    dev_sudos = [x for x in sudo_list.get("dev").values()]
 
     if user_id in common_sudos:
-        sudo_list[common_sudos[0]].remove(user_id)
+        sudo_list.get("common").remove(user_id)
         app.setdv("SUDO_USERS", sudo_list)
     elif user_id in dev_sudos:
-        sudo_list[dev_sudos[0]].remove(user_id)
+        sudo_list.get("dev").remove(user_id)
+        app.setdv("SUDO_USERS", sudo_list)
     else:
         return await app.send_edit(
             "This user is not in sudo list",
