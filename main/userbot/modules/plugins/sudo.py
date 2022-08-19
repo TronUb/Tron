@@ -54,7 +54,7 @@ async def addsudo_handler(_, m: Message):
     if sudo_list:
         sudo_list = json.loads(sudo_list)
         dev_sudos = list(sudo_list.get("dev").values())
-        common_sudos = list(sudo_list.get("dev").values())
+        common_sudos = list(sudo_list.get("common").values())
 
         if user_id in dev_sudos:
             return await app.send_edit(
