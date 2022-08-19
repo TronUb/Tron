@@ -54,12 +54,6 @@ def not_reply(message):
     reply = message.reply_to_message
 
     if not reply:
-<<<<<<< HEAD
-        return None
-    
-    if not reply.video:
-        return None
-=======
         return True
     
     if not reply.video:
@@ -67,7 +61,6 @@ def not_reply(message):
 
     return None
 
->>>>>>> 59801731384fb73ce33596faf4d800c8f3de3214
 
 
 async def send_video(message, filename, text):
@@ -204,7 +197,6 @@ async def vinvert_handler(_, m: Message):
             filename,
             "Failed to invert video, try again later !"
         )
-<<<<<<< HEAD
     except Exception as e:
         await app.error(e)
 
@@ -537,8 +529,6 @@ async def vsetaudio_handler(_, m: Message):
             filename,
             "Failed to add fade out effect in video audio, try again later !"
         )
-=======
->>>>>>> 59801731384fb73ce33596faf4d800c8f3de3214
     except Exception as e:
         await app.error(e)
 
