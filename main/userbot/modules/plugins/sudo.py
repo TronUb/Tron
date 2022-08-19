@@ -31,8 +31,8 @@ async def addsudo_handler(_, m: Message):
     args = app.GetArgs(m)
     text = None
     sudo_set = {
-        "dev": {},
-        "common": {}
+        "dev": set(),
+        "common": set()
     }
 
     if not reply:
@@ -55,7 +55,8 @@ async def addsudo_handler(_, m: Message):
         all_sudos = json.dumps(json.loads(sudo_list).get(sudo_type).update({user_id}))
 
     else:
-        all_sudos = json.dumps(sudo_set.get(sudo_type).update({user_id}))
+        sudo_set.get(sudo_type).update({user_id})
+        all_sudos = json.dumps(sudo_set)
 
     app.setdv("SUDO_USERS", all_sudos)
     await app.send_edit(
