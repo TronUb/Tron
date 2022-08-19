@@ -227,8 +227,16 @@ class Dispatcher:
                                 if inspect.iscoroutinefunction(handler.callback):
                                     if isinstance(args[0], Message):
                                         user = args[0].from_user if args[0].from_user else None
+                                        sudo_users_list = []
+                                        sudo_users = self.client.SudoUsers()
+
+                                        if sudo_users.get("dev"):
+                                            sudo_users_list += list(sudo_users.get("dev"))
+                                        elif sudo_users.get("common"):
+                                            sudo_users_list += list(sudo_users.get("common"))
+
                                         if user and not user.is_self:
-                                            if user.id in self.client.SudoUsers():
+                                            if user.id in sudo_users_list:
                                                   args = (await self.client.send_message(
                                                       args[0].chat.id,
                                                       ". . ."
