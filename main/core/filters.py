@@ -193,7 +193,7 @@ def gen(
                     if user.is_self:
                         message.owner = "owner"
                     elif user.id in sudo_users:
-                        message.owner = "sudo":
+                        message.owner = "sudo"
                     else:
                         return False
 
