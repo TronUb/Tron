@@ -207,6 +207,7 @@ class Dispatcher:
                     for group in self.groups.values():
                         for handler in group:
                             args = None
+                            handler_callback = None
 
                             if isinstance(handler, handler_type):
                                 try:
@@ -232,8 +233,9 @@ class Dispatcher:
                                                       args[0].chat.id,
                                                       ". . ."
                                                   ),)
-                                                  await handler.callback(self.client, *args)
-                                    else:
+                                                  handler_callback = await handler.callback(self.client, *args)
+
+                                    if not handler_callback:
                                         await handler.callback(self.client, *args)
                                 else:
                                     await self.loop.run_in_executor(
