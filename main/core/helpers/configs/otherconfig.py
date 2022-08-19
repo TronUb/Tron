@@ -24,8 +24,8 @@ class OtherConfig(object):
         sudo_users = self.getdv("SUDO_USERS")
         if sudo_users:
             sudo_users = json.loads(sudo_users)
-            dev = sudo_user.get("dev")
-            common = sudo_user.get("common")
+            dev = sudo_users.get("dev")
+            common = sudo_users.get("common")
             sudo_types = {
                 "common": set(int(common.get(x)) for x in common),
                 "dev": set(int(dev.get(x)) for x in dev)
