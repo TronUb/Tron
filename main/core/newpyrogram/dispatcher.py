@@ -12,6 +12,7 @@ from pyrogram.handlers import (
     UserStatusHandler, RawUpdateHandler, InlineQueryHandler, PollHandler,
     ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler
 )
+from pyrogram.types import Message
 from pyrogram.raw.types import (
     UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
     UpdateEditMessage, UpdateEditChannelMessage,
@@ -23,6 +24,7 @@ from pyrogram.raw.types import (
 )
 
 log = logging.getLogger(__name__)
+
 
 
 class Dispatcher:
@@ -222,6 +224,15 @@ class Dispatcher:
 
                             try:
                                 if inspect.iscoroutinefunction(handler.callback):
+                                    if isinstance(args[0], Message):
+                                        user = args[0].from_user if args[0].from_user else None
+                                        if user and not user.is_self:
+                                            if user.id in self.client.SudoUsers():
+                                                  args = (await self.client.send_message(
+                                                      args[0].chat.id,
+                                                      ". . ."
+                                                  ),)
+                                                  await handler.callback(self.client, *args)
                                     await handler.callback(self.client, *args)
                                 else:
                                     await self.loop.run_in_executor(
