@@ -135,8 +135,8 @@ async def delsudo_handler(_, m: Message):
 
     sudo_list = json.loads(sudo_list)
 
-    common_sudos = sudo_list.get("common").values()
-    dev_sudos = sudo_list.get("dev").values()
+    common_sudos = sudo_list.get("common")
+    dev_sudos = sudo_list.get("dev")
 
     user_exists = 0
 
