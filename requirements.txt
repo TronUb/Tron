@@ -26,3 +26,4 @@ pyfy
 uvloop
 cinemagoer
 moviepy
+apscheduler
