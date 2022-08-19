@@ -5,6 +5,7 @@ import string
 from pyrogram import Client
 from main.assistant.client import Bot
 from main.core import Core
+from main.core.newpyrogram.dispatcher import Dispatcher
 
 
 
@@ -33,5 +34,6 @@ class SuperClient(Core, Client):
         self.bio = self.me.bio if self.me.bio else ""
         self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
         self.is_bot = False
+        self.dispatcher = Dispatcher(self)
         self.stop()
         self.bot = Bot()
