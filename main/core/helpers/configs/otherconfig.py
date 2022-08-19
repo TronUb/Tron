@@ -1,3 +1,4 @@
+import json
 
 OTHERDV = [
     "NO_LOAD",
@@ -22,6 +23,7 @@ class OtherConfig(object):
         """ Get sudo users """
         sudo_users = self.getdv("SUDO_USERS")
         if sudo_users:
+            sudo_users = json.loads(sudo_users)
             sudo_types = {
                 "common": set(int(x) for x in sudo_users.get("common")),
                 "dev": set(int(x) for x in sudo_users.get("dev"))
