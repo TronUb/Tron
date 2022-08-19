@@ -141,7 +141,7 @@ async def delsudo_handler(_, m: Message):
     user_exists = 0
 
     for x in common_sudos:
-        if str(common_sudos.get(x)) == user_id:
+        if common_sudos.get(x) == user_id:
             sudo_list.get("common").pop(x)
             app.setdv("SUDO_USERS", sudo_list)
             user_exists += 1
