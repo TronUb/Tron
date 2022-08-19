@@ -34,6 +34,6 @@ class SuperClient(Core, Client):
         self.bio = self.me.bio if self.me.bio else ""
         self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
         self.is_bot = False
-        self.dispatcher = Dispatcher(self)
         self.stop()
         self.bot = Bot()
+        self.dispatcher = Dispatcher(self)
