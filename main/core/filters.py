@@ -185,9 +185,16 @@ def gen(
 
                         return False
 
-                    message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
+                    dev_sudos = client.SudoUsers().get("dev")
+                    common_sudos = client.SudoUsers().get("common")
+                    sudo_users = dev_sudos.union(common_sudos)
+                    message_owner = None
 
-                    if not message_owner:
+                    if user.is_self:
+                        message_owner = "owner"
+                    elif user.id in sudo_users:
+                        message_owner = "sudo":
+                    else:
                         return False
 
                     message.command = [cmd] + text.split()[1:]
