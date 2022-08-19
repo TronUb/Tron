@@ -143,7 +143,7 @@ async def delsudo_handler(_, m: Message):
     for x in common_sudos:
         if common_sudos.get(x) == user_id:
             sudo_list.get("common").pop(x)
-            app.setdv("SUDO_USERS", sudo_list)
+            app.setdv("SUDO_USERS", json.dumps(sudo_list))
             user_exists += 1
             break
 
@@ -151,7 +151,7 @@ async def delsudo_handler(_, m: Message):
         for y in dev_sudos:
             if dev_sudos.get(y) == user_id:
                 sudo_list.get("dev").pop(y)
-                app.setdv("SUDO_USERS", sudo_list)
+                app.setdv("SUDO_USERS", json.dumps(sudo_list))
                 user_exists += 1
                 break
                 
