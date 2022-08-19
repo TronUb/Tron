@@ -82,7 +82,7 @@ def regex(
 
 # gen reply checker
 async def is_reply(client, message, reply, reply_type):
-    if reply and not message.reply:
+    if reply and not message.replied:
         await client.send_edit(
             "Reply to something . . .",
             text_type=["mono"],
@@ -90,7 +90,7 @@ async def is_reply(client, message, reply, reply_type):
         )
         return False
     elif reply and message.reply:
-        reply_attr = getattr(message.reply, reply_type)
+        reply_attr = getattr(message.replied, reply_type)
         if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}",
@@ -150,7 +150,7 @@ def gen(
         try:
             text = message.text or message.caption or None
             message.command = None
-            message.reply = message.reply_to_message
+            message.replied = message.reply_to_message
 
             if not text:
                 return False
@@ -223,7 +223,6 @@ def gen(
                             # max argument count condition
                             if not await max_argcount(client, message, max_args):
                                 return False
-
 
                             return True
 
