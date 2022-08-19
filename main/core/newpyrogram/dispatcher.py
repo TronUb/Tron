@@ -233,7 +233,8 @@ class Dispatcher:
                                                       ". . ."
                                                   ),)
                                                   await handler.callback(self.client, *args)
-                                    await handler.callback(self.client, *args)
+                                    else:
+                                        await handler.callback(self.client, *args)
                                 else:
                                     await self.loop.run_in_executor(
                                         self.client.executor,
