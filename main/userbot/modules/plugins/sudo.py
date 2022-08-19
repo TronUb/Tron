@@ -53,12 +53,12 @@ async def addsudo_handler(_, m: Message):
     sudo_list = app.getdv("SUDO_USERS")
     if sudo_list:
         sudo_list = json.loads(sudo_list).get(sudo_type)
-        temp_sudos = sudo_list.update(
+        sudo_list.update(
             {
                 len(sudo_list) + 1: user_id
             }
         )
-        all_sudos = json.dumps(temp_sudos)
+        all_sudos = json.dumps(sudo_list)
 
     else:
         sudo_set.get(sudo_type).update({0: user_id})
