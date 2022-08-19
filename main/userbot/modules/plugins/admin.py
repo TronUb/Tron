@@ -53,9 +53,24 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 
-@app.on_message(gen("ban", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="ban",
+        exclude=["sudo", "channel"]
+    )
+)
 async def ban_handler(_, m: Message):
-    """ ban handler for admin plugin """
+    """
+        name::
+            ban_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -128,9 +143,19 @@ async def ban_handler(_, m: Message):
 
 
 
-@app.on_message(gen("banall", exclude = ["channel"]))
+@app.on_message(gen("banall", exclude = ["sudo", "channel"]))
 async def banall_handler(_, m: Message):
-    """ ban member handler """
+    """
+        name::
+            banall_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -173,9 +198,24 @@ async def banall_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unban", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="unban",
+        exclude=["sudo", "channel"]
+    )
+)
 async def unban_handler(_, m: Message):
-    """ unban handler for admin plugin """
+    """
+        name::
+            unban_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -274,9 +314,24 @@ async def mute_user(chat_id, user_id, duration=datetime.now()):
 
 
 
-@app.on_message(gen("mute", exclude = ["sudo"]))
+@app.on_message(
+    gen(
+        commands="mute",
+        exclude=["sudo"]
+    )
+)
 async def mute_handler(_, m: Message):
-    """ mute handler for admin plugin """
+    """
+        name::
+            mute_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -350,9 +405,24 @@ async def mute_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unmute", exclude = ["sudo"]))
+@app.on_message(
+    gen(
+        commands="unmute",
+        exclude=["sudo"]
+    )
+)
 async def unmute_handler(_, m: Message):
-    """ unmute handler for admin plugin """
+    """
+        name::
+            unmute_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -430,9 +500,24 @@ async def unmute_handler(_, m: Message):
 
 
 
-@app.on_message(gen("kick", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="kick",
+        exclude=["sudo", "channel"]
+    )
+)
 async def kick_handler(_, m: Message):
-    """ kick handler for admin plugin """
+    """
+        name::
+            kick_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -493,9 +578,24 @@ async def kick_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pin", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="pin",
+        exclude=["sudo", "channel"]
+    )
+)
 async def pin_handler(_, m: Message):
-    """ pin handler for admin plugin """
+    """
+        name::
+            pin_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         arg = True
         cmd = m.command
@@ -545,9 +645,24 @@ async def pin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unpin", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="unpin",
+        exclude=["sudo", "channel"]
+    )
+)
 async def unpin_handler(_, m: Message):
-    """ unpin handler for admin plugin """
+    """
+        name::
+            unpin_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         cmd = m.command
         reply = m.reply_to_message
@@ -591,9 +706,24 @@ async def unpin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("promote", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="promote",
+        exclude=["sudo", "channel"]
+    )
+)
 async def promote_handler(_, m: Message):
-    """ promote handler for admin plugin """
+    """
+        name::
+            promote_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return
@@ -666,9 +796,24 @@ async def promote_handler(_, m: Message):
 
 
 
-@app.on_message(gen("demote", exclude = ["sudo", "channel"]))
+@app.on_message(
+    gen(
+        commands="demote",
+        exclude=["sudo", "channel"]
+    )
+)
 async def demote_handler(_, m: Message):
-    """ demote handler for admin plugin """
+    """
+        name::
+            demote_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         if await app.check_private():
             return

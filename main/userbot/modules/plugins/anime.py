@@ -62,6 +62,16 @@ app.CMD_HELP.update(
 
 
 def get_anime_gif(arg):
+    """ 
+        name:: 
+            get_anime_gif
+        
+        parameters::
+            arg (str): a query to search
+            
+        returns::
+            list | None
+    """
     data = requests.get(f"https://nekos.best/api/v2/{arg}").json()
     data = data["results"][0]
     img = data["url"]
@@ -74,6 +84,17 @@ def get_anime_gif(arg):
 
 
 async def send_gif(m: Message, gif_data):
+    """ 
+        name:: 
+            send_gif
+        
+        parameters::
+            message (pyrogram.types.Message): pyrogram message
+            gif_data (list):: a list containing image url and text
+            
+        returns::
+            None
+    """
     try:
         await app.send_video(
             m.chat.id,
@@ -86,52 +107,87 @@ async def send_gif(m: Message, gif_data):
 
 
 
-@app.on_message(gen("animelist"))
-async def animelist(_, m: Message):
-    """ animelist function """
+@app.on_message(
+    gen(
+        commands="animelist"
+    )
+)
+async def animelist_handler(_, m: Message):
+    """
+        name::
+            animelist_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     await app.send_edit(anime_suffix)
 
 
 
 
-@app.on_message(gen(["nekopic", "npic"]))
-async def nekopic_handler(_, m: Message):
-    """ nekopic handler for anime plugin """
-    try:
-        if m.from_user.is_self:
-            await m.delete()
+@app.on_message(
+    gen(
+        commands=["nekopic", "npic"]
 
+    )
+)
+async def nekopic_handler(_, m: Message):
+    """
+        name::
+            nekopic_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
+    try:
         data = requests.get("https://nekos.best/api/v2/neko").json()
         data = data["results"][0]
         await app.send_photo(
             m.chat.id,
             data["url"],
             caption = data["artist_name"]
-            )
+        )
+        await m.delete()
     except Exception as e:
         await app.error(e)
 
 
 
 
-@app.on_message(gen("animegif"))
+@app.on_message(
+    gen(
+        commands="animegif",
+        max_args=1
+    )
+)
 async def animegif_handler(_, m: Message):
-    """ animegif handler for anime plugin """
-    if app.long() > 1:
-        arg = m.command[1]
-        try:
-            if m.from_user.is_self:
-                await m.delete()
+    """
+        name::
+            animegif_handler
 
-            if arg in anime_list:
-                data = get_anime_gif(arg)
-                await send_gif(m, data)
-            else:
-                await app.send_edit(anime_suffix)
-        except Exception as e:
-            await app.error(e)
-    else:
-        await app.send_edit(
-            f"Give me a suffix, use `{app.Trigger()[0]}animelist` to get suffix.",
-            delme=3
-        )
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
+    try:
+        arg = m.command[1]
+
+        if arg in anime_list:
+            data = get_anime_gif(arg)
+            await send_gif(m, data)
+            await m.delete()
+        else:
+            await app.send_edit("Use these suffix only:\n\n" + anime_suffix)
+    except Exception as e:
+        await app.error(e)

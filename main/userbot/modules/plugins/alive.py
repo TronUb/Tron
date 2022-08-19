@@ -24,12 +24,24 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("alive"))
+@app.on_message(
+    gen(
+        commands="alive"
+    )
+)
 async def alive_handler(_, m: Message):
-    """ alive handler for alive plugin """
-    try:
-        await app.send_edit(". . .", text_type=["mono"])
+    """
+        name::
+            alive_handler
 
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
+    try:
         alive_msg = "\n"
         if app.UserBio():
             alive_msg += f"⦿ {app.UserBio()}\n\n"
@@ -66,11 +78,24 @@ async def alive_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ialive"))
+@app.on_message(
+    gen(
+        commands="ialive"
+    )
+)
 async def inlinealive_handler(_, m: Message):
-    """  inline alive handler for alive plugin """
+    """
+        name::
+            inlinealive_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
-        await app.send_edit(". . .", text_type=["mono"])
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#ialive")
         except BotInlineDisabled:
@@ -94,11 +119,24 @@ async def inlinealive_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["iquote", "iqt"]))
+@app.on_message(
+    gen(
+        commands=["iquote", "iqt"]
+    )
+)
 async def inlinequote_handler(_, m: Message):
-    """  inline quote handler for alive plugin """
+    """
+        name::
+            inlinequote_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
-        await app.send_edit(". . .", text_type=["mono"])
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#quote")
         except BotInlineDisabled:

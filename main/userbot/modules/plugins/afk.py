@@ -30,9 +30,25 @@ handlers = []
 
 
 
-@app.on_message(gen("afk", exclude = ["sudo"]), group=0)
-async def go_offline(_, m: Message):
-    """ afk handler for afk plugin """
+@app.on_message(
+    gen(
+        commands="afk",
+        exclude=["sudo"]
+    ),
+    group=0
+)
+async def afk_handler(_, m: Message):
+    """
+        name::
+            offline_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         start = int(time.time())
         if app.long() >= 2:
@@ -62,8 +78,18 @@ async def go_offline(_, m: Message):
 
 
 # notify mentioned users
-async def offline_mention(_, m: Message):
-    """ offine mention function for afk plugin """
+async def offlinemention_handler(_, m: Message):
+    """
+        name::
+            offlinemention_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         get = app.get_afk()
         if get and get["afk"]:
@@ -109,7 +135,17 @@ async def offline_mention(_, m: Message):
 
 
 async def unafk_handler(_, m: Message):
-    """ unafk function for afk plugin """
+    """
+        name::
+            unafk_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         # don't break afk while using afk command
         commands = [f"{x}afk" for x in app.Trigger()]
@@ -139,9 +175,18 @@ async def unafk_handler(_, m: Message):
 
 
 def add_afkhandler():
-    """ add afk function for afk plugin """
+    """
+        name::
+            add_afkhandler
+
+        parameters::
+            None
+
+        returns::
+            None
+    """
     handlers.append(app.add_handler(MessageHandler(
-        callback=offline_mention,
+        callback=offlinemention_handler,
         filters=~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned),
         1
     ))
@@ -153,7 +198,16 @@ def add_afkhandler():
 
 
 def remove_afkhandler():
-    """ afk handler remover function """
+    """
+        name::
+            remove_afkhandler
+
+        parameters::
+            None
+
+        returns::
+            None
+    """
     try:
         app.remove_handler(*handlers[0])
         app.remove_handler(*handlers[1])
