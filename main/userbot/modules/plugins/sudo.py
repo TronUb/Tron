@@ -147,7 +147,7 @@ async def delsudo_handler(_, m: Message):
             user_exists += 1
             break
 
-    if task:
+    if not user_exists:
         for y in dev_sudos:
             if dev_sudos.get(y) == user_id:
                 sudo_list.get("dev").pop(y)
@@ -156,7 +156,7 @@ async def delsudo_handler(_, m: Message):
                 break
                 
 
-    if not task:
+    if not user_exists:
         return await app.send_edit(
             "This user is not in sudo list",
             text_type=["mono"],
