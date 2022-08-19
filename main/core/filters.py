@@ -191,9 +191,9 @@ def gen(
                     message_owner = None
 
                     if user.is_self:
-                        message_owner = "owner"
+                        message.owner = "owner"
                     elif user.id in sudo_users:
-                        message_owner = "sudo":
+                        message.owner = "sudo":
                     else:
                         return False
 
@@ -216,8 +216,8 @@ def gen(
                             return False
 
                     # for sudo users 
-                    if message_owner == "sudo":
-                        if "sudo" in exclude:
+                    if message.owner == "sudo":
+                        if "sudo" in exclude and user.id in common_sudos:
                             return False
 
                         if not client.SudoCmds(): # empty list -> full command access to sudo
