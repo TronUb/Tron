@@ -35,6 +35,12 @@ class OtherConfig(object):
         return sudo_types or {"dev": set(), "common": set(int(x) for x in self.SUDO_USERS)} or set()
 
 
+    def SudoUsersList(self):
+        """ Get your combined sudo users catagory as list """
+        sudo_users = self.SudoUsers()                     
+        sudo_users_list = list(sudo_users["dev"]) + list(sudo_users["common"])
+        return sudo_users_list or self.SUDO_USERS or []
+
 
     def Trigger(self):
         """ Get list of prefixes (command handlers) """
