@@ -28,3 +28,4 @@ class Bot(Core, Client):
         self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
         self.is_bot = True
         self.stop()
+        self.__class__.__module__ = "pyrogram.client"
