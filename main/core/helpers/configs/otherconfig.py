@@ -16,7 +16,7 @@ class OtherConfig(object):
         """ Get your No load module list """
         noload_plugins = self.getdv("NO_LOAD")
         noload_list = noload_plugins.split() if noload_plugins else None
-        return noload_list or self.NO_LOAD or [] 
+        return noload_list or self.NO_LOAD or []
 
 
     def SudoUsers(self):
