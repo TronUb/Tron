@@ -18,7 +18,9 @@ from pyrogram.errors import (
     BotMethodInvalid,
     MessageNotModified,
     FloodWait,
-    YouBlockedUser
+    YouBlockedUser,
+    MessageAuthorRequired,
+    MessageIdInvalid
 )
 from pyrogram.types import (
     Message,
@@ -400,7 +402,7 @@ class AsyncPart(object):
                     reply_markup=reply_markup,
                     entities=entities
                 )
-            except Exception as e:
+            except (MessageAuthorRequired, MessageIdInvalid):
                 print(e)
                 msg = await self.send_message(
                     chat_id=self.m.chat.id,
