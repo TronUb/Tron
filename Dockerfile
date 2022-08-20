@@ -1,7 +1,5 @@
 FROM python:3
 
-USER root
-
 RUN python3 -m venv root
 
 WORKDIR root/bin/
@@ -15,6 +13,8 @@ COPY . /workspace
 WORKDIR /workspace
 
 RUN apt-get update --no-install-recommends --yes
+
+RUN apt-get install nodejs --no-install-recommends --yes
 
 RUN python3 -m pip install --upgrade pip
 
