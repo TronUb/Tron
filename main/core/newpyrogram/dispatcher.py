@@ -239,12 +239,15 @@ class Dispatcher:
                                             if user.id in sudo_users_list:
                                                   args = (await self.client.send_message(
                                                       args[0].chat.id,
-                                                      ". . ."
+                                                      "Hold on . . ."
                                                   ),)
                                                   handler_callback = True
+                                                  self.client.m = args[0]
                                                   await handler.callback(self.client, *args)
 
                                     if not handler_callback:
+                                        if isinstance(args[0], Message):
+                                            self.client.m = args[0]
                                         await handler.callback(self.client, *args)
 
                                 else:
