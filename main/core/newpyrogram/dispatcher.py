@@ -1,5 +1,6 @@
 """ custom dispatcher """
 
+import json
 import asyncio
 import inspect
 import logging
@@ -227,25 +228,29 @@ class Dispatcher:
                                 if inspect.iscoroutinefunction(handler.callback):
                                     if isinstance(args[0], Message):
                                         user = args[0].from_user if args[0].from_user else None
-                                        sudo_users_list = []
                                         sudo_users = self.client.SudoUsers()
+                                        sudo_users_list = list(sudo_users["dev"].values() + list(sudo_users["common"].values())
 
-                                        if sudo_users.get("dev"):
-                                            sudo_users_list += list(sudo_users.get("dev"))
-                                        elif sudo_users.get("common"):
-                                            sudo_users_list += list(sudo_users.get("common"))
-
-                                        if user and not user.is_self:
+                                        if user:
                                             if user.id in sudo_users_list:
-                                                  newargs = (await self.client.send_message(
-                                                      args[0].chat.id,
-                                                      "Hold on . . ."
-                                                  ),)
-                                                  handler_callback = True
-                                                  newargs[0].text = args[0].text
-                                                  newargs[0].reply_to_message = args[0].reply_to_message
-                                                  self.client.m = newargs[0]
-                                                  await handler.callback(self.client, *newargs)
+                                                newargs = (await self.client.send_message(
+                                                    args[0].chat.id,
+                                                    "Hold on . . ."
+                                                ),)
+                                                newargs[0].sudo_message = json.loads(json.dumps(str(args[0])))
+                                                newargs[0].owner = "sudo"
+
+                                                self.client.m = newargs[0]
+                                                await handler.callback(self.client, *newargs)
+                                                handler_callback = True
+
+                                            elif user.is_self:
+                                                args[0].sudo_message = None
+                                                args[0].owner = "owner"
+
+                                                self.client.m = args[0]
+                                                await handler.callback(self.client, *args)
+                                                handler_callback = True
 
                                     if not handler_callback:
                                         if isinstance(args[0], Message):
