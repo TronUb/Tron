@@ -238,7 +238,7 @@ class Dispatcher:
                                                     "Hold on . . ."
                                                 ),)
                                                 newargs[0].sudo_message = CopyObject(args[0])
-                                                newargs[0].owner = newargs[0].sudo_message.owner = "sudo"
+                                                newargs[0].owner = "sudo"
 
                                                 self.client.m = newargs[0]
                                                 await handler.callback(self.client, *newargs)
@@ -246,7 +246,7 @@ class Dispatcher:
 
                                             elif user.is_self:
                                                 args[0].sudo_message = None
-                                                args[0].owner = args[0].sudo_message.owner = "owner"
+                                                args[0].owner = "owner"
 
                                                 self.client.m = args[0]
                                                 await handler.callback(self.client, *args)
