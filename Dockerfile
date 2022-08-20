@@ -19,8 +19,6 @@ WORKDIR /workspace
 
 RUN apt-get update --no-install-recommends --yes
 
-RUN apt-get install nodejs=15.3.1+repack-2 --no-install-recommends --yes 
-
 RUN python3 -m pip install --upgrade pip
 
 RUN pip3 install -r requirements.txt  
