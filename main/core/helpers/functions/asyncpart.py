@@ -401,6 +401,7 @@ class AsyncPart(object):
                     entities=entities
                 )
             except Exception as e:
+                print(e)
                 msg = await self.send_message(
                     chat_id=self.m.chat.id,
                     text=self.FormatText(text, textformat=text_type),
