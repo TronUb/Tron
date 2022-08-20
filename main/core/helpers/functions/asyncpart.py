@@ -260,7 +260,7 @@ class AsyncPart(object):
         return True
 
 
-    async def sleep(
+    async def sleep_delete(
         self,
         sec: int=0,
         delmsg=False
@@ -282,7 +282,7 @@ class AsyncPart(object):
 
         msg = None
         await asyncio.sleep(sec)
-        if delmsg and self.m.from_user.is_self:
+        if delmsg:
             msg = await self.m.delete()
         return msg
 
