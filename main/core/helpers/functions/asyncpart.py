@@ -421,7 +421,7 @@ class AsyncPart(object):
 
         try:
             if delme > 0:
-                asyncio.create_task(self.sleep(sec=delme, delmsg=True))
+                asyncio.create_task(self.sleep_delete(sec=delme, delmsg=True))
 
         except Exception as e:
             await self.error(e)
