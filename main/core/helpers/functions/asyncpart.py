@@ -413,7 +413,7 @@ class AsyncPart(object):
                     reply_markup=reply_markup,
                     entities=entities
                 )
-            self.m = msg
+            #self.m = msg
 
         except Exception as e:
             await self.error(e)
