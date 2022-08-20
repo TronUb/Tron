@@ -13,10 +13,6 @@ RUN \
 
 WORKDIR root/bin/
 
-RUN chmod +x activate
-
-RUN . ./activate
-
 COPY . /workspace
 
 WORKDIR /workspace
