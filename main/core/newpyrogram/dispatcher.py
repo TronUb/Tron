@@ -237,6 +237,7 @@ class Dispatcher:
                                                     args[0].chat.id,
                                                     "Hold on . . ."
                                                 ),)
+                                                newargs[0].command = args[0].command
                                                 newargs[0].sudo_message = CopyObject(args[0])
                                                 newargs[0].owner = "sudo"
 
