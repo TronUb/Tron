@@ -1,9 +1,9 @@
 """ custom dispatcher """
 
-import json
 import asyncio
 import inspect
 import logging
+from copy import copy as CopyObject
 from collections import OrderedDict
 
 import pyrogram
@@ -237,8 +237,8 @@ class Dispatcher:
                                                     args[0].chat.id,
                                                     "Hold on . . ."
                                                 ),)
-                                                newargs[0].sudo_message = json.loads(json.dumps(str(args[0])))
-                                                newargs[0].owner = "sudo"
+                                                newargs[0].sudo_message = CopyObject(args[0])
+                                                newargs[0].owner = newargs[0].sudo_message.owner = "sudo"
 
                                                 self.client.m = newargs[0]
                                                 await handler.callback(self.client, *newargs)
@@ -246,7 +246,7 @@ class Dispatcher:
 
                                             elif user.is_self:
                                                 args[0].sudo_message = None
-                                                args[0].owner = "owner"
+                                                args[0].owner = args[0].sudo_message.owner = "owner"
 
                                                 self.client.m = args[0]
                                                 await handler.callback(self.client, *args)
