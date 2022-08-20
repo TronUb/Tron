@@ -1,5 +1,7 @@
 FROM python:3
 
+USER root
+
 RUN python3 -m venv root
 
 WORKDIR root/bin/
