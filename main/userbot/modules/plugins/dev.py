@@ -48,8 +48,11 @@ async def evaluate_handler(_, m: Message):
                 text_type=["mono"],
                 delme=4
             )
+        if m.sudo_message:
+            text = m.sudo_message.text
+        else:
+            text = m.text
 
-        text = m.text
         cmd = text.split(None, 1)[1]
 
         msg = await app.send_edit("Executing . . .", text_type=["mono"])
@@ -123,9 +126,8 @@ async def terminal_handler(_, m: Message):
                 output += "\n"
         else:
             shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", cmd)
-            i = list(enumerate(shell))
-            for y in i:
-                shell[i[y]] = shell[i[y]].replace('"', "")
+            for y in range(len(shell)):
+                shell[y] = shell[y].replace('"', "")
             try:
                 process = subprocess.Popen(
                     shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE

@@ -82,7 +82,7 @@ def regex(
 
 # gen reply checker
 async def is_reply(client, message, reply, reply_type):
-    if reply and not message.reply:
+    if reply and not message.replied:
         await client.send_edit(
             "Reply to something . . .",
             text_type=["mono"],
@@ -90,7 +90,7 @@ async def is_reply(client, message, reply, reply_type):
         )
         return False
     elif reply and message.reply:
-        reply_attr = getattr(message.reply, reply_type)
+        reply_attr = getattr(message.replied, reply_type)
         if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}",
@@ -150,7 +150,7 @@ def gen(
         try:
             text = message.text or message.caption or None
             message.command = None
-            message.reply = message.reply_to_message
+            message.replied = message.reply_to_message
 
             if not text:
                 return False
@@ -185,9 +185,16 @@ def gen(
 
                         return False
 
-                    message_owner = "owner" if user.is_self else "sudo" if user.id in client.SudoUsers() else None
+                    dev_sudos = client.SudoUsers().get("dev")
+                    common_sudos = client.SudoUsers().get("common")
+                    sudo_users = dev_sudos.union(common_sudos)
+                    message_owner = None
 
-                    if not message_owner:
+                    if user.is_self:
+                        message.owner = "owner"
+                    elif user.id in sudo_users:
+                        message.owner = "sudo"
+                    else:
                         return False
 
                     message.command = [cmd] + text.split()[1:]
@@ -209,8 +216,8 @@ def gen(
                             return False
 
                     # for sudo users 
-                    if message_owner == "sudo":
-                        if "sudo" in exclude:
+                    if message.owner == "sudo":
+                        if "sudo" in exclude and user.id in common_sudos:
                             return False
 
                         if not client.SudoCmds(): # empty list -> full command access to sudo
@@ -223,7 +230,6 @@ def gen(
                             # max argument count condition
                             if not await max_argcount(client, message, max_args):
                                 return False
-
 
                             return True
 

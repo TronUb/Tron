@@ -5,6 +5,7 @@ import string
 from pyrogram import Client
 from main.assistant.client import Bot
 from main.core import Core
+from main.core.newpyrogram.dispatcher import Dispatcher
 
 
 
@@ -35,3 +36,4 @@ class SuperClient(Core, Client):
         self.is_bot = False
         self.stop()
         self.bot = Bot()
+        self.dispatcher = Dispatcher(self)

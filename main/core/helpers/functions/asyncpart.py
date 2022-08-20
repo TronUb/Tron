@@ -18,7 +18,9 @@ from pyrogram.errors import (
     BotMethodInvalid,
     MessageNotModified,
     FloodWait,
-    YouBlockedUser
+    YouBlockedUser,
+    MessageAuthorRequired,
+    MessageIdInvalid
 )
 from pyrogram.types import (
     Message,
@@ -260,7 +262,7 @@ class AsyncPart(object):
         return True
 
 
-    async def sleep(
+    async def sleep_delete(
         self,
         sec: int=0,
         delmsg=False
@@ -282,7 +284,7 @@ class AsyncPart(object):
 
         msg = None
         await asyncio.sleep(sec)
-        if delmsg and self.m.from_user.is_self:
+        if delmsg:
             msg = await self.m.delete()
         return msg
 
@@ -383,27 +385,16 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         try:
-            msg = None
+            try:
+                msg = None
 
-            # in private chats messages dont have from_user attribute
-            if self.m and self.m.chat and self.m.chat.type == ChatType.PRIVATE:
-                self.m = await self.get_messages(self.m.chat.id, self.m.id)
+                if len(text) > 4096:
+                    return await self.send_edit(
+                        "Message text is too long.",
+                        text_type=["mono"],
+                        delme=3
+                    )
 
-            if self.m.from_user and self.m.from_user.is_self:
-                is_self = True
-            elif self.m.outgoing: # for channels
-                is_self = True
-            else:
-                is_self = False
-
-            if len(text) > 4096:
-                return await self.send_edit(
-                    "Message text is too long.",
-                    text_type=["mono"],
-                    delme=3
-                )
-
-            if is_self:
                 msg = await self.m.edit(
                     text=self.FormatText(text, textformat=text_type),
                     parse_mode=parse_mode,
@@ -411,11 +402,8 @@ class AsyncPart(object):
                     reply_markup=reply_markup,
                     entities=entities
                 )
-                self.m = msg
-
-            else:
-                # for sudo users send message's instead of editing their message
-                # it is not possible for us to edit someone else's message
+            except (MessageAuthorRequired, MessageIdInvalid):
+                print(e)
                 msg = await self.send_message(
                     chat_id=self.m.chat.id,
                     text=self.FormatText(text, textformat=text_type),
@@ -428,16 +416,18 @@ class AsyncPart(object):
                     reply_markup=reply_markup,
                     entities=entities
                 )
-                self.m = msg # assign new message to m attribute
+            #self.m = msg
+
         except Exception as e:
             await self.error(e)
 
         try:
             if delme > 0:
-                asyncio.create_task(self.sleep(sec=delme, delmsg=True))
+                asyncio.create_task(self.sleep_delete(sec=delme, delmsg=True))
 
         except Exception as e:
             await self.error(e)
+
         return msg
 
 

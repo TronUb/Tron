@@ -25,7 +25,17 @@ app.CMD_HELP.update(
 
 
 async def broadcast(dialog, text):
-    """ broadcast function """
+    """
+        name::
+            broadcast
+
+        parameters::
+            dialog (int): dialog object
+            text (str): text message to be sent to users
+
+        returns::
+            None
+    """
     res = await app.send_message(
         dialog.chat.id,
         text
@@ -33,9 +43,23 @@ async def broadcast(dialog, text):
     return res if res else None
 
 
-@app.on_message(gen(["broadcast", "bdc"]))
+@app.on_message(
+    gen(
+        commands=["broadcast", "bdc"]
+    )
+)
 async def broadcast_handler(_, m: Message):
-    """ broadcast handler for broadcast plugin """
+    """
+        name::
+            broadcast_handler
+
+        parameters::
+            client (pyrogram.Client): pyrogram client
+            message (pyrogram.types.Message): pyrogram message
+
+        returns::
+            None
+    """
     try:
         args = app.GetArgs()
         users = 0

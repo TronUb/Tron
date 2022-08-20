@@ -1,3 +1,4 @@
+import json
 
 OTHERDV = [
     "NO_LOAD",
@@ -13,22 +14,38 @@ OTHERDV = [
 class OtherConfig(object):
     def NoLoad(self):
         """ Get your No load module list """
-        noloadvar = self.getdv("NO_LOAD")
-        data_list = noloadvar.split() if noloadvar else False  
-        return data_list or self.NO_LOAD or [] 
+        noload_plugins = self.getdv("NO_LOAD")
+        noload_list = noload_plugins.split() if noload_plugins else None
+        return noload_list or self.NO_LOAD or []
 
 
     def SudoUsers(self):
         """ Get sudo users """
-        sudovar = self.getdv("SUDO_USERS")
-        data_list = [int(x) for x in sudovar.split()] if sudovar else False  
-        return data_list or self.SUDO_USERS or [] 
+        sudo_users = self.getdv("SUDO_USERS")
+        if sudo_users:
+            sudo_users = json.loads(sudo_users)
+            dev = sudo_users.get("dev")
+            common = sudo_users.get("common")
+            sudo_types = {
+                "common": set(int(common.get(x)) for x in common),
+                "dev": set(int(dev.get(x)) for x in dev)
+            }
+        else:
+            sudo_types = None
+        return sudo_types or {"dev": set(), "common": set(int(x) for x in self.SUDO_USERS)} or set()
 
+
+    def SudoUsersList(self):
+        """ Get your combined sudo users catagory as list """
+        sudo_users = self.SudoUsers()                     
+        sudo_users_list = list(sudo_users["dev"]) + list(sudo_users["common"])
+        return sudo_users_list or self.SUDO_USERS or []
 
 
     def Trigger(self):
         """ Get list of prefixes (command handlers) """
-        return self.getdv("TRIGGER").split() or self.TRIGGER.split() or "."
+        trigger = self.getdv("TRIGGER")
+        return trigger.split() if trigger else None or self.TRIGGER.split() or "."
 
 
     def HelpEmoji(self):
@@ -38,7 +55,8 @@ class OtherConfig(object):
 
     def SudoCmds(self):
         """ returns a list of command names """
-        return self.getdv("SUDO_CMDS").split() or []
+        sudo_cmds = self.getdv("SUDO_CMDS")
+        return sudo_cmds.split() if sudo_cmds else []
 
 
     def SpotifyToken(self):
