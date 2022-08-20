@@ -14,7 +14,7 @@ WORKDIR /workspace
 
 RUN apt-get update --no-install-recommends --yes
 
-RUN apt-get install nodejs=18.7.0-1 --no-install-recommends --yes
+RUN apt install nodejs=18.7.0-1 --no-install-recommends --yes
 
 RUN python3 -m pip install --upgrade pip
 
