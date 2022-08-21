@@ -17,7 +17,7 @@ class JoinGroupCall:
         """
         group_call = self.get_group_call(chat_id)
 
-        if call is None:
+        if group_call is None:
             return None
 
         call = group.call
