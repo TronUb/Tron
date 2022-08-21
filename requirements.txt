@@ -27,3 +27,4 @@ uvloop
 cinemagoer
 moviepy
 apscheduler
+youtube-dl
