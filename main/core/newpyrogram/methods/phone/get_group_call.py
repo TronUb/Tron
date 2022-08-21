@@ -10,7 +10,7 @@ class GetGroupCall:
         chat_id: Union[int, str],
         limit: int = 1
     ) -> "pyrogram.raw.base.phone.GroupCall":
-        """ Create group call
+        """ Get group call
         """
         peer = await self.resolve_peer(chat_id)
         
