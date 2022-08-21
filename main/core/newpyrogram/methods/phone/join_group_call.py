@@ -15,7 +15,7 @@ class JoinGroupCall:
     ) -> "pyrogram.raw.base.Updates":
         """ Join group call
         """
-        group_call = self.get_group_call(chat_id)
+        group_call = await self.get_group_call(chat_id)
 
         if group_call is None:
             return None
