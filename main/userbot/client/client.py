@@ -37,3 +37,4 @@ class SuperClient(Core, Client):
         self.stop()
         self.bot = Bot()
         self.dispatcher = Dispatcher(self)
+        self.__class__.__module__ = "pyrogram.client"
