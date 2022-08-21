@@ -3,7 +3,7 @@ from .get_group_call import GetGroupCall
 
 
 
-class Phone:
+class Phone(
     CreateGroupCall,
     GetGroupCall
 ):
