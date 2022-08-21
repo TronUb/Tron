@@ -18,13 +18,13 @@ class GetGroupCall:
             call = (await self.invoke(
                 raw.functions.channels.GetFullChannel(
                     channel=peer
-                )).full_chat.call
+                ))).full_chat.call
         else:
             if isinstance(peer, raw.types.InputPeerChat):
                 call = (await self.invoke(
                     raw.functions.messages.GetFullChat(
                         chat_id=peer.chat_id
-                    )).full_chat.call
+                    ))).full_chat.call
 
         if call is None:
             return call
