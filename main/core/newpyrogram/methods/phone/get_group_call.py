@@ -30,7 +30,7 @@ class GetGroupCall:
             return call
 
         return await self.invoke(
-            raw.functions.phone.CreateGroupCall(
+            raw.functions.phone.GetGroupCall(
                 call=call,
                 limit=limit
             )
