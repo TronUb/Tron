@@ -20,7 +20,7 @@ class JoinGroupCall:
         if group_call is None:
             return None
 
-        call = group.call
+        call = group_call.call
 
         return await self.invoke(
             raw.functions.phone.JoinGroupCall(
