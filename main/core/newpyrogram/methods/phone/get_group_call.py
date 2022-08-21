@@ -19,7 +19,7 @@ class GetGroupCall:
                 raw.functions.channels.GetFullChannel(
                     channel=peer
                 ).full_chat.call
-        elif:
+        else:
             if isinstance(peer, raw.types.InputPeerChat):
                 call = (await self.invoke(
                     raw.functions.messages.GetFullChat(
