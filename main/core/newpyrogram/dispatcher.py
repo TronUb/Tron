@@ -228,8 +228,7 @@ class Dispatcher:
                                 if inspect.iscoroutinefunction(handler.callback):
                                     if isinstance(args[0], Message):
                                         user = args[0].from_user if args[0].from_user else None
-                                        sudo_users = self.client.SudoUsers()
-                                        sudo_users_list = list(sudo_users["dev"]) + list(sudo_users["common"])
+                                        sudo_users_list = self.client.SudoUsersList()
 
                                         if user:
                                             if user.id in sudo_users_list:
