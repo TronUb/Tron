@@ -42,5 +42,5 @@ class EditGroupCallParticipant:
                 video_paused=video_paused,
                 presentation_paused=presentation_paused
             )
-        )"
+        )
  
