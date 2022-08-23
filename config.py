@@ -157,11 +157,11 @@ if platform.uname()[1] in ("localhost"):
             if data[0] in config_atr:
                 setattr(Config, data[0], data[1])
 
-        # set remaining necessary config values
-        config_txt = dir(Config)
-        for attr in dir(Configuration):
-            if attr.isupper() and not attr in config_txt:
-                setattr(Config, attr, getattr(Configuration, att, None))
+    # set remaining necessary config values
+    config_txt = dir(Config)
+    for attr in dir(Configuration):
+        if attr.isupper() and not attr in config_txt:
+            setattr(Config, attr, getattr(Configuration, att, None))
 
 else:
     class Config(Configuration):
