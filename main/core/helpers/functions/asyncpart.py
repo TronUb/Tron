@@ -64,7 +64,7 @@ class AsyncPart(object):
 
     async def IsAdmin(
         self,
-        privileges: raw.types.ChatAdminRights = None,
+        privileges: types.ChatAdminRights = None,
         chat_id: Union[str, int] = None,
         user_id: Union[str, int] = None
         ):
