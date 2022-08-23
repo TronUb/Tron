@@ -169,7 +169,7 @@ if platform.uname()[1] in ("localhost"):
         value = getattr(Configuration, attr, None)
         if value and value.isdigit():
             class_attr = int(value)
-        elif value and value.isalpha() or value.isalnum():
+        elif value and value.isalpha() or value and value.isalnum():
             class_attr = str(value)
         else:
             class_attr = None
