@@ -98,10 +98,10 @@ class Configuration(object): # pylint: disable=too-few-public-methods
 
 
 
-def package_installed(package_name: str):
+def package_installed(package_name: str, installer: str=None):
     return (subprocess.run(
         [
-            "pip3",
+            "pip3" if not installer else installer,
             "show",
             package_name
         ],
@@ -142,6 +142,10 @@ if platform.uname()[1] in ("localhost"):
 
         with open("temp.info", "w") as f:
             f.write(str(count))
+
+    # check & install ffmpeg
+    if not package_installed("ffmpeg", "apt"):
+        os.system("apt install ffmpeg")
 
     class Config:
         pass
