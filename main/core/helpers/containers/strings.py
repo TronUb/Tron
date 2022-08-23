@@ -1,7 +1,18 @@
 class Strings(object):
+    def assistant_tab_string(self):
+        text = "**Dex:** Assistant\n"
+        text += "**Location:**  home/assistant\n\n"
+        text += "**Introduction:**\n\n"
+        text += "Welcome to assistant tab section."
+        text += "There are some buttons below."
+        text += "Tap on them to get more details"
+
+        return text
+
+
     def about_tab_string(self):
         text = "**Dex:** About\n"
-        text += "**Location:** /home/about\n"
+        text += "**Location:** /home/about\n\n"
         text += "**[ Personal Info ]:**\n\n"
         text += f"**Name:** {self.assistant_name}\n"
         text += "**[ Versions ]:**\n\n"
@@ -16,7 +27,7 @@ class Strings(object):
         text += "You can ask me for any help related to your userbot.\n"
         text += "If you have any suggestions or you're facing any problems\n"
         text += "which are related to tronuserbot then just ask in\n"
-        text += f"[support group](https://t.me/tronuserbot_support)"
+        text += f"[support group](https://t.me/TronUbSupport)"
 
         return text
 
