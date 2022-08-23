@@ -167,15 +167,9 @@ if platform.uname()[1] in ("localhost"):
     config_txt = dir(Config)
     for attr in dir(Configuration):
         value = getattr(Configuration, attr, None)
-        if value and value.isdigit():
-            class_attr = int(value)
-        elif value and value.isalpha() or value and value.isalnum():
-            class_attr = str(value)
-        else:
-            class_attr = None
 
         if attr.isupper() and not attr in config_txt:
-            setattr(Config, attr, class_attr)
+            setattr(Config, attr, value)
 
 else:
     class Config(Configuration):
