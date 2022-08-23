@@ -161,7 +161,7 @@ if platform.uname()[1] in ("localhost"):
         config_txt = dir(Config)
         for attr in dir(Configuration):
             if attr.isupper() and not attr in config_txt:
-                setattr(Config, attr, getattr(Configuration, att, None)
+                setattr(Config, attr, getattr(Configuration, att, None))
 
 else:
     class Config(Configuration):
