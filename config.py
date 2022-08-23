@@ -37,7 +37,7 @@ if platform.uname()[1] in ("localhost"):
         if not package_installed(_pkg):
             os.system(f"pip3 install {pkg}")
 
-        print(f"\n{_pkg} installed: Yes")
+        print(f"\n{pkg} installed: Yes")
             
         
 
