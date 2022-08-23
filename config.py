@@ -2,17 +2,44 @@
 
 import os
 import platform
+import subprocess
 
 
-Inside = object
-IS_TERMUX = None
+def package_installed(package_name: str):
+    return (await subprocess.run(
+        [
+            "pip3",
+            "show",
+            package_name
+        ],
+        stdout=subprocess.PIPE
+    )).stdout.decode()
+
+
+def requirements():
+    with open("requirements.txt", "r") as f:
+        return f.read().split("\n")
+
+
+def _requirements():
+    return [
+        "".join(x.lower() for x in y if x.isalpha()) 
+        for y in requirements()
+    ]
+
+
 if platform.uname()[1] in ("localhost"):
-    from termuxconfig import TermuxConfig
-    IS_TERMUX = True
-    Inside = TermuxConfig
+    print("Checking Packages:\n\n")
+    for pkg, _pkg in zip(
+        requirements(),
+        _requirements()
+        ):
+        if not package_installed(_pkg):
+            os.system(f"pip3 install {pkg}")
 
-
-
+        print(f"\n{_pkg} installed: Yes")
+            
+        
 
 _PMPERMIT_TEXT = """
 Hey ! This is [Tron Userbot](https://t.me/tronuserbot) Security System.
@@ -25,13 +52,12 @@ And Better Not To Spam His here !
 # ------------------
 class Config(Inside): # pylint: disable=too-few-public-methods
     """ configuration class """
-    if not IS_TERMUX:
-        # api id of your telegram account (required)
-        API_ID = os.getenv("API_ID")
-        # api hash of your telegram account (required)
-        API_HASH = os.getenv("API_HASH")
-        # create a session using command [ python3 session.py ] or use repl.it (required)
-        SESSION = os.getenv("SESSION")
+    # api id of your telegram account (required)
+    API_ID = os.getenv("API_ID")
+    # api hash of your telegram account (required)
+    API_HASH = os.getenv("API_HASH")
+    # create a session using command [ python3 session.py ] or use repl.it (required)
+    SESSION = os.getenv("SESSION")
 # ------------------
     # temporary download location (required)
     TEMP_DICT = os.getenv("TEMP_DICT", os.path.abspath(".") + "/downloads/")
@@ -42,15 +68,13 @@ class Config(Inside): # pylint: disable=too-few-public-methods
     HEROKU_API_KEY = os.getenv("HEROKU_API_KEY")
     # heroku app name (required -> if hosted on heroku)
     HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-    if not IS_TERMUX:
-        # database url (required)
-        DB_URI = os.getenv("DATABASE_URL")
+    # database url (required)
+    DB_URI = os.getenv("DATABASE_URL")
 # ------------------
     # these users can use your userbot
     SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
-    if not IS_TERMUX:
-        # a group to store logs, etc (required)
-        LOG_CHAT = int(os.getenv("LOG_CHAT"))
+    # a group to store logs, etc (required)
+    LOG_CHAT = int(os.getenv("LOG_CHAT"))
     # command trigger, it works like this: .ping => result: pong !
     TRIGGER = os.getenv("TRIGGER", ".")
     # for more info visit docs.pyrogram.org, workers section
@@ -92,9 +116,8 @@ class Config(Inside): # pylint: disable=too-few-public-methods
     BOT_USERNAME = os.getenv("BOT_USERNAME")
     # telegram id of bot if failed to get automatically (optional)
     BOT_ID = os.getenv("BOT_ID")
-    if not IS_TERMUX:
-        # access token of your bot, without this the bot will not work (required)
-        TOKEN = os.getenv("TOKEN")
+    # access token of your bot, without this the bot will not work (required)
+    TOKEN = os.getenv("TOKEN")
 # ---------------------
     # thumbnail used while uploading plugins, etc. (optional)
     THUMB_PIC = os.getenv("THUMB_PIC", "./main/core/resources/images/tron-square.png")
