@@ -50,7 +50,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Config(Inside): # pylint: disable=too-few-public-methods
+class Config(object): # pylint: disable=too-few-public-methods
     """ configuration class """
     # api id of your telegram account (required)
     API_ID = os.getenv("API_ID")
