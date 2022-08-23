@@ -700,7 +700,7 @@ class AsyncPart(object):
                 if await self.user_ingroup(chat_id, user_id):
                     raise Exception("User is already in group")
 
-                r = await self.add_users(chat_id, user_id):
+                r = await self.add_users(chat_id, user_id)
                 return True if r else None
             else:
                 raise Exception("Bot client is not available")
