@@ -21,20 +21,10 @@ def requirements():
         return f.read().split("\n")
 
 
-def _requirements():
-    return [
-        "".join(x.lower() for x in y if x.isalpha()) 
-        for y in requirements()
-    ]
-
-
 if platform.uname()[1] in ("localhost"):
     print("Checking Packages:\n\n")
-    for pkg, _pkg in zip(
-        requirements(),
-        _requirements()
-        ):
-        if not package_installed(_pkg):
+    for pkg in requirements():
+        if not package_installed(pkg.split("=")[0].lower()):
             os.system(f"pip3 install {pkg}")
 
         print(f"\n{pkg} installed: Yes")
@@ -74,7 +64,7 @@ class Config(object): # pylint: disable=too-few-public-methods
     # these users can use your userbot
     SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
     # a group to store logs, etc (required)
-    LOG_CHAT = int(os.getenv("LOG_CHAT"))
+    LOG_CHAT = int(os.getenv("LOG_CHAT", "-100"))
     # command trigger, it works like this: .ping => result: pong !
     TRIGGER = os.getenv("TRIGGER", ".")
     # for more info visit docs.pyrogram.org, workers section
