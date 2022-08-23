@@ -60,7 +60,13 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-    elif query.startswith("#helpdex"):
+    elif query.startswith("#helpmenu"):
+        help_emoji = app.HelpEmoji()
+        if help_emoji:
+            emoji = help_emoji
+        else:
+            emoji = "•"
+
         await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
@@ -72,17 +78,17 @@ async def inline_result(_, inline_query):
                     [
                         app.BuildKeyboard(
                             (
-                                ["• Settings •", "settings-tab"],
-                                ["• Plugins •", "plugins-tab"]
+                                [f"{emoji} Settings {emoji}", "settings-tab"],
+                                [f"{emoji} Plugins {emoji}", "plugins-tab"]
                             )
                         ),
                         app.BuildKeyboard(
                             (
-                                ["• Extra •", "extra-tab"],
-                                ["• Stats •", "stats-tab"]
+                                [f"{emoji} Extra {emoji}", "extra-tab"],
+                                [f"{emoji} Stats {emoji}", "stats-tab"]
                             )
                         ),
-                        app.BuildKeyboard(([["About", "about-tab"]])),
+                        app.BuildKeyboard(([["Assistant", "assistant-tab"]])),
                         app.BuildKeyboard(([["Close", "close-tab"]]))
                     ]
                 )
@@ -203,6 +209,6 @@ async def inline_result(_, inline_query):
 
     else:
         await inline_query.answer(
-        results=await create_articles(),
-        cache_time=1
+            results=await create_articles(),
+            cache_time=1
         )
