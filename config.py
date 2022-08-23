@@ -157,7 +157,7 @@ if platform.uname()[1] in ("localhost"):
         # set text file config values
         for x in content:
             data = x.split("=")
-            file_value = None
+            file_value = data[1]
             if data[1].isdigit():
                 file_value = int(data[1])
 
