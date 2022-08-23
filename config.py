@@ -146,13 +146,22 @@ if platform.uname()[1] in ("localhost"):
     class Config:
         pass
 
+    # check if the user config file exists
     if os.path.exists("config.txt"):
         with open("config.txt") as f:
             content = f.read().split("\n")
 
+        # set text file config values
         for x in content:
             data = x.split("=")
-            setattr(Config, date[0], data[1])
+            if data[0] in config_atr:
+                setattr(Config, data[0], data[1])
+
+        # set remaining necessary config values
+        config_txt = dir(Config)
+        for attr in dir(Configuration):
+            if attr.isupper() and not attr in config_txt:
+                setattr(Config, attr, getattr(Configuration, att, None)
 
 else:
     class Config(Configuration):
