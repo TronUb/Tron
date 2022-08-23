@@ -110,11 +110,14 @@ async def start_bot():
     try:
         await send_start()
     except (ChannelInvalid, PeerIdInvalid):
-        await app.get_chat(app.LOG_CHAT)
-        await app.send_message(
-            app.LOG_CHAT,
-            "The userbot is online now."
-        )
+        try:
+            await app.get_chat(app.LOG_CHAT)
+            await app.send_message(
+                app.LOG_CHAT,
+                "The userbot is online now."
+            )
+        except PeerIdInvalid:
+            pass
 
     await idle() # block execution
 
