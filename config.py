@@ -154,14 +154,25 @@ if platform.uname()[1] in ("localhost"):
         # set text file config values
         for x in content:
             data = x.split("=")
+            if data[1].isdigit():
+                file_value = int(date[1])
+
             if data[0] in config_atr:
-                setattr(Config, data[0], data[1])
+                setattr(Config, data[0], file_value)
 
     # set remaining necessary config values
     config_txt = dir(Config)
     for attr in dir(Configuration):
+        value = getattr(Configuration, attr, None)
+        if value.isdigit():
+            class_attr = int(value)
+        elif value.isalpha() or value.isalnum():
+            class_attr = str(value)
+        else:
+            class_attr = None
+
         if attr.isupper() and not attr in config_txt:
-            setattr(Config, attr, getattr(Configuration, attr, None))
+            setattr(Config, attr, class_attr)
 
 else:
     class Config(Configuration):
