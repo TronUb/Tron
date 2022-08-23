@@ -21,13 +21,34 @@ def requirements():
         return f.read().split("\n")
 
 
-if platform.uname()[1] in ("localhost"):
-    print("Checking Packages:\n\n")
-    for pkg in requirements():
-        if not package_installed(pkg.split("=")[0].lower()):
-            os.system(f"pip3 install {pkg}")
+def requirements_installed():
+    filename = "temp.info"
+    if os.path.exists(filename):
+        with open(filename, "r") as f:
+            content = f.read()
 
-        print(f"\n{pkg} installed: Yes")
+        if content.isdigit() and int(content) == 30: # 30 requirements
+            return True
+
+    return None
+
+
+if platform.uname()[1] in ("localhost"):
+    if requirement_installed():
+        count = 0 # extra empty string
+        print("Checking Packages:\n\n")
+        for pkg in requirements():
+            if not package_installed(pkg.split("=")[0].lower()):
+                if pkg: # empty string
+                    os.system(f"pip3 install {pkg}")
+            else:
+                if pkg: # don't count empty string
+                    count += 1
+            if pkg: # empty string
+                print(f"\n{pkg} installed: Yes")
+
+        with open("temp.info", "w") as f:
+            f.write(str(count))
             
         
 
