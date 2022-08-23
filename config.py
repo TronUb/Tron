@@ -6,7 +6,7 @@ import subprocess
 
 
 def package_installed(package_name: str):
-    return (await subprocess.run(
+    return (subprocess.run(
         [
             "pip3",
             "show",
