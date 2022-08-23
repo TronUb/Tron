@@ -4,52 +4,6 @@ import os
 import platform
 import subprocess
 
-
-def package_installed(package_name: str):
-    return (subprocess.run(
-        [
-            "pip3",
-            "show",
-            package_name
-        ],
-        stdout=subprocess.PIPE
-    )).stdout.decode()
-
-
-def requirements():
-    with open("requirements.txt", "r") as f:
-        return f.read().split("\n")
-
-
-def requirements_installed():
-    filename = "temp.info"
-    if os.path.exists(filename):
-        with open(filename, "r") as f:
-            content = f.read()
-
-        if content.isdigit() and int(content) == 30: # 30 requirements
-            return True
-
-    return None
-
-
-if platform.uname()[1] in ("localhost"):
-    if requirement_installed():
-        count = 0 # extra empty string
-        print("Checking Packages:\n\n")
-        for pkg in requirements():
-            if not package_installed(pkg.split("=")[0].lower()):
-                if pkg: # empty string
-                    os.system(f"pip3 install {pkg}")
-            else:
-                if pkg: # don't count empty string
-                    count += 1
-            if pkg: # empty string
-                print(f"\n{pkg} installed: Yes")
-
-        with open("temp.info", "w") as f:
-            f.write(str(count))
-            
         
 
 _PMPERMIT_TEXT = """
@@ -61,7 +15,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Config(object): # pylint: disable=too-few-public-methods
+class Configuration(object): # pylint: disable=too-few-public-methods
     """ configuration class """
     # api id of your telegram account (required)
     API_ID = os.getenv("API_ID")
@@ -140,3 +94,67 @@ class Config(object): # pylint: disable=too-few-public-methods
 # ---------------------
     # spotify token for spotify now
     SPOTIFY_TOKEN = os.getenv("SPOTIFY_TOKEN")
+
+
+
+
+def package_installed(package_name: str):
+    return (subprocess.run(
+        [
+            "pip3",
+            "show",
+            package_name
+        ],
+        stdout=subprocess.PIPE
+    )).stdout.decode()
+
+
+def requirements():
+    with open("requirements.txt", "r") as f:
+        return f.read().split("\n")
+
+
+def requirements_installed():
+    filename = "temp.info"
+    if os.path.exists(filename):
+        with open(filename, "r") as f:
+            content = f.read()
+
+        if content.isdigit() and int(content) == 30: # 30 requirements
+            return True
+
+    return None
+
+
+if platform.uname()[1] in ("localhost"):
+    if requirements_installed():
+        count = 0
+        print("Checking Packages:\n\n")
+        for pkg in requirements():
+            if not package_installed(pkg.split("=")[0].lower()):
+                if pkg: # empty string
+                    os.system(f"pip3 install {pkg}")
+            else:
+                if pkg: # don't count empty string
+                    count += 1
+            if pkg: # empty string
+                print(f"\n{pkg} installed: Yes")
+
+        with open("temp.info", "w") as f:
+            f.write(str(count))
+
+    class Config:
+        pass
+
+    if os.path.exists("config.txt"):
+        with open("config.txt") as f:
+            content = f.read().split("\n")
+
+        for x in content:
+            data = x.split("=")
+            setattr(Config, date[0], data[1])
+
+else:
+    class Config(Configuration):
+        pass
+
