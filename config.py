@@ -155,7 +155,7 @@ if platform.uname()[1] in ("localhost"):
         for x in content:
             data = x.split("=")
             if data[1].isdigit():
-                file_value = int(date[1])
+                file_value = int(data[1])
 
             if data[0] in config_atr:
                 setattr(Config, data[0], file_value)
