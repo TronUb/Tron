@@ -151,6 +151,9 @@ if platform.uname()[1] in ("localhost"):
         with open("config.txt") as f:
             content = f.read().split("\n")
 
+        # remove empty strings
+        content.remove("")
+
         # set text file config values
         for x in content:
             data = x.split("=")
