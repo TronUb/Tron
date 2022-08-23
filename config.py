@@ -154,11 +154,11 @@ if platform.uname()[1] in ("localhost"):
         # set text file config values
         for x in content:
             data = x.split("=")
+            file_value = None
             if data[1].isdigit():
                 file_value = int(data[1])
 
-            if data[0] in config_atr:
-                setattr(Config, data[0], file_value)
+            setattr(Config, data[0], file_value)
 
     # set remaining necessary config values
     config_txt = dir(Config)
