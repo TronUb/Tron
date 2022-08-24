@@ -27,6 +27,8 @@ import pytz
 
 from pySmartDL import SmartDL
 
+from youtube_dl import YoutubeDL
+
 
 
 
@@ -829,3 +831,30 @@ class SyncPart(Types):
         obj = SmartDL(url, self.TEMP_DICT, progress_bar=False)
         obj.start()
         return obj.get_dest()
+
+
+    def Ytdl(
+        params: dict = {
+            "format": "bestaudio[ext=webm]",
+            "noplaylist": "True"
+        },
+        auto_init: bool = true
+        ):
+        """
+        Just read the YoutubeDL class docs for use
+    
+        params::
+            params: dict  = {
+                "format": "bestaudio[ext=webm]",
+                "noplaylist": "true"
+            },
+        
+            auto_init: bool = True
+        """
+
+        yt = YoutubeDL(
+            params=params,
+            auto_init=auto_init
+        )
+    
+        return yt
