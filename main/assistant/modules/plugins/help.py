@@ -11,7 +11,7 @@ from main.userbot.client import app
 
 
 
-help_emoji = app.HelpEmoji() or "•"
+emoji = app.HelpEmoji() or "•"
 
 settings = app.BuildKeyboard(([f"{emoji} Settings {emoji}", "settings-tab"], ["{emoji} Modules {emoji}", "plugins-tab"]))
 extra = app.BuildKeyboard(([f"{emoji} Extra {emoji}", "extra-tab"], [f"{emoji} Stats {emoji}", "stats-tab"]))
