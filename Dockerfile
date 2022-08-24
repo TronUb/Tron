@@ -25,7 +25,7 @@ RUN \
 RUN apt update && apt install -y ffmpeg
 
 # for deep-translater
-RUN pip3 install requests
+#RUN pip3 install requests
 
 RUN pip3 install -r requirements.txt  
 
