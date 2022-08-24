@@ -6,7 +6,7 @@ and loads plugins for both assistant & userbot.
 import sys
 import asyncio
 import warnings
-from pyrogram import idle
+from pyrogram import idle, Client
 from pyrogram.types import (
     BotCommand,
     InlineKeyboardButton,
