@@ -20,7 +20,9 @@ RUN \
   pip install -U pip && pip install pipenv && \
   npm i -g npm@^8 && \
   curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python && ln -s /root/.poetry/bin/poetry /usr/local/bin && \
-  rm -rf /var/lib/apt/lists/* && / apt install -y ffmpeg
+  rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt install -y ffmpeg
 
 RUN pip3 install -r requirements.txt  
 
