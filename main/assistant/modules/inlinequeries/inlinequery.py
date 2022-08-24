@@ -61,11 +61,7 @@ async def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#helpmenu"):
-        help_emoji = app.HelpEmoji()
-        if help_emoji:
-            emoji = help_emoji
-        else:
-            emoji = "•"
+        emoji = app.HelpEmoji() or "•"
 
         await inline_query.answer(
         results=[
