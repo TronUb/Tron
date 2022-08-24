@@ -62,31 +62,62 @@ class AsyncPart(object):
                     return json.loads(await resp.text())
 
 
-    async def IsAdmin(self, privileges):
-        """Check if we are an admin."""
-        if not self.m.from_user:
-            raise Exception("message is None in app.IsAdmin method")
+    async def IsAdmin(
+        self,
+        privileges: types.ChatAdminRights = None,
+        chat_id: Union[str, int] = None,
+        user_id: Union[str, int] = None
+        ):
+        """
+        Check if you/user are an admin in chat.
+        
+        params::
+            privileges: "raw.types.ChatAdminRights"
+            chat_id: Union[str, int] = None
+            user_id: Union[str, int] = None
 
-        resp = (await self.invoke(
+        privileges::
+            1. change_info
+            2. post_messages
+            3. edit_messages
+            4. delete_messages
+            5. ban_users
+            6. invite_users
+            7. pin_messages
+            8. add_admins
+            9. anonymous
+            10. manage_call
+            11. other
+        """
+        if not self.m.from_user:
+            raise Exception("app.m is None in app.IsAdmin method")
+
+        r = (await self.invoke(
                 functions.channels.GetParticipant(
-                    channel=await self.resolve_peer(self.m.chat.id),
-                    participant=await self.resolve_peer(self.id)
+                    channel=await self.resolve_peer(
+                        chat_id if chat_id else self.m.chat.id
+                    ),
+                    participant=await self.resolve_peer(
+                        user_id if user_id else "self"
+                    )
                 )
             )
             ).participant
 
-        if not isinstance(resp, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)):
-            return False
+        if not isinstance(r, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)):
+            raise Exception(f"Invalid type {type(r)}")
 
-        if resp is None:
-            raise Exception("app.IsAdmin returned None")
+        if r is None:
+            raise Exception("channels.GetParticipant returned None")
 
-        return True if getattr(resp.admin_rights, privileges) else False
+        return getattr(r.admin_rights, privileges)
 
 
     async def IsReply(self, msg: Message):
-        """Check if the message is a reply to another user."""
-        return True if msg.reply_to_message else False
+        """
+        Check if the message is a reply to another user.
+        """
+        return msg.reply_to_message if msg else self.m.reply_to_message
 
 
     async def ProgressForPyrogram(self, current, total, ud_type, message, start):
@@ -123,7 +154,7 @@ class AsyncPart(object):
 
 
     async def IsThumbExists(self, file_name: str):
-        " get thumbnail of file if it exists "
+        """ get thumbnail of file if it exists """
         thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
         if os.path.exists(thumb_image_path):
             thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
@@ -142,7 +173,7 @@ class AsyncPart(object):
 
 
     async def RunCommand(self, shell_command: List) -> str:
-        " run shell commands "
+        """ run shell commands """
         process = await asyncio.create_subprocess_exec(
             *shell_command,
             stdout=asyncio.subprocess.PIPE,
@@ -154,26 +185,8 @@ class AsyncPart(object):
         return t_response, e_response
 
 
-    async def ExtractUser(self, msg: Message) -> Union[int, str]:
-        """extracts the user from a message"""
-        user_id = None
-        first_name = None
-        reply = msg.reply_to_message
-
-        if reply:
-            if reply.from_user:
-                user_id = reply.from_user.id
-                first_name = reply.from_user.first_name
-
-        elif not reply:
-            if msg.from_user:
-                user_id = msg.from_user.id
-                first_name = msg.from_user.first_name
-
-        return user_id, first_name
-
     async def HasteBinPaste(self, text):
-        " paste anything to pasting site "
+        """ paste anything to pasting site """
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
@@ -501,45 +514,56 @@ class AsyncPart(object):
         self,
         chat_id: Union[str, int],
         user_id: Union[str, int],
-        ban_time: int=31
+        ban_time: int = 40
         ):
         """
-        params:
-            1. chat_id: int :: chat id of the chat where this method is used
-            2. user_id: int :: user id of the user you want to kick from chat
+        Kick (noban) a user from chat.
 
-        use:
-            use this function to kick a member from your chat
+        params::
+            chat_id: Union[str, int]
+            user_id: Union[str, int]
+            ban_time: int = 40
 
         ex: (async)
-            await app.kick_user(chat_id, user_id, ban_time=120)
+            await app.kick_user(
+                chat_id,
+                user_id,
+                ban_time=120
+            )
         """
 
         try:
-            return await self.ban_chat_member(chat_id, user_id, datetime.datetime.now() + timedelta(seconds=ban_time))
+            return await self.ban_chat_member(
+                chat_id,
+                user_id,
+                datetime.datetime.now() + timedelta(seconds=ban_time))
         except Exception as e:
             await self.error(e)
 
 
-    async def get_last_msg(
+    async def get_lastmessage(
         self,
-        chat_id
+        chat_id: Union[int, str],
+        reverse: bool = False
         ):
         """
-        params:
-            1. chat_id: int :: chat id of group or user
-            2. reverse: bool, default=False :: if reverse is True you'll get the oldest message in chat
+        Get first or last message of a chat.
 
-        use:
-            use this function to get last message of the chat or user
+        params:
+            chat_id: Union[int, str]
+            reverse: bool = False
 
         ex: (async)
-            await app.get_last_msg(chat_id, reverse=True)
+            await app.get_lastmessage(
+                chat_id,
+                reverse=True
+            )
         """
-
-        async for x in self.get_chat_history(chat_id, limit=1):
-            return x
-
+        try:
+            results = [x async for x in self.get_chat_history(chat_id, limit=1)]
+            return results[-1] if reverse else results[0]
+        except Exception as e:
+            await self.error(e)
 
     async def toggle_inline(
         self,
@@ -612,78 +636,73 @@ class AsyncPart(object):
 
     async def add_users(
         self,
-        user_id: Union[int, str, List[int], List[str]],
-        chat_id: Union[int, str]
+        chat_id: Union[int, str],
+        user_id: Union[int, str, List[int], List[str]]
         ):
         """
+        Add users in groups/supergroups
+
         params:
-            1. user_id: int :: list of telegram id of user
-            2. chat_id :: chat id of a group or channel
-
-        use:
-            use this function to add users in a group / channel
-
+            chat_id: Union[int, str]
+            user_id: Union[int, str, List[int], List[str]]
+   
         ex: (async)
             await app.add_users(user_id, chat_id)
         """
 
         try:
-            done = await self.add_chat_members(chat_id, user_id)
-            return True if done else False
+            return await self.add_chat_members(
+                chat_id,
+                user_id
+            )
         except Exception as e:
-            self.log.error(e)
+            self.error(e)
 
 
-    async def user_exists(
+    async def user_ingroup(
         self,
         chat_id: Union[int, str],
         user_id: Union[int, str]
         ):
         """
-        params:
-            1. chat_id: int :: id of a telegram chat
-            2. chat :: id of a telegram user
+        Check if a user exists in group or not.
 
-        use:
-            use this function to check whether a user exists in a group or not
+        params::
+            chat_id: Union[int, str]
+            user_id: Union[int, str]
 
         ex: (async)
-            await app.user_exists(user_id, chat_id)
+            await app.user_ingroup(chat_id, user_id)
         """
 
         async for x in self.get_chat_members(chat_id):
             if x.user.id == user_id:
                 return True
-        return False
+        return None
+
 
 
     async def add_logbot(
         self
         ):
         """
+        Add you assitant bot in log chat.
+
         params:
             None
 
-        use:
-            use this function to add your bot if he is not in the log chat
-
         ex: (async)
-            await app.check_bot_in_log_chat()
+            await app.add_logbot()
         """
 
         try:
             if self.bot:
-                self.log.info("PROCESS: Checking presence of bot in log chat . . .\n")
-                try:
-                    if await self.user_exists(self.bot.id, self.LOG_CHAT) is False:
-                        await self.add_users(self.bot.id, self.LOG_CHAT)
-                        self.log.info("COMPLETED: Added bot in log chat . . .\n")
-                    else:
-                        self.log.info("COMPLETED: Bot is already present in log chat . . .\n")
-                except PeerIdInvalid:
-                    self.log.info("Peer id is invalid, Manually add bot to your log chat . . .\n")
+                if await self.user_ingroup(chat_id, user_id):
+                    raise Exception("User is already in group")
 
+                r = await self.add_users(chat_id, user_id)
+                return True if r else None
             else:
-                self.log.warning("Bot client is not available, please check (TOKEN, API_ID, API_HASH)")
-        except Exception as err:
-            await self.log.info(err)
+                raise Exception("Bot client is not available")
+        except Exception as e:
+            await self.error(e)
