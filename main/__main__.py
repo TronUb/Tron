@@ -58,8 +58,8 @@ async def start_assistant():
 async def start_vcbot(client: Client):
     """ this function starts the py-tgcalls vcbot """
     if client:
-        pytgcall_client = PyTgCalls(client)
-        client.pytgcall = await pytgcall_client.start()
+        client.pytgcall = PyTgCalls(client)
+        await client.pytgcall.start()
         return True
     else:
         client.pytgcall = None
