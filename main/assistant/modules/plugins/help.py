@@ -11,11 +11,13 @@ from main.userbot.client import app
 
 
 
-settings = app.BuildKeyboard((["• Settings •", "settings-tab"], ["• Modules •", "plugins-tab"]))
-extra = app.BuildKeyboard((["• Extra •", "extra-tab"], ["• Stats •", "stats-tab"]))
+help_emoji = app.HelpEmoji() or "•"
+
+settings = app.BuildKeyboard(([f"{emoji} Settings {emoji}", "settings-tab"], ["{emoji} Modules {emoji}", "plugins-tab"]))
+extra = app.BuildKeyboard(([f"{emoji} Extra {emoji}", "extra-tab"], [f"{emoji} Stats {emoji}", "stats-tab"]))
 about = app.BuildKeyboard(([["About", "about-tab"]]))
 close = app.BuildKeyboard(([["Close", "close-tab"]]))
-public = app.BuildKeyboard(([["• Public Commands •", "public-commands-tab"]]))
+public = app.BuildKeyboard(([[f"{emoji} Public Commands {emoji}", "public-commands-tab"]]))
 
 
 
