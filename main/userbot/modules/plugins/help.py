@@ -65,7 +65,7 @@ async def helpmenu_handler(_, m: Message):
     args = m.command if app.long() > 1 else None
 
     try:
-        if args is False:
+        if not args:
             await app.send_edit(". . .", text_type=["mono"])
             result = await app.get_inline_bot_results(
                 app.bot.username,
