@@ -62,14 +62,14 @@ async def delete_helpdex(_, cb: CallbackQuery):
 @app.on_message(gen("help"))
 async def helpmenu_handler(_, m: Message):
     """ helpmenu handler for help plugin """
-    args = m.command if app.long() > 1 else False
+    args = m.command if app.long() > 1 else None
 
     try:
         if args is False:
             await app.send_edit(". . .", text_type=["mono"])
             result = await app.get_inline_bot_results(
                 app.bot.username,
-                "#helpdex"
+                "#helpmenu"
             )
             if result:
                 await m.delete()
