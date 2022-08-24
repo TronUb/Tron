@@ -17,6 +17,7 @@ from pyrogram.errors import (
     ChannelInvalid
 )
 from main.userbot import app
+from pytgcalls import PyTgCalls
 
 
 
@@ -54,6 +55,19 @@ async def start_assistant():
 
 
 
+async def start_vcbot(client: Client):
+    """ this function starts the py-tgcalls vcbot """
+    if client:
+        pytgcall_client = PyTgCalls(client)
+        client.pytgcall = await pytgcall_client.start()
+        return True
+    else:
+        client.pytgcall = None
+        return None
+
+
+
+
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
@@ -61,6 +75,11 @@ async def start_userbot():
         response = await app.start()
         if response:
             print("Userbot activated.\n")
+            print("Activating VCBot.\n")
+            if await start_vcbot(app):
+                print("Activated VCBot.\n")
+            else:
+                print("VCBot is not avtivated.\n")
         else:
             print("Userbot is not activated.\n")
     else:
