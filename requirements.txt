@@ -28,3 +28,4 @@ cinemagoer
 moviepy
 apscheduler
 youtube-dl
+py-tgcalls
