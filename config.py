@@ -175,6 +175,7 @@ if platform.uname()[1] in ("localhost"):
 
     # check if the user config file exists
     if os.path.exists("config.txt"):
+        print("config.txt file exists: Yes\n\n")
         with open("config.txt") as f:
             content = f.read().split("\n")
 
@@ -182,6 +183,7 @@ if platform.uname()[1] in ("localhost"):
         content.remove("")
 
         # set text file config values
+        print("Setting configuration values.\n\n")
         for x in content:
             data = x.strip()
             data = data.split("=")
@@ -190,14 +192,16 @@ if platform.uname()[1] in ("localhost"):
                 file_value = int(data[1])
 
             setattr(Config, data[0], file_value)
+            print(f"Added config = {data[0]} with value = {file_value}\n")
 
     # set remaining necessary config values
-    config_txt = dir(Config)
+    print("Setting remaining configuration values\n\n")
     for attr in dir(Configuration):
         value = getattr(Configuration, attr, None)
 
-        if attr.isupper() and not attr in config_txt:
+        if attr.isupper() and not hasattr(Config, attr):
             setattr(Config, attr, value)
+            print(f"Added config = {attr} with value = {value}\n")
 
 else:
     class Config(Configuration):
