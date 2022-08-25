@@ -1,6 +1,15 @@
-import uvloop
+try:
+    import uvloop
+except ImportError:
+    uvloop = None
+
 from .client import SuperClient
 
 
-uvloop.install()
+
+# support for termux
+if uvloop:
+    uvloop.install()
+
+# create an instance of client
 app = SuperClient()
