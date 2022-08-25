@@ -838,7 +838,7 @@ class SyncPart(Types):
             "format": "bestaudio[ext=webm]",
             "noplaylist": "True"
         },
-        auto_init: bool = true
+        auto_init: bool = True
         ):
         """
         Just read the YoutubeDL class docs for use
