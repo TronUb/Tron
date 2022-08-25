@@ -1,4 +1,9 @@
+import os
+
 try:
+    # download uvloop manually
+    os.system("pip3 install uvloop")
+
     import uvloop
 except ImportError:
     uvloop = None
