@@ -27,4 +27,4 @@ cinemagoer
 moviepy
 apscheduler
 youtube-dl
-py-tgcalls
+git+https://github.com/pytgcalls/pytgcalls.git
