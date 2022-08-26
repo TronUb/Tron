@@ -14,6 +14,9 @@ else:
     from config import Config
     database = Config.DB_URI
 
+if not database:
+    database = "sqlite:///tron.db"
+
 
 def start() -> scoped_session:
     engine = create_engine(database)
