@@ -26,7 +26,7 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     # create a session using command [ python3 session.py ] or use repl.it (required)
     SESSION = os.getenv("SESSION")
     # access token of your bot, without this the bot will not work (required)
-    TOKEN = os.getenv("TOKEN")
+    TOKEN = os.getenv("BOT_TOKEN") # fix-this
     # database url (required)
     DB_URI = os.getenv("DATABASE_URL")
     # a group to store logs, etc (required)
