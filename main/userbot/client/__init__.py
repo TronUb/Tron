@@ -1,20 +1,17 @@
 import os
 
 try:
-    # download uvloop manually
-    os.system("pip3 install uvloop")
-
+    # work slow but don't mess
+    print("uvloop wasn't installed, userbot will work slow.")
     import uvloop
 except ImportError:
-    uvloop = None
+    pass
 
 from .client import SuperClient
 
 
 
-# support for termux
 if uvloop:
     uvloop.install()
 
-# create an instance of client
 app = SuperClient()
