@@ -13,7 +13,7 @@ SQLAlchemy==1.4.40
 TgCrypto
 httpx
 pytz
-psycopg2
+asyncpg
 CurrencyConverter
 git+https://github.com/nidhaloff/deep-translator.git
 gTTS
