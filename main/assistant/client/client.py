@@ -16,7 +16,7 @@ class Bot(Core, Client):
             name="Nora",
             api_id=self.API_ID,
             api_hash=self.API_HASH,
-            bot_token=self.TOKEN,
+            bot_token=self.BOT_TOKEN,
 	)
         self.start()
         self.me = self.get_chat("me")
