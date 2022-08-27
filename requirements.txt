@@ -15,7 +15,7 @@ httpx
 pytz
 asyncpg
 CurrencyConverter
-git+https://github.com/nidhaloff/deep-translator.git
+deep-translator==1.8.3
 gTTS
 git-python
 Wikipedia-API
