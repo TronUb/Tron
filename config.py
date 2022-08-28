@@ -145,7 +145,7 @@ def requirements_installed():
     return None
 
 
-if RunShell(["uname", "-o"]) in ("Android", "android"):
+if RunShell(["uname", "-n"]) in ("Localhost", "localhost"):
     if not requirements_installed():
         count = 0
         print("Checking Packages:\n\n")
