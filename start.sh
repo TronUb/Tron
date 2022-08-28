@@ -4,6 +4,7 @@ uname=$(uname -n)
 filename="./config.txt"
 repo="https://github.com/TronUb/Tron.git"
 pytgcalls=$(pip3 show py-tgcalls)
+G='\033[0;32m'
 
 
 # not found
@@ -23,46 +24,48 @@ sleep 3
 if [ "$uname" == "localhost" ]; then
     clear
     # update & upgrade ubuntu
-    echo $'Updating & Upgrading ubuntu apt . . .\n'
+    echo -e $'${G}Updating & Upgrading ubuntu apt . . .${G}\n'
     apt update && apt upgrade
     clear
 
     # install python3
     if ! installed python3; then
-       echo $'Installing python3 . . .\n'
+       echo -e $'${G}Installing python3 . . .${G}\n'
        apt install python3
        clear
     fi
 
     # install python3 pip
     if ! installed pip; then
-       echo $'Installing python3 pip . . .\n'
+       echo -e $'${G}Installing python3 pip . . .${G}\n'
        apt install pip
        clear
     fi
 
     # install git 
     if ! installed git; then
-        echo $'Installing git . . .\n'
+        echo -e $'${G}Installing git . . .${G}\n'
         apt install git
         clear
     fi
 
     # install ffmpeg
     if ! installed ffmpeg; then
+        echo -e $'${G}Installing ffmpeg . . .${G}\n'
         apt install ffmpeg
         clear
     fi
 
     # install nodejs
     if ! installed nodejs; then
-        bash installl_nodejs.sh
+        echo -e $'${G}Installing nodejs . . .${G}\n'
+        bash install_nodejs.sh
         clear
     fi
 
     # install py-tgcalls
     if [[ $pytgcalls =~ no_cmd ]]; then
-        echo 'Installing py-tgcalls . . .\n'
+        echo -e $'${G}Installing py-tgcalls . . .${G}\n'
         python3 -m pip install py-tgcalls
         clear
     fi
