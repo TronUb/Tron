@@ -834,6 +834,7 @@ class SyncPart(Types):
 
 
     def Ytdl(
+        self,
         params: dict = {
             "format": "bestaudio[ext=webm]",
             "noplaylist": "True"
