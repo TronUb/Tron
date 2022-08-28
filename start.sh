@@ -1,46 +1,47 @@
 #!/bin/bash
 
-
-
-oname=$(uname -n)
+uname=$(uname -n)
 filename="./config.txt"
 repo="https://github.com/TronUb/Tron.git"
-ffmpeg=$(ffmpeg)
-nodejs=$(node)
-python=$(python3 --version)
-pip=$(pip --version)
 pytgcalls=$(pip3 show py-tgcalls)
-git=$(git)
 
 
 # not found
-no_file="No such file or directory"
 no_cmd="not found"
 
 
-echo $'Welcome to Tron Corporation\n'
+installed() {
+    return $(dpkg-query -W -f '${Status}\n' "${1}" 2>&1|awk '/ok installed/{print 0;exit}{print 1}')
+}
 
-if [ "$oname" == "localhost" ]; then
+
+clear
+echo $'Welcome to Tron Corporation\n'
+sleep 3
+
+
+if [ "$uname" == "localhost" ]; then
     clear
     # update & upgrade ubuntu
+    echo $'Updating & Upgrading ubuntu apt . . .\n'
     apt update && apt upgrade
 
     # install python3
-    if [[ $python =~ no_cmd ]]; then
+    if ! installed python3; then
        echo $'Installing python3 . . .\n'
        apt install python3
        clear
     fi
 
     # install python3 pip
-    if [[ $pip =~ no_cmd ]]; then
+    if ! installed pip3; then
        echo $'Installing python3 pip . . .\n'
        apt install pip
        clear
     fi
 
     # install git 
-    if [[ $git =~ no_file ]]; then
+    if ! installed git; then
         echo $'Installing git . . .\n'
         apt install git
         clear
@@ -56,13 +57,13 @@ if [ "$oname" == "localhost" ]; then
     fi
 
     # install ffmpeg
-    if [[ $ffmpeg =~ $error ]]; then
+    if ! installed ffmpeg; then
         apt install ffmpeg
         clear
     fi
 
     # install nodejs
-    if [[ $nodejs =~ $error ]]; then
+    if ! installed nodejs; then
         bash installl_nodejs.sh
         clear
     fi
