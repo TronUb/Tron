@@ -52,3 +52,4 @@ elif [ "$oname" == "Android" ]; then
     exit
 else
     python3 -m main
+fi
