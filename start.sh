@@ -25,6 +25,7 @@ if [ "$uname" == "localhost" ]; then
     # update & upgrade ubuntu
     echo $'Updating & Upgrading ubuntu apt . . .\n'
     apt update && apt upgrade
+    clear
 
     # install python3
     if ! installed python3; then
@@ -34,7 +35,7 @@ if [ "$uname" == "localhost" ]; then
     fi
 
     # install python3 pip
-    if ! installed pip3; then
+    if ! installed pip; then
        echo $'Installing python3 pip . . .\n'
        apt install pip
        clear
