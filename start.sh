@@ -17,55 +17,55 @@ installed() {
 
 
 clear
-echo -e "${G}Welcome to Tron Corporation{G}\n"
+echo -e "${G}Welcome to Tron Corporation.\n"
 sleep 3
 
 
 if [ "$uname" == "localhost" ]; then
     clear
     # update & upgrade ubuntu
-    echo -e '${G}Updating & Upgrading ubuntu apt . . .${G}\n'
+    echo -e "${G}Updating & Upgrading ubuntu apt . . .\n"
     apt update && apt upgrade
     clear
 
     # install python3
     if ! installed python3; then
-       echo -e '${G}Installing python3 . . .${G}\n'
+       echo -e "${G}Installing python3 . . .${G}\n"
        apt install python3
        clear
     fi
 
     # install python3 pip
     if ! installed pip; then
-       echo -e '${G}Installing python3 pip . . .${G}\n'
+       echo -e "${G}Installing python3 pip . . .\n"
        apt install pip
        clear
     fi
 
     # install git 
     if ! installed git; then
-        echo -e '${G}Installing git . . .${G}\n'
+        echo -e "${G}Installing git . . .\n"
         apt install git
         clear
     fi
 
     # install ffmpeg
     if ! installed ffmpeg; then
-        echo -e '${G}Installing ffmpeg . . .${G}\n'
+        echo -e "${G}Installing ffmpeg . . .\n"
         apt install ffmpeg
         clear
     fi
 
     # install nodejs
     if ! installed nodejs; then
-        echo -e '${G}Installing nodejs . . .${G}\n'
+        echo -e "${G}Installing nodejs . . .\n"
         bash install_nodejs.sh
         clear
     fi
 
     # install py-tgcalls
     if [[ $pytgcalls =~ $no_cmd ]]; then
-        echo -e '${G}Installing py-tgcalls . . .${G}\n'
+        echo -e "${G}Installing py-tgcalls . . .\n"
         python3 -m pip install py-tgcalls
         clear
     fi
