@@ -121,13 +121,9 @@ class Configuration(object): # pylint: disable=too-few-public-methods
 
 
 
-def package_installed(package_name: str, installer: str=None):
+def RunShell(args: list):
     return (subprocess.run(
-        [
-            "pip3" if not installer else installer,
-            "show",
-            package_name
-        ],
+        args,
         stdout=subprocess.PIPE
     )).stdout.decode()
 
@@ -149,12 +145,18 @@ def requirements_installed():
     return None
 
 
-if platform.uname()[1] in ("localhost"):
-    if requirements_installed():
+if RunShell(["uname", "-o"]) in ("Android", "android"):
+    if not requirements_installed():
         count = 0
         print("Checking Packages:\n\n")
         for pkg in requirements():
-            if not package_installed(pkg.split("=")[0].lower()):
+            pkg_response = RunShell(
+            [
+                "pip3",
+                "show",
+                pkg.split("=")[0].lower()
+            ])
+            if "not found" in pkg_response:
                 if pkg: # empty string
                     os.system(f"pip3 install {pkg}")
             else:
@@ -167,7 +169,7 @@ if platform.uname()[1] in ("localhost"):
             f.write(str(count))
 
     # check & install ffmpeg
-    if not package_installed("ffmpeg", "apt"):
+    if "not found" in RunShell(["apt", "show", "ffmpeg"]):
         os.system("apt install ffmpeg")
 
     class Config:
