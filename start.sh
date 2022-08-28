@@ -17,7 +17,7 @@ installed() {
 
 
 clear
-echo $'Welcome to Tron Corporation\n'
+echo -e "${G}Welcome to Tron Corporation{G}\n"
 sleep 3
 
 
@@ -64,7 +64,7 @@ if [ "$uname" == "localhost" ]; then
     fi
 
     # install py-tgcalls
-    if [[ $pytgcalls =~ no_cmd ]]; then
+    if [[ $pytgcalls =~ $no_cmd ]]; then
         echo -e '${G}Installing py-tgcalls . . .${G}\n'
         python3 -m pip install py-tgcalls
         clear
