@@ -47,15 +47,6 @@ if [ "$uname" == "localhost" ]; then
         clear
     fi
 
-    # clone Tron repo
-    if [ ! -f "$filename" ]; then
-        git clone $repo
-        clear
-        cd Tron
-    else
-        cd Tron
-    fi
-
     # install ffmpeg
     if ! installed ffmpeg; then
         apt install ffmpeg
