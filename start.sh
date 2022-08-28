@@ -30,7 +30,7 @@ if [ "$uname" == "localhost" ]; then
 
     # install python3
     if ! installed python3; then
-       echo -e "${G}Installing python3 . . .${G}\n"
+       echo -e "${G}Installing python3 . . .\n"
        apt install python3
        clear
     fi
