@@ -2,7 +2,7 @@
 
 
 
-oname=$(uname -o)
+oname=$(uname -n)
 filename="./config.txt"
 repo="https://github.com/TronUb/Tron.git"
 ffmpeg=$(ffmpeg)
@@ -20,7 +20,7 @@ no_cmd="not found"
 
 echo $'Welcome to Tron Corporation\n'
 
-if [ "$oname" == "Android" ]; then
+if [ "$oname" == "localhost" ]; then
     clear
     # update & upgrade ubuntu
     apt update && apt upgrade
