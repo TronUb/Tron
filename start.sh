@@ -47,7 +47,7 @@ elif [[ "$oname" == "Android" && -f "$filename" ]]; then
     python3 -m main
 elif [ "$oname" == "Android" ]; then
     clear
-    echo $'The config.txt file doesn't exist !\n'
+    echo $'The config.txt file doesnt exist !\n'
     echo $'Set your config.txt file with config values.'
     exit
 else
