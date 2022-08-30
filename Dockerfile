@@ -1,4 +1,4 @@
-FROM amd64/python:3.9-buster
+FROM amd64/python:3.10.6-buster
 
 WORKDIR root/bin/
 
