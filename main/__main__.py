@@ -22,7 +22,7 @@ from main.userbot import app
 try:
     from pytgcalls import PyTgCalls 
 except ImportError:
-    os.system("pip3 install pytgcalls")
+    os.system("python3 -m pip install pytgcalls")
     try:
         from pytgcalls import PyTgCalls 
     except ImportError:
