@@ -9,7 +9,7 @@ Pillow
 bs4
 covid
 pySmartDL
-SQLAlchemy==1.4.40
+SQLAlchemy==1.3.23
 TgCrypto
 httpx
 pytz
