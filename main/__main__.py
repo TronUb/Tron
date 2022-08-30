@@ -65,7 +65,7 @@ async def start_assistant():
 
 async def start_vcbot(client: Client):
     """ this function starts the py-tgcalls vcbot """
-    if client:
+    if PyTgCalls:
         client.pytgcall = PyTgCalls(client)
         await client.pytgcall.start()
         return True
@@ -84,13 +84,10 @@ async def start_userbot():
         if response:
             print("Userbot activated.\n")
             print("Activating VCBot.\n")
-            if PyTgCalls:
-                if await start_vcbot(app):
-                    print("Activated VCBot.\n")
-                else:
-                    print("VCBot is not avtivated.\n")
+            if await start_vcbot(app):
+                print("Activated VCBot.\n")
             else:
-                print("Pytgcalls is not installed, vcbot will be unavailable !\n")
+                print("VCBot is not avtivated, PyTgCalls is not installed !\n")
         else:
             print("Userbot is not activated.\n")
     else:
