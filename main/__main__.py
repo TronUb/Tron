@@ -3,6 +3,7 @@ Run after main.__init__.py, this file starts
 and loads plugins for both assistant & userbot.
 """
 
+import os 
 import sys
 import asyncio
 import warnings
@@ -17,7 +18,11 @@ from pyrogram.errors import (
     ChannelInvalid
 )
 from main.userbot import app
-from pytgcalls import PyTgCalls
+
+try:
+    from pytgcalls import PyTgCalls 
+except ImportError:
+    os.system("pip3 install pytgcalls")
 
 
 
