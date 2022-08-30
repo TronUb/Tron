@@ -23,7 +23,10 @@ try:
     from pytgcalls import PyTgCalls 
 except ImportError:
     os.system("pip3 install pytgcalls")
-
+    try:
+        from pytgcalls import PyTgCalls 
+    except ImportError:
+        pytgcalls = None
 
 
 
@@ -81,10 +84,13 @@ async def start_userbot():
         if response:
             print("Userbot activated.\n")
             print("Activating VCBot.\n")
-            if await start_vcbot(app):
-                print("Activated VCBot.\n")
+            if pytgcalls:
+                if await start_vcbot(app):
+                    print("Activated VCBot.\n")
+                else:
+                    print("VCBot is not avtivated.\n")
             else:
-                print("VCBot is not avtivated.\n")
+                print("Pytgcalls is not installed, vcbot will be unavailable !\n")
         else:
             print("Userbot is not activated.\n")
     else:
