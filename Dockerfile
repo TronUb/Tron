@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bullseye
+FROM amd64/python:3.9-buster
 
 WORKDIR root/bin/
 
