@@ -26,7 +26,7 @@ except ImportError:
     try:
         from pytgcalls import PyTgCalls 
     except ImportError:
-        pytgcalls = None
+        PyTgCalls = None
 
 
 
@@ -84,7 +84,7 @@ async def start_userbot():
         if response:
             print("Userbot activated.\n")
             print("Activating VCBot.\n")
-            if pytgcalls:
+            if PyTgCalls:
                 if await start_vcbot(app):
                     print("Activated VCBot.\n")
                 else:
@@ -101,7 +101,7 @@ async def start_userbot():
 
 
 
-async def send_start():
+async def send_logmessage():
     await app.bot.send_message(
         app.LOG_CHAT,
         "The userbot is online now.",
@@ -138,7 +138,7 @@ async def start_bot():
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 
     try:
-        await send_start()
+        await send_logmessage()
     except (ChannelInvalid, PeerIdInvalid):
         try:
             await app.get_chat(app.LOG_CHAT)
