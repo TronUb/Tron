@@ -66,6 +66,7 @@ async def start_assistant():
 async def start_vcbot(client: Client):
     """ this function starts the py-tgcalls vcbot """
     if PyTgCalls:
+        os.system("bash install_nodejs.sh")
         client.pytgcall = PyTgCalls(client)
         await client.pytgcall.start()
         return True
