@@ -22,11 +22,9 @@ from main.userbot import app
 try:
     from pytgcalls import PyTgCalls 
 except ImportError:
-    os.system("bash install_nodejs.sh")
     os.system("python3 -m pip install py-tgcalls")
     try:
         from pytgcalls import PyTgCalls
-        os.system("bash install_nodejs.sh")
     except ImportError:
         PyTgCalls = None
 
