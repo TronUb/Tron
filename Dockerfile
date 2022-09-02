@@ -11,7 +11,7 @@ RUN apt-get update --no-install-recommends --yes
 RUN python3 -m pip install --upgrade pip
 
 RUN \
-  apt-get update --no-install-recommends --yes && apt-get upgrade --no-install-recommends--yes && \
+  apt-get update --no-install-recommends --yes && apt-get upgrade --no-install-recommends --yes && \
   apt-get install wget curl --no-install-recommends --yes && \
   echo "deb https://deb.nodesource.com/node_17.x buster main" > /etc/apt/sources.list.d/nodesource.list && \
   wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
