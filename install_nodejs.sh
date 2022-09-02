@@ -1,5 +1,5 @@
 echo "deb https://deb.nodesource.com/node_17.x buster main" > /etc/apt/sources.list.d/nodesource.list && \
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key --no-install-recommends --yes | apt-key add - && \
   apt update --no-install-recommends --yes && apt upgrade --no-install-recommends --yes && \
   apt install wget curl --no-install-recommends --yes && \
   wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
