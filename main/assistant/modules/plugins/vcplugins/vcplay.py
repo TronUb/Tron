@@ -11,15 +11,24 @@ from main import app, bot
 
 
 
-if app.VcBotAccess():
-    vcpass = filters.all # public use
-else:
-    vcpass = filters.user(app.id) # private use
+public = app.VcBotAccess()
+
+def vc_allowed(message):
+    if message.owner == "owner":
+        return True
+
+    if public:
+        return True
+
+    return None
 
 
-@bot.on_message(filters.command("vcplay") & vcpass)
+@bot.on_message(filters.command("vcplay"))
 async def vcplay_handler(_, m: Message):
     try:
+        if not vc_allowed(m):
+            return
+
         if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
             return await bot.send_message(
                 m.chat.id,
@@ -71,6 +80,9 @@ async def vcplay_handler(_, m: Message):
 @bot.on_message(filters.command("vcstop") & vcpass)
 async def vcstop_handler(_, m: Message):
     try:
+        if not vc_allowed(m):
+            return
+
         if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
             return await bot.send_message(
                 m.chat.id,
@@ -98,6 +110,9 @@ async def vcstop_handler(_, m: Message):
 @bot.on_message(filters.command("vcpause") & vcpass)
 async def vcpause_handler(_, m: Message):
     try:
+        if not vc_allowed(m):
+            return
+
         if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
             return await bot.send_message(
                 m.chat.id,
@@ -116,6 +131,9 @@ async def vcpause_handler(_, m: Message):
 @bot.on_message(filters.command("vcresume") & vcpass)
 async def vcresume_handler(_, m: Message):
     try:
+        if not vc_allowed(m):
+            return
+
         if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
             return await bot.send_message(
                 m.chat.id,
