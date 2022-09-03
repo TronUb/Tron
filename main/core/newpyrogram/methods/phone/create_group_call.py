@@ -17,6 +17,10 @@ class CreateGroupCall:
         """ Create group call
         """
         peer = await self.resolve_peer(chat_id)
+        call = await self.get_group_call(chat_id)
+
+        if call:
+            return call
 
         return await self.invoke(
             raw.functions.phone.CreateGroupCall(
