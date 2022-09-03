@@ -16,7 +16,10 @@ async def vcplay_handler(_, m):
                 m.chat.id,
                 "Give me song name to start in vc.",
             )
-        await m.edit(f"Playing {args} . . .")
+        await app.send_message(
+            m.chat.id,
+            f"Playing {args} . . ."
+        )
 
         await app.create_group_call(m.chat.id, m.id)
         data = app.Ytdl().extract_info(f"ytsearch:{args}", download=False)['entries'][0]
