@@ -1,6 +1,15 @@
-import uvloop
+import os
+
+try:
+    import uvloop
+except ImportError:
+    print("uvloop wasn't installed, userbot will work slow.")
+
 from .client import SuperClient
 
 
-uvloop.install()
+
+if uvloop:
+    uvloop.install()
+
 app = SuperClient()

@@ -3,10 +3,11 @@ Run after main.__init__.py, this file starts
 and loads plugins for both assistant & userbot.
 """
 
+import os 
 import sys
 import asyncio
 import warnings
-from pyrogram import idle
+from pyrogram import idle, Client
 from pyrogram.types import (
     BotCommand,
     InlineKeyboardButton,
@@ -18,6 +19,14 @@ from pyrogram.errors import (
 )
 from main.userbot import app
 
+try:
+    from pytgcalls import PyTgCalls 
+except ImportError:
+    os.system("python3 -m pip install py-tgcalls")
+    try:
+        from pytgcalls import PyTgCalls
+    except ImportError:
+        PyTgCalls = None
 
 
 
@@ -54,6 +63,20 @@ async def start_assistant():
 
 
 
+async def start_vcbot(client: Client):
+    """ this function starts the py-tgcalls vcbot """
+    if PyTgCalls:
+        os.system("bash install_nodejs.sh")
+        client.pytgcall = PyTgCalls(client)
+        await client.pytgcall.start()
+        return True
+    else:
+        client.pytgcall = None
+        return None
+
+
+
+
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
@@ -61,6 +84,11 @@ async def start_userbot():
         response = await app.start()
         if response:
             print("Userbot activated.\n")
+            print("Activating VCBot.\n")
+            if await start_vcbot(app):
+                print("Activated VCBot.\n")
+            else:
+                print("VCBot is not avtivated, PyTgCalls is not installed !\n")
         else:
             print("Userbot is not activated.\n")
     else:
@@ -71,7 +99,7 @@ async def start_userbot():
 
 
 
-async def send_start():
+async def send_logmessage():
     await app.bot.send_message(
         app.LOG_CHAT,
         "The userbot is online now.",
@@ -108,7 +136,7 @@ async def start_bot():
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 
     try:
-        await send_start()
+        await send_logmessage()
     except (ChannelInvalid, PeerIdInvalid):
         try:
             await app.get_chat(app.LOG_CHAT)

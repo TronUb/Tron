@@ -1,4 +1,4 @@
-Pyrogram==2.0.27
+pyrogram
 pytube
 telegraph
 heroku3
@@ -9,13 +9,13 @@ Pillow
 bs4
 covid
 pySmartDL
+psycopg2
 SQLAlchemy==1.3.23
 TgCrypto
 httpx
 pytz
-psycopg2
 CurrencyConverter
-git+https://github.com/nidhaloff/deep-translator.git
+deep-translator==1.8.3
 gTTS
 git-python
 Wikipedia-API
@@ -23,8 +23,8 @@ speedtest-cli==2.1.3
 qrcode
 bing-image-downloader
 pyfy
-uvloop
 cinemagoer
 moviepy
 apscheduler
 youtube-dl
+uvloop

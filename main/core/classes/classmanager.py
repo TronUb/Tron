@@ -57,5 +57,5 @@ class ClassManager(Config, Helpers, Database, Methods):
 
     # telegraph /
     telegraph = Telegraph()
-    telegraph.create_account(short_name=Config.TL_NAME if Config.TL_NAME else "Tron userbot")
+    telegraph.create_account(short_name=Config.TL_NAME or "TronUserbot Team")
 

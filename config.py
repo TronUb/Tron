@@ -26,7 +26,7 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     # create a session using command [ python3 session.py ] or use repl.it (required)
     SESSION = os.getenv("SESSION")
     # access token of your bot, without this the bot will not work (required)
-    TOKEN = os.getenv("TOKEN")
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
     # database url (required)
     DB_URI = os.getenv("DATABASE_URL")
     # a group to store logs, etc (required)
@@ -121,13 +121,9 @@ class Configuration(object): # pylint: disable=too-few-public-methods
 
 
 
-def package_installed(package_name: str, installer: str=None):
+def RunShell(args: list):
     return (subprocess.run(
-        [
-            "pip3" if not installer else installer,
-            "show",
-            package_name
-        ],
+        args,
         stdout=subprocess.PIPE
     )).stdout.decode()
 
@@ -149,12 +145,18 @@ def requirements_installed():
     return None
 
 
-if platform.uname()[1] in ("localhost"):
-    if requirements_installed():
+if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
+    if not requirements_installed():
         count = 0
         print("Checking Packages:\n\n")
         for pkg in requirements():
-            if not package_installed(pkg.split("=")[0].lower()):
+            pkg_response = RunShell(
+            [
+                "pip3",
+                "show",
+                pkg.split("=")[0].lower()
+            ])
+            if "not found" in pkg_response:
                 if pkg: # empty string
                     os.system(f"pip3 install {pkg}")
             else:
@@ -167,7 +169,7 @@ if platform.uname()[1] in ("localhost"):
             f.write(str(count))
 
     # check & install ffmpeg
-    if not package_installed("ffmpeg", "apt"):
+    if "not found" in RunShell(["apt", "show", "ffmpeg"]):
         os.system("apt install ffmpeg")
 
     class Config:
@@ -175,6 +177,7 @@ if platform.uname()[1] in ("localhost"):
 
     # check if the user config file exists
     if os.path.exists("config.txt"):
+        print("config.txt file exists: Yes\n\n")
         with open("config.txt") as f:
             content = f.read().split("\n")
 
@@ -182,6 +185,7 @@ if platform.uname()[1] in ("localhost"):
         content.remove("")
 
         # set text file config values
+        print("Setting configuration values.\n\n")
         for x in content:
             data = x.split("=")
             file_value = data[1]
@@ -189,14 +193,16 @@ if platform.uname()[1] in ("localhost"):
                 file_value = int(data[1])
 
             setattr(Config, data[0], file_value)
+            print(f"Added config = {data[0]} with value = {file_value}\n")
 
     # set remaining necessary config values
-    config_txt = dir(Config)
+    print("Setting remaining configuration values\n\n")
     for attr in dir(Configuration):
         value = getattr(Configuration, attr, None)
 
-        if attr.isupper() and not attr in config_txt:
+        if attr.isupper() and not hasattr(Config, attr):
             setattr(Config, attr, value)
+            print(f"Added config = {attr} with value = {value}\n")
 
 else:
     class Config(Configuration):
