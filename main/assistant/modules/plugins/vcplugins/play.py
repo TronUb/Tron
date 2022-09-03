@@ -1,4 +1,5 @@
 from pytgcalls.types import AudioPiped
+from pytgcalls.exceptions import AlreadyJoinedError
 from pyrogram import filters
 
 from main import app, bot
