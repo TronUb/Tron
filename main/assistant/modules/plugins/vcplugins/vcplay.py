@@ -85,3 +85,5 @@ async def vcstop_handler(_, m: Message):
                 m.chat.id,
                 "Unable to stop group call (vc).",
            )
+    except Exception as e:
+        await app.error(e)
