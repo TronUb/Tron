@@ -19,15 +19,6 @@ from pyrogram.errors import (
 )
 from main.userbot import app
 
-try:
-    from pytgcalls import PyTgCalls 
-except ImportError:
-    os.system("python3 -m pip install py-tgcalls")
-    try:
-        from pytgcalls import PyTgCalls
-    except ImportError:
-        PyTgCalls = None
-
 
 
 
@@ -65,8 +56,17 @@ async def start_assistant():
 
 async def start_vcbot(client: Client):
     """ this function starts the py-tgcalls vcbot """
+    try:
+        from pytgcalls import PyTgCalls 
+    except (ImportError, ModuleNotFoundError):
+        os.system("python3 -m pip install py-tgcalls")
+        try:
+            from pytgcalls import PyTgCalls
+        except (ImportError, ModuleNotFoundError):
+            raise Exception("Can't import PyTgCalls in __main__.py file.")
+
     if PyTgCalls:
-        os.system("bash install_nodejs.sh")
+        # os.system("bash install_nodejs.sh")
         client.pytgcall = PyTgCalls(client)
         await client.pytgcall.start()
         return True
