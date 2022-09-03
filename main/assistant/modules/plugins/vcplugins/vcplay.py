@@ -59,3 +59,29 @@ async def vcplay_handler(_, m: Message):
         )
     except Exception as e:
         await app.error(e)
+
+
+
+
+@bot.on_message(filters.command("vcstop") & filters.user(app.id))
+async def vcstop_handler(_, m: Message):
+    try:
+        if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
+            return await bot.send_message(
+                m.chat.id,
+                "You can't use this command here !"
+            )
+
+        call_on = await app.get_group_call(m.chat.id)
+        if not call_on:
+            return await bot.send_message(
+                m.chat.id,
+                "No group call (vc) is active.",
+           )
+
+        call_discard = await app.discard_group_call(m.chat.id)
+        if not call_discard:
+            return await bot.send_message(
+                m.chat.id,
+                "Unable to stop group call (vc).",
+           )
