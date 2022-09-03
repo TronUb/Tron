@@ -121,14 +121,11 @@ async def send_logmessage():
 
 async def start_bot():
     """ This is the main startup function to start both clients i.e assistant & userbot.
-    It also imports modules & plugins for assistant & userbot. """
+    It also imports modules & plugins for assistant bot & userbot. """
 
     print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
     print("PLUGINS: Installing.\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
-    if app.VcBot():
-        botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", exclude=app.NoLoad())
-
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
     print(f"\n\n{botplugins} plugins Loaded\n\n")
@@ -137,6 +134,8 @@ async def start_bot():
     print(f"\n\n{plugins} modules Loaded\n\n")
     await start_assistant()
     await start_userbot()
+    if app.VcBot():
+        botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", display_module=True, exclude=app.NoLoad())
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 
     try:
