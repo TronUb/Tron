@@ -87,3 +87,39 @@ async def vcstop_handler(_, m: Message):
            )
     except Exception as e:
         await app.error(e)
+
+
+
+@bot.on_message(filters.command("vcpause") & filters.user(app.id))
+async def vcpause_handler(_, m: Message):
+    try:
+        if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
+            return await bot.send_message(
+                m.chat.id,
+                "You can't use this command here !"
+            )
+        await app.pytgcall.pause_stream(m.chat.id)
+        await bot.send_message(
+            m.chat.id,
+            "Vc bot is paused !"
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+@bot.on_message(filters.command("vcresume") & filters.user(app.id))
+async def vcresume_handler(_, m: Message):
+    try:
+        if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
+            return await bot.send_message(
+                m.chat.id,
+                "You can't use this command here !"
+            )
+        await app.pytgcall.resume_stream(m.chat.id)
+        await bot.send_message(
+            m.chat.id,
+            "Vc bot is resumed !"
+        )
+    except Exception as e:
+        await app.error(e)
