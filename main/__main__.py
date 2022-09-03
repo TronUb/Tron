@@ -126,7 +126,9 @@ async def start_bot():
     print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
     print("PLUGINS: Installing.\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
-    botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", exclude=app.NoLoad())
+    if app.VcBot()
+        botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", exclude=app.NoLoad())
+
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
     print(f"\n\n{botplugins} plugins Loaded\n\n")
