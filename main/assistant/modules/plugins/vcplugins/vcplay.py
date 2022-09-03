@@ -1,15 +1,26 @@
 from pytgcalls.types import AudioPiped
 from pytgcalls.exceptions import AlreadyJoinedError
+
 from pyrogram import filters
+from pyrogram.types import Message
+from pyrogram.enums import ChatType
+from pyrogram.errors import UserNotParticipant
 
 from main import app, bot
 
 
 
 
-@bot.on_message(filters.command("play") & filters.user(app.id))
-async def vcplay_handler(_, m):
+
+@bot.on_message(filters.command("vcplay") & filters.user(app.id))
+async def vcplay_handler(_, m: Message):
     try:
+        if not m.chat.type in (ChatType.SUPERGROUP, ChatType.GROUP):
+            return await bot.send_message(
+                m.chat.id,
+                "You can't use this command here !"
+            )
+
         try:
             args = m.text.split(None, 1)[1]
         except IndexError:
@@ -17,9 +28,15 @@ async def vcplay_handler(_, m):
                 m.chat.id,
                 "Give me song name to start in vc.",
             )
+
         await bot.send_message(
             m.chat.id,
             f"Playing {args} . . ."
+        )
+
+        await app.get_chat_member(
+            m.chat.id,
+            app.id
         )
 
         await app.create_group_call(m.chat.id, m.id)
@@ -34,6 +51,11 @@ async def vcplay_handler(_, m):
         await app.pytgcall.change_stream(
             m.chat.id,
             AudioPiped(url)
+        )
+    except UserNotParticipant:
+        return await bot.send_message(
+            m.chat.id,
+            "The owner of this bot is not in this group, add them first !"
         )
     except Exception as e:
         await app.error(e)
