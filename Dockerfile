@@ -20,7 +20,7 @@ RUN \
   apt-get update && apt-get upgrade && \
   apt-get install -yqq nodejs yarn && \
   pip install -U pip && pip install pipenv && \
-  npm i -g npm@^8 && \
+  npm i -g npm@8.19.1 && \
   curl -sSL https://install.python-poetry.org | python3 - && ln -s /root/.poetry/bin/poetry /usr/local/bin && \
   rm -rf /var/lib/apt/lists/*
 
