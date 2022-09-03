@@ -84,11 +84,12 @@ async def start_userbot():
         response = await app.start()
         if response:
             print("Userbot activated.\n")
-            print("Activating VCBot.\n")
-            if await start_vcbot(app):
-                print("Activated VCBot.\n")
-            else:
-                print("VCBot is not avtivated, PyTgCalls is not installed !\n")
+            if app.VcBot():
+                print("Activating VCBot.\n")
+                if await start_vcbot(app):
+                    print("Activated VCBot.\n")
+                else:
+                    print("VCBot is not avtivated, Maybe PyTgCalls is not installed !\n")
         else:
             print("Userbot is not activated.\n")
     else:
