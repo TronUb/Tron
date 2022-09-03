@@ -16,7 +16,7 @@ async def vcplay_handler(_, m):
                 m.chat.id,
                 "Give me song name to start in vc.",
             )
-        await app.send_message(
+        await bot.send_message(
             m.chat.id,
             f"Playing {args} . . ."
         )
@@ -26,6 +26,11 @@ async def vcplay_handler(_, m):
         url = data.get("url")
 
         await app.pytgcall.join_group_call(
+            m.chat.id,
+            AudioPiped(url)
+        )
+    except AlreadyJoinedError:
+        await app.pytgcall.change_stream(
             m.chat.id,
             AudioPiped(url)
         )
