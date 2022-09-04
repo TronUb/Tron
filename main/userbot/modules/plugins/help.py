@@ -6,7 +6,10 @@ import base64
 
 from pyrogram import filters
 from pyrogram.enums import ChatType
-from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
+from pyrogram.errors import (
+    BotInlineDisabled,
+    PeerIdInvalid
+)
 from pyrogram.types import (
     Message,
     CallbackQuery,
@@ -46,13 +49,16 @@ async def delete_helpdex(_, cb: CallbackQuery):
                     cb.inline_message_id + '=' * (len(cb.inline_message_id) % 4)
                 )
             )
-            if not m.chat.type in (ChatType.BOT, ChatType.PRIVATE):
-                chat_id = int(str(-100) + str(chat_id)[1:])
 
             await app.delete_messages(
-                chat_id=chat_id,
+                chat_id=int(str(-100) + str(chat_id)[1:]),
                 message_ids=message_id
             )
+    except PeerIdInvalid:
+        await app.delete_messages(
+            chat_id=chat_id,
+            message_ids=message_id
+        )
     except Exception as e:
         await app.error(e)
 
