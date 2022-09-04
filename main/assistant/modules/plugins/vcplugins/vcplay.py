@@ -14,7 +14,7 @@ from main import app, bot
 public = app.VcBotAccess()
 
 def vc_allowed(message):
-    if message.owner == "owner":
+    if message.from_user.is_self:
         return True
 
     if public:
