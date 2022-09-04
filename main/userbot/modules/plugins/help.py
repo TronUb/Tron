@@ -46,6 +46,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
                     cb.inline_message_id + '=' * (len(cb.inline_message_id) % 4)
                 )
             )
+            print(f"chat_id: {chat_id}, message_id: {message_id}")
             await app.delete_messages(
                 chat_id=chat_id,
                 message_ids=int(str(-100) + str(message_id)[1:])
