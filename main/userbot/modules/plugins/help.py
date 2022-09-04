@@ -48,7 +48,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
             )
             await app.delete_messages(
                 chat_id=chat_id,
-                message_ids=message_id
+                message_ids=int(str(-100) + str(message_id)[1:])
             )
     except Exception as e:
         await app.error(e)
