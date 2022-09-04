@@ -63,7 +63,7 @@ async def inline_result(_, inline_query):
     elif query.startswith("#helpmenu"):
         emoji = app.HelpEmoji() or "•"
 
-        res = await inline_query.answer(
+        await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
                 photo_url=app.BotPic(),
@@ -92,7 +92,6 @@ async def inline_result(_, inline_query):
         ],
         cache_time=1
         )
-        print(res)
     elif query.startswith("#ialive"):
         await inline_query.answer(
         results=[
