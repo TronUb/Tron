@@ -77,7 +77,7 @@ async def vcplay_handler(_, m: Message):
 
 
 
-@bot.on_message(filters.command("vcstop") & vcpass)
+@bot.on_message(filters.command("vcstop"))
 async def vcstop_handler(_, m: Message):
     try:
         if not vc_allowed(m):
@@ -107,7 +107,7 @@ async def vcstop_handler(_, m: Message):
 
 
 
-@bot.on_message(filters.command("vcpause") & vcpass)
+@bot.on_message(filters.command("vcpause"))
 async def vcpause_handler(_, m: Message):
     try:
         if not vc_allowed(m):
@@ -128,7 +128,7 @@ async def vcpause_handler(_, m: Message):
 
 
 
-@bot.on_message(filters.command("vcresume") & vcpass)
+@bot.on_message(filters.command("vcresume"))
 async def vcresume_handler(_, m: Message):
     try:
         if not vc_allowed(m):
