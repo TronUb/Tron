@@ -19,7 +19,7 @@ from main.userbot.client import app
 @app.bot.on_callback_query(filters.regex("extra-tab"))
 @app.alert_user
 async def _extra(_, cb: CallbackQuery):
-    await cb.edit_message_text(
+    res = await cb.edit_message_text(
         text=app.extra_tab_string(),
         reply_markup=InlineKeyboardMarkup(
             [
@@ -42,3 +42,4 @@ async def _extra(_, cb: CallbackQuery):
             ]
         )
     )
+    print(res)
