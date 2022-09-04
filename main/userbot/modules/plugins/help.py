@@ -1,7 +1,7 @@
 """ help plugin """
 
 import os
-import struck
+import struct
 import base64
 
 from pyrogram import filters
