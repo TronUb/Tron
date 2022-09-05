@@ -49,16 +49,15 @@ async def delete_helpdex(_, cb: CallbackQuery):
                     cb.inline_message_id + '=' * (len(cb.inline_message_id) % 4)
                 )
             )
+            try:
+                chat = await app.get_chat(chat_id)
+            except PeerIdInvalid:
+                chat = await app.get_chat(int(str(-100) + str(chat_id)[1:]))
 
             await app.delete_messages(
-                chat_id=int(str(-100) + str(chat_id)[1:]),
+                chat_id=chat.id,
                 message_ids=message_id
             )
-    except (PeerIdInvalid, KeyError, ValueError):
-        await app.delete_messages(
-            chat_id=chat_id,
-            message_ids=message_id
-        )
     except Exception as e:
         await app.error(e)
 
