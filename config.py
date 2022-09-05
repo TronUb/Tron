@@ -98,6 +98,12 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     # set your assistant about text
     ASSISTANT_TEXT = os.getenv("ASSISTANT_TEXT", "")
 
+# ---- vcbot ----
+    # start the vcbot client
+    VCBOT = os.getenv("VCBOT", None)
+    # make vcbot public so that everyone can use
+    VCBOT_ACCESS = os.getenv("VCBOT_ACCESS", None)
+
 # ---- other ----
     # your telegraph account name (default: Tronuserbot)
     TL_NAME = os.getenv("TL_NAME", "Tron UserBot")

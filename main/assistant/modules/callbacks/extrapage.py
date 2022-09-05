@@ -42,3 +42,4 @@ async def _extra(_, cb: CallbackQuery):
             ]
         )
     )
+    print(cb)

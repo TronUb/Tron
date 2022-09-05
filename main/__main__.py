@@ -19,15 +19,6 @@ from pyrogram.errors import (
 )
 from main.userbot import app
 
-try:
-    from pytgcalls import PyTgCalls 
-except ImportError:
-    os.system("python3 -m pip install py-tgcalls")
-    try:
-        from pytgcalls import PyTgCalls
-    except ImportError:
-        PyTgCalls = None
-
 
 
 
@@ -65,8 +56,17 @@ async def start_assistant():
 
 async def start_vcbot(client: Client):
     """ this function starts the py-tgcalls vcbot """
+    try:
+        from pytgcalls import PyTgCalls 
+    except (ImportError, ModuleNotFoundError):
+        os.system("python3 -m pip install py-tgcalls")
+        try:
+            from pytgcalls import PyTgCalls
+        except (ImportError, ModuleNotFoundError):
+            raise Exception("Can't import PyTgCalls in __main__.py file.")
+
     if PyTgCalls:
-        os.system("bash install_nodejs.sh")
+        # os.system("bash install_nodejs.sh")
         client.pytgcall = PyTgCalls(client)
         await client.pytgcall.start()
         return True
@@ -84,11 +84,12 @@ async def start_userbot():
         response = await app.start()
         if response:
             print("Userbot activated.\n")
-            print("Activating VCBot.\n")
-            if await start_vcbot(app):
-                print("Activated VCBot.\n")
-            else:
-                print("VCBot is not avtivated, PyTgCalls is not installed !\n")
+            if app.VcBot():
+                print("Activating VCBot.\n")
+                if await start_vcbot(app):
+                    print("Activated VCBot.\n")
+                else:
+                    print("VCBot is not avtivated, Maybe PyTgCalls is not installed !\n")
         else:
             print("Userbot is not activated.\n")
     else:
@@ -120,12 +121,11 @@ async def send_logmessage():
 
 async def start_bot():
     """ This is the main startup function to start both clients i.e assistant & userbot.
-    It also imports modules & plugins for assistant & userbot. """
+    It also imports modules & plugins for assistant bot & userbot. """
 
     print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
     print("PLUGINS: Installing.\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
-    botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", exclude=app.NoLoad())
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
     print(f"\n\n{botplugins} plugins Loaded\n\n")
@@ -134,6 +134,8 @@ async def start_bot():
     print(f"\n\n{plugins} modules Loaded\n\n")
     await start_assistant()
     await start_userbot()
+    if app.VcBot():
+        botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", display_module=True, exclude=app.NoLoad())
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 
     try:

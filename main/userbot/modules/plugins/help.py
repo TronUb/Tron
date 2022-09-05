@@ -1,10 +1,15 @@
 """ help plugin """
 
 import os
+import struct
+import base64
 
 from pyrogram import filters
 from pyrogram.enums import ChatType
-from pyrogram.errors.exceptions.bad_request_400 import BotInlineDisabled
+from pyrogram.errors import (
+    BotInlineDisabled,
+    PeerIdInvalid
+)
 from pyrogram.types import (
     Message,
     CallbackQuery,
@@ -30,31 +35,33 @@ app.CMD_HELP.update(
 )
 
 
-helpdex_ids = [
-    x for x in app.getdv("DELETE_TAB_ID").strip("[]").split("," " ") if bool(app.getdv("DELETE_TAB_ID"))
-]
-
 
 @app.bot.on_callback_query(filters.regex("delete-tab"))
 @app.alert_user
 async def delete_helpdex(_, cb: CallbackQuery):
     """ delete helpdex handler for help plugin """
-    if not bool(helpdex_ids):
-        await cb.answer(
-            "This message is expired, hence it can't be deleted !",
-            show_alert=True,
-        )
-    else:
-        try:
-            for x in helpdex_ids[1:]: # list
-                for y in x: # dicts
-                    if y in ("None", "none", None):
-                        continue
-                    await app.delete_messages(int(y), x[y])
-                    app.deldv("DELETE_TAB_ID") # empty var
-        except Exception as e:
-            app.log.error(e)
 
+    try:
+        if cb.inline_message_id:
+            dc_id, message_id, chat_id, query_id = struct.unpack(
+                "<iiiq",
+                base64.urlsafe_b64decode(
+                    cb.inline_message_id + '=' * (len(cb.inline_message_id) % 4)
+                )
+            )
+
+            await app.delete_messages(
+                chat_id=int(str(-100) + str(chat_id)[1:]),
+                message_ids=message_id
+            )
+    except (PeerIdInvalid, KeyError, ValueError):
+        await app.delete_messages(
+            chat_id=chat_id,
+            message_ids=message_id
+        )
+        print(chat_id, message_id)
+    except Exception as e:
+        await app.error(e)
 
 
 
@@ -62,6 +69,7 @@ async def delete_helpdex(_, cb: CallbackQuery):
 @app.on_message(gen("help"))
 async def helpmenu_handler(_, m: Message):
     """ helpmenu handler for help plugin """
+
     args = m.command if app.long() > 1 else None
 
     try:
@@ -80,16 +88,6 @@ async def helpmenu_handler(_, m: Message):
                     disable_notification=True,
                 )
 
-                if m.chat.type in [ChatType.BOT, ChatType.PRIVATE]:
-                    app.setdv(
-                        "DELETE_TAB_ID",
-                        helpdex_ids.append({m.chat.id : info.updates[1].message.id})
-                    )
-                else:
-                    app.setdv(
-                        "DELETE_TAB_ID",
-                        helpdex_ids.append({m.chat.id : info.updates[2].message.id})
-                    )
             else:
                 await app.send_edit(
                     "Please check your bots inline mode is on or not . . .",

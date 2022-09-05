@@ -85,15 +85,27 @@ and get its bot token
 
 <b>2. Deploy on Termux</b>
 
-<p>1. Install termux app in your device ( lastest version )</p>
+1. Install ubuntu in termux ~ ```curl https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/repo-fix.sh > repo.sh && chmod +x repo.sh && bash repo.sh && pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu20/ubuntu20.sh -O ubuntu20.sh && chmod +x ubuntu20.sh && bash ubuntu20.sh```
 
-<p>2. Run The code given below in termux.</p>
+2. start ubuntu ~ ```start-ubuntu20.sh```
 
-*  ```cd $HOME && pkg install python3 git && git clone https://github.com/TronUb/Tron.git && cd Tron && ./start.sh```
+3. Install git & nano ~ ```apt-get install git nano```
 
-<p>3. Enter your details carefully.</p>
+4. clone repo ~ ```git clone https://github.com/TronUb/Tron.git```
 
-<p>4. Done, Have fun using tronuserbot.</p>
+5. change directory ~ ```cd Tron```
+
+6. create & fill all configs details in config file ~ ```nano config.txt``` 
+
+7. ```bash start.sh``` or ```./start.sh```
+
+
+<b>Note:</b> you have to add key & values in config.txt file same as given below 👇
+
+```API_ID=1234567```
+```API_HASH=a2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kblops```
+
+<p>🎉 Done, Have fun using tronuserbot.</p>
 
 ---
 
