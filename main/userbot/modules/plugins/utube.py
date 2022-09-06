@@ -169,7 +169,7 @@ async def ytmdl_handler(_, m):
             )
 
         if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
-            if await app.user_exists(m.chat.id, app.bot.id):
+            if await app.user_ingroup(m.chat.id, app.bot.id):
                 botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
 
                 buttons = []
