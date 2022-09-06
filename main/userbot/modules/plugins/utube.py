@@ -17,7 +17,8 @@ app.CMD_HELP.update(
     {"utube": (
         "utube",
         {
-        "ytvinfo [ link | reply ]" : "Get a youtube video information.",
+        "ytsearch [ query ]" : "Search anything on YouTube.",
+        "ytinfo [ link | reply ]" : "Get a youtube video information.",
         "ytmdl [ link | reply ] [ -a ]" : "Download any video/audio from YouTube Use flag -a to download audio. If your bot is present in chat, by default you'll get inline results.",
         }
         )
@@ -36,8 +37,50 @@ def ResizeImage(path: str, size: tuple=(320, 320)):
 
 
 
+@app.on_message(
+    gen(
+        "ytsearch",
+        max_args=1
+    )
+)
+async def ytsearch_handler(_, m: Message):
+    try:
+        args = m.text.split(None, 1)[1]
+        result = await app.get_inline_bot_results(
+            "vid",
+            args,
+        )
 
-@app.on_message(gen("ytvinfo"))
+        if not result.results:
+            return await app.send_edit(
+                "No results found !",
+                text_type=["mono"],
+                delme=3
+            )
+
+        msg = await app.send_edit(
+            f"**Searching for** `{args}` . . ."
+        )
+
+        r = result.results[0]
+        thumb_url = r.thumb.url
+        caption = f"**Title:** {r.title}\n"
+        caption += f"**Views:** {r.description}\n"
+        caption += f"**Url:** {r.send_message.message}\n"
+
+        await msg.delete()
+        await app.send_photo(
+            m.chat.id,
+            thumb_url,
+            caption
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+
+@app.on_message(gen("ytinfo"))
 async def ytvideoinfo_handler(_, m: Message):
     try:
         args = app.GetArgs()
@@ -126,7 +169,7 @@ async def ytmdl_handler(_, m):
             )
 
         if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
-            if await app.user_exists(m.chat.id, app.bot.id):
+            if await app.user_ingroup(m.chat.id, app.bot.id):
                 botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
 
                 buttons = []
