@@ -17,6 +17,7 @@ app.CMD_HELP.update(
     {"utube": (
         "utube",
         {
+        "ytsearch [ query ]" : "Search anything on YouTube.",
         "ytvinfo [ link | reply ]" : "Get a youtube video information.",
         "ytmdl [ link | reply ] [ -a ]" : "Download any video/audio from YouTube Use flag -a to download audio. If your bot is present in chat, by default you'll get inline results.",
         }
@@ -33,6 +34,44 @@ def ResizeImage(path: str, size: tuple=(320, 320)):
     img.save(photo)
     return photo
 
+
+
+
+@app.on_message(
+    gen(
+        "ytsearch",
+        max_args=1
+    )
+)
+async def ytsearch_handler(_, m: Message):
+    try:
+        args = m.text.split(None, 1)[1]
+        result = await app.get_inline_bot_results(
+            "vid",
+            args,
+        )
+
+        if not result.results:
+            return await app.send_edit(
+                "No results found !",
+                text_type=["mono"],
+                delme=3
+            )
+
+        r = result.results[0]
+        caption = f"**Title:** {r.title}"
+        thumb_url = r.thumb.url
+        caption += f"{**Views:** {r.description}"
+        caption += f"**Url:** {r.send_messsge.message}"
+
+
+        await app.send_photo(
+            m.chat.id,
+            url,
+            caption
+        )
+    except Exception as e:
+        await app.error(e)
 
 
 
