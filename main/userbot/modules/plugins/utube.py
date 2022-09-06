@@ -59,15 +59,15 @@ async def ytsearch_handler(_, m: Message):
             )
 
         r = result.results[0]
-        caption = f"**Title:** {r.title}"
         thumb_url = r.thumb.url
+        caption = f"**Title:** {r.title}"
         caption += f"{**Views:** {r.description}"
         caption += f"**Url:** {r.send_messsge.message}"
 
 
         await app.send_photo(
             m.chat.id,
-            url,
+            thumb_url,
             caption
         )
     except Exception as e:
