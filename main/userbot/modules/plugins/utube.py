@@ -62,7 +62,7 @@ async def ytsearch_handler(_, m: Message):
         thumb_url = r.thumb.url
         caption = f"**Title:** {r.title}"
         caption += f"**Views:** {r.description}"
-        caption += f"**Url:** {r.send_messsge.message}"
+        caption += f"**Url:** {r.send_message.message}"
 
 
         await app.send_photo(
