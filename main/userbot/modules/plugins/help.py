@@ -54,6 +54,15 @@ async def delete_helpdex(_, cb: CallbackQuery):
                 chat_id=int(str(-100) + str(chat_id)[1:]),
                 message_ids=message_id
             )
+        elif not cb.inline_message_id:
+            if cb.message:
+                await cb.message.delete()
+        else:
+            await cb.answer(
+                "Message Expired !",
+                show_alert=True
+            )
+
     except (PeerIdInvalid, KeyError, ValueError):
         await app.delete_messages(
             chat_id=chat_id,
