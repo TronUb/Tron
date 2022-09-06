@@ -58,13 +58,17 @@ async def ytsearch_handler(_, m: Message):
                 delme=3
             )
 
+        msg = await app.send_edit(
+            f"**Searching for** `{args}` . . ."
+        )
+
         r = result.results[0]
         thumb_url = r.thumb.url
         caption = f"**Title:** {r.title}\n"
         caption += f"**Views:** {r.description}\n"
         caption += f"**Url:** {r.send_message.message}\n"
 
-        await m.delete()
+        await msg.delete()
         await app.send_photo(
             m.chat.id,
             thumb_url,
