@@ -18,7 +18,7 @@ app.CMD_HELP.update(
         "utube",
         {
         "ytsearch [ query ]" : "Search anything on YouTube.",
-        "ytvinfo [ link | reply ]" : "Get a youtube video information.",
+        "ytinfo [ link | reply ]" : "Get a youtube video information.",
         "ytmdl [ link | reply ] [ -a ]" : "Download any video/audio from YouTube Use flag -a to download audio. If your bot is present in chat, by default you'll get inline results.",
         }
         )
@@ -76,7 +76,7 @@ async def ytsearch_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytvinfo"))
+@app.on_message(gen("ytinfo"))
 async def ytvideoinfo_handler(_, m: Message):
     try:
         args = app.GetArgs()
