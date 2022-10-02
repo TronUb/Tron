@@ -54,7 +54,7 @@
             "description": "A Private Telegram Group Id To Store Your Logs.",
             "required": true
         },
-        "TOKEN": {
+        "BOT_TOKEN": {
             "description": "Go to @botfather in telegram and make a new bot and get the bot token.",
             "required": true
         }
