@@ -63,7 +63,7 @@ make a private group and get its chat id
 by default its Asia/Kolkata, change it 
 your time zone
 
-<p><blockquote>TOKEN</blockquote></p>
+<p><blockquote>BOT_TOKEN</blockquote></p>
 create a bot at https://t.me/BotFather 
 and get its bot token
 
