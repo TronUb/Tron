@@ -415,7 +415,7 @@ class AsyncPart(object):
                     reply_markup=reply_markup,
                     entities=entities
                 )
-            except (MessageAuthorRequired, MessageIdInvalid):
+            except (MessageAuthorRequired, MessageIdInvalid, Exception) as e:
                 print(e)
                 msg = await self.send_message(
                     chat_id=self.m.chat.id,
