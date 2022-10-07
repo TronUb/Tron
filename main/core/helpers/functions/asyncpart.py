@@ -230,13 +230,13 @@ class AsyncPart(object):
 
     async def error(
         self,
-        e,
+        e: Exception,
         edit_error: bool=True
         ):
         """
         params:
-            1. error :: occured error
-            2. edit_error: bool, default=True :: edits | sends error message
+            1. error :: occured exception variable
+            2. edit_error: bool, default=True :: edits | sends error message in short
 
         usage:
             use this function at the end of try/except block
@@ -251,9 +251,13 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         teks = "**Traceback Report:**\n\n"
-        teks += f"**Date:** `{self.showdate()}`\n**Time:** `{self.showtime()}`\n\n"
-        teks += "`This can be a error in tronuserbot, if you want you can forward this to @tronuserbot_support.`\n\n"
-        teks += f"**Command:** `{self.m.text}`\n\n"
+        teks += f"**Date:** `{self.showdate()}`\n"
+        teks += f"**Time:** `{self.showtime()}`\n\n"
+        teks += f"**Chat Name:** `{self.m.chat.first_name or self.m.chat.title}`\n\n"
+        teks += f"**Chat Type:** `{self.m.chat.type.lower()}`\n\n"
+        teks += f"**Message Owner:** `{self.m.owner}`\n\n"
+        teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
+        teks += f"**Message:** `{self.m.text}`\n\n"
         teks += "`-`" * 30 + "\n\n"
         teks += f"**SHORT:** \n\n`{e}`\n\n"
         teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
@@ -265,7 +269,11 @@ class AsyncPart(object):
                 else:
                     await self.send_edit(e.args[0] if e.args else None)
 
-            await self.send_message(self.LOG_CHAT, teks)
+            if len(teks) > 4096:
+                await self.create_file("exception.txt", teks)
+            else:
+                await self.send_message(self.LOG_CHAT, teks)
+
             print(e)
 
         except PeerIdInvalid:
