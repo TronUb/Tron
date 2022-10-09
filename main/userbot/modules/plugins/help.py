@@ -31,10 +31,11 @@ app.CMD_HELP.update(
 async def helpmenu_handler(_, m: Message):
     """ helpmenu handler for help plugin """
 
-    args = m.command if app.long() > 1 else None
+    args = m.command or []
+    args_exists = True if len(m.command) > 1 else None
 
     try:
-        if not args:
+        if not args_exists:
             await app.send_edit(". . .", text_type=["mono"])
             result = await app.get_inline_bot_results(
                 app.bot.username,
@@ -55,7 +56,7 @@ async def helpmenu_handler(_, m: Message):
                     delme=3,
                     text_type=["mono"]
                 )
-        elif args:
+        elif args_exists:
 
             module_help = await app.PluginData(args[1])
             if not module_help:
