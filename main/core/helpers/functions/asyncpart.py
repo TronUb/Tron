@@ -257,7 +257,7 @@ class AsyncPart(object):
         teks += f"**Date:** `{self.showdate()}`\n"
         teks += f"**Time:** `{self.showtime()}`\n\n"
         teks += f"**Chat Name:** `{self.m.chat.first_name or self.m.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{self.m.chat.type.lower()}`\n\n"
+        teks += f"**Chat Type:** `{str(self.m.chat.type).lower()}`\n\n"
         teks += f"**Message Owner:** `{self.m.owner}`\n\n"
         teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
         teks += f"**Message:** `{self.m.text}`\n\n"
