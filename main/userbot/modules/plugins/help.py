@@ -4,6 +4,7 @@ import os
 
 from pyrogram import filters
 from pyrogram.types import Message
+from pyrogram.errors import BotInlineDisabled
 
 from main import app, gen
 
