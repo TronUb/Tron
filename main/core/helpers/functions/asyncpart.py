@@ -104,6 +104,9 @@ class AsyncPart(object):
             )
             ).participant
 
+        if isinstance(r, types.ChannelParticipantSelf):
+            raise Exception("You can't use this method on yourself.")
+
         if not isinstance(r, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)):
             raise Exception(f"Invalid type {type(r)}")
 
