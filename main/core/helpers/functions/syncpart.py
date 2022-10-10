@@ -107,8 +107,10 @@ class SyncPart(Types):
         if self.is_bot:
             raise BotMethodInvalid
 
-        text_length = len(self.m.text.split() or self.m.caption.split())
-        return text_length if bool(text_length) is True else None
+        owner_text = self.m.text.split() or self.m.caption.split()
+        sudo_text = self.m.sudo_message.text.split() or self.m.sudo_message.caption.split()
+        text_length = len(owner_text or sudo_text)
+        return text_length if text_length else None
 
 
     def textlen(
