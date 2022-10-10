@@ -107,8 +107,13 @@ class SyncPart(Types):
         if self.is_bot:
             raise BotMethodInvalid
 
+        sm = self.m.sudo_message
         owner_text = self.m.text.split() or self.m.caption.split()
-        sudo_text = self.m.sudo_message.text.split() or self.m.sudo_message.caption.split()
+        if sm and (sm.text or sm.caption):
+            sudo_text = sm.text.split() or sm.caption.split()
+        else:
+            sudo_text = None
+
         text_length = len(owner_text or sudo_text)
         return text_length if text_length else None
 
