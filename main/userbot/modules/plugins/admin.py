@@ -75,9 +75,9 @@ async def ban_handler(_, m: Message):
         if await app.check_private():
             return
 
-        reply = m.reply_to_message
+        reply = m.reply_to_message or m.sudo_message.reply_to_message
         user = False
-        cmd = m.command
+        cmd = m.command or m.sudo_message.command
         ban_time = False
 
         if app.long() == 1 and not reply:
