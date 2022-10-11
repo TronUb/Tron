@@ -110,13 +110,13 @@ async def ban_handler(_, m: Message):
         if user:
             if user.user.is_self:
                 return await app.send_edit("You can't ban yourself !", text_type=["mono"], delme=4)
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How am i supposed to ban an admin ?",
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to ban a creator of a group ?",
                     text_type=["mono"],
@@ -253,13 +253,13 @@ async def unban_handler(_, m: Message):
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How am i supposed to unban an admin ?",
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to unban a creator of a group ?",
                     text_type=["mono"],
@@ -375,13 +375,13 @@ async def mute_handler(_, m: Message):
         if user:
             if user.user.is_self:
                 return await app.send_edit("You can't mute yourself !", text_type=["mono"], delme=4)
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How am i supposed to mute an admin ?",
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to mute a creator of a group ?",
                     text_type=["mono"],
@@ -462,13 +462,13 @@ async def unmute_handler(_, m: Message):
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How do i unmute an admin ?",
                     text_type=["mono"],
                     delme=4
                 )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How do i unmute a creator ?",
                     text_type=["mono"],
@@ -552,12 +552,12 @@ async def kick_handler(_, m: Message):
         if user:
             if user.user.is_self:
                 return await app.send_edit("You can't kick yourself !", text_type=["mono"])
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How am i supposed to kick an admin ?",
                     text_type=["mono"]
                 )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to kick a creator of a group ?",
                     text_type=["mono"]
@@ -761,12 +761,12 @@ async def promote_handler(_, m: Message):
         if user:
             if user.user.is_self:
                 return await app.send_edit("You can't promote yourself !", text_type=["mono"])
-            elif user.status == "administrator":
+            elif user.status == ChatMemberStatus.ADMINISTRATOR:
                 return await app.send_edit(
                     "How am i supposed to promote already promoted user ?",
                     text_type=["mono"]
                     )
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to promote a creator of a group ? wth ?",
                     text_type=["mono"]
@@ -852,7 +852,7 @@ async def demote_handler(_, m: Message):
         if user:
             if user.user.is_self:
                 return await app.send_edit("You can't demote yourself !", text_type=["mono"])
-            elif user.status == "creator":
+            elif user.status == ChatMemberStatus.OWNER:
                 return await app.send_edit(
                     "How am i supposed to demote a creator of a group ?",
                     text_type=["mono"]
