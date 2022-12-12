@@ -1,7 +1,7 @@
 """
 This file creates Assistant's client.
 """
-
+import asyncio
 from pyrogram import Client
 from pyrogram.errors import FloodWait
 from main.core import Core
