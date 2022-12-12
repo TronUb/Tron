@@ -53,30 +53,6 @@ async def start_assistant():
 
 
 
-
-async def start_vcbot(client: Client):
-    """ this function starts the py-tgcalls vcbot """
-    try:
-        from pytgcalls import PyTgCalls 
-    except (ImportError, ModuleNotFoundError):
-        os.system("python3 -m pip install py-tgcalls")
-        try:
-            from pytgcalls import PyTgCalls
-        except (ImportError, ModuleNotFoundError):
-            raise Exception("Can't import PyTgCalls in __main__.py file.")
-
-    if PyTgCalls:
-        # os.system("bash install_nodejs.sh")
-        client.pytgcall = PyTgCalls(client)
-        await client.pytgcall.start()
-        return True
-    else:
-        client.pytgcall = None
-        return None
-
-
-
-
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
@@ -84,12 +60,6 @@ async def start_userbot():
         response = await app.start()
         if response:
             print("Userbot activated.\n")
-            if app.VcBot():
-                print("Activating VCBot.\n")
-                if await start_vcbot(app):
-                    print("Activated VCBot.\n")
-                else:
-                    print("VCBot is not avtivated, Maybe PyTgCalls is not installed !\n")
         else:
             print("Userbot is not activated.\n")
     else:
@@ -134,8 +104,6 @@ async def start_bot():
     print(f"\n\n{plugins} modules Loaded\n\n")
     await start_assistant()
     await start_userbot()
-    if app.VcBot():
-        botplugins += app.import_module("main/assistant/modules/plugins/vcplugins/", display_module=True, exclude=app.NoLoad())
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
 
     try:
