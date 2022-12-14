@@ -38,39 +38,11 @@ if [ "$uname" == "localhost" ]; then
     # install python3 pip
     if ! installed pip; then
        echo -e "${G}Installing python3 pip . . .\n"
-       apt install pip
+       apt install pip3
        clear
     fi
 
-    # install git 
-    if ! installed git; then
-        echo -e "${G}Installing git . . .\n"
-        apt install git
-        clear
-    fi
-
-    # install ffmpeg
-    if ! installed ffmpeg; then
-        echo -e "${G}Installing ffmpeg . . .\n"
-        apt install ffmpeg
-        clear
-    fi
-
-    # install nodejs
-    if ! installed nodejs; then
-        echo -e "${G}Installing nodejs . . .\n"
-        bash install_nodejs.sh
-        clear
-    fi
-
-    # install py-tgcalls
-    if [[ $pytgcalls =~ $no_cmd ]]; then
-        echo -e "${G}Installing py-tgcalls . . .\n"
-        python3 -m pip install py-tgcalls
-        clear
-    fi
-
-    python3 -m main
+    python3 -u -m main
 else
-    python3 -m main
+    python3 -u -m main
 fi
