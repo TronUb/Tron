@@ -1,7 +1,6 @@
 """
 This file creates Assistant's client.
 """
-import asyncio
 from pyrogram import Client
 from pyrogram.errors import FloodWait
 from main.core import Core
@@ -33,6 +32,6 @@ class Bot(Core, Client):
             self.is_bot = True
             self.stop()
         except FloodWait as e:
-            asyncio.sleep(e.value)
+            pass
 
         self.__class__.__module__ = "pyrogram.client"
