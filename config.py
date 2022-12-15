@@ -181,6 +181,9 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
     class Config:
         pass
 
+    # variable counter
+    count = 1
+
     # check if the user config file exists
     if os.path.exists("config.txt"):
         print("config.txt file exists: Yes\n\n")
@@ -189,7 +192,6 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
 
         # remove empty strings
         content.remove("")
-        count = 1
 
         # set text file config values
         print("Setting configuration values.\n\n")
@@ -210,7 +212,8 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
 
         if attr.isupper() and not hasattr(Config, attr):
             setattr(Config, attr, value)
-            print(f"Added config = {attr} with value = {value}\n")
+            print(f"[{count}] Added config = {attr} with value = {value}\n")
+            count += 1
 
 else:
     class Config(Configuration):
