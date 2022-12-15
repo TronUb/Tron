@@ -189,6 +189,7 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
 
         # remove empty strings
         content.remove("")
+        count = 1
 
         # set text file config values
         print("Setting configuration values.\n\n")
@@ -199,7 +200,8 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
                 file_value = int(data[1])
 
             setattr(Config, data[0], file_value)
-            print(f"Added config = {data[0]} with value = {file_value}\n")
+            print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+            count += 1
 
     # set remaining necessary config values
     print("Setting remaining configuration values\n\n")
