@@ -17,8 +17,7 @@ class Bot(Core, Client):
             name="Nora",
             api_id=self.API_ID,
             api_hash=self.API_HASH,
-            bot_token=self.BOT_TOKEN,
-            in_memory=True
+            bot_token=self.BOT_TOKEN
 	)
         try:
             self.start()
