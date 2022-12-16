@@ -1,15 +1,14 @@
 """ Configuration file to get secure data we need """
 
 import os
-import platform
 import subprocess
 
-        
+
 
 _PMPERMIT_TEXT = """
 Hey ! This is [Tron Userbot](https://t.me/tronuserbot) Security System.
 **You will be blocked if you spammed my owner's pm**
-Currently My Owner is busy ! So Wait Until He Arrives. 
+Currently My Owner is busy ! So Wait Until He Arrives.
 And Better Not To Spam His here !
 """
 
@@ -77,7 +76,7 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     BOT_ID = os.getenv("BOT_ID")
 
 # ---- help menu ----
-    # this will be shown on 4 buttons (settings, plugins, extra, stats) as prefix and suffix 
+    # this will be shown on 4 buttons (settings, plugins, extra, stats) as prefix and suffix
     HELP_EMOJI = os.getenv("HELP_EMOJI", "")
     # set this text to show on help menu's closed tab
     HELP_TEXT = os.getenv("HELP_TEXT", "")
@@ -93,7 +92,7 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     ASSISTANT_NAME = os.getenv("ASSISTANT_NAME", "Lara")
     # set your assistant age
     ASSISTANT_AGE = os.getenv("ASSISTANT_AGE", "20")
-    # set your assistant pic 
+    # set your assistant pic
     ASSISTANT_PIC = os.getenv("ASSISTANT_PIC", "./main/core/resources/images/nora.png")
     # set your assistant about text
     ASSISTANT_TEXT = os.getenv("ASSISTANT_TEXT", "")
@@ -186,8 +185,8 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
 
     # check if the user config file exists
     if os.path.exists("config.txt"):
-        print("config.txt file exists: Yes\n\n")
-        with open("config.txt") as f:
+        print("config.text file exists: Yes\n\n")
+        with open("config.text") as f:
             content = f.read().split("\n")
 
         # remove empty strings
@@ -218,4 +217,3 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
 else:
     class Config(Configuration):
         pass
-

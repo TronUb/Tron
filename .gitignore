@@ -3,3 +3,6 @@ __pycache__
 .Python
 .cache
 .vscode
+config.txt
+temp.info
+test.temp
