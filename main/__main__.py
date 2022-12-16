@@ -3,11 +3,10 @@ Run after main.__init__.py, this file starts
 and loads plugins for both assistant & userbot.
 """
 
-import os 
 import sys
 import asyncio
 import warnings
-from pyrogram import idle, Client
+from pyrogram import idle
 from pyrogram.types import (
     BotCommand,
     InlineKeyboardButton,

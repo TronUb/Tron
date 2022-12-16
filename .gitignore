@@ -1,8 +1,11 @@
 __pycache__
 *.session
+*.session-journal
 .Python
 .cache
 .vscode
-config.txt
+config.text
 temp.info
-test.temp
+downloads
+tron.db
+

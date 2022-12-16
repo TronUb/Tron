@@ -1,8 +1,9 @@
 import time
-import logging 
+import logging
 import platform
 
 import pyrogram
+from requests.exceptions import ConnectionError
 from config import Config
 from telegraph import Telegraph
 from pyrogram import __version__ as pyrogram_version
@@ -46,16 +47,19 @@ class ClassManager(Config, Helpers, Database, Methods):
     whisper_ids = {}
 
     # debugging /
-    
-   
+
+
     logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
-    logging.getLogger("pyrogram.session.session").setLevel(logging.WARNING) 
+    logging.getLogger("pyrogram.session.session").setLevel(logging.WARNING)
     logging.getLogger("pyrogram.session.internals.msg_id").setLevel(logging.WARNING)
     logging.getLogger("pyrogram.dispatcher").setLevel(logging.WARNING)
     logging.getLogger("pyrogram.connection.connection").setLevel(logging.WARNING)
     log = logging.getLogger()
 
     # telegraph /
-    telegraph = Telegraph()
-    telegraph.create_account(short_name=Config.TL_NAME or "TronUserbot Team")
+    try:
+        telegraph = Telegraph()
+        telegraph.create_account(short_name=Config.TL_NAME or "TronUserbot Team")
+    except ConnectionError:
+        telegraph = None
 

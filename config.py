@@ -1,7 +1,9 @@
 """ Configuration file to get secure data we need """
 
 import os
+import platform
 import subprocess
+import pkg_resources
 
 
 
@@ -129,52 +131,33 @@ class Configuration(object): # pylint: disable=too-few-public-methods
 def RunShell(args: list):
     return (subprocess.run(
         args,
-        stdout=subprocess.PIPE
+        stdout=subprocess.PIPE,
+        shell=True
     )).stdout.decode()
 
 
 def requirements():
     with open("requirements.txt", "r") as f:
-        return f.read().split("\n")
+        return [x for x in f.read().split("\n") if x not in ("\n", "")]
 
 
-def requirements_installed():
-    filename = "temp.info"
-    if os.path.exists(filename):
-        with open(filename, "r") as f:
-            content = f.read()
-
-        if content.isdigit() and int(content) == 30: # 30 requirements
-            return True
-
-    return None
+def check_requirements():
+    print("Checking Packages:\n\n")
+    for pkg in requirements():
+        try:
+            pkg_resources.require([pkg])
+        except pkg_resources.DistributionNotFound as e:
+            print(f"Since {e.req} is not Installed, Installing {e.req}")
+            os.system(f"pip3 install {e.req}")
 
 
-if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
-    if not requirements_installed():
-        count = 0
-        print("Checking Packages:\n\n")
-        for pkg in requirements():
-            pkg_response = RunShell(
-            [
-                "pip3",
-                "show",
-                pkg.split("=")[0].lower()
-            ])
-            if "not found" in pkg_response:
-                if pkg: # empty string
-                    os.system(f"pip3 install {pkg}")
-            else:
-                if pkg: # don't count empty string
-                    count += 1
-            if pkg: # empty string
-                print(f"\n{pkg} installed: Yes")
+device = platform.uname()[0]
+if device in ("Windows", "Linux"):
 
-        with open("temp.info", "w") as f:
-            f.write(str(count))
-
-    # check & install ffmpeg
-    if "not found" in RunShell(["apt", "show", "ffmpeg"]):
+    # install ffmpeg
+    if device == "Windows":
+        os.system("scoop install ffmpeg")
+    elif device == "linux":
         os.system("apt install ffmpeg")
 
     class Config:
@@ -184,7 +167,7 @@ if RunShell(["uname", "-n"]) in ("Localhost", "localhost", "localhost\n"):
     count = 1
 
     # check if the user config file exists
-    if os.path.exists("config.txt"):
+    if os.path.exists("config.text"):
         print("config.text file exists: Yes\n\n")
         with open("config.text") as f:
             content = f.read().split("\n")
