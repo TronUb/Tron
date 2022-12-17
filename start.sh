@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# shortcut file for running the bot in linux
+
 uname=$(uname -n)
 filename="./config.txt"
 repo="https://github.com/TronUb/Tron.git"

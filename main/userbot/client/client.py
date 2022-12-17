@@ -1,7 +1,6 @@
 """ userbot client module """
 
-import random
-import string
+import os
 from pyrogram import Client
 from main.assistant.client import Bot
 from main.core import Core
@@ -9,15 +8,13 @@ from main.core.newpyrogram.dispatcher import Dispatcher
 
 
 
-# temp -
-random_name =  "".join(random.choices(string.ascii_uppercase + string.digits, k = 7))
 
 
 class SuperClient(Core, Client):
     """ Userbot (tron) """
     def __init__(self):
         super().__init__(
-            name=random_name,
+            name="tronuserbot",
             api_id=self.API_ID,
             api_hash=self.API_HASH,
             session_string=self.SESSION,
@@ -32,7 +29,10 @@ class SuperClient(Core, Client):
         self.name = self.first_name + " " + self.last_name
         self.username = f"@{self.me.username}" if self.me.username else ""
         self.bio = self.me.bio if self.me.bio else ""
-        self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
+        dp_name = f"dp_{self.id}.jpg"
+        dp_path = f"./downloads/{dp_name}"
+        if not os.path.exists(dp_path):
+            self.pic = self.download_media(self.me.photo.big_file_id, dp_name) if self.me.photo else None
         self.is_bot = False
         self.stop()
         self.bot = Bot()

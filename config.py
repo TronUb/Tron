@@ -1,5 +1,6 @@
 """ Configuration file to get secure data we need """
 
+import re
 import os
 import platform
 import subprocess
@@ -152,14 +153,22 @@ def check_requirements():
 
 
 device = platform.uname()[0]
-if device in ("Windows", "Linux"):
+if (re.match(device, "Windows", re.IGNORECASE)
+    or re.match(device, "Linux", re.IGNORECASE)):
 
     # install ffmpeg
-    if device == "Windows":
+    if re.match(device, "Windows", re.IGNORECASE):
+        # permission needed in windows
+        os.system("Set-ExecutionPolicy RemoteSigned -Scope CurrentUser")
+        # install scoop for installing other packages
+        os.system('Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"')
+        # install ffmpeg through scoop
         os.system("scoop install ffmpeg")
-    elif device == "linux":
+    elif re.match(device, "Linux", re.IGNORECASE):
+        # install ffmpeg through apt
         os.system("apt install ffmpeg")
 
+    # build config class
     class Config:
         pass
 
@@ -170,10 +179,7 @@ if device in ("Windows", "Linux"):
     if os.path.exists("config.text"):
         print("config.text file exists: Yes\n\n")
         with open("config.text") as f:
-            content = f.read().split("\n")
-
-        # remove empty strings
-        content.remove("")
+            content = [x for x in f.read().split("\n") if x not in ("\n", "")]
 
         # set text file config values
         print("Setting configuration values.\n\n")

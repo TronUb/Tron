@@ -122,7 +122,5 @@ async def start_bot():
 
 
 if __name__ == '__main__':
-    with warnings.catch_warnings(): # suppress DeprecationWarning
-        warnings.simplefilter("ignore")
-        loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
     loop.run_until_complete(start_bot())

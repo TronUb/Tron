@@ -1,6 +1,8 @@
 """
 This file creates Assistant's client.
 """
+
+import os
 from pyrogram import Client
 from pyrogram.errors import FloodWait
 from main.core import Core
@@ -27,7 +29,10 @@ class Bot(Core, Client):
             self.name = self.me.first_name
             self.username = f"@{self.me.username}"
             self.bio = self.me.bio if self.me.bio else ""
-            self.pic = self.download_media(self.me.photo.big_file_id) if self.me.photo else None
+            dp_name = f"dp_{self.id}.jpg"
+            dp_path = f"./downloads/{dp_name}"
+            if not os.path.exists(dp_path):
+                self.pic = self.download_media(self.me.photo.big_file_id, dp_name) if self.me.photo else None
             self.is_bot = True
             self.stop()
         except FloodWait as e:
