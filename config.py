@@ -1,7 +1,6 @@
 """ Configuration file to get secure data we need """
 
 import os
-from setup import TempConfig
 
 
 _PMPERMIT_TEXT = """
@@ -13,7 +12,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Configuration(object): # pylint: disable=too-few-public-methods
+class Config: # pylint: disable=too-few-public-methods
     """ configuration class """
 
 # ---- important ----
@@ -123,7 +122,3 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     NO_LOAD = [int(x) for x in os.getenv("NO_LOAD", "").split()] # splits on spaces
 
 
-
-# inherit config k,v from here and setup.py
-class Config(Configuration, TempConfig):
-    pass
