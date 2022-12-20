@@ -118,8 +118,7 @@ class Tools:
             exit(0)
 
     def setup_config(self):
-        # UnboundLocalError
-        count = 0
+        count = 1
 
         # check if the user config file exists
         if os.path.exists("config.text"):
