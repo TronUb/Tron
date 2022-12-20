@@ -20,6 +20,8 @@ from pyrogram.errors import BotMethodInvalid
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
+from main.colors import Colors
+
 from PIL import Image
 import heroku3
 import requests
@@ -374,7 +376,7 @@ class SyncPart(Types):
         if display_module:
             data = sorted(listbin)
             for x in data:
-                print(x + " Loaded !")
+                print(f"Installing = [{x}] [{Colors.green + u'\u2713' + Colors.reset}]")
         return count
 
 
