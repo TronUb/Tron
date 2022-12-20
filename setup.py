@@ -10,9 +10,6 @@ is_localhost = (hostname==localhost_hostname) and (ip_address==localhost_ip_addr
 
 
 
-class TempConfig:
-    pass
-
 
 if not is_localhost:
     os.system("python -m main")
@@ -24,7 +21,7 @@ import os
 import platform
 import subprocess
 import pkg_resources
-
+from config import Config
 
 
 
@@ -148,7 +145,7 @@ class Tools:
                 if data[1].isdigit():
                     file_value = int(data[1])
 
-                setattr(TempConfig, data[0], file_value)
+                setattr(Config, data[0], file_value)
                 print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
                 count += 1
 
