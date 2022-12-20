@@ -23,6 +23,8 @@ if not is_localhost:
 import os
 import platform
 import subprocess
+import pkg_resources
+
 
 
 
