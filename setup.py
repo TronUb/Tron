@@ -8,6 +8,12 @@ localhost_hostname = "localhost"
 localhost_ip_address = "127.0.0.1"
 is_localhost = (hostname==localhost_hostname) and (ip_address==localhost_ip_address) 
 
+
+
+class TempConfig:
+    pass
+
+
 if not is_localhost:
     os.system("python -m main")
     exit(0)
@@ -16,10 +22,8 @@ if not is_localhost:
 
 import os
 import platform
+import subprocess
 
-
-class Config:
-    pass
 
 
 class Tools:
@@ -42,7 +46,7 @@ class Tools:
 
     def check_requirements(self):
         print("Checking Packages:\n\n")
-        for pkg in requirements():
+        for pkg in self.requirements():
             try:
                 pkg_resources.require([pkg])
             except pkg_resources.DistributionNotFound as e:
@@ -78,7 +82,7 @@ count = 1
 
 # check if the user config file exists
 if os.path.exists("config.text"):
-print("config.text file exists: Yes\n\n")
+    print("config.text file exists: Yes\n\n")
     with open("config.text") as f:
         content = [x for x in f.read().split("\n") if x not in ("\n", "")]
 
@@ -90,16 +94,11 @@ print("config.text file exists: Yes\n\n")
         if data[1].isdigit():
             file_value = int(data[1])
 
-        setattr(Config, data[0], file_value)
+        setattr(TempConfig, data[0], file_value)
         print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
         count += 1
-
-# set remaining necessary config values
-print("Setting remaining configuration values\n\n")
-for attr in dir(Configuration):
-    value = getattr(Configuration, attr, None)
-
-    if attr.isupper() and not hasattr(Config, attr):
-        setattr(Config, attr, value)
-        print(f"[{count}] Added config = {attr} with value = {value}\n")
-        count += 1
+    os.system("python -m main")
+    exit(0)
+else:
+    print("config.text file doesn't exist, existing. . .")
+    exit(0)
