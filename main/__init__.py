@@ -1,6 +1,10 @@
 """ everything starts here """
 
+import os
 import socket
+import platform
+import subprocess
+import pkg_resources
 from config import Configuration
 
 
@@ -148,12 +152,6 @@ tools = Tools()
 hosttype = HostType()
 
 if hosttype.is_localhost:
-    # import for localhost
-    import os
-    import platform
-    import subprocess
-    import pkg_resources
-
     # start setup
     tools.setup_config()
 
