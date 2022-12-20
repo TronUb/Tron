@@ -4,7 +4,7 @@ import platform
 
 import pyrogram
 from requests.exceptions import ConnectionError
-from config import Config
+from main import Configuration as Config
 from telegraph import Telegraph
 from pyrogram import __version__ as pyrogram_version
 from main.core.database import Database
