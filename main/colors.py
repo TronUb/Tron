@@ -28,7 +28,7 @@ class Colors:
     def cursor_right(digits: int=0):
         return "\u001b[{}C".format(digits) 
 
-    def cursor_up(digits: int=0)
+    def cursor_up(digits: int=0):
         return "\u001b[{}A".format(digits) 
 
     def cursor_down(digits: int=0):
