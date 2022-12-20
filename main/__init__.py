@@ -9,7 +9,7 @@ from config import Configuration
 
 
 
-class Config(Configuration):
+class Config:
     pass
 
 
@@ -139,11 +139,22 @@ class Tools:
                 print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
                 count += 1
 
+
             # install requirements before running bot
             self.check_requirements()
         else:
             print("config.text file doesn't exist, existing. . .")
             exit(0)
+
+        # set remaining necessary config values
+        print("\nSetting remaining configuration values\n\n")
+        for attr in dir(Configuration):
+            value = getattr(Configuration, attr, None)
+
+            if attr.isupper() and not hasattr(Config, attr):
+                setattr(Config, attr, value)
+                print(f"[{count}] Added config = {attr} with value = {value}\n")
+                count += 1
 
 
 
