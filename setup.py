@@ -53,12 +53,59 @@ class Tools:
                 pkg_resources.require([pkg])
             except pkg_resources.DistributionNotFound as e:
                 print(f"\nSince {e.req} is not Installed, Installing {e.req}")
-                os.system(f"python -m pip3 install {e.req}")
+                if e.req == "numpy":
+                    self.install_numpy()
+
+                elif e.req == "lxml":
+                    self.install_lxml()
+
+                elif e.req == "psycopg2":
+                    self.install_psycopg2()
+
+                elif e.req == "pillow":
+                    self. install_pillow()
+
+                else:
+                    os.system(f"python -m pip3 install {e.req}")
+
+
+    def install_numpy(self):
+        print("\nInstalling numpy . . .\n")
+        os.system("MATHLIB="m" python -m pip3 install numpy")
+
+
+    def install_lxml(self):
+        if self.is_windows:
+            os.system("scoop install libxml2")
+            os.system("scoop install libxslt")
+        else:
+            os.system("apt install libxml2 libxslt")
+        print("\nInstalling lxml . . .\n")
+        os.system("python -m pip3 install lxml")
+
+
+    def install_psycopg2(self):
+        if self.is_windows:
+            os.system("scoop install postgresql python make clang")
+        else:
+            os.system("apt install postgresql python make clang")
+        print("\nInstalling psycopg2 . . .\n")
+        os.system("python -m pip3 install psycopg2")
+
+
+    def install_pillow(self):
+        if self.windows:
+            os.system("scoop install libjpeg-turbo")
+        else:
+            os.system("apt install libjpeg-turbo")
+        print("\nInstalling pillow . . .")
+        os.system("python -m pip3 install pillow")
+
+
 
 
 tools = Tools()
 
-tools.check_requirements()
 if tools.is_windows:
     # install ffmpeg
 
@@ -78,6 +125,9 @@ else:
     print('\nUnknown device, Existing . . .')
     exit(0)
 
+
+# check if requirements are installed
+tools.check_requirements()
 
 # variable counter
 count = 1
