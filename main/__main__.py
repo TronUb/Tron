@@ -61,7 +61,7 @@ async def start_userbot():
         print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}", end="")
         response = await app.start()
         if response:
-            print(Colors.cursor_left(5)
+            print(Colors.cursor_left(5))
             print(f"[{Colors.green}ON{Colors.reset}]", end="\n\n")
         else:
             print("Userbot is not activated.\n")
