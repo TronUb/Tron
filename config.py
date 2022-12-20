@@ -12,7 +12,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Config: # pylint: disable=too-few-public-methods
+class Configuration: # pylint: disable=too-few-public-methods
     """ configuration class """
 
 # ---- important ----
