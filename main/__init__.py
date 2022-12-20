@@ -165,10 +165,6 @@ hosttype = HostType()
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
-    print(len(str(Config.API_ID)))
-    print(len(str(Config.API_HASH)))
-    print(Config.BOT_TOKEN)
-        
 
 
 # default import
