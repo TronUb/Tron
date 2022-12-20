@@ -25,12 +25,12 @@ from main.colors import Colors
 async def start_assistant():
     """ this function starts the pyrogram bot client. """
     if app and app.bot:
-        print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}", end="")
+        print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.bot.start()
         if response:
             # move cursor one line up
-            print(Colors.cursor_left(5))
-            print(f"[{Colors.green}ON{Colors.reset}]", end="\n\n")
+            print(Colors.up(2))
+            print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}ON{Colors.reset}] {Colors.reset}", end="\n\n")
             botcmd = [
                 ["start", "check whether bot is on or not."],
                 ["help", "Get your helpdex."],
@@ -58,11 +58,11 @@ async def start_assistant():
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
-        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}", end="")
+        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.start()
         if response:
-            print(Colors.cursor_left(5))
-            print(f"[{Colors.green}ON{Colors.reset}]", end="\n\n")
+            print(Colors.cursor_up(2))
+            print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}ON{Colors.reset}] {Colors.reset}", end="\n\n")
         else:
             print("Userbot is not activated.\n")
     else:
