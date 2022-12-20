@@ -130,7 +130,7 @@ class Tools:
             print('\nUnknown device, Existing . . .')
             exit(0)
 
-    def set_config(self):
+    def setup_config(self):
         # check if the user config file exists
         if os.path.exists("config.text"):
             print("config.text file exists: Yes\n\n")
