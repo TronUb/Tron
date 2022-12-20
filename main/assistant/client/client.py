@@ -15,8 +15,6 @@ from main.core import Core
 class Bot(Core, Client):
     """ Assistant (Nora) """
     def __init__(self):
-        print("Bot ", self.API_ID)
-        print("Bot ", self.API_HASH)
         super().__init__(
             name="Nora",
             api_id=self.API_ID,
