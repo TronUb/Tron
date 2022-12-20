@@ -71,7 +71,7 @@ class Tools:
 
     def install_numpy(self):
         print("\nInstalling numpy . . .\n")
-        os.system("MATHLIB="m" python -m pip3 install numpy")
+        os.system('MATHLIB="m" python -m pip3 install numpy')
 
 
     def install_lxml(self):
@@ -96,8 +96,10 @@ class Tools:
     def install_pillow(self):
         if self.windows:
             os.system("scoop install libjpeg-turbo")
+            os.system('./configure CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib"')
         else:
             os.system("apt install libjpeg-turbo")
+            os.system('LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"')
         print("\nInstalling pillow . . .")
         os.system("python -m pip3 install pillow")
 
