@@ -154,6 +154,8 @@ hosttype = HostType()
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
+    print(Config.API_ID)
+        
 
 
 # default import
