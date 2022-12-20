@@ -26,7 +26,7 @@ class Tools:
     is_linux = (device=="linux")
     is_windows = (device=="windows")
 
-    def clear_screeen(self):
+    def clear_screen(self):
         os.system("clear" if self.is_linux else "cls")
 
     def check_command(self, args: list):
