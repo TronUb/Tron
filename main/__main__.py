@@ -28,7 +28,7 @@ async def start_assistant():
         print(f"{Colors.block}Assistant: {Colors.reset}{Colors.red}[OFF]{Colors.reset}")
         response = await app.bot.start()
         if response:
-            print(Colors.cursor_up(1) + Colors.cursor_right(12))
+            print(Colors.cursor_up(2) + Colors.cursor_right(12))
             print(f"{Colors.green}[ON] {Colors.reset}\n")
             botcmd = [
                 ["start", "check whether bot is on or not."],
