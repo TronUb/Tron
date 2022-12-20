@@ -99,7 +99,7 @@ async def start_bot():
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
-    print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n")
+    print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n\n\n")
 
     print(Colors.block + "PLUGINS:" + Colors.reset + " ( Userbot )\n\n")
     ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
