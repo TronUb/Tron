@@ -28,10 +28,11 @@ import pkg_resources
 
 
 
-# variable counter
+# config counter
 count = 1
 
-# execution_count = 0
+# execution counter
+execution_count = 0
 
 class Tools:
     device = platform.uname()[0].lower()
