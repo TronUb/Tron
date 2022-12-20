@@ -144,7 +144,7 @@ class Tools:
                     file_value = int(data[1])
 
                 setattr(Config, data[0], file_value)
-                log.info(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+                log.debug(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
                 count += 1
 
 
