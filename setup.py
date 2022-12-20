@@ -28,6 +28,11 @@ import pkg_resources
 
 
 
+# variable counter
+count = 1
+
+# execution_count = 0
+
 class Tools:
     device = platform.uname()[0].lower()
     is_linux = (device=="linux")
@@ -47,6 +52,7 @@ class Tools:
 
 
     def check_requirements(self):
+        self.install_ffmpeg()
         print("Checking Packages:\n\n")
         for pkg in self.requirements():
             try:
@@ -103,56 +109,63 @@ class Tools:
         print("\nInstalling pillow . . .")
         os.system("python -m pip install pillow")
 
+    def install_ffmpeg(self):
+        if tools.is_windows:
+            # install ffmpeg
+
+            # permission needed in windows
+            os.system('Set-ExecutionPolicy RemoteSigned -Scope CurrentUser')
+            # install scoop for installing scoop & other packages
+            os.system('Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"')
+            # install ffmpeg through scoop
+            os.system('scoop install ffmpeg')
+
+        elif tools.is_linux:
+            # install ffmpeg
+
+            os.system('apt install ffmpeg')
+
+        else:
+            print('\nUnknown device, Existing . . .')
+            exit(0)
+
+     def set_config(self):
+         # check if the user config file exists
+         if os.path.exists("config.text"):
+             print("config.text file exists: Yes\n\n")
+             with open("config.text") as f:
+                 content = [x for x in f.read().split("\n") if x not in ("\n", "")]
+
+             # set text file config values
+             print("Setting configuration values.\n\n")
+             for x in content:
+                 data = x.split("=")
+                 file_value = data[1]
+                 if data[1].isdigit():
+                     file_value = int(data[1])
+
+                 setattr(TempConfig, data[0], file_value)
+                 print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+                 count += 1
+
+             # install requirements before running bot
+             self.check_requirements()
+
+             # set execution count
+             execution_count += 1
+
+             os.system("python -m main")
+             exit(0)
+         else:
+             print("config.text file doesn't exist, existing. . .")
+             exit(0)
+
 
 
 
 tools = Tools()
 
-if tools.is_windows:
-    # install ffmpeg
-
-    # permission needed in windows
-    os.system('Set-ExecutionPolicy RemoteSigned -Scope CurrentUser')
-    # install scoop for installing scoop & other packages
-    os.system('Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"')
-    # install ffmpeg through scoop
-    os.system('scoop install ffmpeg')
-
-elif tools.is_linux:
-    # install ffmpeg
-
-    os.system('apt install ffmpeg')
-
-else:
-    print('\nUnknown device, Existing . . .')
-    exit(0)
+if execution_count < 1:
+    tools.setup_config()
 
 
-# check if requirements are installed
-tools.check_requirements()
-
-# variable counter
-count = 1
-
-# check if the user config file exists
-if os.path.exists("config.text"):
-    print("config.text file exists: Yes\n\n")
-    with open("config.text") as f:
-        content = [x for x in f.read().split("\n") if x not in ("\n", "")]
-
-    # set text file config values
-    print("Setting configuration values.\n\n")
-    for x in content:
-        data = x.split("=")
-        file_value = data[1]
-        if data[1].isdigit():
-            file_value = int(data[1])
-
-        setattr(TempConfig, data[0], file_value)
-        print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
-        count += 1
-    os.system("python -m main")
-    exit(0)
-else:
-    print("config.text file doesn't exist, existing. . .")
-    exit(0)
