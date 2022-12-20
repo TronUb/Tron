@@ -25,12 +25,12 @@ from main.colors import Colors
 async def start_assistant():
     """ this function starts the pyrogram bot client. """
     if app and app.bot:
-        print(f"{Colors.block}Assistant: {Colors.reset}{Colors.red}[OFF]{Colors.reset}")
+        print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.bot.start()
         if response:
             # move cursor one line up
             print(Colors.cursor_up(2))
-            print(f"{Colors.block}Assistant: {Colors.reset}{Colors.red}[ON] {Colors.reset}")
+            print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}")
             botcmd = [
                 ["start", "check whether bot is on or not."],
                 ["help", "Get your helpdex."],
