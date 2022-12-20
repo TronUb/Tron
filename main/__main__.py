@@ -93,7 +93,7 @@ async def start_bot():
     """ This is the main startup function to start both clients i.e assistant & userbot.
     It also imports modules & plugins for assistant bot & userbot. """
 
-    print(20*"_" + Colors.reversed + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
+    print(20*"_" + Colors.block + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
     print("PLUGINS: Installing.\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
