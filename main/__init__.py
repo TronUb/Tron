@@ -126,6 +126,10 @@ class Tools:
         count = 1
         self.clear_screen()
 
+        # check requirements & install
+        self.check_requirements()
+        self.clear_screen()
+
         # check if the user config file exists
         if os.path.exists("config.text"):
             print("config.text file exists: Yes\n\n")
@@ -144,9 +148,6 @@ class Tools:
                 print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
                 count += 1
 
-
-            # install requirements before running bot
-            self.check_requirements()
         else:
             print("config.text file doesn't exist, existing. . .")
             exit(0)
