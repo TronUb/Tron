@@ -1,6 +1,7 @@
 """ everything starts here """
 
 import os
+import time
 import socket
 import platform
 import subprocess
@@ -168,6 +169,8 @@ hosttype = HostType()
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
+    # take a pause
+    time.sleep(5)
     # clear screen for logs
     tools.clear_screen()
 
