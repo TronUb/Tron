@@ -131,6 +131,9 @@ class Tools:
             exit(0)
 
     def setup_config(self):
+        # UnboundLocalError
+        global count, execution_count
+
         # check if the user config file exists
         if os.path.exists("config.text"):
             print("config.text file exists: Yes\n\n")
