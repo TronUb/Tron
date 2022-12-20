@@ -66,12 +66,12 @@ class Tools:
                     self. install_pillow()
 
                 else:
-                    os.system(f"python -m pip3 install {e.req}")
+                    os.system(f"python -m pip install {e.req}")
 
 
     def install_numpy(self):
         print("\nInstalling numpy . . .\n")
-        os.system('MATHLIB="m" python -m pip3 install numpy')
+        os.system('MATHLIB="m" python -m pip install numpy')
 
 
     def install_lxml(self):
@@ -81,7 +81,7 @@ class Tools:
         else:
             os.system("apt install libxml2 libxslt")
         print("\nInstalling lxml . . .\n")
-        os.system("python -m pip3 install lxml")
+        os.system("python -m pip install lxml")
 
 
     def install_psycopg2(self):
@@ -90,7 +90,7 @@ class Tools:
         else:
             os.system("apt install postgresql python make clang")
         print("\nInstalling psycopg2 . . .\n")
-        os.system("python -m pip3 install psycopg2")
+        os.system("python -m pip install psycopg2")
 
 
     def install_pillow(self):
@@ -101,7 +101,7 @@ class Tools:
             os.system("apt install libjpeg-turbo")
             os.system('LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"')
         print("\nInstalling pillow . . .")
-        os.system("python -m pip3 install pillow")
+        os.system("python -m pip install pillow")
 
 
 
