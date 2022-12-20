@@ -6,7 +6,7 @@ try:
     import uvloop
     uvloop.install()
 except ImportError:
-    print(Colors.block + Colors.red + "\nuvloop wasn't installed, userbot will work slow." + Colors.reset + "\n")
+    print(f"{Colors.red}\nuvloop wasn't installed, userbot will work slow.{Colors.reset}\n")
 
 from .client import SuperClient
 
