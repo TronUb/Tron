@@ -129,36 +129,36 @@ class Tools:
             print('\nUnknown device, Existing . . .')
             exit(0)
 
-     def set_config(self):
-         # check if the user config file exists
-         if os.path.exists("config.text"):
-             print("config.text file exists: Yes\n\n")
-             with open("config.text") as f:
-                 content = [x for x in f.read().split("\n") if x not in ("\n", "")]
+    def set_config(self):
+        # check if the user config file exists
+        if os.path.exists("config.text"):
+            print("config.text file exists: Yes\n\n")
+            with open("config.text") as f:
+                content = [x for x in f.read().split("\n") if x not in ("\n", "")]
 
-             # set text file config values
-             print("Setting configuration values.\n\n")
-             for x in content:
-                 data = x.split("=")
-                 file_value = data[1]
-                 if data[1].isdigit():
-                     file_value = int(data[1])
+            # set text file config values
+            print("Setting configuration values.\n\n")
+            for x in content:
+                data = x.split("=")
+                file_value = data[1]
+                if data[1].isdigit():
+                    file_value = int(data[1])
 
-                 setattr(TempConfig, data[0], file_value)
-                 print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
-                 count += 1
+                setattr(TempConfig, data[0], file_value)
+                print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+                count += 1
 
-             # install requirements before running bot
-             self.check_requirements()
+            # install requirements before running bot
+            self.check_requirements()
 
-             # set execution count
-             execution_count += 1
+            # set execution count
+            execution_count += 1
 
-             os.system("python -m main")
-             exit(0)
-         else:
-             print("config.text file doesn't exist, existing. . .")
-             exit(0)
+            os.system("python -m main")
+            exit(0)
+        else:
+            print("config.text file doesn't exist, existing. . .")
+            exit(0)
 
 
 
