@@ -52,7 +52,7 @@ class Tools:
             try:
                 pkg_resources.require([pkg])
             except pkg_resources.DistributionNotFound as e:
-                print(f"Since {e.req} is not Installed, Installing {e.req}")
+                print(f"\nSince {e.req} is not Installed, Installing {e.req}")
                 os.system(f"pip3 install {e.req}")
 
 
