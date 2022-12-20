@@ -133,7 +133,7 @@ class Tools:
                 content = [x for x in f.read().split("\n") if x not in ("\n", "")]
 
             # set text file config values
-            print("Setting configuration values.\n\n")
+            print(Colors.block + "Setting configuration values.\n\n" + Colors.reset)
             for x in content:
                 data = x.split("=")
                 file_value = data[1]
@@ -152,7 +152,7 @@ class Tools:
             exit(0)
 
         # set remaining necessary config values
-        print("\nSetting remaining configuration values\n\n")
+        print(Colors.block + "\nSetting remaining configuration values\n\n" + Colors.reset)
         for attr in dir(Configuration):
             value = getattr(Configuration, attr, None)
 
