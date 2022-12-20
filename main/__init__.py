@@ -155,6 +155,8 @@ if hosttype.is_localhost:
     # start setup
     tools.setup_config()
     print(Config.API_ID)
+    print(Config.API_HASH)
+    print(Config.BOT_TOKEN)
         
 
 
