@@ -162,6 +162,9 @@ class Tools:
                 print(f"[{count}] Added config = {attr} with value = {value}\n")
                 count += 1
 
+        clear = input(f"{Colors.block}Should we clear screen ?{Colors.reset} (Y/N): ")
+        if (not clear) or (clear and clear.upper() == "Y"):
+            self.clear_screen()
 
 
 
