@@ -16,7 +16,7 @@ class Colors:
     # decorators
     bold = "\u001b[1m"
     underline = "\u001b[0m\u001b[4m"
-    reversed = "\u001b[0m\u001b[7m"
+    block = "\u001b[0m\u001b[7m"
 
     # reset
     reset = "\u001b[0m"
