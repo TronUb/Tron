@@ -26,6 +26,9 @@ class Tools:
     is_linux = (device=="linux")
     is_windows = (device=="windows")
 
+    def clear_screeen(self):
+        os.system("clear" if self.is_linux else "cls")
+
     def check_command(self, args: list):
         return (subprocess.run(
             args,
@@ -119,6 +122,7 @@ class Tools:
 
     def setup_config(self):
         count = 1
+        self.clear_screen()
 
         # check if the user config file exists
         if os.path.exists("config.text"):
@@ -164,6 +168,8 @@ hosttype = HostType()
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
+    # clear screen for logs
+    tools.clear_screen()
 
 
 # default import
