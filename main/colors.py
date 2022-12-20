@@ -20,3 +20,9 @@ class Colors:
 
     # reset
     reset = "\u001b[0m"
+
+    # move cursor
+    left = "\u001b[1000D"
+    right = "\u001b[1000C"
+    up = "\u001b[1000A"
+    down = "\u001b[1000B"
