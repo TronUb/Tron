@@ -358,6 +358,8 @@ class SyncPart(Types):
         modules = []
         modules.clear()
 
+        check_mark = u'\u2713'
+
         for x in os.listdir(path):
             if x.endswith(".py"):
                 if not x in ["__pycache__",  "__init__.py"]:
@@ -376,7 +378,7 @@ class SyncPart(Types):
         if display_module:
             data = sorted(listbin)
             for x in data:
-                print(f"Installing = [{x}] [{Colors.green + u'\u2713' + Colors.reset}]")
+                print(f"Installing = [{x}] [{Colors.green + check_mark + Colors.reset}]")
         return count
 
 
