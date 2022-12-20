@@ -94,7 +94,7 @@ async def start_bot():
     It also imports modules & plugins for assistant bot & userbot. """
 
     print(20*"_" + Colors.block + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
-    print(Colors.block + "PLUGINS: " Colors.reset + "( Assistant )\n\n")
+    print(Colors.block + "PLUGINS: " + Colors.reset + "( Assistant )\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
