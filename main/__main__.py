@@ -58,11 +58,11 @@ async def start_assistant():
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
-        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.green}OFF{Colors.reset}]{Colors.reset}")
+        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.start()
         if response:
             print(Colors.cursor_up(2))
-            print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}ON{Colors.reset}] {Colors.reset}", end="\n\n")
+            print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}", end="\n\n")
         else:
             print("Userbot is not activated.\n")
     else:
