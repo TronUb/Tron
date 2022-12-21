@@ -190,10 +190,8 @@ if hosttype.is_localhost:
     tools.setup_config()
 
 
+# don't change this
 # default import
 from main.userbot.client import app
 bot = app.bot
 from main.core.filters import gen, regex
-
-
-
