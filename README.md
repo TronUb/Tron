@@ -83,27 +83,56 @@ and get its bot token
 
 <br></br>
 
-<b>2. Deploy on Termux</b>
-
-1. Install ubuntu in termux ~ ```curl https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/repo-fix.sh > repo.sh && chmod +x repo.sh && bash repo.sh && pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu20/ubuntu20.sh -O ubuntu20.sh && chmod +x ubuntu20.sh && bash ubuntu20.sh```
-
-2. start ubuntu ~ ```start-ubuntu20.sh```
-
-3. Install git & nano ~ ```apt-get install git nano```
-
-4. clone repo ~ ```git clone https://github.com/TronUb/Tron.git```
-
-5. change directory ~ ```cd Tron```
-
-6. create & fill all configs details in config file ~ ```nano config.txt``` 
-
-7. ```bash start.sh``` or ```./start.sh```
+<b>2. Deploy on Local Machine</b>
 
 
-<b>Note:</b> you have to add key & values in config.txt file same as given below 👇
+• Windows: 
+
+1. Install python ```winget install -e --id Python.Python.3.10```
+
+2. Create virtual environment ```python -m venv tronuserbot```
+
+3. Activate the virtual environment ```tronuserbot/Scripts/activate```
+
+4. Go to home path ```cd```
+
+5. Install git ```winget install -e --id Git.Git```
+
+6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
+
+7. change directory ```cd Tron```
+
+8. Start the tronuserbot installation setup ```python -m main```
+
+
+• Linux: 
+
+1. Update and upgrade ```apt-get update && apt-get upgrade```
+
+2. Install python ```apt-get install python```
+
+3. Create python virtual environment ```python -m venv tronuserbot```
+
+4. Activate python virtual environment ```source tronuserbot/bin/activate```
+
+5. Install git ```apt-get install git```
+
+6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
+
+7. Change directory ```cd Tron```
+
+8. Paste your keys and values in config.text file ```nano config.text```
+
+9. After pasting all of your information, use <b>Ctrl + X</b> and enter <b>Y</b> and again hit enter button.
+
+10. Start the tronuserbot installation setup ```python -m main```
+
+
+<b>Note:</b> You have to add keys & values in config.txt file same as given below 👇
 
 ```API_ID=1234567```
-```API_HASH=a2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kblops```
+```API_HASH=ad2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kbopz```
+```SUDO_USERS=[1252773, 7737382, 1721726]```
 
 <p>🎉 Done, Have fun using tronuserbot.</p>
 
