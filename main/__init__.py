@@ -1,5 +1,6 @@
 """ everything starts here """
 
+import re
 import os
 import json
 import socket
@@ -11,6 +12,9 @@ from config import Configuration
 
 
 
+
+
+symbols = re.compile("[@_!#$%^&*()<>?/\|}{~:-]")
 
 class Config:
     pass
@@ -145,7 +149,7 @@ class Tools:
                 if value.isdigit():
                     # convert str into int
                     value = int(value)
-                elif value.isalnum():
+                elif value.isalnum() or symbols.search(value):
                     # not needed but don't pass an alphanumeric to json.loads()
                     value = str(value)
                 else:
