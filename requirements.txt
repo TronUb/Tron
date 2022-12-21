@@ -5,7 +5,7 @@ heroku3
 aiohttp
 aiofiles
 hachoir
-Pillow
+pillow
 bs4
 covid
 pySmartDL
@@ -27,3 +27,5 @@ cinemagoer
 moviepy
 apscheduler
 youtube-dl
+numpy
+lxml

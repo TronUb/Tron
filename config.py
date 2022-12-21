@@ -1,11 +1,6 @@
 """ Configuration file to get secure data we need """
 
-import re
 import os
-import platform
-import subprocess
-import pkg_resources
-
 
 
 _PMPERMIT_TEXT = """
@@ -17,7 +12,7 @@ And Better Not To Spam His here !
 
 
 # ------------------
-class Configuration(object): # pylint: disable=too-few-public-methods
+class Configuration: # pylint: disable=too-few-public-methods
     """ configuration class """
 
 # ---- important ----
@@ -127,82 +122,3 @@ class Configuration(object): # pylint: disable=too-few-public-methods
     NO_LOAD = [int(x) for x in os.getenv("NO_LOAD", "").split()] # splits on spaces
 
 
-
-
-def RunShell(args: list):
-    return (subprocess.run(
-        args,
-        stdout=subprocess.PIPE,
-        shell=True
-    )).stdout.decode()
-
-
-def requirements():
-    with open("requirements.txt", "r") as f:
-        return [x for x in f.read().split("\n") if x not in ("\n", "")]
-
-
-def check_requirements():
-    print("Checking Packages:\n\n")
-    for pkg in requirements():
-        try:
-            pkg_resources.require([pkg])
-        except pkg_resources.DistributionNotFound as e:
-            print(f"Since {e.req} is not Installed, Installing {e.req}")
-            os.system(f"pip3 install {e.req}")
-
-
-device = platform.uname()[0]
-if (re.match(device, "Windows", re.IGNORECASE)
-    or re.match(device, "Linux", re.IGNORECASE)):
-
-    # install ffmpeg
-    if re.match(device, "Windows", re.IGNORECASE):
-        # permission needed in windows
-        os.system("Set-ExecutionPolicy RemoteSigned -Scope CurrentUser")
-        # install scoop for installing other packages
-        os.system('Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"')
-        # install ffmpeg through scoop
-        os.system("scoop install ffmpeg")
-    elif re.match(device, "Linux", re.IGNORECASE):
-        # install ffmpeg through apt
-        os.system("apt install ffmpeg")
-
-    # build config class
-    class Config:
-        pass
-
-    # variable counter
-    count = 1
-
-    # check if the user config file exists
-    if os.path.exists("config.text"):
-        print("config.text file exists: Yes\n\n")
-        with open("config.text") as f:
-            content = [x for x in f.read().split("\n") if x not in ("\n", "")]
-
-        # set text file config values
-        print("Setting configuration values.\n\n")
-        for x in content:
-            data = x.split("=")
-            file_value = data[1]
-            if data[1].isdigit():
-                file_value = int(data[1])
-
-            setattr(Config, data[0], file_value)
-            print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
-            count += 1
-
-    # set remaining necessary config values
-    print("Setting remaining configuration values\n\n")
-    for attr in dir(Configuration):
-        value = getattr(Configuration, attr, None)
-
-        if attr.isupper() and not hasattr(Config, attr):
-            setattr(Config, attr, value)
-            print(f"[{count}] Added config = {attr} with value = {value}\n")
-            count += 1
-
-else:
-    class Config(Configuration):
-        pass

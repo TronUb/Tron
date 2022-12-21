@@ -17,6 +17,7 @@ from pyrogram.errors import (
     ChannelInvalid
 )
 from main.userbot import app
+from main.colors import Colors
 
 
 
@@ -24,10 +25,12 @@ from main.userbot import app
 async def start_assistant():
     """ this function starts the pyrogram bot client. """
     if app and app.bot:
-        print("Activating assistant.\n")
+        print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.bot.start()
         if response:
-            print("Assistant activated.\n")
+            # move cursor one line up
+            print(Colors.cursor_up(2))
+            print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}", end="\n\n")
             botcmd = [
                 ["start", "check whether bot is on or not."],
                 ["help", "Get your helpdex."],
@@ -55,10 +58,11 @@ async def start_assistant():
 async def start_userbot():
     """ this function starts the pyrogram userbot client. """
     if app:
-        print("Activating userbot.\n")
+        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await app.start()
         if response:
-            print("Userbot activated.\n")
+            print(Colors.cursor_up(2))
+            print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}", end="\n\n")
         else:
             print("Userbot is not activated.\n")
     else:
@@ -92,15 +96,18 @@ async def start_bot():
     """ This is the main startup function to start both clients i.e assistant & userbot.
     It also imports modules & plugins for assistant bot & userbot. """
 
-    print(20*"_" + ". Welcome to Tron corporation ." + "_"*20 + "\n\n\n")
-    print("PLUGINS: Installing.\n\n")
+    print(20*"_" + Colors.block + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
+
+    print(Colors.block + "PLUGINS:" + Colors.reset + " ( Assistant )\n\n")
     botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
-    print(f"\n\n{botplugins} plugins Loaded\n\n")
-    print("MODULES: Installing.\n\n")
-    plugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
-    print(f"\n\n{plugins} modules Loaded\n\n")
+    print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n\n\n")
+
+    print(Colors.block + "PLUGINS:" + Colors.reset + " ( Userbot )\n\n")
+    ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
+    print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {ubotplugins}\n")
+
     await start_assistant()
     await start_userbot()
     print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
