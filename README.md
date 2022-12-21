@@ -9,7 +9,7 @@
 [![Pylint](https://github.com/TronUb/Tron/actions/workflows/pylint.yml/badge.svg)](https://github.com/TronUb/Tron/actions/workflows/pylint.yml)
 ![Repo Size](https://img.shields.io/github/repo-size/TronUb/Tron)
 ![License](https://img.shields.io/github/license/TronUb/Tron)
-![Python Version](https://img.shields.io/badge/python-3-aqua)
+![Python Version](https://img.shields.io/badge/python-3.x.x-aqua)
 ![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 ![Maintained](https://img.shields.io/badge/Maintained%20%3F-Yes-orange)
 ![Files](https://img.shields.io/github/directory-file-count/TronUb/Tron?label=repo%20files)
