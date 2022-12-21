@@ -9,12 +9,13 @@ import subprocess
 import pkg_resources
 from main.colors import Colors
 from config import Configuration
+from string import punctuation as special_characters
 
 
 
 
 
-symbols = re.compile("[@_!#$%^&*()<>?/\|}{~:-]")
+symbols = re.compile(f"[{special_characters}]")
 
 class Config:
     pass
