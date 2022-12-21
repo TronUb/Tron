@@ -145,6 +145,9 @@ class Tools:
                 if value.isdigit():
                     # convert str into int
                     value = int(value)
+                elif value.isalnum():
+                    # not needed but don't pass an alphanumeric to json.loads()
+                    value = str(value)
                 else:
                     # load string lists as lists
                     value = json.loads(value)
