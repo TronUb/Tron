@@ -109,7 +109,7 @@ class NOTESSQL(object):
 
 
     # load notes while startup
-    def load_allnotes():
+    def load_allnotes(self):
         global SELF_NOTES
         getall = SESSION.query(NOTES).distinct().all()
         for x in getall:
