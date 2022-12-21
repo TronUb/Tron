@@ -28,7 +28,7 @@ async def plugins_page(_, cb: CallbackQuery):
 
 
 # next page
-@app.bot.on_callback_query(filters.regex(pattern="navigate-next\((.+?)\)"))
+@app.bot.on_callback_query(filters.regex(pattern=r"navigate-next\((.+?)\)"))
 @app.alert_user
 async def give_next_page(_, cb: CallbackQuery):
     current_page_number = int(cb.matches[0].group(1))
@@ -39,7 +39,7 @@ async def give_next_page(_, cb: CallbackQuery):
 
 
 # previous page
-@app.bot.on_callback_query(filters.regex(pattern="navigate-prev\((.+?)\)"))
+@app.bot.on_callback_query(filters.regex(pattern=r"navigate-prev\((.+?)\)"))
 @app.alert_user
 async def give_old_page(_, cb: CallbackQuery):
     current_page_number = int(cb.matches[0].group(1))

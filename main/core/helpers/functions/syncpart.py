@@ -561,13 +561,13 @@ class SyncPart(Types):
 
 
     def ClearString(self, msg: str):
-        msg = re.sub(r"\<code\>(.*)\<\/code\>", "\g<1>", msg)
-        msg = re.sub(r"\<i\>(.*)\<\/i\>", "\g<1>", msg)
-        msg = re.sub(r"\<b\>(.*)\<\/b\>", "\g<1>", msg)
-        msg = re.sub(r"\<u\>(.*)\<\/u\>", "\g<1>", msg)
-        msg = re.sub(r"\*\*(.*)\*\*", "\g<1>", msg)
-        msg = re.sub(r"\_\_(.*)\_\_", "\g<1>", msg)
-        msg = re.sub(r"\`(.*)\`", "\g<1>", msg)
+        msg = re.sub(r"\<code\>(.*)\<\/code\>", r"\g<1>", msg)
+        msg = re.sub(r"\<i\>(.*)\<\/i\>", r"\g<1>", msg)
+        msg = re.sub(r"\<b\>(.*)\<\/b\>", r"\g<1>", msg)
+        msg = re.sub(r"\<u\>(.*)\<\/u\>", r"\g<1>", msg)
+        msg = re.sub(r"\*\*(.*)\*\*", r"\g<1>", msg)
+        msg = re.sub(r"\_\_(.*)\_\_", r"\g<1>", msg)
+        msg = re.sub(r"\`(.*)\`", r"\g<1>", msg)
         return msg
 
 
