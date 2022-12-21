@@ -175,6 +175,7 @@ class Tools:
 tools = Tools()
 hosttype = HostType()
 
+
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
