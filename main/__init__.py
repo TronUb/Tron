@@ -1,15 +1,21 @@
 """ everything starts here """
 
+import re
 import os
+import json
 import socket
 import platform
 import subprocess
 import pkg_resources
 from main.colors import Colors
 from config import Configuration
+from string import punctuation as special_characters
 
 
 
+
+
+symbols = re.compile(f"[{special_characters}]")
 
 class Config:
     pass
@@ -138,14 +144,21 @@ class Tools:
 
             # set text file config values
             print(Colors.block + "Setting configuration values.\n\n" + Colors.reset)
-            for x in content:
-                data = x.split("=")
-                file_value = data[1]
-                if data[1].isdigit():
-                    file_value = int(data[1])
+            for string in content:
+                key, value = string.split("=")
 
-                setattr(Config, data[0], file_value)
-                print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+                if value.isdigit():
+                    # convert str into int
+                    value = int(value)
+                elif value.isalnum() or symbols.search(value):
+                    # not needed but don't pass an alphanumeric to json.loads()
+                    value = str(value)
+                else:
+                    # load string lists as lists
+                    value = json.loads(value)
+
+                setattr(Config, key, value)
+                print(f"[{count}] Added config = {key} with value = {value}\n")
                 count += 1
 
         else:
@@ -171,15 +184,14 @@ class Tools:
 tools = Tools()
 hosttype = HostType()
 
+
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
 
 
+# don't change this
 # default import
 from main.userbot.client import app
 bot = app.bot
 from main.core.filters import gen, regex
-
-
-
