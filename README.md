@@ -22,7 +22,7 @@
 <details>
     <summary><b>• About</b></summary>
 
-<br></br>
+<br />
 **This is a telegram userbot which is written in pure python language and it is based on Dan's** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
 
 **Now let's understand what is a userbot ?**
@@ -73,7 +73,7 @@ and get its bot token
 <details>
     <summary><b>• Deployment ( 2 methods )</b></summary>
 
-<br></br>
+<br />
 
 <b>1. Deploy on Heroku</b>
 
@@ -81,7 +81,7 @@ and get its bot token
 
 ---
 
-<br></br>
+<br />
 
 <b>2. Deploy on Local Machine</b>
 
@@ -130,28 +130,28 @@ and get its bot token
 
 <b>Note:</b> You have to add keys & values in config.txt file same as given below 👇
 
-```API_ID=1234567```
-```API_HASH=ad2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kbopz```
+```API_ID=1234567```<br />
+```API_HASH=ad2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kbopz```<br />
 ```SUDO_USERS=[1252773, 7737382, 1721726]```
 
 <p>🎉 Done, Have fun using tronuserbot.</p>
 
 ---
 
-<br></br>
+<br />
 </details>
 
 <details>
 <summary><b>• Session ( 2 methods )</b></summary>
 
-<br></br>
+<br />
 <b>1. Repl method</b>
 
 [![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20Here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot?v=1)
 
 ---
 
-<br></br>
+<br />
 
 <b>2. Termux method</b>
 
@@ -161,12 +161,11 @@ and get its bot token
 
 ---
 
-<br></br>
+<br />
 </details>
 
 <b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens.
 
-<br></br>
+<br />
 
 • MADE WITH 🎉 BY [࿇•ẞᗴᗩSԵ•࿇](https://t.me/beastzx)
-
