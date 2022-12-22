@@ -47,7 +47,7 @@ AFK.__table__.create(checkfirst=True)
 
 class AFKSQL(object):
     """ AMC -> Afk Modification Class """
-    def set_afk(afk, reason, afktime):
+    def set_afk(self, afk, reason, afktime):
         global MY_AFK
         afk_db = SESSION.query(AFK).get(str(0))
         if afk_db:
@@ -58,7 +58,7 @@ class AFKSQL(object):
         MY_AFK[0] = {"afk": afk, "reason": reason, "afktime": afktime}
 
 
-    def get_afk():
+    def get_afk(self):
         return MY_AFK.get(0)
 
 
