@@ -42,6 +42,11 @@ class OtherConfig(object):
         return sudo_users_list or self.SUDO_USERS or []
 
 
+    def AllUsersId(self):
+       """ Returns owner id & sudo users id as a list """
+       return [self.id] + self.SudoUsersList()
+
+
     def Trigger(self):
         """ Get list of prefixes (command handlers) """
         trigger = self.getdv("TRIGGER")
