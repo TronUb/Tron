@@ -165,7 +165,7 @@ async def nekopic_handler(_, m: Message):
 @app.on_message(
     gen(
         commands="animegif",
-        max_args=1
+        argcount=1
     )
 )
 async def animegif_handler(_, m: Message):
