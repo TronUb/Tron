@@ -35,7 +35,7 @@ INSERTION_LOCK = threading.RLock()
 
 class WELCOMESQL(object):
     """ setwelcome, getwelcome, delwelcome, get_welcome_ids """
-    def set_welcome(chat_id, file_id, text=None):
+    def set_welcome(self, chat_id, file_id, text=None):
         with INSERTION_LOCK:
             it_exists = SESSION.query(WELCOME).get(chat_id)
             try:
@@ -49,7 +49,7 @@ class WELCOMESQL(object):
         return (chat_id, file_id, text)
 
 
-    def del_welcome(chat_id):
+    def del_welcome(self, chat_id):
         with INSERTION_LOCK:
             it_exists = SESSION.query(WELCOME).get(chat_id)
             try:
@@ -64,7 +64,7 @@ class WELCOMESQL(object):
                 return False
 
 
-    def get_welcome(chat_id):
+    def get_welcome(self, chat_id):
         it_exists = SESSION.query(WELCOME).get(chat_id)
         rep = None
         repx = None
@@ -75,7 +75,7 @@ class WELCOMESQL(object):
         return {"file_id" : rep, "caption" : repx}
 
 
-    def get_welcome_ids():
+    def get_welcome_ids(self):
         chat_ids = []
         all_welcome = SESSION.query(WELCOME).distinct().all()
         for x in all_welcome:
