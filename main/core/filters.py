@@ -103,12 +103,12 @@ async def is_reply(client, message, reply, reply_type):
 
 
 # gen arguments count checker
-async def max_argcount(client, message, max_args):
-    if max_args == 0:
+async def max_argcount(client, message, argc):
+    if argc <= 0:
         return True
 
     try:
-        message.text.split()[max_args]
+        message.text.split()[argc]
     except IndexError:
         await client.send_edit(
             "Give me more arguments . . .",
@@ -130,7 +130,7 @@ def gen(
     exclude: list = [],
     reply: bool = False,
     reply_type: str = None,
-    max_args: int = 0
+    argcount: int = 0
     ):
 
     """
@@ -143,7 +143,7 @@ def gen(
            exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
            reply: True | False
            reply_type: message type (video, audio, etc)
-           max_args: int (default = 0)
+           argcount: int (default = 0)
     """
     async def func(flt, client: Client, message: Message):
 
@@ -178,7 +178,7 @@ def gen(
                                 return False
 
                             # max argument count condition
-                            if not await max_argcount(client, message, max_args):
+                            if not await max_argcount(client, message, argcount):
                                 return False
 
                             return True
@@ -228,7 +228,7 @@ def gen(
                                 return False
 
                             # max argument count condition
-                            if not await max_argcount(client, message, max_args):
+                            if not await max_argcount(client, message, argcount):
                                 return False
 
                             return True
@@ -243,7 +243,7 @@ def gen(
                         return False
 
                     # max argument count condition 
-                    if not await max_argcount(client, message, max_args):
+                    if not await max_argcount(client, message, argcount):
                         return False
 
                     return True
