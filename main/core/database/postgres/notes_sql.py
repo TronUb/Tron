@@ -46,7 +46,7 @@ SELF_NOTES = {}
 
 class NOTESSQL(object):
     # save a note
-    def save_selfnote(user_id, note_name, note_data, msgtype, file=None, file_ref=None, message_id=0):
+    def save_selfnote(self, user_id, note_name, note_data, msgtype, file=None, file_ref=None, message_id=0):
         global SELF_NOTES
         with INSERTION_LOCK:
             prev = SESSION.query(NOTES).get((user_id, note_name))
@@ -62,14 +62,14 @@ class NOTESSQL(object):
 
 
     # get a saved note
-    def get_selfnote(user_id, note_name):
+    def get_selfnote(self, user_id, note_name):
         if not SELF_NOTES.get(user_id):
             SELF_NOTES[user_id] = {}
         return SELF_NOTES[user_id].get(note_name)
 
 
     # get list of saved notes
-    def get_all_selfnotes(user_id):
+    def get_all_selfnotes(self, user_id):
         if not SELF_NOTES.get(user_id):
             SELF_NOTES[user_id] = {}
             return None
@@ -79,7 +79,7 @@ class NOTESSQL(object):
 
 
     # get all saved notes with inline buttons
-    def get_all_selfnote_inline(user_id):
+    def get_all_selfnote_inline(self, user_id):
         if not SELF_NOTES.get(user_id):
             SELF_NOTES[user_id] = {}
             return None
@@ -93,7 +93,7 @@ class NOTESSQL(object):
 
 
     # remove a saved note
-    def rm_selfnote(user_id, note_name):
+    def rm_selfnote(self, user_id, note_name):
         global SELF_NOTES
         with INSERTION_LOCK:
             note = SESSION.query(NOTES).get((user_id, note_name))
