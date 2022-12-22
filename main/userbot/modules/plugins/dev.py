@@ -35,13 +35,6 @@ async def evaluate_handler(_, m: Message):
 
     try:
 
-        if app.textlen() > 4096:
-            return await app.send_edit(
-                "Your message is too long ! only 4096 characters are excludeed",
-                text_type=["mono"],
-                delme=3
-            )
-
         if app.long() == 1:
             return await app.send_edit(
                 "Give me some text (code) to execute . . .",
@@ -73,13 +66,13 @@ async def evaluate_handler(_, m: Message):
         sys.stdout = old_stdout
         sys.stderr = old_stderr
         evaluation = exc or stderr or stdout or "Success"
-        final_output = f"**• COMMAND:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
+        final_output = f"**• PROGRAM:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
 
         if len(final_output) > 4096:
             await app.create_file(
                 filename="eval_output.txt",
                 content=str(final_output),
-                caption=f"`{m.text}`"
+                caption=f"`{cmd}`"
             )
             await msg.delete()
         else:
@@ -98,22 +91,16 @@ async def terminal_handler(_, m: Message):
         if app.long() == 1:
             return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
-        if app.textlen() > 4096:
-            return await app.send_edit(
-                "Your message is too long ! only 4096 characters are excludeed",
-                text_type=["mono"],
-                delme=4
-            )
-
         await app.send_edit("Running in shell . . .", text_type=["mono"])
-        text = m.text.split(None, 1)
-        cmd = text[1]
+        text = m.sudo_message.text if getattr(m, "sudo_message", None) else m.text
+        pattern = """ (?=(?:[^'"]|'[^']*'|"[^"]*")*$)"""
+        cmd = m.text.split(None, 1)[1]
 
         if "\n" in cmd:
             code = cmd.split("\n")
             output = ""
-            for x in code:
-                shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", x)
+            for command in code:
+                shell = re.split(pattern, command)
                 try:
                     process = subprocess.Popen(
                         shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -125,9 +112,10 @@ async def terminal_handler(_, m: Message):
                 output += process.stdout.read()[:-1].decode("utf-8")
                 output += "\n"
         else:
-            shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", cmd)
+            shell = re.split(pattern, cmd)
             for y in range(len(shell)):
                 shell[y] = shell[y].replace('"', "")
+
             try:
                 process = subprocess.Popen(
                     shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -137,7 +125,7 @@ async def terminal_handler(_, m: Message):
                 errors = traceback.format_exception(
                     etype=exc_type, value=exc_obj, tb=exc_tb
                 )
-                return await app.send_edit(f"**Error:**\n`{''.join(errors)}`")
+                return await app.send_edit(f"**Error:**\n\n`{''.join(errors)}`")
 
             output = process.stdout.read()[:-1].decode("utf-8")
         if str(output) == "\n":
@@ -148,11 +136,11 @@ async def terminal_handler(_, m: Message):
                 await app.create_file(
                     filename="term_output.txt",
                     content=output,
-                    caption=f"`{m.text}`"
+                    caption=f"`{cmd}`"
                 )
             else:
-                await app.send_edit(f"**COMMAND:**\n\n{m.text}\n\n\n**OUTPUT:**\n\n`{output}`")
+                await app.send_edit(f"**COMMAND:**\n\n`{cmd}`\n\n\n**OUTPUT:**\n\n`{output}`")
         else:
-            await app.send_edit("**OUTPUT:**\n\n`No Output`")
+            await app.send_edit(f"**COMMAND:**\n\n`{cmd}`\n\n\n**OUTPUT:**\n\n`No Output`")
     except Exception as e:
         await app.error(e)
