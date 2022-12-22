@@ -64,7 +64,7 @@ INSERTION_LOCK = threading.RLock()
 
 class PMPERMITSQL(object):
     # add message id of a user
-    def set_msgid(self, user_id, msg_id):
+    def set_msgid(user_id, msg_id):
         with INSERTION_LOCK:
             try:
                 user = SESSION.query(MSGID).get(user_id)
@@ -78,7 +78,7 @@ class PMPERMITSQL(object):
                 SESSION.close()
 
     # get warn message id
-    def get_msgid(self, user_id):
+    def get_msgid(user_id):
         try:
             user = SESSION.query(MSGID).get(user_id)
             msg_id = None
@@ -90,7 +90,7 @@ class PMPERMITSQL(object):
 
 
     # add user id to whitelist 
-    def set_whitelist(self, user_id, boolvalue):
+    def set_whitelist(user_id, boolvalue):
         with INSERTION_LOCK:
             user = SESSION.query(PMTABLE).get(user_id)
             try:
@@ -106,7 +106,7 @@ class PMPERMITSQL(object):
 
 
     # remove user id from whitelist
-    def del_whitelist(self, user_id):
+    def del_whitelist(user_id):
         with INSERTION_LOCK:
             user = SESSION.query(PMTABLE).get(user_id)
             try:
@@ -119,7 +119,7 @@ class PMPERMITSQL(object):
 
 
     # get whitelist (approved)
-    def get_whitelist(self, user_id):
+    def get_whitelist(user_id):
         user = SESSION.query(PMTABLE).get(user_id)
         rep = ""
         if user:
@@ -129,7 +129,7 @@ class PMPERMITSQL(object):
 
 
     # warn table func
-    def set_warn(self, user_id, warn_count):
+    def set_warn(user_id, warn_count):
         with INSERTION_LOCK:
             try:
                 user = SESSION.query(DISAPPROVE).get(user_id)
@@ -144,7 +144,7 @@ class PMPERMITSQL(object):
 
 
     # get warn func
-    def get_warn(self, user_id):
+    def get_warn(user_id):
         user = SESSION.query(DISAPPROVE).get(user_id)
         rep = ""
         if user:
@@ -154,7 +154,7 @@ class PMPERMITSQL(object):
 
 
     # del warn func
-    def del_warn(self, user_id):
+    def del_warn(user_id):
         with INSERTION_LOCK:
             user = SESSION.query(DISAPPROVE).get(user_id)
             try:
