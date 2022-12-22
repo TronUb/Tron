@@ -40,7 +40,7 @@ def ResizeImage(path: str, size: tuple=(320, 320)):
 @app.on_message(
     gen(
         "ytsearch",
-        max_args=1
+        argcount=1
     )
 )
 async def ytsearch_handler(_, m: Message):
