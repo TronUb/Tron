@@ -39,13 +39,9 @@ async def create_articles():
 
 
 # via bot messages
-@app.bot.on_inline_query()
+@app.bot.on_inline_query(filters.user(app.id))
 async def inline_result(_, inline_query):
     query = inline_query.query
-    ids = app.SudoUsersList() + [app.id]
-    if not inline_query.from_user.id in ids:
-        return 
-  
     if query.startswith("#pmpermit"):
         await inline_query.answer(
         results=[

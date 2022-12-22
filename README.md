@@ -9,7 +9,7 @@
 [![Pylint](https://github.com/TronUb/Tron/actions/workflows/pylint.yml/badge.svg)](https://github.com/TronUb/Tron/actions/workflows/pylint.yml)
 ![Repo Size](https://img.shields.io/github/repo-size/TronUb/Tron)
 ![License](https://img.shields.io/github/license/TronUb/Tron)
-![Python Version](https://img.shields.io/badge/python-3.x.x-aqua)
+![Python Version](https://img.shields.io/badge/python-3.10.5-aqua)
 ![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 ![Maintained](https://img.shields.io/badge/Maintained%20%3F-Yes-orange)
 ![Files](https://img.shields.io/github/directory-file-count/TronUb/Tron?label=repo%20files)
@@ -22,7 +22,7 @@
 <details>
     <summary><b>• About</b></summary>
 
-<br />
+<br></br>
 **This is a telegram userbot which is written in pure python language and it is based on Dan's** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
 
 **Now let's understand what is a userbot ?**
@@ -73,7 +73,7 @@ and get its bot token
 <details>
     <summary><b>• Deployment ( 2 methods )</b></summary>
 
-<br />
+<br></br>
 
 <b>1. Deploy on Heroku</b>
 
@@ -81,77 +81,48 @@ and get its bot token
 
 ---
 
-<br />
+<br></br>
 
-<b>2. Deploy on Local Machine</b>
+<b>2. Deploy on Termux</b>
 
+1. Install ubuntu in termux ~ ```curl https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/repo-fix.sh > repo.sh && chmod +x repo.sh && bash repo.sh && pkg update -y && pkg install wget curl proot tar -y && wget https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Installer/Ubuntu20/ubuntu20.sh -O ubuntu20.sh && chmod +x ubuntu20.sh && bash ubuntu20.sh```
 
-• Windows: 
+2. start ubuntu ~ ```start-ubuntu20.sh```
 
-1. Install python ```winget install -e --id Python.Python.3.10```
+3. Install git & nano ~ ```apt-get install git nano```
 
-2. Create virtual environment ```python -m venv tronuserbot```
+4. clone repo ~ ```git clone https://github.com/TronUb/Tron.git```
 
-3. Activate the virtual environment ```tronuserbot/Scripts/activate```
+5. change directory ~ ```cd Tron```
 
-4. Go to home path ```cd```
+6. create & fill all configs details in config file ~ ```nano config.txt``` 
 
-5. Install git ```winget install -e --id Git.Git```
-
-6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
-
-7. change directory ```cd Tron```
-
-8. Start the tronuserbot installation setup ```python -m main```
+7. ```bash start.sh``` or ```./start.sh```
 
 
-• Linux: 
+<b>Note:</b> you have to add key & values in config.txt file same as given below 👇
 
-1. Update and upgrade ```apt-get update && apt-get upgrade```
-
-2. Install python ```apt-get install python```
-
-3. Create python virtual environment ```python -m venv tronuserbot```
-
-4. Activate python virtual environment ```source tronuserbot/bin/activate```
-
-5. Install git ```apt-get install git```
-
-6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
-
-7. Change directory ```cd Tron```
-
-8. Paste your keys and values in config.text file ```nano config.text```
-
-9. After pasting all of your information, use <b>Ctrl + X</b> and enter <b>Y</b> and again hit enter button.
-
-10. Start the tronuserbot installation setup ```python -m main```
-
-
-<b>Note:</b> You have to add keys & values in config.txt file same as given below 👇
-
-```API_ID=1234567```<br />
-```API_HASH=ad2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kbopz```<br />
-```SUDO_USERS=[1252773, 7737382, 1721726]```
+```API_ID=1234567```
+```API_HASH=a2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kblops```
 
 <p>🎉 Done, Have fun using tronuserbot.</p>
 
 ---
 
-<br />
+<br></br>
 </details>
 
 <details>
 <summary><b>• Session ( 2 methods )</b></summary>
 
-<br />
+<br></br>
 <b>1. Repl method</b>
 
 [![Repl.it](https://img.shields.io/badge/REPL%20RUN-Click%20Here-aqua.svg)](https://replit.com/@beastzx18/Tron-Userbot?v=1)
 
 ---
 
-<br />
+<br></br>
 
 <b>2. Termux method</b>
 
@@ -161,11 +132,12 @@ and get its bot token
 
 ---
 
-<br />
+<br></br>
 </details>
 
 <b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens.
 
-<br />
+<br></br>
 
 • MADE WITH 🎉 BY [࿇•ẞᗴᗩSԵ•࿇](https://t.me/beastzx)
+
