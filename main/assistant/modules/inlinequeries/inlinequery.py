@@ -39,7 +39,7 @@ async def create_articles():
 
 
 # via bot messages
-@app.bot.on_inline_query(filters.user(app.id))
+@app.bot.on_inline_query(filters.user(app.AllUsersId()))
 async def inline_result(_, inline_query):
     query = inline_query.query
     if query.startswith("#pmpermit"):
