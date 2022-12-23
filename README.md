@@ -12,7 +12,6 @@
 ![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 ![Maintained](https://img.shields.io/badge/Maintained%20%3F-Yes-orange)
 ![Files](https://img.shields.io/github/directory-file-count/TronUb/Tron?label=repo%20files)
-![Downloads](https://img.shields.io/github/downloads/TronUb/Tron/total)
 ![Commit since](https://img.shields.io/github/commits-since/TronUb/Tron/0.0.1/master)
 
 
