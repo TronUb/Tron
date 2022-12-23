@@ -1,5 +1,5 @@
 import os
-from main.colors import Colors
+from main.others import Colors
 
 
 try:
