@@ -17,7 +17,7 @@ from pyrogram.errors import (
     ChannelInvalid
 )
 from main.userbot import app
-from main.core.colors import Colors
+from main.others import Colors
 
 
 
