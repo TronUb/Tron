@@ -34,7 +34,7 @@ async def _start(_, cb: CallbackQuery):
                         ["• Stats •", "stats-tab"]
                     )
                 ),
-                app.BuildKeyboard(([["About", "about-tab"]])),
+                app.BuildKeyboard(([["Assistant", "assistant-tab"]])),
                 app.BuildKeyboard(([["Close", "close-tab"]]))
         ]
         ),
