@@ -5,7 +5,7 @@ import socket
 import platform
 import subprocess
 import pkg_resources
-from main.core.colors import Colors
+from main.others import Colors
 from config import Configuration
 
 
