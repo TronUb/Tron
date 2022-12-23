@@ -1,4 +1,5 @@
-from main.core.classes.classmanager import ClassManager
+from .classes.classmanager import ClassManager
+from .filters import gen, regex
 
 
 
