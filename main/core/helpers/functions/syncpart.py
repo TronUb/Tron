@@ -20,7 +20,7 @@ from pyrogram.errors import BotMethodInvalid
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-from main.colors import Colors
+from main.others import Colors
 
 from PIL import Image
 import heroku3
