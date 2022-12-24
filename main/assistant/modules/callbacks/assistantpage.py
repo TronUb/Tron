@@ -21,9 +21,8 @@ from main.userbot.client import app
 @app.alert_user
 async def _assistant(_, cb: CallbackQuery):
     await cb.edit_message_media(
-        media=InputMediaVideo(
-            media="main/core/resources/videos/nora.gif",
-            thumb="main/core/resources/images/nora.png",
+        media=InputMediaPhoto(
+            media="main/core/resources/videos/nora.png",
             caption=app.assistant_tab_string()
         ),
         reply_markup=InlineKeyboardMarkup(
