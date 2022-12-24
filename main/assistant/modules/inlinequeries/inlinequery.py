@@ -12,7 +12,6 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineQueryResultArticle,
     InlineQueryResultPhoto,
-    InlineQueryResultVideo,
     InputTextMessageContent,
 )
 
@@ -66,7 +65,7 @@ async def inline_result(_, inline_query):
 
         await inline_query.answer(
         results=[
-            InlineQueryResultVideo(
+            InlineQueryResultPhoto(
                 photo_url=app.BotPic(),
                 title="Tron Inline helpdex menu",
                 description="Get your inline helpdex menu.",
