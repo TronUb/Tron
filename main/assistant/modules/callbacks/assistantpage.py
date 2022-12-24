@@ -22,7 +22,7 @@ from main.userbot.client import app
 async def _assistant(_, cb: CallbackQuery):
     await cb.edit_message_media(
         media=InputMediaVideo(
-            media="main/core/resources/videos/nora.mp4",
+            media="main/core/resources/videos/nora.gif",
             thumb="main/core/resources/images/nora.png",
             caption=app.assistant_tab_string()
         ),
