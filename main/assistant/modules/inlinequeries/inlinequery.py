@@ -12,6 +12,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineQueryResultArticle,
     InlineQueryResultPhoto,
+    InlineQueryResultVideo,
     InputTextMessageContent,
 )
 
