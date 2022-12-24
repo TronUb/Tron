@@ -7,6 +7,7 @@ from pyrogram import filters
 from pyrogram.types import (
 	InlineKeyboardMarkup,
 	InputMediaPhoto,
+        InputMediaVideo,
 	CallbackQuery
 )
 
@@ -20,8 +21,9 @@ from main.userbot.client import app
 @app.alert_user
 async def _assistant(_, cb: CallbackQuery):
     await cb.edit_message_media(
-        media=InputMediaPhoto(
-            media="main/core/resources/images/nora.png", 
+        media=InputMediaVideo(
+            media="main/core/resources/videos/nora.mp4",
+            thumb="main/core/resources/images/nora.png",
             caption=app.assistant_tab_string()
         ),
         reply_markup=InlineKeyboardMarkup(
