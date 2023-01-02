@@ -1,7 +1,7 @@
-from configs import Configs
-from containers import Containers
-from database import Database
-from decorators import Decorators
+from .configs import Configs
+from .containers import Containers
+from .database import Database
+from .decorators import Decorators
 
 
 
