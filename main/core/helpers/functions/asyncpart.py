@@ -408,28 +408,32 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
+
         try:
             try:
-                msg = None
+                r = None
 
                 if len(text) > 4096:
-                    return await self.send_edit(
+                    r = await self.send_edit(
                         "Message text is too long.",
                         text_type=["mono"],
                         delme=3
                     )
 
-                msg = await self.m.edit(
-                    text=self.FormatText(text, textformat=text_type),
-                    parse_mode=parse_mode,
-                    disable_web_page_preview=disable_web_page_preview,
-                    reply_markup=reply_markup,
-                    entities=entities
-                )
+                else:
+                    r = await msg.edit(
+                        text=self.FormatText(text, textformat=text_type),
+                        parse_mode=parse_mode,
+                        disable_web_page_preview=disable_web_page_preview,
+                        reply_markup=reply_markup,
+                        entities=entities
+                    )
             except (MessageAuthorRequired, MessageIdInvalid, Exception) as e:
                 print(e)
-                msg = await self.send_message(
-                    chat_id=self.m.chat.id,
+                r = await self.send_message(
+                    chat_id=msg.chat.id,
                     text=self.FormatText(text, textformat=text_type),
                     disable_web_page_preview=disable_web_page_preview,
                     disable_notification=disable_notification,
@@ -452,7 +456,7 @@ class AsyncPart(object):
         except Exception as e:
             await self.error(e)
 
-        return msg
+        return r
 
 
     async def check_private(
