@@ -10,10 +10,7 @@ from main.core.methods import Methods
 
 
 
-
-
-
-class ClassManager(Methods):
+class ClassManager(Config, Methods):
     # versions /
     python_version = str(platform.python_version())
     pyrogram_version = str(pyrogram_version)
