@@ -92,7 +92,8 @@ class AsyncPart(object):
         """
         
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
 
         r = (await self.invoke(
                 functions.channels.GetParticipant(
@@ -123,7 +124,8 @@ class AsyncPart(object):
         Check if the message is a reply to another user.
         """
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
         try:
             return message.reply_to_message or msg.reply_to_message
         except Exception as e:
@@ -229,7 +231,8 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
 
         globals().update({
             "app":self,
@@ -266,7 +269,8 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
 
         teks = "**Traceback Report:**\n\n"
         teks += f"**Date:** `{self.showdate()}`\n"
@@ -322,7 +326,8 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("msg")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
 
         r = None
         await asyncio.sleep(sec)
@@ -427,7 +432,8 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
 
         try:
             try:
@@ -493,7 +499,8 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        args = frame.f_code.co_varnames
+        msg = frame.f_locals.get(args[1])
         if msg.chat.type == ChatType.PRIVATE:
             await self.send_edit(
                 "Please use these commands in groups.",
@@ -526,7 +533,8 @@ class AsyncPart(object):
 
         try:
             frame = inspect.currentframe().f_back
-            msg = frame.f_locals.get("m")
+            args = frame.f_code.co_varnames
+            msg = frame.f_locals.get(args[1])
             path = f"./downloads/{filename}"
             file = open(path, "w+")
             file.write(content)

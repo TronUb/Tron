@@ -10,3 +10,5 @@ class UserType(AutoName):
     SUDO = auto()
 
     OTHER = auto()
+
+    ALL = auto()
