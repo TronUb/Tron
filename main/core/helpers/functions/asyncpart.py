@@ -3,6 +3,7 @@ import math
 import json
 import random
 import asyncio
+import inspect
 import traceback
 import datetime
 
@@ -90,7 +91,8 @@ class AsyncPart(object):
             11. other
         """
         
-        msg = self.f_locals.get("m")
+               frame = inspect.currentframe().f_back
+               msg = frame.f_locals.get("m")
 
         r = (await self.invoke(
                 functions.channels.GetParticipant(
@@ -120,7 +122,8 @@ class AsyncPart(object):
         """
         Check if the message is a reply to another user.
         """
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
         try:
             return message.reply_to_message or msg.reply_to_message
         except Exception as e:
@@ -225,7 +228,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
 
         globals().update({
             "app":self,
@@ -261,7 +265,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
 
         teks = "**Traceback Report:**\n\n"
         teks += f"**Date:** `{self.showdate()}`\n"
@@ -316,7 +321,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
 
         r = None
         await asyncio.sleep(sec)
@@ -420,7 +426,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
 
         try:
             try:
@@ -486,7 +493,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = self.f_locals.get("m")
+        frame = inspect.currentframe().f_back
+        msg = frame.f_locals.get("m")
         if msg.chat.type == ChatType.PRIVATE:
             await self.send_edit(
                 "Please use these commands in groups.",
@@ -518,7 +526,8 @@ class AsyncPart(object):
         """
 
         try:
-            msg = self.f_locals.get("m")
+            frame = inspect.currentframe().f_back
+            msg = frame.f_locals.get("m")
             path = f"./downloads/{filename}"
             file = open(path, "w+")
             file.write(content)
