@@ -322,7 +322,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        msg = frame.f_locals.get("msg")
 
         r = None
         await asyncio.sleep(sec)
