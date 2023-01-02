@@ -2,21 +2,18 @@ import time
 import logging
 import platform
 
-import pyrogram
 from requests.exceptions import ConnectionError
 from main import Config
 from telegraph import Telegraph
 from pyrogram import __version__ as pyrogram_version
-from main.core.database import Database
-from main.core.helpers import Helpers
-from main.core.newpyrogram import Methods
+from main.core.methods import Methods
 
 
 
 
 
 
-class ClassManager(Config, Helpers, Database, Methods):
+class ClassManager(Methods):
     # versions /
     python_version = str(platform.python_version())
     pyrogram_version = str(pyrogram_version)

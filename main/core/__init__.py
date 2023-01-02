@@ -5,4 +5,3 @@ from .filters import gen, regex
 
 class Core(ClassManager):
     pass
-    
