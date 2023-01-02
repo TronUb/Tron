@@ -1,6 +1,7 @@
 """ userbot client module """
 
 import os
+import inspect
 from pyrogram import Client
 from main.assistant.client import Bot
 from main.core import Core
@@ -38,3 +39,14 @@ class SuperClient(Core, Client):
         self.bot = Bot()
         self.dispatcher = Dispatcher(self)
         self.__class__.__module__ = "pyrogram.client"
+
+    @property
+    def f_locals(self):
+        try:
+            frame = inspect.currentframe().f_back
+            return frame.f_locals
+        except Exception as e:
+            print(e)
+            return None
+        finally:
+            del frame # view inspect module

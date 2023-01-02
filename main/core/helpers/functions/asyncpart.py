@@ -3,7 +3,6 @@ import math
 import json
 import random
 import asyncio
-import inspect
 import traceback
 import datetime
 
@@ -90,13 +89,13 @@ class AsyncPart(object):
             10. manage_call
             11. other
         """
-        if not self.m.from_user:
-            raise Exception("app.m is None in app.IsAdmin method")
+        
+        msg = self.f_locals.get("m")
 
         r = (await self.invoke(
                 functions.channels.GetParticipant(
                     channel=await self.resolve_peer(
-                        chat_id if chat_id else self.m.chat.id
+                        chat_id if chat_id else msg.chat.id
                     ),
                     participant=await self.resolve_peer(
                         user_id if user_id else "self"
@@ -117,11 +116,17 @@ class AsyncPart(object):
         return getattr(r.admin_rights, privileges)
 
 
-    async def IsReply(self, msg: Message):
+    async def IsReply(self, message: Message=None):
         """
         Check if the message is a reply to another user.
         """
-        return msg.reply_to_message if msg else self.m.reply_to_message
+        msg = self.f_locals.get("m")
+        try:
+            return message.reply_to_message or msg.reply_to_message
+        except Exception as e:
+            print(e)
+        finally:
+            del frame
 
 
     async def ProgressForPyrogram(self, current, total, ud_type, message, start):
@@ -220,16 +225,18 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
+        msg = self.f_locals.get("m")
+
         globals().update({
             "app":self,
             "bot":self.bot,
-            "reply":self.m.reply_to_message,
+            "reply":msg.reply_to_message,
         })
         exec(
             "async def __aexec(self, m): "
             + "".join(f"\n {l}" for l in code.split("\n"))
         )
-        return await locals()["__aexec"](self, self.m)
+        return await locals()["__aexec"](self, msg)
 
 
     async def error(
@@ -254,14 +261,16 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
+        msg = self.f_locals.get("m")
+
         teks = "**Traceback Report:**\n\n"
         teks += f"**Date:** `{self.showdate()}`\n"
         teks += f"**Time:** `{self.showtime()}`\n\n"
-        teks += f"**Chat Name:** `{self.m.chat.first_name or self.m.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{str(self.m.chat.type).lower()}`\n\n"
-        teks += f"**Message Owner:** `{self.m.owner}`\n\n"
+        teks += f"**Chat Name:** `{msg.chat.first_name or msg.chat.title}`\n\n"
+        teks += f"**Chat Type:** `{str(msg.chat.type).lower()}`\n\n"
+        teks += f"**Message Owner:** `{msg.owner}`\n\n"
         teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
-        teks += f"**Message:** `{self.m.text}`\n\n"
+        teks += f"**Message:** `{msg.text}`\n\n"
         teks += "`-`" * 30 + "\n\n"
         teks += f"**SHORT:** \n\n`{e}`\n\n"
         teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
@@ -307,11 +316,13 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        msg = None
+        msg = self.f_locals.get("m")
+
+        r = None
         await asyncio.sleep(sec)
         if delmsg:
-            msg = await self.m.delete()
-        return msg
+            r = await msg.delete()
+        return r
 
 
     async def delete_message(
@@ -409,8 +420,7 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        frame = inspect.currentframe().f_back
-        msg = frame.f_locals.get("m")
+        msg = self.f_locals.get("m")
 
         try:
             try:
@@ -476,7 +486,8 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        if self.m.chat.type == ChatType.PRIVATE:
+        msg = self.f_locals.get("m")
+        if msg.chat.type == ChatType.PRIVATE:
             await self.send_edit(
                 "Please use these commands in groups.",
                 text_type=["mono"],
@@ -507,13 +518,14 @@ class AsyncPart(object):
         """
 
         try:
+            msg = self.f_locals.get("m")
             path = f"./downloads/{filename}"
             file = open(path, "w+")
             file.write(content)
             file.close()
             if send:
                 await self.send_document(
-                    self.m.chat.id,
+                    msg.chat.id,
                     path,
                     caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
                 )
@@ -717,7 +729,7 @@ class AsyncPart(object):
                     raise Exception("User is already in group")
 
                 r = await self.add_users(chat_id, user_id)
-                return True if r else None
+                return r
             else:
                 raise Exception("Bot client is not available")
         except Exception as e:
