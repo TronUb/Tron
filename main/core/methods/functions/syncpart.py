@@ -93,8 +93,9 @@ class SyncPart(Types):
 
 
     def long(
-        self
-        length=0):
+        self,
+        length: int=0
+        ):
         """
         params:
             None
