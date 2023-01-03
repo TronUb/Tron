@@ -673,7 +673,7 @@ class AsyncPart(object):
             await self.error(err)
 
 
-    async def add_users(
+    async def abh(
         self,
         chat_id: Union[int, str],
         user_id: Union[int, str, List[int], List[str]]
