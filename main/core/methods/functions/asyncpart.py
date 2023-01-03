@@ -92,13 +92,12 @@ class AsyncPart(object):
         """
         
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
 
         r = (await self.invoke(
                 functions.channels.GetParticipant(
                     channel=await self.resolve_peer(
-                        chat_id if chat_id else msg.chat.id
+                        chat_id if chat_id else m.chat.id
                     ),
                     participant=await self.resolve_peer(
                         user_id if user_id else "self"
@@ -124,10 +123,9 @@ class AsyncPart(object):
         Check if the message is a reply to another user.
         """
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
         try:
-            return message.reply_to_message or msg.reply_to_message
+            return message.reply_to_message or m.reply_to_message
         except Exception as e:
             print(e)
         finally:
@@ -231,19 +229,18 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
 
         globals().update({
             "app":self,
             "bot":self.bot,
-            "reply":msg.reply_to_message,
+            "reply":m.reply_to_message,
         })
         exec(
             "async def __aexec(self, m): "
             + "".join(f"\n {l}" for l in code.split("\n"))
         )
-        return await locals()["__aexec"](self, msg)
+        return await locals()["__aexec"](self, m)
 
 
     async def error(
@@ -269,20 +266,20 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
+        full_traceback = traceback.format_exc()
 
         teks = "**Traceback Report:**\n\n"
         teks += f"**Date:** `{self.showdate()}`\n"
         teks += f"**Time:** `{self.showtime()}`\n\n"
-        teks += f"**Chat Name:** `{msg.chat.first_name or msg.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{str(msg.chat.type).lower()}`\n\n"
-        teks += f"**Message Owner:** `{msg.owner}`\n\n"
+        teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
+        teks += f"**Chat Type:** `{str(m.chat.type).lower()}`\n\n"
+        teks += f"**Message Owner:** `{m.owner}`\n\n"
         teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
-        teks += f"**Message:** `{msg.text}`\n\n"
+        teks += f"**Message:** `{m.text}`\n\n"
         teks += "`-`" * 30 + "\n\n"
         teks += f"**SHORT:** \n\n`{e}`\n\n"
-        teks += f"**FULL:** \n\n`{traceback.format_exc()}`"
+        teks += f"**FULL:** \n\n`{full_traceback}`"
 
         try:
             if edit_error:
@@ -296,7 +293,7 @@ class AsyncPart(object):
             else:
                 await self.send_message(self.LOG_CHAT, teks)
 
-            print(e)
+            print(full_traceback)
 
         except PeerIdInvalid:
             self.log.error(teks)
@@ -326,13 +323,12 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
 
         r = None
         await asyncio.sleep(sec)
         if delmsg:
-            r = await msg.delete()
+            r = await m.delete()
         return r
 
 
@@ -432,8 +428,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
+        m = frame.f_locals.get("m")
 
         try:
             try:
@@ -457,7 +452,7 @@ class AsyncPart(object):
             except (MessageAuthorRequired, MessageIdInvalid, Exception) as e:
                 print(e)
                 r = await self.send_message(
-                    chat_id=msg.chat.id,
+                    chat_id=m.chat.id,
                     text=self.FormatText(text, textformat=text_type),
                     disable_web_page_preview=disable_web_page_preview,
                     disable_notification=disable_notification,
@@ -479,6 +474,7 @@ class AsyncPart(object):
         except Exception as e:
             await self.error(e)
 
+        frame.f_locals["m"] = r
         return r
 
 
@@ -499,16 +495,16 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        args = frame.f_code.co_varnames
-        msg = frame.f_locals.get(args[1])
-        if msg.chat.type == ChatType.PRIVATE:
+        m = frame.f_locals.get("m")
+    
+        if m.chat.type == ChatType.PRIVATE:
             await self.send_edit(
                 "Please use these commands in groups.",
                 text_type=["mono"],
                 delme=3
             )
             return True
-        return False
+        return None
 
 
     async def create_file(
@@ -533,15 +529,14 @@ class AsyncPart(object):
 
         try:
             frame = inspect.currentframe().f_back
-            args = frame.f_code.co_varnames
-            msg = frame.f_locals.get(args[1])
+            m = frame.f_locals.get("m")
             path = f"./downloads/{filename}"
             file = open(path, "w+")
             file.write(content)
             file.close()
             if send:
                 await self.send_document(
-                    msg.chat.id,
+                    m.chat.id,
                     path,
                     caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
                 )
