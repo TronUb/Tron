@@ -113,7 +113,7 @@ class SyncPart(Types):
 
         frame = inspect.currentframe().f_back
         m = frame.f_locals.get("m")
-        sm = getattr(m, "sudo_message")
+        sm = getattr(m, "sudo_message", None)
 
         if sm and (sm.text or sm.caption):
             return len(sm.text.split() or sm.caption.split() or "") or None
