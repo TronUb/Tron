@@ -436,10 +436,11 @@ class AsyncPart(object):
 
                 if len(text) > 4096:
                     r = await self.send_edit(
-                        "Message text is too long.",
+                        "Message text is too long, Sending as file.",
                         text_type=["mono"],
                         delme=3
                     )
+                    return self.create_file("file.text", text)
 
                 else:
                     r = await msg.edit(
@@ -542,7 +543,8 @@ class AsyncPart(object):
                 )
                 if os.path.exists(path):
                     os.remove(path)
-
+                    
+                return True
             else:
                 return path
         except Exception as e:
