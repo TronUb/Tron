@@ -440,7 +440,7 @@ class AsyncPart(object):
                         text_type=["mono"],
                         delme=3
                     )
-                    return self.create_file("file.text", text)
+                    return await self.create_file("file.text", text)
 
                 else:
                     r = await m.edit(
