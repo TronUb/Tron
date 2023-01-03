@@ -327,7 +327,7 @@ class AsyncPart(object):
 
         r = None
         await asyncio.sleep(sec)
-        if delmsg:
+        if delmsg and m:
             r = await m.delete()
         return r
 
