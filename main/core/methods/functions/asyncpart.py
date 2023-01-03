@@ -443,7 +443,7 @@ class AsyncPart(object):
                     return self.create_file("file.text", text)
 
                 else:
-                    r = await msg.edit(
+                    r = await m.edit(
                         text=self.FormatText(text, textformat=text_type),
                         parse_mode=parse_mode,
                         disable_web_page_preview=disable_web_page_preview,
