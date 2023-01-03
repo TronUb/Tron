@@ -94,7 +94,7 @@ class SyncPart(Types):
 
     def long(
         self
-        ):
+        length=0):
         """
         params:
             None
@@ -109,13 +109,14 @@ class SyncPart(Types):
         if self.is_bot:
             raise BotMethodInvalid
 
-        
-        sm = self.m.sudo_message
+        frame = inspect.currentframe().f_back
+        m = frame.f_locals.get("m")
+        sm = getattr(m, "sudo_message")
 
         if sm and (sm.text or sm.caption):
             return len(sm.text.split() or sm.caption.split() or "") or None
         else:
-            return len(self.m.text.split() or self.m.caption.split() or "") or None
+            return len(m.text.split() or m.caption.split() or "") or None
 
 
     def textlen(
@@ -134,8 +135,11 @@ class SyncPart(Types):
         """
         if self.is_bot:
             raise BotMethodInvalid
+            
+        frame = inspect.currentframe().f_back
+        m = frame.f_locals.get("m")
 
-        return len([x for x in self.m.text or self.m.caption or []])
+        return len([x for x in m.text or m.caption or ""])
 
 
     def rem_dual(
@@ -743,7 +747,10 @@ class SyncPart(Types):
 
 
     def GetArgs(self, message=None):
-        reply = self.m.reply_to_message
+        frame = inspect.currentframe().f_back
+        m = frame.f_locals.get("m")
+
+        reply = m.reply_to_message
 
         if message:
             return message
@@ -752,13 +759,13 @@ class SyncPart(Types):
             setattr(
                 reply,
                 "text",
-                self.m.text.split(None, 1)[0] + " " + reply.text
+                m.text.split(None, 1)[0] + " " + reply.text
             )
             return reply
 
         elif not reply:
             if self.long() > 1:
-                return self.m
+                return m
         return type("argclass", (object,), {"text" : None})()
 
 
