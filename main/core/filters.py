@@ -185,7 +185,7 @@ def gen(
                         message.sudo_message = None
 
                     elif user.type == UserType.SUDO:
-                        if not message.sudo_message.from_user.sudo_type == sudo_type:
+                        if not message.from_user.sudo_type == sudo_type:
                             return False
 
                         new_message = await client.send_message(
