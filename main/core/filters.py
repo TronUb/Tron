@@ -1,4 +1,5 @@
 import re
+import copy
 import inspect
 import traceback
 
@@ -197,12 +198,12 @@ def gen(
                             )
 
                         setattr(new_message.from_user, "type", UserType.OWNER)
-                        setattr(new_message, "sudo_message", message)
+                        setattr(new_message, "sudo_message", copy.copy(message))
 
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
-                        print(message)
+                        print(message.sudo_message)
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
                             return True
