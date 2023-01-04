@@ -195,7 +195,7 @@ def gen(
                     else:
                         return False
 
-                    client.m = client.bot.m = messagelater # remove later
+                    client.m = client.bot.m = message # remove later
 
                     # reply condition
                     if not await is_reply(client, message, reply, reply_type):
