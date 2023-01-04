@@ -11,7 +11,6 @@ from typing import (
 
 from pyrogram.filters import create
 from pyrogram import Client
-from pyrogram.enums import ChatType
 from pyrogram.types import (
     Message, 
     CallbackQuery, 
@@ -19,7 +18,11 @@ from pyrogram.types import (
     Update,
     User
 )
-from main.core.enums import UserType
+from main.core.enums import (
+    UserType,
+    ChatType,
+    SudoType
+)
 
 
 
