@@ -149,7 +149,7 @@ def gen(
             user = getattr(message, "from_user", None)
             sudos = client.SudoUsers()
 
-            if not (text or user or user.type):
+            if text is None:
                 return False
 
             if message.forward_date: # forwarded messages can't be edited
