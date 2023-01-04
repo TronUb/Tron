@@ -1,4 +1,5 @@
 import re
+import inspect
 
 from typing import (
     Union, 
@@ -14,7 +15,9 @@ from pyrogram.types import (
     CallbackQuery, 
     InlineQuery, 
     Update
-)
+)sudos
+from main.core.enums import UserType
+
 
 
 # custom regex filter
@@ -128,36 +131,34 @@ def gen(
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
     exclude: list = [],
-    reply: bool = False,
-    reply_type: str = None,
-    argcount: int = 0
+    reply: bool = None,
+    reply_type: list = None,
+    disable_in: list = None,
+    disable_for: list = None,
+    argcount: int = None
+    **kwargs
     ):
 
-    """
-    modified function of pyrogram.filters.command
-
-    params:
-           commands: single command or list of commands 
-           prefixes: single prefix or list of prefixes
-           case_sensitive: True | False
-           exclude: list of args (supported -> 'sudo', 'group', 'channel', 'bot', 'private')
-           reply: True | False
-           reply_type: message type (video, audio, etc)
-           argcount: int (default = 0)
-    """
     async def func(flt, client: Client, message: Message):
 
         try:
             text = message.text or message.caption or None
             message.command = None
             message.replied = message.reply_to_message
+            user = getattr(message, "from_user", None)
+            sudos = client.SudoUsers()
 
-            if not text:
+            if not (text or user or user.type):
                 return False
 
             if message.forward_date: # forwarded messages can't be edited
                 return False
 
+            if message.chat.id in flt.disable_in:
+                return False
+
+            if user.id in flt.disable_for:
+                return False
 
             flt.prefixes = client.Trigger() or ["."] # workaround
 
@@ -167,76 +168,34 @@ def gen(
 
                 cmd = text.split()[0][1:]
                 if cmd in flt.commands:
-                    user = message.from_user if message.from_user else None
 
-                    if not user:
-                        if message.outgoing: # for channels
-                            client.m = client.bot.m = message
-
-                            # reply condition
-                            if not await is_reply(client, message, reply, reply_type):
-                                return False
-
-                            # max argument count condition
-                            if not await max_argcount(client, message, argcount):
-                                return False
-
-                            return True
-
-                        return False
-
-                    dev_sudos = client.SudoUsers().get("dev")
-                    common_sudos = client.SudoUsers().get("common")
+                    dev_sudos = sudos.get("dev")
+                    common_sudos = sudos.get("common")
                     sudo_users = dev_sudos.union(common_sudos)
-                    message_owner = None
 
-                    if user.is_self:
-                        message.owner = "owner"
-                    elif user.id in sudo_users:
-                        message.owner = "sudo"
+                    if user.type == UserType.OWNER:
+                        message.command = [cmd] + text.split()[1:]
+                    elif user.type == UserType.SUDO:
+                        new_message = await client.send_message(
+                            message.chat.id,
+                            "Hold on . . ."
+                        )
+                        new_message.from_user.type = UserType.OWNER
+                        new_message.sudo_message = message
+                        frame = inspect.currentframe().f_back
+                        frame.f_locals["m"] = new_message
+                        message = new_message
+                        
+                        if not cmd in client.SudoCmds():
+                            return False
+                            
+                        if not client.SudoCmds():
+                            client.m = client.bot.m = message # remove later
+                            return True
                     else:
                         return False
 
-                    message.command = [cmd] + text.split()[1:]
-
-                    if message.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
-                        if "group" in exclude:
-                            return False
-
-                    if message.chat.type == ChatType.CHANNEL:
-                        if "channel" in exclude:
-                            return False
-
-                    if message.chat.type == ChatType.PRIVATE:
-                        if "private" in exclude:
-                            return False
-
-                    if message.chat.type == ChatType.BOT:
-                        if "bot" in exclude:
-                            return False
-
-                    # for sudo users 
-                    if message.owner == "sudo":
-                        if "sudo" in exclude and user.id in common_sudos:
-                            return False
-
-                        if not client.SudoCmds(): # empty list -> full command access to sudo
-                            client.m = client.bot.m = message
-
-                            # reply condition
-                            if not await is_reply(client, message, reply, reply_type):
-                                return False
-
-                            # max argument count condition
-                            if not await max_argcount(client, message, argcount):
-                                return False
-
-                            return True
-
-                        if not cmd in client.SudoCmds():
-                            return False
-
-                    client.m = client.bot.m = message
+                    client.m = client.bot.m = messagelater # remove later
 
                     # reply condition
                     if not await is_reply(client, message, reply, reply_type):
@@ -254,6 +213,14 @@ def gen(
 
     commands = commands if isinstance(commands, list) else [commands]
     commands = {c if case_sensitive else c.lower() for c in commands}
+
+    disable_in = [] if disable_in is None else disable_in
+    disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
+    disable_in = set(disable_in) if disable_in else {""}
+
+    disable_for = [] if disable_for is None else disable_for
+    disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
+    disable_for = set(disable_for) if disable_for else {""}
 
     prefixes = [] if prefixes is None else prefixes
     prefixes = prefixes if isinstance(prefixes, list) else [prefixes]

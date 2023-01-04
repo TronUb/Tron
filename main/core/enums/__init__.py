@@ -15,5 +15,6 @@ from pyrogram.enums import (
     UserStatus
 )
 
-from .usertype import UserType
-from .textype import TextType
+from .user_type import UserType
+from .text_type import TextType
+from .reply_type import ReplyType
