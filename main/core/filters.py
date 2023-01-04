@@ -183,10 +183,24 @@ def gen(
                         )
                         print(new_message)
                         if not hasattr(new_message, "from_user"):
-                            new_message.from_user = None
+                            new_message.from_user = RawType.User(
+                                id=client.id,
+                                is_self=True,
+                                contact=True,
+                                mutual_contact=True,
+                                deleted=False,
+                                bot=False,
+                                verified=False,
+                                scam=False,
+                                fake=False,
+                                support=False,
+                                premium=False,
+                            )
 
                         new_message.from_user.type = UserType.OWNER
                         new_message.sudo_message = message
+
+                        # update the new message
                         frame = inspect.currentframe().f_back
                         frame.f_locals["m"] = new_message
                         message = new_message
