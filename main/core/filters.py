@@ -201,10 +201,7 @@ def gen(
                         setattr(new_message, "sudo_message", message)
 
                         # update new attributes
-                        print("message dict: ", message.__dict__)
-                        print("new message dict: ", new_message.__dict__)
                         message.__dict__ = new_message.__dict__
-                        print("message dict: ", message.__dict__)
 
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
