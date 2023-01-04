@@ -232,4 +232,7 @@ def gen(
         commands=commands,
         prefixes=prefixes,
         case_sensitive=case_sensitive
+        disable_in=disable_in,
+        disable_for=disable_for
+        
     )
