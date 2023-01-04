@@ -15,7 +15,7 @@ from pyrogram.types import (
     CallbackQuery, 
     InlineQuery, 
     Update
-)sudos
+)
 from main.core.enums import UserType
 
 
