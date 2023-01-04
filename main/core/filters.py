@@ -181,6 +181,7 @@ def gen(
                             message.chat.id,
                             "Hold on . . ."
                         )
+                        print(new_message)
                         new_message.from_user.type = UserType.OWNER
                         new_message.sudo_message = message
                         frame = inspect.currentframe().f_back
