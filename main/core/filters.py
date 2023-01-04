@@ -204,14 +204,15 @@ def gen(
                         frame = inspect.currentframe().f_back
                         frame.f_locals["m"] = new_message
                         message = new_message
-                        
-                        if not cmd in client.SudoCmds():
-                            print("cmd is not in sudocmds")
-                            return False
-                            
+
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
                             return True
+
+                        if not cmd in client.SudoCmds():
+                            print("cmd is not in sudocmds") # rem
+                            return False
+
                     else:
                         return False
 
@@ -219,18 +220,18 @@ def gen(
 
                     # reply condition
                     if not await is_reply(client, message, reply, reply_type):
-                        print("its not a reply")
+                        print("its not a reply") # rem
                         return False
 
                     # max argument count condition 
                     if not await max_argcount(client, message, argcount):
-                        print("argcount is less than expected")
+                        print("argcount is less than expected") # rem
                         return False
 
                     return True
 
             return False
-            print("reached end of filters")
+            print("reached end of filters") # rem
         except Exception as e:
             print(traceback.format_exc())
 
