@@ -201,7 +201,7 @@ def gen(
                         new_message.sudo_message = message
 
                         # update new attributes
-                        message.___dict__ = new_message.__dict__
+                        message.__dict__ = new_message.__dict__
 
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
