@@ -81,6 +81,6 @@ class SuperClient(Core, Client):
             })
 
         # update empty dictionary for plugins
-        for file in os.listdir("main/core/modules/plugins/"):
+        for file in os.listdir("main/userbot/modules/plugins/"):
             if not file.startswith("__"):
                 self.CMD_HELP.update({file.split(".")[0]:{}})
