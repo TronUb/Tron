@@ -31,8 +31,8 @@ app.CMD_HELP.update(
 async def helpmenu_handler(_, m: Message):
     """ helpmenu handler for help plugin """
 
-    args = m.command or []
-    args_exists = True if len(m.command) > 1 else None
+    args = m.command or m.sudo_message.command or []
+    args_exists = True if len(args) > 1 else None
 
     try:
         if not args_exists:

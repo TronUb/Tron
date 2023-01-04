@@ -203,13 +203,11 @@ def gen(
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
-                        print(message.sudo_message)
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
                             return True
 
                         if not cmd in client.SudoCmds():
-                            print("cmd is not in sudocmds") # rem
                             return False
 
                     else:
@@ -219,18 +217,15 @@ def gen(
 
                     # reply condition
                     if not await is_reply(client, message, reply, reply_type):
-                        print("its not a reply") # rem
                         return False
 
                     # max argument count condition 
                     if not await max_argcount(client, message, argcount):
-                        print("argcount is less than expected") # rem
                         return False
 
                     return True
 
             return False
-            print("reached end of filters") # rem
         except Exception as e:
             print(traceback.format_exc())
 
