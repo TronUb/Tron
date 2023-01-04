@@ -21,22 +21,6 @@ MESSAGE_TYPES = (
 )
 
 
-async def message_parser(update, users, chats):
-    return (
-        await Message.parse(
-            self.client,
-            update.message,
-            users,
-            chats,
-            isinstance(
-                update,
-                UpdateNewScheduledMessage
-            )
-        ),
-        pyrogram.handlers.MessageHandler
-    )
-
-
 class SuperClient(Core, Client):
     """ Userbot (tron) """
     def __init__(self):
@@ -77,10 +61,26 @@ class SuperClient(Core, Client):
         # set custom message parser
         for parser in MESSAGE_TYPES:
             self.dispatcher.update_parsers.update({
-                parser:message_parser
+                parser:self.message_parser
             })
 
         # update empty dictionary for plugins
         for file in os.listdir("main/userbot/modules/plugins/"):
             if not file.startswith("__"):
                 self.CMD_HELP.update({file.split(".")[0]:{}})
+
+
+    async def message_parser(self, update, users, chats):
+        return (
+            await Message.parse(
+                self,
+                update.message,
+                users,
+                chats,
+                isinstance(
+                    update,
+                    UpdateNewScheduledMessage
+                )
+            ),
+            pyrogram.handlers.MessageHandler
+        )
