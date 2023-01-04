@@ -200,10 +200,8 @@ def gen(
                         new_message.from_user.type = UserType.OWNER
                         new_message.sudo_message = message
 
-                        # update the new message
-                        frame = inspect.currentframe().f_back
-                        frame.f_locals["m"] = new_message
-                        message = new_message
+                        # update new attributes
+                        message.___dict__ = new_message.__dict__
 
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
