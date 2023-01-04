@@ -451,7 +451,7 @@ class AsyncPart(object):
                         entities=entities
                     )
             except (MessageAuthorRequired, MessageIdInvalid, Exception) as e:
-                print(e)
+                print(traceback.format_exc())
                 r = await self.send_message(
                     chat_id=m.chat.id,
                     text=self.FormatText(text, textformat=text_type),
