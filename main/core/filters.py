@@ -16,7 +16,7 @@ from pyrogram.types import (
     Message, 
     CallbackQuery, 
     InlineQuery, 
-    Update
+    Update,
     User
 )
 from main.core.enums import UserType
