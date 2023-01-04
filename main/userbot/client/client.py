@@ -76,9 +76,9 @@ class SuperClient(Core, Client):
 
         # set custom message parser
         for parser in MESSAGE_TYPES:
-            self.dispatcher.update_parsers.update(
-                message_parser
-            )
+            self.dispatcher.update_parsers.update({
+                parser:message_parser
+            })
 
         # update empty dictionary for plugins
         for file in os.listdir("main/core/modules/plugins/"):
