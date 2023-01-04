@@ -185,7 +185,7 @@ def gen(
                             message.chat.id,
                             "Hold on . . ."
                         )
-                        if not hasattr(new_message, "from_user"):
+                        if not new_message.from_user:
                             new_message.from_user = User(
                                 id=client.id
                             )
