@@ -209,7 +209,7 @@ def gen(
 
             return False
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
 
     commands = commands if isinstance(commands, list) else [commands]
     commands = {c if case_sensitive else c.lower() for c in commands}
