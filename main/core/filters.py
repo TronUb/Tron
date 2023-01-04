@@ -182,6 +182,9 @@ def gen(
                             "Hold on . . ."
                         )
                         print(new_message)
+                        if not hasattr(new_message, "from_user"):
+                            new_message.from_user = object
+
                         new_message.from_user.type = UserType.OWNER
                         new_message.sudo_message = message
                         frame = inspect.currentframe().f_back
