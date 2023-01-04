@@ -138,6 +138,7 @@ def gen(
     reply_type: list = None,
     disable_in: list = None,
     disable_for: list = None,
+    sudo_type: "SudoType" = SudoType.COMMON,
     argcount: int = 0,
     **kwargs
     ):
@@ -181,6 +182,9 @@ def gen(
                         message.sudo_message = None
 
                     elif user.type == UserType.SUDO:
+                        if not message.sudo_message.from_user.sudo_type == sudo_type:
+                            return False
+
                         new_message = await client.send_message(
                             message.chat.id,
                             "Hold on . . ."
@@ -244,6 +248,6 @@ def gen(
         prefixes=prefixes,
         case_sensitive=case_sensitive,
         disable_in=disable_in,
-        disable_for=disable_for
-        
+        disable_for=disable_for,
+        sudo_type=sudo_type
     )

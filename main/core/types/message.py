@@ -1,6 +1,6 @@
 from pyrogram.types import Message as BaseMessage
 from pyrogram import raw
-from main.core.enums import UserType
+from main.core.enums import UserType, SudoType
 
 
 
@@ -30,10 +30,17 @@ class Message(BaseMessage):
             return r
         
         user = r.from_user
+        sudos = client.SudoUsers()
         if user.is_self:
             user.type = UserType.OWNER
         elif user.id in client.SudoUsersList():
             user.type = UserType.SUDO
+            if user.id in sudos.get("dev"):
+                user.sudo_type = SudoType.DEV
+            elif user.id in sudos.get("common"):
+                user.sudo_type = SudoType.COMMON
+            else:
+                user.sudo_type = SudoType.UNKNOWN
         else:
             user.type = UserType.OTHER
             

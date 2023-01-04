@@ -18,3 +18,4 @@ from pyrogram.enums import (
 from .user_type import UserType
 from .text_type import TextType
 from .reply_type import ReplyType
+from .sudo_type import SudoType
