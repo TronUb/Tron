@@ -17,9 +17,9 @@ from pyrogram.types import (
     CallbackQuery, 
     InlineQuery, 
     Update
+    User
 )
 from main.core.enums import UserType
-from pyrogram.raw import types as RawTypes
 
 
 
@@ -178,24 +178,16 @@ def gen(
 
                     if user.type == UserType.OWNER:
                         message.command = [cmd] + text.split()[1:]
+                        message.sudo_message = None
+
                     elif user.type == UserType.SUDO:
                         new_message = await client.send_message(
                             message.chat.id,
                             "Hold on . . ."
                         )
                         if not hasattr(new_message, "from_user"):
-                            new_message.from_user = RawTypes.User(
-                                id=client.id,
-                                is_self=True,
-                                contact=True,
-                                mutual_contact=True,
-                                deleted=False,
-                                bot=False,
-                                verified=False,
-                                scam=False,
-                                fake=False,
-                                support=False,
-                                premium=False,
+                            new_message.from_user = User(
+                                id=client.id
                             )
 
                         setattr(new_message.from_user, "type", UserType.OWNER)
