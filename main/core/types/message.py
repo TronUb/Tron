@@ -17,7 +17,7 @@ class Message(BaseMessage):
         is_scheduled: bool = False,
         replies: int = 1
         ):
-        r = BaseMessage._parse(
+        r = await BaseMessage._parse(
             client=client,
             message=message,
             users=users,
