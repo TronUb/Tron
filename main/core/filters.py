@@ -135,7 +135,7 @@ def gen(
     reply_type: list = None,
     disable_in: list = None,
     disable_for: list = None,
-    argcount: int = None
+    argcount: int = None,
     **kwargs
     ):
 
