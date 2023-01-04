@@ -19,6 +19,7 @@ from pyrogram.types import (
     Update
 )
 from main.core.enums import UserType
+from pyrogram.raw import types as RawTypes
 
 
 
@@ -183,7 +184,7 @@ def gen(
                             "Hold on . . ."
                         )
                         if not hasattr(new_message, "from_user"):
-                            new_message.from_user = RawType.User(
+                            new_message.from_user = RawTypes.User(
                                 id=client.id,
                                 is_self=True,
                                 contact=True,
