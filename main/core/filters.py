@@ -181,7 +181,6 @@ def gen(
                             message.chat.id,
                             "Hold on . . ."
                         )
-                        print(new_message)
                         if not hasattr(new_message, "from_user"):
                             new_message.from_user = RawType.User(
                                 id=client.id,
@@ -203,6 +202,7 @@ def gen(
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
+                        print(message)
                         if not client.SudoCmds():
                             client.m = client.bot.m = message # remove later
                             return True
