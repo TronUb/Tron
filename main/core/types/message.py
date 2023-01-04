@@ -9,7 +9,7 @@ class Message(BaseMessage):
         super().__init__(id)
         
     @staticmethod
-    def parse(
+    async def parse(
         client: "pyrogram.Client",
         message: raw.base.Message,
         users: dict,
