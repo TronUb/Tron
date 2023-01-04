@@ -76,7 +76,7 @@ class SuperClient(Core, Client):
 
         # set custom message parser
         for parser in MESSAGE_TYPES:
-            self.dispatcher.update_parsers.get(parser).update(
+            self.dispatcher.update_parsers.update(
                 message_parser
             )
 
