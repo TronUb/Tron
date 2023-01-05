@@ -25,7 +25,7 @@ class OnCmd:
         group: int = 0
     ) -> Callable:
 
-        command_info = {command[0] if isinstance(command, list) else command : usage}
+        command_info = {command[0] if isinstance(commands, list) else command : usage}
         cmd_help = self.CMD_HELP.get(module)
         if cmd_help:
             cmd_help.update(command_info)
