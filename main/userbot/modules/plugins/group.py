@@ -10,7 +10,7 @@ from main.core.enums import UserType
 
 
 
-@app.on_message(
+@app.on_cmd(
     commands=["bgroup", "bgp"],
     usage="Create a basic group.",
     disable_for=UserType.SUDO
@@ -19,7 +19,7 @@ async def basicgroup_handler(_, m: Message):
     """ basic group handler for group plugin """
     grpname = None
     users = None
-    if app.long() == 1:
+    if app.long() == 1
         return await app.send_edit(f"Usage: `{app.PREFIX}bgroup mygroupname`", delme=4)
     elif app.long() > 1:
         grpname = m.text.split(None, 1)[1]
