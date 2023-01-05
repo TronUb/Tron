@@ -6,6 +6,7 @@ from typing import (
 
 import pyrogram
 from main.core.enums import UserType
+from main.core.filters import gen
 
 
 
