@@ -10,7 +10,7 @@ from main.core.enums import UserType
 
 @app.on_cmd(
     commands="zombies",
-    usage="Check deleted accounts in chat, use clean as suffix to remove them."
+    usage="Check deleted accounts in chat, use clean as suffix to remove them.",
     disable_for=UserType.SUDO
 )
 async def zombies_handler(_, m: Message):
