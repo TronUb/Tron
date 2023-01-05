@@ -81,7 +81,7 @@ async def savewelcome_handler(_, m: Message):
 
 @app.on_cmd(
     commands=["delwelcome", "delwc"],
-    usage="Delete welcome message of a chat.,
+    usage="Delete welcome message of a chat.",
     disable_for=UserType.SUDO
 )
 async def deletewelcome_handler(_, m: Message):
