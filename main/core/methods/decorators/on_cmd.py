@@ -36,9 +36,12 @@ class OnCmd:
             # we will access its future local variables
             frame = inspect.currentframe().f_back
             module = frame.f_locals.get("__name__")
+            print("module ", module)
             module_name = module.split(".")[-1]
+            print("module_name ", module_name)
 
             cmd_help = self.CMD_HELP.get(module_name)
+            print("cmd_help ", cmd_help)
             if cmd_help:
                 self.CMD_HELP.get(module_name).update({command_info})
 
