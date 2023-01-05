@@ -28,22 +28,18 @@ class OnCmd:
     ) -> Callable:
 
         command_info = {commands[0] if isinstance(commands, list) else commands : usage}
-        cmd_help = self.CMD_HELP.get(module)
-        if cmd_help:
-            self.CMD_HELP.get(module).update(command_info)
+        
+        if module:
+            if not module in self.CMD_HELP.keys():
+                self.CMD_HELP.update({module : {}})
+            self.CMD_HELP.get(module).update({command_info})
         else:
             # wherever this decorator is called 
             # we will access its future local variables
             frame = inspect.currentframe().f_back
             module = frame.f_locals.get("__name__")
-            print("module ", module)
-            module_name = module.split(".")[-1]
-            print("module_name ", module_name)
 
-            cmd_help = self.CMD_HELP.get(module_name)
-            print("cmd_help ", cmd_help)
-            if cmd_help:
-                self.CMD_HELP.get(module_name).update({command_info})
+            self.CMD_HELP.get(module.split(".")[-1]).update({command_info})
 
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
