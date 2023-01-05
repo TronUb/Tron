@@ -64,7 +64,7 @@ async def helpmenu_handler(_, m: Message):
 
 
 # get all module name
-@app.on_message(
+@app.on_cmd(
     commands="uplugs",
     usage="Get list of userbot plugin names."
 )
@@ -82,7 +82,7 @@ async def uplugs_handler(_, m: Message):
 
 
 # get all plugins name
-@app.on_message(
+@app.on_cmd(
     commands="bplugs",
     usage="Get list of your bot plugin names."
 )
@@ -99,7 +99,7 @@ async def aplugs_handler(_, m: Message):
 
 
 
-@app.on_message(
+@app.on_cmd(
     commands="inline",
     usage="Toggle on/off inline mode of bot."
 )
