@@ -7,21 +7,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"wikipedia" : (
-        "wikipedia",
-        {
-        "wiki [ query ]" : "Get info about anything on Wikipedia."
-        }
-        )
-    }
-)
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 @app.on_cmd(
     commands="wiki",
     usage="Get information from Wikipedia."
