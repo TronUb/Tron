@@ -69,7 +69,7 @@ async def evaluate_handler(_, m: Message):
 
 
 @app.on_cmd(
-    command=["term", "shell"],
+    commands=["term", "shell"],
     usage="Execute shell scripts.",
     disable_for=UserType.SUDO
 )
