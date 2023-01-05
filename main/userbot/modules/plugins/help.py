@@ -12,7 +12,6 @@ from main import app, gen
 
 @app.on_cmd(
     commands="help",
-    module="help",
     usage="Get your helpmenu, use plugin name as suffix to get command information.",
 )
 async def helpmenu_handler(_, m: Message):
@@ -65,7 +64,10 @@ async def helpmenu_handler(_, m: Message):
 
 
 # get all module name
-@app.on_message(gen("uplugs"))
+@app.on_message(
+    commands="uplugs",
+    usage="Get list of userbot plugin names."
+)
 async def uplugs_handler(_, m: Message):
     """ uplugs handler for help plugin """
     store = []
@@ -80,7 +82,10 @@ async def uplugs_handler(_, m: Message):
 
 
 # get all plugins name
-@app.on_message(gen("aplugs"))
+@app.on_message(
+    commands="bplugs",
+    usage="Get list of your bot plugin names."
+)
 async def aplugs_handler(_, m: Message):
     """ aplugs handler for help plugin """
     store = []
@@ -94,7 +99,10 @@ async def aplugs_handler(_, m: Message):
 
 
 
-@app.on_message(gen("inline"))
+@app.on_message(
+    commands="inline")
+    usage="Toggle on/off inline mode of bot."
+)
 async def toggleinline_handler(_, m: Message):
     """ toggleinline handler for help plugin """
     return await app.toggle_inline()

@@ -5,6 +5,7 @@ from typing import (
 )
 
 import pyrogram
+import inspect
 from main.core.enums import UserType
 from main.core.filters import gen
 
@@ -14,7 +15,7 @@ class OnCmd:
     def on_cmd(
         self: "pyrogram.client",
         commands: Union[str, List[str]],
-        module: str,
+        module: str = None,
         prefixes: Union[str, List[str]] = None,
         usage: str = None,
         case_sensitive: bool = True,
@@ -26,12 +27,17 @@ class OnCmd:
         group: int = 0
     ) -> Callable:
 
+        # wherever this decorator is called 
+        # we will access its future local variables
+        frame = inspect.currentframe().f_back
+        module = frame.f_locals.get("__name__")
+
         command_info = {command[0] if isinstance(commands, list) else commands : usage}
         cmd_help = self.CMD_HELP.get(module)
         if cmd_help:
             cmd_help.update(command_info)
         else:
-            self.CMD_HELP.update({module: command_info})
+            self.CMD_HELP.update({module.split(".")[-1]: command_info})
 
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
