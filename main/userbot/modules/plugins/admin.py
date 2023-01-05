@@ -4,7 +4,11 @@
 
 from datetime import datetime, timedelta
 
-from pyrogram.enums import ChatMemberStatus
+from main.core.enums import (
+    ChatMemberStatus,
+    ChatType,
+    UserType
+)
 from pyrogram.types import (
     Message,
     ChatPermissions,
@@ -53,11 +57,11 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 
-@app.on_message(
-    gen(
+@app.on_cmd(
         commands="ban",
-        exclude=["sudo", "channel"]
-    )
+        usage="Ban a user in a chat.",
+        disable_for=UserType.SUDO,
+        disable_in=ChatType.CHANNEL
 )
 async def ban_handler(_, m: Message):
     """
