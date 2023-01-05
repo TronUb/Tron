@@ -381,7 +381,7 @@ async def joinchat_handler(_, m: Message):
 
 @app.on_cmd(
     commands="slowmo",
-    usage="Set slow mode of chat."
+    usage="Set slow mode of chat.",
     disable_for=UserType.SUDO
 )
 async def slowmode_handler(_, m: Message):
