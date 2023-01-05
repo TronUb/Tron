@@ -11,7 +11,7 @@ from main.core.enums import UserType
 
 class OnCmd:
     def on_cmd(
-        self=None,
+        self: "pyrogram.client",
         commands: Union[str, List[str]],
         module: str,
         prefixes: Union[str, List[str]] = None,
