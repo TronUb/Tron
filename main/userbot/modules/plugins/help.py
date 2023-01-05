@@ -100,7 +100,7 @@ async def aplugs_handler(_, m: Message):
 
 
 @app.on_message(
-    commands="inline")
+    commands="inline",
     usage="Toggle on/off inline mode of bot."
 )
 async def toggleinline_handler(_, m: Message):
