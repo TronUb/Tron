@@ -16,7 +16,7 @@ from main.core.enums import UserType
 handlers = []
 
 
-@app.on_message(
+@app.on_cmd(
     commands="afk",
     usage="Away from keyboard.",
     disable_for=UserType.SUDO
