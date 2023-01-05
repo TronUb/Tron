@@ -12,7 +12,7 @@ from main.core.enums import UserType
 
 
 
-async def broadcast(dialog, text)
+async def broadcast(dialog, text):
     r = await app.send_message(
         dialog.chat.id,
         text
