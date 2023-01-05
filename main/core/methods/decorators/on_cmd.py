@@ -24,11 +24,14 @@ class OnCmd:
         argcount: int = None,
         group: int = 0
     ) -> Callable:
-        self.CMD_HELP.get(module).update(
-            {
-                command[0] if isinstance(command, list) else command:usage
-            }
-        )
+
+        command_info = {command[0] if isinstance(command, list) else command : usage}
+        cmd_help = self.CMD_HELP.get(module)
+        if cmd_help:
+            cmd_help.update(command_info)
+        else:
+            self.CMD_HELP.update({module: command_info})
+
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
         reply_type = reply_type if isinstance(reply_type, list) else [reply_type]
