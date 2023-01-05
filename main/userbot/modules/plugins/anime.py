@@ -98,7 +98,7 @@ async def nekopic_handler(_, m: Message):
 
 @app.on_cmd(
     commands="animegif",
-    ussge="Get anime gifs."
+    usage="Get anime gifs."
 )
 async def animegif_handler(_, m: Message):
 
