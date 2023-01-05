@@ -359,7 +359,7 @@ class AsyncPart(object):
 
     async def PluginData(
         self,
-        modules: str
+        module: str
         ):
         """
         params:
@@ -373,19 +373,20 @@ class AsyncPart(object):
         """
 
         try:
-            module_data = []
-            module_data.clear()
 
-            for x, y in zip(
-                self.CMD_HELP.get(modules)[1].keys(),
-                self.CMD_HELP.get(modules)[1].values()
-                ):
-                module_data.append(
-                    f"CMD: `{self.Trigger()[0]}{x}`\nINFO: `{y}`\n\n"
-                    )
-            return module_data
-        except Exception as e:
-            self.log.error(e)
+            if self.CMD_HELP.get(module) is None:
+                r = None
+            else:
+                r = [
+                        f"CMD: `{self.Trigger()[0]}{cmd}`\nINFO: `{usage}`\n\n" 
+                        for cmd, usage in zip(
+                            self.CMD_HELP.get(module).keys(),
+                            self.CMD_HELP.get(module).values()
+                        )
+                    ]
+            return r
+        except Exception:
+            self.log.error(traceback.format_exc())
             return None
 
 
