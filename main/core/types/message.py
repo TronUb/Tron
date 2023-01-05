@@ -34,7 +34,7 @@ class Message(BaseMessage):
 
         if r.from_user is None:
             # to do
-            r.from_user = BaseUser._parse(
+            r.from_user = BaseUser(
                 id=0000000000,
                 is_self=False
             )
