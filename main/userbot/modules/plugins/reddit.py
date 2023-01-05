@@ -9,21 +9,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"reddit" : (
-        "reddit",
-        {
-        "r [query]" : "Get reddit images (limit = 1)"
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["r", "reddit"],
+    usage="Get reddit images."
 )
-
-
-
-
-@app.on_message(gen(["r", "reddit"]))
 async def reddit_handler(_, m: Message):
     """ reddit handler for reddit plugin """
     if app.long() == 1:

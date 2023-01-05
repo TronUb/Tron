@@ -4,26 +4,15 @@ import json
 from pyrogram.types import Message
 from telegraph import upload_file
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"clone" : (
-        "clone",
-        {
-        "clone [reply]" : "clone your friends account for fun.",
-        "revert [reply]" : "unclone your account to normal."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="clone",
+    usage="Change your account avatar to someone's else.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-
-@app.on_message(gen(["clone"]))
 async def clone_handler(_, m: Message):
     """ clone handler for clone plugin """
     try:
@@ -86,7 +75,11 @@ async def clone_handler(_, m: Message):
 
 
 
-@app.on_message(gen("revert"))
+@app.on_cmd(
+    commands="revert",
+    usage="Revert back to your original account.",
+    disable_for=UserType.SUDO
+)
 async def revert_handler(_, m: Message):
     """ revert handler for clone plugin """
     try:

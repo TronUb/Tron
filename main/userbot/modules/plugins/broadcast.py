@@ -8,58 +8,25 @@ from pyrogram.errors import (
 )
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"broadcast" : (
-        "broadcast",
-        {
-        "broadcast" : "Broadcast messages in user chats, group chats."
-        }
-        )
-    }
-)
-
-
-
-async def broadcast(dialog, text):
-    """
-        name::
-            broadcast
-
-        parameters::
-            dialog (int): dialog object
-            text (str): text message to be sent to users
-
-        returns::
-            None
-    """
-    res = await app.send_message(
+async def broadcast(dialog, text)
+    r = await app.send_message(
         dialog.chat.id,
         text
     )
-    return res if res else None
+    return r if r else None
 
 
-@app.on_message(
-    gen(
-        commands=["broadcast", "bdc"]
-    )
+@app.on_cmd(
+    commands=["broadcast", "bdt"],
+    usage="Broadcast messages in groups/user chats.",
+    disable_for=UserType.SUDO
 )
 async def broadcast_handler(_, m: Message):
-    """
-        name::
-            broadcast_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         args = app.GetArgs()
         users = 0

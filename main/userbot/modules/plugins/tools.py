@@ -9,28 +9,7 @@ from pyrogram.types import Message
 import speedtest
 
 from main import app, gen
-
-
-
-
-app.CMD_HELP.update(
-    {"tools" : (
-        "tools",
-        {
-        "wlink" : "Get message links which contain the query word.",
-        "cur [10 USD INR]" : "Converts Other Money value In Your Currency value. Just Use The Right Currency Code.",
-        "temp [10 c]" : "Get temperature or farenheight, c = celcius, f = farenheight.",
-        "json [reply to message]" : "Use This Command To Get Deep Details Of Any Media Or Text.",
-        "mlink [reply to message]" : "Use this to get message links. both private and public groups.",
-        "saved [reply to message]" : r"Save Media To Your Telegram Cloud Storage \ Saved Messages.",
-        "fwd [reply to message]" : "Forward messages to same group or other groups.",
-        "spt" : "Check Hosted Server Speed, use [pic] after command to get image of speedtest.",
-        "cchats" : "Get common chats to the replied user."
-        }
-        )
-    }
-)
-
+from main.core.enums import UserType
 
 
 
@@ -52,7 +31,10 @@ def convert_c(celsius):
 
 
 
-@app.on_message(gen("wlink"))
+@app.on_cmd(
+    commands="wlink",
+    usage="Get message links which contains query word."
+)
 async def wordlink_handler(_, m: Message):
     """ wordlink handler for tools plugin """
     links = []
@@ -77,7 +59,10 @@ async def wordlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["cur", "currency"]))
+@app.on_cmd(
+    commands=["cur", "currency"],
+    usage="Convert one currency to another currency."
+)
 async def currency_handler(_, m: Message):
     """ currency handler for tools plugin """
     if app.long() <= 3:
@@ -99,7 +84,10 @@ async def currency_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["temp", "temperature"]))
+@app.on_cmd(
+    commands=["temp", "temperature"],
+    usage="Convert temperatures in Celcius/Fahrenheit."
+)
 async def temperature_handler(_, m: Message):
     if app.long() <= 2:
         return await app.send_edit(f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
@@ -123,7 +111,10 @@ async def temperature_handler(_, m: Message):
 
 
 
-@app.on_message(gen("json"))
+@app.on_cmd(
+    commands="json",
+    usage="Get json format of a message object (pyrogram)."
+)
 async def messagejson_handler(_, m: Message):
     reply = m.reply_to_message
 
@@ -140,7 +131,10 @@ async def messagejson_handler(_, m: Message):
 
 
 
-@app.on_message(gen("mlink"))
+@app.on_cmd(
+    commands="mlink",
+    usage="Get a message link of a message."
+)
 async def messagelink_handler(_, m: Message):
     reply = m.reply_to_message
     message = reply if reply else m
@@ -151,7 +145,11 @@ async def messagelink_handler(_, m: Message):
 
 
 
-@app.on_message(gen("saved", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="saved",
+    usage="Save a text, media in saved messages.",
+    disable_for=UserType.SUDO
+)
 async def saved_handler(_, m: Message):
     if m.from_user.is_self:
         await m.delete()
@@ -160,7 +158,10 @@ async def saved_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["fwd", "frwd"]))
+@app.on_cmd(
+    commands=["fwd", "frwd"],
+    usage="Forward a message."
+)
 async def forward_handler(_, m: Message):
     reply = m.reply_to_message
     try:
@@ -194,7 +195,10 @@ async def forward_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["spt", "speed", "speedtest"]))
+@app.on_cmd(
+    commands=["spt", "speed", "speedtest"],
+    usage="Get upload/download speed."
+)
 async def speedtest_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Testing speed . . .", text_type=["mono"])
@@ -248,7 +252,10 @@ async def speedtest_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["cc", "cchats"]))
+@app.on_cmd(
+    commands=["cc", "cchats"],
+    usage="Get list of common chats with a user."
+)
 async def commonchat_handler(_, m):
     try:
         reply = m.reply_to_message
@@ -267,5 +274,3 @@ async def commonchat_handler(_, m):
             await app.send_edit("Please reply to someone . . .", text_type=["mono"], delme=4)
     except Exception as e:
         await app.error(e)
-
-

@@ -10,28 +10,7 @@ from pyrogram.types import Message
 from pyrogram.errors import PeerIdInvalid
 
 from main import app, gen
-
-
-
-
-app.CMD_HELP.update(
-    {"heroku" : (
-        "heroku",
-        {
-        "shutdown" : "Turn off your userbot by turning off the dynos.",
-        "restart" : "Restart your userbot.",
-        "usage" : "Check your heroku dyno usage.",
-        "vars" : "Get a list of enabled vars in your heroku account.",
-        "setvar [key] [value]" : "Set config vars of heroku through a command.",
-        "getvar [key]" : "Get a existing var value from heroku config.",
-        "delvar" : "Delete a existing heroku var from heroku config.",
-        "logs" : "Get heroku logs as a file (Extension: .txt).",
-        "textlogs" : "Get logs pasted in nekobin, not as a file."
-        }
-        )
-    }
-)
-
+from main.core.enums import UserType
 
 
 
@@ -53,7 +32,11 @@ else:
 
 
 # shut-down dyno
-@app.on_message(gen("shutdown", exclude=["sudo"]))
+@app.on_cmd(
+    commands="shutdown",
+    usage="Shutdown your bot on heroku.",
+    disable_for=UserType.SUDO
+)
 async def shutdown_handler(_, m: Message):
     """ shutdown handler for heroku plugin """
     if await not_heroku():
@@ -80,7 +63,11 @@ async def shutdown_handler(_, m: Message):
 
 
 # restart your bot
-@app.on_message(gen("restart", exclude=["sudo"]))
+@app.on_cmd(
+    commands="restart",
+    usage="Restart your bot on heroku.",
+    disable_for=UserType.SUDO
+)
 async def restart_handler(_, m: Message):
     """ restart handler for heroku plugin """
     if await not_heroku():
@@ -106,7 +93,10 @@ async def restart_handler(_, m: Message):
 
 
 # get usage of your dyno hours from heroku
-@app.on_message(gen("usage"))
+@app.on_cmd(
+    commands="usage",
+    usage="Get your bots dyno stats.",
+)
 async def dynostats_handler(_, m: Message):
     """ dynostats handler for heroku plugin """
     if await not_heroku():
@@ -168,7 +158,11 @@ async def dynostats_handler(_, m: Message):
 
 
 # get list of vars from heroku
-@app.on_message(gen("vars"))
+@app.on_cmd(
+    commands="vars",
+    usage="Get all config variables and values.",
+    disable_for=UserType.SUDO
+)
 async def herokuvars_handler(_, m: Message):
     """ herokuvars handler for heroku plugin """
     if await not_heroku():
@@ -197,7 +191,11 @@ async def herokuvars_handler(_, m: Message):
 
 
 # set vars in heroku
-@app.on_message(gen("setvar", exclude=["sudo"]))
+@app.on_cmd(
+    commands="setvar",
+    usage="Set heroku config variables.",
+    disable_for=UserType.SUDO
+)
 async def setvar_handler(_, m: Message):
     """ setvar handler for heroku plugin """
     if await not_heroku():
@@ -234,7 +232,11 @@ async def setvar_handler(_, m: Message):
 
 
 # get vars from heroku vars
-@app.on_message(gen("getvar", exclude=["sudo"]))
+@app.on_cmd(
+    commands="getvar",
+    usage="Get heroku config variable values.",
+    disable_for=UserType.SUDO
+)
 async def getvar_handler(_, m: Message):
     """ getvar handler for heroku pugin """
     if await not_heroku():
@@ -264,7 +266,11 @@ async def getvar_handler(_, m: Message):
 
 
 # delete vars in heroku
-@app.on_message(gen("delvar", exclude=["sudo"]))
+@app.on_cmd(
+    commands="delvar",
+    usage="Delete heroku config variables.",
+    disable_for=UserType.SUDO
+)
 async def delvar_handler(_, m: Message):
     """ delvar handler for herokou plugin """
     if await not_heroku():
@@ -309,7 +315,10 @@ async def delvar_handler(_, m: Message):
 
 
 # get logs from heroku in file format (.txt)
-@app.on_message(gen("logs"))
+@app.on_cmd(
+    commands="logs",
+    usage="Get heroku logs as file."
+)
 async def logs_handler(_, m: Message):
     """ logs handler for heroku plugin """
     if await not_heroku():
@@ -339,7 +348,10 @@ async def logs_handler(_, m: Message):
 
 
 # get logs from heroku in nekobin link, not as a file
-@app.on_message(gen(["textlogs", "tlogs"]))
+@app.on_cmd(
+    commands=["textlogs", "tlogs"],
+    usage="Get heroku logs as a telegraph link",
+)
 async def textlogs_handler(_, m: Message):
     """ textlogs handler for heroku plugin """
     if await not_heroku():

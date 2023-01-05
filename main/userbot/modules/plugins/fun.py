@@ -7,31 +7,14 @@ import asyncio
 from pyrogram.errors import FloodWait
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"fun" : (
-        "fun",
-        {
-        "upcase [text]" : "Convert texts into uppercase",
-        "slap [reply to user]" : "Slap your friends with amazing items.",
-        "type [text]" : "Retype words with animation, just try and understand, Don't Use too much.",
-        "insult [reply to message]" : "Use it to insult idiots & fools",
-        "advice [reply to message]" : "get a random advice for someone.",
-        "wtd" : "what to do when you are bored ?, finds a activity for you.",
-        "mqt" : "Finds some movie quotes for you.",
-        "joke" : "Get some daddy jokes.",
-        }
-        )
-    }
+@app.on_cmd(
+    commands="slap",
+    usage="Fun text of slapping someone."
 )
-
-
-
-
-@app.on_message(gen("slap"))
 async def slap_handler(_, m):
     """ slap handler for fun plugin """
     reply = m.reply_to_message
@@ -75,7 +58,10 @@ async def slap_handler(_, m):
 
 
 
-@app.on_message(gen(["upcase"]))
+@app.on_cmd(
+    commands="upcase",
+    usage="Convert a text to upper-case."
+)
 async def uppercase_handler(_, m):
     """ uppercase handler for fun plugin """
     try:
@@ -101,7 +87,10 @@ async def uppercase_handler(_, m):
 
 
 
-@app.on_message(gen("type"))
+@app.on_cmd(
+    commands="type",
+    usage="Text typing animation, use less."
+)
 async def type_handler(_, m):
     """ type handler for fu plugin """
     try:
@@ -127,7 +116,11 @@ async def type_handler(_, m):
 
 
 
-@app.on_message(gen("insult", exclude =["sudo"]))
+@app.on_cmd(
+    commands="insult",
+    usage="Insulting texts for your friends.",
+    disable_for=UserType.SUDO
+)
 async def insult_handler(_, m):
     """ insult handler for fun plugin """
     reply = m.reply_to_message
@@ -159,7 +152,10 @@ async def insult_handler(_, m):
 
 
 
-@app.on_message(gen("advice"))
+@app.on_cmd(
+    commands="advice",
+    usage="Give someone advices."
+)
 async def advice_handler(_, m):
     """ advice handler for fun plugin """
     reply = m.reply_to_message
@@ -185,7 +181,10 @@ async def advice_handler(_, m):
 
 
 
-@app.on_message(gen("qs"))
+@app.on_cmd(
+    commands="qs",
+    usage="Ask someone questions, answers in saved message."
+)
 async def question_handler(_, m):
     """ question handler for fun plugin """
     reply = m.reply_to_message
@@ -213,7 +212,10 @@ async def question_handler(_, m):
 
 
 
-@app.on_message(gen("wtd"))
+@app.on_cmd(
+    commands="wtd",
+    usage="Suggest some activities to do."
+)
 async def whattodo_handler(_, m):
     """ what to do handler for fun plugin """
     try:
@@ -231,7 +233,10 @@ async def whattodo_handler(_, m):
 
 
 
-@app.on_message(gen("mqt"))
+@app.on_cmd(
+    commands="mqt",
+    usage="Get movie quotes."
+)
 async def moviequote_handler(_, m):
     """ movie quote handler for fun plugin """
     try:
@@ -250,7 +255,10 @@ async def moviequote_handler(_, m):
 
 
 
-@app.on_message(gen("joke"))
+@app.on_cmd(
+    commands="joke",
+    usage="Get some jokes."
+)
 async def joke_handler(_, m):
     """ joke handler for fun plugin """
     try:

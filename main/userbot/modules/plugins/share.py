@@ -9,23 +9,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"share" : (
-        "share",
-        {
-        "send [plugin name]" : "Send official plugin files from userbot to telegram chat.",
-        "install [reply to plugin]" : "Reply to a .py file to install it in external modules directory.",
-        "uninstall [name of local plugin]" : "Uninstall Local installed modules."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="send",
+    usage="Send plugins."
 )
-
-
-
-
-@app.on_message(gen("send"))
 async def sendplugin_handler(_, m: Message):
     """ send plugin handler for share plugin """
     if app.long() > 1:
@@ -66,7 +53,10 @@ async def sendplugin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("install"))
+@app.on_cmd(
+    commands="install",
+    usage="Install a plugin."
+)
 async def install_handler(_, m: Message):
     """ install handler for share plugin """
     reply = m.reply_to_message
@@ -119,7 +109,10 @@ async def install_handler(_, m: Message):
 
 
 
-@app.on_message(gen("uninstall"))
+@app.on_cmd(
+    commands="uninstall",
+    usage="Uninstall a installed plugin."
+)
 async def uninstall_handler(_, m: Message):
     """ uninstal handler for share plugin """
     cmd = m.command

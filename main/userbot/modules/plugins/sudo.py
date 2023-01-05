@@ -3,28 +3,18 @@
 import json
 from pyrogram.types import Message
 from main import app, gen
-
-
-
-
-app.CMD_HELP.update(
-    {"sudo" : (
-        "sudo",
-        {
-        "addsudo [reply to user]" : "Add a user into your sudo list.",
-        "listsudo " : "Get list of available sudo ids.",
-        "delsudo [reply to user]" : "Delete a user from your sudo list."
-        }
-        )
-    }
-)
+from main.core.enums import UserType
 
 
 
 sudo_types = ("common", "dev")
 
 
-@app.on_message(gen("addsudo", exclude=["sudo"]))
+@app.on_cmd(
+    commands="addsudo",
+    usage="Give your userbot access to someone.",
+    disable_for=UserType.SUDO
+)
 async def addsudo_handler(_, m: Message):
     """ addsudo handler for sudo plugin """
     reply = m.reply_to_message
@@ -90,7 +80,11 @@ async def addsudo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listsudo"))
+@app.on_cmd(
+    commands="listsudo",
+    usage="Get available sudo's user ids.",
+    disable_for=UserType.SUDO
+)
 async def getsudo_handler(_, m: Message):
     """ getsudo hanlder for sudo plugin """
     sudo_list = app.getdv("SUDO_USERS")
@@ -112,7 +106,11 @@ async def getsudo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("delsudo", exclude=["sudo"]))
+@app.on_cmd(
+    commands="delsudo",
+    usage="Remove a user from your sudo users list.",
+    disable_for=UserType.SUDO
+)
 async def delsudo_handler(_, m: Message):
     """ delsudo handler for sudo plugin """
     reply = m.reply_to_message

@@ -14,28 +14,14 @@ from pyrogram.types import Message
 from pyrogram import errors
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"download" : (
-        "download",
-        {
-        "ls [path]" : "Find file location in the local directories.",
-        "download [Reply to media]" : "Downloads media files in local server.",
-        "upload [path]" : "Upload files from local server to telegram",
-        "batchup [path]" : "Upload batch files from a local directories."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="ls",
+    usage="Get your tronuserbot directory in a proper manner."
 )
-
-
-
-
-
-@app.on_message(gen("ls"))
 async def ls_handler(_, m: Message):
     """ function to show directory files and folders """
 
@@ -83,7 +69,11 @@ async def ls_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["download", "dl"]))
+@app.on_cmd(
+    commands=["download", "dl"],
+    usage="Download a telegram media in your server.",
+    disable_for=UserType.SUDO
+)
 async def download_handler(_, m: Message):
     """ function to download media """
 
@@ -186,7 +176,11 @@ async def download_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["upload", "ul"], exclude=["sudo"]))
+@app.on_cmd(
+    commands=["upload", "ul"],
+    usage="Upload a existing file from your server to telegram.",
+    disable_for=UserType.SUDO
+)
 async def upload_handler(_, m: Message):
     """ function to upload files from downloads """
 
@@ -247,7 +241,11 @@ async def upload_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["batchup", "bcp"], exclude=["sudo"]))
+@app.on_cmd(
+    commands=["batchup", "bcp"],
+    usage="Upload all files of a directory in a batch.",
+    disable_for=UserType.SUDO
+)
 async def batchupload_handler(_, m: Message):
     """ function to upload files of a directory """
 

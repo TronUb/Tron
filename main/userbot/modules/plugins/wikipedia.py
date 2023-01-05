@@ -22,7 +22,10 @@ app.CMD_HELP.update(
 
 
 
-@app.on_message(gen("wiki"))
+@app.on_cmd(
+    commands="wiki",
+    usage="Get information from Wikipedia."
+)
 async def wikipedia_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some query to search on wikipedia . . .", text_type=["mono"], delme=True)

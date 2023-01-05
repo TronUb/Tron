@@ -5,25 +5,15 @@ import asyncio
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"spam" : (
-        "spam",
-        {
-        "spam [count] [text]" : "You Know The Use Of This Command.",
-        "dspam [count] [delay] [msg]" : "Delay spam use it to spam with a delay between spamming msg."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="spam",
+    usage="Send a message a number of times.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen("spam", exclude = ["sudo"]))
 async def spam_handler(_, m: Message):
     """ spam handler for spam plugin """
     try:
@@ -66,7 +56,11 @@ async def spam_handler(_, m: Message):
 
 
 
-@app.on_message(gen("dspam", exclude = ["sudo"]))
+@app.on_cmd(
+    commands="dspam",
+    usage="Spam with a delay.",
+    disable_for=UserType.SUDO
+)
 async def delayspam_handler(_, m: Message):
     """ delay spam handler for spam plugin """
     try:

@@ -8,20 +8,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"quotly" : (
-        "quotly",
-        {
-        "q [color] [reply to message]" : "Make Stickers Of Your Texts."
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["q", "quotly"],
+    usage="Get text quotes from @quotly bot."
 )
-
-
-
-@app.on_message(gen(["q", "quotly"]))
 async def quotly_handler(_, m: Message):
     """ quotly handler for quotly plugin """
     try:

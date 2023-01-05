@@ -6,22 +6,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"info" : (
-        "info",
-        {
-        "minfo [reply to media]" : "Check media info including text information.",
-        "chatinfo" : "Get chats information."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="minfo",
+    usage="Get media information of a telegram media."
 )
-
-
-
-
-@app.on_message(gen("minfo"))
 async def mediainfo_handler(_, m: Message):
     """ mediainfo handler for info plugin """
     replied = m.reply_to_message
@@ -139,7 +127,10 @@ async def mediainfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("chatinfo"))
+@app.on_cmd(
+    commands="chatinfo",
+    usage="Get chat information."
+)
 async def chatinfo_handler(_, m: Message):
     """ chatinfo handler for info plugin """
     try:

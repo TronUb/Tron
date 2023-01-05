@@ -10,21 +10,7 @@ from pyrogram.errors import (
 )
 
 from main import app, gen
-
-
-
-
-app.CMD_HELP.update(
-    {"pmpermit" : (
-        "pmpermit",
-        {
-        "a" : "approve a user when pmpermit is on",
-        "da" : "disapprove a user when pmpermit is on"
-        }
-        )
-    }
-)
-
+from main.core.enums import UserType
 
 
 
@@ -145,7 +131,11 @@ async def pmpermit_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["a", "approve"]), group=0)
+@app.on_cmd(
+    commands=["a", "approve"],
+    usage="Approve a user to dm you.",
+    disable_for=UserType.SUDO
+)
 async def approve_handler(_, m: Message):
     """ approve handler for pmpermit plugin """
     if m.chat.type == ChatType.BOT:
@@ -215,7 +205,11 @@ async def approve_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["da", "disapprove"]), group=-2)
+@app.on_cmd(
+    commands=["da", "disapprove"],
+    usage="Disapprove a user from sending message to you.",
+    disable_for=UserType.SUDO
+)
 async def diapprove_handler(_, m:Message):
     """ disapprove handler for pmpermit plugin """
     if m.chat.type == ChatType.BOT:

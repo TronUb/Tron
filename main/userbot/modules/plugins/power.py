@@ -7,25 +7,15 @@ import time
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"power" : (
-        "power",
-        {
-        "reboot" : "restarts the userbot through sys. (not heroku)",
-        "sleep [seconds]" : "The bot sleeps with your desired given input.\n**Note:** input must be less than <= 86400 seconds",
-        }
-        )
-    }
+@app.on_cmd(
+    commands="reboot",
+    usage="Reboot your userbot.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen("reboot", exclude = ["sudo"]))
 async def reboot_handler(_, m: Message):
     """ reboot handler for power plugin """
     try:
@@ -44,7 +34,11 @@ async def reboot_handler(_, m: Message):
 
 
 
-@app.on_message(gen("sleep", exclude = ["sudo"]))
+@app.on_cmd(
+    commands="sleep",
+    usage="Make your bot sleep.",
+    disable_for=UserType.SUDO
+)
 async def sleep_handler(_, m: Message):
     """ sleep handler for power plugin """
     if app.long() == 1:

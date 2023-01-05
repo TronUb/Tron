@@ -11,21 +11,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"ping" : (
-        "ping",
-        {
-        "ping" : "Shows you the response speed of the bot.",
-        "ping [ number ]" : "Make infinite pings, don't overuse."
-        }
-        )
-    }
-)
-
-
-
-
 # animations
 data = [
     "🕜",
@@ -44,9 +29,10 @@ data = [
 pings = []
 
 
-
-
-@app.on_message(gen(["ping", "pong"]))
+@app.on_cmd(
+    commands=["ping", "pong"],
+    usage="Get userbot response time."
+)
 async def ping_handler(_, m: Message):
     """ ping handler for ping plugin """
     try:

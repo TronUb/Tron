@@ -4,25 +4,15 @@ import asyncio
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType 
 
 
 
-
-app.CMD_HELP.update(
-    {"zombies" : (
-        "zombies",
-        {
-        "zombies" : "Get number of deleted accounts in a chat.",
-        "zombies [clean]" : "Remove all deleted accounts from chat."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="zombies",
+    usage="Check deleted accounts in chat, use clean as suffix to remove them."
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen("zombies"))
 async def zombies_handler(_, m: Message):
     if await app.check_private():
         return
@@ -63,7 +53,3 @@ async def zombies_handler(_, m: Message):
         await app.send_edit(f"Check `{app.PREFIX}help zombies` to see how it works !")
     else:
         await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
-
-
-
-

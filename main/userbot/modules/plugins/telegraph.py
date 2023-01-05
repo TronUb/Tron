@@ -10,21 +10,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"telegraph" : (
-        "telegraph",
-        {
-        "tgm [reply to message | media]" : "Reply To Media To Get Links Of That Media.\nSupported Media - (jpg, jpeg, png, gif, mp4)."
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["tgm", "telegraph"],
+    usage="Convert a text or image in telegraph link."
 )
-
-
-
-
-@app.on_message(gen(["tgm", "telegraph"]))
 async def telegraph_handler(_, m:Message):
     """ telegraph handler for supertools plugin """
     reply = m.reply_to_message

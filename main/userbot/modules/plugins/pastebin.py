@@ -8,22 +8,10 @@ from main import app, gen
 
 
 
-
-
-app.CMD_HELP.update(
-    {"nekobin" : (
-        "nekobin",
-        {
-        "bin [reply to text]" : "Paste Texts To Nekobin Site, You Can Easily Read The Texts Without Downloading The file."
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["paste", "bin"],
+    usage="Paste your text in pastebin & get a link."
 )
-
-
-
-
-@app.on_message(gen(["paste", "bin"]))
 async def paste_handler(_, m: Message):
     """ paste handler for pastebin plugin """
     reply = m.reply_to_message

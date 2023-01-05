@@ -6,27 +6,15 @@ from pyrogram.raw import functions
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"group" : (
-        "group",
-        {
-        "bgroup [group name]" : "Creates a basic group.",
-        "sgroup [group name]" : "Creates a super group.",
-        "unread" : "Mark a chat as unread in your telegram folders.",
-        "channel [channel name]" : "Create a channel through this command."
-        }
-        )
-    }
+@app.on_message(
+    commands=["bgroup", "bgp"],
+    usage="Create a basic group.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen(["bgroup", "bgp"], exclude =["sudo"]))
 async def basicgroup_handler(_, m: Message):
     """ basic group handler for group plugin """
     grpname = None
@@ -58,7 +46,11 @@ async def basicgroup_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["sgroup", "sgp"], exclude =["sudo"]))
+@app.on_cmd(
+    commands=["sgroup", "sgp"],
+    usage="Create a super group.",
+    disable_for=UserType.SUDO
+)
 async def supergroup_handler(_, m: Message):
     """ super group handler for group plugin """
     grpname = None
@@ -90,7 +82,11 @@ async def supergroup_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["unread", "un"], exclude =["sudo"]))
+@app.on_cmd(
+    commands=["unread", "un"],
+    usage="Set a chat as unread, read it later.",
+    disable_for=UserType.SUDO
+)
 async def unreadchat_handler(_, m: Message):
     """ unread chat handler for group plugin """
     try:
@@ -109,7 +105,11 @@ async def unreadchat_handler(_, m: Message):
 
 
 
-@app.on_message(gen("channel", exclude =["sudo"]))
+@app.on_cmd(
+    commands="channel",
+    usage="Create a channel.",
+    disable_for=UserType.SUDO
+)
 async def channel_handler(_, m: Message):
     """ channel handler for group plugin """
     chname = None

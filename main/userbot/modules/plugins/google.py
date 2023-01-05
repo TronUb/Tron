@@ -13,29 +13,16 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"google" : (
-        "google",
-        {
-        "img [number of pic] [query]" : "uploads searched images on telegram using bing.com",
-        "sauce [reply to pic]" : "Get the source link of that image",
-        "pic [query]" : "Get Images from @bing bot.",
-        }
-        )
-    }
-)
-
-
-
-
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
 
 
 
-@app.on_message(gen("sauce"))
+@app.on_cmd(
+    commands="sauce",
+    usage="Get information of a image."
+)
 async def imagesauce_handler(_, m: Message):
     """ imagesauce handler for google plugin """
     try:
@@ -93,7 +80,10 @@ async def imagesauce_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pic"))
+@app.on_cmd(
+    commands="pic",
+    usage="Get images from @pic"
+)
 async def yandeximages_handler(_, m: Message):
     """ yandex images handler for google plugin """
     if app.long() == 1:
@@ -125,7 +115,10 @@ async def yandeximages_handler(_, m: Message):
 
 
 
-@app.on_message(gen("img"))
+@app.on_cmd(
+    commands="img",
+    usage="Get images from google."
+)
 async def imagesearch_handler(_, m: Message):
     """ image search handler for google plugin """
     cmd = m.command

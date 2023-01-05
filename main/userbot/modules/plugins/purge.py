@@ -5,26 +5,15 @@ from datetime import datetime
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"purge" : (
-        "purge",
-        {
-        "purge [tag a message]" : "Delete All Your Messages From A Fixed Point.",
-        "del [reply to message]" : "Delete Your Single Selected/Tagged Message.",
-        "purgeme [number]" : "Delete Your Messages In Count Numbers."
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["purge", "p"],
+    usage="Delete messages from tagged message to top fown message.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen(["purge", "p"]))
 async def purge_handler(_, m:Message):
     """ purge handler for purge plugin """
     if m.reply_to_message:
@@ -65,7 +54,11 @@ async def purge_handler(_, m:Message):
 
 
 
-@app.on_message(gen(["purgeme", "purgme", "pgm"]))
+@app.on_cmd(
+    commands=["purgeme", "purgme", "pgm"],
+    usage="Delete number of messages, counting from recent to oldest.",
+    disable_for=UserType.SUDO
+)
 async def purgecount_handler(_, m:Message):
     """ purge count handler for purge plugin """
     if app.long() > 1:
@@ -100,7 +93,11 @@ async def purgecount_handler(_, m:Message):
 
 
 
-@app.on_message(gen("del"))
+@app.on_cmd(
+    commands="del",
+    usage="Delete a message in a chat.",
+    disable_for=UserType.SUDO
+)
 async def del_handler(_, m: Message):
     """ del handler for purge plugin """
     reply = m.reply_to_message

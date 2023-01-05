@@ -3,29 +3,15 @@
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-
-app.CMD_HELP.update(
-    {"dv" : (
-        "dv",
-        {
-        "setdv [varname] [value]" : "Set any database vars, for ex: .setdv [USER_NAME] [BEAST]",
-        "getdv [varname]" : "Get a existing database vars value.",
-        "deldv [varname]" : "Delete a existing database var with its value.",
-        "alldv" : "Get all existing database vars.",
-        "listdv" : "Get all available dv vars which you set.",
-        "pm [on | off]" : "Turn on & off your pmguard",
-        }
-        )
-    }
+@app.on_cmd(
+    commands="setdv",
+    usage="Set database variable.",
+    disable_for=UserType.SUDO
 )
-
-
-
-@app.on_message(gen("setdv", exclude =["sudo"]))
 async def setdv_handler(_, m: Message):
     """ setdv handler for dv plugin """
     if app.long() == 1:
@@ -61,7 +47,11 @@ async def setdv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("deldv", exclude =["sudo"]))
+@app.on_cmd(
+    commands="deldv",
+    usage="Delete a database variable.",
+    disable_for=UserType.SUDO
+)
 async def deldv_handler(_, m: Message):
     """ deldv handler for dv plugin """
     if app.long() == 1:
@@ -94,7 +84,11 @@ async def deldv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("getdv", exclude =["sudo"]))
+@app.on_cmd(
+    commands="getdv"
+    usage="Get value of databae variable.",
+    disable_for=UserType.SUDO
+)
 async def getdv_handler(_, m: Message):
     """ getdv handler for dv plugin """
     if app.long() == 1:
@@ -126,7 +120,10 @@ async def getdv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("pm"))
+@app.on_cmd(
+    commands="pm",
+    usage="Allow users to pm"
+)
 async def pm_handler(_, m: Message):
     """ pm handler for dv plugin """
     arg = m.command
@@ -165,9 +162,13 @@ async def pm_handler(_, m: Message):
 
 
 
-@app.on_message(gen("alldv", exclude =["sudo"]))
-async def alldv_handler(_, m: Message):
-    """ alldv handler for dv plugin """
+@app.on_cmd(
+    commands="listdv",
+    usage="Get all database variables & values.",
+    disable_for=UserType.SUDO
+)
+async def listdv_handler(_, m: Message):
+    """ listdv handler for dv plugin """
     if bool(app.getalldv()) is True:
         await app.send_edit("Getting all database vars . . .", text_type=["mono"])
         my_dict = app.getalldv()
@@ -183,8 +184,11 @@ async def alldv_handler(_, m: Message):
 
 
 
-@app.on_message(gen("listdv"))
-async def dvlist_handler(_, m: Message):
-    """ dvlist handler for dv plugin """
+@app.on_cmd(
+    commands="alldv",
+    usage="Get all available database variable names."
+)
+async def alldv_handler(_, m: Message):
+    """ alldv handler for dv plugin """
     allvars = [f"`{x}`" for x in app.DVLIST]
     await app.send_edit("**AVAILABLE DB VARS:**\n\n" + "\n".join(allvars))

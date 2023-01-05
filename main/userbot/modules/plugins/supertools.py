@@ -12,24 +12,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"supertools" : (
-        "supertools",
-        {
-        "ud [query]" : "Get The Meaning Of Any Word In Urban Dictionary.",
-        "short [link]" : "Shorten a link into da.gd link.",
-        "unshort [shortlink]" : "Reverse the da.gd link to real link.",
-        "tts [reply to text]" : "Text To Speech, Convert Text Message To Voice | audio (mp3).",
-        "wtr [city name]" : "Type Command And Your City Name To Get Weather Details.",
-        "ws [site link]" : "Take A Screenshot Of Any Website And Get The Image Of That Site.",
-        "undlt [count]" : "Get deleted messages from recent history of group . . .",
-        }
-        )
-    }
-)
-
-
 weather_lang_code="en"
 
 lang_code = os.getenv("LANG_CODE", "en")
@@ -95,7 +77,10 @@ async def unshorten_link(m: Message, text):
 
 
 
-@app.on_message(gen("tts"))
+@app.on_cmd(
+    commands="tts",
+    usage="Convert text to speech."
+)
 async def tts_handler(_, m: Message):
     """tts handler for supertools plugin """
     reply = m.reply_to_message
@@ -124,7 +109,10 @@ async def tts_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ud"))
+@app.on_cmd(
+    commands="ud",
+    usage="Get meaning of a word on urban dictionary."
+)
 async def ud_handler(_, m:Message):
     """ ud_handler for supertools plugin """
     if app.long() == 1:
@@ -153,7 +141,10 @@ async def ud_handler(_, m:Message):
 
 
 
-@app.on_message(gen("short"))
+@app.on_cmd(
+    commands="short",
+    usage="Shorten a link."
+)
 async def shortlink_handler(_, m: Message):
     """ shortlink handler for supertools plugin """
     reply = m.reply_to_message
@@ -178,7 +169,10 @@ async def shortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["unshort", "noshort"]))
+@app.on_cmd(
+    commands=["unshort", "noshort"],
+    usage="Unshort a link."
+)
 async def unshortlink_handler(_, m: Message):
     """ unshortlink handler for supertools plugin """
     reply = m.reply_to_message
@@ -207,7 +201,10 @@ async def unshortlink_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["wtr", "weather"]))
+@app.on_cmd(
+    commands=["wtr", "weather"],
+    usage="Get your country wheather report."
+)
 async def weather_handler(_, m: Message):
     """ whether handler for supertools plugin """
     if app.long() == 1:
@@ -232,7 +229,10 @@ async def weather_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["ws", "webshot"]))
+@app.on_cmd(
+    commands=["ws", "webshot"],
+    usage="Send a screenshot of a website."
+)
 async def webshot_handler(_, m: Message):
     """ webshot handler for supertools plugin """
     if app.long() > 1:
@@ -262,7 +262,10 @@ async def webshot_handler(_, m: Message):
 
 
 
-@app.on_message(gen("undlt"))
+@app.on_cmd(
+    commands="undlt",
+    usage="Get your deleted texts back."
+)
 async def undlt_handler(_, m: Message):
     """ undlt handler for supertools plugin """
     collect = []

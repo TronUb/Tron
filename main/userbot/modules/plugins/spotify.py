@@ -40,7 +40,10 @@ async def spotify_now():
 
 
 
-@app.on_message(gen("now"))
+@app.on_cmd(
+    commands="now",
+    usage="Get current listening song information."
+)
 async def spotify_handler(_, m: Message):
     """ spotify handler for spotify plugin """
     try:

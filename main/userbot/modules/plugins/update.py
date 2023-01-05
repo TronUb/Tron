@@ -12,22 +12,6 @@ from main import app, gen
 
 
 
-
-
-app.CMD_HELP.update(
-    {"update" : (
-        "update",
-        {
-        "update" : "To check if new update is available or not.",
-        "update [ now ]" : "To update userbot to latest version."
-        }
-        )
-    }
-)
-
-
-
-
 TRON_REPO = app.UPSTREAM_REPO
 
 
@@ -70,7 +54,11 @@ async def install_requirements():
 
 
 
-@app.on_message(gen("update", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="update",
+    usage="Update your userbot to the latest version.",
+    disable_for=UserType.SUDO
+)
 async def update_handler(_, m):
     try:
         branch = "master"

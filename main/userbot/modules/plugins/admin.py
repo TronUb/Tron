@@ -25,30 +25,8 @@ from main import app, gen
 
 
 
+private = (ChatType.PRIVATE, ChatType.BOT)
 
-app.CMD_HELP.update(
-    {"admin" : (
-        "admin",
-        {
-        "ban [username | id | reply] [time]" : "bans a user, use it as timeban too",
-        "banall [confirm]" : "Ban all members in chat by one command",
-        "unban" : "unbans a user",
-        "mute [username | id | reply] [time]" : "restricts a user from talking in groups",
-        "unmute" : "unrestricts a user from talking in groups",
-        "promote" : "promote a member to admin",
-        "demote" : "demote a admin to a member",
-        "pin" : "pin a message in group",
-        "kick" : "kick a user out of your groups.",
-        "unpin" : "unpin a pinned message.",
-        "unpin all" : "unpin all pinned messages in one command"
-        }
-        )
-    }
-)
-
-
-
-private = ("private", "bot")
 def to_seconds(format, number): # number: int, format: s, m, h, d
     """ from hour/minutes/days to seconds converter """
     format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24}
@@ -58,23 +36,13 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 @app.on_cmd(
-        commands="ban",
-        usage="Ban a user in a chat.",
-        disable_for=UserType.SUDO,
-        disable_in=ChatType.CHANNEL
+    commands="ban",
+    usage="Ban a user in a chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def ban_handler(_, m: Message):
-    """
-        name::
-            ban_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -147,19 +115,14 @@ async def ban_handler(_, m: Message):
 
 
 
-@app.on_message(gen("banall", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="banall",
+    usage="Ban all members of a chat, except admins.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
+)
 async def banall_handler(_, m: Message):
-    """
-        name::
-            banall_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -202,24 +165,14 @@ async def banall_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="unban",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="unban",
+    usage="Unban a user in a chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def unban_handler(_, m: Message):
-    """
-        name::
-            unban_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -319,11 +272,10 @@ async def mute_user(chat_id, user_id, duration=datetime.now()):
 
 
 
-@app.on_message(
-    gen(
-        commands="mute",
-        exclude=["sudo"]
-    )
+@app.on_cmd(
+    commands="mute",
+    usage="Mute a user in a chat.",
+    disable_for=UserType.SUDO
 )
 async def mute_handler(_, m: Message):
     """
@@ -411,24 +363,13 @@ async def mute_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="unmute",
-        exclude=["sudo"]
-    )
+@app.on_cmd(
+    commands="unmute",
+    usage="Unmute a user in a chat.",
+    disable_for=UserType.SUDO
 )
 async def unmute_handler(_, m: Message):
-    """
-        name::
-            unmute_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -505,26 +446,14 @@ async def unmute_handler(_, m: Message):
         await app.error(e)
 
 
-
-
-@app.on_message(
-    gen(
-        commands="kick",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="kick",
+    usage="Kick a user out from your chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def kick_handler(_, m: Message):
-    """
-        name::
-            kick_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -586,24 +515,14 @@ async def kick_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="pin",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="pin",
+    usage="Pin a message in a chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def pin_handler(_, m: Message):
-    """
-        name::
-            pin_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         arg = True
         sm = m.sudo_message
@@ -654,24 +573,14 @@ async def pin_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="unpin",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="unpin",
+    usage="Unpin a message in a chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def unpin_handler(_, m: Message):
-    """
-        name::
-            unpin_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         sm = m.sudo_message
         reply = m.reply_to_message or sm.reply_to_message
@@ -716,24 +625,14 @@ async def unpin_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="promote",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="promote",
+    usage="Promote a user as an admin.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def promote_handler(_, m: Message):
-    """
-        name::
-            promote_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return
@@ -807,24 +706,14 @@ async def promote_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="demote",
-        exclude=["sudo", "channel"]
-    )
+@app.on_cmd(
+    commands="demote",
+    usage="Demote a user from admin to member.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
 )
 async def demote_handler(_, m: Message):
-    """
-        name::
-            demote_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         if await app.check_private():
             return

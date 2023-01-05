@@ -7,20 +7,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"stats": (
-        "stats",
-        {
-        "stats" : "Get information about how many groups/channels/users you have in your dialogs."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="stats",
+    usage="Get stats of how many channels/bots/ etc you have."
 )
-
-
-
-@app.on_message(gen("stats"))
 async def dialogstats_handler(_, m: Message):
     """ dialogstats handler for stats plugin """
     try:

@@ -14,34 +14,15 @@ from pyrogram.errors import (
 )
 
 from main import app, gen
+from main.core.enums import UserType, ChatType
 
 
 
-
-app.CMD_HELP.update(
-    {"utils" : (
-        "utils",
-        {
-        "settitle [ @username ] [ title ]" : "Set title of an admin.",
-        "invite [ @username ]" : "add a user / bot in your chat.",
-        "inviteall [ @group_username ]" : "add all users (not bots) in your chat.",
-        "admins" : "Get list of admins.",
-        "report [ reply to user ]" : "Report a spammer or idiot.",
-        "all" : "Tag recent 100 members, use carefully.",
-        "bots" : "Get list of bots in a chat.",
-        "kickme" : "Leave a chat, use it carefully.",
-        "members [ @username ]" : "Get number of members in  a chat.",
-        "join [@username]" : "Join a chat with just a command.",
-        "slowmo [seconds | off]" : "Set slow mode in a chat, use only [ 10, 30, 60, 300, 900, 3600, off ] . . .",
-        }
-        )
-    }
+@app.on_cmd(
+    commands="settitle",
+    usage="Set title to admins.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen("settitle", exclude = ["sudo", "channel"]))
 async def admintitle_handler(_, m: Message):
     if await app.check_private():
         return
@@ -94,7 +75,11 @@ async def admintitle_handler(_, m: Message):
 
 
 
-@app.on_message(gen("invite"))
+@app.on_cmd(
+    commands="invite",
+    usage="Invite members to chat.",
+    disable_for=UserType.SUDO
+)
 async def invite_handler(_, m):
     if await app.check_private():
         return
@@ -120,7 +105,12 @@ async def invite_handler(_, m):
     await app.send_edit(f"Added {get_user.first_name} to the chat!")
 
 
-@app.on_message(gen("inviteall", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="inviteall",
+    usage="invite all members of a chat to our chat.",
+    disable_for=UserType.SUDO,
+    disable_in=ChatType.CHANNEL
+)
 async def inviteall_handler(_, m):
     if await app.check_private():
         return
@@ -155,7 +145,11 @@ async def inviteall_handler(_, m):
 
 
 
-@app.on_message(gen(["admins", "adminlist"]))
+@app.on_cmd(
+    commands=["admins", "adminlist"],
+    usage="Get lost of admins of a chat.",
+    disable_for=UserType.SUDO
+)
 async def adminlist_handler(_, m):
     if await app.check_private():
         return
@@ -204,7 +198,11 @@ async def adminlist_handler(_, m):
 
 
 
-@app.on_message(gen("report", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="report",
+    usage="Report a member to admins.",
+    disable_for=UserType.SUDO
+)
 async def reportadmin_handler(_, m: Message):
     if await app.check_private():
         return
@@ -235,7 +233,11 @@ async def reportadmin_handler(_, m: Message):
 
 
 
-@app.on_message(gen("all", exclude = ["sudo"]))
+@app.on_cmd(
+    commands="all",
+    usage="Tag all members/admins of a chat.",
+    disable_for=UserType.SUDO
+)
 async def tagall_handler(app, m: Message):
     if await app.check_private():
         return
@@ -258,7 +260,10 @@ async def tagall_handler(app, m: Message):
 
 
 
-@app.on_message(gen("bots"))
+@app.on_cmd(
+    commands="bots",
+    usage="Get list of bots present in a chat."
+)
 async def botlist_handler(_, m: Message):
     if await app.check_private():
         return
@@ -302,7 +307,11 @@ async def botlist_handler(_, m: Message):
 
 
 
-@app.on_message(gen("kickme", exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands="kickme",
+    usage="Leave a chat",
+    disable_for=UserType.SUDO
+)
 async def leavechat_handler(_, m):
     if await app.check_private():
         return
@@ -317,7 +326,10 @@ async def leavechat_handler(_, m):
 
 
 
-@app.on_message(gen("members"))
+@app.on_cmd(
+    commands="members",
+    usage="Get count numbers of a chat."
+)
 async def membercount_handler(_, m):
     if await app.check_private():
         return
@@ -341,7 +353,11 @@ async def membercount_handler(_, m):
 
 
 
-@app.on_message(gen("join", exclude=["sudo"]))
+@app.on_cmd(
+    commands="join",
+    usage="Join a chat.",
+    disable_for=UserType.SUDO
+)
 async def joinchat_handler(_, m: Message):
     if app.long() == 1:
         await app.send_edit("Give me some chat id | username after command . . .", text_type=["mono"], delme=5)
@@ -363,7 +379,11 @@ async def joinchat_handler(_, m: Message):
 
 
 
-@app.on_message(gen("slowmo"))
+@app.on_cmd(
+    commands="slowmo",
+    usage="Set slow mode of chat."
+    disable_for=UserType.SUDO
+)
 async def slowmode_handler(_, m: Message):
     if await app.check_private():
         return

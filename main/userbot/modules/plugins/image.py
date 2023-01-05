@@ -14,26 +14,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"image" : (
-        "image",
-        {
-        "uns [ query ]" : "Search Images On Unsplash.",
-        "stoi [ reply to sticker ]" : "Converts the replied sticker into image.",
-        "itos [ reply to image ]" : "Converts the replied image into sticker.",
-        "qc [ text ]" : "Creates a qr code image.",
-        "colour [ colour name ] [ text ]" : "Creates a colour background image.",
-        "cat" : "Get random cat images.",
-        "waifu" : "Get random waifu images.",
-        "poto" : "Get profile photos of yours or someone's else.",
-        "dog" : "Get random dog images.",
-        }
-        )
-    }
-)
-
-
 # colour code to generate images
 COLOUR_CODE = {
     "aqua": "rgba(0, 255, 255, 100)",
@@ -47,8 +27,6 @@ COLOUR_CODE = {
     "black": "rgba(0, 0, 0, 100)",
     "white": "rgba(255, 255, 255, 100)",
 }
-
-
 
 
 async def get_image(m: Message, keyword):
@@ -78,7 +56,10 @@ async def send_profile_pic(m):
 
 
 
-@app.on_message(gen(["uns", "unsplash"]))
+@app.on_cmd(
+    commands=["uns", "unsplash"],
+    usage="Get images from unsplash.",
+)
 async def unsplash_handler(_, m: Message):
     """ unsplash handler for image """
     cmd = m.command
@@ -137,7 +118,10 @@ async def unsplash_handler(_, m: Message):
 
 
 
-@app.on_message(gen("stoi"))
+@app.on_cmd(
+    commands="stoi",
+    usage="Convert sticker to image."
+)
 async def stoi_handler(_, m):
     """ stoi handler for image plugin """
     reply = m.reply_to_message
@@ -173,7 +157,10 @@ async def stoi_handler(_, m):
 
 
 
-@app.on_message(gen("itos"))
+@app.on_cmd(
+    commands="itos",
+    usage="Convert image to sticker."
+)
 async def itos_handler(_, m):
     """ itos handler for image plugin """
     reply = m.reply_to_message
@@ -208,7 +195,10 @@ async def itos_handler(_, m):
 
 
 
-@app.on_message(gen(["qc", "qrcode"]))
+@app.on_cmd(
+    commands=["qc", "qrcode"],
+    usage="Create qr codes of your texts."
+)
 async def qrcode_handler(_, m):
     """ qrcode handler for image plugin """
     try:
@@ -232,7 +222,10 @@ async def qrcode_handler(_, m):
 
 
 
-@app.on_message(gen(["colour", "color"]))
+@app.on_cmd(
+    commands=["colour", "color"],
+    usage="Create color template images."
+)
 async def colourtemplate_handler(_, m: Message):
     """ colourtemplate handler for image plugin """
     if app.long() == 1:
@@ -269,7 +262,10 @@ async def colourtemplate_handler(_, m: Message):
 
 
 
-@app.on_message(gen("cat"))
+@app.on_cmd(
+    commands="cat",
+    usage="Get cat images."
+)
 async def catpic_handler(_, m):
     try:
         await m.delete()
@@ -284,7 +280,10 @@ async def catpic_handler(_, m):
 
 
 
-@app.on_message(gen("waifu"))
+@app.on_cmd(
+    commands="waifu",
+    usage="Get waifu images."
+)
 async def waifupic_handler(_, m):
     text = "Finding waifu . . ."
     try:
@@ -321,7 +320,10 @@ async def waifupic_handler(_, m):
 
 
 
-@app.on_message(gen("poto"))
+@app.on_cmd(
+    commands="pfp",
+    usage="Get profile pictures."
+)
 async def profilepic_handler(_, m):
     msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
     await send_profile_pic(m)
@@ -330,7 +332,10 @@ async def profilepic_handler(_, m):
 
 
 
-@app.on_message(gen("dog"))
+@app.on_cmd(
+    commands="dog",
+    usage="Get dog images."
+)
 async def dogpic_handler(_, m):
     try:
         img_url = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]

@@ -12,22 +12,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"carbon" : (
-        "carbon",
-        {
-        "carbon [text]" : "Get a carbon image with written text on it.",
-        "carblist" : "Get list of carbon colour codes."
-        }
-        )
-    }
-)
-
-
-
-
-
 colour_code = {
     "aqua": "rgba(0, 255, 255, 100)",
     "red": "rgba(255, 0, 0, 100)",
@@ -51,7 +35,10 @@ colour_code = {
 
 
 
-@app.on_message(gen(["carbon", "carb"]))
+@app.on_cmd(
+    commands=["carbon", "cb"],
+    usage="Get a carbon template with text written on it.",
+)
 async def carbon_handler(_, m: Message):
     """ carbon handler for carbon plugin """
     cmd = m.command
@@ -80,7 +67,10 @@ async def carbon_handler(_, m: Message):
 
 
 
-@app.on_message(gen("carblist", exclude = ["sudo"]))
+@app.on_cmd(
+    commands="carblist",
+    usage="Get list of available carbon background colors."
+)
 async def carblist_handler(_, m: Message):
     """ carbon list handler for carbon plugin """
     clist = [f"`{x}`" for x in list(colour_code.keys())]

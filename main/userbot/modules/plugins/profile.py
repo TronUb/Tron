@@ -12,35 +12,11 @@ from pyrogram.types import (
 from pyrogram.errors import PeerIdInvalid
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
 date_dict = []
-
-
-
-
-app.CMD_HELP.update(
-    {"profile" : (
-        "profile",
-        {
-        "whois [reply to message]" : "get a small piece of information of a user.",
-        "id" : "Get chat or user id",
-        "block [username] or [reply to user]" : "Block a user from sending message in your pm.",
-        "unblock [username] or [reply to user]" : "Unblock a user and exclude him to send messages in your pm.",
-        "repo" : "Get Tron Userbot official repository link.",
-        "rem [lname] | [bio] | [pfp] | [uname]" : "Remove last name or username from profile.",
-        "set [fname] | [lname ] | [uname] | [bio] & [text]" : "Choose a option from command and set anything in your profile.",
-        "uinfo [reply to user]" : "Get Full Info Of A Specific User.\nThis Command Includes More Details.",
-        "sc [reply to user]" : "Find Out Groups Of A Specific User, Reply To That User. @tgscanrobot",
-        "sg [reply to user]" : "Get name & username history of a particular user in groups or private chats. @sangmatainfo_bot",
-        "men [username] [text]" : "Mention a user in a specific text.",
-        }
-        )
-    }
-)
-
-
 
 
 men = partial("<a href='tg://user?id={}'>{}</a>".format)
@@ -64,7 +40,10 @@ def FullName(user: User):
 
 
 
-@app.on_message(gen("whois"))
+@app.on_cmd(
+    commands="whois",
+    usage="Get user information."
+)
 async def whois_handler(_, m: Message):
     """ whois handler for profile plugin """
     reply = m.reply_to_message
@@ -118,7 +97,10 @@ async def whois_handler(_, m: Message):
 
 
 
-@app.on_message(gen("id"))
+@app.on_cmd(
+    commands="id",
+    usage="Get user id of user."
+)
 async def id_handler(_, m: Message):
     """ id handler for profile plugin """
     await app.send_edit("Getting id . . .", text_type=["mono"])
@@ -146,7 +128,11 @@ async def id_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["men", "mention"], exclude = ["sudo"]))
+@app.on_cmd(
+    commands=["men", "mention"],
+    usage="Mention a user.",
+    disable_for=UserType.SUDO
+)
 async def mentionuser_handler(_, m: Message):
     """ mentionuser handler for profile plugin """
     if app.long() < 3:
@@ -166,7 +152,10 @@ async def mentionuser_handler(_, m: Message):
 
 
 
-@app.on_message(gen("uinfo"))
+@app.on_cmd(
+    commands="uinfo",
+    usage="Get full user information."
+)
 async def get_full_user_info(_, m: Message):
     """ get full user info function for profile plugin """
     await app.send_edit("scrapping info . . .", text_type=["mono"])
@@ -215,7 +204,10 @@ async def get_full_user_info(_, m: Message):
 
 
 
-@app.on_message(gen(["sc", "scan"]))
+@app.on_cmd(
+    commands=["sc", "scan"],
+    usage="Scan a user from @tgscanrobot"
+)
 async def tgscan_handler(_, m: Message):
     """ tgscan handler for profile plugin """
     if m.reply_to_message:
@@ -242,7 +234,11 @@ async def tgscan_handler(_, m: Message):
 
 
 
-@app.on_message(gen("block"))
+@app.on_cmd(
+    commands="block",
+    usage="Block a user.",
+    disable_for=UserType.SUDO
+)
 async def block_handler(_, m: Message):
     """ block handler for profile plugin """
     reply = m.reply_to_message
@@ -265,7 +261,11 @@ async def block_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unblock"))
+@app.on_cmd(
+    commands="unblock",
+    usage="Unblock a user.",
+    disble_for=UserType.SUDO
+)
 async def unblock_handler(_, m: Message):
     """ unblock handler for profile plugin """
     reply = m.reply_to_message
@@ -288,7 +288,10 @@ async def unblock_handler(_, m: Message):
 
 
 
-@app.on_message(gen("sg"))
+@app.on_cmd(
+    commands="sg",
+    usage="Get user name/username history."
+)
 async def usernamehistory_handler(_, m: Message):
     """ usernamehistory handler for profile plugin """
     reply = m.reply_to_message
@@ -347,7 +350,11 @@ async def usernamehistory_handler(_, m: Message):
 
 
 
-@app.on_message(gen("set", exclude=["sudo"]))
+@app.on_cmd(
+    commands="set",
+    usage="Set your profile details.",
+    disble_for=UserType.SUDO
+)
 async def setprofile_handler(_, m: Message):
     """ setprofile handler for profile plugin """
     cmd = m.command
@@ -372,7 +379,11 @@ async def setprofile_handler(_, m: Message):
 
 
 
-@app.on_message(gen("rem", exclude=["sudo"]))
+@app.on_cmd(
+    commands="rem",
+    usage="Remove removable attributes from your profile.",
+    disable_for=UserType.SUDO
+)
 async def remprofile_handler(_, m: Message):
     """ rmprofile handler for profile plugin """
     if app.long() > 1:
@@ -480,7 +491,10 @@ async def rmprofile(m: Message, args):
 
 
 
-@app.on_message(gen("repo"))
+@app.on_cmd(
+    commands="repo",
+    usage="Get repo link.",
+)
 async def repolink_handler(_, m: Message):
     """ repolink handler for profile plugin """
     await app.send_edit(

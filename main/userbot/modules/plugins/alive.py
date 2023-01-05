@@ -8,39 +8,12 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"alive" : (
-        "alive",
-        {
-        "alive" : "Normal alive, in which you will get userbot status without inline buttons.",
-        "ialive" : "Inline alive that contains your & your userbot status.",
-        "iqt" : "Get inline quotes with a inline 'more' button."
-        }
-        )
-    }
-)
-
-
-
-
-@app.on_message(
-    gen(
-        commands="alive"
-    )
+@app.on_cmd(
+    commands="alive",
+    usage="Get a beautiful alive template."
 )
 async def alive_handler(_, m: Message):
-    """
-        name::
-            alive_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         alive_msg = "\n"
         if app.UserBio():
@@ -78,23 +51,12 @@ async def alive_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="ialive"
-    )
+@app.on_cmd(
+    commands="ialive",
+    usage="Get alive template with inline buttons."
 )
 async def inlinealive_handler(_, m: Message):
-    """
-        name::
-            inlinealive_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#ialive")
@@ -119,23 +81,12 @@ async def inlinealive_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands=["iquote", "iqt"]
-    )
+@app.on_cmd(
+    commands=["iquote", "iqt"],
+    usage="Get inline quotes."
 )
 async def inlinequote_handler(_, m: Message):
-    """
-        name::
-            inlinequote_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#quote")

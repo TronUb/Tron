@@ -9,23 +9,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"time" : (
-        "time",
-        {
-        "today" : "Get date & time information, set your `TIME_ZONE` to get correct time & date.",
-        "time" : "Get time information of your city.",
-        "date" : "Get date information of your city."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="today",
+    usage="Get today's details like day, date, time."
 )
-
-
-
-
-@app.on_message(gen("today"))
 async def today_handler(_, m: Message):
     """ today handler for time plugin """
     weekday = datetime.datetime.today().weekday()
@@ -55,7 +42,10 @@ async def today_handler(_, m: Message):
 
 
 
-@app.on_message(gen("time"))
+@app.on_cmd(
+    commands="time",
+    usage="Get time of your place."
+)
 async def time_handler(_, m: Message):
     """ time handler for time plugin """
     await app.send_edit(f"Today's time: `{app.showtime()}`")
@@ -63,7 +53,10 @@ async def time_handler(_, m: Message):
 
 
 
-@app.on_message(gen("date"))
+@app.on_cmd(
+    commands="date",
+    usage="Get date of your place."
+)
 async def date_handler(_, m: Message):
     """ date handler for time plugin """
     await app.send_edit(f"Today's date: `{app.showdate()}`")

@@ -9,28 +9,16 @@ from main import app, gen
 
 
 
-
-
-app.CMD_HELP.update(
-    {"song" : (
-        "song",
-        {
-        "ly [song title]" : "Get Song Lyrics [ Japanese Songs Doesn't Work For Now.]",
-        "song [song name]" : "Get songs in mp3 format.",
-        "dz [song name]" : "Get songs from deezer bot in mp3 format."
-        }
-        )
-    }
-)
-
-
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
 
 
 
-@app.on_message(gen(["song", "music"]))
+@app.on_cmd(
+    commands=["song", "music"],
+    usage="Download songs in mp3 format."
+)
 async def song_handler(_, m: Message):
     """ song handler for song plugin """
     await app.send_edit("Getting song . . .")
@@ -76,7 +64,10 @@ async def song_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["dz", "deezer"]))
+@app.on_cmd(
+    commands=["dz", "deezer"],
+    usage="Download songs from deezerbot in mp3 format."
+)
 async def deezer_handler(_, m: Message):
     """ deezer handler for song plugin """
     try:
@@ -126,7 +117,10 @@ async def deezer_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["ly", "lyrics"]))
+@app.on_cmd(
+    commands=["ly", "lyrics"],
+    usage="Get lyrics of a song."
+)
 async def lyrics_handler(_, m: Message):
     """ lyrics handler for song plugin """
     try:

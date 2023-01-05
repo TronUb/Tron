@@ -15,25 +15,15 @@ from pyrogram.raw.types import InputStickerSetShortName
 from pyrogram.errors import YouBlockedUser, StickersetInvalid
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"stickers" : (
-        "stickers",
-        {
-        "kang [reply to sticker]" : "Adds sticker to your pack or creates new sticker pack.",
-        "stinfo [ reply to sticker ]" : "Get sticker pack info."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="kang",
+    usage="Add sticker to your sticker pack.",
+    disable_for=UserType.SUDO
 )
-
-
-
-
-@app.on_message(gen("kang"))
 async def kang_handler(_, m: Message):
     """ kang handler for stickers plugin """
     replied = m.reply_to_message
@@ -211,7 +201,10 @@ async def kang_handler(_, m: Message):
 
 
 
-@app.on_message(gen("stinfo"))
+@app.on_cmd(
+    commands="stinfo",
+    usage="Get a sticker information, emoji, pack name, etc."
+)
 async def stinfo_handler(_, m: Message):
     """ stickerinfo handler for stickers plugin """
     replied = m.reply_to_message

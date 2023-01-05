@@ -10,26 +10,15 @@ from io import StringIO
 from pyrogram.types import Message
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
-
-app.CMD_HELP.update(
-    {"dev" : (
-        "dev",
-        {
-        "eval print('cat')" : "A nice tool to test python codes.",
-        "term pip3 install colorama" : "Run commands in shell."
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["eval", "e"],
+    usage="Run python programs, (script level)"
+    disable_for=UserType.SUDO
 )
-
-
-
-
-
-@app.on_message(gen(["eval", "e"], exclude =["sudo"]))
 async def evaluate_handler(_, m: Message):
     """ This function is made to execute python codes """
 
@@ -79,7 +68,11 @@ async def evaluate_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["term", "shell"], exclude =["sudo"]))
+@app.on_cmd(
+    command=["term", "shell"],
+    usage="Execute shell scripts.",
+    disable_for=UserType.SUDO
+)
 async def terminal_handler(_, m: Message):
     """ This function is made to run shell commands """
 

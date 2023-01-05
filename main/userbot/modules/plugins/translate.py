@@ -6,24 +6,13 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"translate" : (
-        "translate",
-        {
-        "tr [ language code ] [ text ] | [ reply to message ]" : "Translates The Message In Your Language.\n\nNote : Use Correct Language Codes To Translate In Your Language.",
-        "trlist" : "Get list of supported translating languages."
-        }
-        )
-    }
-)
-
-
 gtl = GoogleTranslator()
 
 
-
-@app.on_message(gen(["tr", "tl", "translate"]))
+@app.on_cmd(
+    commands=["tr", "tl", "translate"],
+    usage="Translate your texts to any language."
+)
 async def translate_handler(_, m: Message):
     reply = m.reply_to_message
     cmd = m.command
@@ -66,7 +55,10 @@ async def translate(lang, text):
 
 
 
-@app.on_message(gen(["trlist", "tllist", "translatelist"]))
+@app.on_cmd(
+    commands=["trlist", "tllist", "translatelist"],
+    usage="Get list of supported language codes."
+)
 async def translatelang_handler(_, m):
     data = []
     data.clear()

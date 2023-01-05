@@ -10,19 +10,10 @@ from main import app, gen
 
 
 
-app.CMD_HELP.update(
-    {"heroku" : (
-        "heroku",
-        {
-        "kbd [button text] [url] [caption]" : "get bot custom keyboards",
-        }
-        )
-    }
+@app.on_cmd(
+    commands=["kbd", "keyboard"],
+    usage="Create keyboards with assistant bot."
 )
-
-
-
-@app.on_message(gen(["kbd", "keyboard"]))
 async def create_keyboard(_, m):
     """ create keyboard handler keyboard plugin """
     if not app.GetArgs():

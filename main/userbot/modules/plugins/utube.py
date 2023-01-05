@@ -12,21 +12,6 @@ from PIL import Image
 
 
 
-
-app.CMD_HELP.update(
-    {"utube": (
-        "utube",
-        {
-        "ytsearch [ query ]" : "Search anything on YouTube.",
-        "ytinfo [ link | reply ]" : "Get a youtube video information.",
-        "ytmdl [ link | reply ] [ -a ]" : "Download any video/audio from YouTube Use flag -a to download audio. If your bot is present in chat, by default you'll get inline results.",
-        }
-        )
-    }
-)
-
-
-
 def ResizeImage(path: str, size: tuple=(320, 320)):
     img = Image.open(path)
     img.thumbnail(size)
@@ -37,11 +22,9 @@ def ResizeImage(path: str, size: tuple=(320, 320)):
 
 
 
-@app.on_message(
-    gen(
-        "ytsearch",
-        argcount=1
-    )
+@app.on_cmd(
+    commands="ytsearch",
+    usage="Search anything on YouTube."
 )
 async def ytsearch_handler(_, m: Message):
     try:
@@ -80,7 +63,10 @@ async def ytsearch_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytinfo"))
+@app.on_cmd(
+    commands="ytinfo",
+    usage="Get a YouTube video information."
+)
 async def ytvideoinfo_handler(_, m: Message):
     try:
         args = app.GetArgs()
@@ -113,7 +99,10 @@ async def ytvideoinfo_handler(_, m: Message):
 
 
 
-@app.on_message(gen("ytmdl"))
+@app.on_cmd(
+    commands="ytmdl",
+    usage="Download video/audio from YouTube, use -a to download audio."
+)
 async def ytmdl_handler(_, m):
     try:
         msg = await app.send_edit("processing link . . .", text_type=["mono"])

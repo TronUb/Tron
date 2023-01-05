@@ -62,16 +62,6 @@ app.CMD_HELP.update(
 
 
 def get_anime_gif(arg):
-    """ 
-        name:: 
-            get_anime_gif
-        
-        parameters::
-            arg (str): a query to search
-            
-        returns::
-            list | None
-    """
     data = requests.get(f"https://nekos.best/api/v2/{arg}").json()
     data = data["results"][0]
     img = data["url"]
@@ -84,17 +74,6 @@ def get_anime_gif(arg):
 
 
 async def send_gif(m: Message, gif_data):
-    """ 
-        name:: 
-            send_gif
-        
-        parameters::
-            message (pyrogram.types.Message): pyrogram message
-            gif_data (list):: a list containing image url and text
-            
-        returns::
-            None
-    """
     try:
         await app.send_video(
             m.chat.id,
@@ -107,46 +86,22 @@ async def send_gif(m: Message, gif_data):
 
 
 
-@app.on_message(
-    gen(
-        commands="animelist"
-    )
+@app.on_cmd(
+    commands="animelist",
+    usage="Get list of available keywords."
 )
 async def animelist_handler(_, m: Message):
-    """
-        name::
-            animelist_handler
-
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     await app.send_edit(anime_suffix)
 
 
 
 
-@app.on_message(
-    gen(
-        commands=["nekopic", "npic"]
-
-    )
+@app.on_cmd(
+    commands=["nekopic", "npic"],
+    usage="Get anime neko girl images."
 )
 async def nekopic_handler(_, m: Message):
-    """
-        name::
-            nekopic_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         data = requests.get("https://nekos.best/api/v2/neko").json()
         data = data["results"][0]
@@ -162,24 +117,12 @@ async def nekopic_handler(_, m: Message):
 
 
 
-@app.on_message(
-    gen(
-        commands="animegif",
-        argcount=1
-    )
+@app.on_cmd(
+    commands="animegif",
+    ussge="Get anime gifs."
 )
 async def animegif_handler(_, m: Message):
-    """
-        name::
-            animegif_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         arg = m.command[1]
 

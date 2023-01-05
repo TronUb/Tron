@@ -9,46 +9,20 @@ from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 
 from main import app, gen
-
-
-
-
-
-app.CMD_HELP.update(
-    {"afk": (
-        "afk",
-        {
-        "afk" : "away from keyboard, use `#afk` for important talk."
-        }
-        )
-    }
-)
+from main.core.enums import UserType
 
 
 
 handlers = []
 
 
-
 @app.on_message(
-    gen(
-        commands="afk",
-        exclude=["sudo"]
-    ),
-    group=0
+    commands="afk",
+    usage="Away from keyboard."
+    disable_for=UserType.SUDO
 )
 async def afk_handler(_, m: Message):
-    """
-        name::
-            offline_handler
 
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         start = int(time.time())
         if app.long() >= 2:
@@ -79,17 +53,6 @@ async def afk_handler(_, m: Message):
 
 # notify mentioned users
 async def offlinemention_handler(_, m: Message):
-    """
-        name::
-            offlinemention_handler
-
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         get = app.get_afk()
         if get and get["afk"]:
@@ -135,17 +98,6 @@ async def offlinemention_handler(_, m: Message):
 
 
 async def unafk_handler(_, m: Message):
-    """
-        name::
-            unafk_handler
-
-        parameters::
-            client (pyrogram.Client): pyrogram client
-            message (pyrogram.types.Message): pyrogram message
-
-        returns::
-            None
-    """
     try:
         # don't break afk while using afk command
         commands = [f"{x}afk" for x in app.Trigger()]
@@ -173,18 +125,8 @@ async def unafk_handler(_, m: Message):
 
 
 
-
+# add handlers when user goes afk
 def add_afkhandler():
-    """
-        name::
-            add_afkhandler
-
-        parameters::
-            None
-
-        returns::
-            None
-    """
     handlers.append(app.add_handler(MessageHandler(
         callback=offlinemention_handler,
         filters=~filters.bot & ~filters.channel & ~filters.me & filters.private | filters.mentioned),
@@ -197,17 +139,8 @@ def add_afkhandler():
     ))
 
 
+# remove handlers when users comes out of afk
 def remove_afkhandler():
-    """
-        name::
-            remove_afkhandler
-
-        parameters::
-            None
-
-        returns::
-            None
-    """
     try:
         app.remove_handler(*handlers[0])
         app.remove_handler(*handlers[1])

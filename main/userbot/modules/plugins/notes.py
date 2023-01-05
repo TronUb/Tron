@@ -12,23 +12,7 @@ from main import (
     gen,
     regex
 )
-
-
-
-
-app.CMD_HELP.update(
-    {"notes" : (
-        "notes",
-        {
-        "save [note mame ] [reply to message]" : "Save A Note Of Any Type Of Media In Your Database.",
-        ">" : "Get Your Note. Example: `>mynote`, Where mynote is note name and command ( >)",
-        "notes" : "Get Your Saved Note List.",
-        "clear" : "Delete A Note."
-        }
-        )
-    }
-)
-
+from main.core.enums import UserType
 
 
 
@@ -49,7 +33,11 @@ GET_FORMAT = {
 
 
 
-@app.on_message(gen("save"))
+@app.on_cmd(
+    commands="save",
+    usage="save a note.",
+    disable_for=UserType.SUDO
+)
 async def savenote_hanlder(_, m: Message):
     """ savenote handler for notes plugin """
     try:
@@ -158,7 +146,10 @@ async def getnote_handler(_, m: Message):
 
 
 
-@app.on_message(gen("notes"))
+@app.on_cmd(
+    commands="notes",
+    usage="Get all saved notes."
+)
 async def notelist_handler(_, m: Message):
     """ notelist handler for notes plugin """
     getnotes = app.get_all_selfnotes(m.from_user.id)
@@ -174,7 +165,11 @@ async def notelist_handler(_, m: Message):
 
 
 
-@app.on_message(gen("clear", exclude=["sudo"]))
+@app.on_cmd(
+    commands="clear",
+    usage="Delete a saved note.",
+    disable_for=UserType.SUDO
+)
 async def clearnote_handler(_, m: Message):
     """ clearnote handler for notes plugin """
     if app.long() <= 1:

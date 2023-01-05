@@ -7,21 +7,10 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"imdb" : (
-        "imdb",
-        {
-        "imdb" : "search a movie and get its metadata on imdb."
-        }
-        )
-    }
+@app.on_cmd(
+    commands="imdb",
+    usage="Get imdb details of a movie."
 )
-
-
-
-
-@app.on_message(gen("imdb"))
 async def imdb_handler(_, m: Message):
     """ imdb handler for imdb plugin """
     try:

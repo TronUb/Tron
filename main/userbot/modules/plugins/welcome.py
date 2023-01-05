@@ -4,26 +4,11 @@ from pyrogram.types import Message
 from pyrogram import filters
 
 from main import app, gen
+from main.core.enums import UserType
 
-
-
-
-app.CMD_HELP.update(
-    {"welcome": (
-        "welcome",
-        {
-        "setwc [reply to media/text]" : "Set welcome message for group.",
-        "getwc" : "Use it in group to get saved welcome message.",
-        "delwc" : "Use it in group to delete saved welcome message.",
-        }
-        )
-    }
-)
 
 
 IgnoreChat = app.get_welcome_ids()
-
-
 
 
 @app.on_message(filters.new_chat_members & filters.group & filters.chat(IgnoreChat))
@@ -59,9 +44,11 @@ async def sendwelcome_handler(_, m: Message):
         await app.error(e)
 
 
-
-
-@app.on_message(gen(["setwelcome", "setwc"], exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands=["setwelcome", "setwc"],
+    usage="Set welcome message in a chat.",
+    disable_for=UserType.SUDO
+)
 async def savewelcome_handler(_, m: Message):
     if await app.check_private():
         return
@@ -92,7 +79,11 @@ async def savewelcome_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["delwelcome", "delwc"], exclude=["sudo"]))
+@app.on_cmd(
+    commands=["delwelcome", "delwc"],
+    usage="Delete welcome message of a chat.,
+    disable_for=UserType.SUDO
+)
 async def deletewelcome_handler(_, m: Message):
     if await app.check_private():
         return
@@ -107,7 +98,11 @@ async def deletewelcome_handler(_, m: Message):
 
 
 
-@app.on_message(gen(["getwelcome", "getwc"], exclude = ["sudo", "channel"]))
+@app.on_cmd(
+    commands=["getwelcome", "getwc"],
+    usage="Get saved welcome message of a chat.",
+    disable_for=UserType.SUDO
+)
 async def getwelcome_handler(_, m: Message):
     if await app.check_private():
         return

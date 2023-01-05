@@ -9,21 +9,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"zip" : (
-        "zip",
-        {
-        "zip [reply to file]" : "Zip a file and save it in your local directories.",
-        "unzip [file path]" : "Unzip a file and save it in your local directories.",
-        "new [file name]" : "Create a python file with your codes."
-        }
-        )
-    }
-)
-
-
-
 async def unzipfiles(zippath):
     """ unzipfiles function for filetools plugin """
     foldername = zippath.split("/")[-1]
@@ -34,7 +19,10 @@ async def unzipfiles(zippath):
 
 
 
-@app.on_message(gen("zip"))
+@app.on_cmd(
+    commands="zip",
+    usage="Zip a file."
+)
 async def zip_handler(_, m: Message):
     """ zip handler for filetools plugin """
     reply = m.reply_to_message
@@ -64,7 +52,10 @@ async def zip_handler(_, m: Message):
 
 
 
-@app.on_message(gen("unzip"))
+@app.on_cmd(
+    commands="unzip",
+    usage="Unzip a file."
+)
 async def unzip_handler(_, m: Message):
     """ unzip handler for filetools plugin """
     if app.long() == 2:
@@ -85,7 +76,10 @@ async def unzip_handler(_, m: Message):
 
 
 
-@app.on_message(gen("new"))
+@app.on_cmd(
+    commands="new",
+    usage="Create a new file."
+)
 async def createfile_handler(_, m:Message):
     """ create file handler for filetools plugin """
     reply = m.reply_to_message
