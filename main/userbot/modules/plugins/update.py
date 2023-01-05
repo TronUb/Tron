@@ -9,6 +9,7 @@ from git.exc import (
 )
 
 from main import app, gen
+from main.core.enums import UserType
 
 
 
