@@ -30,16 +30,17 @@ class OnCmd:
         command_info = {commands[0] if isinstance(commands, list) else commands : usage}
         cmd_help = self.CMD_HELP.get(module)
         if cmd_help:
-            cmd_help.update(command_info)
+            self.CMD_HELP.get(module).update(command_info)
         else:
             # wherever this decorator is called 
             # we will access its future local variables
             frame = inspect.currentframe().f_back
             module = frame.f_locals.get("__name__")
+            module_name = module.split(".")[-1]
 
-            cmd_help = self.CMD_HELP.get(module.split(".")[-1])
+            cmd_help = self.CMD_HELP.get(module_name)
             if cmd_help:
-                cmd_help.update({command_info})
+                self.CMD_HELP.get(module_name).update({command_info})
 
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
