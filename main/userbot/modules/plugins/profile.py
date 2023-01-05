@@ -264,7 +264,7 @@ async def block_handler(_, m: Message):
 @app.on_cmd(
     commands="unblock",
     usage="Unblock a user.",
-    disble_for=UserType.SUDO
+    disable_for=UserType.SUDO
 )
 async def unblock_handler(_, m: Message):
     """ unblock handler for profile plugin """
@@ -353,7 +353,7 @@ async def usernamehistory_handler(_, m: Message):
 @app.on_cmd(
     commands="set",
     usage="Set your profile details.",
-    disble_for=UserType.SUDO
+    disable_for=UserType.SUDO
 )
 async def setprofile_handler(_, m: Message):
     """ setprofile handler for profile plugin """
