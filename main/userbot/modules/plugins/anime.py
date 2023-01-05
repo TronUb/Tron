@@ -8,8 +8,6 @@ from main import app, gen
 
 
 
-
-
 anime_suffix = "`baka`\n`bite`\n`blush`\n`bored`\n`cry`\n`cuddle`\n`dance`\n`facepalm`\n`feed`\n`happy`\n`highfive`\n`hug`\n`kiss`\n`laugh`\n`pat`\n`poke`\n`pout`\n`shrug`\n`slap`\n`sleep`\n`smile`\n`stare`\n`think`\n`thumbsup`\n`tickle`\n`wave`\n`wink`"
 anime_list = [
     "baka",
@@ -40,25 +38,6 @@ anime_list = [
     "wave",
     "wink"
 ]
-
-
-
-
-app.CMD_HELP.update(
-    {"anime": (
-        "anime",
-        {
-        "npic" : "Get a anime neko girl image.",
-        "animegif [suffix]" : "Get gif's of different anime expressions, use the command below to get suffix list.",
-        "animelist":"Get list of supported suffix for animegif command."
-        }
-        )
-    }
-)
-
-
-
-
 
 
 def get_anime_gif(arg):
