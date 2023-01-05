@@ -22,7 +22,7 @@ class OnCmd:
         reply_type: Union["ReplyType", List["ReplyType"]] = None,
         disable_in: Union["ChatType", List["ChatType"]] = None,
         disable_for: Union["UserType", List["UserType"]] = UserType.OTHER,
-        argcount: int = None,
+        argcount: int = 0,
         group: int = 0
     ) -> Callable:
 
