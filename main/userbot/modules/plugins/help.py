@@ -10,23 +10,6 @@ from main import app, gen
 
 
 
-
-app.CMD_HELP.update(
-    {"help" : (
-        "help",
-        {
-        "help [ module name ]" : "Get commands info of that plugin.",
-        "help" : "Get your inline help dex.",
-        "inline" : "Toggle inline mode to On or Off of your bot through @BotFather",
-        "uplugs" : "Get list of available userbot plugin names",
-        "aplugs" : "Get list of available assistant plugin names",
-        }
-        )
-    }
-)
-
-
-
 @app.on_cmd(
     commands="help",
     module="help",
