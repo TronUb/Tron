@@ -137,7 +137,6 @@ def gen(
     commands: Union[str, List[str]],
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
-    exclude: list = [],
     reply: bool = None,
     reply_type: list = None,
     disable_in: list = None,

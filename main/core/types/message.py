@@ -8,7 +8,7 @@ from main.core.enums import UserType, SudoType
 class Message(BaseMessage):
     def __init__(id):
         super().__init__(id)
-        
+
     @staticmethod
     async def parse(
         client: "pyrogram.Client",
@@ -26,7 +26,7 @@ class Message(BaseMessage):
             is_scheduled=is_scheduled,
             replies=replies
         )
-        
+
         if not (r or r.from_user):
             return r
 
@@ -53,6 +53,5 @@ class Message(BaseMessage):
                 user.sudo_type = SudoType.UNKNOWN
         else:
             user.type = UserType.OTHER
-            
+
         return r
-        
