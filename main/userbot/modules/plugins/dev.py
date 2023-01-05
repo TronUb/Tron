@@ -16,7 +16,7 @@ from main.core.enums import UserType
 
 @app.on_cmd(
     commands=["eval", "e"],
-    usage="Run python programs, (script level)"
+    usage="Run python programs, (script level)",
     disable_for=UserType.SUDO
 )
 async def evaluate_handler(_, m: Message):
