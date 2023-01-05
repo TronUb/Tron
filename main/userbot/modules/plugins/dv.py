@@ -85,7 +85,7 @@ async def deldv_handler(_, m: Message):
 
 
 @app.on_cmd(
-    commands="getdv"
+    commands="getdv",
     usage="Get value of databae variable.",
     disable_for=UserType.SUDO
 )
