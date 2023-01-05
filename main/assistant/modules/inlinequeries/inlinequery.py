@@ -20,22 +20,16 @@ from main.userbot.client import app
 
 
 
-async def create_articles():
-    cmds = []
-    info = app.CMD_HELP
-
-    for x in sorted([info.get(x) for x in info]):
-        cmds.append(
-            InlineQueryResultArticle(
-                title=x[0],
-                input_message_content=InputTextMessageContent(
-                    "".join(await app.PluginData(x[0]))
+async def create_helpmenu_articles():
+    return [
+        InlineQueryResultArticle(
+            title=module_name,
+            input_message_content=InputTextMessageContent(
+                "".join(await app.PluginData(module_name)
                 )
             )
-        )
-    return cmds
-
-
+        ) for module_name in app.CMD_HELP.keys()
+    ]
 
 
 # via bot messages
@@ -205,6 +199,6 @@ async def inline_result(_, inline_query):
 
     else:
         await inline_query.answer(
-            results=await create_articles(),
+            results=await create_helpmenu_articles(),
             cache_time=1
         )
