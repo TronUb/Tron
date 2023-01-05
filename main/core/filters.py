@@ -113,6 +113,7 @@ async def is_reply(client, message, reply, reply_type):
 
 # gen arguments count checker
 async def max_argcount(client, message, argc):
+    argc = 0 if argc is None else argc
     if argc <= 0:
         return True
 
