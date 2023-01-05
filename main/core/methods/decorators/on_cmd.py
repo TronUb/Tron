@@ -37,7 +37,9 @@ class OnCmd:
             frame = inspect.currentframe().f_back
             module = frame.f_locals.get("__name__")
 
-            self.CMD_HELP.update({module.split(".")[-1]: command_info})
+            cmd_help = self.CMD_HELP.get(module.split(".")[-1])
+            if cmd_help:
+                cmd_help.update({command_info})
 
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
