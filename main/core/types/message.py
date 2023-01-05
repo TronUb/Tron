@@ -1,4 +1,5 @@
 from pyrogram.types import Message as BaseMessage
+from pyrogram.types import User as BaseUser
 from pyrogram import raw
 from main.core.enums import UserType, SudoType
 
@@ -28,9 +29,18 @@ class Message(BaseMessage):
         
         if not (r or r.from_user):
             return r
-        
-        user = r.from_user
+
         sudos = client.SudoUsers()
+
+        if r.from_user is None:
+            # to do
+            r.from_user = BaseUser._parse(
+                id=0000000000,
+                is_self=False
+            )
+            return r
+
+        user = r.from_user
         if user.is_self:
             user.type = UserType.OWNER
         elif user.id in client.SudoUsersList():
