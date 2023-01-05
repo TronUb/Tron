@@ -18,7 +18,7 @@ handlers = []
 
 @app.on_message(
     commands="afk",
-    usage="Away from keyboard."
+    usage="Away from keyboard.",
     disable_for=UserType.SUDO
 )
 async def afk_handler(_, m: Message):
