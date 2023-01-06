@@ -153,7 +153,6 @@ def gen(
             message.command = None
             message.replied = message.reply_to_message
             user = getattr(message, "from_user", None)
-            sudos = client.SudoUsers()
 
             if text is None:
                 return False
@@ -175,10 +174,6 @@ def gen(
 
                 cmd = text.split()[0][1:]
                 if cmd in flt.commands:
-
-                    dev_sudos = sudos.get("dev")
-                    common_sudos = sudos.get("common")
-                    sudo_users = dev_sudos.union(common_sudos)
 
                     if user.type == UserType.OWNER:
                         message.command = [cmd] + text.split()[1:]
@@ -203,7 +198,7 @@ def gen(
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
-                        if not client.SudoCmds():
+                        if not client.SudoCmds:
                             client.m = client.bot.m = message # remove later
                             return True
 

@@ -14,6 +14,7 @@ class SUDOTABLE(BASE):
     sudo_id = Column(Integer, primary_key=True)
     sudo_name = Column(String(10), default=False)
     sudo_type = Column(String(6), default="common")
+    sudo_cmds = Column(String, default=False)
 
     def __init__(self, sudo_id, sudo_name, sudo_type, sudo_cmds):
         self.sudo_id = sudo_id
