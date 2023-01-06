@@ -29,11 +29,12 @@ SUDOTABLE.__table__.create(checkfirst=True)
 
 
 class SUDOSQL(object):
-    def set_sudo(self, sudo_id, sudo_name, sudo_type, sudo_cmds):
+    def set_sudo(self, sudo_id: int, sudo_name: str, sudo_type: str, sudo_cmds: set):
         try:
             r = SESSION.query(SUDOTABLE).get(sudo_id)
             if r:
                 SESSION.delete(r)
+
             r = SUDOTABLE(
                 int(sudo_id),
                 str(sudo_name),
@@ -46,9 +47,19 @@ class SUDOSQL(object):
             SESSION.close()
 
 
-    def get_sudo(self, sudo_id):
+    def get_sudo(self, sudo_id: int):
         try:
             return SESSION.query(SUDOTABLE).get(sudo_id)
+        finally:
+            SESSION.close()
+
+
+    def del_sudo(self, sudo_id: int):
+        try:
+            r = SESSION.query(SUDOTABLE).get(sudo_id)
+            if r:
+                SESSION.delete(r)
+            return True
         finally:
             SESSION.close()
 
@@ -70,5 +81,3 @@ class SUDOSQL(object):
             return ALL_SUDO
         finally:
             SESSION.close()
-
-
