@@ -13,9 +13,8 @@ from . import SESSION, BASE
 
 
 class DV(BASE):
-
     __tablename__ = "database var"
-    
+
     keys = Column(String, primary_key=True)
     values = Column(String)
     
@@ -66,7 +65,10 @@ class DVSQL(object):
         mydata = SESSION.query(DV).get(keys)
         rep = ""
         if mydata:
-            rep = str(mydata.values)
+            if mydata.isalnum():
+                rep = str(mydata)
+            else:
+                rep = eval(str(mydata))
         SESSION.close()
         return rep
 
