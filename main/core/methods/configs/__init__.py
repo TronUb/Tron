@@ -5,6 +5,7 @@ from .pmpermitconfig import PmpermitConfig, PMPERMITDV
 from .afkconfig import AfkConfig, AFKDV
 from .herokuconfig import HerokuConfig, HEROKUDV
 from .vcbotconfig import VcBotConfig, VCBOTDV
+from .sudousersconfig import SudoUsersConfig, SUDOUSERSDV
 
 
 
@@ -16,6 +17,7 @@ class Configs(
     UserConfig,
     AfkConfig,
     HerokuConfig,
-    VcBotConfig
+    VcBotConfig,
+    SudoUsersConfig
     ):
-    DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV + HEROKUDV + VCBOTDV 
+    DVLIST = BOTDV + OTHERDV + USERDV + PMPERMITDV + AFKDV + HEROKUDV + VCBOTDV + SUDOUSERSDV 

@@ -12,8 +12,8 @@ from . import SESSION, BASE
 
 
 
-class DV(BASE):
-    __tablename__ = "database var"
+class DVTABLE(BASE):
+    __tablename__ = "Database Vars"
 
     keys = Column(String, primary_key=True)
     values = Column(String)
@@ -25,7 +25,7 @@ class DV(BASE):
 
 
 
-DV.__table__.create(checkfirst=True)
+DVTABLE.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
@@ -36,10 +36,10 @@ INSERTION_LOCK = threading.RLock()
 class DVSQL(object):
     def setdv(self, keys: str, values: str):
         with INSERTION_LOCK:
-            mydata = SESSION.query(DV).get(keys)
+            mydata = SESSION.query(DVTABLE).get(keys)
             try:
                 if not mydata:
-                    mydata = DV(keys, values)
+                    mydata = DVTABLE(keys, values)
                 else:
                     mydata.values = values
                 SESSION.merge(mydata)
@@ -51,7 +51,7 @@ class DVSQL(object):
 
     def deldv(self, keys: str):
         with INSERTION_LOCK:
-            mydata = SESSION.query(DV).get(keys)
+            mydata = SESSION.query(DVTABLE).get(keys)
             try:
                 if mydata:
                     SESSION.delete(mydata)
@@ -62,7 +62,7 @@ class DVSQL(object):
 
 
     def getdv(self, keys: str):
-        mydata = SESSION.query(DV).get(keys)
+        mydata = SESSION.query(DVTABLE).get(keys)
         rep = ""
         if mydata:
             if mydata.values.isalnum():
@@ -75,7 +75,7 @@ class DVSQL(object):
 
     def getalldv(self):
         kv_data = {}
-        mydata = SESSION.query(DV).distinct().all()
+        mydata = SESSION.query(DVTABLE).distinct().all()
         for x in mydata:
             kv_data.update({x.keys : x.values})
 
