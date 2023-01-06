@@ -34,7 +34,7 @@ INSERTION_LOCK = threading.RLock()
 
 
 class DVSQL(object):
-    def setdv(self, keys, values):
+    def setdv(self, keys: str, values: str):
         with INSERTION_LOCK:
             mydata = SESSION.query(DV).get(keys)
             try:
@@ -49,7 +49,7 @@ class DVSQL(object):
         return keys
 
 
-    def deldv(self, keys):
+    def deldv(self, keys: str):
         with INSERTION_LOCK:
             mydata = SESSION.query(DV).get(keys)
             try:
@@ -61,14 +61,14 @@ class DVSQL(object):
             return True
 
 
-    def getdv(self, keys):
+    def getdv(self, keys: str):
         mydata = SESSION.query(DV).get(keys)
         rep = ""
         if mydata:
-            if mydata.isalnum():
-                rep = str(mydata)
+            if mydata.values.isalnum():
+                rep = str(mydata.values)
             else:
-                rep = eval(str(mydata))
+                rep = eval(str(mydata.values))
         SESSION.close()
         return rep
 
