@@ -23,7 +23,6 @@ class OtherConfig(object):
         """ Get sudo users """
         sudo_users = self.getdv("SUDO_USERS")
         if sudo_users:
-            sudo_users = json.loads(sudo_users)
             dev = sudo_users.get("dev")
             common = sudo_users.get("common")
             sudo_types = {
