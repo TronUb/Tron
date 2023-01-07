@@ -90,19 +90,19 @@ def regex(
 
 
 # gen reply checker
-async def is_reply(client, m, reply, reply_type):
-    if reply and not m.replied:
+async def is_reply(client, message, reply, reply_type):
+    if reply and not message.replied:
         await client.send_edit(
             "Reply to something . . .",
             text_type=["mono"],
             delme=3
         )
         return False
-    elif reply and m.replied:
+    elif reply and message.replied:
         if not reply_type:
             return True
 
-        reply_attr = getattr(m.replied, reply_type, None)
+        reply_attr = getattr(message.replied, reply_type, None)
         if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}",
@@ -115,13 +115,13 @@ async def is_reply(client, m, reply, reply_type):
 
 
 # gen arguments count checker
-async def max_argcount(client, m, argc):
+async def max_argcount(client, message, argc):
     argc = 0 if argc is None else argc
     if argc <= 0:
         return True
 
     try:
-        m.text.split()[argc]
+        message.text.split()[argc]
     except IndexError:
         await client.send_edit(
             "Give me more arguments . . .",
