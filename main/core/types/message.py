@@ -30,8 +30,6 @@ class Message(BaseMessage):
         if not (r or r.from_user):
             return r
 
-        sudos = client.SudoUsers()
-
         if r.from_user is None:
             # to do
             r.from_user = BaseUser(
@@ -44,7 +42,7 @@ class Message(BaseMessage):
 
         if user.is_self:
             user.type = UserType.OWNER
-        elif user.id in client.SudoUsersList():
+        elif user.id in client.SudoUsersList:
             user.type = UserType.SUDO
         else:
             user.type = UserType.OTHER
