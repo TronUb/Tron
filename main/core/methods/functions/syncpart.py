@@ -37,11 +37,11 @@ from youtube_dl import YoutubeDL
 
 
 def messageobject(anydict: dict):
-    obj = (
-            x for x in anydict.values()
-            if isinstance(x, Message)
-        )
-    return *obj if obj else None
+    message = None
+    for val in anydict.values():
+        if isinstance(val, Message):
+            message = val
+    return message
 
 
 class Types(object):
