@@ -112,8 +112,12 @@ class Configuration: # pylint: disable=too-few-public-methods
     UPSTREAM_REPO = os.getenv("UPSTREAM_REPO", "https://github.com/TronUb/Tron.git")
     # this is used to get your accurate time
     TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
+    # toggle this on/off to give/remove access of bot to sudo users
+    SUDO_ACCESS = os.getenv("SUDO_ACCESS", None)
     # these users can use your userbot
     SUDO_USERS = [int(x) for x in os.getenv("SUDO_USERS", "").split()] # splits on spaces
+    # default sudo commands to add in database when adding a sudo
+    SUDO_CMDS = [x for x in os.getenv("SUDO_CMDS", "").split()] # splits on spaces
     # command trigger, it works like this: .ping => result: pong !
     TRIGGER = os.getenv("TRIGGER", ".")
     # for more info visit docs.pyrogram.org, workers section

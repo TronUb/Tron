@@ -37,20 +37,15 @@ class Message(BaseMessage):
             r.from_user = BaseUser(
                 id=0000000000,
                 is_self=False
-            )
+            ) # workaround
             return r
 
         user = r.from_user
+
         if user.is_self:
             user.type = UserType.OWNER
         elif user.id in client.SudoUsersList():
             user.type = UserType.SUDO
-            if user.id in sudos.get("dev"):
-                user.sudo_type = SudoType.DEV
-            elif user.id in sudos.get("common"):
-                user.sudo_type = SudoType.COMMON
-            else:
-                user.sudo_type = SudoType.UNKNOWN
         else:
             user.type = UserType.OTHER
 

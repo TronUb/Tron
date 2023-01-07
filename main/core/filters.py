@@ -180,9 +180,6 @@ def gen(
                         message.sudo_message = None
 
                     elif user.type == UserType.SUDO:
-                        if not message.from_user.sudo_type == sudo_type:
-                            return False
-
                         new_message = await client.send_message(
                             message.chat.id,
                             "Hold on . . ."
@@ -198,13 +195,10 @@ def gen(
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
-                        if not client.SudoCmds:
-                            client.m = client.bot.m = message # remove later
-                            return True
-
-                        if not cmd in client.SudoCmds():
+                        if not cmd in client.get_sudo(user.id).get("sudo_cmds"):
                             return False
 
+                        return True
                     else:
                         return False
 

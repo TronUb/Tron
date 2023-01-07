@@ -1,81 +1,53 @@
 """ sudo plugin """
 
-import json
 from pyrogram.types import Message
-from main import app, gen
+from main import app
 from main.core.enums import UserType
 
 
 
-sudo_types = ("common", "dev")
-
 
 @app.on_cmd(
     commands="addsudo",
-    usage="Give your userbot access to someone.",
-    disable_for=UserType.SUDO
+    usage="Give your userbot access to someone else.",
+    disable_for=UserType.SUDO,
+    reply=True
 )
 async def addsudo_handler(_, m: Message):
     """ addsudo handler for sudo plugin """
-    reply = m.reply_to_message
-    args = app.GetArgs(m)
-    text = None
-    sudo_set = {
-        "dev": dict(),
-        "common": dict()
-    }
-
-    if not reply:
-        return await app.send_edit(
-            "Reply to a user to add him in sudo list",
-            text_type=["mono"],
-            delme=4
-        )
-
-    user_id = reply.from_user.id
     try:
-        text = args.text.split(None, 1)[1]
-    except IndexError:
-        pass
+        sudos = app.SudoUsers
+        user = m.reply_to_message.from_user
+        default_cmds = {
+            "ping", "help", "alive", "ialive",
+            "img", "cat", "dog", "q", "joke"
+        }
 
-    sudo_type = text if text and text in sudo_types else sudo_types[0]
+        try:
+            sudo_cmds = m.text.split(None, 1)[1]
+        except IndexError:
+            sudo_cmds = default_cmds
 
-    sudo_list = app.getdv("SUDO_USERS")
-    if sudo_list:
-        sudo_list = json.loads(sudo_list)
-        dev_sudos = list(sudo_list.get("dev").values())
-        common_sudos = list(sudo_list.get("common").values())
-
-        if user_id in dev_sudos:
+        if user.id in sudos:
             return await app.send_edit(
-                "The user is already in sudo list as dev sudo.",
+                "The user is already in sudo list.",
                 text_type=["mono"],
                 delme=3
             )
 
-        elif user_id in common_sudos:
-            return await app.send_edit(
-                "The user is already in sudo list as common sudo.",
-                text_type=["mono"],
-                delme=3
+        else:
+            app.set_sudo(
+                user.id,
+                user.first_name,
+                sudo_cmds
             )
 
-        sudo_list.get(sudo_type).update(
-            {
-                len(sudo_list.get(sudo_type)) + 1: user_id
-            }
-        )
-        all_sudos = json.dumps(sudo_list)
-
-    else:
-        sudo_set.get(sudo_type).update({1: user_id})
-        all_sudos = json.dumps(sudo_set)
-
-    app.setdv("SUDO_USERS", all_sudos)
-    await app.send_edit(
-        f"{reply.from_user.mention()} `has been added to sudo.`",
-        delme=4
-    )
+            await app.send_edit(
+                f"Added {user.mention} as sudo."
+                delme=3
+            )
+    except Exception as e:
+        await app.error(e)
 
 
 
@@ -87,21 +59,27 @@ async def addsudo_handler(_, m: Message):
 )
 async def getsudo_handler(_, m: Message):
     """ getsudo hanlder for sudo plugin """
-    sudo_list = app.getdv("SUDO_USERS")
-    if not sudo_list:
-        return await app.send_edit(
-            "No sudos are added !",
-            text_type=["mono"],
-            delme=3
-        )
+    try:
+        sudos = app.all_sudo().items()
+        text = "Available sudos:\n\n"
 
-    sudo_list = json.loads(sudo_list)
+        r = [
+            f"{x[1].get('sudo_name')} ({x[0]})\n" 
+            for x in sudos
+        ]
 
-    common_sudos = [str(x) for x in sudo_list[sudo_types[0]].values()]
-    dev_sudos = [str(x) for x in sudo_list[sudo_types[1]].values()]
-
-    sudos = "dev sudos:\n\n{}\n\ncommon sudos:{}".format("\n".join(dev_sudos), "\n".join(common_sudos))
-    await app.send_edit("**Available Sudo id:**\n" + sudos)
+        if r:
+            await app.send_edit(
+                text + "".join(r),
+                delme=3
+            )
+        else:
+            await app.send_edit(
+                text + "\nNo Sudo Added !",
+                delme=3
+            )
+    except Exception as e:
+        await app.error(e)
 
 
 
@@ -109,59 +87,37 @@ async def getsudo_handler(_, m: Message):
 @app.on_cmd(
     commands="delsudo",
     usage="Remove a user from your sudo users list.",
-    disable_for=UserType.SUDO
+    disable_for=UserType.SUDO,
+    reply=True
 )
 async def delsudo_handler(_, m: Message):
     """ delsudo handler for sudo plugin """
-    reply = m.reply_to_message
-    user_id = reply.from_user.id
-    if not reply:
-        return await app.send_edit(
-            "Reply to a user to remove him from sudo list.",
-            text_type=["mono"],
-            delme=4
-        )
+    try:
+        user = m.reply_to_message.from_user
+        sudos = app.SudoUsers
 
-    sudo_list = app.getdv("SUDO_USERS")
+        try:
+            sudo_id = m.text.split(None, 1)[1]
+        except IndexError:
+            sudo_id = None
 
-    if not sudo_list:
-        return await app.send_edit(
-            "No sudos are added !",
-            text_type=["mono"],
-            delme=3
-        )
+        if not sudo_id:
+            return await app.send_edit(
+                "Give me sudo user id so that i can delete them.",
+                delme=3
+            )
 
-    sudo_list = json.loads(sudo_list)
-
-    common_sudos = sudo_list.get("common")
-    dev_sudos = sudo_list.get("dev")
-
-    user_exists = 0
-
-    for x in common_sudos:
-        if common_sudos.get(x) == user_id:
-            sudo_list.get("common").pop(x)
-            app.setdv("SUDO_USERS", json.dumps(sudo_list))
-            user_exists += 1
-            break
-
-    if not user_exists:
-        for y in dev_sudos:
-            if dev_sudos.get(y) == user_id:
-                sudo_list.get("dev").pop(y)
-                app.setdv("SUDO_USERS", json.dumps(sudo_list))
-                user_exists += 1
-                break
-                
-
-    if not user_exists:
-        return await app.send_edit(
-            "This user is not in sudo list",
-            text_type=["mono"],
-            delme=4
-        )
-
-    await app.send_edit(
-        f"{reply.from_user.mention()} `has been removed from sudo list`",
-        delme=4
-    )
+        if not sudo_id in sudos:
+            await app.send_edit(
+                "This user is not a sudo !",
+                text_type=["mono"],
+                delme=3
+            )
+        else:
+            app.del_sudo(sudo_id)
+            await app.send_edit(
+                f"Deleted {user.mention} from sudo.",
+                delme=3
+            )
+    except Exception as e:
+        await app.error(e)
