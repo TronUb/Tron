@@ -205,11 +205,11 @@ def gen(
                     client.m = client.bot.m = message # remove later
 
                     # reply condition
-                    if not await is_reply(client, message, reply, reply_type):
+                    if not await is_reply(client, message, flt.reply, flt.reply_type):
                         return False
 
                     # max argument count condition 
-                    if not await max_argcount(client, message, argcount):
+                    if not await max_argcount(client, message, flt.argcount):
                         return False
 
                     return True
@@ -241,5 +241,8 @@ def gen(
         case_sensitive=case_sensitive,
         disable_in=disable_in,
         disable_for=disable_for,
-        sudo_type=sudo_type
+        sudo_type=sudo_type,
+        reply=reply,
+        reply_type=reply_type,
+        argcount=argcount
     )
