@@ -99,6 +99,9 @@ async def is_reply(client, message, reply, reply_type):
         )
         return False
     elif reply and message.replied:
+        if not reply_type:
+            return True
+
         reply_attr = getattr(message.replied, reply_type, None)
         if reply_type and not reply_attr:
             await client.send_edit(
