@@ -40,6 +40,14 @@ from aiohttp.client_exceptions import ContentTypeError
 
 
 
+def messageobject(anydict: dict):
+    obj = (
+            x for x in anydict.values()
+            if isinstance(x, Message)
+        )
+    return *obj if obj else None
+
+
 class AsyncPart(object):
     @staticmethod
     async def GetRequest(link: str="", resptype: str=""):
@@ -92,7 +100,7 @@ class AsyncPart(object):
         """
         
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         r = (await self.invoke(
                 functions.channels.GetParticipant(
@@ -123,7 +131,7 @@ class AsyncPart(object):
         Check if the message is a reply to another user.
         """
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
         try:
             return message.reply_to_message or m.reply_to_message
         except Exception as e:
@@ -229,7 +237,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         globals().update({
             "app":self,
@@ -266,7 +274,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
         full_traceback = traceback.format_exc()
 
         teks = "**Traceback Report:**\n\n"
@@ -323,7 +331,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         r = None
         await asyncio.sleep(sec)
@@ -429,7 +437,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         try:
             try:
@@ -497,7 +505,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
     
         if m.chat.type == ChatType.PRIVATE:
             await self.send_edit(
@@ -531,7 +539,7 @@ class AsyncPart(object):
 
         try:
             frame = inspect.currentframe().f_back
-            m = frame.f_locals.get("m")
+            m = messageobject(frame.f_locals)
             path = f"./downloads/{filename}"
             file = open(path, "w+")
             file.write(content)

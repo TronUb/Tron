@@ -36,6 +36,13 @@ from youtube_dl import YoutubeDL
 
 
 
+def messageobject(anydict: dict):
+    obj = (
+            x for x in anydict.values()
+            if isinstance(x, Message)
+        )
+    return *obj if obj else None
+
 
 class Types(object):
     TEXT = 1
@@ -112,7 +119,7 @@ class SyncPart(Types):
             raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
         sm = getattr(m, "sudo_message", None)
 
         if sm and (sm.text or sm.caption):
@@ -139,7 +146,7 @@ class SyncPart(Types):
             raise BotMethodInvalid
             
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         return len([x for x in m.text or m.caption or ""])
 
@@ -750,7 +757,7 @@ class SyncPart(Types):
 
     def GetArgs(self, message=None):
         frame = inspect.currentframe().f_back
-        m = frame.f_locals.get("m")
+        m = messageobject(frame.f_locals)
 
         reply = m.reply_to_message
 
