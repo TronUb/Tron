@@ -98,8 +98,8 @@ async def is_reply(client, message, reply, reply_type):
             delme=3
         )
         return False
-    elif reply and message.reply:
-        reply_attr = getattr(message.replied, reply_type)
+    elif reply and message.replied:
+        reply_attr = getattr(message.replied, reply_type, None)
         if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}",
@@ -138,7 +138,7 @@ def gen(
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
     reply: bool = None,
-    reply_type: list = None,
+    reply_type: str = "",
     disable_in: list = None,
     disable_for: list = None,
     sudo_type: "SudoType" = SudoType.COMMON,
