@@ -12,7 +12,7 @@ class SudoUsersConfig(object):
     @property
     def SudoUsers(self):
         """ returns the ids of all sudo profiles """
-        return {x[0] for x in self.all_sudos().items()}
+        return {x[0] for x in self.all_sudo().items()}
 
     @property
     def SudoUsersList(self):
