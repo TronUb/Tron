@@ -95,13 +95,16 @@ async def delsudo_handler(_, m: Message):
         reply = m.reply_to_message
         sudos = app.SudoUsers
 
+        try:
+            sudo_id = m.text.split(None, 1)[1]
+        except IndexError:
+            sudo_id = None
+
         if reply:
             sudo_id = reply.from_user.id
+            name = reply.from_user.first_name
         else:
-            try:
-                sudo_id = m.text.split(None, 1)[1]
-            except IndexError:
-                sudo_id = None
+            name = app.get_sudo(sudo_id).get("sudo_name")
 
         if not sudo_id:
             return await app.send_edit(
@@ -118,7 +121,7 @@ async def delsudo_handler(_, m: Message):
         else:
             app.del_sudo(sudo_id)
             await app.send_edit(
-                f"Deleted {user.mention} from sudo.",
+                f"Deleted {name} from sudo.",
                 delme=3
             )
     except Exception as e:
