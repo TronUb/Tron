@@ -10,8 +10,7 @@ from main.core.enums import UserType
 @app.on_cmd(
     commands="addsudo",
     usage="Give your userbot access to someone else.",
-    disable_for=UserType.SUDO,
-    reply=True
+    disable_for=UserType.SUDO
 )
 async def addsudo_handler(_, m: Message):
     """ addsudo handler for sudo plugin """
