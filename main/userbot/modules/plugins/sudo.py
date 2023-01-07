@@ -92,13 +92,16 @@ async def getsudo_handler(_, m: Message):
 async def delsudo_handler(_, m: Message):
     """ delsudo handler for sudo plugin """
     try:
-        user = m.reply_to_message.from_user
+        reply = m.reply_to_message
         sudos = app.SudoUsers
 
-        try:
-            sudo_id = m.text.split(None, 1)[1]
-        except IndexError:
-            sudo_id = None
+        if reply:
+            sudo_id = reply.from_user.id
+        else:
+            try:
+                sudo_id = m.text.split(None, 1)[1]
+            except IndexError:
+                sudo_id = None
 
         if not sudo_id:
             return await app.send_edit(
