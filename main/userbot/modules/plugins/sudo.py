@@ -43,7 +43,7 @@ async def addsudo_handler(_, m: Message):
             )
 
             await app.send_edit(
-                f"Added {user.mention} as sudo."
+                f"Added {user.mention} as sudo.",
                 delme=3
             )
     except Exception as e:
