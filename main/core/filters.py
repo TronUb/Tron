@@ -91,7 +91,7 @@ def regex(
 
 # gen reply checker
 async def is_reply(client, m, reply, reply_type):
-    if reply and not message.replied:
+    if reply and not m.replied:
         await client.send_edit(
             "Reply to something . . .",
             text_type=["mono"],
