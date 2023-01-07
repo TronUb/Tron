@@ -20,7 +20,7 @@ class OnCmd:
         usage: str = None,
         case_sensitive: bool = True,
         reply: bool = None,
-        reply_type: Union["ReplyType", List["ReplyType"]] = None,
+        reply_type: "ReplyType" = None,
         disable_in: Union["ChatType", List["ChatType"]] = None,
         disable_for: Union["UserType", List["UserType"]] = UserType.OTHER,
         argcount: int = 0,
@@ -43,7 +43,6 @@ class OnCmd:
 
         disable_in = disable_in if isinstance(disable_in, list) else [disable_in]
         disable_for = disable_for if isinstance(disable_for, list) else [disable_for]
-        reply_type = reply_type if isinstance(reply_type, list) else [reply_type]
 
         def decorator(func: Callable) -> Callable:
             if not isinstance(self, pyrogram.Client):
