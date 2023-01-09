@@ -16,7 +16,7 @@ async def alive_handler(_, m: Message):
 
     try:
         alive_msg = "\n"
-        if app.UserBio():
+        if app.UserBio:
             alive_msg += f"⦿ {app.UserBio}\n\n"
         alive_msg += f"⟜ **Owner:** {app.UserMention}\n"
         alive_msg += f"⟜ **Tron:** `{app.userbot_version}`\n"
