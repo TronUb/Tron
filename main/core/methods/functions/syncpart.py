@@ -442,7 +442,7 @@ class SyncPart(Types):
         modules = [
             InlineKeyboardButton(
                 text="{} {}".format(
-                    self.HelpEmoji(),
+                    self.HelpEmoji,
                     x.replace("_", " ").title(),
                 ),
                 callback_data="pluginlist-{}|{}".format(x, page_number),
