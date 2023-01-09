@@ -70,7 +70,7 @@ async def _shutdown_core(_, cb):
             reply_markup=back_button
         )
     else:
-        r = app.heroku_app().process_formation()["worker"].scale(0)
+        r = app.herokuApp.process_formation()["worker"].scale(0)
         process = "Successfully" if r else "Unsuccessfully"
         await cb.edit_message_text(
             text=app.shutdown_tab_string(f"`Shutdown {process} . . .`"),

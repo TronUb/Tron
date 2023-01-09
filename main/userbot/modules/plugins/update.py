@@ -18,7 +18,7 @@ TRON_REPO = app.UPSTREAM_REPO
 
 async def gen_chlog():
     changes = []
-    last_updated = int(re.sub(r"[- + : \s]", "", str(app.heroku_app().updated_at))[:14])
+    last_updated = int(re.sub(r"[- + : \s]", "", str(app.herokuApp.updated_at))[:14])
     recent_updates = await app.GetRequest("https://api.github.com/repos/TronUb/Tron/events")
 
     for x in recent_updates:
@@ -114,10 +114,10 @@ async def update_handler(_, m):
         upstream = repo.remote(remote)
         upstream.fetch(ACTIVE_BRANCH)
 
-        if app.heroku_app():
+        if app.herokuApp:
             await app.send_edit("Found update, updating . . .", text_type=["mono"])
             repo.git.reset("--hard", "FETCH_HEAD")
-            heroku_git_url = app.heroku_app().git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
+            heroku_git_url = app.herokuApp.git_url.replace("https://", "https://api:" + app.HEROKU_API_KEY + "@")
 
             if "heroku" in repo.remotes:
                 remote = repo.remote("heroku")

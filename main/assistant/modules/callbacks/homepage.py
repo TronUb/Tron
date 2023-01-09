@@ -20,7 +20,7 @@ from main.userbot.client import app
 @app.alert_user
 async def _start(_, cb: CallbackQuery):
     await cb.edit_message_media(
-        media=InputMediaPhoto(media=app.BotPic(), caption=app.home_tab_string()),
+        media=InputMediaPhoto(media=app.BotPic, caption=app.home_tab_string()),
         reply_markup=InlineKeyboardMarkup([
                 app.BuildKeyboard(
                     (

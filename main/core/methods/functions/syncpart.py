@@ -243,7 +243,7 @@ class SyncPart(Types):
         return isinstance(element, int)
 
 
-    def quote(
+    def animeQuote(
         self
         ):
         """
@@ -412,7 +412,8 @@ class SyncPart(Types):
         return "Available" if hasattr(self, "DB_URI") and self.DB_URI else "Unavailable"
 
 
-    def heroku_app(self):
+    @property
+    def herokuApp(self):
         """
         params:
             None
@@ -421,7 +422,7 @@ class SyncPart(Types):
             use this function to get acess of your heroku app
 
         ex:
-            app.heroku_app()
+            app.herokuApp
         """
         if not (self.HerokuApiKey() and self.HerokuAppName()):
             return None

@@ -55,12 +55,12 @@ async def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#helpmenu"):
-        emoji = app.HelpEmoji() or "•"
+        emoji = app.HelpEmoji or "•"
 
         await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
-                photo_url=app.BotPic(),
+                photo_url=app.BotPic,
                 title="Tron Inline helpdex menu",
                 description="Get your inline helpdex menu.",
                 caption=app.home_tab_string(),
@@ -108,7 +108,7 @@ async def inline_result(_, inline_query):
         results=[
             InlineQueryResultArticle(
                 title="Tron Inline anime quotes",
-                input_message_content=InputTextMessageContent(app.quote()),
+                input_message_content=InputTextMessageContent(app.animeQuote()),
                 description="Get infinite anime character quotes through this inline loop button.",
                 reply_markup=InlineKeyboardMarkup(
                     [

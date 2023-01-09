@@ -10,21 +10,25 @@ USERDV = [
 
 
 class UserConfig(object):
+    @property
     def UserName(self):
         """returns name of user"""
         return self.getdv("USER_NAME") or self.USER_NAME or self.name or None
 
 
+    @property
     def UserUsername(self):
         """returns username of user"""
         return self.getdv("USER_USERNAME") or self.USER_USERNAME or self.username or None
 
 
+    @property
     def UserMention(self):
         """returns mention of user"""
         return self.MentionMarkdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
 
 
+    @property
     def UserId(self):
         """returns telegram id of user"""
         return self.getdv("USER_ID") or self.USER_ID or self.id or None

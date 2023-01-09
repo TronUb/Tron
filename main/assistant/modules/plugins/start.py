@@ -24,5 +24,3 @@ async def added_to_group_msg(_, m: Message):
             )
         except Exception as e:
             await app.error(m, e)
-    else:
-        return

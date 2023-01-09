@@ -70,7 +70,7 @@ async def _confirm_restart(_, cb: CallbackQuery):
                 reply_markup=back_button
             )
         else:
-            res = app.heroku_app().restart()
+            res = app.herokuApp.restart()
             text = "`Please wait 2-3 minutes to restart userbot . . .`"
             final_text = text if res else "`Failed to restart userbot, do it manually . . .`"
             await cb.edit_message_text(

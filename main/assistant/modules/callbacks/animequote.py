@@ -33,6 +33,6 @@ async def _anime_quotes(_, cb: CallbackQuery):
         reply_markup=reply_markup
     )
     await cb.edit_message_text(
-        app.quote(),
+        app.animeQuote(),
         reply_markup=reply_markup
     )
