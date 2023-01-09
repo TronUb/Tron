@@ -1,3 +1,4 @@
+""" userconfig configuration module """
 
 USERDV = [
     "USER_NAME",

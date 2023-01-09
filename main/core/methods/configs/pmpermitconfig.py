@@ -1,3 +1,5 @@
+""" pmpermit configuration module """
+
 PMPERMITDV = [
     "PMPERMIT",
     "PM_LIMIT",

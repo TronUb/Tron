@@ -1,3 +1,5 @@
+""" heroku configaration module """
+
 HEROKUDV = [
     "HEROKU_API_KEY",
     "HEROKU_APP_NAME"

@@ -386,7 +386,7 @@ class AsyncPart(object):
                 r = None
             else:
                 r = [
-                        f"CMD: `{self.Trigger()[0]}{cmd}`\nINFO: `{usage}`\n\n" 
+                        f"CMD: `{self.Trigger[0]}{cmd}`\nINFO: `{usage}`\n\n" 
                         for cmd, usage in zip(
                             self.CMD_HELP.get(module).keys(),
                             self.CMD_HELP.get(module).values()

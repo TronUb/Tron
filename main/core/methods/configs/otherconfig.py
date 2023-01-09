@@ -1,4 +1,4 @@
-import json
+""" otherconfig configuration module """
 
 OTHERDV = [
     "NO_LOAD",
