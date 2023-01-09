@@ -17,11 +17,11 @@ class ClassManager(Config, Methods):
 
     # assistant /
     assistant_name = "Nora"
-    assistant_version = "v.0.0.4"
+    assistant_version = "v.0.0.5"
 
     # userbot /
     userbot_name = "Tron"
-    userbot_version = "v.0.1.5"
+    userbot_version = "v.0.2.0"
 
     # containers /
     CMD_HELP = {}
