@@ -34,16 +34,19 @@ class UserConfig(object):
         return self.getdv("USER_ID") or self.USER_ID or self.id or None
 
 
+    @property
     def UserDc(self):
         """returns telegram dc id of user"""
         return self.getdv("DC_ID") or self.dc_id or None
 
 
+    @property 
     def UserPic(self):
         """returns pic of user"""
         return self.getdv("USER_PIC") or self.USER_PIC or self.pic or None
 
 
+    @property
     def UserBio(self):
         """returns bio of user"""
         return self.getdv("USER_BIO") or self.USER_BIO or self.bio or None
