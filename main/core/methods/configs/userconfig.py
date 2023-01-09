@@ -25,7 +25,7 @@ class UserConfig(object):
     @property
     def UserMention(self):
         """returns mention of user"""
-        return self.MentionMarkdown(self.UserId(), self.UserName()) if self.UserName() and self.UserId() else None
+        return self.MentionMarkdown(self.UserId, self.UserName) if self.UserName and self.UserId else None
 
 
     @property

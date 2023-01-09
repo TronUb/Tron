@@ -26,7 +26,7 @@ class BotConfig(object):
     @property
     def BotMention(self):
         """Get bot mention"""
-        return f"[{self.BotName()}](tg://user?id={self.BotId()})" if self.BotName() and self.BotId() else None
+        return f"[{self.BotName}](tg://user?id={self.BotId})" if self.BotName and self.BotId else None
 
 
     @property

@@ -17,14 +17,14 @@ async def alive_handler(_, m: Message):
     try:
         alive_msg = "\n"
         if app.UserBio():
-            alive_msg += f"⦿ {app.UserBio()}\n\n"
-        alive_msg += f"⟜ **Owner:** {app.UserMention()}\n"
+            alive_msg += f"⦿ {app.UserBio}\n\n"
+        alive_msg += f"⟜ **Owner:** {app.UserMention}\n"
         alive_msg += f"⟜ **Tron:** `{app.userbot_version}`\n"
         alive_msg += f"⟜ **Python:** `{app.python_version}`\n"
         alive_msg += f"⟜ **Pyrogram:** `{app.pyrogram_version}`\n"
         alive_msg += f"⟜ **Uptime:** {app.uptime()}\n\n"
 
-        pic = app.UserPic()
+        pic = app.UserPic
 
         if (pic) and (pic.endswith(".mp4" or ".mkv" or ".gif")):
             await m.delete()
