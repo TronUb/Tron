@@ -105,7 +105,7 @@ async def start_bot():
     print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n\n\n")
 
     print(Colors.block + "PLUGINS:" + Colors.reset + " ( Userbot )\n\n")
-    ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
+    ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad)
     print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {ubotplugins}\n")
 
     await start_assistant()
