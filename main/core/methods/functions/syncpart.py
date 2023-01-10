@@ -424,11 +424,11 @@ class SyncPart(Types):
         ex:
             app.herokuApp
         """
-        if not (self.HerokuApiKey() and self.HerokuAppName()):
+        if not (self.HerokuApiKey and self.HerokuAppName):
             return None
 
-        account = heroku3.from_key(self.HerokuApiKey())
-        return account.apps()[self.HerokuAppName()]
+        account = heroku3.from_key(self.HerokuApiKey)
+        return account.apps()[self.HerokuAppName]
 
 
     def HelpDex(self, page_number, allmodules, prefix):
