@@ -54,8 +54,7 @@ class SUDOSQL(object):
     def del_sudo(self, sudo_id: int):
         try:
             r = SESSION.query(SUDOTABLE).get(sudo_id)
-            if r:
-                SESSION.delete(r)
+            SESSION.delete(r)
             return True
         finally:
             SESSION.close()
