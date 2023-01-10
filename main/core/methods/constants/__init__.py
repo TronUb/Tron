@@ -3,7 +3,7 @@ from .strings import Strings
 
 
 
-class Containers(
+class Constants(
     Strings
 ):
     pass

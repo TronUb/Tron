@@ -22,7 +22,7 @@ from main.userbot.client import app
 async def plugins_page(_, cb: CallbackQuery):
     btn = app.HelpDex(0, app.CMD_HELP, "navigate")
     await cb.edit_message_text(
-        text=app.plugin_tab_string(),
+        text=app.plugin_tab_string,
         reply_markup=InlineKeyboardMarkup(btn)
     )
 

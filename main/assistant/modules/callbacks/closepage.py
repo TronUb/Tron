@@ -23,7 +23,7 @@ async def _close(_, cb: CallbackQuery):
     await cb.edit_message_media(
         media=InputMediaPhoto(
             media="main/others/resources/images/tron-vertical.png", 
-            caption=app.close_tab_string()
+            caption=app.close_tab_string
         ),
         reply_markup=InlineKeyboardMarkup(
             [

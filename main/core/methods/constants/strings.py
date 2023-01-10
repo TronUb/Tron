@@ -1,4 +1,5 @@
 class Strings(object):
+    @property
     def assistant_tab_string(self):
         text = "**Dex:** Assistant\n"
         text += "**Location:**  home/assistant\n\n"
@@ -10,6 +11,7 @@ class Strings(object):
         return text
 
 
+    @property
     def about_tab_string(self):
         text = "**Dex:** About\n"
         text += "**Location:** /home/about\n\n"
@@ -32,6 +34,7 @@ class Strings(object):
         return text
 
 
+    @property
     def close_tab_string(self):
         text = "Welcome to Tron.\n"
         text += "This is your Helpdex, Tap on open button to get more buttons,\n"
@@ -41,7 +44,7 @@ class Strings(object):
         return text
 
 
-
+    @property
     def extra_tab_string(self):
         text = "**Dex:** Extra\n\n"
         text += f"Location: /home/extra"
@@ -49,6 +52,7 @@ class Strings(object):
         return text
 
 
+    @property
     def public_tab_string(self):
         text = "**Dex:** Extra\n"
         text += "**Location:** /home/extra/public commands\n\n"
@@ -61,6 +65,7 @@ class Strings(object):
         return text
 
 
+    @property
     def home_tab_string(self):
         text = "**Dex:** Home\n\n"
         text += "**Description:** This is your helpdex use to navigate in different sub dex to information."
@@ -68,6 +73,7 @@ class Strings(object):
         return text
 
 
+    @property
     def plugin_tab_string(self):
         text = "**Dex:** Plugins \n\n"
         text += "**Location:** /home/plugins\n\n"
@@ -84,6 +90,7 @@ class Strings(object):
         return text
 
 
+    @property
     def settings_tab_string(self):
         text = "**Dex:** Settings\n\n"
         text += "**Location:** /home/settings"
@@ -99,6 +106,7 @@ class Strings(object):
         return text
  
 
+    @property
     def stats_tab_string(self):
         text = "**Dex:** Stats\n"
         text += "**Location:** /home/stats\n\n"
@@ -113,12 +121,14 @@ class Strings(object):
         return text
 
 
+    @property
     def update_tab_string(self):
         text = "Not implemented yet."
 
         return text
 
 
+    @property
     def ialive_tab_string(self):
         text = f"**⛊  Inline Status:**\n\n"
         text += f"**⟐** {self.USER_BIO}\n\n"
@@ -132,6 +142,7 @@ class Strings(object):
 
 
 
+    @property
     def pmpermit_tab_string(self):
         text = "Not implemented yet."
 
