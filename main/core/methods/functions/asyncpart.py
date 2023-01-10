@@ -42,11 +42,14 @@ from aiohttp.client_exceptions import ContentTypeError
 
 def messageobject(anydict: dict):
     message = None
-    for val in anydict.values():
-        if isinstance(val, Message):
-            if val.from_user:
-                if val.from_user.is_self:
-                    message = val
+    all_messages = [
+        x for x in anydict.values()
+        if isinstance(x, Message)
+    ]
+    for val in all_messages:
+        if val.from_user.is_self:
+            if hasattr(val, "sudo_message"):
+                message = val
     return message
 
 
