@@ -40,10 +40,10 @@ async def inline_result(_, inline_query):
         await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
-                photo_url=app.PmpermitPic(),
+                photo_url=app.PmpermitPic,
                 title="Tron Inline security system",
                 description="Get tron security system inline menu.",
-                caption=app.PmpermitText(),
+                caption=app.PmpermitText,
                 parse_mode=ParseMode.DEFAULT,
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -63,7 +63,7 @@ async def inline_result(_, inline_query):
                 photo_url=app.BotPic,
                 title="Tron Inline helpdex menu",
                 description="Get your inline helpdex menu.",
-                caption=app.home_tab_string(),
+                caption=app.home_tab_string,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         app.BuildKeyboard(
@@ -93,7 +93,7 @@ async def inline_result(_, inline_query):
                 photo_url=app.ialive_pic(),
                 title="Tron Inline alive",
                 description="Get your inline alive results with buttons.",
-                caption=app.ialive_tab_string(),
+                caption=app.ialive_tab_string,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))
