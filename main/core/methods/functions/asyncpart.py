@@ -46,11 +46,12 @@ def messageobject(anydict: dict):
         x for x in anydict.values()
         if isinstance(x, Message)
     ]
-    for val in all_messages:
-        if val.from_user.is_self:
-            if hasattr(val, "sudo_message"):
-                message = val
-    return message
+    try:
+        # the passed message object
+        # must be at the top 
+        return all_messages[0]
+    except IndexError:
+        return None
 
 
 class AsyncPart(object):
@@ -286,8 +287,8 @@ class AsyncPart(object):
         teks += f"**Date:** `{self.showdate()}`\n"
         teks += f"**Time:** `{self.showtime()}`\n\n"
         teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{str(m.chat.type).lower()}`\n\n"
-        teks += f"**Message Owner:** `{m.owner}`\n\n"
+        teks += f"**Chat Type:** `{m.chat.type.value}`\n\n"
+        teks += f"**Message Owner:** `{m.from_user.type.value}`\n\n"
         teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
         teks += f"**Message:** `{m.text}`\n\n"
         teks += "`-`" * 30 + "\n\n"

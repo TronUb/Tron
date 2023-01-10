@@ -38,10 +38,16 @@ from youtube_dl import YoutubeDL
 
 def messageobject(anydict: dict):
     message = None
-    for val in anydict.values():
-        if isinstance(val, Message):
-            message = val
-    return message
+    all_messages = [
+        x for x in anydict.values()
+        if isinstance(x, Message)
+    ]
+    try:
+        # the passed message object
+        # must be at the top 
+        return all_messages[0]
+    except IndexError:
+        return None
 
 
 class Types(object):
