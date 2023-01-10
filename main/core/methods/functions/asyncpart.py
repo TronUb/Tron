@@ -44,7 +44,9 @@ def messageobject(anydict: dict):
     message = None
     for val in anydict.values():
         if isinstance(val, Message):
-            message = val
+            if val.from_user:
+                if val.from_user.is_self:
+                    message = val
     return message
 
 
