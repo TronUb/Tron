@@ -35,7 +35,7 @@ async def _public_commands(_, cb: CallbackQuery):
 
 
 
-@app.bot.on_callback_query(filters.regex("public-commands-tab(.[a-z]+)?"))
+@app.bot.on_callback_query(filters.regex(r"public-commands-tab(.[a-z]+)?"))
 async def _global_commands(_, cb):
     if cb.matches[0].match == "public-commands-tab-back":
         text = "You can use these public commands, check below."
