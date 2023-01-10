@@ -18,7 +18,7 @@ class Message(PyMessage):
         is_scheduled: bool = False,
         replies: int = 1
         ):
-        r = await BaseMessage._parse(
+        r = await PyMessage._parse(
             client=client,
             message=message,
             users=users,
