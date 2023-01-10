@@ -152,6 +152,9 @@ def gen(
     async def func(flt, client: Client, message: Message):
 
         try:
+            if message is None:
+                return False
+
             text = message.text or message.caption or None
             message.command = None
             message.replied = message.reply_to_message

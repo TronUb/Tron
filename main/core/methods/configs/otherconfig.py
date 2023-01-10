@@ -43,3 +43,9 @@ class OtherConfig(object):
     def SpotifyToken(self):
         """ returns your spotify token """
         return self.getdv("SPOTIFY_TOKEN") or self.SPOTIFY_TOKEN or {}
+
+
+    @property
+    def LogChat(self):
+        """ returns your log chat id """
+        return self.getdv("LOG_CHAT") or self.LOG_CHAT or None

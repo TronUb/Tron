@@ -14,7 +14,7 @@ from main.core.types import Message
 
 
 
-MESSAGE_TYPES = (
+NEW_MESSAGE_UPDATES = (
     UpdateNewMessage,
     UpdateNewChannelMessage,
     UpdateNewScheduledMessage
@@ -45,7 +45,7 @@ class SuperClient(Core, Client):
         self.username = f"@{self.me.username}" if self.me.username else ""
         self.bio = self.me.bio if self.me.bio else ""
 
-        # reduce the image downloading
+        # reduce the profile image downloading
         dp_name = f"dp_{self.id}.jpg"
         dp_path = f"./downloads/{dp_name}"
         if not os.path.exists(dp_path):
@@ -59,12 +59,12 @@ class SuperClient(Core, Client):
         self.__class__.__module__ = "pyrogram.client"
 
         # set custom message parser
-        for parser in MESSAGE_TYPES:
+        for parser in NEW_MESSAGE_UPDATES:
             self.dispatcher.update_parsers.update({
                 parser:self.message_parser
             })
 
-        # update empty dictionary for plugins
+        # update plugin names with empty dicts in CMD_HELP
         for file in os.listdir("main/userbot/modules/plugins/"):
             if not file.startswith("__"):
                 self.CMD_HELP.update({file.split(".")[0]:{}})

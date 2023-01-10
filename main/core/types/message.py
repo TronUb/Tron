@@ -1,11 +1,11 @@
-from pyrogram.types import Message as BaseMessage
-from pyrogram.types import User as BaseUser
+from pyrogram.types import Message as PyMessage
 from pyrogram import raw
-from main.core.enums import UserType, SudoType
+from .user import User
 
 
 
-class Message(BaseMessage):
+
+class Message(PyMessage):
     def __init__(id):
         super().__init__(id)
 
@@ -27,24 +27,12 @@ class Message(BaseMessage):
             replies=replies
         )
 
-        if not (r or r.from_user):
-            return r
+        if isinstance(r, raw.types.MessageEmpty):
+            return None
 
-        if r.from_user is None:
-            # to do
-            r.from_user = BaseUser(
-                id=0000000000,
-                is_self=False
-            ) # workaround
-            return r
+        if not r.from_user:
+            return None
 
-        user = r.from_user
-
-        if user.is_self:
-            user.type = UserType.OWNER
-        elif user.id in client.SudoUsersList:
-            user.type = UserType.SUDO
-        else:
-            user.type = UserType.OTHER
+        r = User.parse(client, r)
 
         return r
