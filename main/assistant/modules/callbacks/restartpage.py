@@ -26,7 +26,7 @@ async def _restart_userbot(_, cb: CallbackQuery):
             show_alert=True
         )
 
-    if cb.matches[0].match=="restart-tab-confirm":
+    if cb.matches[0].group(0) == "restart-tab-confirm":
         try:
             back_button = InlineKeyboardMarkup(
                 [
