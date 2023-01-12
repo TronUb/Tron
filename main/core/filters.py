@@ -178,8 +178,15 @@ def gen(
                 if not text.startswith(prefix):
                     continue
 
-                cmd = text.split()[0][1:]
-                if cmd in flt.commands:
+                without_prefix = text.split()[0][len(prefix):]
+                for cmd in flt.commands:
+                    if not re.match(
+                        cmd,
+                        without_prefix,
+                        flags=re.IGNORECASE if not 
+                        flt.case_sensitive else 0
+                        ):
+                        continue
 
                     if user.type == UserType.OWNER:
                         message.command = [cmd] + text.split()[1:]

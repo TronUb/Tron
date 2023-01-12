@@ -365,7 +365,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         if sec <= 600: # 10 min
-            asyncio.create_task(self.sleep(sec=sec, delmsg=True))
+            asyncio.create_task(self.sleep_delete(sec=sec, delmsg=True))
             return True
         else:
             self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")

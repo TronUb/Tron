@@ -39,7 +39,11 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
     commands="ban",
     usage="Ban a user in a chat.",
     disable_for=UserType.SUDO,
-    disable_in=ChatType.CHANNEL
+    disable_in=[
+        ChatType.CHANNEL,
+        ChatType.BOT,
+        ChatType.PRIVATE
+    ]
 )
 async def ban_handler(_, m: Message):
 
