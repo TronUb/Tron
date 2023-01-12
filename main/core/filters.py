@@ -26,68 +26,6 @@ from main.core.enums import (
 
 
 
-# custom regex filter
-def regex(
-    pattern: Union[str, Pattern], 
-    flags: int = 0,
-    allow: list = []
-    ):
-
-    async def func(flt, client: Client, update: Update):
-
-        # work for -> sudo & bot owner if sudo
-        if "sudo" in allow:
-            if update.from_user and not (update.from_user.is_self or update.from_user.id in client.SudoUsers()):
-                return False
-
-            # allow some specific commands to sudos
-            if update.from_user and update.from_user.id in client.SudoUsers():
-                if update.text or update.caption and not "full" in client.SudoCmds():
-                    for x in pattern.split(): # list of texts
-                        if not x in client.SudoCmds():
-                            return False
-
-        # work only for -> bot owner if not sudo
-        elif not "sudo" in allow:
-            if update.from_user and not update.from_user.is_self:
-                return False
-
-        # work for -> forwarded message
-        if not "forward" in allow:
-            if update.forward_date: 
-                return False
-
-        # work for -> messages in channel
-        if not "channel" in allow:
-            if update.chat.type == "channel": 
-                return False
-
-        # work for -> edited message
-        if not "edited" in allow:
-            if update.edit_date: 
-                return False
-
-        if isinstance(update, Message):
-            value = update.text or update.caption
-        elif isinstance(update, CallbackQuery):
-            value = update.data
-        elif isinstance(update, InlineQuery):
-            value = update.query
-        else:
-            raise ValueError(f"Regex filter doesn't work with {type(update)}")
-
-        if value:
-            update.matches = list(flt.p.finditer(value)) or None
-
-        return bool(update.matches)
-
-    return create(
-        func,
-        "RegexCommandFilter",
-        p=pattern if isinstance(pattern, Pattern) else re.compile(pattern, flags)
-    )
-
-
 
 # gen reply checker
 async def is_reply(client, message, reply, reply_type):

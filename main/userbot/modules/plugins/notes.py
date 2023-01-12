@@ -1,6 +1,6 @@
 """ notes plugin """
 
-from pyrogram import errors
+from pyrogram import errors, filters
 
 from pyrogram.types import (
     InlineKeyboardMarkup,
@@ -10,7 +10,6 @@ from pyrogram.types import (
 from main import (
     app,
     gen,
-    regex
 )
 from main.core.enums import UserType
 
@@ -69,7 +68,7 @@ async def savenote_hanlder(_, m: Message):
 
 
 
-@app.on_message(regex(">"))
+@app.on_message(filters.regex(">") & filters.user(app.AllUsersId))
 async def getnote_handler(_, m: Message):
     """ getnote handler for notes plugin """
     reply = m.reply_to_message

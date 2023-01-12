@@ -180,7 +180,7 @@ if hosttype.is_localhost:
 # default import
 from main.userbot.client import app
 bot = app.bot
-from main.core.filters import gen, regex
+from main.core.filters import gen
 
 
 
