@@ -119,7 +119,7 @@ def gen(
                 without_prefix = text.split()[0][len(prefix):]
                 for cmd in flt.commands:
                     if not re.match(
-                        cmd,
+                        rf"\b{cmd}\b",
                         without_prefix,
                         flags=re.IGNORECASE if not 
                         flt.case_sensitive else 0
