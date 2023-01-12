@@ -36,7 +36,7 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 @app.on_cmd(
-    commands="ban",
+    commands=r"d?ban",
     usage="Ban a user in a chat.",
     disable_for=UserType.SUDO,
     disable_in=[
