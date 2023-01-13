@@ -13,11 +13,13 @@ class User(BaseUser):
         client,
         message
         ):
-        if message.from_user.is_self:
-            message.from_user.type = UserType.OWNER
-        elif message.from_user.id in client.SudoUsersList:
-            message.from_user.type = UserType.SUDO
-        else:
-            message.from_user.type = UserType.OTHER
+        """ custom user parser """
+        if message and message.from_user:
+            if message.from_user.is_self:
+                message.from_user.type = UserType.OWNER
+            elif message.from_user.id in client.SudoUsersList:
+                message.from_user.type = UserType.SUDO
+            else:
+                message.from_user.type = UserType.OTHER
 
         return message
