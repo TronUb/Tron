@@ -71,6 +71,7 @@ class SuperClient(Core, Client):
 
 
     async def message_parser(self, update, users, chats):
+        """ custom message parser """
         return (
             await Message.parse(
                 self,

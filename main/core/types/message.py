@@ -18,6 +18,7 @@ class Message(PyMessage):
         is_scheduled: bool = False,
         replies: int = 1
         ):
+        """ custome message parse method """
         r = await PyMessage._parse(
             client=client,
             message=message,
