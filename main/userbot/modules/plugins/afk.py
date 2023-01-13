@@ -88,7 +88,7 @@ async def offlinemention_handler(_, m: Message):
                 **Id:** {m.from_user.id}\n
                 **Group:** `{m.chat.title}`\n
                 **Message:** `{text[:4096]}`\n
-                [Go to message](https://t.me/c/{cid}/{m.id})
+                [Go to message]({m.link})
                 """
                 )
     except Exception as e:
