@@ -107,7 +107,7 @@ async def getnote_handler(_, m: Message):
                         await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'])
                 except errors.exceptions.bad_request_400.BadRequest:
                     msg = await app.get_messages(m.chat.id, getnotes['message_id'])
-                   note_name, text, message_type, content = app.FetchNoteType(msg)
+                    note_name, text, message_type, content = app.FetchNoteType(msg)
                     app.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
                     if msg_id:
                         await GET_FORMAT[getnotes['type']](m.chat.id, content, reply_to_message_id=msg_id)
