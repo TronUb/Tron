@@ -71,76 +71,79 @@ async def savenote_hanlder(_, m: Message):
 @app.on_message(filters.regex(">") & filters.user(app.AllUsersId))
 async def getnote_handler(_, m: Message):
     """ getnote handler for notes plugin """
-    reply = m.reply_to_message
-    if m.text and m.text.startswith(">"):
-        if app.long() == 1:
-            note = m.text.replace(">", "")
-        else:
-            return # no response
-
-        getnotes = app.get_selfnote(m.from_user.id, note)
-
-        if not getnotes:
-            return await app.send_edit("This note does not exist !")
-
-        msg_id = reply.id if reply else None
-
-        if getnotes['type'] == app.TEXT:
-            teks, button = app.ParseButton(getnotes.get('value'))
-            button = app.BuildKeyboard(button)
-            if button:
-                button = InlineKeyboardMarkup(button)
+    try:
+        reply = m.reply_to_message
+        if m.text and m.text.startswith(">"):
+            if app.long() == 1:
+                note = m.text.replace(">", "")
             else:
-                button = False
-            if button:
-                return await app.send_edit("Inline button not supported in this userbot version :(")
-            else:
-                await app.send_edit(teks)
+                return # no response
 
-        elif getnotes['type'] in (app.STICKER, app.VOICE, app.VIDEO_NOTE, app.CONTACT, app.ANIMATED_STICKER):
-            await m.delete()
-            try:
-                if msg_id:
-                    await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], reply_to_message_id=msg_id)
-                else:
-                    await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'])
-            except errors.exceptions.bad_request_400.BadRequest:
-                msg = await app.get_messages(m.chat.id, getnotes['message_id'])
-                note_name, text, message_type, content = app.FetchNoteType(msg)
-                app.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
-                if msg_id:
-                    await GET_FORMAT[getnotes['type']](m.chat.id, content, reply_to_message_id=msg_id)
-                else:
-                    await GET_FORMAT[getnotes['type']](m.chat.id, content)
-        else:
-            await m.delete()
-            if getnotes.get('value'):
+            getnotes = app.get_selfnote(m.from_user.id, note)
+
+            if not getnotes:
+                return await app.send_edit("This note does not exist !")
+
+            msg_id = reply.id if reply else None
+
+            if getnotes['type'] == app.TEXT:
                 teks, button = app.ParseButton(getnotes.get('value'))
                 button = app.BuildKeyboard(button)
                 if button:
                     button = InlineKeyboardMarkup(button)
                 else:
                     button = False
-            else:
-                teks = False
-                button = False
+                if button:
+                    return await app.send_edit("Inline button not supported in this userbot version :(")
+                else:
+                    await app.send_edit(teks)
 
-            if button:
-                return await app.send_edit("Inline button not supported in this userbot.")
-            else:
+            elif getnotes['type'] in (app.STICKER, app.VOICE, app.VIDEO_NOTE, app.CONTACT, app.ANIMATED_STICKER):
+                await m.delete()
                 try:
                     if msg_id:
-                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
+                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], reply_to_message_id=msg_id)
                     else:
-                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
+                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'])
                 except errors.exceptions.bad_request_400.BadRequest:
                     msg = await app.get_messages(m.chat.id, getnotes['message_id'])
-                    note_name, text, message_type, content = app.FetchNoteType(msg)
-                    app.save_selfnote(m.chat.id, note, teks, getnotes['type'], content, getnotes['message_id'])
+                   note_name, text, message_type, content = app.FetchNoteType(msg)
+                    app.save_selfnote(m.chat.id, note, "", getnotes['type'], content, getnotes['message_id'])
                     if msg_id:
-                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
+                        await GET_FORMAT[getnotes['type']](m.chat.id, content, reply_to_message_id=msg_id)
                     else:
-                        await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
+                        await GET_FORMAT[getnotes['type']](m.chat.id, content)
+            else:
+                await m.delete()
+                if getnotes.get('value'):
+                    teks, button = app.ParseButton(getnotes.get('value'))
+                    button = app.BuildKeyboard(button)
+                    if button:
+                        button = InlineKeyboardMarkup(button)
+                    else:
+                        button = False
+                else:
+                    teks = False
+                    button = False
+
+                if button:
+                    return await app.send_edit("Inline button not supported in this userbot.")
+                else:
+                    try:
+                        if msg_id:
+                            await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
+                        else:
+                            await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
+                    except errors.exceptions.bad_request_400.BadRequest:
+                        msg = await app.get_messages(m.chat.id, getnotes['message_id'])
+                        note_name, text, message_type, content = app.FetchNoteType(msg)
+                        app.save_selfnote(m.chat.id, note, teks, getnotes['type'], content, getnotes['message_id'])
+                        if msg_id:
+                            await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks, reply_to_message_id=msg_id)
+                        else:
+                            await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
+    except Exception as e:
+        await app.error(e)
 
 
 

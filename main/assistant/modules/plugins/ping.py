@@ -9,7 +9,7 @@ from main.userbot.client import app
 
 
 @app.bot.on_message(filters.command("ping"), group=-1)
-async def bot_ping(_, m: Message):
+async def bot_ping_handler(_, m: Message):
         start = datetime.now()
         msg = await app.bot.send_message(
             m.chat.id,

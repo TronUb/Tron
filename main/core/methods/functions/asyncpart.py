@@ -239,8 +239,6 @@ class AsyncPart(object):
         ex: (async)
             await app.aexec("print('Hello, World !')")
         """
-        if self.is_bot:
-            raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
