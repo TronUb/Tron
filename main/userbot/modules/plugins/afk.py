@@ -29,7 +29,7 @@ async def afk_handler(_, m: Message):
             reason = m.text.split(None, 1)[1]
             app.set_afk(True, reason, start) # with reason
             add_afkhandler()
-            await app.send_edit(f"{app.UserMention()} is now Offline.\nBecause: {reason}", delme=3)
+            await app.send_edit(f"{app.UserMention} is now Offline.\nBecause: {reason}", delme=3)
 
         elif app.long() == 1 and app.long() < 4096:
             reason = app.AfkText
@@ -38,13 +38,13 @@ async def afk_handler(_, m: Message):
                 app.set_afk(True, reason, start) # with reason
                 add_afkhandler()
                 await app.send_edit(
-                    f"{app.UserMention()} is now offline.\nBecause: {reason}",
+                    f"{app.UserMention} is now offline.\nBecause: {reason}",
                     delme=3
                 )
             else:
                 app.set_afk(True, "", start) # without reason
                 add_afkhandler()
-                await app.send_edit(f"{app.UserMention()} is now offline.", delme=3)
+                await app.send_edit(f"{app.UserMention} is now offline.", delme=3)
 
     except Exception as e:
         await app.error(e)
@@ -66,14 +66,14 @@ async def offlinemention_handler(_, m: Message):
             if get["reason"] and get["afktime"]:
                 await app.send_message(
                     m.chat.id,
-                    f"Sorry {app.UserMention()} is currently offline !\n**Time:** {otime}\n**Because:** {get['reason']}",
+                    f"Sorry {app.UserMention} is currently offline !\n**Time:** {otime}\n**Because:** {get['reason']}",
                     reply_to_message_id=m.id
                     )
                 await app.delete_message(3)
             elif get["afktime"] and not get["reason"]:
                 await app.send_message(
                     m.chat.id,
-                    f"Sorry {app.UserMention()} is currently offline !\n**Time:** {otime}",
+                    f"Sorry {app.UserMention} is currently offline !\n**Time:** {otime}",
                     reply_to_message_id=m.id
                     )
                 await app.delete_message(3)
@@ -100,7 +100,7 @@ async def offlinemention_handler(_, m: Message):
 async def unafk_handler(_, m: Message):
     try:
         # don't break afk while using afk command
-        commands = [f"{x}afk" for x in app.Trigger()]
+        commands = [f"{x}afk" for x in app.Trigger]
         if m.text:
             if m.text.split()[0] in commands:
                 return
@@ -116,8 +116,9 @@ async def unafk_handler(_, m: Message):
                 f"{app.UserMention} is now online !\n**Offline Time:** `{afk_time}`"
             )
             app.set_afk(False, "", 0)
-            remove_afkhandler()
-            handlers.clear()
+            if len(handlers) >= 2:
+                remove_afkhandler()
+                handlers.clear()
 
     except Exception as e:
         await app.error(e)
