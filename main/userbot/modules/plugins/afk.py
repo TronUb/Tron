@@ -113,7 +113,7 @@ async def unafk_handler(_, m: Message):
             afk_time = app.GetReadableTime(end - get["afktime"])
             await app.send_message(
                 m.chat.id,
-                f"{app.UserMention()} is now online !\n**Offline Time:** `{afk_time}`"
+                f"{app.UserMention} is now online !\n**Offline Time:** `{afk_time}`"
             )
             app.set_afk(False, "", 0)
             remove_afkhandler()

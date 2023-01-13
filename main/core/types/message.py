@@ -28,12 +28,4 @@ class Message(PyMessage):
             replies=replies
         )
 
-        if isinstance(r, raw.types.MessageEmpty):
-            return None
-
-        if not r.from_user:
-            return None
-
-        r = User.parse(client, r)
-
-        return r
+        return User.parse(client, r)
