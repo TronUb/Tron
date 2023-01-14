@@ -9,6 +9,7 @@ import html
 import inspect
 import subprocess
 import importlib
+import threading
 
 from typing import List
 
@@ -905,3 +906,15 @@ class SyncPart(Types):
     @staticmethod
     def buildMarkup(*buttons):
         return InlineKeyboardMarkup([*buttons])
+
+
+    @staticmethod
+    def createThread(func: callable, start_now: bool=True, *_args, **kwargs):
+        thread = threading.Thread(
+            target=asyncio.run,
+            args=(func(*_args, **_kwargs),)
+        )
+        if start_now:
+            thread.start()
+        else:
+            return thread
