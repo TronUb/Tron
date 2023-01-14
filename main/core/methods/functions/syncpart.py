@@ -14,7 +14,8 @@ from typing import List
 
 from pyrogram.types import (
     Message,
-    InlineKeyboardButton
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
 )
 from pyrogram.errors import BotMethodInvalid
 
@@ -891,3 +892,14 @@ class SyncPart(Types):
         )
     
         return yt
+
+
+    def buildButton(text: str, callback_data: str):
+        return InlineKeyboardButton(
+            text=text,
+            callback_data=callback_data
+        )
+
+
+    def buildMarkup(*buttons)
+        return InlineKeyboardMarkup([*buttons])

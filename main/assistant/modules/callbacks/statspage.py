@@ -3,11 +3,7 @@ This file creates stats page in help menu.
 """
 
 from pyrogram import filters
-
-from pyrogram.types import (
-    InlineKeyboardMarkup,
-    CallbackQuery,
-)
+from pyrogram.types import CallbackQuery
 
 from main.userbot.client import app
 
@@ -17,12 +13,11 @@ from main.userbot.client import app
 
 @app.bot.on_callback_query(filters.regex("stats-tab"))
 @app.alert_user
-async def _stats(_, cb: CallbackQuery):
+async def stats_callback(_, cb: CallbackQuery):
     await cb.edit_message_text(
         text=app.stats_tab_string,
-        reply_markup=InlineKeyboardMarkup(
-            [
-                app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))
-            ]
-        ),
+        reply_markup=app.buildMarkup(
+            [app.buildButton("Home", "close-tab")],
+            [app.buildButton("Back", "home-tab")]
+        )
     )
