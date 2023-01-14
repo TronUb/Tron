@@ -244,9 +244,9 @@ class AsyncPart(object):
         m = messageobject(frame.f_locals)
 
         globals().update({
-            "app":self,
-            "bot":self.bot,
-            "reply":m.reply_to_message,
+            "app": self,
+            "bot": getattr(self, "bot", None),
+            "reply": m.reply_to_message,
         })
         exec(
             "async def __aexec(self, m): "
@@ -281,17 +281,20 @@ class AsyncPart(object):
         m = messageobject(frame.f_locals)
         full_traceback = traceback.format_exc()
 
-        teks = "**Traceback Report:**\n\n"
-        teks += f"**Date:** `{self.showdate()}`\n"
-        teks += f"**Time:** `{self.showtime()}`\n\n"
-        teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{m.chat.type.value}`\n\n"
-        teks += f"**Message Owner:** `{m.from_user.type.value}`\n\n"
-        teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
-        teks += f"**Message:** `{m.text}`\n\n"
-        teks += "`-`" * 30 + "\n\n"
-        teks += f"**SHORT:** \n\n`{e}`\n\n"
-        teks += f"**FULL:** \n\n`{full_traceback}`"
+        if m:
+            teks = "**Traceback Report:**\n\n"
+            teks += f"**Date:** `{self.showdate()}`\n"
+            teks += f"**Time:** `{self.showtime()}`\n\n"
+            teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
+            teks += f"**Chat Type:** `{m.chat.type.value}`\n\n"
+            teks += f"**Message Owner:** `{m.from_user.type.value}`\n\n"
+            teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
+            teks += f"**Message:** `{m.text}`\n\n"
+            teks += "`-`" * 30 + "\n\n"
+            teks += f"**SHORT:** \n\n`{e}`\n\n"
+            teks += f"**FULL:** \n\n`{full_traceback}`"
+        else:
+            teks = ""
 
         try:
             if edit_error:
@@ -303,14 +306,14 @@ class AsyncPart(object):
             if len(teks) > 4096:
                 await self.create_file("exception.txt", teks)
             else:
-                await self.send_message(self.LOG_CHAT, teks)
+                await self.send_message(self.LogChat, teks)
 
             print(full_traceback)
 
         except PeerIdInvalid:
             self.log.error(teks)
-        except Exception as err:
-            self.log.error(err)
+        except Exception as e:
+            self.log.error(e)
         return True
 
 
