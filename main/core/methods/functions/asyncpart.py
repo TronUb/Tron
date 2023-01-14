@@ -319,7 +319,7 @@ class AsyncPart(object):
 
     async def sleep_delete(
         self,
-        message=None
+        message=None,
         sec: int=0,
         delmsg=False
         ):
