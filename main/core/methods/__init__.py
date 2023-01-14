@@ -1,5 +1,5 @@
 from .configs import Configs
-from .containers import Containers
+from .constants import Constants
 from .database import Database
 from .decorators import Decorators
 from .functions import Functions
@@ -9,7 +9,7 @@ from .functions import Functions
 class Methods(
     Functions,
     Configs,
-    Containers,
+    Constants,
     Database,
     Decorators
     ):

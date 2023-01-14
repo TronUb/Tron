@@ -42,10 +42,16 @@ from aiohttp.client_exceptions import ContentTypeError
 
 def messageobject(anydict: dict):
     message = None
-    for val in anydict.values():
-        if isinstance(val, Message):
-            message = val
-    return message
+    all_messages = [
+        x for x in anydict.values()
+        if isinstance(x, Message)
+    ]
+    try:
+        # the passed message object
+        # must be at the top 
+        return all_messages[0]
+    except IndexError:
+        return None
 
 
 class AsyncPart(object):
@@ -233,16 +239,14 @@ class AsyncPart(object):
         ex: (async)
             await app.aexec("print('Hello, World !')")
         """
-        if self.is_bot:
-            raise BotMethodInvalid
 
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
         globals().update({
-            "app":self,
-            "bot":self.bot,
-            "reply":m.reply_to_message,
+            "app": self,
+            "bot": getattr(self, "bot", None),
+            "reply": m.reply_to_message,
         })
         exec(
             "async def __aexec(self, m): "
@@ -277,17 +281,20 @@ class AsyncPart(object):
         m = messageobject(frame.f_locals)
         full_traceback = traceback.format_exc()
 
-        teks = "**Traceback Report:**\n\n"
-        teks += f"**Date:** `{self.showdate()}`\n"
-        teks += f"**Time:** `{self.showtime()}`\n\n"
-        teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
-        teks += f"**Chat Type:** `{str(m.chat.type).lower()}`\n\n"
-        teks += f"**Message Owner:** `{m.owner}`\n\n"
-        teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
-        teks += f"**Message:** `{m.text}`\n\n"
-        teks += "`-`" * 30 + "\n\n"
-        teks += f"**SHORT:** \n\n`{e}`\n\n"
-        teks += f"**FULL:** \n\n`{full_traceback}`"
+        if m:
+            teks = "**Traceback Report:**\n\n"
+            teks += f"**Date:** `{self.showdate()}`\n"
+            teks += f"**Time:** `{self.showtime()}`\n\n"
+            teks += f"**Chat Name:** `{m.chat.first_name or m.chat.title}`\n\n"
+            teks += f"**Chat Type:** `{m.chat.type.value}`\n\n"
+            teks += f"**Message Owner:** `{m.from_user.type.value}`\n\n"
+            teks += "`This can be a error in tronuserbot, if you want you can forward this to` @tronUbSupport.\n\n"
+            teks += f"**Message:** `{m.text}`\n\n"
+            teks += "`-`" * 30 + "\n\n"
+            teks += f"**SHORT:** \n\n`{e}`\n\n"
+            teks += f"**FULL:** \n\n`{full_traceback}`"
+        else:
+            teks = ""
 
         try:
             if edit_error:
@@ -299,19 +306,20 @@ class AsyncPart(object):
             if len(teks) > 4096:
                 await self.create_file("exception.txt", teks)
             else:
-                await self.send_message(self.LOG_CHAT, teks)
+                await self.send_message(self.LogChat, teks)
 
             print(full_traceback)
 
         except PeerIdInvalid:
             self.log.error(teks)
-        except Exception as err:
-            self.log.error(err)
+        except Exception as e:
+            self.log.error(e)
         return True
 
 
     async def sleep_delete(
         self,
+        message=None,
         sec: int=0,
         delmsg=False
         ):
@@ -330,8 +338,11 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        frame = inspect.currentframe().f_back
-        m = messageobject(frame.f_locals)
+        if message:
+            m = message
+        else:
+            frame = inspect.currentframe().f_back
+            m = messageobject(frame.f_locals)
 
         r = None
         await asyncio.sleep(sec)
@@ -359,7 +370,7 @@ class AsyncPart(object):
             raise BotMethodInvalid
 
         if sec <= 600: # 10 min
-            asyncio.create_task(self.sleep(sec=sec, delmsg=True))
+            asyncio.create_task(self.sleep_delete(sec=sec, delmsg=True))
             return True
         else:
             self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
@@ -386,7 +397,7 @@ class AsyncPart(object):
                 r = None
             else:
                 r = [
-                        f"CMD: `{self.Trigger()[0]}{cmd}`\nINFO: `{usage}`\n\n" 
+                        f"CMD: `{self.Trigger[0]}{cmd}`\nINFO: `{usage}`\n\n" 
                         for cmd, usage in zip(
                             self.CMD_HELP.get(module).keys(),
                             self.CMD_HELP.get(module).values()
@@ -479,7 +490,7 @@ class AsyncPart(object):
 
         try:
             if delme > 0:
-                asyncio.create_task(self.sleep_delete(sec=delme, delmsg=True))
+                self.createThread(self.sleep_delete, message=m, sec=delme, delmsg=True)
 
         except Exception as e:
             await self.error(e)

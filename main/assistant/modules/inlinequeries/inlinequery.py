@@ -33,17 +33,18 @@ async def create_helpmenu_articles():
 
 
 # via bot messages
-@app.bot.on_inline_query(filters.user(app.AllUsersId()))
+@app.bot.on_inline_query(filters.user(app.AllUsersId))
 async def inline_result(_, inline_query):
+    print(inline_query)
     query = inline_query.query
     if query.startswith("#pmpermit"):
         await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
-                photo_url=app.PmpermitPic(),
+                photo_url=app.PmpermitPic,
                 title="Tron Inline security system",
                 description="Get tron security system inline menu.",
-                caption=app.PmpermitText(),
+                caption=app.PmpermitText,
                 parse_mode=ParseMode.DEFAULT,
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -55,15 +56,15 @@ async def inline_result(_, inline_query):
         cache_time=1
         )
     elif query.startswith("#helpmenu"):
-        emoji = app.HelpEmoji() or "•"
+        emoji = app.HelpEmoji or "•"
 
         await inline_query.answer(
         results=[
             InlineQueryResultPhoto(
-                photo_url=app.BotPic(),
+                photo_url=app.BotPic,
                 title="Tron Inline helpdex menu",
                 description="Get your inline helpdex menu.",
-                caption=app.home_tab_string(),
+                caption=app.home_tab_string,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         app.BuildKeyboard(
@@ -93,7 +94,7 @@ async def inline_result(_, inline_query):
                 photo_url=app.ialive_pic(),
                 title="Tron Inline alive",
                 description="Get your inline alive results with buttons.",
-                caption=app.ialive_tab_string(),
+                caption=app.ialive_tab_string,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         app.BuildKeyboard((["Home", "close-tab"], ["Back", "home-tab"]))
@@ -108,7 +109,7 @@ async def inline_result(_, inline_query):
         results=[
             InlineQueryResultArticle(
                 title="Tron Inline anime quotes",
-                input_message_content=InputTextMessageContent(app.quote()),
+                input_message_content=InputTextMessageContent(app.animeQuote()),
                 description="Get infinite anime character quotes through this inline loop button.",
                 reply_markup=InlineKeyboardMarkup(
                     [

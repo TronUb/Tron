@@ -7,14 +7,17 @@ import math
 import datetime
 import html
 import inspect
+import asyncio
 import subprocess
 import importlib
+import threading
 
 from typing import List
 
 from pyrogram.types import (
     Message,
-    InlineKeyboardButton
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
 )
 from pyrogram.errors import BotMethodInvalid
 
@@ -38,10 +41,16 @@ from youtube_dl import YoutubeDL
 
 def messageobject(anydict: dict):
     message = None
-    for val in anydict.values():
-        if isinstance(val, Message):
-            message = val
-    return message
+    all_messages = [
+        x for x in anydict.values()
+        if isinstance(x, Message)
+    ]
+    try:
+        # the passed message object
+        # must be at the top 
+        return all_messages[0]
+    except IndexError:
+        return None
 
 
 class Types(object):
@@ -243,7 +252,7 @@ class SyncPart(Types):
         return isinstance(element, int)
 
 
-    def quote(
+    def animeQuote(
         self
         ):
         """
@@ -412,7 +421,8 @@ class SyncPart(Types):
         return "Available" if hasattr(self, "DB_URI") and self.DB_URI else "Unavailable"
 
 
-    def heroku_app(self):
+    @property
+    def herokuApp(self):
         """
         params:
             None
@@ -421,13 +431,13 @@ class SyncPart(Types):
             use this function to get acess of your heroku app
 
         ex:
-            app.heroku_app()
+            app.herokuApp
         """
-        if not (self.HerokuApiKey() and self.HerokuAppName()):
+        if not (self.HerokuApiKey and self.HerokuAppName):
             return None
 
-        account = heroku3.from_key(self.HerokuApiKey())
-        return account.apps()[self.HerokuAppName()]
+        account = heroku3.from_key(self.HerokuApiKey)
+        return account.apps()[self.HerokuAppName]
 
 
     def HelpDex(self, page_number, allmodules, prefix):
@@ -441,7 +451,7 @@ class SyncPart(Types):
         modules = [
             InlineKeyboardButton(
                 text="{} {}".format(
-                    self.HelpEmoji(),
+                    self.HelpEmoji,
                     x.replace("_", " ").title(),
                 ),
                 callback_data="pluginlist-{}|{}".format(x, page_number),
@@ -884,3 +894,28 @@ class SyncPart(Types):
         )
     
         return yt
+
+
+    @staticmethod
+    def buildButton(text: str, callback_data: str):
+        return InlineKeyboardButton(
+            text=text,
+            callback_data=callback_data
+        )
+
+
+    @staticmethod
+    def buildMarkup(*buttons):
+        return InlineKeyboardMarkup([*buttons])
+
+
+    @staticmethod
+    def createThread(func: callable, start_now: bool=True, *_args, **_kwargs):
+        thread = threading.Thread(
+            target=asyncio.run,
+            args=(func(*_args, **_kwargs),)
+        )
+        if start_now:
+            thread.start()
+        else:
+            return thread

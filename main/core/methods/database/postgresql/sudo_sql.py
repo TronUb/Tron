@@ -56,6 +56,8 @@ class SUDOSQL(object):
             r = SESSION.query(SUDOTABLE).get(sudo_id)
             if r:
                 SESSION.delete(r)
+
+            SESSION.commit()
             return True
         finally:
             SESSION.close()

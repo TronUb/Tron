@@ -99,13 +99,13 @@ async def start_bot():
     print(20*"_" + Colors.block + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
 
     print(Colors.block + "PLUGINS:" + Colors.reset + " ( Assistant )\n\n")
-    botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad())
+    botplugins = app.import_module("main/assistant/modules/plugins/", exclude=app.NoLoad)
     app.import_module("main/assistant/modules/callbacks/", display_module=False)
     app.import_module("main/assistant/modules/inlinequeries/", display_module=False)
     print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n\n\n")
 
     print(Colors.block + "PLUGINS:" + Colors.reset + " ( Userbot )\n\n")
-    ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad())
+    ubotplugins = app.import_module("main/userbot/modules/plugins/", exclude=app.NoLoad)
     print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {ubotplugins}\n")
 
     await start_assistant()

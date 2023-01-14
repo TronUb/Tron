@@ -33,13 +33,25 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
     return int(format_set[format])
 
 
+async def delete_reply(reply, command, start):
+    if reply and app.IsAdmin("delete_messages"):
+        if starts and command.startswith(start):
+            return await reply.delete()
+
+    return None
+
+
 
 
 @app.on_cmd(
-    commands="ban",
+    commands=r"d?ban",
     usage="Ban a user in a chat.",
     disable_for=UserType.SUDO,
-    disable_in=ChatType.CHANNEL
+    disable_in=[
+        ChatType.CHANNEL,
+        ChatType.BOT,
+        ChatType.PRIVATE
+    ]
 )
 async def ban_handler(_, m: Message):
 
@@ -47,9 +59,10 @@ async def ban_handler(_, m: Message):
         if await app.check_private():
             return
 
-        reply = m.reply_to_message or m.sudo_message.reply_to_message
+        sm = m.sudo_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
-        cmd = m.command or m.sudo_message.command
+        cmd = m.command or sm.command if sm else None
         ban_time = False
 
         if app.long() == 1 and not reply:
@@ -99,9 +112,11 @@ async def ban_handler(_, m: Message):
 
         await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
         if ban_time:
+            await delete_reply(reply, commands, "d")
             await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
             await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
         else:
+            await delete_reply(reply, commands, "d")
             await app.ban_chat_member(m.chat.id, user.user.id)
             await app.send_edit(f"Banned {user.user.mention} in this chat.", delme=4)
 
@@ -134,10 +149,6 @@ async def banall_handler(_, m: Message):
                 delme=3
             )
 
-        count = 0
-        data = []
-        data.clear()
-
         if app.long() == 1:
             return await app.send_edit(
                 "Use '`confirm`' text after command to ban all members.",
@@ -146,6 +157,7 @@ async def banall_handler(_, m: Message):
             )
 
         elif app.long() > 1 and m.command[1] == "confirm":
+            count = 0
             async for x in app.get_chat_members(m.chat.id):
                 if x.status == ChatMemberStatus.MEMBER:
                     await app.ban_chat_member(m.chat.id, x.user.id)
@@ -178,7 +190,7 @@ async def unban_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -273,7 +285,7 @@ async def mute_user(chat_id, user_id, duration=datetime.now()):
 
 
 @app.on_cmd(
-    commands="mute",
+    commands=r"d?mute",
     usage="Mute a user in a chat.",
     disable_for=UserType.SUDO
 )
@@ -294,10 +306,10 @@ async def mute_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
         mute_time = False
-        cmd = m.command
+        cmd = m.command or sm.command if sm else None
 
         if not reply and app.long() == 1:
             return await app.send_edit(
@@ -347,9 +359,11 @@ async def mute_handler(_, m: Message):
             return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
         if mute_time:
+            await delete_reply(reply, commands, "d")
             await mute_user(m.chat.id, user.user.id, datetime.now() + timedelta(mute_time))
             await app.send_edit(f"Muted {user.user.mention} for {arg}")
         else:
+            await delete_reply(reply, commands, "d")
             await mute_user(m.chat.id, user.user.id)
             await app.send_edit(f"Muted {user.user.mention} in this chat for forever.", delme=4)
 
@@ -375,7 +389,7 @@ async def unmute_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -459,7 +473,7 @@ async def kick_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -526,8 +540,8 @@ async def pin_handler(_, m: Message):
     try:
         arg = True
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
-        cmd = m.command or sm.command
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
+        cmd = m.command or sm.command if sm else None
 
         if app.long() > 1:
             arg = False if cmd[1] == "loud" else True
@@ -583,8 +597,8 @@ async def unpin_handler(_, m: Message):
 
     try:
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
-        cmd = m.command or sm.command
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
+        cmd = m.command or sm.command if sm else None
 
         if not reply and app.long() == 1:
             return await app.send_edit(
@@ -638,7 +652,7 @@ async def promote_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if app.long() == 1 and not reply:
@@ -719,7 +733,7 @@ async def demote_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message
+        reply = m.reply_to_message or sm.reply_to_messageNone if sm else None
         user = False
 
         if await app.IsAdmin("add_admins") is False:

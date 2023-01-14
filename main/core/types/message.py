@@ -1,11 +1,11 @@
-from pyrogram.types import Message as BaseMessage
-from pyrogram.types import User as BaseUser
+from pyrogram.types import Message as PyMessage
 from pyrogram import raw
-from main.core.enums import UserType, SudoType
+from .user import User
 
 
 
-class Message(BaseMessage):
+
+class Message(PyMessage):
     def __init__(id):
         super().__init__(id)
 
@@ -18,7 +18,8 @@ class Message(BaseMessage):
         is_scheduled: bool = False,
         replies: int = 1
         ):
-        r = await BaseMessage._parse(
+        """ custome message parse method """
+        r = await PyMessage._parse(
             client=client,
             message=message,
             users=users,
@@ -27,24 +28,4 @@ class Message(BaseMessage):
             replies=replies
         )
 
-        if not (r or r.from_user):
-            return r
-
-        if r.from_user is None:
-            # to do
-            r.from_user = BaseUser(
-                id=0000000000,
-                is_self=False
-            ) # workaround
-            return r
-
-        user = r.from_user
-
-        if user.is_self:
-            user.type = UserType.OWNER
-        elif user.id in client.SudoUsersList:
-            user.type = UserType.SUDO
-        else:
-            user.type = UserType.OTHER
-
-        return r
+        return User.parse(client, r)

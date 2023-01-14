@@ -30,8 +30,8 @@ async def old_msg(m: Message, user_id):
 
 async def send_warn(m: Message, user):
     """ Send warning messages """
-    pic = app.PmpermitPic()
-    text = app.PmpermitText()
+    pic = app.PmpermitPic
+    text = app.PmpermitText
 
     if pic:
         msg = await app.send_photo(
@@ -64,9 +64,9 @@ async def pmpermit_handler(_, m: Message):
     try:
         users = []
         is_user = False
-        pmlimit = app.PmpermitLimit()
+        pmlimit = app.PmpermitLimit
 
-        if bool(app.Pmpermit()) is False or m.chat.is_verified: # exclude verified accounts
+        if bool(app.Pmpermit) is False or m.chat.is_verified: # exclude verified accounts
             return
 
         if bool(app.get_whitelist(m.chat.id)) is True:

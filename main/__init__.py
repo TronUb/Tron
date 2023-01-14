@@ -28,6 +28,7 @@ class Tools:
     is_linux = (device=="linux")
     is_windows = (device=="windows")
 
+    @property
     def clear_screen(self):
         os.system("clear" if self.is_linux else "cls")
 
@@ -124,11 +125,11 @@ class Tools:
 
     def setup_config(self):
         count = 1
-        self.clear_screen()
+        self.clear_screen
 
         # check requirements & install
         self.check_requirements()
-        self.clear_screen()
+        self.clear_screen
 
         # check if the user config file exists
         if os.path.exists("config.text"):
@@ -164,7 +165,7 @@ class Tools:
 
         clear = input(f"{Colors.block}Should we clear screen ?{Colors.reset} (Y/N): ")
         if (not clear) or (clear and clear.upper() == "Y"):
-            self.clear_screen()
+            self.clear_screen
 
 
 
@@ -179,7 +180,7 @@ if hosttype.is_localhost:
 # default import
 from main.userbot.client import app
 bot = app.bot
-from main.core.filters import gen, regex
+from main.core.filters import gen
 
 
 

@@ -1,3 +1,5 @@
+""" sudousers configuration module """
+
 SUDOUSERSDV = [
     "SUDO_USERS",
     "SUDO_CMDS"

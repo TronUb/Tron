@@ -11,7 +11,7 @@ from main.userbot.client import app
 
 
 
-emoji = app.HelpEmoji() or "•"
+emoji = app.HelpEmoji or "•"
 
 settings = app.BuildKeyboard(([f"{emoji} Settings {emoji}", "settings-tab"], [f"{emoji} Modules {emoji}", "plugins-tab"]))
 extra = app.BuildKeyboard(([f"{emoji} Extra {emoji}", "extra-tab"], [f"{emoji} Stats {emoji}", "stats-tab"]))
@@ -32,18 +32,18 @@ async def bot_start_handler(_, m: Message):
             buttons=InlineKeyboardMarkup(
                 [ settings, extra, about, close ]
             )
-            botpic = app.BotPic().split(".")[-1] # extension of media
+            botpic = app.BotPic.split(".")[-1] # extension of media
             if botpic in ("jpg", "png", "jpeg"):
                 await app.bot.send_photo(
                     m.chat.id,
-                    app.BotPic(),
+                    app.BotPic,
                     app.BotBio(m),
                     reply_markup=buttons
                 )
             elif botpic in ("mp4", "gif"):
                 await app.bot.send_video(
                     m.chat.id,
-                    app.BotPic(),
+                    app.BotPic,
                     app.BotBio(m),
                     reply_markup=buttons
                 )

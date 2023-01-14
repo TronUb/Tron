@@ -43,7 +43,7 @@ async def ping_handler(_, m: Message):
             end = datetime.now()
             m_s = (end - start).microseconds / 1000
             await app.send_edit(
-                f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention()}",
+                f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention}",
                 disable_web_page_preview=True
             )
         elif app.long() == 2:
@@ -51,7 +51,7 @@ async def ping_handler(_, m: Message):
             count = int(cmd[1]) if cmd[1] and cmd[1].isdigit() else 0
             if count <= 1:
                 return await app.send_edit(
-                    f"Use `{app.Trigger()[0]}ping` for pings less than 1.",
+                    f"Use `{app.Trigger[0]}ping` for pings less than 1.",
                     delme=3
                 )
 
@@ -80,6 +80,6 @@ async def infinite():
     await app.send_edit(random.choice(data)) # MessageNotModified
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
-    msg = f"Pöng !\n{m_s} ms\n⧑ {app.UserMention()}\n\n"
+    msg = f"Pöng !\n{m_s} ms\n⧑ {app.UserMention}\n\n"
     pings.append(msg)
     return True
