@@ -56,3 +56,4 @@ async def restart_callback(_, cb: CallbackQuery):
                     app.buildButton("Back", "settings-tab")
                 ]
             )
+        )
