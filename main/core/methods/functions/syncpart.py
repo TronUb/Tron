@@ -901,5 +901,5 @@ class SyncPart(Types):
         )
 
 
-    def buildMarkup(*buttons)
+    def buildMarkup(*buttons):
         return InlineKeyboardMarkup([*buttons])
