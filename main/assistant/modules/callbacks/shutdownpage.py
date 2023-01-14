@@ -14,8 +14,8 @@ from main.userbot.client import app
 @app.alert_user
 async def shutdown_callback(_, cb: CallbackQuery):
     if not app.herokuApp:
-        await cb.answer(
-            "You're not on heroku deployment . . .",
+        return await cb.answer(
+            "Sorry you are not on Heroku Platform.",
             show_alert=True
         )
 
