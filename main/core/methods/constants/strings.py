@@ -110,13 +110,13 @@ class Strings(object):
     def stats_tab_string(self):
         text = "**Dex:** Stats\n"
         text += "**Location:** /home/stats\n\n"
-        text += f"**Name:** {self.UserName()}\n"
-        text += f"**{self.BotName()} version:** {self.assistant_version}\n"
+        text += f"**Name:** {self.UserName}\n"
+        text += f"**{self.BotName} version:** {self.assistant_version}\n"
         text += f"**Python version:** {self.python_version}\n"
         text += f"**Pyrogram version:** {self.pyrogram_version}\n"
         text += f"**Database:** {self.db_status()}\n"
         text += f"**Uptime:** {self.uptime()}\n"
-        text += f"**User Bio:** {self.UserBio()}\n"
+        text += f"**User Bio:** {self.UserBio}\n"
 
         return text
 
