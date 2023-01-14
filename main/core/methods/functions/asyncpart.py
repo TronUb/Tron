@@ -319,6 +319,7 @@ class AsyncPart(object):
 
     async def sleep_delete(
         self,
+        message=None
         sec: int=0,
         delmsg=False
         ):
@@ -337,8 +338,11 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        frame = inspect.currentframe().f_back
-        m = messageobject(frame.f_locals)
+        if message:
+            m = message
+        else:
+            frame = inspect.currentframe().f_back
+            m = messageobject(frame.f_locals)
 
         r = None
         await asyncio.sleep(sec)
@@ -486,7 +490,7 @@ class AsyncPart(object):
 
         try:
             if delme > 0:
-                self.createThread(self.sleep_delete, sec=delme, delmsg=True)
+                self.createThread(self.sleep_delete, message=m, sec=delme, delmsg=True)
 
         except Exception as e:
             await self.error(e)
