@@ -910,7 +910,7 @@ class SyncPart(Types):
 
 
     @staticmethod
-    def createThread(func: callable, start_now: bool=True, *_args, **kwargs):
+    def createThread(func: callable, start_now: bool=True, *_args, **_kwargs):
         thread = threading.Thread(
             target=asyncio.run,
             args=(func(*_args, **_kwargs),)
