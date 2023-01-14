@@ -894,6 +894,7 @@ class SyncPart(Types):
         return yt
 
 
+    @staticmethod
     def buildButton(text: str, callback_data: str):
         return InlineKeyboardButton(
             text=text,
@@ -901,5 +902,6 @@ class SyncPart(Types):
         )
 
 
+    @staticmethod
     def buildMarkup(*buttons):
         return InlineKeyboardMarkup([*buttons])
