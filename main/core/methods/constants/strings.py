@@ -131,7 +131,7 @@ class Strings(object):
     @property
     def ialive_tab_string(self):
         text = f"**⛊  Inline Status:**\n\n"
-        text += f"**⟐** {self.USER_BIO}\n\n"
+        text += f"**⟐** {self.UserBio}\n\n"
         text += f"**⟜ Owner**: [{self.name}](https://t.me/{self.username})\n"
         text += f"**⟜ Tron:** `{self.userbot_version}`\n"
         text += f"**⟜ Python:** `{self.python_version}`\n"
