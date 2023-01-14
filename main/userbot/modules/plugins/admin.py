@@ -60,7 +60,7 @@ async def ban_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
         cmd = m.command or sm.command if sm else None
         ban_time = False
@@ -190,7 +190,7 @@ async def unban_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -306,7 +306,7 @@ async def mute_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
         mute_time = False
         cmd = m.command or sm.command if sm else None
@@ -389,7 +389,7 @@ async def unmute_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -473,7 +473,7 @@ async def kick_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if not reply and app.long() == 1:
@@ -540,7 +540,7 @@ async def pin_handler(_, m: Message):
     try:
         arg = True
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         cmd = m.command or sm.command if sm else None
 
         if app.long() > 1:
@@ -597,7 +597,7 @@ async def unpin_handler(_, m: Message):
 
     try:
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         cmd = m.command or sm.command if sm else None
 
         if not reply and app.long() == 1:
@@ -652,7 +652,7 @@ async def promote_handler(_, m: Message):
             return
 
         sm = m.sudo_message
-        reply = m.reply_to_message or sm.reply_to_message if sm else None
+        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
         if app.long() == 1 and not reply:
