@@ -52,7 +52,7 @@ class Bot(Core, Client):
                 raise Exception("The userbot client is missing.")
                 quit(0)
 
-            if not self.bot:
+            if not self.is_bot:
                 raise Exception("The assistant client is missing.")
                 quit(0)
 
