@@ -57,7 +57,7 @@ class Bot(Core, Client):
                 quit(0)
 
             print(f"{Colors.block}Assistant:{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
-            response = await self.bot.start()
+            response = await self.start()
             if response:
                 # move cursor one line up
                 print(Colors.cursor_up(2))
@@ -71,12 +71,12 @@ class Bot(Core, Client):
                     ["broadcast", "send messages to users who have started your bot."],
                     ["eval", "evaluate python codes."]
                 ]
-                cmds = [x.command for x in await self.bot.get_bot_commands()]
+                cmds = [x.command for x in await self.get_bot_commands()]
                 botcmdkeys = [y[0] for y in botcmd]
 
                 if cmds != botcmdkeys:
                     print("Setting bot commands.\n")
-                    await self.bot.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
+                    await self.set_bot_commands([BotCommand(y[0], y[1]) for y in botcmd])
                     print("Added bot commands.\n")
             else:
                 print("Assistant is not activated.\n")
