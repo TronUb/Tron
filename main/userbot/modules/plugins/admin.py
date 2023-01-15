@@ -112,11 +112,11 @@ async def ban_handler(_, m: Message):
 
         await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
         if ban_time:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
             await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
         else:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await app.ban_chat_member(m.chat.id, user.user.id)
             await app.send_edit(f"Banned {user.user.mention} in this chat.", delme=4)
 
@@ -359,11 +359,11 @@ async def mute_handler(_, m: Message):
             return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
         if mute_time:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await mute_user(m.chat.id, user.user.id, datetime.now() + timedelta(mute_time))
             await app.send_edit(f"Muted {user.user.mention} for {arg}")
         else:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await mute_user(m.chat.id, user.user.id)
             await app.send_edit(f"Muted {user.user.mention} in this chat for forever.", delme=4)
 
