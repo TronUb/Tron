@@ -18,6 +18,8 @@ from pyrogram.types import (
     Update,
     User
 )
+
+from .types.super_parser import SuperParser
 from main.core.enums import (
     UserType,
     ChatType,
@@ -152,6 +154,7 @@ def gen(
                         # update new attributes
                         message.__dict__ = new_message.__dict__
 
+                        SuperParser.parse_combined_args(message)
                         return True
                     else:
                         return False
@@ -166,6 +169,7 @@ def gen(
                     if not await max_argcount(client, message, flt.argcount):
                         return False
 
+                    SuperParser.parse_combined_args(message)
                     return True
 
             return False

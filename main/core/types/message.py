@@ -28,5 +28,4 @@ class Message(PyMessage):
             replies=replies
         )
 
-        r = SuperParser.parse_user(client, r)
-        return SuperParser.parse_combined_args(r)
+        return SuperParser.parse_user(client, r)
