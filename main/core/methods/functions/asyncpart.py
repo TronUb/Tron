@@ -783,9 +783,9 @@ class AsyncPart(object):
             await self.bot.send_message(
                 self.LogChat,
                 "The userbot is online now.",
-                reply_markup=self.buildMarkuo(
+                reply_markup=self.buildMarkup(
                     [self.buildButton("Support Group", "t.me/tronubsupport")]
                 )
             )
         except Exception as e:
-            await self.error(e)
+            print(e)
