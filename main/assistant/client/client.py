@@ -3,6 +3,8 @@ This file creates Assistant's client.
 """
 
 import os
+import traceback
+
 from pyrogram import Client
 from pyrogram.errors import FloodWait
 from pyrogram.types import BotCommand
