@@ -112,7 +112,7 @@ class SuperClient(Core, Client):
             print("Userbot is not activated.\n")
 
 
-    async def start_bot():
+    async def start_bot(self):
         """ This is the main startup function to start both clients i.e assistant & userbot.
         It also imports modules & plugins for assistant bot & userbot. """
 
