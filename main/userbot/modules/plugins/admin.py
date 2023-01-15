@@ -34,7 +34,7 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 async def delete_reply(reply, command, start):
-    if reply and app.IsAdmin("delete_messages"):
+    if reply and await app.IsAdmin("delete_messages"):
         if start and command.startswith(start):
             return await reply.delete()
 
@@ -51,6 +51,9 @@ async def delete_reply(reply, command, start):
         ChatType.CHANNEL,
         ChatType.BOT,
         ChatType.PRIVATE
+    ],
+    permissions=[
+    
     ]
 )
 async def ban_handler(_, m: Message):

@@ -1,6 +1,6 @@
 from pyrogram.types import Message as PyMessage
 from pyrogram import raw
-from .user import User
+from .superparser import SuperParser
 
 
 
@@ -28,4 +28,5 @@ class Message(PyMessage):
             replies=replies
         )
 
-        return User.parse(client, r)
+        r = SuperParser.parse_user(client, r)
+        return SuperParser.parse_combined_args(r)
