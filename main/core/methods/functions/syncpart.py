@@ -916,6 +916,6 @@ class SyncPart(Types):
             args=(func(*_args, **_kwargs),)
         )
         if start_now:
-            thread.start()
+            return thread.start()
         else:
             return thread
