@@ -35,7 +35,7 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 async def delete_reply(reply, command, start):
     if reply and app.IsAdmin("delete_messages"):
-        if starts and command.startswith(start):
+        if start and command.startswith(start):
             return await reply.delete()
 
     return None
