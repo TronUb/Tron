@@ -450,6 +450,9 @@ class AsyncPart(object):
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
+        if m is None:
+            return
+
         try:
             try:
                 r = None
