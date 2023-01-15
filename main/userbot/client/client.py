@@ -1,6 +1,8 @@
 """ userbot client module """
 
 import os
+import traceback
+
 from pyrogram import (
     Client,
     idle,
