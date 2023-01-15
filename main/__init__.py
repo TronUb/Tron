@@ -178,9 +178,6 @@ if hosttype.is_localhost:
 
 
 # default import
-from main.userbot.client import app
+from main.userbot import app
 bot = app.bot
 from main.core.filters import gen
-
-
-

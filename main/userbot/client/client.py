@@ -1,16 +1,28 @@
 """ userbot client module """
 
 import os
-import pyrogram
-from pyrogram import Client
-from main.assistant.client import Bot
-from main.core import Core
+import traceback
+
+from pyrogram import (
+    Client,
+    idle,
+    handlers
+)
 from pyrogram.raw.types import (
     UpdateNewMessage,
     UpdateNewChannelMessage,
     UpdateNewScheduledMessage
 )
+from pyrogram.errors import (
+    PeerIdInvalid,
+    ChannelInvalid
+)
+
+from main.others.colors import Colors
+from main.assistant.client import Bot
+from main.core import Core
 from main.core.types import Message
+
 
 
 
@@ -83,5 +95,51 @@ class SuperClient(Core, Client):
                     UpdateNewScheduledMessage
                 )
             ),
-            pyrogram.handlers.MessageHandler
+            handlers.MessageHandler
         )
+
+
+    async def start_userbot(self):
+        """ this function starts the pyrogram userbot client. """
+        if not self:
+            raise Exception("The userbot client is missing.")
+            quit(0)
+
+        print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
+        response = await self.start()
+        if response:
+            print(Colors.cursor_up(2))
+            print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}", end="\n\n")
+        else:
+            print("Userbot is not activated.\n")
+
+
+    async def start_bot(self):
+        """ This is the main startup function to start both clients i.e assistant & userbot.
+        It also imports modules & plugins for assistant bot & userbot. """
+
+        try:
+            print(20*"_" + Colors.block + Colors.bold + ". Welcome to Tron corporation ." + Colors.reset + "_"*20 + "\n\n\n")
+
+            print(Colors.block + "PLUGINS:" + Colors.reset + " ( Assistant )\n\n")
+            botplugins = self.import_module("main/assistant/modules/plugins/", exclude=self.NoLoad)
+            self.import_module("main/assistant/modules/callbacks/", display_module=False)
+            self.import_module("main/assistant/modules/inlinequeries/", display_module=False)
+            print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {botplugins}\n\n\n")
+
+            print(Colors.block + "PLUGINS:" + Colors.reset + " ( Userbot )\n\n")
+            ubotplugins = self.import_module("main/userbot/modules/plugins/", exclude=self.NoLoad)
+            print(f"\n\n{Colors.block}Total plugins:{Colors.reset} {ubotplugins}\n")
+
+            await self.bot.start_assistant()
+            await self.start_userbot()
+            print("You successfully deployed Tronuserbot, try .ping or .alive commands to test it.")
+
+            try:
+                await self.send_start_message()
+            except (ChannelInvalid, PeerIdInvalid):
+                print("Userbot start message wasn't send in Log Chat.")
+
+            await idle() # block execution
+        except Exception:
+            print(traceback.format_exc())

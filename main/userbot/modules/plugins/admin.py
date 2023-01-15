@@ -34,8 +34,8 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 async def delete_reply(reply, command, start):
-    if reply and app.IsAdmin("delete_messages"):
-        if starts and command.startswith(start):
+    if reply and await app.IsAdmin("delete_messages"):
+        if start and command.startswith(start):
             return await reply.delete()
 
     return None
@@ -62,7 +62,7 @@ async def ban_handler(_, m: Message):
         sm = m.sudo_message
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
-        cmd = m.command or sm.command if sm else None
+        cmd = m.command or getattr(sm, "command", None)
         ban_time = False
 
         if app.long() == 1 and not reply:
@@ -112,11 +112,11 @@ async def ban_handler(_, m: Message):
 
         await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
         if ban_time:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
             await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
         else:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await app.ban_chat_member(m.chat.id, user.user.id)
             await app.send_edit(f"Banned {user.user.mention} in this chat.", delme=4)
 
@@ -309,7 +309,7 @@ async def mute_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
         mute_time = False
-        cmd = m.command or sm.command if sm else None
+        cmd = m.command or getattr(sm, "command", None)
 
         if not reply and app.long() == 1:
             return await app.send_edit(
@@ -359,11 +359,11 @@ async def mute_handler(_, m: Message):
             return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
 
         if mute_time:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await mute_user(m.chat.id, user.user.id, datetime.now() + timedelta(mute_time))
             await app.send_edit(f"Muted {user.user.mention} for {arg}")
         else:
-            await delete_reply(reply, commands, "d")
+            await delete_reply(reply, cmd[0], "d")
             await mute_user(m.chat.id, user.user.id)
             await app.send_edit(f"Muted {user.user.mention} in this chat for forever.", delme=4)
 
