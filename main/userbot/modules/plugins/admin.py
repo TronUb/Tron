@@ -62,7 +62,7 @@ async def ban_handler(_, m: Message):
         sm = m.sudo_message
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
-        cmd = m.command or sm.command if sm else None
+        cmd = m.command or getattr(sm, "command", None)
         ban_time = False
 
         if app.long() == 1 and not reply:
@@ -309,7 +309,7 @@ async def mute_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
         mute_time = False
-        cmd = m.command or sm.command if sm else None
+        cmd = m.command or getattr(sm, "command", None)
 
         if not reply and app.long() == 1:
             return await app.send_edit(
