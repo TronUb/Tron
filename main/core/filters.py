@@ -19,7 +19,7 @@ from pyrogram.types import (
     User
 )
 
-from .types.super_parser import SuperParser
+from .types.superparser import SuperParser
 from main.core.enums import (
     UserType,
     ChatType,
