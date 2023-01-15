@@ -695,7 +695,7 @@ class AsyncPart(object):
             await self.error(err)
 
 
-    async def abh(
+    async def add_users(
         self,
         chat_id: Union[int, str],
         user_id: Union[int, str, List[int], List[str]]
@@ -765,5 +765,24 @@ class AsyncPart(object):
                 return r
             else:
                 raise Exception("Bot client is not available")
+        except Exception as e:
+            await self.error(e)
+
+
+    async def send_start_message(
+        self
+        ):
+        """ used by bots only """
+        try:
+            if not self.bot:
+                raise BotMethodInvalid
+
+            await self.bot.send_message(
+                self.LogChat,
+                "The userbot is online now.",
+                reply_markup=self.buildMarkuo(
+                    [self.buildButton("Support Group", "t.me/tronubsupport")]
+                )
+            )
         except Exception as e:
             await self.error(e)
