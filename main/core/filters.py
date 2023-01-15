@@ -101,6 +101,9 @@ def gen(
             if text is None:
                 return False
 
+            if user is None:
+                return False
+
             if message.forward_date: # forwarded messages can't be edited
                 return False
 
