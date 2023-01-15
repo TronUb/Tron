@@ -51,9 +51,6 @@ async def delete_reply(reply, command, start):
         ChatType.CHANNEL,
         ChatType.BOT,
         ChatType.PRIVATE
-    ],
-    permissions=[
-    
     ]
 )
 async def ban_handler(_, m: Message):
