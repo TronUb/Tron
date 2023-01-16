@@ -30,7 +30,7 @@ print(intro)
 while True:
   API_ID = input("Enter your API_ID: ")
 
-  if not (API_ID or len(API_ID) == 7):
+  if not (API_ID and len(API_ID) == 7):
     print("\n\nPlease enter a valid 7 digit API ID.\n\n")
     continue
   break
