@@ -36,7 +36,7 @@ while True:
   break
 
 while True:
-  API_HASH = input("\nEnter API HASH: ")
+  API_HASH = input("Enter API HASH: ")
   if not API_HASH:
     print("\n\nPlease enter a valid API HASH.\n\n")
     continue
