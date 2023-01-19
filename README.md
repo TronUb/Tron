@@ -21,16 +21,16 @@
     <summary><b>• About</b></summary>
 
 <br />
-**This is a telegram userbot which is written in pure python language and it is based on Dan's** [pyrogram](https://github.com/pyrogram/pyrogram) **library.**
+<b>This is a telegram userbot which is written in pure python language and it is based on Dan's</b> [pyrogram](https://github.com/pyrogram/pyrogram) <b>library.</b>
 
-**Now let's understand what is a userbot ?**
+<b>Now let's understand what is a userbot ?</b>
 
-**A userbot is simple program to automate your telegram account. Userbots are same as telegram bots.**
-**the difference is that all the functionality & features of a bot is provided in a telegram user account.**
+<b>A userbot is simple program to automate your telegram account. Userbots are same as telegram bots.</b>
+<b>the difference is that all the functionality & features of a bot is provided in a telegram user account.</b>
 
-**You might be thinking, what can a userbot do ? well userbots can do a lots of things for example downloading a video/audio from 
-YouTube, making telegram stickers, stopping unknown users from messaging us, image processing, etc. A userbot is not limited 
-to its features it can be extended more and more, it can do more beyond its limits.**
+<b>You might be thinking, what can a userbot do ? well userbots can do a lots of things for example downloading a video/audio from
+YouTube, making telegram stickers, stopping unknown users from messaging us, image processing, etc. A userbot is not limited
+to its features it can be extended more and more, it can do more beyond its limits.</b>
 
 </details>
 
