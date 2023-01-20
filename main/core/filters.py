@@ -9,7 +9,7 @@ from typing import (
     Pattern
 )
 
-from pyrogram.filters import create
+from pyrogram.filters import *
 from pyrogram import Client
 from pyrogram.types import (
     Message, 
@@ -193,7 +193,7 @@ def gen(
 
     return create(
         func,
-        "MessageCommandFilter",
+        "CustomMessageCommandFilter",
         commands=commands,
         prefixes=prefixes,
         case_sensitive=case_sensitive,
