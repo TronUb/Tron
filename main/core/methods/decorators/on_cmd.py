@@ -1,11 +1,12 @@
+import inspect
+import pyrogram
+
 from typing import (
     List,
     Union,
     Callable
 )
 
-import pyrogram
-import inspect
 from main.core.enums import UserType
 from main.core.filters import gen
 
@@ -14,7 +15,7 @@ from main.core.filters import gen
 class OnCmd:
     def on_cmd(
         self: "pyrogram.client",
-        commands: Union[str, List[str]],
+        commands: Union[str, List[str]] = None,
         prefixes: Union[str, List[str]] = None,
         module: str = None,
         usage: str = None,
@@ -24,6 +25,7 @@ class OnCmd:
         disable_in: Union["ChatType", List["ChatType"]] = None,
         disable_for: Union["UserType", List["UserType"]] = UserType.OTHER,
         argcount: int = 0,
+        filters: pyrogram.filters = None,
         group: int = 0
     ) -> Callable:
 
@@ -47,19 +49,31 @@ class OnCmd:
         def decorator(func: Callable) -> Callable:
             if not isinstance(self, pyrogram.Client):
                 raise Exception("Instance should be pyrogram.Client in on_cmd decorator.")
+
+            if filters:
+                if self.is_bot:
+                    raise Exception("filters are important for a bot decorator.")
+
+            if self.is_bot:
+                if filters is None:
+                    raise Exception("filters are important for a assistant bot decorator.")
+
+            if filters is None:
+                filters = gen(
+                    commands=commands,
+                    prefixes=prefixes,
+                    disable_in=disable_in,
+                    disable_for=disable_for,
+                    case_sensitive=case_sensitive,
+                    reply=reply,
+                    reply_type=reply_type,
+                    argcount=argcount
+                )
+
             self.add_handler(
                 pyrogram.handlers.MessageHandler(
                     func,
-                    gen(
-                        commands=commands,
-                        prefixes=prefixes,
-                        disable_in=disable_in,
-                        disable_for=disable_for,
-                        case_sensitive=case_sensitive,
-                        reply=reply,
-                        reply_type=reply_type,
-                        argcount=argcount
-                    )
+                    filters
                 ),
                 group
             )
@@ -67,3 +81,4 @@ class OnCmd:
             return func
 
         return decorator
+
