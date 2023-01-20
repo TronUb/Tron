@@ -84,7 +84,7 @@ and get its bot token
 <b>2. Deploy on Local Machine</b>
 
 
-• Windows: 
+• <i>Windows:</i>
 
 1. Install python ```winget install -e --id Python.Python.3.10```
 
@@ -103,7 +103,7 @@ and get its bot token
 8. Start the tronuserbot installation setup ```python -m main```
 
 
-• Linux: 
+• <i>Linux:</i>
 
 1. Update and upgrade ```apt-get update && apt-get upgrade```
 
@@ -155,14 +155,41 @@ and get its bot token
 
 * Run the given command in termux
 
-*  ```apt update && apt upgrade && pkg install python3 git && cd $HOME && git clone https://github.com/TronUb/Tron.git && cd Tron && python3 session.py```
+``` shell
+apt update && apt upgrade && pkg install python3 git && cd $HOME && git clone https://github.com/TronUb/Tron.git && cd Tron && python3 session.py 
+```
 
 ---
 
 <br />
 </details>
 
-<b>Warning ⚠️</b>: I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens.
+<details>
+    <summary>
+        <b>• Examples</b>
+    </summary>
+
+``` python3
+from main import app
+from main.core import filters
+from main.core.enums import HandlerType
+
+
+@app.on_update(
+    handler_type=HandlerType.MESSAGE,
+    filters=gen(
+        commands="check",
+        usage="Check Bot is active or not."
+    )
+)
+async def check_handler(client, message):
+    await message.edit("Bot is Active !")
+
+```
+</details>
+
+<b>Warning ⚠️:</b>
+I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens. 
 
 <br />
 
