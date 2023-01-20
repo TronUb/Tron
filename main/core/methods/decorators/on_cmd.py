@@ -25,7 +25,6 @@ class OnCmd:
         disable_in: Union["ChatType", List["ChatType"]] = None,
         disable_for: Union["UserType", List["UserType"]] = UserType.OTHER,
         argcount: int = 0,
-        filters: pyrogram.filters = None,
         group: int = 0
     ) -> Callable:
 
@@ -50,30 +49,19 @@ class OnCmd:
             if not isinstance(self, pyrogram.Client):
                 raise Exception("Instance should be pyrogram.Client in on_cmd decorator.")
 
-            if filters:
-                if self.is_bot:
-                    raise Exception("filters are important for a bot decorator.")
-
-            if self.is_bot:
-                if filters is None:
-                    raise Exception("filters are important for a assistant bot decorator.")
-
-            if filters is None:
-                filters = gen(
-                    commands=commands,
-                    prefixes=prefixes,
-                    disable_in=disable_in,
-                    disable_for=disable_for,
-                    case_sensitive=case_sensitive,
-                    reply=reply,
-                    reply_type=reply_type,
-                    argcount=argcount
-                )
-
             self.add_handler(
                 pyrogram.handlers.MessageHandler(
                     func,
-                    filters
+                    gen(
+                        commands=commands,
+                        prefixes=prefixes,
+                        disable_in=disable_in,
+                        disable_for=disable_for,
+                        case_sensitive=case_sensitive,
+                        reply=reply,
+                        reply_type=reply_type,
+                        argcount=argcount
+                    )
                 ),
                 group
             )
