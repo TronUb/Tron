@@ -21,6 +21,16 @@ from main.userbot.client import app
 
 
 
+async def create_plugin_telegraph(title, html_content):
+    try:
+        return app.telegraph.create_page(
+            title=title,
+            html_content=html_content
+        ).get("url")
+    except RetryAfterError as e:
+        await asyncio.sleep(e.retry_after)
+
+
 async def create_helpmenu_articles():
     return [
         InlineQueryResultArticle(
@@ -35,10 +45,10 @@ async def create_helpmenu_articles():
                         InlineKeyboardButton(
                             text="Search Again",
                             web_app=WebAppInfo(
-                                url=app.telegraph.create_page(
+                                url=await create_plugin_telegraph(
                                     title=module_name,
                                     html_content="".join(await app.PluginData(module_name))
-                                ).get("url")
+                                )
                             ),
                             switch_inline_query_current_chat=""
                         )
