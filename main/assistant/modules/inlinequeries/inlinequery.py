@@ -48,7 +48,7 @@ async def create_helpmenu_articles(query=None):
                                 text="Search Again",
                                 web_app=WebAppInfo(
                                     url=await create_plugin_telegraph(
-                                        title=module_name,
+                                        title=query,
                                         html_content="".join(await app.PluginData(query))
                                     )
                                 )
