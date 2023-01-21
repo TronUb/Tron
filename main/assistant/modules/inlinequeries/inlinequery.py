@@ -18,6 +18,7 @@ from pyrogram.types import (
 )
 
 from main.userbot.client import app
+from telegraph.exceptions import RetryAfterError
 
 
 
@@ -32,32 +33,53 @@ async def create_plugin_telegraph(title, html_content):
         await asyncio.sleep(e.retry_after)
 
 
-async def create_helpmenu_articles():
-    return [
-        InlineQueryResultArticle(
-            title=module_name,
-            input_message_content=InputTextMessageContent(
-                "".join(await app.PluginData(module_name)
-                )
-            ),
-            reply_markup=InlineKeyboardMarkup(
-                [
+async def create_helpmenu_articles(query=None):
+    if query:
+        return [
+            InlineQueryResultArticle(
+                title=query,
+                input_message_content=InputTextMessageContent(
+                    "**Module: **" + query
+                ),
+                reply_markup=InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton(
-                            text="Search Again",
-                            web_app=WebAppInfo(
-                                url=await create_plugin_telegraph(
-                                    title=module_name,
-                                    html_content="".join(await app.PluginData(module_name))
+                        [
+                            InlineKeyboardButton(
+                                text="Search Again",
+                                web_app=WebAppInfo(
+                                    url=await create_plugin_telegraph(
+                                        title=module_name,
+                                        html_content="".join(await app.PluginData(query))
+                                    )
                                 )
-                            ),
-                            switch_inline_query_current_chat=""
-                        )
+                            )
+                        ]
                     ]
-                ]
+                )
             )
-        ) for module_name in app.CMD_HELP.keys()
-    ]
+        ]
+    else:
+        return [
+            InlineQueryResultArticle(
+                title=module_name,
+                input_message_content=InputTextMessageContent(
+                    "".join(await app.PluginData(module_name)
+                    )
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Search Again",
+                                switch_inline_query_current_chat=""
+                            )
+                        ]
+                    ]
+                )
+            ) for module_name in app.CMD_HELP.keys()
+        ]
+
+
 
 
 # via bot messages
