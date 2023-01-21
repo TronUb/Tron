@@ -13,6 +13,7 @@ from pyrogram.types import (
     InlineQueryResultArticle,
     InlineQueryResultPhoto,
     InputTextMessageContent,
+    WebAppInfo
 )
 
 from main.userbot.client import app
@@ -33,6 +34,12 @@ async def create_helpmenu_articles():
                     [
                         InlineKeyboardButton(
                             text="Search Again",
+                            web_app=WebAppInfo(
+                                url=app.telegraph.create_page(
+                                    title=module_name,
+                                    html_content="".join(await app.PluginData(module_name))
+                                ).get("url")
+                            ),
                             switch_inline_query_current_chat=""
                         )
                     ]
