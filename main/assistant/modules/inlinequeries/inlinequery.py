@@ -249,7 +249,13 @@ async def inline_result(_, inline_query):
         return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+[|]\d+")))
 
     else:
-        await inline_query.answer(
-            results=await create_helpmenu_articles(),
-            cache_time=1
-        )
+        if query:
+            await inline_query.answer(
+                results=await create_helpmenu_articles(query),
+                cache_time=1
+            )
+        else:
+            await inline_query.answer(
+                results=await create_helpmenu_articles(),
+                cache_time=1
+            )
