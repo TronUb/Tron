@@ -27,6 +27,16 @@ async def create_helpmenu_articles():
             input_message_content=InputTextMessageContent(
                 "".join(await app.PluginData(module_name)
                 )
+            ),
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Search Again",
+                            switch_inline_query_current_chat=""
+                        )
+                    ]
+                ]
             )
         ) for module_name in app.CMD_HELP.keys()
     ]
