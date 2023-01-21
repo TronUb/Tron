@@ -46,12 +46,10 @@ async def create_helpmenu_articles(query=None):
                         [
                             InlineKeyboardButton(
                                 text="Search Again",
-                                web_app=WebAppInfo(
-                                    url=await create_plugin_telegraph(
-                                        title=query,
-                                        html_content="".join(await app.PluginData(query))
+                                url=await create_plugin_telegraph(
+                                    title=query,
+                                    html_content="".join(await app.PluginData(query))
                                     )
-                                )
                             )
                         ]
                     ]
