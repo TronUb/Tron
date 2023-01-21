@@ -177,7 +177,7 @@ from main.core.enums import HandlerType
 
 @app.on_update(
     handler_type=HandlerType.MESSAGE,
-    filters=gen(
+    filters=filters.gen(
         commands="check",
         usage="Check Bot is active or not."
     )
