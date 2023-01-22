@@ -12,33 +12,36 @@ from main.userbot.client import app
 
 
 reply_markup=app.buildMarkup(
-                [
-                    app.buildButton("1", "cal-(1)"),
-                    app.buildButton("2", "cal-(2)"),
-                    app.buildButton("3", "cal-(3)"),
-                    app.buildButton("-", "cal-(-)")
-                ],
-                [
-                    app.buildButton("4", "cal-(4)"),
-                    app.buildButton("5", "cal-(5)"),
-                    app.buildButton("6", "cal-(6)"),
-                    app.buildButton("+", "cal-(+)")
-                ],
-                [
-                    app.buildButton("7", "cal-(7)"),
-                    app.buildButton("8", "cal-(8)"),
-                    app.buildButton("9", "cal-(9)"),
-                    app.buildButton("×", "cal-(*)")
-                ],
-                [
-                    app.buildButton("0", "cal-(0)"),
-                    app.buildButton("C", "cal-(C)"),
-                    app.buildButton("del", "cal-(D)"),
-                    app.buildButton("÷", "cal-(/)")
-                ],
-                [app.buildButton("=", "cal-(=)")]
-                
-            )
+    [
+        app.buildButton("1", "cal-(1)"),
+        app.buildButton("2", "cal-(2)"),
+        app.buildButton("3", "cal-(3)"),
+        app.buildButton("-", "cal-(-)")
+    ],
+    [
+        app.buildButton("4", "cal-(4)"),
+        app.buildButton("5", "cal-(5)"),
+        app.buildButton("6", "cal-(6)"),
+        app.buildButton("+", "cal-(+)")
+    ],
+    [
+        app.buildButton("7", "cal-(7)"),
+        app.buildButton("8", "cal-(8)"),
+        app.buildButton("9", "cal-(9)"),
+        app.buildButton("×", "cal-(*)")
+    ],
+    [
+        app.buildButton("0", "cal-(0)"),
+        app.buildButton("C", "cal-(C)"),
+        app.buildButton("del", "cal-(D)"),
+        app.buildButton("÷", "cal-(/)")
+    ],
+    [app.buildButton("=", "cal-(=)")]
+    [
+        app.buildButton("Home", "close-tab"),
+        app.buildButton("Back", "extra-tab")
+    ]
+)
 
 
 @app.bot.on_callback_query(filters.regex("calculator-tab"))
