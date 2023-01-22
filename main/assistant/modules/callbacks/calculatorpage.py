@@ -92,7 +92,7 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
             text = message.caption if message.caption else "" + text
 
         await cb.edit_message_text(
-            text=" ",
+            text=text,
             reply_markup=reply_markup
         )
     except Exception as e:
