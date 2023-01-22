@@ -29,6 +29,7 @@ async def counter_callback(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex("counter-increment-tab"))
 async def counter_increment_callback(_, cb: CallbackQuery):
     try:
+        print(cb)
         if cb.inline_message_id:
             dc_id, message_id, chat_id, query_id = struct.unpack(
                 "<iiiq",
