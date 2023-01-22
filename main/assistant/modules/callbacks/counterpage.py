@@ -41,7 +41,9 @@ async def counter_callback(_, cb: CallbackQuery):
                     )
                 )
 
+            print(chat_id, message_id)
             message = await app.get_messages(chat_id, message_id)
+            print(message)
 
         if message:
             text = getattr(message, "caption", None)
