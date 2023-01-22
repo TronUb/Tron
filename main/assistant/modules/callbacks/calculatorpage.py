@@ -89,6 +89,7 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
                 text = "Error !"
                 print(e)
         else:
+            print(message)
             text = message.caption if message.caption else "" + text
 
         await cb.edit_message_text(
