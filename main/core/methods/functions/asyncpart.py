@@ -784,7 +784,7 @@ class AsyncPart(object):
                 self.LogChat,
                 "The userbot is online now.",
                 reply_markup=self.buildMarkup(
-                    [self.buildButton("Support Group", "t.me/tronubsupport")]
+                    [self.buildButton(text="Support Group", url="t.me/tronubsupport")]
                 )
             )
         except Exception as e:

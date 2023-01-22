@@ -897,11 +897,19 @@ class SyncPart(Types):
 
 
     @staticmethod
-    def buildButton(text: str, callback_data: str):
-        return InlineKeyboardButton(
-            text=text,
-            callback_data=callback_data
-        )
+    def buildButton(text: str, callback_data: str=None, url: str=None):
+        if url:
+            return InlineKeyboardButton(
+                text=text,
+                url=url
+            )
+        elif callback_data:
+            return InlineKeyboardButton(
+                text=text,
+                callback_data=callback_data
+            )
+        else:
+            raise "Either give 'url' or 'callback_data' in parameter."
 
 
     @staticmethod
