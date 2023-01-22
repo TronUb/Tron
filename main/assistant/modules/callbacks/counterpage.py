@@ -14,6 +14,21 @@ from main.userbot.client import app
 @app.bot.on_callback_query(filters.regex("counter-tab"))
 async def counter_callback(_, cb: CallbackQuery):
     try:
+        await cb.edit_message_text(
+            text=str(0),
+            reply_markup=app.buildMarkup(
+                [app.buildButton("Increment", "counter-increment-tab")]
+            )
+        )
+    except Exception as e:
+        await app.error(e)
+
+
+
+
+@app.bot.on_callback_query(filters.regex("counter-increment-tab"))
+async def counter_callback(_, cb: CallbackQuery):
+    try:
         if cb.message:
             message = cb.message
         else:
