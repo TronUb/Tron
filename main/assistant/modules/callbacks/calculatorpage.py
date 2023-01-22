@@ -76,20 +76,20 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
         else:
             return
 
-        text = cb.data[-2]
+        ch = cb.data[-2]
+        caption = message.caption if message.caption else ""
 
-        if text=="C":
+        if ch=="C":
             text = ""
-        elif text=="D":
-            text = text[:-1] if text else ""
-        elif text=="=":
+        elif ch=="D":
+            text = caption[:-1]
+        elif ch=="=":
             try:
-                text = eval(text) if text else ""
+                text = eval(caption) if caption else ""
             except Exception as e:
                 text = "Error !"
-                print(e)
         else:
-            text = message.caption if message.caption else "" + text
+            text = caption + text
             print(text)
 
         #await cb.edit_message_text(
