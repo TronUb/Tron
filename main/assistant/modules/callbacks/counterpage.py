@@ -27,23 +27,27 @@ async def counter_callback(_, cb: CallbackQuery):
 
 
 @app.bot.on_callback_query(filters.regex("counter-increment-tab"))
-async def counter_callback(_, cb: CallbackQuery):
+async def counter_increment_callback(_, cb: CallbackQuery):
     try:
-        if cb.message:
-            message = cb.message
-        else:
+        if cb.inline_message_id:
             dc_id, message_id, chat_id, query_id = struct.unpack(
-                    "<iiiq",
-                    base64.urlsafe_b64decode(
-                        cb.inline_message_id + '=' * (
-                            len(cb.inline_message_id) % 4
-                        )
+                "<iiiq",
+                base64.urlsafe_b64decode(
+                    cb.inline_message_id + '=' * (
+                        len(cb.inline_message_id) % 4
                     )
                 )
+            )
 
-            print(chat_id, message_id)
-            message = await app.get_messages(chat_id, message_id)
+            message = await app.get_messages(
+                chat_id=int(str(-100) + str(chat_id)[1:]),
+                message_ids=message_id
+            )
             print(message)
+        elif cb.message:
+                message = cb.message
+        else:
+            message = None
 
         if message:
             text = getattr(message, "caption", None)
