@@ -90,7 +90,7 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
             try:
                 text = eval(caption) if caption else ""
             except Exception as e:
-                text = "Error !"
+                text = e.msg if e.msg else "Error !"
         else:
             text = caption + ch
 
