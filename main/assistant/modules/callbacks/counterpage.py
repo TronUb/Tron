@@ -22,7 +22,7 @@ async def counter_callback(_, cb: CallbackQuery):
                 [app.buildButton("Increment", "counter-increment-tab")],
                 [
                     app.buildButton("Home", "close-tab"),
-                    app.buildButton("Back", "home-tab")
+                    app.buildButton("Back", "extra-tab")
                 ]
             )
         )
@@ -65,7 +65,7 @@ async def counter_increment_callback(_, cb: CallbackQuery):
                 [app.buildButton("Increment", "counter-increment-tab")],
                 [
                     app.buildButton("Home", "close-tab"),
-                    app.buildButton("Back", "home-tab")
+                    app.buildButton("Back", "extra-tab")
                 ]
             )
         )

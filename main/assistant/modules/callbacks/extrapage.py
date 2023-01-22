@@ -19,6 +19,7 @@ async def extra_callback(_, cb: CallbackQuery):
             reply_markup=app.buildMarkup(
                 [app.buildButton("• Public commands •", "ubpublic-commands-tab")],
                 [app.buildButton("Counter", "counter-tab")],
+                [app.buildButton("Calculator", "calculator-tab")],
                 [
                     app.buildButton("Home", "close-tab"),
                     app.buildButton("Back", "home-tab")
