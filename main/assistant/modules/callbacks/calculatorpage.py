@@ -90,11 +90,10 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
                 text = "Error !"
         else:
             text = caption + ch
-            print(text)
 
-        #await cb.edit_message_text(
-            #text=text,
-            #reply_markup=reply_markup
-        #)
+        await cb.edit_message_text(
+            text=text,
+            reply_markup=reply_markup
+        )
     except Exception as e:
         await app.error(e)
