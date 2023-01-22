@@ -36,7 +36,7 @@ reply_markup=app.buildMarkup(
         app.buildButton("del", "cal-(D)"),
         app.buildButton("÷", "cal-(/)")
     ],
-    [app.buildButton("=", "cal-(=)")]
+    [app.buildButton("=", "cal-(=)")],
     [
         app.buildButton("Home", "close-tab"),
         app.buildButton("Back", "extra-tab")
