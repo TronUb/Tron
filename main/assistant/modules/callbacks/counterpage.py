@@ -41,7 +41,7 @@ async def counter_callback(_, cb: CallbackQuery):
                     )
                 )
 
-            message = await app.bot.get_messages(chat_id, message_id)
+            message = await app.get_messages(chat_id, message_id)
 
         if message:
             text = getattr(message, "caption", None)
@@ -50,7 +50,7 @@ async def counter_callback(_, cb: CallbackQuery):
         await cb.edit_message_text(
             text=str(count),
             reply_markup=app.buildMarkup(
-                [app.buildButton("Increment", "counter-tab")]
+                [app.buildButton("Increment", "counter-increment-tab")]
             )
         )
     except Exception as e:
