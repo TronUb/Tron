@@ -3,6 +3,8 @@ This file creates extra page tab menu in helpdex
 """
 
 import struct
+import base64
+
 from pyrogram import filters
 from pyrogram.types import CallbackQuery
 
@@ -40,12 +42,10 @@ async def counter_increment_callback(_, cb: CallbackQuery):
                 )
             )
 
-            print(dc_id, message_id, chat_id, query_id)
             message = await app.get_messages(
                 chat_id=int(str(-100) + str(chat_id)[1:]),
                 message_ids=message_id
             )
-            print(message)
         elif cb.message:
                 message = cb.message
         else:
