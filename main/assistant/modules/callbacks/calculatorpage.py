@@ -45,6 +45,7 @@ reply_markup=app.buildMarkup(
 
 
 @app.bot.on_callback_query(filters.regex("calculator-tab"))
+@app.alert_user
 async def calculator_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_text(
@@ -58,9 +59,13 @@ async def calculator_callback(_, cb: CallbackQuery):
 
 
 @app.bot.on_callback_query(filters.regex(r"."))
+@app.alert_user
 async def calculator_evaluate_callback(_, cb: CallbackQuery):
     try:
-        if cb.inline_message_id:
+        if cb.message:
+            message = cb.message
+
+        elif cb.inline_message_id:
             dc_id, message_id, chat_id, query_id = struct.unpack(
                 "<iiiq",
                 base64.urlsafe_b64decode(
@@ -74,8 +79,6 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
                 chat_id=int(str(-100) + str(chat_id)[1:]),
                 message_ids=message_id
             )
-        elif cb.message:
-                message = cb.message
         else:
             return
 
@@ -93,7 +96,7 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
                 text = e or "Error !"
         else:
             text = caption + ch
-
+        
         await cb.edit_message_text(
             text=text,
             reply_markup=reply_markup
