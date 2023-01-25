@@ -73,8 +73,6 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                         app.buildButton("Back", "mygroup-tab")
                     ]
                 )
-            )
-            os.remove(path)
         else:
             await cb.edit_message_media(
             text="Will be added Later.",
