@@ -287,7 +287,7 @@ class SyncPart(Types):
             app.ialive_pic()
         """
 
-        return self.getdv("USER_PIC") or self.UserPic() or None
+        return self.getdv("USER_PIC") or self.UserPic or None
 
 
     def get_file_id(
