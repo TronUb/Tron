@@ -6,6 +6,7 @@ import asyncio
 import inspect
 import traceback
 import datetime
+import pyrogram
 
 from time import time
 from datetime import timedelta
@@ -789,3 +790,44 @@ class AsyncPart(object):
             )
         except Exception as e:
             print(e)
+
+
+    async def mute_notification(
+        self,
+        chat_id: Union[str, int],
+        show_previews: bool=None,
+        silent: bool=True,
+        mute_until: int=None,
+        sound: "pyrogram.raw.types.NotificationSound"=None
+        ):
+        peer = await self.resolve_peer(chat_id)
+
+        return await self.invoke(
+            pyrogram.raw.functions.account.UpdateNotifySettings(
+                peer=pyrogram.raw.types.InputNotifyPeer(
+                    peer=peer
+                ),
+                settings=pyrogram.raw.types.InputPeerNotifySettings(
+                    show_previews=show_previews,
+                    silent=silent,
+                    mute_until=mute_until,
+                    sound=sound
+                )
+            )
+        )
+
+
+    async def unmute_notification(
+        self,
+        chat_id: Union[str, int],
+        ):
+        r = await self.mute_notification(
+            chat_id=chat_id,
+            show_previews=True,
+            silent=False,
+            mute_until=None,
+            sound=None
+        )
+        return True if r else False
+
+
