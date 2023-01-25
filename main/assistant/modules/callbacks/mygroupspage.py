@@ -19,6 +19,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
             app.get_dialogs() if x.chat.type == enums.ChatType.SUPERGROUP and 
             x.chat.is_creator
         ]
+        print(buttons)
         await cb.edit_message_text(
             text="Available Groups That Belong To You.",
             reply_markup=app.buildMarkup(*buttons)
