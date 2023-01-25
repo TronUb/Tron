@@ -4,7 +4,10 @@ This file creates pages for settings in help menu.
 
 import os
 from pyrogram import filters, enums
-from pyrogram.types import CallbackQuery
+from pyrogram.types import (
+    CallbackQuery,
+    InputMediaPhoto
+)
 
 from main.userbot.client import app
 
