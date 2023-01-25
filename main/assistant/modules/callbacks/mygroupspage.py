@@ -30,7 +30,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
         ] + [
                 [
                     app.buildButton("Home", "close-tab"),
-                    app.buildButton("Back", "home-tab")
+                    app.buildButton("Back", "extra-tab")
                 ]
             ]
         await cb.edit_message_text(
