@@ -15,11 +15,10 @@ from main.userbot.client import app
 async def mygroups_callback(_, cb: CallbackQuery):
     try:
         buttons = [
-            [app.buildButton(x.chat.title, x.chat.id)] async for x in 
+            [app.buildButton(x.chat.title, str(x.chat.id))] async for x in 
             app.get_dialogs() if x.chat.type == enums.ChatType.SUPERGROUP and 
             x.chat.is_creator
-        ]
-        print(buttons)
+        ])
         await cb.edit_message_text(
             text="Available Groups That Belong To You.",
             reply_markup=app.buildMarkup(*buttons)
