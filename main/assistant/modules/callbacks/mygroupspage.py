@@ -48,7 +48,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         chat_id = cb.data
         chat = await app.get_chat(chat_id)
         if chat.photo:
-            path = await app.download_media(chat.photo)
+            path = await app.download_media(chat.photo.big_file_id)
         else:
             path = None
 
@@ -77,4 +77,4 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error()
+        await app.error(e)
