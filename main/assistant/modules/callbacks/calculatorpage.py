@@ -58,7 +58,7 @@ async def calculator_callback(_, cb: CallbackQuery):
 
 
 
-@app.bot.on_callback_query(filters.regex(r"."))
+@app.bot.on_callback_query(filters.regex(r"cal-\(.{1}\)"))
 @app.alert_user
 async def calculator_evaluate_callback(_, cb: CallbackQuery):
     try:

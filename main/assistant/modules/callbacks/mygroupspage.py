@@ -73,7 +73,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                 reply_markup=app.buildMarkup(
                     [
                         app.buildButton("Home", "close-tab"),
-                        app.buildButton("Back", "mygroup-tab")
+                        app.buildButton("Back", "mygroups-tab")
                     ]
                 )
             )
