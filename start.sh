@@ -1,2 +1,3 @@
-# run in shell
+# bash start.sh
+# ./start.sh
 python -m main
