@@ -47,7 +47,14 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
         print(cb)
         chat_id = cb.data
-        chat = await app.get_chat(chat_id)
+        try:
+            chat = await app.get_chat(chat_id)
+        except PeerInvalid:
+            return await cb.answer(
+                "Peer Id Invalid.",
+                show_alert=True
+            )
+
         if chat.photo:
             path = await app.download_media(chat.photo.big_file_id)
         else:
@@ -57,7 +64,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         if path:
             await cb.edit_message_media(
                 media=InputMediaPhoto(
-                    media="downloads/" + path.split("/")[-1],
+                    media=path,
                     caption="Will be added later."
                 ),
                 reply_markup=app.buildMarkup(
