@@ -185,6 +185,7 @@ from main.core.enums import HandlerType
 async def check_handler(client, message):
     await message.edit("Bot is Active !")
 
+# The gen filter is only made for userbot
 ```
 </details>
 
