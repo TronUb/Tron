@@ -15,7 +15,13 @@ from main.userbot.client import app
 async def mygroups_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_text(
-            text="<i>Fetching Your Groups . . .,</i>"
+            text="<i>Fetching Your Groups . . .</i>",
+            reply_markup=app.buildMarkup(
+                [
+                    app.buildButton("Home", "close-tab"),
+                    app.buildButton("Back", "extra-tab")
+                ]
+            )
         )
         buttons = [
             [app.buildButton(x.chat.title, str(x.chat.id))] async for x in 
