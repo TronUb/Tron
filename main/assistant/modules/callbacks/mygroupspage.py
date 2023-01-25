@@ -2,6 +2,7 @@
 This file creates pages for settings in help menu.
 """
 
+import os
 from pyrogram import filters, enums
 from pyrogram.types import CallbackQuery
 
@@ -39,3 +40,41 @@ async def mygroups_callback(_, cb: CallbackQuery):
         )
     except Exception as e:
         await app.error(e)
+
+
+@app.bot.on_callback_query(filters.regex(r"-(\d+)"))
+async def mygroups_info_callback(_, cb: CallbackQuery):
+    try:
+        chat_id = cb.data
+        chat = await app.get_chat(chat_id)
+        if chat.photo:
+            path = await app.download_media(chat.photo)
+        else:
+            path = None
+
+        if path:
+            await cb.edit_message_media(
+                media=InputMediaPhoto(
+                    media=path,
+                    caption="Will be added later."
+                ),
+                reply_markup=app.buildMarkup(
+                    [
+                        app.buildButton("Home", "close-tab"),
+                        app.buildButton("Back", "mygroup-tab")
+                    ]
+                )
+            )
+            os.remove(path)
+        else:
+            await cb.edit_message_media(
+            text="Will be added Later."
+            reply_markup=app.buildMarkup(
+                [
+                    app.buildButton("Home", "close-tab"),
+                    app.buildButton("Back", "mygroups-tab")
+                ]
+            )
+        )
+    except Exception as e:
+        await app.error()
