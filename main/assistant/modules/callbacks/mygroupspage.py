@@ -45,6 +45,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex(r"-(\d+)"))
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
+        print(cb)
         chat_id = cb.data
         chat = await app.get_chat(chat_id)
         if chat.photo:
@@ -52,6 +53,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         else:
             path = None
 
+        print(chat.photo, path)
         if path:
             await cb.edit_message_media(
                 media=InputMediaPhoto(
