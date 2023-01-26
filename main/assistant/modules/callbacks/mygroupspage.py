@@ -15,6 +15,7 @@ from main.userbot.client import app
 
 
 buttons = []
+chat_info = dict()
 
 @app.bot.on_callback_query(filters.regex("mygroups-tab"))
 @app.alert_user
@@ -58,13 +59,17 @@ async def mygroups_callback(_, cb: CallbackQuery):
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
         chat_id = cb.data
-        try:
-            chat = await app.get_chat(chat_id)
-        except PeerInvalid:
-            return await cb.answer(
-                "Peer Id Invalid.",
-                show_alert=True
-            )
+        if chat_info.get(chat_id):
+            chat = chat_info.get(chat_id)
+        else:
+            try:
+                chat = await app.get_chat(chat_id)
+                chat_info.update({chat_id: chat})
+            except PeerInvalid:
+                return await cb.answer(
+                    "Peer Id Invalid.",
+                    show_alert=True
+                )
 
         if chat.photo:
             path = await app.download_media(chat.photo.big_file_id)
