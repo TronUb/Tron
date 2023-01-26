@@ -41,29 +41,31 @@ to its features it can be extended more and more, it can do more beyond its limi
     </summary>
 <br></br>
 
-<p><blockquote>API_ID</blockquote></p>
-get this value from https://my.telegram.org
+```python
+API_ID
+# get this value from https://my.telegram.org
 
-<p><blockquote>API_HASH</blockquote></p>
-get this value from https://my.telegram.org
+API_HASH
+# get this value from https://my.telegram.org
 
-<p><blockquote>SESSION</blockquote></p>
-create session from session methods given below 
+SESSION
+# create session from session methods given below 
 
-<p><blockquote>TRIGGER</blockquote></p>
-by default its dot (.) 
-change it to any single symbol you like
+TRIGGER
+# by default its dot (.) 
+# change it to any single symbol you like
 
-<p><blockquote>LOG_CHAT</blockquote></p>
-make a private group and get its chat id
+LOG_CHAT
+# make a private group and get its chat id
 
-<p><blockquote>TIME_ZONE</blockquote></p>
-by default its Asia/Kolkata, change it 
-your time zone
+TIME_ZONE
+# by default its Asia/Kolkata, change it 
+# your time zone
 
-<p><blockquote>BOT_TOKEN</blockquote></p>
-create a bot at https://t.me/BotFather 
-and get its bot token
+BOT_TOKEN
+# create a bot at https://t.me/BotFather 
+# and get its bot token
+```
 
 </details>
 
