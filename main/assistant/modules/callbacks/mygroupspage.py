@@ -33,7 +33,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
 
         if not buttons: # empty list acts as False
             async for x in app.get_dialogs():
-                if x.chat.type == enums. ChatType.SUPERGROUP:
+                if x.chat.type in (enums.ChatType.SUPERGROUP, enums. ChatType.GROUP):
                     if x.chat.is_creator:
                         buttons.append(
                             [
@@ -73,15 +73,16 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
 
         if chat and chat.photo:
             path = await app.download_media(chat.photo.big_file_id)
+            text = "**Title:** `{}`\n".format(chat.title)
+            text += "**Username:** `{}`\n".format(chat.username or '')
+            text += "**Id:** `{}`\n".format(chat.id)
+            text += "**Type:** `{}`\n".format(chat.type.value)
+            text += "**Description:** `{}`\n".format(chat.description or '')
+            text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
+            text += "**Member Count:** `{}`\n".format(chat.members_count)
         else:
             path = None
-
-        text = "**Title:** `{}`\n".format(chat.title)
-        text += "**Username:** `{}`\n".format(chat.username or '')
-        text += "**Id:** `{}`\n".format(chat.id)
-        text += "**Description:** `{}`\n".format(chat.description or '')
-        text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
-        text += "**Member Count:** `{}`\n".format(chat.members_count)
+            text = None
 
         if path:
             await cb.edit_message_media(
