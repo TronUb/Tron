@@ -48,7 +48,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
             )
 
         await cb.edit_message_text(
-            text="Available Groups That Belong To You.",
+            text=f"**Total Groups:** `{len(buttons)}`",
             reply_markup=app.buildMarkup(*buttons)
         )
     except Exception as e:
@@ -71,17 +71,17 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                     show_alert=True
                 )
 
-        if chat.photo:
+        if chat and chat.photo:
             path = await app.download_media(chat.photo.big_file_id)
         else:
             path = None
 
-        text = f"**Title:** {chat.title}\n"
-        text += f"**Username:** {chat.username or ''}\n"
-        text += f"**Id:** {chat.id}\n"
-        text += f"**Description:** {chat.description}\n"
-        text += f"**Content Protected:** {'Yes' if chat.has_protected_content else 'No'}\n" 
-        text += f"**Member Count:** {chat.members_count}\n"
+        text = f"**Title:** `{chat.title}`\n"
+        text += f"**Username:** `{chat.username or ''}`\n"
+        text += f"**Id:** `{chat.id}`\n"
+        text += f"**Description:** `{chat.description or '''}`\n"
+        text += f"**Content Protected:** `{'Yes' if chat.has_protected_content else 'No'}`\n" 
+        text += f"**Member Count:** `{chat.members_count}`\n"
 
         if path:
             await cb.edit_message_media(
