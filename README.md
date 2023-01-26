@@ -196,4 +196,4 @@ I will not be responsible for anything that happens with your account, channels,
 
 <br />
 
-• MADE WITH 🎉 BY [࿇•ẞᗴᗩSԵ•࿇](https://t.me/beastzx)
+<b>• MADE WITH 🎉 BY</b> [࿇•ẞᗴᗩSԵ•࿇](https://t.me/beastzx)
