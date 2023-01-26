@@ -53,7 +53,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
         )
 
         if not buttons or cb.data == "mygroups-refresh-tab": # empty list acts as False
-            update_buttons()
+            await update_buttons()
 
         await cb.edit_message_text(
             text=f"**Total Groups:** `{len(buttons)}`",
