@@ -14,6 +14,8 @@ from main.userbot.client import app
 
 
 
+buttons = []
+
 @app.bot.on_callback_query(filters.regex("mygroups-tab"))
 @app.alert_user
 async def mygroups_callback(_, cb: CallbackQuery):
@@ -27,16 +29,23 @@ async def mygroups_callback(_, cb: CallbackQuery):
                 ]
             )
         )
-        buttons = [
-            [app.buildButton(x.chat.title, str(x.chat.id))] async for x in 
-            app.get_dialogs() if x.chat.type == enums.ChatType.SUPERGROUP and 
-            x.chat.is_creator
-        ] + [
+
+        if not buttons: # empty list acts as False
+            async for x in app.get_dialogs():
+                if x.chat.type == enums. ChatType.SUPERGROUP:
+                    if x.chat.is_creator:
+                        buttons.append(
+                            [
+                                app.buildButton(x.chat.title, str(x.chat.id))
+                            ]
+                        )
+            buttons.append(
                 [
                     app.buildButton("Home", "close-tab"),
                     app.buildButton("Back", "extra-tab")
                 ]
-            ]
+            )
+
         await cb.edit_message_text(
             text="Available Groups That Belong To You.",
             reply_markup=app.buildMarkup(*buttons)
