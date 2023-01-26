@@ -48,7 +48,6 @@ async def mygroups_callback(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex(r"-(\d+)"))
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
-        print(cb)
         chat_id = cb.data
         try:
             chat = await app.get_chat(chat_id)
@@ -63,23 +62,29 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         else:
             path = None
 
-        print(chat.photo, path)
+        text = f"**Title:** {chat.title}"
+        text += f"**Username:** {chat.username or ''}"
+        text += f"**Id:** {chat.id}"
+        text += f"**Description:** {chat.description}"
+        text += f"**Content Protected:** {'Yes' if chat.has_protected_content else 'No'}" 
+        text += f"**Member Count:** {chat.members_count}"
+
         if path:
             await cb.edit_message_media(
                 media=InputMediaPhoto(
                     media=path,
-                    caption="Will be added later."
+                    caption=text
                 ),
                 reply_markup=app.buildMarkup(
                     [
                         app.buildButton("Home", "close-tab"),
                         app.buildButton("Back", "mygroups-tab")
                     ]
-                )
+                    )
             )
         else:
             await cb.edit_message_media(
-            text="Will be added Later.",
+            text=text,
             reply_markup=app.buildMarkup(
                 [
                     app.buildButton("Home", "close-tab"),
