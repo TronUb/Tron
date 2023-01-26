@@ -19,7 +19,7 @@ async def extra_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_media(
             media=InputMediaPhoto(
-                    media=,
+                    media=app.BotPic,
                     caption=app.extra_tab_string
             ),
             reply_markup=app.buildMarkup(
