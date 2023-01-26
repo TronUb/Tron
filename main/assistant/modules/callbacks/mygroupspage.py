@@ -97,7 +97,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                     )
             )
         else:
-            await cb.edit_message_media(
+            await cb.edit_message_text(
             text=text,
             reply_markup=app.buildMarkup(
                 [
