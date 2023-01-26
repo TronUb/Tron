@@ -24,13 +24,12 @@ async def update_buttons():
         if x.chat.type in (enums.ChatType.SUPERGROUP, enums. ChatType.GROUP):
             if x.chat.is_creator:
                 buttons.append(
-                    [
-                        app.buildButton(x.chat.title, str(x.chat.id))
-                    ]
+                    [app.buildButton(x.chat.title, str(x.chat.id))]
                 )
     buttons.append(
         [
             app.buildButton("Home", "close-tab"),
+            app.buildButton("Refresh", "mygroups-refresh-tab"),
             app.buildButton("Back", "extra-tab")
         ]
     )
