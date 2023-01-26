@@ -275,12 +275,12 @@ class AsyncPart(object):
             except Exception as e:
                 await app.error(e, edit_error=False)
         """
-        if self.is_bot:
-            raise BotMethodInvalid
-
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
         full_traceback = traceback.format_exc()
+
+        if self.is_bot:
+            return print(full_traceback)
 
         if m:
             teks = "**Traceback Report:**\n\n"

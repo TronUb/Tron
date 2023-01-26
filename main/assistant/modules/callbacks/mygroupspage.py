@@ -52,7 +52,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
             reply_markup=app.buildMarkup(*buttons)
         )
     except Exception as e:
-        await app.error(e)
+        await app.bot.error(e)
 
 
 @app.bot.on_callback_query(filters.regex(r"-(\d+)"))
@@ -107,4 +107,4 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await app.bot.error(e)
