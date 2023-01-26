@@ -116,7 +116,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
             await cb.edit_message_text(
             text=text,
             reply_markup=app.buildMarkup(
-                [app.buildButton("Open Chat", url=f"https://t.me/c/{str(chat.id)[4:] if str(chat.id).startswith("-100") else str(chat.id)[1:]}/-1")],
+                [app.buildButton("Open Chat", url=f"https://t.me/c/{str(chat.id)[4:] if str(chat.id).startswith('-100') else str(chat.id)[1:]}/-1")],
                 [
                     app.buildButton("Home", "close-tab"),
                     app.buildButton("Back", "mygroups-tab")
