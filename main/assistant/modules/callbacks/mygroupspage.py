@@ -76,12 +76,12 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         else:
             path = None
 
-        text = f"**Title:** `{chat.title}`\n"
-        text += f"**Username:** `{chat.username or ''}`\n"
-        text += f"**Id:** `{chat.id}`\n"
-        text += f"**Description:** `{chat.description or '''}`\n"
-        text += f"**Content Protected:** `{'Yes' if chat.has_protected_content else 'No'}`\n" 
-        text += f"**Member Count:** `{chat.members_count}`\n"
+        text = "**Title:** `{}`\n".format(chat.title)
+        text += "**Username:** `{}`\n".format(chat.username or '')
+        text += "**Id:** `{}`\n".format(chat.id)
+        text += "**Description:** `{}`\n".format(chat.description or '')
+        text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
+        text += "**Member Count:** `{}`\n".format(chat.members_count)
 
         if path:
             await cb.edit_message_media(
