@@ -101,7 +101,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         if path:
             await cb.edit_message_media(
                 media=InputMediaPhoto(
-                    media=path,
+                    media=app.BotPic,
                     caption=text
                 ),
                 reply_markup=app.buildMarkup(

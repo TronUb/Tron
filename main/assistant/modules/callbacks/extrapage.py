@@ -3,7 +3,10 @@ This file creates extra page tab menu in helpdex
 """
 
 from pyrogram import filters
-from pyrogram.types import CallbackQuery
+from pyrogram.types import (
+    CallbackQuery,
+    InputMediaPhoto
+)
 
 from main.userbot.client import app
 
@@ -14,8 +17,11 @@ from main.userbot.client import app
 @app.alert_user
 async def extra_callback(_, cb: CallbackQuery):
     try:
-        await cb.edit_message_text(
-            text=app.extra_tab_string,
+        await cb.edit_message_media(
+            media=InputMediaPhoto(
+                    media=,
+                    caption=app.extra_tab_string
+            ),
             reply_markup=app.buildMarkup(
                 [app.buildButton("• Public commands •", "ubpublic-commands-tab")],
                 [app.buildButton("Counter", "counter-tab")],
