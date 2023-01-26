@@ -21,7 +21,7 @@
     <summary><b>• About</b></summary>
 
 <br />
-<b>This is a telegram userbot which is written in pure python language and it is based on Dan's</b> [pyrogram](https://github.com/pyrogram/pyrogram) <b>library.</b>
+<b>This is a telegram userbot which is written in pure python language and it is based on Dan's</b> <a href="https://github.com/pyrogram/pyrogram">Pyrogram</a> <b>library.</b>
 
 <b>Now let's understand what is a userbot ?</b>
 
