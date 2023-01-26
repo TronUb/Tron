@@ -79,18 +79,24 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                     show_alert=True
                 )
 
-        if chat and chat.photo:
+        if not chat:
+            await cb.answer(
+                "Peer Id Invalid",
+                show_alert=True
+            )
+
+        if chat.photo:
             path = await app.download_media(chat.photo.big_file_id)
-            text = "**Title:** `{}`\n".format(chat.title)
-            text += "**Username:** `{}`\n".format(chat.username or '')
-            text += "**Id:** `{}`\n".format(chat.id)
-            text += "**Type:** `{}`\n".format(chat.type.value)
-            text += "**Description:** `{}`\n".format(chat.description or '')
-            text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
-            text += "**Member Count:** `{}`\n".format(chat.members_count)
         else:
             path = None
-            text = None
+
+        text = "**Title:** `{}`\n".format(chat.title)
+        text += "**Username:** `{}`\n".format(chat.username or '')
+        text += "**Id:** `{}`\n".format(chat.id)
+        text += "**Type:** `{}`\n".format(chat.type.value)
+        text += "**Description:** `{}`\n".format(chat.description or '')
+        text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
+        text += "**Member Count:** `{}`\n".format(chat.members_count)
 
         if path:
             await cb.edit_message_media(
