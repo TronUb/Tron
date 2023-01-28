@@ -45,15 +45,15 @@ def generate_docs():
 
 
 class OnUpdate:
-    f"""
+    """
     parameters::
         handler_type: Union[int, HandleType]
         filters: pyrogram.filters
         group: int
     
     Note:
-        {*generate_docs()}
-    """
+        {}
+    """.format(*generate_docs())
     def on_update(
         self,
         handler_type: Union[int, HandlerType],
