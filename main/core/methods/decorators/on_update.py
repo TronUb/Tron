@@ -37,29 +37,36 @@ handler_type_dict = {
 }
 
 
-def generate_docs():
-    return [
-        f"{x} : {handler_type_dict.get(list(handler_type_dict)[x])}\n" for 
-        x in range(len(handler_type_dict))
-    ]
-
-
 class OnUpdate:
-    """
-    parameters::
-        handler_type: Union[int, HandleType]
-        filters: pyrogram.filters
-        group: int
-    
-    Note:
-        {}
-    """.format(*generate_docs())
     def on_update(
         self,
         handler_type: Union[int, HandlerType],
         filters: pyrogram.filters = None,
         group: int = None
         ):
+        """
+        parameters::
+            handler_type: Union[int, HandleType]
+            filters: pyrogram.filters
+            group: int
+
+        returns::
+            object
+
+        0: CallbackQueryHandler
+        1: ChatJoinRequestHandler
+        2: ChatMemberUpdatedHandler
+        3: ChosenInlineResultHandler
+        4: DeletedMessagesHandler
+        5: DisconnectHandler
+        6: EditedMessageHandler
+        7: InlineQueryHandler
+        8: MessageHandler
+        9: PollHandler
+        10: RawUpdateHandler
+        11: UserStatusHandler
+        """
+
         if isinstance(handler_type, int):
             handler = handler_type_dict.get(list(handler_type_dict)[handler]) 
         else:
