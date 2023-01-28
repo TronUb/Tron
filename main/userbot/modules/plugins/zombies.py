@@ -29,7 +29,7 @@ async def zombies_handler(_, m: Message):
                 temp_count += 1
 
         if temp_count > 0:
-            await app.send_edit(f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.PREFIX}zombies clean` to remove them from group.")
+            await app.send_edit(f"**Found:** `{temp_count}` Deleted accounts\nUse `{app.Trigger[0]}zombies clean` to remove them from group.")
         else:
             await app.send_edit("No deleted accounts found.\nGroup is clean as Hell ! 😃", delme=3, text_type=["mono"])
 

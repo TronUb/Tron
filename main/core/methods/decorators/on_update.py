@@ -37,19 +37,36 @@ handler_type_dict = {
 }
 
 
+def generate_docs():
+    return [
+        f"{x} : {handler_type_dict.get(list(handler_type_dict)[x])}\n" for 
+        x in range(len(handler_type_dict))
+    ]
+
 
 class OnUpdate:
+    f"""
+    parameters::
+        handler_type: Union[int, HandleType]
+        filters: pyrogram.filters
+        group: int
+    
+    Note:
+        {*generate_docs()}
+    """
     def on_update(
         self,
-        handler_type: pyrogram.handlers,
-        **kwargs
+        handler_type: Union[int, HandlerType],
+        filters: pyrogram.filters = None,
+        group: int = None
         ):
-        handler = handler_type_dict.get(handler_type)
+        if isinstance(handler_type, int):
+            handler = handler_type_dict.get(list(handler_type_dict)[handler]) 
+        else:
+            handler = handler_type_dict.get(handler_type)
+
         if handler is None:
             raise Exception("This handler doesn't exist.")
-
-        group = kwargs.get("group") or 0
-        filters = kwargs.get("filters")
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
