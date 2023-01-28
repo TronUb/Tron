@@ -14,7 +14,7 @@ from pyrogram.handlers import (
     UserStatusHandler
 )
 
-from typing import Callable
+from typing import Callable, Union
 
 from main.core.enums import HandlerType
 
