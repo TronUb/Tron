@@ -1,7 +1,10 @@
 import os
 import asyncio
 
-from pyrogram.types import Message
+from pyrogram.types import (
+    Message,
+    ChatPermissions
+)
 
 from main import app, gen
 from main.core.enums import UserType 
