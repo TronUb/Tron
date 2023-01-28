@@ -36,7 +36,7 @@ async def zombies_handler(_, m: Message):
     elif app.long() == 2 and m.command[1] == "clean":
         await app.send_edit("Cleaning deleted accounts . . .", text_type=["mono"])
 
-        async for x in app.iter_chat_members(chat_id=m.chat.id):
+        async for x in app.get_chat_members(chat_id=m.chat.id):
             if x.user.is_deleted:
                 if x.status in ("administrator", "creator"):
                     admin_count += 1
@@ -50,6 +50,6 @@ async def zombies_handler(_, m: Message):
         await app.send_edit(f"`Group clean up done !`\n\n**Total:** `{count+admin_count}`\n**Removed:** `{count}`\n**Not Removed:** `{admin_count}`\n\n**Note:** `Not removed accounts can be admins or the owner`")
 
     elif app.long() == 2 and m.command[1] != "clean":
-        await app.send_edit(f"Check `{app.PREFIX}help zombies` to see how it works !")
+        await app.send_edit(f"Check `{app.Trigger[0]}help zombies` to see how it works !")
     else:
         await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=3)
