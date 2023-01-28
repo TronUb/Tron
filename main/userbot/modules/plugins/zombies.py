@@ -42,7 +42,7 @@ async def zombies_handler(_, m: Message):
                     admin_count += 1
                     continue
                 try:
-                    await app.kick_chat_member(m.chat.id, x.user.id)
+                    await app.restrict_chat_member(m.chat.id, x.user.id)
                     count += 1
                     await asyncio.sleep(0.2)
                 except Exception as e:
