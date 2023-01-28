@@ -46,17 +46,17 @@ async def zombies_handler(_, m: Message):
                     continue
                 try:
                     await app.restrict_chat_member(
-                        m.chat.id,
-                        x.user.id,
-                        ChatPermissions(
-                            False,
-                            False,
-                            False,
-                            False,
-                            False,
-                            False,
-                            False,
-                            False
+                        chat_id=m.chat.id,
+                        user_id=x.user.id,
+                        permissions=ChatPermissions(
+                            can_send_messages=False,
+                            can_send_media_messages=False,
+                            can_send_other_messages=False,
+                            can_send_polls=False,
+                            can_add_web_page_previews=False,
+                            can_change_info=False,
+                            can_invite_users=False,
+                            can_pin_messages=False
                         )
                     )
                     count += 1
