@@ -422,17 +422,15 @@ class AsyncPart(object):
         schedule_date: int=0,
         protect_content: bool=False,
         reply_markup=None,
-        entities=None
+        entities=None,
+        send_as_file: bool=False,
+        filename: str=None
         ):
         """
         params:
             1. text: str :: text to be edited or sent instead of editing
             2. disable_web_page_preview: bool, default=False :: web page preview will be shown if True
             3. delme: int, default=0 :: sleeps for given time and then deletes the message
-            4. mono: bool, default=False :: all text format will become mono
-            5. bold: bool, default=False :: all text format will become bold
-            6. italic: bool, default=False :: all text format will become italic
-            7. underline: bool, defau=False :: all text format will become underlined
 
         use:
             use this function to edit or send a message if failed to edit message
@@ -451,56 +449,64 @@ class AsyncPart(object):
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
-        if m is None:
+        if (m is None) or (not m):
             return
 
         try:
-            try:
-                r = None
+            r = None
+            file_name = filename or "file.txt"
 
-                if len(text) > 4096:
-                    r = await self.send_edit(
-                        "Message text is too long, Sending as file.",
-                        text_type=["mono"],
-                        delme=3
-                    )
-                    return await self.create_file("file.text", text)
+            if (len(text) > 4096) or send_as_file:
+                r = await self.send_edit(
+                    "Message text is too long, Sending as file.",
+                    text_type=["mono"],
+                    delme=3
+                )
+                return await self.create_file(file_name, text)
 
-                else:
-                    r = await m.edit(
-                        text=self.FormatText(text, textformat=text_type),
-                        parse_mode=parse_mode,
-                        disable_web_page_preview=disable_web_page_preview,
-                        reply_markup=reply_markup,
-                        entities=entities
-                    )
-            except (MessageAuthorRequired, MessageIdInvalid, Exception) as e:
-                print(traceback.format_exc())
-                r = await self.send_message(
-                    chat_id=m.chat.id,
+            else:
+                r = await m.edit(
                     text=self.FormatText(text, textformat=text_type),
-                    disable_web_page_preview=disable_web_page_preview,
-                    disable_notification=disable_notification,
                     parse_mode=parse_mode,
-                    reply_to_message_id=reply_to_message_id,
-                    schedule_date=schedule_date,
-                    protect_content=protect_content,
+                    disable_web_page_preview=disable_web_page_preview,
                     reply_markup=reply_markup,
                     entities=entities
                 )
+        except MessageNotModified:
+            pass
+
+        except (MessageAuthorRequired, MessageIdInvalid) as e:
+            print(traceback.format_exc())
+            r = await self.send_message(
+                chat_id=m.chat.id,
+                text=self.FormatText(text, textformat=text_type),
+                disable_web_page_preview=disable_web_page_preview,
+                disable_notification=disable_notification,
+                parse_mode=parse_mode,
+                reply_to_message_id=reply_to_message_id,
+                schedule_date=schedule_date,
+                protect_content=protect_content,
+                reply_markup=reply_markup,
+                entities=entities
+            )
 
         except Exception as e:
             await self.error(e)
 
         try:
             if delme > 0:
-                self.createThread(self.sleep_delete, message=m, sec=delme, delmsg=True)
+                self.createThread(
+                    self.sleep_delete,
+                    message=m, 
+                    sec=delme, 
+                    delmsg=True
+                )
+
+            frame.f_locals["m"] = r # re-asign a new value
+            return r # return that new value
 
         except Exception as e:
             await self.error(e)
-
-        frame.f_locals["m"] = r
-        return r
 
 
     async def check_private(
