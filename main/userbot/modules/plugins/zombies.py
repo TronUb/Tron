@@ -1,10 +1,7 @@
 import os
 import asyncio
 
-from pyrogram.types import (
-    Message,
-    ChatPermissions
-)
+from pyrogram.types import Message
 
 from main import app, gen
 from main.core.enums import UserType 
@@ -45,19 +42,9 @@ async def zombies_handler(_, m: Message):
                     admin_count += 1
                     continue
                 try:
-                    await app.restrict_chat_member(
+                    await app.ban_chat_member(
                         chat_id=m.chat.id,
-                        user_id=x.user.id,
-                        permissions=ChatPermissions(
-                            can_send_messages=False,
-                            can_send_media_messages=False,
-                            can_send_other_messages=False,
-                            can_send_polls=False,
-                            can_add_web_page_previews=False,
-                            can_change_info=False,
-                            can_invite_users=False,
-                            can_pin_messages=False
-                        )
+                        user_id=x.user.id
                     )
                     count += 1
                     await asyncio.sleep(0.2)
