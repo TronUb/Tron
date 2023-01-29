@@ -69,6 +69,14 @@ class OnUpdate:
         11: UserStatusHandler
         """
 
+        if isinstance(handler_type, int):
+            handler = handler_type_dict.get(list(handler_type_dict)[handler_type]) 
+        else:
+            handler = handler_type_dict.get(handler_type)
+
+        if handler is None:
+            raise Exception("This handler doesn't exist.")
+
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(
