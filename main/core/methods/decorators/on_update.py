@@ -44,9 +44,7 @@ class OnUpdate:
         self,
         handler_type: Union[int, HandlerType],
         filters: pyrogram.filters = None,
-        group: int = 0,
-        module: str = None,
-        usage: str = None
+        group: int = 0
         ):
         """
         parameters::
@@ -70,26 +68,6 @@ class OnUpdate:
         10: RawUpdateHandler
         11: UserStatusHandler
         """
-
-        if isinstance(handler_type, int):
-            handler = handler_type_dict.get(list(handler_type_dict)[handler_type]) 
-        else:
-            handler = handler_type_dict.get(handler_type)
-
-        if handler is None:
-            raise Exception("This handler doesn't exist.")
-
-        if module:
-            if not module in self.CMD_HELP.keys():
-                self.CMD_HELP.update({module : {}})
-            self.CMD_HELP.get(module).update(command_info)
-        else:
-            # wherever this decorator is called 
-            # we will access its future local variables
-            frame = inspect.currentframe().f_back
-            module = frame.f_locals.get("__name__")
-
-            self.CMD_HELP.get(module.split(".")[-1]).update(command_info)
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
