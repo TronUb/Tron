@@ -177,6 +177,7 @@ from main.core import filters
 from main.core.enums import HandlerType
 
 
+# userbot decorator
 @app.on_update(
     handler_type=HandlerType.MESSAGE,
     filters=filters.gen(
@@ -184,10 +185,23 @@ from main.core.enums import HandlerType
         usage="Check Bot is active or not."
     )
 )
-async def check_handler(client, message):
+async def userbot_check_handler(client, message):
     await message.edit("Bot is Active !")
 
-# The gen filter is only made for userbot
+# The gen filter can be only used by the userbot
+
+
+
+# bot decorator 
+@app.bot.on_update(
+    handler_type=HandlerType.MESSAGE,
+    filters=filters.command(
+        commands="check"
+    )
+)
+async def bot_check_handler(bot, message):
+    await bot.send_message(m.chat.id, "Bot is Active !")
+
 ```
 </details>
 
