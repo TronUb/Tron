@@ -25,7 +25,7 @@ class Configuration: # pylint: disable=too-few-public-methods
     # access token of your bot, without this the bot will not work (required)
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     # database url (required)
-    DB_URI = os.getenv("DATABASE_URL")
+    DB_URI = os.getenv("DATABASE_URL", "sqlite:///tron.db")
     # a group to store logs, etc (required)
     LOG_CHAT = int(os.getenv("LOG_CHAT", "-100"))
 
