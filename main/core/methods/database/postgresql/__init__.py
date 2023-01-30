@@ -7,19 +7,11 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 
-
-if hasattr(sys, "getandroidapilevel"):
-    database = "sqlite:///tron.db"
-else:
-    from config import Config
-    database = Config.DB_URI
-
-if not database:
-    database = "sqlite:///tron.db"
+from main import Config
 
 
 def start() -> scoped_session:
-    engine = create_engine(database)
+    engine = create_engine(Config.DB_URI)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
