@@ -5,13 +5,19 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 
+try:
+    from main import Config
+except ImportError:
+    Config = None
 
-
-from main import Config
+if Config is None:
+    database = "sqlite:///tron.db"
+else:
+    database = getattr(Config, "DB_URI", database)
 
 
 def start() -> scoped_session:
-    engine = create_engine(Config.DB_URI)
+    engine = create_engine(database)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
