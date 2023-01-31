@@ -50,7 +50,7 @@ class Tools:
         print("Checking Packages:\n\n")
         for pkg in self.requirements():
             try:
-                if pkg.startswith("git+https://github.com/"): # custom dependencies
+                if pkg.startswith("git+https"): # custom dependencies
                     raise pkg_resources.DistributionNotFound
                 else:
                     pkg_resources.require([pkg])
