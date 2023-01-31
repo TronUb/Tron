@@ -10,9 +10,9 @@ try:
 except ImportError:
     Config = None
 
-if Config is None:
-    database = "sqlite:///tron.db"
-else:
+database = "sqlite:///tron.db"
+
+if Config is not None:
     database = getattr(Config, "DB_URI", database)
 
 
