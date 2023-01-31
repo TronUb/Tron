@@ -21,7 +21,7 @@ channel_info = dict()
 async def update_buttons():
     buttons.clear() # remove previous data
     async for x in app.get_dialogs():
-        if x.chat.type in (enums.ChatType.CHANNEL):
+        if x.chat.type == enums.ChatType.CHANNEL:
             if x.chat.is_creator:
                 buttons.append(
                     [app.buildButton(x.chat.title, str(x.chat.id))]
@@ -42,7 +42,7 @@ async def update_buttons():
 async def mychannels_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_text(
-            text="<i>Fetching Your Groups . . .</i>",
+            text="<i>Fetching Your Channels . . .</i>",
             reply_markup=app.buildMarkup(
                 [
                     app.buildButton("Home", "close-tab"),
