@@ -24,7 +24,7 @@ async def update_buttons():
         if x.chat.type in (enums.ChatType.SUPERGROUP, enums. ChatType.GROUP):
             if x.chat.is_creator:
                 buttons.append(
-                    [app.buildButton(x.chat.title, str(x.chat.id))]
+                    [app.buildButton(x.chat.title, str(x.chat.id)+"g")]
                 )
     buttons.append(
         [
@@ -66,7 +66,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex(r"-(\d+)"))
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
-        chat_id = cb.data
+        chat_id = cb.datag.strip("g")
         if chat_info.get(chat_id):
             chat = chat_info.get(chat_id)
         else:

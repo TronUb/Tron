@@ -24,7 +24,7 @@ async def update_buttons():
         if x.chat.type == enums.ChatType.CHANNEL:
             if x.chat.is_creator:
                 buttons.append(
-                    [app.buildButton(x.chat.title, str(x.chat.id))]
+                    [app.buildButton(x.chat.title, str(x.chat.id)+"c")]
                 )
     buttons.append(
         [
@@ -66,7 +66,7 @@ async def mychannels_callback(_, cb: CallbackQuery):
 @app.bot.on_callback_query(filters.regex(r"-(\d+)"))
 async def mychannels_info_callback(_, cb: CallbackQuery):
     try:
-        chat_id = cb.data
+        chat_id = cb.data.strip("c")
         if channel_info.get(chat_id):
             chat = channel_info.get(chat_id)
         else:
