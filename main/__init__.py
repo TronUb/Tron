@@ -52,8 +52,9 @@ class Tools:
             try:
                 if pkg.startswith("git+https://github.com/"): # custom dependencies
                     raise pkg_resources.DistributionNotFound
-
-                pkg_resources.require([pkg])
+                else:
+                    pkg_resources.require([pkg])
+                print(pkg)
             except pkg_resources.DistributionNotFound as e:
                 print(f"\nSince {e.req} is not Installed, Installing {e.req}")
                 if e.req == "numpy":
@@ -66,7 +67,7 @@ class Tools:
                     self.install_psycopg2()
 
                 elif e.req == "pillow":
-                    self. install_pillow()
+                                              self. install_pillow()
 
                 else:
                     os.system(f"python -m pip install {e.req}")
