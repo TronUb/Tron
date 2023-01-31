@@ -1,4 +1,4 @@
-git+https://github.com/beastzx18/pyrolite/tree/custom
+git+https://github.com/beastzx18/pyrolite@custom
 pytube
 telegraph
 heroku3
