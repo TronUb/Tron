@@ -176,7 +176,7 @@ if hosttype.is_localhost:
     # start setup
     tools.setup_config()
     repo = "git+https://github.com/beastzx18/pyrolite@custom"
-    os.system(f"python -m pip install {repo}")
+    os.system(f"python -m pip3 install {repo}")
 
 
 # default import
