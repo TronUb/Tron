@@ -63,10 +63,10 @@ async def mygroups_callback(_, cb: CallbackQuery):
         await app.bot.error(e)
 
 
-@app.bot.on_callback_query(filters.regex(r"-(\d+)"))
+@app.bot.on_callback_query(filters.regex(r"-(\d+)g"))
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
-        chat_id = cb.datag.strip("g")
+        chat_id = cb.data.strip("g")
         if chat_info.get(chat_id):
             chat = chat_info.get(chat_id)
         else:

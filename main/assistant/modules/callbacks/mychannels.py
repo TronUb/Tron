@@ -63,7 +63,7 @@ async def mychannels_callback(_, cb: CallbackQuery):
         await app.bot.error(e)
 
 
-@app.bot.on_callback_query(filters.regex(r"-(\d+)"))
+@app.bot.on_callback_query(filters.regex(r"-(\d+)c"))
 async def mychannels_info_callback(_, cb: CallbackQuery):
     try:
         chat_id = cb.data.strip("c")
