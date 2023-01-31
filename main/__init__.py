@@ -51,9 +51,9 @@ class Tools:
         for pkg in self.requirements():
             try:
                 if pkg.startswith("git+https://github.com/"):
-                    raise pkg_resources.DistributionNotFound
-
-                pkg_resources.require([pkg])
+                    os.system(f"python -m pip install {pkg}")
+                else:
+                    pkg_resources.require([pkg])
             except pkg_resources.DistributionNotFound as e:
                 print(f"\nSince {e.req} is not Installed, Installing {e.req}")
                 if e.req == "numpy":
