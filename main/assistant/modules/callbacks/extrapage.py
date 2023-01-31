@@ -27,6 +27,7 @@ async def extra_callback(_, cb: CallbackQuery):
                 [app.buildButton("Counter", "counter-tab")],
                 [app.buildButton("Calculator", "calculator-tab")],
                 [app.buildButton("My Groups", "mygroups-tab")],
+                [app.buildButton("My Channels", "mychannels-tab")],
                 [
                     app.buildButton("Home", "close-tab"),
                     app.buildButton("Back", "home-tab")
