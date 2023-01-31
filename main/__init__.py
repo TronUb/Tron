@@ -50,11 +50,7 @@ class Tools:
         print("Checking Packages:\n\n")
         for pkg in self.requirements():
             try:
-                if pkg.startswith("git+https"): # custom dependencies
-                    raise pkg_resources.DistributionNotFound
-                else:
-                    pkg_resources.require([pkg])
-                print(pkg)
+                pkg_resources.require([pkg])
             except pkg_resources.DistributionNotFound as e:
                 print(f"\nSince {e.req} is not Installed, Installing {e.req}")
                 if e.req == "numpy":
@@ -179,6 +175,8 @@ hosttype = HostType()
 if hosttype.is_localhost:
     # start setup
     tools.setup_config()
+    repo = "git+https://github.com/beastzx18/pyrolite@custom"
+    os.system(f"python -m pip install {repo}")
 
 
 # default import
