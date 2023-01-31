@@ -37,7 +37,7 @@ async def update_buttons():
 
 
 
-@app.bot.on_callback_query(filters.regex(r"mygroups(-[a-z]+)?-tab"))
+@app.bot.on_callback_query(filters.regex(r"(mygroups)(-[a-z]+)?-tab"))
 @app.alert_user
 async def mygroups_callback(_, cb: CallbackQuery):
     try:
