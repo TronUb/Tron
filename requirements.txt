@@ -1,5 +1,5 @@
 pytube
-pyrogram
+pyrotron
 telegraph
 heroku3
 aiohttp
