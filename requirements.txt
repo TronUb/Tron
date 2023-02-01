@@ -1,5 +1,5 @@
 pytube
-git+https://github.com/beastzx18/pyrolite.git@custom
+pyrotron
 telegraph
 heroku3
 aiohttp
