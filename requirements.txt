@@ -1,5 +1,5 @@
 pytube
-git+https://github.com/beastzx18/PyroTron 
+git+https://github.com/TronUb/PyroTron 
 telegraph
 heroku3
 aiohttp
