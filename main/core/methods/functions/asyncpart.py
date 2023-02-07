@@ -57,7 +57,7 @@ def messageobject(anydict: dict):
 
 class AsyncPart(object):
     @staticmethod
-    async def GetRequest(link: str="", resptype: str=""):
+    async def GetRequest(url: str, resptype: str=""):
         """ args:
                 link: str = ""
                 resptype: str = "json"
@@ -67,8 +67,14 @@ class AsyncPart(object):
                     'json', 'text', 'jsontext', 'raw', 'url'
         """
         async with aiohttp.ClientSession() as session:
-            async with session.get(link) as resp:
-                stored = {"json":"json", "text":"text", "jsontext":"text", "raw":"read", "url":"url"}
+            async with session.get(url) as resp:
+                stored = {
+                    "json":"json",
+                    "text":"text",
+                    "jsontext":"text",
+                    "raw":"read",
+                    "url":"url"
+                }
                 try:
                     returntype = resptype if resptype and resptype in stored.keys() else stored.get("json")
                     if returntype == "jsontext":
@@ -76,6 +82,25 @@ class AsyncPart(object):
                     return await getattr(resp, returntype, None)()
                 except ContentTypeError:
                     return json.loads(await resp.text())
+
+
+    @staticmethod
+    async def PostRequest(endpoint: str, payload: dict, timeout: int=3, resptype: str=""):
+        """ args:
+                link: str = ""
+                resptype: str = "json"
+
+                Note: resptype is 'json' by default
+                    available args for restype:
+                    'json', 'text', 'jsontext', 'raw', 'url'
+        """
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                endpoint,
+                data=payload,
+                timeout=timeout
+            ) as response:
+                return (await response.json())
 
 
     async def IsAdmin(
