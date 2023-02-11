@@ -7,11 +7,15 @@ import inspect
 import traceback
 import datetime
 import pyrogram
+import hachoir
 
 from time import time
 from datetime import timedelta
 
-from typing import List, Union
+from typing import (
+  List,
+  Union
+)
 
 from pyrogram.raw import functions
 from pyrogram.raw import types
@@ -31,9 +35,6 @@ from pyrogram.enums import (
     ParseMode,
     ChatType
 )
-
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 
 import aiohttp
 from aiohttp.client_exceptions import ContentTypeError
@@ -211,7 +212,9 @@ class AsyncPart(object):
         if os.path.exists(thumb_image_path):
             thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
         elif file_name is not None and file_name.lower().endswith(("mp4", "mkv", "webm")):
-            metadata = extractMetadata(createParser(file_name))
+            metadata = hachoir.metadata.extractMetadata(
+                hachoir.parser.createParser(file_name)
+            )
             duration = 0
             if metadata.has("duration"):
                 duration = metadata.get("duration").seconds
@@ -420,7 +423,7 @@ class AsyncPart(object):
         try:
 
             if self.CMD_HELP.get(module) is None:
-                r = None
+                r = []
             else:
                 r = [
                         f"**CMD:** `{self.Trigger[0]}{cmd}`\n**INFO:** `{usage}`\n\n" 
