@@ -66,8 +66,8 @@ class Tools:
                     self.install_psycopg2()
 
                 elif e.req == "pillow":
-                                              self. install_pillow()
-
+                    self. install_pillow()
+                    
                 else:
                     os.system(f"python -m pip install {e.req}")
 

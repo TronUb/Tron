@@ -5,6 +5,7 @@ __pycache__
 .cache
 .vscode
 config.text
+congig.txt
 temp.info
 downloads
 tron.db

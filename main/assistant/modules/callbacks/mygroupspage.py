@@ -64,6 +64,7 @@ async def mygroups_callback(_, cb: CallbackQuery):
 
 
 @app.bot.on_callback_query(filters.regex(r"-(\d+)g"))
+@app.alert_user
 async def mygroups_info_callback(_, cb: CallbackQuery):
     try:
         chat_id = cb.data.strip("g")
@@ -98,6 +99,9 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
         text += "**Content Protected:** `{}`\n".format('Yes' if chat.has_protected_content else 'No')
         text += "**Member Count:** `{}`\n".format(chat.members_count)
 
+        global members
+        members = [x async for x in app.get_chat_history(chat_id)]
+
         if path:
             await cb.edit_message_media(
                 media=InputMediaPhoto(
@@ -106,6 +110,7 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
                 ),
                 reply_markup=app.buildMarkup(
                     [app.buildButton("Open Chat", url=f"https://t.me/c/{str(chat.id)[4:]}/-1")],
+                    [app.buildButton("Members", f"member-0")],
                     [
                         app.buildButton("Home", "close-tab"),
                         app.buildButton("Back", "mygroups-tab")
@@ -114,9 +119,32 @@ async def mygroups_info_callback(_, cb: CallbackQuery):
             )
         else:
             await cb.edit_message_text(
-            text=text,
+                text=text,
+                reply_markup=app.buildMarkup(
+                    [app.buildButton("Open Chat", url=f"https://t.me/c/{str(chat.id)[4:] if str(chat.id).startswith('-100') else str(chat.id)[1:]}/-1")],
+                    [app.buildButton("Members", "member-0")],
+                    [
+                        app.buildButton("Home", "close-tab"),
+                        app.buildButton("Back", "mygroups-tab")
+                    ]
+                )
+            )
+    except Exception as e:
+        await app.bot.error(e)
+
+
+@app.bot.on_callback_query(filters.regex(r"member-(\d+)"))
+@app.alert_user
+async def mygroups_members_callback(_, cb: CallbackQuery):
+    try:
+        count = int(cb.data.split("-")[-1])
+        await cb.edit_message_text(
+            text=members[count].first_name,
             reply_markup=app.buildMarkup(
-                [app.buildButton("Open Chat", url=f"https://t.me/c/{str(chat.id)[4:] if str(chat.id).startswith('-100') else str(chat.id)[1:]}/-1")],
+                [
+                    app.buildButton("prev", f"member-{count-1}"),
+                    app.buildButton("next", f"member-{count+1}")
+                ],
                 [
                     app.buildButton("Home", "close-tab"),
                     app.buildButton("Back", "mygroups-tab")

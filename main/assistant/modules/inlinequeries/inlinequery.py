@@ -23,39 +23,28 @@ from telegraph.exceptions import RetryAfterError
 
 
 
-async def create_plugin_telegraph(title, html_content):
-    try:
-        return app.telegraph.create_page(
-            title=title,
-            html_content=html_content
-        ).get("url")
-    except RetryAfterError as e:
-        await asyncio.sleep(e.retry_after)
-
-
 async def create_helpmenu_articles(query=None):
     if query:
-        return [
-            InlineQueryResultArticle(
-                title=query,
-                input_message_content=InputTextMessageContent(
-                    "**Module: **" + query
-                ),
-                reply_markup=InlineKeyboardMarkup(
-                    [
+        result_text = await app.PluginData(query)
+        if result_text:
+            return [
+                InlineQueryResultArticle(
+                    title=query,
+                    input_message_content=InputTextMessageContent(
+                        result_text[0]
+                    ),
+                    reply_markup=app.buildMarkup(
                         [
-                            InlineKeyboardButton(
+                            app.buildButton(
                                 text="Search Again",
-                                url=await create_plugin_telegraph(
-                                    title=query,
-                                    html_content="".join(await app.PluginData(query))
-                                    )
+                                switch_inline_query_current_chat=""
                             )
                         ]
-                    ]
+                    )
                 )
-            )
-        ]
+            ]
+        else:
+            return []
     else:
         return [
             InlineQueryResultArticle(
@@ -64,14 +53,12 @@ async def create_helpmenu_articles(query=None):
                     "".join(await app.PluginData(module_name)
                     )
                 ),
-                reply_markup=InlineKeyboardMarkup(
+                reply_markup=app.buildMarkup(
                     [
-                        [
-                            InlineKeyboardButton(
-                                text="Search Again",
-                                switch_inline_query_current_chat=""
-                            )
-                        ]
+                        app.buildButton(
+                            text="Search Again",
+                            switch_inline_query_current_chat=""
+                        )
                     ]
                 )
             ) for module_name in app.CMD_HELP.keys()

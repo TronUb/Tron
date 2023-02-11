@@ -897,19 +897,24 @@ class SyncPart(Types):
 
 
     @staticmethod
-    def buildButton(text: str, callback_data: str=None, url: str=None):
-        if url:
+    def buildButton(text: str, callback_data: str=None, url: str=None, switch_inline_query_current_chat: str=None):
+        if url is not None:
             return InlineKeyboardButton(
                 text=text,
                 url=url
             )
-        elif callback_data:
+        elif callback_data is not None:
             return InlineKeyboardButton(
                 text=text,
                 callback_data=callback_data
             )
+        elif switch_inline_query_current_chat is not None:
+            return InlineKeyboardButton(
+                text=text,
+                switch_inline_query_current_chat=switch_inline_query_current_chat
+            )
         else:
-            raise "Either give 'url' or 'callback_data' in parameter."
+            raise Exception("Only these params 'url', 'callback_data', 'switch_inline_query_current_chat' are accepted.")
 
 
     @staticmethod
