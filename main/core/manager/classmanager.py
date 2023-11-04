@@ -54,6 +54,6 @@ class ClassManager(Config, Methods):
     try:
         telegraph = Telegraph()
         telegraph.create_account(short_name=Config.TL_NAME or "TronUserbot Team")
-    except ConnectionError:
+    except ConnectionError, AttributeError:
         telegraph = None
 
