@@ -3,6 +3,11 @@ import os
 
 MIError = (ModuleNotFoundError, ImportError)
 
+def clear_screen():
+    r = os.uname()[0]
+    command = "clear" if r == "Linux" else "cls"
+    os.system(command)
+
 try:
     from pyrogram import Client
 except MIError:
@@ -18,12 +23,6 @@ except MIError:
     os.system("pip install tgcrypto")
 
 
-
-
-def clear_screen():
-    r = os.uname()[0]
-    command = "clear" if r == "Linux" else "cls"
-    os.system(command)
 
 
 # Useful information before doing anything
