@@ -177,6 +177,7 @@ hosttype = HostType()
 
 if hosttype.is_localhost:
     # start setup
+    print("LocalHost Deployment Initiated !")
     tools.setup_config()
 
 
