@@ -15,12 +15,8 @@ class Config:
     pass
 
 
-class HostType:
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-    localhost_hostname = "localhost"
-    localhost_ip_address = "127.0.0.1"
-    is_localhost = (hostname==localhost_hostname) and (ip_address==localhost_ip_address) 
+def isLocalHost():
+    return os.path.exists("./localhost.txt")
 
 
 class Tools:
@@ -173,8 +169,15 @@ class Tools:
 
 
 tools = Tools()
-hosttype = HostType()
-tools.setup_config()
+
+if(isLocalHost()):
+    tools.setup()
+else:
+    print("Setting the Non-LocalHost setup ... !")
+    for attr in dir(Configuration):
+        value = getattr(Configuration, attr, None)
+        if attr.isupper() and not hasattr(Config, attr):
+            setattr(Config, attr, value)
 
 
 # default import
