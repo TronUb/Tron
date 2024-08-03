@@ -16,7 +16,7 @@ class Config:
 
 
 def isLocalHost():
-    return os.path.exists("./localhost.txt")
+    return os.path.exists("./config.txt")
 
 
 class Tools:
@@ -131,9 +131,9 @@ class Tools:
         self.clear_screen
 
         # check if the user config file exists
-        if os.path.exists("config.text"):
-            print("config.text file exists: Yes\n\n")
-            with open("config.text") as f:
+        if os.path.exists("config.txt"):
+            print("config.txt file exists: Yes\n\n")
+            with open("config.txt") as f:
                 content = [x for x in f.read().split("\n") if x not in ("\n", "")]
 
             # set text file config values
@@ -149,7 +149,7 @@ class Tools:
                 count += 1
 
         else:
-            print("config.text file doesn't exist, existing. . .")
+            print("config.txt file doesn't exist, existing. . .")
             exit(0)
 
         # set remaining necessary config values
@@ -162,7 +162,7 @@ class Tools:
                 print(f"[{count}] Added config = {attr} with value = {value}\n")
                 count += 1
 
-        clear = input(f"{Colors.block}Should we clear screen ?{Colors.reset} (Y/N): ")
+        clear = input(f"{Colors.block}Should I clear the screen ?{Colors.reset} (Y/N): ")
         if (not clear) or (clear and clear.upper() == "Y"):
             self.clear_screen
 

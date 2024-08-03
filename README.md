@@ -92,7 +92,7 @@ BOT_TOKEN
 
 2. Create virtual environment ```python -m venv tronuserbot```
 
-3. Activate the virtual environment ```tronuserbot/Scripts/activate```
+3. Activate the virtual environment ```tronuserbot/Scripts/activate``` & install setuptools ```pip install setuptools```
 
 4. Go to home path ```cd```
 
@@ -100,7 +100,7 @@ BOT_TOKEN
 
 6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
 
-7. change directory ```cd Tron```
+7. change directory ```cd Tron``` & create config.txt file ```notepad config.txt``` & fill all details.
 
 8. Start the tronuserbot installation setup ```python -m main```
 
@@ -113,15 +113,15 @@ BOT_TOKEN
 
 3. Create python virtual environment ```python -m venv tronuserbot```
 
-4. Activate python virtual environment ```source tronuserbot/bin/activate```
+4. Activate python virtual environment ```source tronuserbot/bin/activate``` & install setuptools ```pip install setuptools```
 
 5. Install git ```apt-get install git```
 
 6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
 
-7. Change directory ```cd Tron```
+7. Change directory ```cd Tron``` & create a config.txt file
 
-8. Paste your keys and values in config.text file ```nano config.text```
+8. Paste your keys and values in config.text file ```nano config.text``` & fill all details.
 
 9. After pasting all of your information, use <b>Ctrl + X</b> and enter <b>Y</b> and again hit enter button.
 
