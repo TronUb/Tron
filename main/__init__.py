@@ -89,8 +89,7 @@ class Tools:
         else:
             os.system("apt install libxml2 libxslt")
         print("\nInstalling lxml . . .\n")
-        os.system("python3 -m pip install lxml")
-
+        os.system("CFLAGS='-O0' python3 -m pip install lxml")
 
     def install_psycopg2(self):
         if self.is_windows:
