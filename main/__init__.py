@@ -79,7 +79,7 @@ class Tools:
 
     def install_numpy(self):
         print("\nInstalling numpy . . .\n")
-        os.system('MATHLIB="m" python3 -m pip install numpy')
+        os.system('MATHLIB="m" pkg install python-numpy')
 
 
     def install_lxml(self):
