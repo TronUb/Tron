@@ -1,50 +1,41 @@
-import os
+"""Generates a string session for the Tron Userbot
+"""
 
-
-MIError = (ModuleNotFoundError, ImportError)
+import platform
+import subprocess
+from os import system
 
 def clear_screen():
-    r = os.uname()[0]
-    command = "clear" if r == "Linux" else "cls"
-    os.system(command)
+    "clears the screen"
+    r = platform.system().lower()
+    command = "clear" if r == "linux" or r == "darwin" else "cls" if r == "windows" else ""
+    subprocess.run(command.split(), capture_output=True, text=True, check=True)
 
 try:
+    system("python3 -m pip install pyrogram")
     from pyrogram import Client
-except MIError:
-    clear_screen()
-    print("Installing pyrogram ...\n\n")
-    os.system("pip install pyrogram")
-
-try:
-    import tgcrypto
-except MIError:
-    clear_screen()
-    print("Installing tgcrypto . . .")
-    os.system("pip install tgcrypto")
-
-
-
+except Exception:
+    print("Couldn't install pyrogram")
 
 # Useful information before doing anything
-
-intro = """
+INTRO = """
 @Tronuserbot Corporation
 Get the following values by logging to,
 
 https://my.telegram.org
 
 Requirements:
-  
+
   1. API_ID
   2. API_HASH
   3. PHONE NUMBER (WITH COUNTRY CODE, EX: +911034567891)
-  
+
   NOTE: Enter "Ctrl + C" to exit
 \n
 """
 
 
-print(intro)
+print(INTRO)
 
 
 while True:
@@ -70,9 +61,13 @@ with Client(
     api_hash=API_HASH,
     in_memory=True
     ) as app:
+    session = app.export_session_string()
     app.send_message(
         "me",
-        f"This Is Your Tron Userbot • [ `SESSION` ]\n\n```{app.export_session_string()}```\n\n⚠️• Don't share this with anyone !!\n\nCreate session online • [ Press Here ](https://replit.com/@beastzx18/Tron-Userbot-Session)",
+        f"""This Is Your Tron Userbot • [ `SESSION` ]\n\n{session}
+        ⚠️• Don't share this with anyone !!
+        Create session online • [ Press Here ](https://replit.com/@beastzx18/Tron-Userbot-Session)""",
         disable_web_page_preview=True
     )
+    print(session)
     print("\n\nYour String Session Is Successfully Saved In Telegram Saved (Cloud) Messages !! Don't Share It With Anyone!! Anyone having your session can use (Hack) your Telegram Account !")

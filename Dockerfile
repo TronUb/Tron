@@ -1,17 +1,15 @@
 FROM amd64/python:3.9-buster
 
-WORKDIR root/bin/
+WORKDIR /workspace/
 
 COPY . /workspace/
 
-WORKDIR /workspace/
+RUN apt-get update --no-install-recommends --yes && \
+    apt-get install -y ffmpeg --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update --no-install-recommends --yes
+RUN python -m pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-RUN apt-get install ffmpeg --no-install-recommends --yes
-
-RUN python3 -m pip install --upgrade pip
-
-RUN pip3 install -r requirements.txt
-
-CMD ["python3", "-u", "-m", "main"]
+CMD ["python", "-u", "-m", "main"]

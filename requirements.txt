@@ -1,6 +1,5 @@
 CurrencyConverter
 SQLAlchemy==1.3.23
-TgCrypto
 Wikipedia-API
 aiohttp
 bing-image-downloader

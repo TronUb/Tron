@@ -4,9 +4,16 @@ import os
 import socket
 import platform
 import subprocess
-import pkg_resources
+from importlib import metadata
 from main.others import Colors
 from config import Configuration
+
+
+# check which packages are installed
+installed_python_libs = []
+
+for package in metadata.distributions():
+    installed_python_libs.append(package.metadata["Name"].lower())
 
 
 
@@ -16,7 +23,7 @@ class Config:
 
 
 def isLocalHost():
-    return os.path.exists("./config.txt")
+    return os.path.exists("config.txt")
 
 
 class Tools:
@@ -38,39 +45,37 @@ class Tools:
 
     def requirements(self):
         with open("requirements.txt", "r") as f:
-            return [x for x in f.read().split("\n") if x not in ("\n", "")]
+            return [x.lower().strip() for x in f.read().split("\n") if x not in ("\n", "")]
 
 
     def check_requirements(self):
+        if self.is_windows:
+            self.install_scoop()
+
         self.install_ffmpeg()
+
         print("Checking Packages:\n\n")
         for pkg in self.requirements():
             try:
-                if pkg.startswith("git+https://github.com/"):
-                    os.system(f"python -m pip install {pkg}")
-                else:
-                    pkg_resources.require([pkg])
-            except pkg_resources.DistributionNotFound as e:
-                print(f"\nSince {e.req} is not Installed, Installing {e.req}")
-                if e.req == "numpy":
+                if pkg == "numpy":
                     self.install_numpy()
-
-                elif e.req == "lxml":
+                elif pkg == "lxml":
                     self.install_lxml()
-
-                elif e.req == "psycopg2":
+                elif pkg == "psycopg2":
                     self.install_psycopg2()
-
-                elif e.req == "pillow":
+                elif pkg == "pillow":
                     self. install_pillow()
-                    
                 else:
-                    os.system(f"python -m pip install {e.req}")
+                    os.system(f"python3 -m pip install {pkg}")
+
+            except Exception as e:
+                print(f"\n{Colors.red}Error installing {pkg}: {str(e)}")
+
 
 
     def install_numpy(self):
         print("\nInstalling numpy . . .\n")
-        os.system('MATHLIB="m" python -m pip install numpy')
+        os.system('MATHLIB="m" python3 -m pip install numpy')
 
 
     def install_lxml(self):
@@ -80,7 +85,7 @@ class Tools:
         else:
             os.system("apt install libxml2 libxslt")
         print("\nInstalling lxml . . .\n")
-        os.system("python -m pip install lxml")
+        os.system("python3 -m pip install lxml")
 
 
     def install_psycopg2(self):
@@ -89,23 +94,25 @@ class Tools:
         else:
             os.system("apt install postgresql python make clang")
         print("\nInstalling psycopg2 . . .\n")
-        os.system("python -m pip install psycopg2")
+        os.system("python3 -m pip install psycopg2")
+
+    def install_scoop(self):
+        os.system("winget install scoop --accept-package-agreements")
 
 
     def install_pillow(self):
-        if self.windows:
+        if self.is_windows:
             os.system("scoop install libjpeg-turbo")
             os.system('./configure CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib"')
         else:
             os.system("apt install libjpeg-turbo")
             os.system('LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"')
         print("\nInstalling pillow . . .")
-        os.system("python -m pip install pillow")
+        os.system("python3 -m pip install pillow")
 
     def install_ffmpeg(self):
         if tools.is_windows:
             # install ffmpeg
-
             # permission needed in windows
             os.system('Set-ExecutionPolicy RemoteSigned -Scope CurrentUser')
             # install scoop for installing scoop & other packages
@@ -115,9 +122,7 @@ class Tools:
 
         elif tools.is_linux:
             # install ffmpeg
-
             os.system('apt install ffmpeg')
-
         else:
             print('\nUnknown device, Existing . . .')
             exit(0)
