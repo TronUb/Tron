@@ -19,17 +19,20 @@ for package in metadata.distributions():
 
 
 class Config:
+    """This class generates the configs """
     pass
 
 
 def isLocalHost():
+    """Check if it is localhost"""
     return os.path.exists("config.txt")
 
 
 class Tools:
+    """Use it for installing the required packages """
     device = platform.uname()[0].lower()
-    is_linux = (device=="linux")
-    is_windows = (device=="windows")
+    is_linux = device=="linux"
+    is_windows = device=="windows"
 
     @property
     def clear_screen(self):
@@ -39,12 +42,13 @@ class Tools:
         return (subprocess.run(
             args,
             stdout=subprocess.PIPE,
-            shell=True
+            shell=True,
+            check=True
         )).stdout.decode()
 
 
     def requirements(self):
-        with open("requirements.txt", "r") as f:
+        with open("requirements.txt", "r", encoding="UTF-8") as f:
             return [x.lower().strip() for x in f.read().split("\n") if x not in ("\n", "")]
 
 

@@ -47,7 +47,7 @@ def messageobject(anydict: dict):
     ]
     try:
         # the passed message object
-        # must be at the top 
+        # must be at the top
         return all_messages[0]
     except IndexError:
         return None
@@ -69,6 +69,7 @@ class Types(object):
 
 
 class SyncPart(Types):
+    """You must use this class with inherited Config class"""
     def showdate(
         self
         ):
@@ -153,7 +154,7 @@ class SyncPart(Types):
         """
         if self.is_bot:
             raise BotMethodInvalid
-            
+
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
@@ -878,13 +879,13 @@ class SyncPart(Types):
         ):
         """
         Just read the YoutubeDL class docs for use
-    
+
         params::
             params: dict  = {
                 "format": "bestaudio[ext=webm]",
                 "noplaylist": "true"
             },
-        
+
             auto_init: bool = True
         """
 
@@ -892,7 +893,7 @@ class SyncPart(Types):
             params=params,
             auto_init=auto_init
         )
-    
+
         return yt
 
 
