@@ -1,21 +1,21 @@
 <p align="center">
-    <a href="https://github.com/beastzx18/Tron">
-        <img src="main/others/resources/images/tron-round.png" height="300" width="300" alt="TronUb">
+    <a href="https://github.com/TronUb/Tron">
+        <img src="main/others/resources/images/tron-round.png" height="300" width="300" alt="TronUb Logo">
     </a>
 </p>
 
-<h2 align="center">Tron Userbot</h2> 
+<h2 align="center">Tron Userbot</h2>
 
 ![Repo Size](https://img.shields.io/github/repo-size/TronUb/Tron)
 ![License](https://img.shields.io/github/license/TronUb/Tron)
-![Python Version](https://img.shields.io/badge/python-3.x.x-aqua)
+![Python Version](https://img.shields.io/badge/Python-3.9-aqua)
 ![Release](https://img.shields.io/github/v/release/TronUb/Tron)
 ![Maintained](https://img.shields.io/badge/Maintained%20%3F-Yes-orange)
-![Files](https://img.shields.io/github/directory-file-count/TronUb/Tron?label=repo%20files)
+![Files](https://img.shields.io/github/directory-file-count/TronUb/Tron?label=Repo%20Files)
 ![Commit since](https://img.shields.io/github/commits-since/TronUb/Tron/0.0.1/master)
 
 
-<h2>click below to expand</h2>
+<h2>Click below on text to show</h2>
 
 <details>
     <summary><b>• About</b></summary>
@@ -49,21 +49,13 @@ API_HASH
 # get this value from https://my.telegram.org
 
 SESSION
-# create session from session methods given below 
-
-TRIGGER
-# by default its dot (.) 
-# change it to any single symbol you like
+# create session from session methods given below
 
 LOG_CHAT
 # make a private group and get its chat id
 
-TIME_ZONE
-# by default its Asia/Kolkata, change it 
-# your time zone
-
 BOT_TOKEN
-# create a bot at https://t.me/BotFather 
+# create a bot at https://t.me/BotFather
 # and get its bot token
 ```
 
@@ -83,14 +75,14 @@ BOT_TOKEN
 
 <br />
 
-<b>2. Deploy on Local Machine</b>
+<b>2. Deploy on Local Machines</b>
 
 
 • <i>Windows:</i>
 
 1. Install python ```winget install -e --id Python.Python.3.10```
 
-2. Create virtual environment ```python -m venv tronuserbot```
+2. Create virtual environment ```python3 -m venv tronuserbot```
 
 3. Activate the virtual environment ```tronuserbot/Scripts/activate``` & install setuptools ```pip install setuptools```
 
@@ -102,16 +94,16 @@ BOT_TOKEN
 
 7. change directory ```cd Tron``` & create config.txt file ```notepad config.txt``` & fill all details.
 
-8. Start the tronuserbot installation setup ```python -m main```
+8. Start the tronuserbot installation setup ```python3 -m main```
 
 
 • <i>Linux:</i>
 
-1. Update and upgrade ```apt-get update && apt-get upgrade```
+1. Update and upgrade ```apt-get update -y && apt-get upgrade -y```
 
-2. Install python ```apt-get install python```
+2. Install python ```apt-get install python3 -y```
 
-3. Create python virtual environment ```python -m venv tronuserbot```
+3. Create python virtual environment ```python3 -m venv tronuserbot```
 
 4. Activate python virtual environment ```source tronuserbot/bin/activate``` & install setuptools ```pip install setuptools```
 
@@ -121,11 +113,11 @@ BOT_TOKEN
 
 7. Change directory ```cd Tron``` & create a config.txt file
 
-8. Paste your keys and values in config.text file ```nano config.text``` & fill all details.
+8. Paste your keys and values in config.text file ```nano config.txt``` & fill all details.
 
 9. After pasting all of your information, use <b>Ctrl + X</b> and enter <b>Y</b> and again hit enter button.
 
-10. Start the tronuserbot installation setup ```python -m main```
+10. Start the tronuserbot installation setup ```python3 -m main```
 
 
 <b>Note:</b> You have to add keys & values in config.txt file same as given below 👇
@@ -157,8 +149,8 @@ BOT_TOKEN
 
 * Run the given command in termux
 
-``` shell
-apt update && apt upgrade && pkg install python3 git && cd $HOME && git clone https://github.com/TronUb/Tron.git && cd Tron && python3 session.py 
+```shell
+apt update && apt upgrade && pkg install python3 git && cd $HOME && git clone https://github.com/TronUb/Tron.git && cd Tron && python3 session.py
 ```
 
 ---
@@ -192,7 +184,7 @@ async def userbot_check_handler(client, message):
 
 
 
-# bot decorator 
+# bot decorator
 @app.bot.on_update(
     handler_type=HandlerType.MESSAGE,
     filters=filters.command(
@@ -205,8 +197,14 @@ async def bot_check_handler(bot, message):
 ```
 </details>
 
+<details>
+    <summary><b>• FAQ</b></summary>
+    Will be edited soon.
+</details>
+
+
 <b>Warning ⚠️:</b>
-I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited it will be your fault, most of time nothing happens. 
+I will not be responsible for anything that happens with your account, channels, groups, friends, etc, if you get banned or limited, it will be your fault.
 
 <br />
 

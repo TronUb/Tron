@@ -9,4 +9,5 @@ config.txt
 temp.info
 downloads
 tron.db
+.venv
 
