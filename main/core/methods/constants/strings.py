@@ -104,7 +104,7 @@ class Strings(object):
         text += f"**Process:** {process}"
 
         return text
- 
+
 
     @property
     def stats_tab_string(self):

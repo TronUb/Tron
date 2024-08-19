@@ -4,44 +4,16 @@ import requests
 
 from pyrogram.types import Message
 
-from main import app, gen
+from main import app
 
 
 
 anime_suffix = "`baka`\n`bite`\n`blush`\n`bored`\n`cry`\n`cuddle`\n`dance`\n`facepalm`\n`feed`\n`happy`\n`highfive`\n`hug`\n`kiss`\n`laugh`\n`pat`\n`poke`\n`pout`\n`shrug`\n`slap`\n`sleep`\n`smile`\n`stare`\n`think`\n`thumbsup`\n`tickle`\n`wave`\n`wink`"
-anime_list = [
-    "baka",
-    "bite",
-    "blush",
-    "bored",
-    "cry",
-    "cuddle",
-    "dance",
-    "facepalm",
-    "feed",
-    "happy",
-    "highfive",
-    "hug",
-    "kiss",
-    "laugh",
-    "pat",
-    "poke",
-    "pout",
-    "shrug",
-    "slap",
-    "sleep",
-    "smile",
-    "stare",
-    "think",
-    "thumbsup",
-    "tickle",
-    "wave",
-    "wink"
-]
+anime_list = [x.strip("`") for x in anime_suffix.split("\n")]
 
 
 def get_anime_gif(arg):
-    data = requests.get(f"https://nekos.best/api/v2/{arg}").json()
+    data = requests.get(f"https://nekos.best/api/v2/{arg}", timeout=10).json()
     data = data["results"][0]
     img = data["url"]
     text = data["anime_name"]
@@ -82,7 +54,7 @@ async def animelist_handler(_, m: Message):
 async def nekopic_handler(_, m: Message):
 
     try:
-        data = requests.get("https://nekos.best/api/v2/neko").json()
+        data = requests.get("https://nekos.best/api/v2/neko", timeout=10).json()
         data = data["results"][0]
         await app.send_photo(
             m.chat.id,

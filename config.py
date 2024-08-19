@@ -87,7 +87,7 @@ class Configuration: # pylint: disable=too-few-public-methods
 
 # ---- assistant ----
     # set your assistant name, will be used in assistant tab's about section
-    ASSISTANT_NAME = getenv("ASSISTANT_NAME", "Lara")
+    ASSISTANT_NAME = getenv("ASSISTANT_NAME", "Nora")
     # set your assistant age
     ASSISTANT_AGE = getenv("ASSISTANT_AGE", "20")
     # set your assistant pic

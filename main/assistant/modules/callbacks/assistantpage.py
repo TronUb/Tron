@@ -20,7 +20,7 @@ async def _assistant(_, cb: CallbackQuery):
     try:
         await cb.edit_message_media(
             media=InputMediaPhoto(
-                media="main/others/resources/images/nora.png",
+                media=app.BotPic,
                 caption=app.assistant_tab_string
             ),
             reply_markup=app.buildMarkup(

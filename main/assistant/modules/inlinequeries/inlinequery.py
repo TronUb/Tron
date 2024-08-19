@@ -2,25 +2,19 @@
 This file gives inline results with bot having via botusername tag.
 """
 
-import re
 import asyncio
+import re
+
 from pyrogram import filters
-from pyrogram.handlers import CallbackQueryHandler
 from pyrogram.enums import ParseMode
 from pyrogram.errors import PeerIdInvalid
-from pyrogram.types import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    InlineQueryResultArticle,
-    InlineQueryResultPhoto,
-    InputTextMessageContent,
-    WebAppInfo
-)
-
-from main.userbot.client import app
+from pyrogram.handlers import CallbackQueryHandler
+from pyrogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
+                            InlineQueryResultArticle, InlineQueryResultPhoto,
+                            InputTextMessageContent)
 from telegraph.exceptions import RetryAfterError
 
-
+from main.userbot.client import app
 
 
 async def create_helpmenu_articles(query=None):
@@ -192,7 +186,7 @@ async def inline_result(_, inline_query):
                     [
                         [
                             InlineKeyboardButton(
-                                text="show message 🔐", 
+                                text="show message 🔐",
                                 callback_data=f"{app.id}|{user_id}|{number}"
                             )
                         ],

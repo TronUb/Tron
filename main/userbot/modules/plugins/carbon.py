@@ -87,8 +87,8 @@ async def create_carbon(m: Message, text, colour):
         "exportSize": "4x",}
     json["code"] = urllib.parse.quote(text)
     json["language"] = "Auto"
-    ApiUrl = "http://carbonnowsh.herokuapp.com"
-    text = post(ApiUrl, json=json, stream=True)
+    carbonUrl = "http://carbonnowsh.herokuapp.com"
+    text = post(carbonUrl, json=json, stream=True, timeout=15)
     filename = "carbon_image.png"
     if text.status_code == 200:
         text.raw.decode_content = True

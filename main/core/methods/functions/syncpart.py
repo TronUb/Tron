@@ -267,7 +267,7 @@ class SyncPart(Types):
             app.quote()
         """
 
-        results = requests.get("https://animechan.vercel.app/api/random").json()
+        results = requests.get("https://animechan.vercel.app/api/random", timeout=5).json()
         msg = f"❝ {results.get('quote')} ❞"
         msg += f" [ {results.get('anime')} ]\n\n"
         msg += f"- {results.get('character')}\n\n"

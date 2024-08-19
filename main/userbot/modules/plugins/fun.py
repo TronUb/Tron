@@ -50,7 +50,7 @@ async def slap_handler(_, m):
             await app.error(e)
     else:
         await app.send_edit(
-            "Reply to a friend to use harsh words to insult him",
+            "Reply to a friend to use harsh sentences to insult him",
             text_type=["mono"],
             delme=3
         )

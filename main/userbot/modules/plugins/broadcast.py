@@ -7,7 +7,7 @@ from pyrogram.errors import (
     ChatWriteForbidden
 )
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
 
 

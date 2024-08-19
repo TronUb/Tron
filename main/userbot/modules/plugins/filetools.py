@@ -35,10 +35,8 @@ async def zip_handler(_, m: Message):
 
         await app.send_edit("Zipping . . .", text_type=["mono"])
 
-        if app.TEMP_DICT:
-            loc = app.TEMP_DICT
-        else:
-            loc = "./downloads"
+        loc = app.TEMP_DICT if app.TEMP_DICT else "./downloads"
+
         dl = await app.download_media(
             reply,
             block=False
