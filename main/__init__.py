@@ -77,30 +77,30 @@ class Tools:
 
 
 
-    def install_numpy(self):
-        print("\nInstalling numpy . . .\n")
-        os.system('MATHLIB="m" pkg install python-numpy')
+#    def install_numpy(self):
+#        print("\nInstalling numpy . . .\n")
+#        os.system('MATHLIB="m" pkg install python-numpy')
 
 
-    def install_lxml(self):
-        if self.is_windows:
-            os.system("scoop install libxml2")
-            os.system("scoop install libxslt")
-        else:
-            os.system("apt install libxml2 libxslt")
-        print("\nInstalling lxml . . .\n")
-        os.system("CFLAGS='-O0' python3 -m pip install lxml")
+#    def install_lxml(self):
+#        if self.is_windows:
+#            os.system("scoop install libxml2")
+  #          os.system("scoop install libxslt")
+ #       else:
+#            os.system("apt install libxml2 libxslt")
+#        print("\nInstalling lxml . . .\n")
+#        os.system("CFLAGS='-O0' python3 -m pip install lxml")
 
-    def install_psycopg2(self):
+#    def install_psycopg2(self):
         if self.is_windows:
             os.system("scoop install postgresql python make clang")
         else:
             os.system("apt install postgresql python make clang")
         print("\nInstalling psycopg2 . . .\n")
-        os.system("python3 -m pip install psycopg2")
+#        os.system("python3 -m pip install psycopg2")
 
-    def install_scoop(self):
-        os.system("winget install scoop --accept-package-agreements")
+#    def install_scoop(self):
+ #       os.system("winget install scoop --accept-package-agreements")
 
 
     def install_pillow(self):
