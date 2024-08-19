@@ -61,13 +61,13 @@ class Tools:
         print("Checking Packages:\n\n")
         for pkg in self.requirements():
             try:
-                if pkg == "numpy":
-                    self.install_numpy()
-                elif pkg == "lxml":
-                    self.install_lxml()
-                elif pkg == "psycopg2":
-                    self.install_psycopg2()
-                elif pkg == "pillow":
+                if #pkg == "numpy":
+                    #self.install_numpy()
+                #elif pkg == "lxml":
+                    #self.install_lxml()
+                #elif pkg == "psycopg2":
+                    #self.install_psycopg2()
+                 pkg == "pillow":
                     self. install_pillow()
                 else:
                     os.system(f"python3 -m pip install {pkg}")
