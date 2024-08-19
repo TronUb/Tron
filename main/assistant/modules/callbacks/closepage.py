@@ -21,7 +21,7 @@ async def close_helpmenu_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_media(
             media=InputMediaPhoto(
-                media="main/others/resources/images/tron-square.png", 
+                media=app.BotPic,
                 caption=app.close_tab_string
             ),
             reply_markup=app.buildMarkup(
