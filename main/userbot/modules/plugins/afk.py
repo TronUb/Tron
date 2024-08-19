@@ -7,6 +7,7 @@ import time
 from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
+from pyrogram.errors import PeerIdInvalid
 
 from main import app
 from main.core.enums import UserType
@@ -66,7 +67,8 @@ async def offlinemention_handler(_, m: Message):
 
         text = m.text if m.text else "" # could be a media so
 
-        await app.send_message(
+        try:
+            await app.send_message(
             app.LOG_CHAT,
             f"""
             #mention\n\n
@@ -77,6 +79,9 @@ async def offlinemention_handler(_, m: Message):
             [Go to message]({m.link})
             """
         )
+        except PeerIdInvalid:
+            pass
+
     except Exception as e:
         await app.error(e)
 
