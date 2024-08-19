@@ -52,7 +52,7 @@ async def offlinemention_handler(_, m: Message):
         if not (get or get["afk"]):
             return None
 
-        reason = f"**Because:** {reason}" if get["reason"] else ""
+        reason = f"**Because:** {get["reason"]}" if get["reason"] else "No Reason Mentioned"
 
         await app.send_message(
             m.chat.id,
