@@ -8,7 +8,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
 
 
@@ -52,7 +52,7 @@ async def offlinemention_handler(_, m: Message):
         if not (get or get["afk"]):
             return None
 
-        reason = f"**Because:** {get["reason"]}" if get["reason"] else "No Reason Mentioned"
+        reason = f"**Because:** {get['reason']}" if get["reason"] else "No Reason Mentioned"
 
         await app.send_message(
             m.chat.id,
