@@ -1,6 +1,5 @@
 CurrencyConverter
 SQLAlchemy==1.3.23
-lxml
 Wikipedia-API
 aiohttp
 bing-image-downloader
@@ -24,4 +23,3 @@ pytz
 qrcode
 speedtest-cli==2.1.3
 telegraph
-youtube-dl
