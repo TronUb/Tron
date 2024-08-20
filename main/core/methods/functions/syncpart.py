@@ -5,6 +5,7 @@ import os
 import time
 import math
 import random
+import json
 import datetime
 import html
 import inspect
@@ -270,20 +271,45 @@ class SyncPart(Types):
 
         anime_quote_url = "https://gist.githubusercontent.com/vikramisdev/7a53a8eaac465ad065d2fd90faef55cc/raw/anime_quotes.json"
         msg = ""
+        result = None
+        filename = os.path.join(self.TEMP_DICT, "anime_quotes.json")
 
-        r = list(requests.get(anime_quote_url, timeout=5).json())
-        random_index = random.randint(0, len(r) - 1)
-        results = r[random_index]
+        # If the file doesn't exist, get and save it
+        if not os.path.exists(filename):
+            try:
+                response = requests.get(anime_quote_url, timeout=5)
+                response.raise_for_status()  # Check if the request was successful
+                data = response.json()  # Parse the JSON response
 
-
-        if results is not None:
-            msg += f"❝ {results.get('quote')} ❞"
-            msg += f" [ {results.get('anime')} ]\n\n"
-            msg += f"- {results.get('character')}\n\n"
+                # Write the JSON data to a file
+                with open(filename, "w") as f:
+                    json.dump(data, f)
+            except requests.RequestException as e:
+                return f"Error fetching data: {e}"
         else:
-            msg = "No Quotes Found"
+            try:
+                # Read the JSON data from the file
+                with open(filename, "r") as f:
+                    data = json.load(f)
+            except (IOError, json.JSONDecodeError) as e:
+                return f"Error reading data: {e}"
+
+        # Check if data is a list and select a random item
+        if isinstance(data, list) and len(data) > 0:
+            random_index = random.randint(0, len(data) - 1)
+            result = data[random_index]
+
+            if result:
+                msg += f"❝ {result.get('quote')} ❞"
+                msg += f" [ {result.get('anime')} ]\n\n"
+                msg += f"- {result.get('character')}\n\n"
+            else:
+                msg = "No Quotes Found"
+        else:
+            msg = "No Quotes Found or data is not a list"
 
         return msg
+
 
 
     def ialive_pic(
