@@ -4,6 +4,7 @@ import re
 import os
 import time
 import math
+import random
 import datetime
 import html
 import inspect
@@ -267,10 +268,21 @@ class SyncPart(Types):
             app.quote()
         """
 
-        results = requests.get("https://animechan.vercel.app/api/random", timeout=5).json()
-        msg = f"❝ {results.get('quote')} ❞"
-        msg += f" [ {results.get('anime')} ]\n\n"
-        msg += f"- {results.get('character')}\n\n"
+        anime_quote_url = "https://gist.github.com/vikramisdev/7a53a8eaac465ad065d2fd90faef55cc"
+        msg = ""
+
+        r = list(requests.get(anime_quote_url, timeout=5).json())
+        random_index = random.randint(0, len(r) - 1)
+        results = r[random_index]
+
+
+        if results is not None:
+            msg += f"❝ {results.get('quote')} ❞"
+            msg += f" [ {results.get('anime')} ]\n\n"
+            msg += f"- {results.get('character')}\n\n"
+        else:
+            msg = "No Quotes Found"
+
         return msg
 
 
