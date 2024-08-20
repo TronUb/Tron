@@ -19,7 +19,7 @@ class Config:
 
 def isLocalHost():
     """Check if it is localhost"""
-    return os.path.exists("../config.txt")
+    return os.path.exists("config.txt")
 
 
 class Tools:
