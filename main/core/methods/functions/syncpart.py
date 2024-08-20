@@ -268,7 +268,7 @@ class SyncPart(Types):
             app.quote()
         """
 
-        anime_quote_url = "https://gist.github.com/vikramisdev/7a53a8eaac465ad065d2fd90faef55cc"
+        anime_quote_url = "https://gist.githubusercontent.com/vikramisdev/7a53a8eaac465ad065d2fd90faef55cc/raw/anime_quotes.json"
         msg = ""
 
         r = list(requests.get(anime_quote_url, timeout=5).json())
