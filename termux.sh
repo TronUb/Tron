@@ -4,6 +4,18 @@
 # File containing the list of required packages
 REQUIREMENTS_FILE="requirements.txt"
 
+# Windows fails to install Tgcrypto, it shouldnt be
+# added to the same requirements.txt file
+install_tgcrypto() {
+    TGCRYPTO="TgCrypto"
+
+    if pip show "$TGCRYPTO" &> /dev/null; then
+        echo "$TGCRYPTO is installed."
+    else
+        echo "$TGCRYPTO is not installed, Trying to install ..."
+    fi
+}
+
 # Function to check and install Python 3
 install_python() {
     if command -v python3 &> /dev/null; then
