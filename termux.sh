@@ -72,3 +72,5 @@ main() {
     install_userbot_dependencies
     run_userbot
 }
+
+main
