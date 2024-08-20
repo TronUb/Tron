@@ -34,6 +34,30 @@ install_python() {
     fi
 }
 
+install_numpy() {
+    MATHLIB="m" pkg install python-numpy
+}
+
+install_xml() {
+    apt install libxml2 libxslt
+    CFLAGS='-O0' python3 -m pip install lxml
+}
+
+install_psycopg2() {
+    apt install postgresql python make clang
+    python3 -m pip install psycopg2
+}
+
+install_pillow() {
+    apt install libjpeg-turbo
+    LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"
+    python3 -m pip install pillow
+}
+
+install_ffmpeg() {
+    apt install ffmpeg
+}
+
 install_userbot_dependencies() {
     # Check if the requirements file exists
     if [ ! -f "$REQUIREMENTS_FILE" ]; then

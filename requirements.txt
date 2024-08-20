@@ -13,7 +13,7 @@ git-python
 hachoir
 heroku3
 moviepy
-numpy
+numpy==2.0.0
 pillow
 psycopg2
 pySmartDL
