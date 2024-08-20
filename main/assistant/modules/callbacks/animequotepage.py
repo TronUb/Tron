@@ -14,8 +14,7 @@ from main.userbot.client import app
 async def anime_quotes_callback(_, cb: CallbackQuery):
     try:
         await cb.edit_message_text(
-            "`Searching quote . . .`",
-            reply_markup=reply_markup
+            "`Searching quote . . .`"
         )
         await cb.edit_message_text(
             app.animeQuote(),
