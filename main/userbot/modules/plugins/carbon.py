@@ -8,7 +8,7 @@ from requests import post
 
 from pyrogram.types import Message
 
-from main import app, gen
+from main import app
 
 
 
