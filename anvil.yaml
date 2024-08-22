@@ -1,0 +1,7 @@
+runtime_options: {client_version: '2', version: 2, server_spec: null}
+native_deps:
+  head_html: |2
+
+    <style>
+      .anvil-panel-section-container { padding: 0 15px; }
+    </style>
