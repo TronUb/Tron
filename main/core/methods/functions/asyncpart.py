@@ -50,7 +50,7 @@ def messageobject(anydict: dict):
     ]
     try:
         # the passed message object
-        # must be at the top 
+        # must be at the top
         return all_messages[0]
     except IndexError:
         return None
@@ -112,7 +112,7 @@ class AsyncPart(object):
         ):
         """
         Check if you/user are an admin in chat.
-        
+
         params::
             privileges: "raw.types.ChatAdminRights"
             chat_id: Union[str, int] = None
@@ -131,7 +131,7 @@ class AsyncPart(object):
             10. manage_call
             11. other
         """
-        
+
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
@@ -426,7 +426,7 @@ class AsyncPart(object):
                 r = []
             else:
                 r = [
-                        f"**CMD:** `{self.Trigger[0]}{cmd}`\n**INFO:** `{usage}`\n\n" 
+                        f"**CMD:** `{self.Trigger[0]}{cmd}`\n**INFO:** `{usage}`\n\n"
                         for cmd, usage in zip(
                             self.CMD_HELP.get(module).keys(),
                             self.CMD_HELP.get(module).values()
@@ -525,8 +525,8 @@ class AsyncPart(object):
             if delme > 0:
                 self.createThread(
                     self.sleep_delete,
-                    message=m, 
-                    sec=delme, 
+                    message=m,
+                    sec=delme,
                     delmsg=True
                 )
 
@@ -555,7 +555,7 @@ class AsyncPart(object):
 
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
-    
+
         if m.chat.type == ChatType.PRIVATE:
             await self.send_edit(
                 "Please use these commands in groups.",
@@ -601,7 +601,7 @@ class AsyncPart(object):
                 )
                 if os.path.exists(path):
                     os.remove(path)
-                    
+
                 return True
             else:
                 return path
@@ -744,7 +744,7 @@ class AsyncPart(object):
         params:
             chat_id: Union[int, str]
             user_id: Union[int, str, List[int], List[str]]
-   
+
         ex: (async)
             await app.add_users(user_id, chat_id)
         """
