@@ -54,6 +54,10 @@ async def animelist_handler(_, m: Message):
 async def nekopic_handler(_, m: Message):
 
     try:
+        await app.send_edit(
+                "Getting a neko girl image ...",
+                text_type=["mono"]
+            )
         data = requests.get("https://nekos.best/api/v2/neko", timeout=10).json()
         data = data["results"][0]
         await app.send_photo(
@@ -83,5 +87,9 @@ async def animegif_handler(_, m: Message):
             await m.delete()
         else:
             await app.send_edit("Use these suffix only:\n\n" + anime_suffix)
+    except IndexError:
+        await app.send_edit(
+                "The command is like, `.animegif wink`",
+            )
     except Exception as e:
         await app.error(e)

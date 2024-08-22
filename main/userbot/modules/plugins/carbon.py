@@ -45,7 +45,7 @@ async def carbon_handler(_, m: Message):
     oldmsg = m # fixed for-->  m = send_edit() replaces the variable
     if app.long() < 2:
         return await app.send_edit(
-            f"Usage:\n\n`{app.Trigger()[0]}carbon [colour] [text]`\n`{app.Trigger()[0]}carbon [text]`\n\n**Note:** Default colour is aqua",
+            f"Usage:\n\n`{app.Trigger[0]}carbon [colour] [text]`\n`{app.Trigger[0]}carbon [text]`\n\n**Note:** Default colour is aqua",
             delme=4
         )
 

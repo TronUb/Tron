@@ -88,6 +88,11 @@ async def inlinealive_handler(_, m: Message):
 async def inlinequote_handler(_, m: Message):
 
     try:
+        await app.send_edit(
+                "Finding anime quotes ...",
+                text_type=["mono"]
+            )
+
         try:
             result = await app.get_inline_bot_results(app.bot.username, "#quote")
         except BotInlineDisabled:
