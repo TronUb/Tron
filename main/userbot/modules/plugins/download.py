@@ -97,11 +97,10 @@ async def download_handler(_, m: Message):
                 await app.send_edit("Download failed, please try again.", text_type=["mono"])
             else:
                 await app.send_edit(
-                    f"**Downloaded to •>**\n\n```{location}```\n\n**Time:** `{duration}`"
+                    f"**Downloaded to •>**\n\n`{location}`\n\n**Time:** `{duration}`"
                 )
         except Exception as e:
             await app.error(e)
-            await app.send_edit("Failed To Download, look in log chat for more info.")
 
     elif app.long() > 1:
         try:

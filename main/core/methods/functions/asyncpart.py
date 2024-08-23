@@ -590,14 +590,14 @@ class AsyncPart(object):
             frame = inspect.currentframe().f_back
             m = messageobject(frame.f_locals)
             path = f"./downloads/{filename}"
-            file = open(path, "w+")
-            file.write(content)
-            file.close()
+            with open(path, "w+") as f:
+                f.write(content)
+
             if send:
                 await self.send_document(
                     m.chat.id,
                     path,
-                    caption = caption if caption else f"**Uploaded By:** {self.UserMention()}"
+                    caption = caption if caption else f"**Uploaded By:** {self.UserMention}"
                 )
                 if os.path.exists(path):
                     os.remove(path)
