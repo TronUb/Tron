@@ -1,6 +1,6 @@
 import os
 import re
-from moviepy.editor import *
+from moviepy import *
 
 from pyrogram.types import Message
 
@@ -33,7 +33,7 @@ def not_reply(message):
 
     if not reply:
         return True
-    
+
     if not reply.video:
         return True
 
@@ -251,7 +251,7 @@ async def vsubclip_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/subclipvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -335,7 +335,7 @@ async def vafadein_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/fadeinvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -409,7 +409,7 @@ async def vafadeout_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/fadeoutvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -482,7 +482,7 @@ async def vsetaudio_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/setaudiovideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -549,7 +549,7 @@ async def vspeed_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/speedvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -614,7 +614,7 @@ async def vfadeout_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/fadeoutvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]
@@ -684,7 +684,7 @@ async def vfadein_handler(_, m: Message):
     try:
         reply = m.reply_to_message
         filename = "./downloads/fadeinvideo.mp4"
-    
+
         await app.send_edit(
             "Processing . . .",
             text_type=["mono"]

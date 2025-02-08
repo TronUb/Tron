@@ -9,10 +9,10 @@ cinemagoer
 covid
 deep-translator==1.8.3
 gTTS
-git-python
+GitPython
 hachoir
 heroku3
-moviepy
+moviepy==2.1.2
 numpy==2.0.0
 pillow
 psycopg2
