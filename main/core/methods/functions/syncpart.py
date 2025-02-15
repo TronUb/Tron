@@ -38,9 +38,6 @@ from pySmartDL import SmartDL
 from youtube_dl import YoutubeDL
 
 
-
-
-
 def messageobject(anydict: dict):
     message = None
     all_messages = [
@@ -69,7 +66,6 @@ class Types(object):
     CONTACT = 11
 
 
-
 class SyncPart(Types):
     """You must use this class with inherited Config class"""
     def showdate(
@@ -91,7 +87,6 @@ class SyncPart(Types):
         mydate = get_date.strftime("%d %b %Y")
         return mydate
 
-
     def showtime(
         self
         ):
@@ -110,7 +105,6 @@ class SyncPart(Types):
         get_time = datetime.datetime.now(today)
         mytime = get_time.strftime("%r")
         return mytime
-
 
     def long(
         self,
@@ -139,7 +133,6 @@ class SyncPart(Types):
         else:
             return len(m.text.split() or m.caption.split() or "") or None
 
-
     def textlen(
         self
         ):
@@ -162,7 +155,6 @@ class SyncPart(Types):
 
         return len([x for x in m.text or m.caption or ""])
 
-
     def rem_dual(
         self,
         list1: list,
@@ -182,7 +174,6 @@ class SyncPart(Types):
 
         return list(set(list1) - set(list2))
 
-
     def is_str(
         self,
         element
@@ -199,7 +190,6 @@ class SyncPart(Types):
         """
 
         return isinstance(element, str)
-
 
     def is_bool(
         self,
@@ -218,7 +208,6 @@ class SyncPart(Types):
 
         return isinstance(element, bool)
 
-
     def is_float(
         self,
         element
@@ -236,7 +225,6 @@ class SyncPart(Types):
 
         return isinstance(element, float)
 
-
     def is_int(
         self,
         element
@@ -253,7 +241,6 @@ class SyncPart(Types):
         """
 
         return isinstance(element, int)
-
 
     def animeQuote(
         self
@@ -310,8 +297,6 @@ class SyncPart(Types):
 
         return msg
 
-
-
     def ialive_pic(
         self
         ):
@@ -327,7 +312,6 @@ class SyncPart(Types):
         """
 
         return self.getdv("USER_PIC") or self.UserPic or None
-
 
     def get_file_id(
         self,
@@ -356,7 +340,6 @@ class SyncPart(Types):
                 return {"data":message.text, "caption":None, "type":"text"}
         return {"data":None, "caption":None, "type":None}
 
-
     def clear_screen(
         self
         ):
@@ -373,7 +356,6 @@ class SyncPart(Types):
 
         subprocess.call("clear" if os.name == "posix" else "cls")
 
-
     def uptime(
         self
         ):
@@ -388,8 +370,7 @@ class SyncPart(Types):
             app.uptime()
         """
 
-        return self.GetReadableTime(time.time() - self.StartTime)
-
+        return self.GetReadableTime(time.time() - self.start_time)
 
     def import_module(
         self,
@@ -442,7 +423,6 @@ class SyncPart(Types):
                 print(f"Installing = [{x}] [{Colors.green + check_mark + Colors.reset}]")
         return count
 
-
     def db_status(
         self
         ):
@@ -458,7 +438,6 @@ class SyncPart(Types):
         """
 
         return "Available" if hasattr(self, "DB_URI") and self.DB_URI else "Unavailable"
-
 
     @property
     def herokuApp(self):
@@ -477,7 +456,6 @@ class SyncPart(Types):
 
         account = heroku3.from_key(self.HerokuApiKey)
         return account.apps()[self.HerokuAppName]
-
 
     def HelpDex(self, page_number, allmodules, prefix):
         rows = 4
@@ -524,7 +502,6 @@ class SyncPart(Types):
             ]
         return twins
 
-
     def GetMessageType(self, msg, include_text=True):
         content = None
         message_type = None
@@ -570,7 +547,6 @@ class SyncPart(Types):
             message_type = Types.ANIMATION
         return content, message_type
 
-
     def GetNoteType(self, msg):
         reply = msg.reply_to_message
         note_name = None
@@ -605,7 +581,6 @@ class SyncPart(Types):
 
         return note_name, text, message_type, content
 
-
     def FetchNoteType(self, msg):
         message_type = None
         content = None
@@ -621,7 +596,6 @@ class SyncPart(Types):
 
         return note_name, text, message_type, content
 
-
     def ClearString(self, msg: str):
         msg = re.sub(r"\<code\>(.*)\<\/code\>", r"\g<1>", msg)
         msg = re.sub(r"\<i\>(.*)\<\/i\>", r"\g<1>", msg)
@@ -632,7 +606,6 @@ class SyncPart(Types):
         msg = re.sub(r"\`(.*)\`", r"\g<1>", msg)
         return msg
 
-
     def QuoteHtml(self, text: str) -> str:
         """
         Escape unexpected HTML characters.
@@ -640,7 +613,6 @@ class SyncPart(Types):
         :return:
         """
         return html.escape(text, quote=False)
-
 
     def TimeFormator(self, milliseconds: int) -> str:
         """ converts seconds into human readable format """
@@ -657,7 +629,6 @@ class SyncPart(Types):
         )
         return tmp[:-2]
 
-
     def HumanBytes(self, size: int) -> str:
         """ converts bytes into human readable format """
         if not size:
@@ -669,7 +640,6 @@ class SyncPart(Types):
             size /= power
             number += 1
         return str(round(size, 2)) + " " + dict_power_n[number] + "B"
-
 
     def DictSizeInBytes(self, directory):
         """Returns the `directory` size in bytes."""
@@ -692,7 +662,6 @@ class SyncPart(Types):
             return 0
         return total
 
-
     def SizeFormat(self, b, factor=1024, suffix="B"):
         for unit in ["", "K", "M", "G", "T", "P", "E", "Z"]:
             if b < factor:
@@ -700,29 +669,23 @@ class SyncPart(Types):
             b /= factor
         return f"{b:.2f}Y{suffix}"
 
-
     def DictSize(self, location):
         return self.SizeFormat(self.DictSizeInBytes(location))
-
 
     def CleanHtml(self, raw_html):
         cleanr = re.compile("<.*?>")
         cleantext = re.sub(cleanr, "", raw_html)
         return cleantext
 
-
     def EscapeMarkdown(self, text):
         escape_chars = r"\*_`\["
         return re.sub(r"([%s])" % escape_chars, r"\\\1", text)
 
-
     def MentionHtml(self, user_id, name):
         return '<a href="tg://user?id={}">{}</a>'.format(user_id, html.escape(name))
 
-
     def MentionMarkdown(self, user_id, name):
         return '[{}](tg://user?id={})'.format(self.EscapeMarkdown(name), user_id)
-
 
     def ParseButton(self, text):
         markdown_note = text
@@ -753,7 +716,6 @@ class SyncPart(Types):
 
         return note_data, buttons
 
-
     def BuildKeyboard(self, buttons):
         keyb = []
         keyb.clear()
@@ -766,7 +728,6 @@ class SyncPart(Types):
                     )
             )
         return keyb
-
 
     def TimeParser(self, start, end=None) -> int:
         if end is None:
@@ -793,7 +754,6 @@ class SyncPart(Types):
             times = "{} miliseconds".format(time_end)
         return times
 
-
     def ConvertSize(self, size_bytes):
         if size_bytes == 0:
             return "0B"
@@ -802,7 +762,6 @@ class SyncPart(Types):
         p = math.pow(1024, i)
         s = round(size_bytes / p, 2)
         return "%s %s" % (s, size_name[i])
-
 
     def GetArgs(self, message=None):
         frame = inspect.currentframe().f_back
@@ -826,7 +785,6 @@ class SyncPart(Types):
                 return m
         return type("argclass", (object,), {"text" : None})()
 
-
     def SpeedConvert(self, bytesize) -> str:
         " converts bytes into kb, mb, gb, tb "
         power = 2**10 # 1024
@@ -841,7 +799,6 @@ class SyncPart(Types):
             bytesize /= power
             zero += 1
         return f"{round(bytesize, 2)} {units[zero]}"
-
 
     def GetReadableTime(self, seconds: int) -> str:
         " get time formated from seconds "
@@ -868,7 +825,6 @@ class SyncPart(Types):
 
         return ping_time
 
-
     def GenTgThumb(self, downloaded_file_name: str) -> str:
         " generates thumbnail of downloaded telegram media "
         Image.open(downloaded_file_name).convert("RGB").save(downloaded_file_name)
@@ -881,11 +837,9 @@ class SyncPart(Types):
         img.save(downloaded_file_name, "JPEG")
         return downloaded_file_name
 
-
     def ChatType(self, m: Message):
         " get chat type "
         return m.chat.type
-
 
     def FormatText(self, text, textformat=[]):
         " get formated text (html) "
@@ -900,12 +854,10 @@ class SyncPart(Types):
             text = format_dict.get(x)
         return text
 
-
     def PyDownload(self, url: str):
         obj = SmartDL(url, self.TEMP_DICT, progress_bar=False)
         obj.start()
         return obj.get_dest()
-
 
     def Ytdl(
         self,
@@ -934,7 +886,6 @@ class SyncPart(Types):
 
         return yt
 
-
     @staticmethod
     def buildButton(text: str, callback_data: str=None, url: str=None, switch_inline_query_current_chat: str=None):
         if url is not None:
@@ -955,11 +906,9 @@ class SyncPart(Types):
         else:
             raise Exception("Only these params 'url', 'callback_data', 'switch_inline_query_current_chat' are accepted.")
 
-
     @staticmethod
     def buildMarkup(*buttons):
         return InlineKeyboardMarkup([*buttons])
-
 
     @staticmethod
     def createThread(func: callable, start_now: bool=True, *_args, **_kwargs):

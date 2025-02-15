@@ -1,15 +1,29 @@
-__pycache__
+# 🔹 Python Bytecode & Caches
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# 🔹 Virtual Environment & Dependencies
+.venv/
+.Python
+installed_dependencies.txt
+
+# 🔹 Pyrogram & Session Files
 *.session
 *.session-journal
-.Python
-.cache
-.vscode
+tron.db
+
+# 🔹 Configuration & Settings
 config.text
 config.txt
-temp.info
-/downloads/*
-tron.db
-.venv
-installed_dependencies.txt
 .anvil_editor.yaml
 anvil.yaml
+
+# 🔹 Logs & Temporary Files
+temp.info
+.cache
+.vscode
+
+# 🔹 Downloads & Generated Files
+downloads

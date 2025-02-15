@@ -21,9 +21,7 @@ from pyrogram.errors import (
 from main.others.colors import Colors
 from main.assistant.client import Bot
 from main.core import Core
-from main.core.types import Message
-
-
+from main.core.types import Message as TronMessage
 
 
 NEW_MESSAGE_UPDATES = (
@@ -45,7 +43,7 @@ class SuperClient(Core, Client):
         )
         # start the bot and setup whatever needed
         # before other classes start requesting that
-        # information which is not available at the 
+        # information which is not available at the
         # moment & stop it to start it later
         self.start()
         self.me = self.get_chat("me")
@@ -61,12 +59,16 @@ class SuperClient(Core, Client):
         dp_name = f"dp_{self.id}.jpg"
         dp_path = f"./downloads/{dp_name}"
         if not os.path.exists(dp_path):
-            self.pic = self.download_media(self.me.photo.big_file_id, dp_name) if self.me.photo else None 
+            self.pic = (
+                self.download_media(self.me.photo.big_file_id, dp_name)
+                if self.me.photo
+                else None
+            )
 
         self.stop()
         self.is_bot = None
 
-        # start the bot by initialising 
+        # start the bot by initialising
         self.bot = Bot()
         self.__class__.__module__ = "pyrogram.client"
 
@@ -81,23 +83,18 @@ class SuperClient(Core, Client):
             if not file.startswith("__"):
                 self.CMD_HELP.update({file.split(".")[0]:{}})
 
-
     async def message_parser(self, update, users, chats):
         """ custom message parser """
         return (
-            await Message.parse(
+            await TronMessage.parse(
                 self,
                 update.message,
                 users,
                 chats,
-                isinstance(
-                    update,
-                    UpdateNewScheduledMessage
-                )
+                isinstance(update, UpdateNewScheduledMessage),
             ),
-            handlers.MessageHandler
+            handlers.MessageHandler,
         )
-
 
     async def start_userbot(self):
         """ this function starts the pyrogram userbot client. """
@@ -112,7 +109,6 @@ class SuperClient(Core, Client):
             print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.green}ON{Colors.reset}] {Colors.reset}", end="\n\n")
         else:
             print("Userbot is not activated.\n")
-
 
     async def start_bot(self):
         """ This is the main startup function to start both clients i.e assistant & userbot.

@@ -1,91 +1,99 @@
-""" everything starts here """
+""" Everything starts here """
 
 import os
-import socket
 import platform
-import subprocess
-from importlib import metadata
 from main.others import Colors
 from config import Configuration
 
 
-# check which packages are installed
-installed_python_libs_file = "../installed_requirements.txt"
+# Path to check installed Python libraries
+INSTALLED_LIBS_FILE = "../installed_requirements.txt"
+
 
 class Config:
-    """This class generates the configs """
-    pass
+    """Holds dynamically generated configuration values."""
 
 
-def isLocalHost():
-    """Check if it is localhost"""
+def is_local_host():
+    """Check if the script is running locally."""
     return os.path.exists("config.txt")
 
 
 class Tools:
-    """Use it for installing the required packages """
-    device = platform.uname()[0].lower()
-    is_linux = device=="linux"
-    is_windows = device=="windows"
+    """Handles setup tasks like installing packages and configuring settings."""
 
-    @property
+    def __init__(self):
+        self.device = platform.system().lower()
+        self.is_linux = self.device == "linux"
+        self.is_windows = self.device == "windows"
+
     def clear_screen(self):
+        """Clear terminal screen based on OS."""
         os.system("clear" if self.is_linux else "cls")
 
     def setup_config(self):
+        """Read configuration from file and set attributes dynamically."""
         count = 1
         self.clear_screen
 
-        # check if the user config file exists
-        if os.path.exists("config.txt"):
-            print("config.txt file exists: Yes\n\n")
-            with open("config.txt", "r", encoding="UTF-8") as f:
-                content = [x for x in f.read().split("\n") if x not in ("\n", "")]
+        config_file = "config.txt"
 
-            # set text file config values
-            print(Colors.block + "Setting configuration values.\n\n" + Colors.reset)
-            for x in content:
-                data = x.split("=")
-                file_value = data[1]
-                if data[1].isdigit():
-                    file_value = int(data[1])
+        if os.path.exists(config_file):
+            print(f"{Colors.block}Config file found: Yes{Colors.reset}\n")
 
-                setattr(Config, data[0], file_value)
-                print(f"[{count}] Added config = {data[0]} with value = {file_value}\n")
+            with open(config_file, "r", encoding="utf-8") as f:
+                content = [line.strip() for line in f.readlines() if line.strip()]
+
+            print(f"{Colors.block}Setting configuration values...{Colors.reset}\n")
+
+            for line in content:
+                key, value = line.split("=")
+                value = int(value) if value.isdigit() else value
+
+                setattr(Config, key, value)
+                print(f"[{count}] Config set: {key} = {value}")
                 count += 1
 
         else:
-            print("config.txt file doesn't exist, existing. . .")
-            exit(0)
+            print("Config file not found. Exiting...")
+            exit(1)
 
-        # set remaining necessary config values
-        print(Colors.block + "\nSetting remaining configuration values\n\n" + Colors.reset)
+        # Load remaining necessary configuration values
+        print(
+            f"\n{Colors.block}Setting remaining configuration values...{Colors.reset}\n"
+        )
+
         for attr in dir(Configuration):
-            value = getattr(Configuration, attr, None)
-
             if attr.isupper() and not hasattr(Config, attr):
+                value = getattr(Configuration, attr, None)
                 setattr(Config, attr, value)
-                print(f"[{count}] Added config = {attr} with value = {value}\n")
+                print(f"[{count}] Config set: {attr} = {value}")
                 count += 1
 
-        clear = input(f"{Colors.block}Should I clear the screen ?{Colors.reset} (Y/N): ")
-        if (not clear) or (clear and clear.upper() == "Y"):
+        if (
+            input(f"\n{Colors.block}Clear screen? (Y/N): {Colors.reset} ")
+            .strip()
+            .upper()
+            == "Y"
+        ):
             self.clear_screen
 
 
-
-if isLocalHost():
+# Initialize configurations
+if is_local_host():
     tools = Tools()
     tools.setup_config()
 else:
-    print("It looks like you deployed this using Docker, Thats why Setting the Non-LocalHost setup ... !")
+    print("Running in Docker environment. Applying non-localhost setup...")
+
     for attr in dir(Configuration):
-        value = getattr(Configuration, attr, None)
         if attr.isupper() and not hasattr(Config, attr):
-            setattr(Config, attr, value)
+            setattr(Config, attr, getattr(Configuration, attr, None))
 
 
-# default import
+# Import and initialize userbot
 from main.userbot import app
+
 bot = app.bot
+
 from main.core.filters import gen

@@ -59,12 +59,9 @@ async def create_helpmenu_articles(query=None):
         ]
 
 
-
-
 # via bot messages
 @app.bot.on_inline_query(filters.user(app.AllUsersId))
 async def inline_result(_, inline_query):
-    print(inline_query)
     query = inline_query.query
     if query.startswith("#pmpermit"):
         await inline_query.answer(
@@ -199,31 +196,31 @@ async def inline_result(_, inline_query):
 
         # update values when results are sent
         if int(number) > 0:
-             old.update({number:text[1]}) # new message
+            old.update({number:text[1]}) # new message
         else:
             app.bot.whisper_ids.update({str(user_id):{number:text[1]}}) # first message
 
         async def whisper_callback(client, cb):
-                    try:
-                        ids = cb.data.split("|")
-                        if str(cb.from_user.id) in ids:
-                            whisper_msg = client.whisper_ids.get(ids[1])
-                            if whisper_msg:
-                                num = whisper_msg.get(ids[2])
-                            else:
-                                num = None
+            try:
+                ids = cb.data.split("|")
+                if str(cb.from_user.id) in ids:
+                    whisper_msg = client.whisper_ids.get(ids[1])
+                    if whisper_msg:
+                        num = whisper_msg.get(ids[2])
+                    else:
+                        num = None
 
-                            if num:
-                                await cb.answer(num, show_alert=True)
-                                return True
-                            else:
-                                await cb.answer("whipser message expired.", show_alert=True)
-                                return True
+                    if num:
+                        await cb.answer(num, show_alert=True)
+                        return True
+                    else:
+                        await cb.answer("whipser message expired.", show_alert=True)
+                        return True
 
-                        else:
-                            await cb.answer("You're not allowed to view this message", show_alert=True)
-                    except Exception as e:
-                        print(e)
+                else:
+                    await cb.answer("You're not allowed to view this message", show_alert=True)
+            except Exception as e:
+                print(e)
 
         return app.bot.add_handler(CallbackQueryHandler(callback=whisper_callback, filters=filters.regex(r"\d+[|]\d+[|]\d+")))
 

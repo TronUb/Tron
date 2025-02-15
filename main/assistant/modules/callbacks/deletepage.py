@@ -12,8 +12,6 @@ from pyrogram.errors import PeerIdInvalid
 from main.userbot.client import app
 
 
-
-
 @app.bot.on_callback_query(filters.regex("delete-tab"))
 @app.alert_user
 async def delete_helpmenu_callback(_, cb: CallbackQuery):
@@ -42,10 +40,6 @@ async def delete_helpmenu_callback(_, cb: CallbackQuery):
         )
 
     except (PeerIdInvalid, KeyError, ValueError):
-        await app.delete_messages(
-            chat_id=chat_id,
-            message_ids=message_id
-        )
-        print(chat_id, message_id)
+        await app.delete_messages(chat_id=chat_id, message_ids=message_id)
     except Exception as e:
         await app.error(e)

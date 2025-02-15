@@ -11,8 +11,6 @@ from pyrogram.types import (
 from main.userbot.client import app
 
 
-
-
 # plugins page
 @app.bot.on_callback_query(filters.regex("plugins-tab"))
 @app.alert_user
@@ -34,8 +32,6 @@ async def plugins_next_page_callback(_, cb: CallbackQuery):
     try:
         current_page_number = int(cb.matches[0].group(1))
         btn = app.HelpDex(current_page_number + 1, app.CMD_HELP, "navigate")
-        print(cb.matches[0])
-        print(dir(cb.matches[0]))
         await cb.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(btn)
         )

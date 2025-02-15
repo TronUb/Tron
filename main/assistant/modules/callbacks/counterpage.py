@@ -11,8 +11,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
-
 @app.bot.on_callback_query(filters.regex("counter-tab"))
 async def counter_callback(_, cb: CallbackQuery):
     try:
@@ -30,12 +28,9 @@ async def counter_callback(_, cb: CallbackQuery):
         await app.error(e)
 
 
-
-
 @app.bot.on_callback_query(filters.regex("counter-increment-tab"))
 async def counter_increment_callback(_, cb: CallbackQuery):
     try:
-        print(cb)
         if cb.inline_message_id:
             dc_id, message_id, chat_id, query_id = struct.unpack(
                 "<iiiq",
@@ -51,7 +46,7 @@ async def counter_increment_callback(_, cb: CallbackQuery):
                 message_ids=message_id
             )
         elif cb.message:
-                message = cb.message
+            message = cb.message
         else:
             message = None
 

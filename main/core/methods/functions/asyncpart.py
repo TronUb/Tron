@@ -40,8 +40,6 @@ import aiohttp
 from aiohttp.client_exceptions import ContentTypeError
 
 
-
-
 def messageobject(anydict: dict):
     message = None
     all_messages = [
@@ -84,7 +82,6 @@ class AsyncPart(object):
                 except ContentTypeError:
                     return json.loads(await resp.text())
 
-
     @staticmethod
     async def PostRequest(endpoint: str, payload: dict, timeout: int=3, resptype: str=""):
         """ args:
@@ -102,7 +99,6 @@ class AsyncPart(object):
                 timeout=timeout
             ) as response:
                 return (await response.json())
-
 
     async def IsAdmin(
         self,
@@ -158,7 +154,6 @@ class AsyncPart(object):
 
         return getattr(r.admin_rights, privileges)
 
-
     async def IsReply(self, message: Message=None):
         """
         Check if the message is a reply to another user.
@@ -171,7 +166,6 @@ class AsyncPart(object):
             print(e)
         finally:
             del frame
-
 
     async def ProgressForPyrogram(self, current, total, ud_type, message, start):
         """ generic progress display for Telegram Upload / Download status """
@@ -205,7 +199,6 @@ class AsyncPart(object):
             except (MessageNotModified, FloodWait):
                 pass
 
-
     async def IsThumbExists(self, file_name: str):
         """ get thumbnail of file if it exists """
         thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
@@ -226,7 +219,6 @@ class AsyncPart(object):
             thumb_image_path = None
         return thumb_image_path
 
-
     async def RunCommand(self, shell_command: List) -> str:
         """ run shell commands """
         process = await asyncio.create_subprocess_exec(
@@ -238,7 +230,6 @@ class AsyncPart(object):
         e_response = stderr.decode().strip()
         t_response = stdout.decode().strip()
         return t_response, e_response
-
 
     async def HasteBinPaste(self, text):
         """ paste anything to pasting site """
@@ -252,7 +243,6 @@ class AsyncPart(object):
                     return url if key else None
         except Exception as e:
             await self.error(e)
-
 
     async def aexec(
         self,
@@ -282,7 +272,6 @@ class AsyncPart(object):
             + "".join(f"\n {l}" for l in code.split("\n"))
         )
         return await locals()["__aexec"](self, m)
-
 
     async def error(
         self,
@@ -345,7 +334,6 @@ class AsyncPart(object):
             self.log.error(e)
         return True
 
-
     async def sleep_delete(
         self,
         message=None,
@@ -379,7 +367,6 @@ class AsyncPart(object):
             r = await m.delete()
         return r
 
-
     async def delete_message(
         self,
         sec: int=0
@@ -403,7 +390,6 @@ class AsyncPart(object):
             return True
         else:
             self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
-
 
     async def PluginData(
         self,
@@ -436,7 +422,6 @@ class AsyncPart(object):
         except Exception:
             self.log.error(traceback.format_exc())
             return None
-
 
     async def send_edit(
         self,
@@ -536,7 +521,6 @@ class AsyncPart(object):
         except Exception as e:
             await self.error(e)
 
-
     async def check_private(
         self
         ):
@@ -565,7 +549,6 @@ class AsyncPart(object):
             return True
         return None
 
-
     async def create_file(
         self,
         filename: str,
@@ -590,7 +573,7 @@ class AsyncPart(object):
             frame = inspect.currentframe().f_back
             m = messageobject(frame.f_locals)
             path = f"./downloads/{filename}"
-            with open(path, "w+") as f:
+            with open(path, "w+", encoding="utf-8") as f:
                 f.write(content)
 
             if send:
@@ -607,7 +590,6 @@ class AsyncPart(object):
                 return path
         except Exception as e:
             await self.error(e)
-
 
     async def kick_user(
         self,
@@ -638,7 +620,6 @@ class AsyncPart(object):
                 datetime.datetime.now() + timedelta(seconds=ban_time))
         except Exception as e:
             await self.error(e)
-
 
     async def get_lastmessage(
         self,
@@ -732,7 +713,6 @@ class AsyncPart(object):
         except Exception as err:
             await self.error(err)
 
-
     async def add_users(
         self,
         chat_id: Union[int, str],
@@ -757,7 +737,6 @@ class AsyncPart(object):
         except Exception as e:
             self.error(e)
 
-
     async def user_ingroup(
         self,
         chat_id: Union[int, str],
@@ -778,8 +757,6 @@ class AsyncPart(object):
             if x.user.id == user_id:
                 return True
         return None
-
-
 
     async def add_logbot(
         self
@@ -806,7 +783,6 @@ class AsyncPart(object):
         except Exception as e:
             await self.error(e)
 
-
     async def send_start_message(
         self
         ):
@@ -824,7 +800,6 @@ class AsyncPart(object):
             )
         except Exception as e:
             print(e)
-
 
     async def mute_notification(
         self,
@@ -850,7 +825,6 @@ class AsyncPart(object):
             )
         )
 
-
     async def unmute_notification(
         self,
         chat_id: Union[str, int],
@@ -863,5 +837,3 @@ class AsyncPart(object):
             sound=None
         )
         return True if r else False
-
-

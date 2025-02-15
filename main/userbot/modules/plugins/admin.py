@@ -4,26 +4,16 @@
 
 from datetime import datetime, timedelta
 
-from main.core.enums import (
-    ChatMemberStatus,
-    ChatType,
-    UserType
-)
-from pyrogram.types import (
-    Message,
-    ChatPermissions,
-    ChatPrivileges
-)
-
 from pyrogram.errors import (
+    ChannelInvalid,
     UsernameInvalid,
-    UserNotParticipant,
     UsernameNotOccupied,
+    UserNotParticipant,
 )
+from pyrogram.types import ChatPermissions, ChatPrivileges, Message
 
-from main import app, gen
-
-
+from main import app
+from main.core.enums import ChatMemberStatus, ChatType, UserType
 
 private = (ChatType.PRIVATE, ChatType.BOT)
 
@@ -34,13 +24,11 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 async def delete_reply(reply, command, start):
-    if reply and await app.IsAdmin("delete_messages"):
+    if reply and await app.IsAdmin(privileges="delete_messages"):
         if start and command.startswith(start):
             return await reply.delete()
 
     return None
-
-
 
 
 @app.on_cmd(
@@ -72,7 +60,7 @@ async def ban_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin here or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -128,8 +116,6 @@ async def ban_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="banall",
     usage="Ban all members of a chat, except admins.",
@@ -142,7 +128,7 @@ async def banall_handler(_, m: Message):
         if await app.check_private():
             return
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -175,8 +161,6 @@ async def banall_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="unban",
     usage="Unban a user in a chat.",
@@ -200,7 +184,7 @@ async def unban_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -260,8 +244,6 @@ async def unban_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 async def mute_user(chat_id, user_id, duration=datetime.now()):
     """ mute function to admin plugin """
     return await app.restrict_chat_member(
@@ -279,9 +261,6 @@ async def mute_user(chat_id, user_id, duration=datetime.now()):
             ),
             until_date=duration
         )
-
-
-
 
 
 @app.on_cmd(
@@ -318,7 +297,7 @@ async def mute_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -375,8 +354,6 @@ async def mute_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="unmute",
     usage="Unmute a user in a chat.",
@@ -399,7 +376,7 @@ async def unmute_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -483,7 +460,7 @@ async def kick_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("ban_users") is False:
+        if await app.IsAdmin(privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -527,8 +504,6 @@ async def kick_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="pin",
     usage="Pin a message in a chat.",
@@ -536,55 +511,52 @@ async def kick_handler(_, m: Message):
     disable_in=ChatType.CHANNEL
 )
 async def pin_handler(_, m: Message):
-
     try:
-        arg = True
-        sm = m.sudo_message
-        reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
-        cmd = m.command or sm.command if sm else None
-
-        if app.long() > 1:
-            arg = False if cmd[1] == "loud" else True
+        reply = m.reply_to_message or getattr(m.sudo_message, "reply_to_message", None)
+        cmd = m.command or (m.sudo_message.command if m.sudo_message else None)
+        arg = cmd and len(cmd) > 1 and cmd[1] != "loud"
 
         if m.chat.type in private:
             if not reply:
                 return await app.send_edit(
-                    "Reply to some message, so that i can pin that message.",
-                    text_type=["mono"],
-                    delme=4
+                    "Reply to a message to pin it.", text_type=["mono"], delme=4
                 )
 
-            done = await reply.pin(disable_notification=arg)
-            if done:
-                return await app.send_edit("Pinned message !", text_type=["mono"], delme=4)
-            else:
-                return await app.send_edit("Failed to pin message.", text_type=["mono"], delme=4)
+            if await reply.pin(disable_notification=arg):
+                return await app.send_edit(
+                    "Pinned message!", text_type=["mono"], delme=4
+                )
 
-        if await app.IsAdmin("pin_messages") is False:
             return await app.send_edit(
-                "You're not an admin here or you don't have enough admin rights.",
-                text_type=["mono"],
-                delme=4
+                "Failed to pin message.", text_type=["mono"], delme=4
             )
 
-        if reply:
-            await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
-            done = await reply.pin(disable_notification=arg)
-            if done:
-                await app.send_edit("Pinned message.", text_type=["mono"], delme=4)
-            else:
-                await app.send_edit("Failed to pin message.", text_type=["mono"], delme=4)
-        else:
-            await app.send_edit(
-                "Reply to a message so that I can pin that message.",
+        # Check if user has pin privileges
+        if not await app.IsAdmin(privileges="pin_messages"):
+            return await app.send_edit(
+                "You're not an admin or lack pin privileges.",
                 text_type=["mono"],
-                delme=4
+                delme=4,
             )
+
+        if not reply:
+            return await app.send_edit(
+                "Reply to a message to pin it.", text_type=["mono"], delme=4
+            )
+
+        await app.send_edit("⏳ • Pinning message...", text_type=["mono"])
+        if await reply.pin(disable_notification=arg):
+            return await app.send_edit("Pinned message.", text_type=["mono"], delme=4)
+
+        await app.send_edit("Failed to pin message.", text_type=["mono"], delme=4)
+
+    except ChannelInvalid:
+        await app.send_edit(
+            "You aren't eligible to do this!", text_type=["mono"], delme=4
+        )
 
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -637,8 +609,6 @@ async def unpin_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="promote",
     usage="Promote a user as an admin.",
@@ -662,7 +632,7 @@ async def promote_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin("add_admins") is False:
+        if await app.IsAdmin(privileges="add_admins") is False:
             return await app.send_edit(
                 "You're not admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -718,8 +688,6 @@ async def promote_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="demote",
     usage="Demote a user from admin to member.",
@@ -736,7 +704,7 @@ async def demote_handler(_, m: Message):
         reply = m.reply_to_message or sm.reply_to_messageNone if sm else None
         user = False
 
-        if await app.IsAdmin("add_admins") is False:
+        if await app.IsAdmin(privileges="add_admins") is False:
             return await app.send_edit(
                 "You're not an admin here or you don't have enough rights.",
                 text_type=["mono"],

@@ -9,63 +9,63 @@ from io import StringIO
 
 from pyrogram.types import Message
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
-
 
 
 @app.on_cmd(
     commands=["eval", "e"],
-    usage="Run python programs, (script level)",
-    disable_for=UserType.SUDO
+    usage="Run Python programs (script level). Warning: Be careful, you might delete your data.",
 )
 async def evaluate_handler(_, m: Message):
-    """ This function is made to execute python codes """
+    """Execute Python code securely within the bot."""
 
     try:
-
         if app.long() == 1:
             return await app.send_edit(
-                "Give me some text (code) to execute . . .",
-                text_type=["mono"],
-                delme=4
+                "Give me some Python code to execute . . .", text_type=["mono"], delme=4
             )
+
+        # Extract the command text
         text = m.sudo_message.text if getattr(m, "sudo_message", None) else m.text
         cmd = text.split(None, 1)[1]
 
         msg = await app.send_edit("Executing . . .", text_type=["mono"])
 
-        old_stderr = sys.stderr
-        old_stdout = sys.stdout
-        redirected_output = sys.stdout = StringIO()
-        redirected_error = sys.stderr = StringIO()
+        # Redirect stdout and stderr
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        redirected_output, redirected_error = StringIO(), StringIO()
+        sys.stdout, sys.stderr = redirected_output, redirected_error
+
         stdout, stderr, exc = None, None, None
 
         try:
-            await app.aexec(cmd)
+            await app.aexec(cmd)  # Execute the command asynchronously
         except Exception:
             exc = traceback.format_exc()
 
-        stdout = redirected_output.getvalue()
-        stderr = redirected_error.getvalue()
-        sys.stdout = old_stdout
-        sys.stderr = old_stderr
-        evaluation = exc or stderr or stdout or "Success"
-        final_output = f"**• PROGRAM:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation.strip()}`"
+        # Capture outputs
+        stdout = redirected_output.getvalue().strip()
+        stderr = redirected_error.getvalue().strip()
 
+        # Restore stdout and stderr
+        sys.stdout, sys.stderr = old_stdout, old_stderr
+
+        # Determine final output
+        evaluation = exc or stderr or stdout or "Success"
+        final_output = f"**• PROGRAM:**\n\n`{cmd}`\n\n**• OUTPUT:**\n\n`{evaluation}`"
+
+        # Handle large output
         if len(final_output) > 4096:
             await app.create_file(
-                filename="eval_output.txt",
-                content=str(final_output),
-                caption=f"`{cmd}`"
+                filename="eval_output.txt", content=final_output, caption=f"`{cmd}`"
             )
             await msg.delete()
         else:
             await app.send_edit(final_output)
+
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -74,62 +74,56 @@ async def evaluate_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def terminal_handler(_, m: Message):
-    """ This function is made to run shell commands """
-
+    """Execute shell commands and return output."""
     try:
         if app.long() == 1:
             return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
         await app.send_edit("Running in shell . . .", text_type=["mono"])
-        text = m.sudo_message.text if getattr(m, "sudo_message", None) else m.text
-        pattern = """ (?=(?:[^'"]|'[^']*'|"[^"]*")*$)"""
-        cmd = m.text.split(None, 1)[1]
 
-        if "\n" in cmd:
-            code = cmd.split("\n")
-            output = ""
-            for command in code:
-                shell = re.split(pattern, command)
+        # Extract command text (for sudo or normal users)
+        text = m.sudo_message.text if getattr(m, "sudo_message", None) else m.text
+        pattern = r""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)"""
+
+        cmd = text.split(None, 1)[1]  # Extract actual command
+        output = ""
+
+        if "\n" in cmd:  # If multi-line command
+            for command in cmd.split("\n"):
+                shell = [x.replace('"', "") for x in re.split(pattern, command) if x]
+
                 try:
                     process = subprocess.Popen(
-                        shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                        shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
                     )
+                    stdout, stderr = process.communicate()
+                    output += f"**{command}**\n{stdout.strip()}\n{stderr.strip()}\n"
                 except Exception as e:
-                    await app.error(e)
+                    return await app.send_edit(f"**Error:**\n\n`{e}`")
 
-                output += "**{code}**\n"
-                output += process.stdout.read()[:-1].decode("utf-8")
-                output += "\n"
-        else:
-            shell = re.split(pattern, cmd)
-            for y in range(len(shell)):
-                shell[y] = shell[y].replace('"', "")
+        else:  # Single-line command
+            shell = [x.replace('"', "") for x in re.split(pattern, cmd) if x]
 
             try:
                 process = subprocess.Popen(
-                    shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                    shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
                 )
+                stdout, stderr = process.communicate()
             except Exception:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                errors = traceback.format_exception(
-                    etype=exc_type, value=exc_obj, tb=exc_tb
-                )
-                return await app.send_edit(f"**Error:**\n\n`{''.join(errors)}`")
+                errors = traceback.format_exc()
+                return await app.send_edit(f"**Error:**\n\n`{errors}`")
 
-            output = process.stdout.read()[:-1].decode("utf-8")
-        if str(output) == "\n":
-            output = None
+            output = stdout.strip() or stderr.strip() or "No Output"
 
-        if output:
-            if len(output) > 4096:
-                await app.create_file(
-                    filename="term_output.txt",
-                    content=output,
-                    caption=f"`{cmd}`"
-                )
-            else:
-                await app.send_edit(f"**COMMAND:**\n\n`{cmd}`\n\n\n**OUTPUT:**\n\n`{output}`")
+        # Handle large output
+        if len(output) > 4096:
+            await app.create_file(
+                filename="term_output.txt", content=output, caption=f"`{cmd}`"
+            )
         else:
-            await app.send_edit(f"**COMMAND:**\n\n`{cmd}`\n\n\n**OUTPUT:**\n\n`No Output`")
+            await app.send_edit(
+                f"**COMMAND:**\n\n`{cmd}`\n\n\n**OUTPUT:**\n\n`{output}`"
+            )
+
     except Exception as e:
         await app.error(e)

@@ -1,4 +1,6 @@
+import functools
 import inspect
+from typing import Callable, Union
 
 import pyrogram
 from pyrogram.handlers import (
@@ -13,14 +15,10 @@ from pyrogram.handlers import (
     MessageHandler,
     PollHandler,
     RawUpdateHandler,
-    UserStatusHandler
+    UserStatusHandler,
 )
 
-from typing import Callable, Union
-
 from main.core.enums import HandlerType
-
-
 
 
 handler_type_dict = {
@@ -35,55 +33,56 @@ handler_type_dict = {
     HandlerType.MESSAGE: MessageHandler,
     HandlerType.POLL: PollHandler,
     HandlerType.RAW_UPDATE: RawUpdateHandler,
-    HandlerType.USER_STATUS: UserStatusHandler
+    HandlerType.USER_STATUS: UserStatusHandler,
 }
 
 
 class OnUpdate:
+
     def on_update(
         self,
         handler_type: Union[int, HandlerType],
         filters: pyrogram.filters = None,
-        group: int = 0
-        ):
+        group: int = 0,
+    ) -> Callable:
         """
-        parameters::
-            handler_type: Union[int, HandleType]
-            filters: pyrogram.filters
-            group: int
+        Decorator for adding handlers in Pyrogram.
 
-        returns::
-            object
+        Parameters:
+            handler_type (Union[int, HandlerType]): The handler type (enum or integer index).
+            filters (pyrogram.filters, optional): Filters to apply on the handler. Defaults to None.
+            group (int, optional): The group number for the handler. Defaults to 0.
 
-        0: CallbackQueryHandler
-        1: ChatJoinRequestHandler
-        2: ChatMemberUpdatedHandler
-        3: ChosenInlineResultHandler
-        4: DeletedMessagesHandler
-        5: DisconnectHandler
-        6: EditedMessageHandler
-        7: InlineQueryHandler
-        8: MessageHandler
-        9: PollHandler
-        10: RawUpdateHandler
-        11: UserStatusHandler
+        Returns:
+            Callable: The decorated function.
+
+        Raises:
+            ValueError: If the handler_type is invalid.
+
         """
 
+        # Convert int to HandlerType if necessary
         if isinstance(handler_type, int):
-            handler = handler_type_dict.get(list(handler_type_dict)[handler_type]) 
-        else:
-            handler = handler_type_dict.get(handler_type)
+            try:
+                handler_type = list(handler_type_dict.keys())[handler_type]
+            except IndexError:
+                raise ValueError(f"Invalid handler index: {handler_type}")
+
+        # Get the corresponding handler class
+        handler = handler_type_dict.get(handler_type)
 
         if handler is None:
-            raise Exception("This handler doesn't exist.")
+            raise ValueError(f"Invalid handler type: {handler_type}")
 
         def decorator(func: Callable) -> Callable:
-            if isinstance(self, pyrogram.Client):
-                self.add_handler(
-                    handler(func, filters),
-                    group
-                )
 
-            return func
+            @functools.wraps(func)  # Preserve function metadata
+            async def wrapper(client: pyrogram.Client, *args, **kwargs):
+                return await func(client, *args, **kwargs)
+
+            if isinstance(self, pyrogram.Client):
+                self.add_handler(handler(wrapper, filters), group)
+
+            return wrapper
 
         return decorator

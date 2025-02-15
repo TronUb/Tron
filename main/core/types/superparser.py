@@ -1,53 +1,43 @@
-from pyrogram.types import User as BaseUser
+from pyrogram.types import User as PyUser, Message
 from main.core.enums import UserType
+from pyrogram import Client
 
 
-
-
-class SuperParser(BaseUser):
+class SuperParser(PyUser):
     @staticmethod
-    def parse_user(
-        client,
-        message
-        ):
-        """ custom user parser """
-        if message and message.from_user:
-            if message.from_user.is_self:
-                message.from_user.type = UserType.OWNER
-            elif message.from_user.id in client.SudoUsersList:
-                message.from_user.type = UserType.SUDO
-            else:
-                message.from_user.type = UserType.OTHER
+    def parse_user(client: Client, message: Message) -> Message:
+        """Parses user type based on sender information."""
+        if not message or not message.from_user:
+            return message  # Return message unchanged if invalid
+
+        user = message.from_user
+        if user.is_self:
+            user.type = UserType.OWNER
+        elif user.id in getattr(client, "SudoUsersList", []):
+            user.type = UserType.SUDO
+        else:
+            user.type = UserType.OTHER
 
         return message
 
-
     @staticmethod
-    def parse_combined_args(
-        message
-        ):
-        """ custom combined args parser """
-        if not (message or message.from_user):
-            return message
+    def parse_combined_args(message: Message) -> Message:
+        """Parses additional arguments for message processing."""
+        if not message or not hasattr(message, "from_user"):
+            return message  # Return if message is invalid
 
-        message.combined_args = dict()
+        message.combined_args = {}
 
-        # shorten 
-        sm = message.sudo_message
-        mdict = message.combined_args
-
-        # first priority to owner message attributes
-        reply = getattr(message, "reply_to_message", None) or getattr(sm, "reply_to_message", None) 
+        # Retrieve attributes safely with a fallback to sudo_message
+        sm = getattr(message, "sudo_message", None)
+        reply = getattr(message, "reply_to_message", None) or getattr(
+            sm, "reply_to_message", None
+        )
         command = getattr(message, "command", None) or getattr(sm, "command", None)
 
-        mdict.update(
-            {"reply": reply}
-        )
-        mdict.update(
-            {"reply_to_message": reply}
-        )
-        mdict.update(
-            {"command": command}
+        # Update dictionary in one step for better performance
+        message.combined_args.update(
+            {"reply": reply, "reply_to_message": reply, "command": command}
         )
 
         return message
