@@ -7,7 +7,6 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands=["q", "quotly"],
     usage="Get text quotes from @quotly bot."
@@ -19,7 +18,7 @@ async def quotly_handler(_, m: Message):
         if not reply:
             return await app.send_edit(m, "Reply to any users text message", delme=4)
 
-        if app.long() > 1:
+        if app.command() > 1:
             color = m.text.split(None, 1)[1]
         else:
             color = "black"

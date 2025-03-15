@@ -1,9 +1,8 @@
 """ info plugin """
 
-from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums import ChatType
-from main import app, gen
-
+from main import app
 
 
 @app.on_cmd(
@@ -15,116 +14,51 @@ async def mediainfo_handler(_, m: Message):
     replied = m.reply_to_message
     if not replied:
         return await app.send_edit(
-            "Please reply to some media to get media info . . .",
-            text_type=["mono"]
+            "📌 Please reply to some media to get media info . . .", text_type=["mono"]
         )
 
-    if (app.get_file_id(replied))["type"] == "photo":
-        pie = replied.photo
-        msg = "**Type:** Photo\n"
-        msg += f"**Width:** `{pie.width}`\n"
-        msg += f"**Height:** `{pie.height}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg += " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "video":
-        pie = replied.video
-        msg = "**Types:** Video\n"
-        msg += f"**Width:** `{pie.width}`\n"
-        msg += f"**Height:** `{pie.height}`\n"
-        msg += f"**Duration:** `{pie.duration}`\n"
-        msg += f"**Mime type:** `{pie.mime_type}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Streamable:** `{pie.supports_streaming}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg +=  " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "sticker":
-        pie = replied.sticker
-        msg = "**Types:** sticker\n"
-        msg += f"**File name:** `{pie.file_name}`\n"
-        msg += f"**Width:** `{pie.width}`\n"
-        msg += f"**Height:** `{pie.height}`\n"
-        msg += f"**Mime type:** `{pie.mime_type}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Emoji:** `{pie.emoji}`\n"
-        msg += f"**Animated:** `{pie.is_animated}`\n"
-        msg += f"**Set name:** `{pie.set_name}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg +=  " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "document":
-        pie = replied.document
-        msg = "**Types:** Document\n"
-        msg += f"**File name:** `{pie.file_name}`\n"
-        msg += f"**Mime type:** `{pie.mime_type}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg +=  " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "animation":
-        pie = replied.animation
-        msg = "**Types:** Animation\n"
-        msg += f"**File name:** `{pie.file_name}`\n"
-        msg += f"**Width:** `{pie.width}`\n"
-        msg += f"**Height:** `{pie.height}`\n"
-        msg += f"**Duration:** `{pie.duration}`\n"
-        msg += f"**Mime type:** `{pie.mime_type}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg +=  " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "audio":
-        pie = replied.audio
-        msg = "**Types:** Audio\n"
-        msg += f"**Title:** `{pie.title}`\n"
-        msg += f"**Performer:** `{pie.performer}`\n"
-        msg += f"**File name:** `{pie.file_name}`\n"
-        msg += f"**Duration:** `{pie.duration}`\n"
-        msg += f"**Mime type:** `{pie.mime_type}`\n"
-        msg += f"**Size:** `{pie.file_size}`\n"
-        msg += f"**Date:** `{pie.date}`\n"
-        if replied.caption:
-            msg += f"**Caption:** `{replied.caption}`\n"
-        else:
-            msg +=  " "
-        await app.send_edit(
-            "**⚶ Media Information ⚶**\n\n" + msg,
-            )
-    elif (app.get_file_id(replied))["type"] == "text":
-        msg = "**Types:** Text\n"
-        msg += f"**Text:** `{replied.text}`\n"
-        await app.send_edit(
-            "**⚶ Text Information ⚶**\n\n" + msg,
-            )
+    media_types = {
+        "photo": replied.photo,
+        "video": replied.video,
+        "sticker": replied.sticker,
+        "document": replied.document,
+        "animation": replied.animation,
+        "audio": replied.audio,
+        "text": replied.text,
+    }
 
+    media_type = app.get_file_id(replied)["type"]
+    pie = media_types.get(media_type)
 
+    if not pie:
+        return await app.send_edit("❌ Unsupported media type.")
+
+    msg = f"**📂 Type:** {media_type.capitalize()}\n"
+
+    attributes = {
+        "Width": getattr(pie, "width", None),
+        "Height": getattr(pie, "height", None),
+        "Size": getattr(pie, "file_size", None),
+        "Duration": getattr(pie, "duration", None),
+        "Mime type": getattr(pie, "mime_type", None),
+        "File name": getattr(pie, "file_name", None),
+        "Title": getattr(pie, "title", None),
+        "Performer": getattr(pie, "performer", None),
+        "Emoji": getattr(pie, "emoji", None),
+        "Animated": getattr(pie, "is_animated", None),
+        "Set name": getattr(pie, "set_name", None),
+        "Streamable": getattr(pie, "supports_streaming", None),
+        "Date": getattr(pie, "date", None),
+    }
+
+    for key, value in attributes.items():
+        if value is not None:
+            msg += f"**{key}:** `{value}`\n"
+
+    if replied.caption:
+        msg += f"**📜 Caption:** `{replied.caption}`\n"
+
+    await app.send_edit("**⚶ Media Information ⚶**\n\n" + msg)
 
 
 @app.on_cmd(
@@ -134,55 +68,71 @@ async def mediainfo_handler(_, m: Message):
 async def chatinfo_handler(_, m: Message):
     """ chatinfo handler for info plugin """
     try:
-        if app.long() > 1:
+        if len(m.command) > 1:
             chat_u = m.command[1]
             chat = await app.get_chat(chat_u)
         else:
             if m.chat.type == ChatType.PRIVATE:
                 return await app.send_edit(
-                    "Please use it in groups or use `.chatinfo [group username or id]`",
-                    delme=3
+                    "🔒 Please use this in groups or with `.chatinfo [group username or ID]`",
+                    delme=3,
                 )
-
-            else:
-                chatid = m.chat.id
-                chat = await app.get_chat(chatid)
+            chat = await app.get_chat(m.chat.id)
 
         poto = False
-
         async for x in app.get_chat_photos(chat.id):
             poto = x.file_id
             break
 
         await app.send_edit("Processing . . .")
-        neel = chat.permissions
-        data = "**Chat Info:**\n\n"
-        data += f"**Title:** `{chat.title}`\n"
-        data += f"**Chat Id:** `{chat.id}`\n"
-        data += f"**Chat Type:** `{chat.type}`\n"
-        data += f"**Dc Id:** `{chat.dc_id}`\n"
+
+        data = "**🏷️ Chat Info:**\n\n"
+        data += f"**📌 Title:** `{chat.title}`\n"
+        data += f"**🆔 Chat Id:** `{chat.id}`\n"
+        data += f"**📡 Chat Type:** `{chat.type}`\n"
+        data += f"**🌍 Dc Id:** `{chat.dc_id}`\n"
         if chat.username:
-            data += f"**Username:** `@{chat.username}`\n"
-        data += f"**Members:** `{chat.members_count}`\n"
-        data += f"**Description:** `{chat.description}`\n"
-        data += "**Permissions:**\n\n"
-        data += f"**Send Messages:** `{neel.can_send_messages}`\n"
-        data += f"**Send Media:** `{neel.can_send_media_messages}`\n"
-        data += f"**Web Page Preview:** `{neel.can_add_web_page_previews}`\n"
-        data += f"**Send Polls:** `{neel.can_send_polls}`\n"
-        data += f"**Change Group Info:** `{neel.can_change_info}`\n"
-        data += f"**Invite Users:** `{neel.can_invite_users}`\n"
-        data += f"**Pin Messages:** `{neel.can_pin_messages}`\n"
-        if poto and data:
+            data += f"**🔗 Username:** `@{chat.username}`\n"
+        data += f"**👥 Members:** `{chat.members_count}`\n"
+        data += f"**📜 Description:** `{chat.description}`\n"
+
+        # Check if permissions exist
+        if chat.permissions:
+            neel = chat.permissions
+            data += "**🔒 Permissions:**\n\n"
+            data += f"**✉️ Send Messages:** `{getattr(neel, 'can_send_messages', 'Unknown')}`\n"
+            data += f"**📷 Send Media:** `{getattr(neel, 'can_send_media_messages', 'Unknown')}`\n"
+            data += f"**🌐 Web Preview:** `{getattr(neel, 'can_add_web_page_previews', 'Unknown')}`\n"
+            data += (
+                f"**📊 Send Polls:** `{getattr(neel, 'can_send_polls', 'Unknown')}`\n"
+            )
+            data += (
+                f"**⚙️ Change Info:** `{getattr(neel, 'can_change_info', 'Unknown')}`\n"
+            )
+            data += f"**📩 Invite Users:** `{getattr(neel, 'can_invite_users', 'Unknown')}`\n"
+            data += f"**📌 Pin Messages:** `{getattr(neel, 'can_pin_messages', 'Unknown')}`\n"
+        else:
+            data += "**⚠️ Unable to fetch chat permissions.**\n"
+
+        buttons = None
+        if chat.username:
+            buttons = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "🔗 Open Chat", url=f"https://t.me/{chat.username}"
+                        )
+                    ]
+                ]
+            )
+
+        if poto:
             await app.send_cached_media(
-                m.chat.id,
-                file_id=poto,
-                caption=data
+                m.chat.id, file_id=poto, caption=data, reply_markup=buttons
             )
             await m.delete()
-        elif not poto:
-            await app.send_edit(data)
         else:
-            await app.send_edit("Failed to get information of this group . . .", delme=2)
+            await app.send_edit(data, reply_markup=buttons)
+
     except Exception as e:
         await app.error(e)

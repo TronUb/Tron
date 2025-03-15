@@ -12,7 +12,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 c = CurrencyConverter()
 
 
@@ -29,8 +28,6 @@ def convert_c(celsius):
     return (c-32)*5/9
 
 
-
-
 @app.on_cmd(
     commands="wlink",
     usage="Get message links which contains query word."
@@ -41,7 +38,7 @@ async def wordlink_handler(_, m: Message):
     links.clear()
 
     try:
-        if app.long() == 1:
+        if app.command() == 1:
             return await app.send_edit("Please give some text to search in chat ...")
 
         else:
@@ -57,15 +54,13 @@ async def wordlink_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["cur", "currency"],
     usage="Convert one currency to another currency."
 )
 async def currency_handler(_, m: Message):
     """ currency handler for tools plugin """
-    if app.long() <= 3:
+    if app.command() <= 3:
         return await app.send_edit(
             f"Use | `{app.PREFIX}cur 100 USD INR` or `{app.PREFIX}currency 100 USD INR`"
         )
@@ -82,14 +77,12 @@ async def currency_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["temp", "temperature"],
     usage="Convert temperatures in Celcius/Fahrenheit."
 )
 async def temperature_handler(_, m: Message):
-    if app.long() <= 2:
+    if app.command() <= 2:
         return await app.send_edit(f"How To Use: `{app.MyPrefix()[0]}temp 10 c`", disable_web_page_preview=True)
 
     temp1 = m.text.split(None, 2)[1]
@@ -107,8 +100,6 @@ async def temperature_handler(_, m: Message):
             await app.send_edit("Unknown type {}".format(temp2))
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -129,8 +120,6 @@ async def messagejson_handler(_, m: Message):
             await m.delete()
 
 
-
-
 @app.on_cmd(
     commands="mlink",
     usage="Get a message link of a message."
@@ -141,8 +130,6 @@ async def messagelink_handler(_, m: Message):
 
     m = await app.send_edit("Generating message link . . .", text_type=["mono"])
     await app.send_edit(message.link)
-
-
 
 
 @app.on_cmd(
@@ -156,8 +143,6 @@ async def saved_handler(_, m: Message):
     await m.reply_to_message.copy("me")
 
 
-
-
 @app.on_cmd(
     commands=["fwd", "frwd"],
     usage="Forward a message."
@@ -166,19 +151,19 @@ async def forward_handler(_, m: Message):
     reply = m.reply_to_message
     try:
 
-        if reply and app.long() == 1:
+        if reply and app.command() == 1:
             await reply.forward(m.chat.id)
             delete = True
 
-        elif reply and app.long() > 1:
+        elif reply and app.command() > 1:
             await reply.forward(m.command[1])
             delete = True
 
-        elif not reply and app.long() == 1:
+        elif not reply and app.command() == 1:
             await m.forward(m.chat.id)
             delete = True
 
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             await app.send_edit("Sir reply to yours or someone's message. to forward.", text_type=["mono"], delme=4)
             delete = False
 
@@ -193,14 +178,12 @@ async def forward_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["spt", "speed", "speedtest"],
     usage="Get upload/download speed."
 )
 async def speedtest_handler(_, m: Message):
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Testing speed . . .", text_type=["mono"])
         test = speedtest.Speedtest()
         test.get_best_server()
@@ -218,7 +201,7 @@ async def speedtest_handler(_, m: Message):
             await app.send_edit(teks)
         else:
             await app.send_edit("Something went wrong !", text_type=["mono"], delme=5)
-    elif app.long() > 1 and "pic" in m.command[1]:
+    elif app.command() > 1 and "pic" in m.command[1]:
         await app.send_edit("Calculating Speed (pic) . . .")
 
         start = datetime.now()
@@ -247,9 +230,6 @@ async def speedtest_handler(_, m: Message):
             await m.delete()
         else:
             await app.send_edit("Something went wrong !", text_type=["mono"], delme=5)
-
-
-
 
 
 @app.on_cmd(

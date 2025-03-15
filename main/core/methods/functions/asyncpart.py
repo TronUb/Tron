@@ -12,10 +12,7 @@ import hachoir
 from time import time
 from datetime import timedelta
 
-from typing import (
-  List,
-  Union
-)
+from typing import List, Union
 
 from pyrogram.raw import functions
 from pyrogram.raw import types
@@ -26,15 +23,12 @@ from pyrogram.errors import (
     FloodWait,
     YouBlockedUser,
     MessageAuthorRequired,
-    MessageIdInvalid
+    MessageIdInvalid,
 )
 from pyrogram.types import (
     Message,
 )
-from pyrogram.enums import (
-    ParseMode,
-    ChatType
-)
+from pyrogram.enums import ParseMode, ChatType
 
 import aiohttp
 from aiohttp.client_exceptions import ContentTypeError
@@ -42,10 +36,7 @@ from aiohttp.client_exceptions import ContentTypeError
 
 def messageobject(anydict: dict):
     message = None
-    all_messages = [
-        x for x in anydict.values()
-        if isinstance(x, Message)
-    ]
+    all_messages = [x for x in anydict.values() if isinstance(x, Message)]
     try:
         # the passed message object
         # must be at the top
@@ -56,26 +47,30 @@ def messageobject(anydict: dict):
 
 class AsyncPart(object):
     @staticmethod
-    async def GetRequest(url: str, resptype: str=""):
-        """ args:
-                link: str = ""
-                resptype: str = "json"
+    async def GetRequest(url: str, resptype: str = ""):
+        """args:
+        link: str = ""
+        resptype: str = "json"
 
-                Note: resptype is 'json' by default
-                    available args for restype:
-                    'json', 'text', 'jsontext', 'raw', 'url'
+        Note: resptype is 'json' by default
+            available args for restype:
+            'json', 'text', 'jsontext', 'raw', 'url'
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 stored = {
-                    "json":"json",
-                    "text":"text",
-                    "jsontext":"text",
-                    "raw":"read",
-                    "url":"url"
+                    "json": "json",
+                    "text": "text",
+                    "jsontext": "text",
+                    "raw": "read",
+                    "url": "url",
                 }
                 try:
-                    returntype = resptype if resptype and resptype in stored.keys() else stored.get("json")
+                    returntype = (
+                        resptype
+                        if resptype and resptype in stored.keys()
+                        else stored.get("json")
+                    )
                     if returntype == "jsontext":
                         return json.loads(await resp.text())
                     return await getattr(resp, returntype, None)()
@@ -83,29 +78,29 @@ class AsyncPart(object):
                     return json.loads(await resp.text())
 
     @staticmethod
-    async def PostRequest(endpoint: str, payload: dict, timeout: int=3, resptype: str=""):
-        """ args:
-                link: str = ""
-                resptype: str = "json"
+    async def PostRequest(
+        endpoint: str, payload: dict, timeout: int = 3, resptype: str = ""
+    ):
+        """args:
+        link: str = ""
+        resptype: str = "json"
 
-                Note: resptype is 'json' by default
-                    available args for restype:
-                    'json', 'text', 'jsontext', 'raw', 'url'
+        Note: resptype is 'json' by default
+            available args for restype:
+            'json', 'text', 'jsontext', 'raw', 'url'
         """
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                endpoint,
-                data=payload,
-                timeout=timeout
+                endpoint, data=payload, timeout=timeout
             ) as response:
-                return (await response.json())
+                return await response.json()
 
     async def IsAdmin(
         self,
         privileges: types.ChatAdminRights = None,
         chat_id: Union[str, int] = None,
-        user_id: Union[str, int] = None
-        ):
+        user_id: Union[str, int] = None,
+    ):
         """
         Check if you/user are an admin in chat.
 
@@ -131,22 +126,21 @@ class AsyncPart(object):
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
-        r = (await self.invoke(
+        r = (
+            await self.invoke(
                 functions.channels.GetParticipant(
-                    channel=await self.resolve_peer(
-                        chat_id if chat_id else m.chat.id
-                    ),
-                    participant=await self.resolve_peer(
-                        user_id if user_id else "self"
-                    )
+                    channel=await self.resolve_peer(chat_id if chat_id else m.chat.id),
+                    participant=await self.resolve_peer(user_id if user_id else "self"),
                 )
             )
-            ).participant
+        ).participant
 
         if isinstance(r, types.ChannelParticipantSelf):
             raise Exception("You can't use this method on yourself.")
 
-        if not isinstance(r, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)):
+        if not isinstance(
+            r, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)
+        ):
             raise Exception(f"Invalid type {type(r)}")
 
         if r is None:
@@ -154,7 +148,7 @@ class AsyncPart(object):
 
         return getattr(r.admin_rights, privileges)
 
-    async def IsReply(self, message: Message=None):
+    async def IsReply(self, message: Message = None):
         """
         Check if the message is a reply to another user.
         """
@@ -168,7 +162,7 @@ class AsyncPart(object):
             del frame
 
     async def ProgressForPyrogram(self, current, total, ud_type, message, start):
-        """ generic progress display for Telegram Upload / Download status """
+        """generic progress display for Telegram Upload / Download status"""
         now = time()
         diff = now - start
         if round(diff % 10.00) == 0 or current == total:
@@ -188,11 +182,14 @@ class AsyncPart(object):
                 round(percentage, 2),
             )
 
-            tmp = progress + "**Done:** __{0} of {1}__\n**Speed:** __{2}/s__\n**ETA:** __{3}__\n".format(
-                self.HumanBytes(current),
-                self.HumanBytes(total),
-                self.HumanBytes(speed),
-                estimated_total_time if estimated_total_time != "" else "0 s",
+            tmp = (
+                progress
+                + "**Done:** __{0} of {1}__\n**Speed:** __{2}/s__\n**ETA:** __{3}__\n".format(
+                    self.HumanBytes(current),
+                    self.HumanBytes(total),
+                    self.HumanBytes(speed),
+                    estimated_total_time if estimated_total_time != "" else "0 s",
+                )
             )
             try:
                 await message.edit(f"{ud_type}\n {tmp}")
@@ -200,11 +197,13 @@ class AsyncPart(object):
                 pass
 
     async def IsThumbExists(self, file_name: str):
-        """ get thumbnail of file if it exists """
+        """get thumbnail of file if it exists"""
         thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
         if os.path.exists(thumb_image_path):
             thumb_image_path = os.path.join(self.TEMP_DICT, "thumb_image.jpg")
-        elif file_name is not None and file_name.lower().endswith(("mp4", "mkv", "webm")):
+        elif file_name is not None and file_name.lower().endswith(
+            ("mp4", "mkv", "webm")
+        ):
             metadata = hachoir.metadata.extractMetadata(
                 hachoir.parser.createParser(file_name)
             )
@@ -220,7 +219,7 @@ class AsyncPart(object):
         return thumb_image_path
 
     async def RunCommand(self, shell_command: List) -> str:
-        """ run shell commands """
+        """run shell commands"""
         process = await asyncio.create_subprocess_exec(
             *shell_command,
             stdout=asyncio.subprocess.PIPE,
@@ -232,22 +231,21 @@ class AsyncPart(object):
         return t_response, e_response
 
     async def HasteBinPaste(self, text):
-        """ paste anything to pasting site """
+        """Paste text to 0x0.st"""
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
-                    "https://www.toptal.com/developers/hastebin/documents", data=text.encode("utf-8"), timeout=3
-                    ) as response:
-                    key = (await response.json())["key"]
-                    url = f"https://hastebin.com/raw/{key}"
-                    return url if key else None
+                    "https://0x0.st", data={"file": text.encode("utf-8")}
+                ) as response:
+                    if response.status == 200:
+                        return await response.text()
+
+            return None
         except Exception as e:
             await self.error(e)
+            return None
 
-    async def aexec(
-        self,
-        code: str
-        ):
+    async def aexec(self, code: str):
         """
         params:
             1. code: str :: your written python code
@@ -262,22 +260,20 @@ class AsyncPart(object):
         frame = inspect.currentframe().f_back
         m = messageobject(frame.f_locals)
 
-        globals().update({
-            "app": self,
-            "bot": getattr(self, "bot", None),
-            "reply": m.reply_to_message,
-        })
+        globals().update(
+            {
+                "app": self,
+                "bot": getattr(self, "bot", None),
+                "reply": m.reply_to_message,
+            }
+        )
         exec(
             "async def __aexec(self, m): "
             + "".join(f"\n {l}" for l in code.split("\n"))
         )
         return await locals()["__aexec"](self, m)
 
-    async def error(
-        self,
-        e: Exception,
-        edit_error: bool=True
-        ):
+    async def error(self, e: Exception, edit_error: bool = True):
         """
         params:
             1. error :: occured exception variable
@@ -334,12 +330,7 @@ class AsyncPart(object):
             self.log.error(e)
         return True
 
-    async def sleep_delete(
-        self,
-        message=None,
-        sec: int=0,
-        delmsg=False
-        ):
+    async def sleep_delete(self, message=None, sec: int = 0, delmsg=False):
         """
         params:
             1. sec :: time to sleep in seconds
@@ -367,10 +358,7 @@ class AsyncPart(object):
             r = await m.delete()
         return r
 
-    async def delete_message(
-        self,
-        sec: int=0
-        ):
+    async def delete_message(self, sec: int = 0):
         """
         params:
             1. sec: int, default=0 :: time to sleep in seconds
@@ -385,16 +373,13 @@ class AsyncPart(object):
         if self.is_bot:
             raise BotMethodInvalid
 
-        if sec <= 600: # 10 min
+        if sec <= 600:  # 10 min
             asyncio.create_task(self.sleep_delete(sec=sec, delmsg=True))
             return True
         else:
             self.log.error("Delete function can only sleep for 10 ( 600 sec ) minutes")
 
-    async def PluginData(
-        self,
-        module: str
-        ):
+    async def PluginData(self, module: str):
         """
         params:
             1. plug: str :: module name whose information is updated in app.CMD_HELP dict
@@ -412,12 +397,12 @@ class AsyncPart(object):
                 r = []
             else:
                 r = [
-                        f"**CMD:** `{self.Trigger[0]}{cmd}`\n**INFO:** `{usage}`\n\n"
-                        for cmd, usage in zip(
-                            self.CMD_HELP.get(module).keys(),
-                            self.CMD_HELP.get(module).values()
-                        )
-                    ]
+                    f"**CMD:** `{self.Trigger[0]}{cmd}`\n**INFO:** `{usage}`\n\n"
+                    for cmd, usage in zip(
+                        self.CMD_HELP.get(module).keys(),
+                        self.CMD_HELP.get(module).values(),
+                    )
+                ]
             return r
         except Exception:
             self.log.error(traceback.format_exc())
@@ -428,17 +413,17 @@ class AsyncPart(object):
         text: str,
         parse_mode=ParseMode.DEFAULT,
         disable_web_page_preview=False,
-        delme : int=0,
-        text_type: list=[],
-        disable_notification: bool=False,
-        reply_to_message_id: int=0,
-        schedule_date: int=0,
-        protect_content: bool=False,
+        delme: int = 0,
+        text_type: list = [],
+        disable_notification: bool = False,
+        reply_to_message_id: int = 0,
+        schedule_date: int = 0,
+        protect_content: bool = False,
         reply_markup=None,
         entities=None,
-        send_as_file: bool=False,
-        filename: str=None
-        ):
+        send_as_file: bool = False,
+        filename: str = None,
+    ):
         """
         params:
             1. text: str :: text to be edited or sent instead of editing
@@ -473,7 +458,7 @@ class AsyncPart(object):
                 r = await self.send_edit(
                     "Message text is too long, Sending as file.",
                     text_type=["mono"],
-                    delme=3
+                    delme=3,
                 )
                 return await self.create_file(file_name, text)
 
@@ -483,7 +468,7 @@ class AsyncPart(object):
                     parse_mode=parse_mode,
                     disable_web_page_preview=disable_web_page_preview,
                     reply_markup=reply_markup,
-                    entities=entities
+                    entities=entities,
                 )
         except MessageNotModified:
             pass
@@ -500,7 +485,7 @@ class AsyncPart(object):
                 schedule_date=schedule_date,
                 protect_content=protect_content,
                 reply_markup=reply_markup,
-                entities=entities
+                entities=entities,
             )
 
         except Exception as e:
@@ -508,22 +493,15 @@ class AsyncPart(object):
 
         try:
             if delme > 0:
-                self.createThread(
-                    self.sleep_delete,
-                    message=m,
-                    sec=delme,
-                    delmsg=True
-                )
+                self.createThread(self.sleep_delete, message=m, sec=delme, delmsg=True)
 
-            frame.f_locals["m"] = r # re-asign a new value
-            return r # return that new value
+            frame.f_locals["m"] = r  # re-asign a new value
+            return r  # return that new value
 
         except Exception as e:
             await self.error(e)
 
-    async def check_private(
-        self
-        ):
+    async def check_private(self):
         """
         params:
             None
@@ -542,20 +520,14 @@ class AsyncPart(object):
 
         if m.chat.type == ChatType.PRIVATE:
             await self.send_edit(
-                "Please use these commands in groups.",
-                text_type=["mono"],
-                delme=3
+                "Please use these commands in groups.", text_type=["mono"], delme=3
             )
             return True
         return None
 
     async def create_file(
-        self,
-        filename: str,
-        content: str,
-        send: bool=True,
-        caption: str=None
-        ):
+        self, filename: str, content: str, send: bool = True, caption: str = None
+    ):
         """
         params:
             1. filename: str :: give a filename with some extension or without extension
@@ -580,7 +552,9 @@ class AsyncPart(object):
                 await self.send_document(
                     m.chat.id,
                     path,
-                    caption = caption if caption else f"**Uploaded By:** {self.UserMention}"
+                    caption=(
+                        caption if caption else f"**Uploaded By:** {self.UserMention}"
+                    ),
                 )
                 if os.path.exists(path):
                     os.remove(path)
@@ -592,11 +566,8 @@ class AsyncPart(object):
             await self.error(e)
 
     async def kick_user(
-        self,
-        chat_id: Union[str, int],
-        user_id: Union[str, int],
-        ban_time: int = 40
-        ):
+        self, chat_id: Union[str, int], user_id: Union[str, int], ban_time: int = 40
+    ):
         """
         Kick (noban) a user from chat.
 
@@ -615,17 +586,12 @@ class AsyncPart(object):
 
         try:
             return await self.ban_chat_member(
-                chat_id,
-                user_id,
-                datetime.datetime.now() + timedelta(seconds=ban_time))
+                chat_id, user_id, datetime.datetime.now() + timedelta(seconds=ban_time)
+            )
         except Exception as e:
             await self.error(e)
 
-    async def get_lastmessage(
-        self,
-        chat_id: Union[int, str],
-        reverse: bool = False
-        ):
+    async def get_lastmessage(self, chat_id: Union[int, str], reverse: bool = False):
         """
         Get first or last message of a chat.
 
@@ -647,7 +613,7 @@ class AsyncPart(object):
 
     async def toggle_inline(
         self,
-        ):
+    ):
         """
         params:
             None
@@ -664,8 +630,8 @@ class AsyncPart(object):
         try:
             botname = "BotFather"
             await self.send_edit("Processing command . . .", text_type=["mono"])
-            await self.send_message(botname, "/mybots") # BotFather (93372553)
-            await asyncio.sleep(0.50) # floodwaits
+            await self.send_message(botname, "/mybots")  # BotFather (93372553)
+            await asyncio.sleep(0.50)  # floodwaits
 
             data = await self.get_last_msg(botname)
             usernames = list(data[0].reply_markup.inline_keyboard)[0]
@@ -681,7 +647,11 @@ class AsyncPart(object):
             if self.bot.username in unames:
                 await data[0].click(self.bot.username)
             else:
-                return await self.send_edit("Looks like you don't have a bot please, use your own bot.", text_type=["mono"], delme=4)
+                return await self.send_edit(
+                    "Looks like you don't have a bot please, use your own bot.",
+                    text_type=["mono"],
+                    delme=4,
+                )
 
             data = await self.get_last_msg(botname)
 
@@ -691,7 +661,9 @@ class AsyncPart(object):
 
             data = await self.get_last_msg(botname)
 
-            await self.send_edit("checking whether inline mode is On or Off . . . ", text_type=["mono"])
+            await self.send_edit(
+                "checking whether inline mode is On or Off . . . ", text_type=["mono"]
+            )
 
             await data[0].click("Inline Mode")
 
@@ -699,25 +671,31 @@ class AsyncPart(object):
 
             # Turn on inline mode
             if "Turn on" in str(data[0]):
-                await self.send_edit("Turning Inline mode on . . . ", text_type=["mono"])
+                await self.send_edit(
+                    "Turning Inline mode on . . . ", text_type=["mono"]
+                )
                 await data[0].click("Turn on")
-                await self.send_edit("Inline mode is now turned On.", text_type=["mono"], delme=4)
+                await self.send_edit(
+                    "Inline mode is now turned On.", text_type=["mono"], delme=4
+                )
             # Turn inline mode off
             elif "Turn inline mode off" in str(data[0]):
-                await self.send_edit("Turning Inline mode Off . . .", text_type=["mono"])
+                await self.send_edit(
+                    "Turning Inline mode Off . . .", text_type=["mono"]
+                )
                 await data[0].click("Turn inline mode off")
-                await self.send_edit("Inline mode is now turned Off.", text_type=["mono"], delme=4)
+                await self.send_edit(
+                    "Inline mode is now turned Off.", text_type=["mono"], delme=4
+                )
         except YouBlockedUser:
-            await self.unblock_user(botname) # unblock & continue
-            await self.toggle_inline() # keep process going
+            await self.unblock_user(botname)  # unblock & continue
+            await self.toggle_inline()  # keep process going
         except Exception as err:
             await self.error(err)
 
     async def add_users(
-        self,
-        chat_id: Union[int, str],
-        user_id: Union[int, str, List[int], List[str]]
-        ):
+        self, chat_id: Union[int, str], user_id: Union[int, str, List[int], List[str]]
+    ):
         """
         Add users in groups/supergroups
 
@@ -730,18 +708,11 @@ class AsyncPart(object):
         """
 
         try:
-            return await self.add_chat_members(
-                chat_id,
-                user_id
-            )
+            return await self.add_chat_members(chat_id, user_id)
         except Exception as e:
             self.error(e)
 
-    async def user_ingroup(
-        self,
-        chat_id: Union[int, str],
-        user_id: Union[int, str]
-        ):
+    async def user_ingroup(self, chat_id: Union[int, str], user_id: Union[int, str]):
         """
         Check if a user exists in group or not.
 
@@ -758,9 +729,7 @@ class AsyncPart(object):
                 return True
         return None
 
-    async def add_logbot(
-        self
-        ):
+    async def add_logbot(self):
         """
         Add you assitant bot in log chat.
 
@@ -783,10 +752,8 @@ class AsyncPart(object):
         except Exception as e:
             await self.error(e)
 
-    async def send_start_message(
-        self
-        ):
-        """ used by bots only """
+    async def send_start_message(self):
+        """used by bots only"""
         try:
             if not self.bot:
                 raise BotMethodInvalid
@@ -796,7 +763,7 @@ class AsyncPart(object):
                 "The userbot is online now.",
                 reply_markup=self.buildMarkup(
                     [self.buildButton(text="Support Group", url="t.me/tronubsupport")]
-                )
+                ),
             )
         except Exception as e:
             print(e)
@@ -804,36 +771,34 @@ class AsyncPart(object):
     async def mute_notification(
         self,
         chat_id: Union[str, int],
-        show_previews: bool=None,
-        silent: bool=True,
-        mute_until: int=None,
-        sound: "pyrogram.raw.types.NotificationSound"=None
-        ):
+        show_previews: bool = None,
+        silent: bool = True,
+        mute_until: int = None,
+        sound: "pyrogram.raw.types.NotificationSound" = None,
+    ):
         peer = await self.resolve_peer(chat_id)
 
         return await self.invoke(
             pyrogram.raw.functions.account.UpdateNotifySettings(
-                peer=pyrogram.raw.types.InputNotifyPeer(
-                    peer=peer
-                ),
+                peer=pyrogram.raw.types.InputNotifyPeer(peer=peer),
                 settings=pyrogram.raw.types.InputPeerNotifySettings(
                     show_previews=show_previews,
                     silent=silent,
                     mute_until=mute_until,
-                    sound=sound
-                )
+                    sound=sound,
+                ),
             )
         )
 
     async def unmute_notification(
         self,
         chat_id: Union[str, int],
-        ):
+    ):
         r = await self.mute_notification(
             chat_id=chat_id,
             show_previews=True,
             silent=False,
             mute_until=None,
-            sound=None
+            sound=None,
         )
         return True if r else False

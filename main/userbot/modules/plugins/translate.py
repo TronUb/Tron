@@ -5,7 +5,6 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 gtl = GoogleTranslator()
 
 
@@ -19,7 +18,7 @@ async def translate_handler(_, m: Message):
     oldmsg = m
 
     try:
-        lang = cmd[1] if app.long() > 1 else "en"
+        lang = cmd[1] if app.command() > 1 else "en"
 
         await app.send_edit(f"**Translating in** `{lang}` . . .")
 
@@ -33,7 +32,7 @@ async def translate_handler(_, m: Message):
             await app.send_edit(f"**Translated to:** `{lang}`\n\n**Text: **`{tdata}`")
 
         elif not reply and app.textlen(oldmsg) <= 4096:
-            if app.long() <= 2:
+            if app.command() <= 2:
                 return await app.send_edit("Give me the language code with text to translate.", text_type=["mono"], delme=4)
 
             text = m.text.split(None, 2)[2]
@@ -46,13 +45,9 @@ async def translate_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 async def translate(lang, text):
     tr = GoogleTranslator(source="auto", target=lang)
     return tr.translate(text)
-
-
 
 
 @app.on_cmd(
@@ -68,4 +63,3 @@ async def translatelang_handler(_, m):
         data.append(f"`{keys}` : `{values}`")
 
     await app.send_edit("**SUPPORTED LANGUAGES:**\n\n" + "\n".join(data))
-        

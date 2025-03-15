@@ -121,10 +121,7 @@ async def qrcode_handler(_, m):
             picname
         )
         await app.send_edit("Making qrcode . . .", text_type=["mono"])
-        await app.send_document(
-            m.chat.id,
-            picname
-        )
+        await app.send_photo(m.chat.id, picname)
         if os.path.exists(picname):
             os.remove(picname)
 
@@ -139,17 +136,17 @@ async def qrcode_handler(_, m):
 )
 async def colourtemplate_handler(_, m: Message):
     """ colourtemplate handler for image plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Usage: .colour red", delme=3)
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         if not app.textlen() > 4096:
             await app.send_edit("Just give me the color name after command ...", text_type=["mono"], delme=3)
 
         try:
             await app.send_edit(f"Making {m.command[1]} template . . .", text_type=["mono"])
             w, h = 60, 30
-            if app.long() > 2:
+            if app.command() > 2:
                 args = app.GetArgs().text.split()
                 w, h = args[2], args[3]
 
@@ -196,7 +193,7 @@ async def waifupic_handler(_, m):
     try:
         url = "https://api.waifu.pics/sfw/waifu"
 
-        if app.long() > 1 and m.command[1] == "nsfw":
+        if app.command() > 1 and m.command[1] == "nsfw":
             url = "https://api.waifu.pics/nsfw/waifu"
 
         await app.send_edit(text, text_type=["mono"])

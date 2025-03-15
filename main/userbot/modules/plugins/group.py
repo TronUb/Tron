@@ -9,7 +9,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 @app.on_cmd(
     commands=["bgroup", "bgp"],
     usage="Create a basic group.",
@@ -19,12 +18,12 @@ async def basicgroup_handler(_, m: Message):
     """ basic group handler for group plugin """
     grpname = None
     users = None
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(f"Usage: `{app.PREFIX}bgroup mygroupname`", delme=4)
-    elif app.long() > 1:
+    elif app.command() > 1:
         grpname = m.text.split(None, 1)[1]
         users = "@TheRealPhoenixBot"
-    elif app.long() > 2:
+    elif app.command() > 2:
         grpname = m.text.split(None, 1)[1]
         users = m.text.split(None, 2)[2].split()
     else:
@@ -44,8 +43,6 @@ async def basicgroup_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["sgroup", "sgp"],
     usage="Create a super group.",
@@ -55,12 +52,12 @@ async def supergroup_handler(_, m: Message):
     """ super group handler for group plugin """
     grpname = None
     about = None
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(f"`Usage: {app.PREFIX}sgroup mygroupname`", delme=4)
-    elif app.long() > 1:
+    elif app.command() > 1:
         grpname = m.text.split(None, 1)[1]
         about = ""
-    elif app.long() > 2:
+    elif app.command() > 2:
         grpname = m.text.split(None, 1)[1]
         about = m.text.split(None, 2)[2]
     else:
@@ -78,8 +75,6 @@ async def supergroup_handler(_, m: Message):
             await app.send_edit("No group name is provided.", text_type=["mono"], delme=4)
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -103,8 +98,6 @@ async def unreadchat_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="channel",
     usage="Create a channel.",
@@ -114,13 +107,13 @@ async def channel_handler(_, m: Message):
     """ channel handler for group plugin """
     chname = None
     about = None
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(f"Usage: `{app.PREFIX}channel [channel name]`", delme=4)
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         chname = m.text.split(None, 1)[1]
         about = ""
-    elif app.long() > 2:
+    elif app.command() > 2:
         chname = m.text.split(None, 1)[1]
         about = m.text.split(None, 2)[2]
 

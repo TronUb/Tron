@@ -53,7 +53,7 @@ async def ban_handler(_, m: Message):
         cmd = m.command or getattr(sm, "command", None)
         ban_time = False
 
-        if app.long() == 1 and not reply:
+        if app.command() == 1 and not reply:
             return await app.send_edit(
                 "Reply or give some id | username after command.",
                 text_type=["mono"],
@@ -69,14 +69,14 @@ async def ban_handler(_, m: Message):
 
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
-            if app.long() > 1:
+            if app.command() > 1:
                 arg = cmd[1]
                 ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 
         elif not reply:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, cmd[1])
-                if app.long() > 2:
+                if app.command() > 2:
                     arg = cmd[2]
                     ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 
@@ -135,14 +135,14 @@ async def banall_handler(_, m: Message):
                 delme=3
             )
 
-        if app.long() == 1:
+        if app.command() == 1:
             return await app.send_edit(
                 "Use '`confirm`' text after command to ban all members.",
                 text_type=["mono"],
                 delme=4
             )
 
-        elif app.long() > 1 and m.command[1] == "confirm":
+        elif app.command() > 1 and m.command[1] == "confirm":
             count = 0
             async for x in app.get_chat_members(m.chat.id):
                 if x.status == ChatMemberStatus.MEMBER:
@@ -150,7 +150,7 @@ async def banall_handler(_, m: Message):
                     count += 1
                     await app.send_edit(f"Banned {x.user.mention} . . .")
             await app.send_edit(f"Banned {count} members !")
-        elif app.long() > 1 and m.command[1] != "confirm":
+        elif app.command() > 1 and m.command[1] != "confirm":
             await app.send_edit(
                 "Use '`confirm`' text after command to ban all members.",
                 text_type=["mono"],
@@ -177,7 +177,7 @@ async def unban_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Reply to a user or give me the username | id of that user.",
                 text_type=["mono"],
@@ -194,7 +194,7 @@ async def unban_handler(_, m: Message):
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
         elif not reply:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
         else:
             return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
@@ -290,7 +290,7 @@ async def mute_handler(_, m: Message):
         mute_time = False
         cmd = m.command or getattr(sm, "command", None)
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Reply to a user or give me username | id of that user.",
                 text_type=["mono"],
@@ -306,14 +306,14 @@ async def mute_handler(_, m: Message):
 
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
-            if app.long() > 1:
+            if app.command() > 1:
                 arg = cmd[1]
                 mute_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
 
         elif not reply:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
-                if app.long() > 2:
+                if app.command() > 2:
                     arg = cmd[2]
                     mute_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
         else:
@@ -369,7 +369,7 @@ async def unmute_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Reply to a user or give me the username | id of that user.",
                 text_type=["mono"],
@@ -386,7 +386,7 @@ async def unmute_handler(_, m: Message):
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
         elif not reply:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
         else:
             return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
@@ -453,7 +453,7 @@ async def kick_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Reply to a user or give me username | id of that user.",
                 text_type=["mono"],
@@ -470,7 +470,7 @@ async def kick_handler(_, m: Message):
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
         else:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
 
         if user:
@@ -572,7 +572,7 @@ async def unpin_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         cmd = m.command or sm.command if sm else None
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Reply to a message or use `all` as a prefix to unpin all pinned message.",
                 text_type=["mono"],
@@ -586,7 +586,7 @@ async def unpin_handler(_, m: Message):
                 await app.send_edit("Unpinned message.", text_type=["mono"])
             else:
                 await app.send_edit("Failed to unpin message.", text_type=["mono"], delme=4)
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             if cmd[1] == "all":
                 done = await app.unpin_all_chat_messages(m.chat.id)
                 if done:
@@ -625,7 +625,7 @@ async def promote_handler(_, m: Message):
         reply = m.reply_to_message or getattr(sm, "reply_to_message", None)
         user = False
 
-        if app.long() == 1 and not reply:
+        if app.command() == 1 and not reply:
             return await app.send_edit(
                 "Reply to user or give me username | id of that user.",
                 text_type=["mono"],
@@ -642,7 +642,7 @@ async def promote_handler(_, m: Message):
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
         else:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
 
         if user:
@@ -711,7 +711,7 @@ async def demote_handler(_, m: Message):
                 delme=4
             )
 
-        if app.long() == 1 and not reply:
+        if app.command() == 1 and not reply:
             return await app.send_edit(
                 "Reply to user or give me username | id of that user.",
                 text_type=["mono"],
@@ -721,7 +721,7 @@ async def demote_handler(_, m: Message):
         if reply:
             user = await app.get_chat_member(m.chat.id, reply.from_user.id)
         else:
-            if app.long() > 1:
+            if app.command() > 1:
                 user = await app.get_chat_member(m.chat.id, m.command[1])
 
         if user:

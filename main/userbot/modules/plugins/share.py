@@ -8,14 +8,13 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands="send",
     usage="Send plugins."
 )
 async def sendplugin_handler(_, m: Message):
     """ send plugin handler for share plugin """
-    if app.long() > 1:
+    if app.command() > 1:
         await app.send_edit("Checking module . . .", text_type=["mono"])
         filename = m.command[1]
         modulename = f"main/userbot/modules/plugins/{filename}.py"
@@ -49,8 +48,6 @@ async def sendplugin_handler(_, m: Message):
             f"`{app.Trigger()[0]}send [ plugin name ]`  to upload plugin file.",
             delme=3
         )
-
-
 
 
 @app.on_cmd(
@@ -106,9 +103,6 @@ async def install_handler(_, m: Message):
             await app.error(e)
 
 
-
-
-
 @app.on_cmd(
     commands="uninstall",
     usage="Uninstall a installed plugin."
@@ -117,7 +111,7 @@ async def uninstall_handler(_, m: Message):
     """ uninstal handler for share plugin """
     cmd = m.command
     try:
-        if app.long() > 1:
+        if app.command() > 1:
             if cmd[1].endswith(".py"):
                 module_loc = f"./main/userbot/modules/plugins/{cmd[1]}"
             elif not cmd[1].endswith(".py"):

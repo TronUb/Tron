@@ -8,7 +8,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 @app.on_cmd(
     commands="spam",
     usage="Send a message a number of times.",
@@ -21,14 +20,14 @@ async def spam_handler(_, m: Message):
         reply_to_id = reply.id if reply else None
         cmd = m.text.split(None, 2)
 
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             await app.send_edit(
                 "Reply or give me count & spam text after command.",
                 text_type=["mono"],
                 delme=4
             )
 
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             await m.delete()
             times = int(cmd[1]) if cmd[1].isdigit() else 0
             spam_msg = cmd[2]
@@ -54,8 +53,6 @@ async def spam_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="dspam",
     usage="Spam with a delay.",
@@ -67,12 +64,12 @@ async def delayspam_handler(_, m: Message):
         reply = m.reply_to_message
         cmd = m.command
 
-        if app.long() < 3:
+        if app.command() < 3:
             await app.send_edit(
                 f"Use like this: `{app.Trigger()[0]}dspam [count spam] [delay time in seconds] [text messages]`"
             )
 
-        elif app.long() > 2 and not reply:
+        elif app.command() > 2 and not reply:
             await m.delete()
             msg = m.text.split(None, 3)
             times = int(msg[1]) if msg[1].isdigit() else None

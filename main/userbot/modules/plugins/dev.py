@@ -21,7 +21,7 @@ async def evaluate_handler(_, m: Message):
     """Execute Python code securely within the bot."""
 
     try:
-        if app.long() == 1:
+        if app.command() == 1:
             return await app.send_edit(
                 "Give me some Python code to execute . . .", text_type=["mono"], delme=4
             )
@@ -76,7 +76,7 @@ async def evaluate_handler(_, m: Message):
 async def terminal_handler(_, m: Message):
     """Execute shell commands and return output."""
     try:
-        if app.long() == 1:
+        if app.command() == 1:
             return await app.send_edit("Use: `.term pip3 install colorama`", delme=5)
 
         await app.send_edit("Running in shell . . .", text_type=["mono"])

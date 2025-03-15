@@ -6,7 +6,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 @app.on_cmd(
     commands="setdv",
     usage="Set database variable.",
@@ -14,7 +13,7 @@ from main.core.enums import UserType
 )
 async def setdv_handler(_, m: Message):
     """ setdv handler for dv plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Give me a key & a value to set dv vars.", text_type=["mono"], delme=4)
 
     elif app.textlen() > 4096:
@@ -24,10 +23,10 @@ async def setdv_handler(_, m: Message):
             delme=4
         )
 
-    elif app.long() == 2:
+    elif app.command() == 2:
         await app.send_edit("Please give me key with a value.", text_type=["mono"], delme=4)
 
-    elif app.long() > 2:
+    elif app.command() > 2:
         key = m.command[1]
         value = m.text.split(None, 2)[2]
         done = app.setdv(key, value)
@@ -45,8 +44,6 @@ async def setdv_handler(_, m: Message):
             )
 
 
-
-
 @app.on_cmd(
     commands="deldv",
     usage="Delete a database variable.",
@@ -54,7 +51,7 @@ async def setdv_handler(_, m: Message):
 )
 async def deldv_handler(_, m: Message):
     """ deldv handler for dv plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit(
             "Give me some key to delete that a var from database . . . ",
             text_type=["mono"],
@@ -68,7 +65,7 @@ async def deldv_handler(_, m: Message):
             delme=4
         )
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         keys = "**Deleted vars:**\n\n"
         cmd = m.command
         for key in cmd[1:]:
@@ -83,7 +80,6 @@ async def deldv_handler(_, m: Message):
         await app.send_edit("Something went wrong, try again later !", text_type=["mono"], delme=4)
 
 
-
 @app.on_cmd(
     commands="getdv",
     usage="Get value of databae variable.",
@@ -91,14 +87,14 @@ async def deldv_handler(_, m: Message):
 )
 async def getdv_handler(_, m: Message):
     """ getdv handler for dv plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit(
             "Give me some key to get value that a var from database . . . ",
             text_type=["mono"],
             delme=2
         )
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         key = m.command[1]
         done = app.getdv(key)
 
@@ -118,20 +114,18 @@ async def getdv_handler(_, m: Message):
         )
 
 
-
-
 @app.on_cmd(
-    commands="pm",
-    usage="Allow users to pm"
+    commands=["pmgaurd", "pm"],
+    usage="Activate/Deactivate pm gaurd for unwanted spammer block",
 )
 async def pm_handler(_, m: Message):
     """ pm handler for dv plugin """
     arg = m.command
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Provide me a suffix to do some work.\n\nSuffix: `on` & `off`", delme=4)
 
-    elif app.long() > 1 and arg[1] == "on":
-        if app.Pmpermit() is True:
+    elif app.command() > 1 and arg[1] == "on":
+        if app.Pmpermit is True:
             return await app.send_edit("Pmguard is already active !", text_type=["mono"], delme=4)
 
         done = app.setdv("PMPERMIT", "True")
@@ -140,8 +134,8 @@ async def pm_handler(_, m: Message):
         else:
             await app.send_edit("Failed to turn on pmguard.", text_type=["mono"], delme=4)
 
-    elif app.long() > 1 and arg[1] == "off":
-        if app.Pmpermit() is False:
+    elif app.command() > 1 and arg[1] == "off":
+        if app.Pmpermit is False:
             return await app.send_edit("Pmguard is already off !", text_type=["mono"], delme=4)
 
         done = app.deldv("PMPERMIT")
@@ -150,7 +144,7 @@ async def pm_handler(_, m: Message):
         else:
             await app.send_edit("Failed to turn off pmguard.", text_type=["mono"], delme=4)
 
-    elif app.long() > 1 and arg[1] not in ("on", "off"):
+    elif app.command() > 1 and arg[1] not in ("on", "off"):
         await app.send_edit("Use `on` or `off` after command to turn on & off pmguard.", delme=4)
     else:
         await app.send_edit(
@@ -160,12 +154,10 @@ async def pm_handler(_, m: Message):
         )
 
 
-
-
 @app.on_cmd(
-    commands="listdv",
+    commands=["listdv", "ldv"],
     usage="Get all database variables & values.",
-    disable_for=UserType.SUDO
+    disable_for=UserType.SUDO,
 )
 async def listdv_handler(_, m: Message):
     """ listdv handler for dv plugin """
@@ -181,7 +173,6 @@ async def listdv_handler(_, m: Message):
         await app.send_edit("**All DB VARS:**\n\n" + "".join(dict_data))
     else:
         await app.send_edit("There are no database vars (empty) !", text_type=["mono"], delme=4)
-
 
 
 @app.on_cmd(

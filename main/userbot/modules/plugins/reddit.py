@@ -8,14 +8,13 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands=["r", "reddit"],
     usage="Get reddit images."
 )
 async def reddit_handler(_, m: Message):
     """ reddit handler for reddit plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit("Please give me some query to search on reddit.", delme=2)
 
     elif app.textlen() > 4096:
@@ -25,7 +24,7 @@ async def reddit_handler(_, m: Message):
             delme=3
         )
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         try:
             query = m.text.split(None, 1)[1]
             await app.send_edit("Getting reddit images . . .", text_type=["mono"])

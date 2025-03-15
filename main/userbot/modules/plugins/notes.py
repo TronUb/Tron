@@ -14,7 +14,6 @@ from main import (
 from main.core.enums import UserType
 
 
-
 GET_FORMAT = {
     app.TEXT: app.send_message,
     app.DOCUMENT: app.send_document,
@@ -30,8 +29,6 @@ GET_FORMAT = {
 }
 
 
-
-
 @app.on_cmd(
     commands="save",
     usage="save a note.",
@@ -41,10 +38,16 @@ async def savenote_hanlder(_, m: Message):
     """ savenote handler for notes plugin """
     try:
         reply = m.reply_to_message
-        if app.long() == 1:
+        if app.command() == 1:
             return await app.send_edit(
                 "A note name is required with command to save a note.",
                 text_type=["mono"]
+            )
+
+        if not reply and app.command() <= 2:
+            return await app.send_edit(
+                "A note name and its value is required to save it.",
+                text_type=["mono"],
             )
 
         note_name, text, message_type, content = app.GetNoteType(reply if reply else m)
@@ -66,15 +69,13 @@ async def savenote_hanlder(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_message(filters.regex(">") & filters.user(app.AllUsersId))
 async def getnote_handler(_, m: Message):
     """ getnote handler for notes plugin """
     try:
         reply = m.reply_to_message
         if m.text and m.text.startswith(">"):
-            if app.long() == 1:
+            if app.command() == 1:
                 note = m.text.replace(">", "")
             else:
                 return # no response
@@ -146,8 +147,6 @@ async def getnote_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="notes",
     usage="Get all saved notes."
@@ -165,8 +164,6 @@ async def notelist_handler(_, m: Message):
     await app.send_edit(notelist)
 
 
-
-
 @app.on_cmd(
     commands="clear",
     usage="Delete a saved note.",
@@ -174,7 +171,7 @@ async def notelist_handler(_, m: Message):
 )
 async def clearnote_handler(_, m: Message):
     """ clearnote handler for notes plugin """
-    if app.long() <= 1:
+    if app.command() <= 1:
         return await app.send_edit(
             f"Sir, give me a note name after command, Ex: `{app.PREFIX}clear cat`"
         )

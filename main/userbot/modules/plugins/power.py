@@ -3,12 +3,12 @@
 import os
 import sys
 import time
+import asyncio
 
 from pyrogram.types import Message
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
-
 
 
 @app.on_cmd(
@@ -17,22 +17,20 @@ from main.core.enums import UserType
     disable_for=UserType.SUDO
 )
 async def reboot_handler(_, m: Message):
-    """ reboot handler for power plugin """
+    """Reboot handler for power plugin"""
+
     try:
         msg = await app.send_edit("Restarting bot . . .", text_type=["mono"])
 
-        os.execv(sys.executable, ['python'] + sys.argv)
-        await app.edit_message_text(
-            msg.chat.id,
-            msg.message_id,
-            "Restart completed !\nBot is alive now !"
-        )
+        # Allow message to be visible before restarting
+        await asyncio.sleep(2)
+
+        # Restart the bot
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+
     except Exception as e:
-        await m.edit("Failed to restart userbot !", delme=2, text_type=["mono"])
+        await m.edit("Failed to restart userbot!", delme=2, text_type=["mono"])
         await app.error(e)
-
-
-
 
 @app.on_cmd(
     commands="sleep",
@@ -40,35 +38,34 @@ async def reboot_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def sleep_handler(_, m: Message):
-    """ sleep handler for power plugin """
-    if app.long() == 1:
-        return await app.send_edit("Give me some seconds after command . . .")
+    """Sleep handler for power plugin"""
 
-    elif app.long() > 1:
-        arg = m.command[1]
+    if len(m.command) == 1:
+        return await app.send_edit("Give me some seconds after command . . .", delme=3)
 
-    if arg.isdigit():
-        cmd = int(arg)
-        if cmd > 86400:
-            return await app.send_edit(
-                "Sorry you can't sleep bot for more than 24 hours (> 86400 seconds) . . .",
-                text_type=["mono"],
-                delme=3
-            )
+    arg = m.command[1]
 
-        formats = {
-            cmd<60:f"{cmd} seconds",
-            cmd>=60:f"{cmd//60} minutes",
-            cmd>=3600:f"{cmd//3600} hours"
-            }
+    if not arg.isdigit():
+        return await app.send_edit(
+            "Please provide a valid number (seconds).", delme=3, text_type=["mono"]
+        )
 
-        suffix = "`null`"
-        for x in formats: # very small loop
-            if x:
-                suffix = formats[x]
-                break
+    sleep_time = int(arg)
 
-        await app.send_edit(f"Sleeping for {suffix} . . .", delme=cmd)
-        time.sleep(cmd)
+    if sleep_time > 86400:
+        return await app.send_edit(
+            "Sorry, you can't sleep the bot for more than 24 hours (> 86400 seconds).",
+            text_type=["mono"],
+            delme=3,
+        )
+
+    # Convert time to a readable format
+    if sleep_time < 60:
+        suffix = f"{sleep_time} seconds"
+    elif sleep_time < 3600:
+        suffix = f"{sleep_time // 60} minutes"
     else:
-        await app.send_edit("Please give me a number not text . . .", delme=3, text_type=["mono"])
+        suffix = f"{sleep_time // 3600} hours"
+
+    await app.send_edit(f"Sleeping for {suffix} . . .", delme=3)
+    await time.sleep(sleep_time)

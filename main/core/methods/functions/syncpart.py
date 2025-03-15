@@ -106,10 +106,7 @@ class SyncPart(Types):
         mytime = get_time.strftime("%r")
         return mytime
 
-    def long(
-        self,
-        length: int=0
-        ):
+    def command(self, length: int = 0):
         """
         params:
             None
@@ -118,7 +115,7 @@ class SyncPart(Types):
             this function returns the length of a list containing message splited on spaces
 
         ex:
-            if app.long() == 1:
+            if app.command() == 1:
                 print("there is one word in message.text")
         """
         if self.is_bot:
@@ -554,7 +551,7 @@ class SyncPart(Types):
         content = None
         text = None
 
-        if self.long() == 1:
+        if self.command() == 1:
             return None, None, None, None, None
 
         if msg.text:
@@ -567,7 +564,7 @@ class SyncPart(Types):
         note_name = raw_text.split()[1]
 
         # determine what the contents of the filter are - text, image, sticker, etc
-        if self.long() >= 3:
+        if self.command() >= 3:
             text = raw_text.split(None, 2)[2]
             message_type = Types.TEXT
 
@@ -781,7 +778,7 @@ class SyncPart(Types):
             return reply
 
         elif not reply:
-            if self.long() > 1:
+            if self.command() > 1:
                 return m
         return type("argclass", (object,), {"text" : None})()
 

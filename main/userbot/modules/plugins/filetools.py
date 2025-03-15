@@ -1,134 +1,123 @@
 """ filetools plugin """
 
+import os
 import shutil
 import zipfile
 
 from pyrogram.types import Message
-
-from main import app, gen
-
+from main import app
 
 
 async def unzipfiles(zippath):
-    """ unzipfiles function for filetools plugin """
-    foldername = zippath.split("/")[-1]
-    extract_path = f"./downloads/{foldername}"
-    shutil.unpack_archive(zippath, extract_path)
-    return extract_path
+    """Unzips a file and extracts it into the ./downloads directory"""
+    if not os.path.exists(zippath):
+        return None
 
-
-
-
-@app.on_cmd(
-    commands="zip",
-    usage="Zip a file."
-)
-async def zip_handler(_, m: Message):
-    """ zip handler for filetools plugin """
-    reply = m.reply_to_message
-    if not reply:
-        return await app.send_edit("Reply to a file. . .", text_type=["mono"], delme=4)
-
-    elif reply:
-        if not reply.media:
-            return await app.send_edit("Reply to some media . . .", text_type=["mono"])
-
-        await app.send_edit("Zipping . . .", text_type=["mono"])
-
-        loc = app.TEMP_DICT if app.TEMP_DICT else "./downloads"
-
-        dl = await app.download_media(
-            reply,
-            block=False
-        )
-        zipfile.ZipFile(dl.replace("/app/downloads/", "") + ".zip", "w").write(dl)
-        place = dl.replace("/app/downloads/", "") + ".zip"
-        await app.send_edit(f"**Your file is compressed and saved here:** \n`{place}`")
-    else:
-        await app.send_edit("Something went wrong . . .", delme=3, text_type=["mono"])
-
-
-
-
-@app.on_cmd(
-    commands="unzip",
-    usage="Unzip a file."
-)
-async def unzip_handler(_, m: Message):
-    """ unzip handler for filetools plugin """
-    if app.long() == 2:
-        if app.textlen() <= 4096:
-            loc = m.text.split(None, 1)[1]
-            await app.send_edit("Unzipping file . . .", text_type=["mono"])
-            extract_path = await unzipfiles(loc)
-            await app.send_edit(f"File unzipped and saved here: `{extract_path}`")
-        elif app.textlen() > 4096:
-            await app.send_edit("Text is too long !", delme=4, text_type=["mono"])
-    else:
-        await app.send_edit(
-            "Give me the file path to unzip the file . . .",
-            delme=4,
-            text_type=["mono"]
-        )
-
-
-
-
-@app.on_cmd(
-    commands="new",
-    usage="Create a new file."
-)
-async def createfile_handler(_, m:Message):
-    """ create file handler for filetools plugin """
-    reply = m.reply_to_message
-    mytext = "Making file . . ."
+    folder_name = os.path.splitext(os.path.basename(zippath))[0]
+    extract_path = os.path.join("./downloads", folder_name)
 
     try:
-        if app.textlen() > 4096:
+        shutil.unpack_archive(zippath, extract_path)
+        os.remove(zippath)  # Remove the zip file after extraction
+        return extract_path
+    except Exception as e:
+        return str(e)
+
+
+@app.on_cmd(commands="zip", usage="Zip a file or folder.")
+async def zip_handler(_, m: Message):
+    """Zip handler for filetools plugin"""
+    reply = m.reply_to_message
+    if not reply or not reply.media:
+        return await app.send_edit(
+            "Reply to a file or folder to compress.", text_type=["mono"], delme=4
+        )
+
+    await app.send_edit("Zipping file...", text_type=["mono"])
+
+    try:
+        file_path = await app.download_media(message=reply)
+
+        if not file_path:
             return await app.send_edit(
-                "The message is too long. (it must be <= 4096)",
-                delme=4,
-                text_type=["mono"]
+                "Failed to download file.", text_type=["mono"], delme=4
             )
 
-        if app.long() == 1:
-            return await app.send_edit(
-                "Give me filename & content of file after command.",
-                text_type=["mono"],
-                delme=4
-            )
+        zip_path = f"{file_path}.zip"
 
-        if reply and app.long() >= 2:
-            name = m.text.split(None, 1)[1]
-            await app.send_edit(mytext, text_type=["mono"])
-            text = reply.text or reply.caption or "None"
-            await app.create_file(
-                filename=name,
-                content=text,
-                send=True
-            )
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+            if os.path.isdir(file_path):
+                for root, _, files in os.walk(file_path):
+                    for file in files:
+                        zipf.write(
+                            os.path.join(root, file),
+                            os.path.relpath(os.path.join(root, file), file_path),
+                        )
+            else:
+                zipf.write(file_path, os.path.basename(file_path))
 
-        # if replied to text without file name
-        elif not reply and app.long() >= 3:
-            await app.send_edit(mytext, text_type=["mono"])
-            name = m.text.split(None, 1)[1]
-            text = m.text.split(None, 2)[2]
-            await app.create_file(
-                filename=name,
-                content=text,
-                send=True
-            )
-
-        # if replied to text with file name
-        elif not reply and app.long() == 1:
-            await app.send_edit(
-                "Are you dumb, give me the file contents with the file name.",
-                text_type=["mono"],
-                delme=4
-            )
-
-        else:
-            await app.send_edit("Something went wrong !")
+        await app.send_document(
+            m.chat.id,
+            zip_path,
+            caption=f"Compressed file: `{os.path.basename(zip_path)}`",
+        )
+        os.remove(zip_path)  # Remove zip after sending
 
     except Exception as e:
-        await app.error(e)
+        await app.send_edit(f"Error: {e}", text_type=["mono"], delme=4)
+
+
+@app.on_cmd(commands="unzip", usage="Unzip a file.")
+async def unzip_handler(_, m: Message):
+    """Unzip handler for filetools plugin"""
+    reply = m.reply_to_message
+    if not reply or not reply.media:
+        return await app.send_edit(
+            "Reply to a file to unzip it.", text_type=["mono"], delme=4
+        )
+
+    zip_path = await app.download_media(message=reply)
+
+    if not zip_path.endswith(".zip") or not os.path.exists(zip_path):
+        return await app.send_edit("Invalid ZIP file.", text_type=["mono"], delme=4)
+
+    await app.send_edit("Unzipping file...", text_type=["mono"])
+
+    extract_path = await unzipfiles(zip_path)
+
+    if extract_path:
+        await app.send_edit(
+            f"File unzipped successfully at: `{extract_path}`", text_type=["mono"]
+        )
+    else:
+        await app.send_edit("Failed to unzip file.", text_type=["mono"], delme=4)
+
+
+@app.on_cmd(commands="new", usage="Create a new file.")
+async def createfile_handler(_, m: Message):
+    """Create a new file"""
+    reply = m.reply_to_message
+    command_parts = m.text.split(None, 2)
+
+    if len(command_parts) < 2:
+        return await app.send_edit(
+            "Provide a filename and optional content.", text_type=["mono"], delme=4
+        )
+
+    filename = command_parts[1]
+    content = command_parts[2] if len(command_parts) > 2 else ""
+
+    if reply:
+        content = reply.text or reply.caption or "None"
+
+    file_path = os.path.join("./downloads", filename)
+
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+
+        await app.send_document(
+            m.chat.id, file_path, caption=f"File created: `{filename}`"
+        )
+    except Exception as e:
+        await app.send_edit(f"Error: {e}", text_type=["mono"], delme=4)

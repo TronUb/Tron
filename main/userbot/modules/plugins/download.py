@@ -13,9 +13,8 @@ from pyrogram.types import Message
 
 from pyrogram import errors
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
-
 
 
 @app.on_cmd(
@@ -26,7 +25,11 @@ async def ls_handler(_, m: Message):
     """ function to show directory files and folders """
 
     try:
-        location = "." if app.long() == 1 else m.command[1] if m.command and app.long() >= 2 else None
+        location = (
+            "."
+            if app.command() == 1
+            else m.command[1] if m.command and app.command() >= 2 else None
+        )
 
         location = os.path.abspath(location)
         if not location.endswith("/"):
@@ -66,9 +69,6 @@ async def ls_handler(_, m: Message):
         await app.error(e)
 
 
-
-
-
 @app.on_cmd(
     commands=["download", "dl"],
     usage="Download a telegram media in your server.",
@@ -102,7 +102,7 @@ async def download_handler(_, m: Message):
         except Exception as e:
             await app.error(e)
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         try:
             start_t = datetime.now()
             the_url_parts = " ".join(m.command[1:])
@@ -172,9 +172,6 @@ async def download_handler(_, m: Message):
         )
 
 
-
-
-
 @app.on_cmd(
     commands=["upload", "ul"],
     usage="Upload a existing file from your server to telegram.",
@@ -191,7 +188,7 @@ async def upload_handler(_, m: Message):
 
     extensions = (photo_ext, video_ext, sticker_ext, audio_ext, animation_ext)
 
-    if app.long() > 1:
+    if app.command() > 1:
         local_file_name = m.text.split(None, 1)[1]
 
         method = "reply_document"
@@ -237,9 +234,6 @@ async def upload_handler(_, m: Message):
         )
 
 
-
-
-
 @app.on_cmd(
     commands=["batchup", "bcp"],
     usage="Upload all files of a directory in a batch.",
@@ -255,14 +249,14 @@ async def batchupload_handler(_, m: Message):
             text_type=["mono"]
         )
 
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(
             "Give me a location to upload files from the directory . . .",
             delme=2,
             text_type=["mono"]
         )
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         temp_dir = m.command[1]
         if not temp_dir.endswith("/"):
             temp_dir += "/"

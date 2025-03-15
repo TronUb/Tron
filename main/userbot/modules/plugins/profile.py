@@ -1,6 +1,7 @@
 """ profile plugin """
 
 import time
+import asyncio
 
 from functools import partial
 
@@ -13,7 +14,6 @@ from pyrogram.errors import PeerIdInvalid
 
 from main import app, gen
 from main.core.enums import UserType
-
 
 
 date_dict = []
@@ -31,13 +31,9 @@ infotext = """
 """
 
 
-
-
 def FullName(user: User):
     """ fullname function for profile plugin """
     return user.first_name + " " + user.last_name if user.last_name else user.first_name
-
-
 
 
 @app.on_cmd(
@@ -52,49 +48,39 @@ async def whois_handler(_, m: Message):
 
     if reply:
         get_user = reply.from_user.id
-    elif not reply and app.long() > 1:
+    elif len(cmd) > 1:
         get_user = cmd[1]
     else:
         get_user = None
 
+    if not get_user:
+        return await app.send_edit(
+            "Please reply to a user or provide a user ID.", text_type=["mono"], delme=3
+        )
+
     try:
-        if get_user:
-            user = await app.get_users(get_user)
+        user = await app.get_users(get_user)
     except PeerIdInvalid:
         return await app.send_edit("I don't know that User.", text_type=["mono"], delme=3)
 
-    async for x in app.get_chat_photos(user.id):
+    pfp = None
+    async for x in app.get_chat_photos(user.id, limit=1):
         pfp = x.file_id
         break
 
-    if not pfp:
-        await app.send_edit(
-            infotext.format(
-                FullName(user),
-                user.id,
-                user.first_name,
-                user.id,
-                f"@{user.username}" if user.username else "",
-                user.dc_id
-            ),
-        disable_web_page_preview=True,
-        )
+    info_text = (
+        f"**Full Name:** {user.first_name} {user.last_name or ''}\n"
+        f"**User ID:** `{user.id}`\n"
+        f"**Username:** @{user.username if user.username else 'N/A'}\n"
+        f"**DC ID:** `{user.dc_id}`\n"
+    )
+
+    if pfp:
+        await app.send_cached_media(m.chat.id, file_id=pfp, caption=info_text)
     else:
-        await app.send_cached_media(
-            m.chat.id,
-            file_id = pfp,
-            caption=infotext.format(
-                FullName(user),
-                user.id,
-                user.first_name,
-                user.id,
-                f"@{user.username}" if user.username else  "",
-                user.dc_id
-            )
-        )
-        await m.delete()
+        await app.send_edit(info_text, disable_web_page_preview=True)
 
-
+    await m.delete()
 
 
 @app.on_cmd(
@@ -106,6 +92,7 @@ async def id_handler(_, m: Message):
     await app.send_edit("Getting id . . .", text_type=["mono"])
     cmd = m.command
     reply = m.reply_to_message
+    get_user = None
 
     if not reply and len(cmd) == 1:
         get_user = m.from_user.id
@@ -126,8 +113,6 @@ async def id_handler(_, m: Message):
     await app.send_edit(f"**{u_name}:** `{user.id}`\n**{c_name}:** `{chat.id}`")
 
 
-
-
 @app.on_cmd(
     commands=["men", "mention"],
     usage="Mention a user.",
@@ -135,7 +120,7 @@ async def id_handler(_, m: Message):
 )
 async def mentionuser_handler(_, m: Message):
     """ mentionuser handler for profile plugin """
-    if app.long() < 3:
+    if app.command() < 3:
         return await app.send_edit(
             "Incorrect command use.\n\n**Example** : `.men @beastzx Tronuserbot`"
         )
@@ -150,58 +135,48 @@ async def mentionuser_handler(_, m: Message):
     await app.send_edit(mention)
 
 
-
-
 @app.on_cmd(
     commands="uinfo",
     usage="Get full user information."
 )
 async def get_full_user_info(_, m: Message):
-    """ get full user info function for profile plugin """
-    await app.send_edit("scrapping info . . .", text_type=["mono"])
-    reply = m.reply_to_message
+    """Get full user info function for profile plugin"""
+    await app.send_edit("🔍 Scraping user info . . .", text_type=["mono"])
 
-    if reply:
-        user = reply.from_user
-    elif not reply:
-        user = m.from_user
-
-    p_id = False
-
-    async for x in app.get_chat_photos(user.id):
-        p_id = x.file_id
-        break
-
+    user = m.reply_to_message.from_user if m.reply_to_message else m.from_user
+    p_id = None
 
     try:
-        duo = f"**1. ID:** `{user.id}`\n"
-        duo += f"**2. NAME:** `{user.first_name}`\n"
-        duo += f"**3. DC ID:** `{user.dc_id}`\n"
-        duo += f"**4. BOT:** `{user.is_bot}`\n"
-        duo += f"**5. FAKE:** `{user.is_fake}`\n"
-        duo += f"**6. SCAM:** `{user.is_scam}`\n"
-        duo += f"**7. NAME:** `{user.first_name}`\n"
-        duo += f"**8. STATUS:** `{user.status}`\n"
-        duo += f"**9. IS IT ME:** `{user.is_self}`\n"
-        duo += f"**10. DELETED:** `{user.is_deleted}`\n"
-        duo += f"**11. CONTACT:** `{user.is_contact}`\n"
-        duo += f"**12. VERIFIED:** `{user.is_verified}`\n"
-        duo += f"**13. RESTRICTED:** `{user.is_restricted}`\n"
+        async for x in app.get_chat_photos(user.id, limit=1):
+            p_id = x.file_id
+            break
+
+        user_info = (
+            f"🆔 **ID:** `{user.id}`\n"
+            f"👤 **Name:** `{user.first_name}`\n"
+            f"🌍 **DC ID:** `{getattr(user, 'dc_id', 'N/A')}`\n"
+            f"🤖 **Bot:** `{user.is_bot}`\n"
+            f"🎭 **Fake:** `{user.is_fake}`\n"
+            f"🚨 **Scam:** `{user.is_scam}`\n"
+            f"📌 **Status:** `{user.status}`\n"
+            f"👀 **Is it me?** `{user.is_self}`\n"
+            f"🗑 **Deleted:** `{user.is_deleted}`\n"
+            f"📞 **Contact:** `{user.is_contact}`\n"
+            f"✅ **Verified:** `{user.is_verified}`\n"
+            f"⛔ **Restricted:** `{user.is_restricted}`\n"
+        )
 
         if p_id:
-            await app.send_cached_media(
-                m.chat.id,
-                file_id=p_id,
-                caption=duo
-            )
+            await app.send_cached_media(m.chat.id, file_id=p_id, caption=user_info)
             await m.delete()
-        elif p_id is False:
-            await app.send_edit(duo)
+        else:
+            await app.send_edit(user_info)
+
     except Exception as e:
-        await app.send_edit("Some error occured !", text_type=["mono"])
+        await app.send_edit(
+            "⚠️ An error occurred while fetching user info!", text_type=["mono"]
+        )
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -232,8 +207,6 @@ async def tgscan_handler(_, m: Message):
         await app.send_edit("reply to someone's message . . .", delme=3, text_type=["mono"])
 
 
-
-
 @app.on_cmd(
     commands="block",
     usage="Block a user.",
@@ -243,7 +216,7 @@ async def block_handler(_, m: Message):
     """ block handler for profile plugin """
     reply = m.reply_to_message
 
-    if app.long() >= 2 and not reply:
+    if app.command() >= 2 and not reply:
         user = m.command[1]
         try:
             await app.block_user(user)
@@ -257,8 +230,6 @@ async def block_handler(_, m: Message):
             await app.send_edit("Blocked User 🚫", text_type=["mono"], delme=3)
         except Exception as e:
             await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -270,7 +241,7 @@ async def unblock_handler(_, m: Message):
     """ unblock handler for profile plugin """
     reply = m.reply_to_message
 
-    if app.long() >= 2 and not reply:
+    if app.command() >= 2 and not reply:
         user = m.command[1]
         try:
             await app.unblock_user(user)
@@ -285,69 +256,83 @@ async def unblock_handler(_, m: Message):
         except Exception as e:
             await app.error(e)
 
-
-
-
 @app.on_cmd(
     commands="sg",
     usage="Get user name/username history."
 )
 async def usernamehistory_handler(_, m: Message):
-    """ usernamehistory handler for profile plugin """
+    """Username history handler for profile plugin"""
     reply = m.reply_to_message
 
     if not reply:
         await app.send_edit(
-            "Reply to a user to get history of name / username.",
+            "⚠️ Reply to a user to get their name/username history.",
             text_type=["mono"],
-            delme=2
+            delme=2,
         )
+        return
 
-    elif reply:
-        await app.send_edit("Checking History . . .", text_type=["mono"])
-        await app.forward_messages(
-            "@SangMataInfo_bot",
-            m.chat.id,
-            reply.id
-            )
-        is_no_record = False
-        for x in range(8):
-            time.sleep(1)
-            msg = await app.get_chat_history(
-                "@SangMataInfo_bot",
-                limit=3
-                )
-            if msg[0].text == "No records found":
-                await app.send_edit("No records found")
-                is_no_record = True
-                await app.read_chat_history("@SangMataInfo_bot")
-                break
-            if (msg[0].from_user.id == 461843263 and
-                msg[1].from_user.id == 461843263 and
-                msg[2].from_user.id == 461843263):
-                await app.read_chat_history("@SangMataInfo_bot")
-                break
-            else:
-                print(f"Failed, try again ({x+1})")
-                continue
-        if is_no_record:
-            return
-        history_name = "1. " + msg[2].text.split("\n\n1. ")[1]
-        username_history = "1. " + msg[1].text.split("\n\n1. ")[1]
-        text = "**Name History for** [{}](tg://user?id={}) (`{}`)\n\n".format(
-            reply.from_user.first_name,
-            reply.from_user.id,
-            reply.from_user.id) + history_name
-        if (app.textlen() <= 4096 and
-            len(text) + len("\n\n**Username History**\n\n") + len(username_history) <= 4906
-            ):
-            text += "\n\n**Username History**\n\n" + username_history
-            await app.send_edit(text)
+    await app.send_edit("🔍 Checking history . . .", text_type=["mono"])
+
+    await app.forward_messages("@SangMataInfo_bot", m.chat.id, reply.id)
+
+    is_no_record = False
+
+    for attempt in range(8):
+        await asyncio.sleep(1)  # Use async sleep
+
+        # Fetch history properly
+        history = []
+        async for msg in app.get_chat_history("@SangMataInfo_bot", limit=3):
+            history.append(msg)
+
+        if not history or len(history) < 3:
+            continue  # Avoid index errors if history is empty
+
+        if history[0].text == "No records found":
+            await app.send_edit("🚫 No records found!")
+            is_no_record = True
+            await app.read_chat_history("@SangMataInfo_bot")
+            break
+
+        if all(msg.from_user.id == 461843263 for msg in history[:3]):
+            await app.read_chat_history("@SangMataInfo_bot")
+            break
         else:
-            await app.send_edit(text)
-            await app.send_edit("\n\n**Username History**\n\n" + username_history)
+            print(f"🔁 Retry attempt {attempt + 1} . . .")
+            continue
 
+    if is_no_record:
+        return
 
+    # Extracting name and username history safely
+    try:
+        history_name = "1. " + history[2].text.split("\n\n1. ")[1]
+    except IndexError:
+        history_name = "❌ No name history available."
+
+    try:
+        username_history = "1. " + history[1].text.split("\n\n1. ")[1]
+    except IndexError:
+        username_history = "❌ No username history available."
+
+    user_info = (
+        f"📝 **Name History for** [{reply.from_user.first_name}](tg://user?id={reply.from_user.id}) (`{reply.from_user.id}`)\n\n"
+        + history_name
+    )
+
+    if (
+        app.textlen() <= 4096
+        and len(user_info)
+        + len("\n\n**🔄 Username History**\n\n")
+        + len(username_history)
+        <= 4906
+    ):
+        user_info += "\n\n**🔄 Username History**\n\n" + username_history
+        await app.send_edit(user_info)
+    else:
+        await app.send_edit(user_info)
+        await app.send_edit("\n\n**🔄 Username History**\n\n" + username_history)
 
 
 @app.on_cmd(
@@ -359,13 +344,13 @@ async def setprofile_handler(_, m: Message):
     """ setprofile handler for profile plugin """
     cmd = m.command
 
-    if app.long() < 3:
+    if app.command() < 3:
         return await app.send_edit(
             "Please use text and suffix after command suffix: `fname`, `lname`, `bio`, `uname`"
         )
 
     # set -> fname, lname, bio & uname
-    if app.long() > 2:
+    if app.command() > 2:
         text = m.text.split(None, 2)[2]
 
         if cmd[1] in ["fname", "lname", "bio"]:
@@ -377,8 +362,6 @@ async def setprofile_handler(_, m: Message):
         return await app.send_edit("Please specify a correct suffix.", text_type=["mono"], delme=3)
 
 
-
-
 @app.on_cmd(
     commands="rem",
     usage="Remove removable attributes from your profile.",
@@ -386,10 +369,11 @@ async def setprofile_handler(_, m: Message):
 )
 async def remprofile_handler(_, m: Message):
     """ rmprofile handler for profile plugin """
-    if app.long() > 1:
+    cmd = []
+    if app.command() > 1:
         cmd = m.command
 
-    elif app.long(m) == 1:
+    elif app.command(m) == 1:
         return await app.send_edit(
             "what do you want to remove ? suffix: `lname`, `bio`, `pfp`, `uname`",
             delme=3
@@ -405,8 +389,6 @@ async def remprofile_handler(_, m: Message):
             )
     except Exception as e:
         await app.error(e)
-
-
 
 
 # set your profile stuffs
@@ -449,8 +431,6 @@ async def setprofile(m: Message, mode, kwargs):
         await app.send_edit("Please give correct format.", delme=2)
 
 
-
-
 # remove everything
 async def rmprofile(m: Message, args):
     """ rmprofile function for profile plugin """
@@ -487,8 +467,6 @@ async def rmprofile(m: Message, args):
             )
     else:
         await app.send_edit("Give correct format.", delme=3)
-
-
 
 
 @app.on_cmd(

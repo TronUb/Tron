@@ -10,7 +10,6 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 # animations
 data = [
     "🕜",
@@ -37,7 +36,7 @@ async def ping_handler(_, m: Message):
     """ ping handler for ping plugin """
     try:
 
-        if app.long() == 1:
+        if app.command() == 1:
             start = datetime.now()
             await app.send_edit(". . .", text_type=["mono"])
             end = datetime.now()
@@ -46,7 +45,7 @@ async def ping_handler(_, m: Message):
                 f"**Pöng !**\n`{m_s} ms`\n⧑ {app.UserMention}",
                 disable_web_page_preview=True
             )
-        elif app.long() == 2:
+        elif app.command() == 2:
             cmd = m.command
             count = int(cmd[1]) if cmd[1] and cmd[1].isdigit() else 0
             if count <= 1:
@@ -69,8 +68,6 @@ async def ping_handler(_, m: Message):
             return await app.send_edit("Something went wrong in ping module.", delme=2)
     except Exception as e:
         await app.error(e)
-
-
 
 
 # function to create lots of pings

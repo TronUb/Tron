@@ -6,16 +6,15 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands="wiki",
     usage="Get information from Wikipedia."
 )
 async def wikipedia_handler(_, m: Message):
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Give me some query to search on wikipedia . . .", text_type=["mono"], delme=True)
 
-    elif app.long() > 1 and app.long() < 4096:
+    elif app.command() > 1 and app.command() < 4096:
         try:
             obj = wikipediaapi.Wikipedia("en")
             text = m.text.split(None, 1)[1]

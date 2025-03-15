@@ -8,7 +8,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 @app.on_cmd(
     commands=["purge", "p"],
     usage="Delete messages from tagged message to top fown message.",
@@ -52,8 +51,6 @@ async def purge_handler(_, m:Message):
         )
 
 
-
-
 @app.on_cmd(
     commands=["purgeme", "purgme", "pgm"],
     usage="Delete number of messages, counting from recent to oldest.",
@@ -61,7 +58,7 @@ async def purge_handler(_, m:Message):
 )
 async def purgecount_handler(_, m:Message):
     """ purge count handler for purge plugin """
-    if app.long() > 1:
+    if app.command() > 1:
         target = int(m.command[1]) if m.command[1].isdigit() and m.command[1] != 0 else 1
     else:
         return await app.send_edit(
@@ -89,8 +86,6 @@ async def purgecount_handler(_, m:Message):
         text_type=["mono"],
         delme=4
     )
-
-
 
 
 @app.on_cmd(

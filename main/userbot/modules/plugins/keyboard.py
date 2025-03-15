@@ -9,7 +9,6 @@ from pyrogram.enums import ChatType
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands=["kbd", "keyboard"],
     usage="Create keyboards with assistant bot."
@@ -33,7 +32,7 @@ async def create_keyboard(_, m):
             delme=4
         )
 
-    if app.long() >= 3:
+    if app.command() >= 3:
         await app.bot.send_message(
             m.chat.id,
             m.text.split(None, 3)[3],

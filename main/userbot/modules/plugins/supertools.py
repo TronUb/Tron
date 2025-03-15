@@ -11,7 +11,6 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 weather_lang_code="en"
 
 lang_code = os.getenv("LANG_CODE", "en")
@@ -36,8 +35,6 @@ async def text_to_voice(m: Message, text):
     return
 
 
-
-
 async def shorten_link(m: Message, text):
     """ shorten link function for supertools plugin """
     sample_url = f"https://da.gd/s?url={text}"
@@ -49,8 +46,6 @@ async def shorten_link(m: Message, text):
             disable_web_page_preview=True)
     else:
         await app.send_edit(m, "something is wrong. please try again later.", text_type=["mono"])
-
-
 
 
 async def unshorten_link(m: Message, text):
@@ -75,8 +70,6 @@ async def unshorten_link(m: Message, text):
             )
 
 
-
-
 @app.on_cmd(
     commands="tts",
     usage="Convert text to speech."
@@ -86,10 +79,10 @@ async def tts_handler(_, m: Message):
     reply = m.reply_to_message
 
     try:
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit("Reply to someone's text message or give me the text as a suffix . . .", delme=True, text_type=["mono"])
 
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             await app.send_edit("Converting text to voice . . .", text_type=["mono"])
             text = m.text.split(None, 1)[1]
             await text_to_voice(m, text)
@@ -107,15 +100,13 @@ async def tts_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="ud",
     usage="Get meaning of a word on urban dictionary."
 )
 async def ud_handler(_, m:Message):
     """ ud_handler for supertools plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
 
     try:
@@ -139,8 +130,6 @@ async def ud_handler(_, m:Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="short",
     usage="Shorten a link."
@@ -149,13 +138,13 @@ async def shortlink_handler(_, m: Message):
     """ shortlink handler for supertools plugin """
     reply = m.reply_to_message
     try:
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Please give me some link or reply to a link",
                 text_type=["mono"]
             )
 
-        if not reply and app.long() > 1:
+        if not reply and app.command() > 1:
             text = m.text.split(None, 1)[1]
             await shorten_link(m, text)
         elif reply:
@@ -167,8 +156,6 @@ async def shortlink_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["unshort", "noshort"],
     usage="Unshort a link."
@@ -177,13 +164,13 @@ async def unshortlink_handler(_, m: Message):
     """ unshortlink handler for supertools plugin """
     reply = m.reply_to_message
     try:
-        if not reply and app.long() == 1:
+        if not reply and app.command() == 1:
             return await app.send_edit(
                 "Please give me a da.gd link to convert to orginal link",
                 text_type=["mono"]
             )
 
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             text = m.text.split(None, 1)[1]
             await unshorten_link(m, text)
 
@@ -199,15 +186,13 @@ async def unshortlink_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands=["wtr", "weather"],
     usage="Get your country wheather report."
 )
 async def weather_handler(_, m: Message):
     """ whether handler for supertools plugin """
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(
             "Piro Master Atleast Give Me Some Location !",
             text_type=["mono"]
@@ -227,15 +212,13 @@ async def weather_handler(_, m: Message):
     await app.send_edit(weather)
 
 
-
-
 @app.on_cmd(
     commands=["ws", "webshot"],
     usage="Send a screenshot of a website."
 )
 async def webshot_handler(_, m: Message):
     """ webshot handler for supertools plugin """
-    if app.long() > 1:
+    if app.command() > 1:
         try:
             BASE = "https://render-tron.appspot.com/screenshot/"
             url = m.command[1]
@@ -260,8 +243,6 @@ async def webshot_handler(_, m: Message):
         await app.send_edit("Give me the link pro . . .", text_type=["mono"])
 
 
-
-
 @app.on_cmd(
     commands="undlt",
     usage="Get your deleted texts back."
@@ -271,9 +252,9 @@ async def undlt_handler(_, m: Message):
     collect = []
     collect.clear()
 
-    if app.long() == 1:
+    if app.command() == 1:
         count = 5
-    elif app.long() > 1:
+    elif app.command() > 1:
         count = m.command[1]
         if count.isdigit():
             count = int(count)

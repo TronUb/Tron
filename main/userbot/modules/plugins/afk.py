@@ -13,7 +13,6 @@ from main import app
 from main.core.enums import UserType
 
 
-
 handlers = []
 
 
@@ -26,9 +25,9 @@ async def afk_handler(_, m: Message):
 
     try:
         start = int(time.time())
-        if app.long() >= 2:
+        if app.command() >= 2:
             reason = m.text.split(None, 1)[1]
-        elif app.long() == 1:
+        elif app.command() == 1:
             reason = app.AfkText
         else:
             reason = ""
@@ -41,7 +40,6 @@ async def afk_handler(_, m: Message):
         await app.send_edit(f"{app.UserMention} is now Offline.\n{reason}", delme=3)
     except Exception as e:
         await app.error(e)
-
 
 
 # while you are afk
@@ -86,8 +84,6 @@ async def offlinemention_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 async def unafk_handler(_, m: Message):
     try:
         # don't break afk while using afk command
@@ -113,8 +109,6 @@ async def unafk_handler(_, m: Message):
 
     except Exception as e:
         await app.error(e)
-
-
 
 
 # add handlers when user goes afk

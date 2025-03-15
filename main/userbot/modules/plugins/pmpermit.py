@@ -9,9 +9,8 @@ from pyrogram.errors import (
     UsernameInvalid
 )
 
-from main import app, gen
+from main import app
 from main.core.enums import UserType
-
 
 
 async def old_msg(m: Message, user_id):
@@ -24,8 +23,6 @@ async def old_msg(m: Message, user_id):
         )
         return True
     return False
-
-
 
 
 async def send_warn(m: Message, user):
@@ -51,10 +48,6 @@ async def send_warn(m: Message, user):
         return True
     else:
         return print("The bot didn't send pmpermit warning message.")
-
-
-
-
 
 
 # incoming autoblock
@@ -84,7 +77,6 @@ async def pmpermit_handler(_, m: Message):
             else:
                 user = await app.get_users(m.chat.id)
                 users.append({m.chat.id : user}) # whole object
-
 
         # log user info to log chat
 
@@ -129,86 +121,86 @@ async def pmpermit_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
-    commands=["a", "approve"],
+    commands=["approve", "a"],
     usage="Approve a user to dm you.",
-    disable_for=UserType.SUDO
+    disable_for=UserType.SUDO,
 )
 async def approve_handler(_, m: Message):
-    """ approve handler for pmpermit plugin """
+    """Approve handler for pmpermit plugin"""
+
+    # Prevent approving bots
     if m.chat.type == ChatType.BOT:
         return await app.send_edit(
-            "No need to approve innocent bots !",
-            text_type=["mono"],
-            delme=4
+            "No need to approve innocent bots!", text_type=["mono"], delme=4
         )
 
     reply = m.reply_to_message
     cmd = m.command
-    user_data = False
+    user_data = None
+    user_id = None
 
     if m.chat.type == ChatType.PRIVATE:
-        user_id = m.chat.id
+        user_id = m.chat.id  # ✅ Private chat case
 
     elif m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         if reply:
-            user_id = reply.from_user.id
+            user_id = reply.from_user.id  # ✅ If replying to a user
 
-        elif not reply and app.long() == 1:
-            return await app.send_edit("Whom should i approve, piro ?", text_type=["mono"], delme=4)
+        elif len(cmd) == 1:
+            return await app.send_edit(
+                "Whom should I approve, piro?", text_type=["mono"], delme=4
+            )
 
-        elif not reply and app.long() > 1:
+        elif len(cmd) > 1:
             try:
                 user_data = await app.get_users(cmd[1])
                 user_id = user_data.id
             except PeerIdInvalid:
                 return await app.send_edit(
-                    "You have to pass username instead of user id.",
+                    "You must pass a username instead of a user ID.",
                     text_type=["mono"],
-                    delme=4
+                    delme=4,
                 )
             except UsernameNotOccupied:
                 return await app.send_edit(
-                    "This user doesn't exists in telegram.",
-                    text_type=["mono"],
-                    delme=4
+                    "This user doesn't exist on Telegram.", text_type=["mono"], delme=4
                 )
             except UsernameInvalid:
                 return await app.send_edit(
-                    "The username | user id is invalid.",
-                    text_type=["mono"],
-                    delme=4
+                    "The username or user ID is invalid.", text_type=["mono"], delme=4
                 )
 
         else:
             return await app.send_edit("Something went wrong.", text_type=["mono"], delme=4)
-    if user_data:
-        info = user_data
-    else:
-        info = await app.get_users(user_id)
+
+    if not user_id:
+        return await app.send_edit(
+            "Could not determine the user ID.", text_type=["mono"], delme=4
+        )
+
+    info = user_data or await app.get_users(
+        user_id
+    )  # ✅ Get user info if not already fetched
 
     try:
-        m = await app.send_edit(f"`Approving` {info.mention} `. . .`")
+        msg = await app.send_edit(f"`Approving {info.mention}...`")
         app.set_whitelist(user_id, True)
-        await app.send_edit(f"{info.mention} `is now approved.`", delme=4)
+        await app.send_edit(f"{info.mention} is now approved.", delme=4)
         app.del_warn(user_id)
 
         if app.get_msgid(user_id):
-            await old_msg(m, user_id)
+            await old_msg(msg, user_id)  # ✅ Ensure `old_msg` is defined elsewhere
 
     except Exception as e:
         await app.send_edit("Something went wrong.", text_type=["mono"], delme=4)
         await app.error(e)
 
 
-
-
 @app.on_cmd(
-    commands=["da", "disapprove"],
+    commands=["disapprove", "da"],
     usage="Disapprove a user from sending message to you.",
-    disable_for=UserType.SUDO
+    disable_for=UserType.SUDO,
 )
 async def diapprove_handler(_, m:Message):
     """ disapprove handler for pmpermit plugin """
@@ -222,6 +214,7 @@ async def diapprove_handler(_, m:Message):
     reply = m.reply_to_message
     cmd = m.command
     user_data = False
+    user_id = 0
 
     if m.chat.type == ChatType.PRIVATE:
         user_id = m.chat.id
@@ -230,14 +223,14 @@ async def diapprove_handler(_, m:Message):
         if reply:
             user_id = reply.from_user.id
 
-        elif not reply and app.long() == 1:
+        elif not reply and app.command() == 1:
             return await app.send_edit(
                 "Whom should i disapprove, piro ?",
                 text_type=["mono"],
                 delme=4
             )
 
-        elif not reply and app.long() > 1:
+        elif not reply and app.command() > 1:
             try:
                 user_data = await app.get_users(cmd[1])
                 user_id = user_data.id

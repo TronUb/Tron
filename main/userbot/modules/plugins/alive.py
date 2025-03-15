@@ -7,13 +7,23 @@ from pyrogram.errors import BotInlineDisabled
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands="alive",
     usage="Get a beautiful alive template."
 )
 async def alive_handler(_, m: Message):
+    """
+    Get a beautiful alive template.
 
+    This command sends a beautiful alive template containing the bot's owner, Tron version, Python version, Pyrogram version, and uptime. If the bot's profile picture is a video, it will be sent as a video message. If the bot's profile picture is a photo, it will be sent as a photo message. If the bot's profile picture is not set, it will be sent as a text message.
+
+    Args:
+        _ (Client): The Client itself.
+        m (Message): The Message that triggered this command.
+
+    Returns:
+        None
+    """
     try:
         alive_msg = "\n"
         if app.UserBio:
@@ -49,8 +59,6 @@ async def alive_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="ialive",
     usage="Get alive template with inline buttons."
@@ -77,8 +85,6 @@ async def inlinealive_handler(_, m: Message):
             await app.send_edit("Something went wrong, please try again later . . .", delme=2)
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -116,4 +122,3 @@ async def inlinequote_handler(_, m: Message):
             await app.send_edit("Please try again later !", delme=2, text_type=["mono"])
     except Exception as e:
         await app.error(e)
-

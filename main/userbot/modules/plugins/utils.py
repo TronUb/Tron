@@ -5,17 +5,16 @@ import html
 from pyrogram.types import Message, ChatPermissions, User
 from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import (
-    UserAdminInvalid, 
-    PeerIdInvalid, 
-    UsernameNotOccupied, 
+    UserAdminInvalid,
+    PeerIdInvalid,
+    UsernameNotOccupied,
     UserNotMutualContact,
     UserPrivacyRestricted,
-    UserChannelsTooMuch
+    UserChannelsTooMuch,
 )
 
 from main import app, gen
 from main.core.enums import UserType, ChatType
-
 
 
 @app.on_cmd(
@@ -29,7 +28,7 @@ async def admintitle_handler(_, m: Message):
 
     reply = m.reply_to_message
     if await app.IsAdmin() is True:
-        if app.long() == 3:
+        if app.command() == 3:
             try:
                 user_data = m.command[1]
                 title = m.command[2]
@@ -50,7 +49,7 @@ async def admintitle_handler(_, m: Message):
             except Exception as e:
                 await app.error(e)
 
-        elif app.long() == 2 and reply:
+        elif app.command() == 2 and reply:
             try:
                 title = m.command[1]
                 user = reply
@@ -65,14 +64,12 @@ async def admintitle_handler(_, m: Message):
                     await app.send_edit(f"{user_name}'s title is successfully changed to `{title}`", delme=5, text_type=["mono"])
             except Exception as e:
                 await app.error(e)
-        elif app.long() == 1 and not reply:
+        elif app.command() == 1 and not reply:
             await app.send_edit("Reply or give me username | id after command . . .", text_type=["mono"], delme=3)
         else:
             await app.send_edit("Something went wrong, Try again later.", text_type=["mono"], delme=3)
     else:
         await app.send_edit("Sorry you are not an admin here . . .", delme=3, text_type=["mono"])
-
-
 
 
 @app.on_cmd(
@@ -85,11 +82,11 @@ async def invite_handler(_, m):
         return
 
     await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
-        
+
     reply = m.reply_to_message
     if reply:
         user = reply.from_user.id
-    elif not reply and app.long() > 1:
+    elif not reply and app.command() > 1:
         user = m.command[1] if m.command else None
     else:
         return await app.send_edit("I can't invite ghosts, can I ?", text_type=["mono"])
@@ -117,10 +114,10 @@ async def inviteall_handler(_, m):
 
     count = 0
 
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit("Give me a group id or username", text_type=["mono"])
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         group_id = m.command[1] if m.command else None
     else:
         return await app.send_edit("Something weird happened, check log chat.", text_type=["mono"])
@@ -143,8 +140,6 @@ async def inviteall_handler(_, m):
         return await app.send_edit("Something went wrong ! . . .", text_type=["mono"], delme=4)
 
 
-
-
 @app.on_cmd(
     commands=["admins", "adminlist"],
     usage="Get lost of admins of a chat.",
@@ -156,7 +151,7 @@ async def adminlist_handler(_, m):
 
     await app.send_edit("⏳ • Hold on. . .", text_type=["mono"])
 
-    if app.long() >= 2:
+    if app.command() >= 2:
         try:
             chat = m.command[1]
             group = await app.get_chat(chat)
@@ -196,8 +191,6 @@ async def adminlist_handler(_, m):
         await app.send_edit("Something went wrong, Please try again later.", delme=3, text_type=["mono"])
 
 
-
-
 @app.on_cmd(
     commands="report",
     usage="Report a member to admins.",
@@ -208,7 +201,7 @@ async def reportadmin_handler(_, m: Message):
         return
 
     reply = m.reply_to_message
-    if app.long() >= 2:
+    if app.command() >= 2:
         text = m.text.split(None, 1)[1]
     else:
         text = False
@@ -231,8 +224,6 @@ async def reportadmin_handler(_, m: Message):
     await app.send_edit(teks)
 
 
-
-
 @app.on_cmd(
     commands="all",
     usage="Tag all members/admins of a chat.",
@@ -243,7 +234,7 @@ async def tagall_handler(app, m: Message):
         return
 
     reply = m.reply_to_message
-    if app.long() >= 2:
+    if app.command() >= 2:
         text = m.text.split(None, 1)[1]
     else:
         text = "Hello Everyone "
@@ -258,8 +249,6 @@ async def tagall_handler(app, m: Message):
         await app.send_edit(text, parse_mode=ChatType.HTML)
 
 
-
-
 @app.on_cmd(
     commands="bots",
     usage="Get list of bots present in a chat."
@@ -270,7 +259,7 @@ async def botlist_handler(_, m: Message):
 
     reply = m.reply_to_message
     replyid = None
-    if app.long(m) >= 2:
+    if app.command(m) >= 2:
         chat = m.text.split(None, 1)[1]
         grp = await app.get_chat(chat)
     else:
@@ -296,15 +285,9 @@ async def botlist_handler(_, m: Message):
         teks += " • {}\n".format(x)
     teks += "\nTotal {} Bots".format(len(bots))
     if replyid:
-        await app.send_m(
-            m.chat.id, 
-            teks, 
-            reply_to_message_id=replyid
-            )
+        await app.send_m(m.chat.id, teks, reply_to_message_id=replyid)
     else:
         await app.send_edit(teks)
-
-
 
 
 @app.on_cmd(
@@ -324,8 +307,6 @@ async def leavechat_handler(_, m):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="members",
     usage="Get count numbers of a chat."
@@ -334,13 +315,13 @@ async def membercount_handler(_, m):
     if await app.check_private():
         return
 
-    if app.long() == 1:
+    if app.command() == 1:
         try:
             num = await app.get_chat_members_count(m.chat.id)
             await app.send_edit(f"`{num}` members in {m.chat.title}")
         except UsernameNotOccupied or PeerIdInvalid:
             await app.send_edit("The username | id does not exist . . .", text_type=["mono"])
-    elif app.long() >= 2:
+    elif app.command() >= 2:
         try:
             mid = m.command[1]
             num = await app.get_chat_members_count(mid)
@@ -351,18 +332,16 @@ async def membercount_handler(_, m):
         await app.send_edit(f"Usage: `{app.PREFIX}members` or `{app.PREFIX}members [chat username | id]` ", delme=5)
 
 
-
-
 @app.on_cmd(
     commands="join",
     usage="Join a chat.",
     disable_for=UserType.SUDO
 )
 async def joinchat_handler(_, m: Message):
-    if app.long() == 1:
+    if app.command() == 1:
         await app.send_edit("Give me some chat id | username after command . . .", text_type=["mono"], delme=5)
 
-    elif app.long() > 1:
+    elif app.command() > 1:
         chat = m.command[1]
         try:
             data = await app.get_chat(chat)
@@ -373,10 +352,8 @@ async def joinchat_handler(_, m: Message):
                 await app.send_edit("Couldn't join chat !")
         except Exception as e:
             await app.error(e)
-    elif app.long() > 4096:
+    elif app.command() > 4096:
         await app.send_edit("Maximum 4096 characters excludeed . . .", text_type=["mono"], delme=5)
-
-
 
 
 @app.on_cmd(
@@ -389,16 +366,16 @@ async def slowmode_handler(_, m: Message):
         return
 
     if await app.IsAdmin() is True:
-        if app.long() == 1:
+        if app.command() == 1:
             sec = 10
-        elif app.long() > 1:
+        elif app.command() > 1:
             sec = m.command[1]
             if sec == "off":
                 await app.set_slow_mode(m.chat.id, None)
                 await app.send_edit("Slow mode is now turned off.", delme=3, text_type=["mono"])
             elif int(sec) not in [10, 30, 60, 300, 900, 3600]:
                 return await app.send_edit("Please choose seconds from here: [`10`, `30`, `60`, `300`, `900`, `3600`]")
-        elif app.long() > 4096:
+        elif app.command() > 4096:
             return await app.send_edit("Only 4096 characters are excludeed . . .", text_type=["mono"], delme=3)
 
         try:

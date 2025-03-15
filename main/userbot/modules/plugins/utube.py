@@ -11,15 +11,12 @@ from pyrogram.enums import MessageEntityType, ChatType
 from PIL import Image
 
 
-
 def ResizeImage(path: str, size: tuple=(320, 320)):
     img = Image.open(path)
     img.thumbnail(size)
     photo = app.TEMP_DICT+"photo.jpg"
     img.save(photo)
     return photo
-
-
 
 
 @app.on_cmd(
@@ -61,8 +58,6 @@ async def ytsearch_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 @app.on_cmd(
     commands="ytinfo",
     usage="Get a YouTube video information."
@@ -95,8 +90,6 @@ async def ytvideoinfo_handler(_, m: Message):
         await app.send_photo(m.chat.id, thumb_link, caption=data)
     except Exception as e:
         await app.error(e)
-
-
 
 
 @app.on_cmd(
@@ -166,21 +159,24 @@ async def ytmdl_handler(_, m):
 
                 for x in range(len(data)):
                     name = data[x]
-                    
+
                     if name.resolution:
-                        btn = app.BuildKeyboard(([
-                            [
-                                str(name.resolution) + " 🔇" if not name.includes_audio_track else str(name.resolution), 
-                                str(name.itag)
-                            ]
-                        ]))
+                        btn = app.BuildKeyboard(
+                            (
+                                [
+                                    [
+                                        (
+                                            str(name.resolution) + " 🔇"
+                                            if not name.includes_audio_track
+                                            else str(name.resolution)
+                                        ),
+                                        str(name.itag),
+                                    ]
+                                ]
+                            )
+                        )
                     elif name.abr:
-                        btn = app.BuildKeyboard(([
-                            [
-                                str(name.abr), 
-                                str(name.itag)
-                            ]
-                        ]))
+                        btn = app.BuildKeyboard(([[str(name.abr), str(name.itag)]]))
                     else:
                         continue
 
@@ -197,7 +193,7 @@ async def ytmdl_handler(_, m):
 
                 async def utube_callback(client, cb):
                     try:
-                        
+
                         if not cb.from_user.id == m.from_user.id:
                             await cb.answer("You're not excludeed.", show_alert=True)
                             return False
@@ -224,7 +220,7 @@ async def ytmdl_handler(_, m):
 
         media_found = False
         msg = await app.send_edit("**Trying to download **" + f"`{yt.title}`")
-        media_type = "audio" if app.long() > 1 and "-a" in m.text else "video"
+        media_type = "audio" if app.command() > 1 and "-a" in m.text else "video"
 
         for x in data:
             if media_type == "video":
@@ -244,6 +240,10 @@ async def ytmdl_handler(_, m):
                     break
 
         if not media_found:
-            await app.send_edit(f"I didn't found any good quality {media_type} of this YouTube link", text_type=["mono"], delme=3)   
+            await app.send_edit(
+                f"I didn't found any good quality {media_type} of this YouTube link",
+                text_type=["mono"],
+                delme=3,
+            )
     except Exception as e:
         await app.error(e)

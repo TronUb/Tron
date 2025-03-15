@@ -13,7 +13,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 heroku_api = "https://api.heroku.com"
 
 useragent = (
@@ -23,12 +22,10 @@ useragent = (
 )
 
 
-
 if (app.HEROKU_API_KEY and app.HEROKU_APP_NAME):
     heroku_app = heroku3.from_key(app.HEROKU_API_KEY).apps()[app.HEROKU_APP_NAME]
 else:
     heroku_app = None
-
 
 
 # shut-down dyno
@@ -60,8 +57,6 @@ async def shutdown_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 # restart your bot
 @app.on_cmd(
     commands="restart",
@@ -88,8 +83,6 @@ async def restart_handler(_, m: Message):
             )
     except Exception as e:
         await app.error(e)
-
-
 
 
 # get usage of your dyno hours from heroku
@@ -155,8 +148,6 @@ async def dynostats_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 # get list of vars from heroku
 @app.on_cmd(
     commands="vars",
@@ -188,8 +179,6 @@ async def herokuvars_handler(_, m: Message):
         await app.error(e)
 
 
-
-
 # set vars in heroku
 @app.on_cmd(
     commands="setvar",
@@ -201,11 +190,11 @@ async def setvar_handler(_, m: Message):
     if await not_heroku():
         return
 
-    if app.long() < 3:
+    if app.command() < 3:
         await app.send_edit(
             f"`{app.PREFIX}setvar [key] [value]`"
         )
-    elif app.long() >= 3:
+    elif app.command() >= 3:
         key = m.command[1]
         value = m.command[2]
         heroku_vars = heroku_app.config()
@@ -229,8 +218,6 @@ async def setvar_handler(_, m: Message):
             await app.error(e)
 
 
-
-
 # get vars from heroku vars
 @app.on_cmd(
     commands="getvar",
@@ -242,11 +229,11 @@ async def getvar_handler(_, m: Message):
     if await not_heroku():
         return
 
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(
             f"`{app.PREFIX}getvar [key name]`"
         )
-    elif app.long() >= 2:
+    elif app.command() >= 2:
         key = m.command[1]
         heroku_vars = heroku_app.config()
         try:
@@ -263,8 +250,6 @@ async def getvar_handler(_, m: Message):
             await app.error(e)
 
 
-
-
 # delete vars in heroku
 @app.on_cmd(
     commands="delvar",
@@ -276,12 +261,12 @@ async def delvar_handler(_, m: Message):
     if await not_heroku():
         return
 
-    if app.long() == 1:
+    if app.command() == 1:
         return await app.send_edit(
             f"{app.PREFIX}delvar [key name]",
             text_type=["mono"]
         )
-    elif app.long() >= 2:
+    elif app.command() >= 2:
         await app.send_edit(
             "Verifying var in heroku config vars . . .",
             delme=3,
@@ -310,8 +295,6 @@ async def delvar_handler(_, m: Message):
             f"Usage: `{app.PREFIX}delvar [key name]` use this format.",
             delme=4
         )
-
-
 
 
 # get logs from heroku in file format (.txt)
@@ -345,8 +328,6 @@ async def logs_handler(_, m: Message):
         await app.send_edit("Failed to get logs . . .", delme=3)
 
 
-
-
 # get logs from heroku in nekobin link, not as a file
 @app.on_cmd(
     commands=["textlogs", "tlogs"],
@@ -371,8 +352,6 @@ async def textlogs_handler(_, m: Message):
             f"Failed to get the heroku text logs, try `{app.PREFIX.split()[0]}logs` command.",
             delme=4
         )
-
-
 
 
 async def not_heroku():

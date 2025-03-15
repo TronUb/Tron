@@ -8,11 +8,9 @@ from bs4 import BeautifulSoup
 from main import app, gen
 
 
-
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
 }
-
 
 
 @app.on_cmd(
@@ -25,11 +23,11 @@ async def song_handler(_, m: Message):
     try:
         cmd = m.command
         reply = m.reply_to_message
-        if app.long() > 1:
+        if app.command() > 1:
             song_name = m.text.split(None, 1)[1]
-        elif reply and app.long() == 1:
+        elif reply and app.command() == 1:
             song_name = reply.text or reply.caption
-        elif not reply and app.long() == 1:
+        elif not reply and app.command() == 1:
             return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
         song_results = await app.get_inline_bot_results("audio_storm_bot", song_name)
@@ -62,8 +60,6 @@ async def song_handler(_, m: Message):
         await app.send_edit("failed to process your request, please check logs")
 
 
-
-
 @app.on_cmd(
     commands=["dz", "deezer"],
     usage="Download songs from deezerbot in mp3 format."
@@ -74,11 +70,11 @@ async def deezer_handler(_, m: Message):
         await app.send_edit("Searching on deezer . . .")
         cmd = m.command
         reply = m.reply_to_message
-        if app.long() > 1:
+        if app.command() > 1:
             song_name = m.text.split(None, 1)[1]
-        elif reply and app.long() == 1:
+        elif reply and app.command() == 1:
             song_name = reply.text or reply.caption
-        elif not reply and app.long() == 1:
+        elif not reply and app.command() == 1:
             return await app.send_edit("Give a song name . . .", delme=3, text_type=["mono"])
 
         song_results = await app.get_inline_bot_results("DeezerMusicBot", song_name)
@@ -113,8 +109,6 @@ async def deezer_handler(_, m: Message):
     except Exception as e:
         await app.error(e)
         await app.send_edit("Something went wrong, try again !", text_type=["mono"], delme=3)
-
-
 
 
 @app.on_cmd(
