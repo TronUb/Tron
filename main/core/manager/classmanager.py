@@ -44,7 +44,6 @@ class ClassManager(Config, Methods):
     start_time = time.time()
 
     # Logging Setup
-    @staticmethod
     def setup_logging():
         """Configures logging settings for the bot."""
         logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
