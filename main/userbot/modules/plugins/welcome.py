@@ -7,7 +7,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 IgnoreChat = app.get_welcome_ids()
 
 
@@ -24,7 +23,7 @@ async def sendwelcome_handler(_, m: Message):
         if file_id and not file_id.startswith("#"): # as a text
             return await app.send_message(m.chat.id, f"{file_id}", reply_to_message_id=m.message_id)
 
-        elif file_id and file_id.startswith("#"): # as a file id 
+        elif file_id and file_id.startswith("#"):  # as a file id
             file_id = file_id.replace("#", "")
 
         if caption:
@@ -41,7 +40,7 @@ async def sendwelcome_handler(_, m: Message):
                 reply_to_message_id=m.message_id
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -50,7 +49,7 @@ async def sendwelcome_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def savewelcome_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     await app.send_edit("Setting this media as a welcome message . . .", text_type=["mono"])
@@ -71,12 +70,14 @@ async def savewelcome_handler(_, m: Message):
                 app.set_welcome(str(m.chat.id), reply.text.markdown)
                 await app.send_edit("Added this text to welcome message . . .", delme=2, text_type=["mono"])
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
             print(e)
     else:
-        await app.send_edit("Please reply to some media or text to set welcome message . . .", delme=2, text_type=["mono"])      
-
-
+        await app.send_edit(
+            "Please reply to some media or text to set welcome message . . .",
+            delme=2,
+            text_type=["mono"],
+        )
 
 
 @app.on_cmd(
@@ -85,7 +86,7 @@ async def savewelcome_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def deletewelcome_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     try:
@@ -93,9 +94,7 @@ async def deletewelcome_handler(_, m: Message):
         app.del_welcome(str(m.chat.id))
         await app.send_edit("Successfully deleted welcome message for this chat . . .", delme=2, text_type=["mono"])
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -104,7 +103,7 @@ async def deletewelcome_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def getwelcome_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     try:
@@ -135,7 +134,4 @@ async def getwelcome_handler(_, m: Message):
                     )
                 await m.delete()
     except Exception as e:
-        await app.error(m, e)
-
-
-
+        await log_error(m, e)

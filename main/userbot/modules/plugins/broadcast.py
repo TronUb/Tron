@@ -54,4 +54,4 @@ async def broadcast_handler(_, m: Message):
         await app.send_edit(f"Broadcasted messages to {users} users & {groups} groups.", delme=4)
 
     except Exception as e:
-        await app.error(f"Broadcast failed: {e}")
+        await log_error(f"Broadcast failed: {e}")

@@ -1,3 +1,6 @@
+"todo"
+
+# pylint: disable=no-member
 class Strings(object):
     @property
     def assistant_tab_string(self):
@@ -147,5 +150,3 @@ class Strings(object):
         text = "Not implemented yet."
 
         return text
-
-

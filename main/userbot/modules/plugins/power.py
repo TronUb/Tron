@@ -30,7 +30,7 @@ async def reboot_handler(_, m: Message):
 
     except Exception as e:
         await m.edit("Failed to restart userbot!", delme=2, text_type=["mono"])
-        await app.error(e)
+        await log_error(e)
 
 @app.on_cmd(
     commands="sleep",

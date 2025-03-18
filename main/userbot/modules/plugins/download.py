@@ -66,7 +66,7 @@ async def ls_handler(_, m: Message):
         elif len(OUTPUT) <= 4096:
             await app.send_edit(OUTPUT)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -86,7 +86,7 @@ async def download_handler(_, m: Message):
             await app.send_edit("• Downloading . . .", text_type=["mono"])
             location = await app.download_media(
                 message=reply,
-                progress=app.ProgressForPyrogram,
+                progress=app.progress_for_pyrogram,
                 progress_args=("Downloading file . . .", m, c_time),
             )
 
@@ -100,7 +100,7 @@ async def download_handler(_, m: Message):
                     f"**Downloaded to •>**\n\n`{location}`\n\n**Time:** `{duration}`"
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
     elif app.command() > 1:
         try:
@@ -209,7 +209,7 @@ async def upload_handler(_, m: Message):
                     local_file_name,
                     disable_notification=True,
                     reply_to_message_id=m.id,
-                    progress=app.ProgressForPyrogram,
+                    progress=app.progress_for_pyrogram,
                     progress_args=("Uploading file . . .", m, c_time),
                 )
             else:
@@ -218,7 +218,7 @@ async def upload_handler(_, m: Message):
                     caption=doc_caption,
                     disable_notification=True,
                     reply_to_message_id=m.id,
-                    progress=app.ProgressForPyrogram,
+                    progress=app.progress_for_pyrogram,
                     progress_args=("Uploading file . . .", m, c_time),
                 )
 
@@ -271,7 +271,7 @@ async def batchupload_handler(_, m: Message):
                     file in ["__pycache__", ".git", ".github", ".heroku"]):
                     c_time = time.time()
                     required_file_name = temp_dir + file
-                    thumb_image_path = await app.IsThumbExists(required_file_name)
+                    thumb_image_path = await app.get_file_thumbnail(required_file_name)
                     doc_caption = os.path.basename(required_file_name)
                     app.log.info(f"Uploading {required_file_name} from {temp_dir} to Telegram.")
 
@@ -286,6 +286,6 @@ async def batchupload_handler(_, m: Message):
                     app.log.info("Uploaded all files in batch !!")
 
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         return await app.send_edit("404: directory not found . . .", delme=2)

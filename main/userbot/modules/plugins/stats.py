@@ -6,7 +6,6 @@ from pyrogram.enums import ChatType
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands="stats",
     usage="Get stats of how many channels/bots/ etc you have."
@@ -41,4 +40,4 @@ async def dialogstats_handler(_, m: Message):
 
         await app.send_edit(stats_format.format(app.UserMention(), bot, user, group, channel))
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

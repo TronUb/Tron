@@ -40,7 +40,7 @@ async def evaluate_handler(_, m: Message):
         stdout, stderr, exc = None, None, None
 
         try:
-            await app.aexec(cmd)  # Execute the command asynchronously
+            await app.async_exec(cmd)  # Execute the command asynchronously
         except Exception:
             exc = traceback.format_exc()
 
@@ -65,7 +65,7 @@ async def evaluate_handler(_, m: Message):
             await app.send_edit(final_output)
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -126,4 +126,4 @@ async def terminal_handler(_, m: Message):
             )
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

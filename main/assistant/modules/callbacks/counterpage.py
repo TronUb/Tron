@@ -25,7 +25,7 @@ async def counter_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.bot.on_callback_query(filters.regex("counter-increment-tab"))
@@ -65,4 +65,4 @@ async def counter_increment_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

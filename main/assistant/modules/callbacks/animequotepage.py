@@ -8,8 +8,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
-
 @app.bot.on_callback_query(filters.regex("animequote-tab"))
 async def anime_quotes_callback(_, cb: CallbackQuery):
     try:
@@ -23,4 +21,4 @@ async def anime_quotes_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

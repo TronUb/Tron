@@ -54,7 +54,7 @@ async def shutdown_handler(_, m: Message):
         )
         heroku_app.process_formation()["worker"].scale(0)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # restart your bot
@@ -82,7 +82,7 @@ async def restart_handler(_, m: Message):
                 text_type=["mono"]
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # get usage of your dyno hours from heroku
@@ -145,7 +145,7 @@ async def dynostats_handler(_, m: Message):
                 f" |  [ `{percentage}%` ]"
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # get list of vars from heroku
@@ -176,7 +176,7 @@ async def herokuvars_handler(_, m: Message):
         msg += f"\n**Total `{num}` vars found.**"
         await app.send_edit(msg)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # set vars in heroku
@@ -215,7 +215,7 @@ async def setvar_handler(_, m: Message):
                     text_type=["mono"]
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
 # get vars from heroku vars
@@ -247,7 +247,7 @@ async def getvar_handler(_, m: Message):
                     text_type=["mono"]
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
 # delete vars in heroku
@@ -285,7 +285,7 @@ async def delvar_handler(_, m: Message):
         try:
             del heroku_vars[key]
         except Exception as e:
-            return await app.error(e)
+            return await log_error(e)
         await app.send_edit(
             f"Successfully deleted var = [ {key} ] from heroku vars !",
             delme=4
@@ -323,7 +323,7 @@ async def logs_handler(_, m: Message):
                 os.remove(filename)
             await m.delete()
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit("Failed to get logs . . .", delme=3)
 
@@ -342,11 +342,11 @@ async def textlogs_handler(_, m: Message):
     logsdata = heroku_app.get_log()
     if logsdata:
         try:
-            url = await app.HasteBinPaste(logsdata)
+            url = await app.paste_to_bin(logsdata)
             text = f"Heroku Logs: [press here]({url})"
             await app.send_edit(text, disable_web_page_preview=True)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit(
             f"Failed to get the heroku text logs, try `{app.PREFIX.split()[0]}logs` command.",

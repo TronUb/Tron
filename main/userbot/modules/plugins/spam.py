@@ -50,7 +50,7 @@ async def spam_handler(_, m: Message):
                     spam_msg
                 )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -84,4 +84,4 @@ async def delayspam_handler(_, m: Message):
         else:
             await app.send_edit("Something wrong in spam command !")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

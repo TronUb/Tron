@@ -129,7 +129,7 @@ async def mentionuser_handler(_, m: Message):
         user = await app.get_users(m.command[1])
     except Exception as e:
         await app.send_edit("User not found !", text_type=["mono"])
-        return await app.error(e)
+        return await log_error(e)
 
     mention = men(user.id, " ".join(m.command[2:]))
     await app.send_edit(mention)
@@ -176,7 +176,7 @@ async def get_full_user_info(_, m: Message):
         await app.send_edit(
             "⚠️ An error occurred while fetching user info!", text_type=["mono"]
         )
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -222,14 +222,14 @@ async def block_handler(_, m: Message):
             await app.block_user(user)
             await app.send_edit("Blocked User 🚫", text_type=["mono"], delme=3)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     elif reply:
         user = reply.from_user.id
         try:
             await app.block_user(user)
             await app.send_edit("Blocked User 🚫", text_type=["mono"], delme=3)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
 @app.on_cmd(
@@ -247,14 +247,14 @@ async def unblock_handler(_, m: Message):
             await app.unblock_user(user)
             await app.send_edit("Unblocked User 🎉", text_type=["mono"], delme=3)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     elif reply:
         user = reply.from_user.id
         try:
             await app.unblock_user(user)
             await app.send_edit("Unblocked User 🎉", text_type=["mono"], delme=3)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 @app.on_cmd(
     commands="sg",
@@ -388,7 +388,7 @@ async def remprofile_handler(_, m: Message):
                 delme=3
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # set your profile stuffs
@@ -404,7 +404,7 @@ async def setprofile(m: Message, mode, kwargs):
                 f"✅ Updated first name to [ {kwargs} ]"
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     # set last name
     elif mode == "lname":
         try:
@@ -415,7 +415,7 @@ async def setprofile(m: Message, mode, kwargs):
                 f"✅ Updated last name to [ {kwargs} ]"
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     # set bio
     elif mode == "bio":
         try:
@@ -426,7 +426,7 @@ async def setprofile(m: Message, mode, kwargs):
                 f"✅ Updated bio to [ {kwargs}]"
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit("Please give correct format.", delme=2)
 

@@ -13,7 +13,7 @@ from main.core.enums import UserType
     disable_for=UserType.SUDO
 )
 async def zombies_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     temp_count = 0
@@ -48,7 +48,7 @@ async def zombies_handler(_, m: Message):
                     count += 1
                     await asyncio.sleep(0.2)
                 except Exception as e:
-                    await app.error(e)
+                    await log_error(e)
         await app.send_edit(f"`Group clean up done !`\n\n**Total:** `{count+admin_count}`\n**Removed:** `{count}`\n**Not Removed:** `{admin_count}`\n\n**Note:** `Not removed accounts can be admins or the owner`")
 
     elif app.command() == 2 and m.command[1] != "clean":

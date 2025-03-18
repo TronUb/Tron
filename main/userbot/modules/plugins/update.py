@@ -1,6 +1,9 @@
 import re
 import asyncio
 
+import datetime
+from typing import List, Optional
+
 from git import Repo
 from git.exc import (
     GitCommandError,
@@ -12,32 +15,77 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 TRON_REPO = app.UPSTREAM_REPO
 
-
 async def gen_chlog():
-    changes = []
-    last_updated = int(re.sub(r"[- + : \s]", "", str(app.herokuApp.updated_at))[:14])
-    recent_updates = await app.GetRequest("https://api.github.com/repos/TronUb/Tron/events")
+    """Generate and send changelog from GitHub repository updates."""
+    try:
+        # Ensure herokuApp.updated_at is valid
+        if not hasattr(app, "herokuApp") or not app.herokuApp.updated_at:
+            return await app.send_edit(
+                "Heroku app update timestamp not found.", text_type=["mono"]
+            )
 
-    for x in recent_updates:
-        if x.get("payload").get("commits") is not None and int(x.get("created_at").replace("-", "").replace(":", "").replace("T", "").replace("Z", "")) > last_updated:
-            changes.append(x.get("payload").get("commits")[0].get("message")+"\n")
+        # Convert `updated_at` timestamp to integer
+        try:
+            last_updated = int(
+                datetime.datetime.strptime(
+                    str(app.herokuApp.updated_at), "%Y-%m-%d %H:%M:%S"
+                ).strftime("%Y%m%d%H%M%S")
+            )
+        except ValueError:
+            return await app.send_edit(
+                "Error parsing last update timestamp.", text_type=["mono"]
+            )
 
-    if not changes:
-        await app.send_edit("Your app is up-to-date.", text_type=["mono"])
-        return -1
-    else:
-        if len("".join(changes)) > 4096:
-            await app.create_file("changelog.txt", "".join(changes), send=True)
+        # Fetch GitHub events
+        response = await app.fetch_url(
+            "https://api.github.com/repos/TronUb/Tron/events"
+        )
+
+        if not response or response.get("status") != 200:
+            return await app.send_edit(
+                "Failed to fetch GitHub updates.", text_type=["mono"]
+            )
+
+        updates = response.get("data", [])
+
+        changes: List[str] = []
+        for event in updates:
+            if event.get("payload", {}).get("commits"):
+                created_at = event.get("created_at", "")
+                try:
+                    event_timestamp = int(
+                        datetime.datetime.strptime(
+                            created_at, "%Y-%m-%dT%H:%M:%SZ"
+                        ).strftime("%Y%m%d%H%M%S")
+                    )
+                    if event_timestamp > last_updated:
+                        commit_message = event["payload"]["commits"][0].get(
+                            "message", "No message"
+                        )
+                        changes.append(f"- {commit_message}\n")
+                except ValueError:
+                    continue  # Ignore if timestamp conversion fails
+
+        # No updates found
+        if not changes:
+            await app.send_edit("Your app is up-to-date.", text_type=["mono"])
+            return -1
+
+        changelog = "".join(changes)
+
+        # Handle Telegram's message limit
+        if len(changelog) > 4096:
+            await app.create_file("changelog.txt", changelog, send=True)
             return 0
         else:
-            await app.send_edit("".join(changes))
+            await app.send_edit(changelog)
             return 1
 
-        
-
+    except Exception as e:
+        await log_error(f"Changelog Error: {str(e)}")
+        return -1
 
 
 async def install_requirements():
@@ -51,8 +99,6 @@ async def install_requirements():
         return process.returncode
     except Exception as e:
         return repr(e)
-
-
 
 
 @app.on_cmd(
@@ -142,5 +188,4 @@ async def update_handler(_, m):
             await install_requirements()
             await app.send_edit("Successfully updated Userbot!\nBot is restarting . . .", text_type=["mono"], delme=5)
     except Exception as e:
-        await app.error(e)
-
+        await log_error(e)

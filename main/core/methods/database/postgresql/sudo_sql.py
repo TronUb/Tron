@@ -1,11 +1,6 @@
-from sqlalchemy import (
-    Column, 
-    String, 
-    Integer
-)
+from sqlalchemy import Column, String, Integer
 
 from . import BASE, SESSION
-
 
 
 class SUDOTABLE(BASE):
@@ -21,52 +16,48 @@ class SUDOTABLE(BASE):
         self.sudo_cmds = sudo_cmds
 
 
-SUDOTABLE.__table__.create(checkfirst=True)
+SUDOTABLE.__table__.create(checkfirst=True)  # pylint: disable=E1101
 
-
-
+session = SESSION()
 
 class SUDOSQL(object):
     def set_sudo(self, sudo_id: int, sudo_name: str, sudo_cmds: set):
         try:
-            r = SESSION.query(SUDOTABLE).get(sudo_id)
+            r = session.query(SUDOTABLE).get(sudo_id)
             if r:
-                SESSION.delete(r)
+                session.delete(r)
 
             r = SUDOTABLE(
                 int(sudo_id),
                 str(sudo_name),
                 str(sudo_cmds)
             )
-            SESSION.add(r)
-            SESSION.commit()
+            session.add(r)
+            session.commit()
         finally:
-            SESSION.close()
-
+            session.close()
 
     def get_sudo(self, sudo_id: int):
         try:
             return self.all_sudo().get(sudo_id)
         finally:
-            SESSION.close()
-
+            session.close()
 
     def del_sudo(self, sudo_id: int):
         try:
-            r = SESSION.query(SUDOTABLE).get(sudo_id)
+            r = session.query(SUDOTABLE).get(sudo_id)
             if r:
-                SESSION.delete(r)
+                session.delete(r)
 
-            SESSION.commit()
+            session.commit()
             return True
         finally:
-            SESSION.close()
-
+            session.close()
 
     def all_sudo(self):
         try:
             ALL_SUDO = {}
-            r = SESSION.query(SUDOTABLE).all()
+            r = session.query(SUDOTABLE).all()
             for x in r:
                 ALL_SUDO.update(
                     {
@@ -78,4 +69,4 @@ class SUDOSQL(object):
                 )
             return ALL_SUDO
         finally:
-            SESSION.close()
+            session.close()

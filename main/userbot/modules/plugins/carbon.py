@@ -62,7 +62,7 @@ async def carbon_handler(_, m: Message):
 
         await create_carbon(m, text=text, colour=colour)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(commands="carblist", usage="Get list of available background colors.")

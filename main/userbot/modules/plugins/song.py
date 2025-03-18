@@ -56,7 +56,7 @@ async def song_handler(_, m: Message):
         except TimeoutError:
             return await app.send_edit("Something went wrong, tru again !")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
         await app.send_edit("failed to process your request, please check logs")
 
 
@@ -70,6 +70,7 @@ async def deezer_handler(_, m: Message):
         await app.send_edit("Searching on deezer . . .")
         cmd = m.command
         reply = m.reply_to_message
+        song_name = ""
         if app.command() > 1:
             song_name = m.text.split(None, 1)[1]
         elif reply and app.command() == 1:
@@ -107,70 +108,84 @@ async def deezer_handler(_, m: Message):
                 text_type=["mono"]
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
         await app.send_edit("Something went wrong, try again !", text_type=["mono"], delme=3)
 
+
+import aiohttp
+from bs4 import BeautifulSoup
 
 @app.on_cmd(
     commands=["ly", "lyrics"],
     usage="Get lyrics of a song."
 )
 async def lyrics_handler(_, m: Message):
-    """ lyrics handler for song plugin """
+    """Lyrics handler for song plugin."""
     try:
         cmd = m.command
         reply = m.reply_to_message
+        song_name = None
 
+        # Determine song name
         if not reply and len(cmd) > 1:
             song_name = m.text.split(None, 1)[1]
-
         elif reply:
             if reply.audio:
                 song_name = f"{reply.audio.title} {reply.audio.performer}"
-            elif reply.text or reply.caption and len(cmd) == 1:
+            elif (reply.text or reply.caption) and len(cmd) == 1:
                 song_name = reply.text or reply.caption
             elif reply.text and len(cmd) > 1:
                 song_name = m.text.split(None, 1)[1]
-            else:
-                return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
-        elif not reply and len(cmd) == 1:
+        if not song_name:
             return await app.send_edit("Give me a song name . . .", text_type=["mono"], delme=3)
 
         await app.send_edit(f"**Finding lyrics for:** `{song_name}`")
 
-        url = "https://www.google.com/search?q="
-        raw = requests.get(url + song_name.replace(" ", "%20") + "%20artist", headers=headers).text
-        soup = BeautifulSoup(raw, "html.parser")
-        content = soup.find_all("div", {"class":"uOId3b"})
-        artist_name = str(content[-1]).split(" -", maxsplit=1)[0]
+        # Fetch artist name using aiohttp instead of requests
+        google_url = (
+            f"https://www.google.com/search?q={song_name.replace(' ', '%20')}%20artist"
+        )
+        async with aiohttp.ClientSession() as session:
+            async with session.get(google_url, headers=headers) as response:
+                if response.status != 200:
+                    return await app.send_edit(
+                        "Failed to fetch artist info.", text_type=["mono"], delme=3
+                    )
 
-        lyrics = await app.GetRequest(f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}")
-        print(artist_name, "/", song_name)
+                raw_html = await response.text()
 
-        if not lyrics.get("lyrics"):
+        soup = BeautifulSoup(raw_html, "html.parser")
+        content = soup.find_all("div", {"class": "uOId3b"})
+
+        # Extract artist name safely
+        artist_name = content[-1].text.split(" -")[0] if content else "Unknown"
+
+        # Fetch lyrics
+        lyrics_response = await app.fetch_url(
+            f"https://api.lyrics.ovh/v1/{artist_name}/{song_name}"
+        )
+
+        if not lyrics_response or not lyrics_response.get("data", {}).get("lyrics"):
             return await app.send_edit("No lyrics found.", text_type=["mono"], delme=3)
 
-        link = app.telegraph.create_page(
-                app.name,
-                html_content=lyrics.get("lyrics")
-       )
+        lyrics_text = lyrics_response["data"]["lyrics"]
 
-        if not content:
+        # Upload to Telegraph
+        link = app.telegraph.create_page(app.name, html_content=lyrics_text)
+
+        if not link or not link.get("path"):
             return await app.send_edit(
-                f"No lyrics found ! for song: {song_name}",
-                text_type=["mono"],
-                delme=3
+                f"No lyrics found for: `{song_name}`", text_type=["mono"], delme=3
             )
-        else:
-            await app.send_edit(
-                    f"**Lyrics Link: [Press Here](https://telegra.ph/{link.get('path')})**",
-                    disable_web_page_preview=True
-            )
-    except Exception as e:
-        await app.error(e)
+
         await app.send_edit(
-            "Something went wrong, please try again later !",
-            text_type=["mono"],
-            delme=3
+            f"**Lyrics Link:** [Press Here](https://telegra.ph/{link.get('path')})",
+            disable_web_page_preview=True,
+        )
+
+    except Exception as e:
+        await log_error(e)
+        await app.send_edit(
+            "Something went wrong, please try again later!", text_type=["mono"], delme=3
         )

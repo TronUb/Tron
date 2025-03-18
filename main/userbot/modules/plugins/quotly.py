@@ -44,4 +44,4 @@ async def quotly_handler(_, m: Message):
                 )
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

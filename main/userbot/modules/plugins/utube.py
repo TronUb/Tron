@@ -55,7 +55,7 @@ async def ytsearch_handler(_, m: Message):
             caption
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -89,7 +89,7 @@ async def ytvideoinfo_handler(_, m: Message):
 
         await app.send_photo(m.chat.id, thumb_link, caption=data)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -151,7 +151,7 @@ async def ytmdl_handler(_, m):
             )
 
         if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
-            if await app.user_ingroup(m.chat.id, app.bot.id):
+            if await app.is_user_in_group(m.chat.id, app.bot.id):
                 botmsg = await app.bot.send_message(chat_id=m.chat.id, text="`processing link . . .`")
 
                 buttons = []
@@ -246,4 +246,4 @@ async def ytmdl_handler(_, m):
                 delme=3,
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

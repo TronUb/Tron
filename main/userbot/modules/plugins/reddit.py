@@ -55,4 +55,4 @@ async def reddit_handler(_, m: Message):
             await m.delete()
 
         except Exception as e:
-            await app.error(e)
+            await log_error(e)

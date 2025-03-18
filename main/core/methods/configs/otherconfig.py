@@ -10,7 +10,7 @@ OTHERDV = [
     ]
 
 
-
+# pylint: disable=no-member
 class OtherConfig(object):
     @property
     def NoLoad(self):

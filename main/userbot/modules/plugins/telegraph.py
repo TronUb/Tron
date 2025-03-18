@@ -9,7 +9,6 @@ from pyrogram.types import Message
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands=["tgm", "telegraph"],
     usage="Convert a text or image in telegraph link."
@@ -58,7 +57,7 @@ async def telegraph_handler(_, m:Message):
             try:
                 response = upload_file(loc)
             except Exception as e:
-                return await app.error(e)
+                return await log_error(e)
             await app.send_edit(
                 f"**Telegraph Link: [Press Here](https://telegra.ph{response[0]})**",
                 disable_web_page_preview=True

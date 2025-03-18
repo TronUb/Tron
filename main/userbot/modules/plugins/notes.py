@@ -66,7 +66,7 @@ async def savenote_hanlder(_, m: Message):
         app.save_selfnote(m.from_user.id, note_name, text, message_type, content)
         await app.send_edit(f"Saved note = **[ `{note_name}` ]**")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_message(filters.regex(">") & filters.user(app.AllUsersId))
@@ -144,7 +144,7 @@ async def getnote_handler(_, m: Message):
                         else:
                             await GET_FORMAT[getnotes['type']](m.chat.id, getnotes['file'], caption=teks)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(

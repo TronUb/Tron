@@ -58,7 +58,7 @@ async def imagesauce_handler(_, m: Message):
             await app.send_edit("No results found.", text_type=["mono"], delme=4)
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -85,7 +85,7 @@ async def yandeximages_handler(_, m: Message):
         )
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(commands="img", usage="Get images from Google.")
@@ -135,4 +135,4 @@ async def imagesearch_handler(_, m: Message):
         await m.delete()
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

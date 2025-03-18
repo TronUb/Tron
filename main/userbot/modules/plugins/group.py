@@ -40,7 +40,7 @@ async def basicgroup_handler(_, m: Message):
         else:
             await app.send_edit("No group name is provided.", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -74,7 +74,7 @@ async def supergroup_handler(_, m: Message):
         else:
             await app.send_edit("No group name is provided.", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -95,7 +95,7 @@ async def unreadchat_handler(_, m: Message):
             ),
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -129,4 +129,4 @@ async def channel_handler(_, m: Message):
             else:
                 await app.send_edit("Couldn't create a channel.")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

@@ -5,8 +5,6 @@ from main import app
 from main.core.enums import UserType
 
 
-
-
 @app.on_cmd(
     commands="addsudo",
     usage="Give your userbot access to someone else.",
@@ -47,9 +45,7 @@ async def addsudo_handler(_, m: Message):
                 delme=3
             )
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -63,10 +59,7 @@ async def getsudo_handler(_, m: Message):
         sudos = app.all_sudo().items()
         text = "Available sudos:\n\n"
 
-        r = [
-            f"{x[1].get('sudo_name')} ({x[0]})\n" 
-            for x in sudos
-        ]
+        r = [f"{x[1].get('sudo_name')} ({x[0]})\n" for x in sudos]
 
         if r:
             await app.send_edit(
@@ -79,9 +72,7 @@ async def getsudo_handler(_, m: Message):
                 delme=3
             )
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -125,4 +116,4 @@ async def delsudo_handler(_, m: Message):
                 delme=3
             )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

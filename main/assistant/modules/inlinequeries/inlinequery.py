@@ -19,7 +19,7 @@ from main.userbot.client import app
 
 async def create_helpmenu_articles(query=None):
     if query:
-        result_text = await app.PluginData(query)
+        result_text = await app.get_plugin_info(query)
         if result_text:
             return [
                 InlineQueryResultArticle(
@@ -44,7 +44,7 @@ async def create_helpmenu_articles(query=None):
             InlineQueryResultArticle(
                 title=module_name,
                 input_message_content=InputTextMessageContent(
-                    "".join(await app.PluginData(module_name)
+                    "".join(await app.get_plugin_info(module_name)
                     )
                 ),
                 reply_markup=app.buildMarkup(

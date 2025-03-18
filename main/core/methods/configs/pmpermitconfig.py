@@ -9,7 +9,7 @@ PMPERMITDV = [
 
 
 
-
+# pylint: disable=no-member
 class PmpermitConfig(object):
     @property
     def Pmpermit(self):

@@ -48,7 +48,7 @@ async def slap_handler(_, m):
             await app.send_edit(random.choice(SLAP_TEXT))
 
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit(
             "Reply to a friend to use harsh sentences to insult him",
@@ -81,7 +81,7 @@ async def uppercase_handler(_, m):
         else:
             return await app.send_edit("upcase command Error !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -108,7 +108,7 @@ async def type_handler(_, m):
             except FloodWait as e:
                 time.sleep(e.value) # continue
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -138,9 +138,14 @@ async def insult_handler(_, m):
                 if app.command() == 1
                 else m.command[1] if app.command() > 1 else "en"
             )
-            data = await app.GetRequest(
+            response = await app.fetch_url(
                 f"https://evilinsult.com/generate_insult.php?lang={lang}&type=json"
             )
+
+            if response and response.get("status") == 200 and "data" in response:
+                data = response["data"]  # Extract the actual insult JSON
+            else:
+                data = {"error": "Failed to fetch insult."}  # Handle errors properly
 
             await app.send_edit("Insulting . . .", text_type=["mono"])
             if data:
@@ -148,57 +153,77 @@ async def insult_handler(_, m):
             else:
                 await app.send_edit("No insults found !", delme=3, text_type=["mono"])
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
-@app.on_cmd(commands="advice", usage="Give someone advices.")
+@app.on_cmd(commands="advice", usage="Give someone advice.")
 async def advice_handler(_, m):
-    """advice handler for fun plugin"""
+    """Advice handler for fun plugin"""
     reply = m.reply_to_message
+
     if not reply:
         await app.send_edit(
-            "Please reply to someone, so that i can give them a advice . . .",
+            "Please reply to someone, so that I can give them advice . . .",
             delme=3,
             text_type=["mono"],
         )
+        return  # Exit function if no reply
 
-    elif reply:
-        try:
-            await app.send_edit("Finding a good advice . . .", text_type=["mono"])
-            data = await app.GetRequest("https://api.adviceslip.com/advice")
-            data = data.get("slip").get("advice")
-            if data:
-                await app.send_edit(f"`{data}`")
+    try:
+        await app.send_edit("Finding a good piece of advice . . .", text_type=["mono"])
+
+        # Fetch the advice JSON safely
+        response = await app.fetch_url("https://api.adviceslip.com/advice")
+
+        if response and response.get("status") == 200 and "data" in response:
+            advice_text = response["data"].get("slip", {}).get("advice")
+            if advice_text:
+                await app.send_edit(f"`{advice_text}`")
             else:
-                await app.send_edit("No advice found !", delme=3, text_type=["mono"])
-        except Exception as e:
-            await app.error(e)
+                await app.send_edit("No advice found!", delme=3, text_type=["mono"])
+        else:
+            await app.send_edit("Failed to fetch advice!", delme=3, text_type=["mono"])
+
+    except Exception as e:
+        await log_error(f"Error: {str(e)}")
 
 
-@app.on_cmd(commands="uadvice", usage="Give someone advices.")
+@app.on_cmd(commands="uadvice", usage="Give someone a useless advice.")
 async def useless_advice_handler(_, m):
-    """advice handler for fun plugin"""
+    """Handler for fetching and sending useless advice."""
     reply = m.reply_to_message
+
     if not reply:
         await app.send_edit(
-            "Please reply to someone, so that i can give them a advice . . .",
+            "Please reply to someone, so that I can give them a useless advice . . .",
             delme=3,
             text_type=["mono"],
         )
+        return  # Exit function if no reply
 
-    elif reply:
-        try:
-            await app.send_edit("Finding a good advice . . .", text_type=["mono"])
-            data = await app.GetRequest(
-                "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en"
-            )
-            data = data.get("text")
-            if data:
-                await app.send_edit(f"`{data}`")
+    try:
+        await app.send_edit("Finding a useless advice . . .", text_type=["mono"])
+
+        # Fetch the advice safely
+        response = await app.fetch_url(
+            "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en"
+        )
+
+        if response and response.get("status") == 200 and "data" in response:
+            useless_advice = response["data"].get("text")
+            if useless_advice:
+                await app.send_edit(f"`{useless_advice}`")
             else:
-                await app.send_edit("No advice found !", delme=3, text_type=["mono"])
-        except Exception as e:
-            await app.error(e)
+                await app.send_edit(
+                    "No useless advice found!", delme=3, text_type=["mono"]
+                )
+        else:
+            await app.send_edit(
+                "Failed to fetch useless advice!", delme=3, text_type=["mono"]
+            )
+
+    except Exception as e:
+        await log_error(f"Error: {str(e)}")
 
 
 @app.on_cmd(
@@ -295,19 +320,33 @@ async def whattodo_handler(_, m):
     usage="Get movie quotes."
 )
 async def moviequote_handler(_, m):
-    """ movie quote handler for fun plugin """
+    """Movie quote handler for fun plugin"""
     try:
         await app.send_edit("Finding a movie quote . . .", text_type=["mono"])
-        data = await app.GetRequest("https://favqs.com/api/qotd")
-        quote = data.get("quote")
-        quote_text = quote.get("body")
-        author = quote.get("author")
-        if quote and author:
-            await app.send_edit(f"**Quote:**\n\n`{quote_text}`\n\nRole: `{author}`\n")
+
+        # Fetch movie quote safely
+        response = await app.fetch_url("https://favqs.com/api/qotd")
+
+        if response and response.get("status") == 200 and "data" in response:
+            quote_data = response["data"].get("quote", {})
+            quote_text = quote_data.get("body")
+            author = quote_data.get("author")
+
+            if quote_text and author:
+                await app.send_edit(
+                    f"**🎬 Movie Quote:**\n\n`{quote_text}`\n\n📽️ Role: `{author}`"
+                )
+            else:
+                await app.send_edit(
+                    "No movie quotes found!", delme=3, text_type=["mono"]
+                )
         else:
-            await app.send_edit("No movie quotes found !", delme=3, text_type=["mono"])
+            await app.send_edit(
+                "Failed to fetch movie quotes!", delme=3, text_type=["mono"]
+            )
+
     except Exception as e:
-        await app.error(e)
+        await log_error(f"Error: {str(e)}")
 
 
 @app.on_cmd(
@@ -315,21 +354,33 @@ async def moviequote_handler(_, m):
     usage="Get some jokes."
 )
 async def joke_handler(_, m):
-    """ joke handler for fun plugin """
+    """Joke handler for fun plugin"""
     try:
         await app.send_edit("Finding a joke . . .", text_type=["mono"])
-        data = (await app.GetRequest("https://icanhazdadjoke.com/slack")
-            )["attachments"][0]["fallback"]
-        if not data:
-            return app.send_edit(
-                "Site is down, please try again later . . .",
-                delme=3,
-                text_type=["mono"]
-            )
-        elif data:
-            await app.send_edit(f"{data}")
+
+        # Fetch joke safely
+        response = await app.fetch_url(
+            "https://icanhazdadjoke.com/slack",
+            headers={"User-Agent": "TelegramBot"},
+        )
+
+        if response and response.get("status") == 200:
+            attachments = response.get("data", {}).get("attachments", [])
+            joke_text = attachments[0].get("fallback") if attachments else None
+
+            if joke_text:
+                await app.send_edit(f"{joke_text}")
+            else:
+                await app.send_edit("No jokes found!", delme=3, text_type=["mono"])
         else:
-            await app.send_edit("No jokes found !", delme=3, text_type=["mono"])
+            await app.send_edit(
+                "Joke site is down, please try again later.",
+                delme=3,
+                text_type=["mono"],
+            )
+
     except Exception as e:
-        await app.send_edit("Joke site is down, try again later.", text_type=["mono"], delme=3)
-        await app.error(e)
+        await app.send_edit(
+            "Joke site is down, try again later.", delme=3, text_type=["mono"]
+        )
+        await log_error(f"Error fetching joke: {str(e)}")

@@ -9,7 +9,6 @@ from pyrogram.errors import BotInlineDisabled
 from main import app, gen
 
 
-
 @app.on_cmd(
     commands="help",
     usage="Get your helpmenu, use plugin name as suffix to get command information.",
@@ -44,7 +43,7 @@ async def helpmenu_handler(_, m: Message):
                 )
         elif args_exists:
 
-            module_help = await app.PluginData(args[1])
+            module_help = await app.get_plugin_info(args[1])
             if not module_help:
                 await app.send_edit(
                     f"Invalid plugin name specified, use `{app.Trigger()[0]}uplugs` to get list of plugins",
@@ -58,9 +57,7 @@ async def helpmenu_handler(_, m: Message):
         await app.toggle_inline()
         await helpmenu_handler(_, m)
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 # get all module name
@@ -79,8 +76,6 @@ async def uplugs_handler(_, m: Message):
     await app.send_edit("**PLUGINS OF USERBOT:**\n\n" + "".join(store))
 
 
-
-
 # get all plugins name
 @app.on_cmd(
     commands="bplugs",
@@ -95,8 +90,6 @@ async def aplugs_handler(_, m: Message):
             store.append(x + "\n")
 
     await app.send_edit("**PLUGINS OF ASSISTANT:**\n\n" + "".join(store))
-
-
 
 
 @app.on_cmd(

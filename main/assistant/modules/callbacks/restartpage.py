@@ -8,10 +8,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
-
-
-
 @app.bot.on_callback_query(filters.regex(r"restart-tab(.[a-z]+)?"))
 @app.alert_user
 async def restart_callback(_, cb: CallbackQuery):
@@ -45,7 +41,7 @@ async def restart_callback(_, cb: CallbackQuery):
                     reply_markup=back_button
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await cb.edit_message_text(
             text=app.restart_tab_string("`Press confirm to restart.`"),

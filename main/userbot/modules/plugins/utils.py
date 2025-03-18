@@ -23,11 +23,11 @@ from main.core.enums import UserType, ChatType
     disable_for=UserType.SUDO
 )
 async def admintitle_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     reply = m.reply_to_message
-    if await app.IsAdmin() is True:
+    if await app.is_admin(m.chat.id, app.id) is True:
         if app.command() == 3:
             try:
                 user_data = m.command[1]
@@ -47,7 +47,7 @@ async def admintitle_handler(_, m: Message):
                     await app.set_administrator_title(m.chat.id, admin, title)
                     await app.send_edit(f"**{user_name}'s** title is successfully changed to **{title}**")
             except Exception as e:
-                await app.error(e)
+                await log_error(e)
 
         elif app.command() == 2 and reply:
             try:
@@ -63,7 +63,7 @@ async def admintitle_handler(_, m: Message):
                     await app.set_administrator_title(m.chat.id, admin, title)
                     await app.send_edit(f"{user_name}'s title is successfully changed to `{title}`", delme=5, text_type=["mono"])
             except Exception as e:
-                await app.error(e)
+                await log_error(e)
         elif app.command() == 1 and not reply:
             await app.send_edit("Reply or give me username | id after command . . .", text_type=["mono"], delme=3)
         else:
@@ -78,7 +78,7 @@ async def admintitle_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def invite_handler(_, m):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
@@ -109,7 +109,7 @@ async def invite_handler(_, m):
     disable_in=ChatType.CHANNEL
 )
 async def inviteall_handler(_, m):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     count = 0
@@ -146,7 +146,7 @@ async def inviteall_handler(_, m):
     disable_for=UserType.SUDO
 )
 async def adminlist_handler(_, m):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     await app.send_edit("⏳ • Hold on. . .", text_type=["mono"])
@@ -197,7 +197,7 @@ async def adminlist_handler(_, m):
     disable_for=UserType.SUDO
 )
 async def reportadmin_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     reply = m.reply_to_message
@@ -230,7 +230,7 @@ async def reportadmin_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def tagall_handler(app, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     reply = m.reply_to_message
@@ -254,7 +254,7 @@ async def tagall_handler(app, m: Message):
     usage="Get list of bots present in a chat."
 )
 async def botlist_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     reply = m.reply_to_message
@@ -296,7 +296,7 @@ async def botlist_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def leavechat_handler(_, m):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     try:
@@ -304,7 +304,7 @@ async def leavechat_handler(_, m):
         await asyncio.sleep(1)
         await app.leave_chat(m.chat.id)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -312,7 +312,7 @@ async def leavechat_handler(_, m):
     usage="Get count numbers of a chat."
 )
 async def membercount_handler(_, m):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
     if app.command() == 1:
@@ -351,7 +351,7 @@ async def joinchat_handler(_, m: Message):
             else:
                 await app.send_edit("Couldn't join chat !")
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     elif app.command() > 4096:
         await app.send_edit("Maximum 4096 characters excludeed . . .", text_type=["mono"], delme=5)
 
@@ -362,10 +362,10 @@ async def joinchat_handler(_, m: Message):
     disable_for=UserType.SUDO
 )
 async def slowmode_handler(_, m: Message):
-    if await app.check_private():
+    if await app.is_command_used_in_private():
         return
 
-    if await app.IsAdmin() is True:
+    if await app.is_admin(m.chat.id, app.id) is True:
         if app.command() == 1:
             sec = 10
         elif app.command() > 1:
@@ -383,6 +383,6 @@ async def slowmode_handler(_, m: Message):
             await app.set_slow_mode(m.chat.id, sec)
             await app.send_edit(f"Updated slow mode to `{sec}` seconds.", delme=4)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit("Sorry, you are not an admin here . . .", delme=4, text_type=["mono"])

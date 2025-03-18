@@ -8,8 +8,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
-
 @app.bot.on_callback_query(filters.regex("ubpublic-commands-tab"))
 @app.alert_user
 async def ubpublic_commands_callback(_, cb: CallbackQuery):
@@ -21,8 +19,7 @@ async def ubpublic_commands_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
-
+        await log_error(e)
 
 
 @app.bot.on_callback_query(filters.regex(r"public-commands-tab(.[a-z]+)?"))
@@ -36,7 +33,7 @@ async def public_commands_callback(_, cb):
             text = app.public_tab_string
             keyboard_text = "Back"
             keyboard_callback_data = "public-commands-tab-back"
-    
+
         await cb.edit_message_text(
             text=text,
             reply_markup=app.buildMarkup(
@@ -44,4 +41,4 @@ async def public_commands_callback(_, cb):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

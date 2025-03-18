@@ -6,12 +6,9 @@ from main.others import Colors
 from config import Configuration
 
 
-# Path to check installed Python libraries
-INSTALLED_LIBS_FILE = "../installed_requirements.txt"
-
-
 class Config:
     """Holds dynamically generated configuration values."""
+    pass
 
 
 def is_local_host():
@@ -34,7 +31,7 @@ class Tools:
     def setup_config(self):
         """Read configuration from file and set attributes dynamically."""
         count = 1
-        self.clear_screen
+        self.clear_screen()
 
         config_file = "config.txt"
 
@@ -47,16 +44,18 @@ class Tools:
             print(f"{Colors.block}Setting configuration values...{Colors.reset}\n")
 
             for line in content:
-                key, value = line.split("=")
-                value = int(value) if value.isdigit() else value
-
-                setattr(Config, key, value)
-                print(f"[{count}] Config set: {key} = {value}")
-                count += 1
+                try:
+                    key, value = line.split("=", 1)  # Ensure split works correctly
+                    value = int(value) if value.isdigit() else value
+                    setattr(Config, key, value)
+                    print(f"[{count}] Config set: {key} = {value}")
+                    count += 1
+                except ValueError:
+                    print(f"Invalid config line: {line}")
 
         else:
             print("Config file not found. Exiting...")
-            exit(1)
+            raise FileNotFoundError("Missing config.txt file")
 
         # Load remaining necessary configuration values
         print(
@@ -70,13 +69,10 @@ class Tools:
                 print(f"[{count}] Config set: {attr} = {value}")
                 count += 1
 
-        if (
-            input(f"\n{Colors.block}Clear screen? (Y/N): {Colors.reset} ")
-            .strip()
-            .upper()
-            == "Y"
-        ):
-            self.clear_screen
+        if input(
+            f"\n{Colors.block}Clear screen? (Y/N): {Colors.reset} "
+        ).strip().upper() in ("Y", ""):
+            self.clear_screen()
 
 
 # Initialize configurations
@@ -91,9 +87,10 @@ else:
             setattr(Config, attr, getattr(Configuration, attr, None))
 
 
-# Import and initialize userbot
+# Import and initialize userbot after setting configurations
 from main.userbot import app
 
 bot = app.bot
 
+# Import additional modules
 from main.core.filters import gen

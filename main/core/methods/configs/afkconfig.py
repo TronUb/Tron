@@ -12,4 +12,4 @@ class AfkConfig(object):
     @property
     def AfkText(self):
         """ Set your custom afk texts """
-        return self.getdv("AFK_TEXT") or self.AFK_TEXT
+        return self.getdv("AFK_TEXT") or self.AFK_TEXT # pylint: disable=no-member

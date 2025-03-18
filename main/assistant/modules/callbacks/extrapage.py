@@ -30,4 +30,4 @@ async def extra_callback(_, cb: CallbackQuery):
             ),
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

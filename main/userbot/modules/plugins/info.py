@@ -135,4 +135,4 @@ async def chatinfo_handler(_, m: Message):
             await app.send_edit(data, reply_markup=buttons)
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

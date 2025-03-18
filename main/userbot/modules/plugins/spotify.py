@@ -12,8 +12,6 @@ from pyfy import AsyncSpotify
 from main import app, gen
 
 
-
-
 async def spotify_now():
     """ spotify now function for spotify plugin """
     token = app.SpotifyToken()
@@ -36,8 +34,6 @@ async def spotify_now():
         "image_url":image_url,
         "track_url":track_url
         }
-
-
 
 
 @app.on_cmd(
@@ -93,4 +89,4 @@ async def spotify_handler(_, m: Message):
         )
         await m.delete()
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

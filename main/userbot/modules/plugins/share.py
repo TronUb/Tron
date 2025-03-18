@@ -39,7 +39,7 @@ async def sendplugin_handler(_, m: Message):
                     )
                 await m.delete()
             except Exception as e:
-                await app.error(e)
+                await log_error(e)
                 await app.send_edit("Try again later, check log chat . . .", delme=3)
         else:
             await app.send_edit("404: plugin not found . . .", delme=2, text_type=["mono"])
@@ -92,7 +92,7 @@ async def install_handler(_, m: Message):
             if download_loc:
                 await app.send_edit(f"**Installed module:** `{doc_name}`", delme=5)
                 data = open(download_loc, "r")
-                await app.aexec(data.read())
+                await app.async_exec(data.read())
             else:
                 await app.send_edit(
                     f"Failed to install module {doc_name}",
@@ -100,7 +100,7 @@ async def install_handler(_, m: Message):
                     delme=4
                 )
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
 @app.on_cmd(
@@ -124,4 +124,4 @@ async def uninstall_handler(_, m: Message):
         else:
             await app.send_edit("Give me a module name . . .", text_type=["mono"], delme=3)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

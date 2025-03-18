@@ -118,7 +118,7 @@ async def pmpermit_handler(_, m: Message):
             else:
                 print("Something went wrong in pmpermit")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -194,7 +194,7 @@ async def approve_handler(_, m: Message):
 
     except Exception as e:
         await app.send_edit("Something went wrong.", text_type=["mono"], delme=4)
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(

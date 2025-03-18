@@ -8,7 +8,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 pattern = r"([0-9]{2}:){2}[0-9]{2}"
 
 
@@ -40,7 +39,6 @@ def not_reply(message):
     return None
 
 
-
 async def send_video(message, filename, text):
     if os.path.exists(filename):
         msg = await app.send_edit(
@@ -57,8 +55,6 @@ async def send_video(message, filename, text):
         return await send_delete(
             text
         )
-
-
 
 
 @app.on_cmd(
@@ -138,8 +134,7 @@ async def vcut_handler(_, m: Message):
             "Failed to cut video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -184,9 +179,7 @@ async def vinvert_handler(_, m: Message):
             "Failed to invert video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -237,8 +230,7 @@ async def vmute_handler(_, m: Message):
             "Failed to mute video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -319,10 +311,7 @@ async def vsubclip_handler(_, m: Message):
             "Failed to cut sub clip of video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -393,10 +382,7 @@ async def vafadein_handler(_, m: Message):
             "Failed to add fade in effect in video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -466,10 +452,7 @@ async def vafadeout_handler(_, m: Message):
             "Failed to add fade out effect in video audio, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -536,7 +519,7 @@ async def vsetaudio_handler(_, m: Message):
             "Failed to add fade out effect in video audio, try again later !"
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -601,7 +584,7 @@ async def vspeed_handler(_, m: Message):
             "Failed to speed the video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -671,7 +654,7 @@ async def vfadeout_handler(_, m: Message):
             "Failed to add fade out effect in video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -741,5 +724,4 @@ async def vfadein_handler(_, m: Message):
             "Failed to add fade in effect in video, try again later !"
         )
     except Exception as e:
-        await app.error(e)
-
+        await log_error(e)

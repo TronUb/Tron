@@ -11,8 +11,6 @@ from pyrogram.types import (
 from main.userbot.client import app
 
 
-
-
 @app.bot.on_callback_query(filters.regex("home-tab"))
 @app.alert_user
 async def home_page_callback(_, cb: CallbackQuery):
@@ -33,4 +31,4 @@ async def home_page_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

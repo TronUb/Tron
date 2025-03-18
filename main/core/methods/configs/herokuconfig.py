@@ -6,8 +6,7 @@ HEROKUDV = [
     ]
 
 
-
-
+# pylint: disable=no-member
 class HerokuConfig(object):
     @property
     def HerokuApiKey(self):

@@ -42,4 +42,4 @@ async def delete_helpmenu_callback(_, cb: CallbackQuery):
     except (PeerIdInvalid, KeyError, ValueError):
         await app.delete_messages(chat_id=chat_id, message_ids=message_id)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

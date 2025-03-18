@@ -39,7 +39,7 @@ async def afk_handler(_, m: Message):
 
         await app.send_edit(f"{app.UserMention} is now Offline.\n{reason}", delme=3)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # while you are afk
@@ -81,7 +81,7 @@ async def offlinemention_handler(_, m: Message):
             pass
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 async def unafk_handler(_, m: Message):
@@ -108,7 +108,7 @@ async def unafk_handler(_, m: Message):
                 handlers.clear()
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # add handlers when user goes afk

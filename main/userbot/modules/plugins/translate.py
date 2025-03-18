@@ -42,7 +42,7 @@ async def translate_handler(_, m: Message):
             await app.send_edit("Something went wrong, please try again later !", text_type=["mono"], delme=4)
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 async def translate(lang, text):

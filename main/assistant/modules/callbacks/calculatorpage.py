@@ -10,7 +10,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
 reply_markup=app.buildMarkup(
     [
         app.buildButton("1", "cal-(1)"),
@@ -53,9 +52,7 @@ async def calculator_callback(_, cb: CallbackQuery):
             reply_markup=reply_markup
         )
     except Exception as e:
-        await app.error(e)
-
-
+        await log_error(e)
 
 
 @app.bot.on_callback_query(filters.regex(r"cal-\(.{1}\)"))
@@ -96,10 +93,10 @@ async def calculator_evaluate_callback(_, cb: CallbackQuery):
                 text = e or "Error !"
         else:
             text = caption + ch
-        
+
         await cb.edit_message_text(
             text=text,
             reply_markup=reply_markup
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

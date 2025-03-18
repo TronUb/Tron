@@ -11,9 +11,6 @@ from pyrogram.types import (
 from main.userbot.client import app
 
 
-
-
-
 @app.bot.on_callback_query(filters.regex("assistant-tab"))
 @app.alert_user
 async def _assistant(_, cb: CallbackQuery):
@@ -31,4 +28,4 @@ async def _assistant(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

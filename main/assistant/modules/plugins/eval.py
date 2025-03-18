@@ -9,9 +9,6 @@ from pyrogram import filters
 from main.userbot.client import app
 
 
-
-
-
 @app.bot.on_message(filters.command("eval") & filters.user(app.id), group=-1)
 async def bot_evaluate_handler(_, m: Message):
     """ This function is made for executing python codes """
@@ -38,7 +35,7 @@ async def bot_evaluate_handler(_, m: Message):
         stdout, stderr, exc = None, None, None
 
         try:
-            await app.bot.aexec(cmd)
+            await app.bot.async_exec(cmd)
         except Exception:
             exc = traceback.format_exc()
 
@@ -56,4 +53,4 @@ async def bot_evaluate_handler(_, m: Message):
         else:
             await msg.edit(final_output)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

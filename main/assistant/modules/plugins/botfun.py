@@ -9,14 +9,10 @@ from pyrogram.enums import ChatType
 from pyrogram.types import Message
 
 
-
-
-
 collect = {}
 
 numbers = [f"{x}" for x in range(1, 10)]
 cmd_handlers = ["+", "-"]
-
 
 
 @app.bot.on_message(filters.command(numbers, cmd_handlers) & filters.group, group=1)
@@ -62,4 +58,4 @@ async def increment_decrement(_, m: Message):
                         f"{reply.from_user.first_name}: 1 increments"
                     )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

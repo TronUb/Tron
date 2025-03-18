@@ -100,7 +100,6 @@ class SuperClient(Core, Client):
         """ this function starts the pyrogram userbot client. """
         if not self:
             raise Exception("The userbot client is missing.")
-            quit(0)
 
         print(f"{Colors.block}Userbot  :{Colors.reset} [{Colors.red}OFF{Colors.reset}]{Colors.reset}")
         response = await self.start()

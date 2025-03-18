@@ -29,6 +29,6 @@ async def wikipedia_handler(_, m: Message):
             else:
                 await app.send_edit("No results found !", delme=2, text_type=["mono"])
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send("Something went wrong !", text_type=["mono"], delme=3)

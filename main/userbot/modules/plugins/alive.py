@@ -56,7 +56,7 @@ async def alive_handler(_, m: Message):
                 disable_web_page_preview=True,
                 )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -84,7 +84,7 @@ async def inlinealive_handler(_, m: Message):
         else:
             await app.send_edit("Something went wrong, please try again later . . .", delme=2)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -121,4 +121,4 @@ async def inlinequote_handler(_, m: Message):
         else:
             await app.send_edit("Please try again later !", delme=2, text_type=["mono"])
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

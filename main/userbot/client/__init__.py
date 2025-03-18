@@ -10,5 +10,4 @@ except ImportError:
 
 from .client import SuperClient
 
-
 app = SuperClient()

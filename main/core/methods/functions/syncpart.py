@@ -1,45 +1,35 @@
 """ all synchronous functions are stored here """
 
-import re
-import os
-import time
-import math
-import random
-import json
+import asyncio
 import datetime
 import html
-import inspect
-import asyncio
-import subprocess
 import importlib
+import inspect
+import json
+import math
+import os
+import random
+import re
+import subprocess
 import threading
+import time
 
-from typing import List
-
-from pyrogram.types import (
-    Message,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup
-)
-from pyrogram.errors import BotMethodInvalid
-
+import heroku3
+import pytz
+import requests
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from PIL import Image
+from pyrogram.errors import BotMethodInvalid
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pySmartDL import SmartDL
+from youtube_dl import YoutubeDL
 
 from main.others import Colors
 
-from PIL import Image
-import heroku3
-import requests
-import pytz
 
-from pySmartDL import SmartDL
-
-from youtube_dl import YoutubeDL
-
-
+# pylint: disable=no-member
 def messageobject(anydict: dict):
-    message = None
     all_messages = [
         x for x in anydict.values()
         if isinstance(x, Message)
@@ -106,7 +96,7 @@ class SyncPart(Types):
         mytime = get_time.strftime("%r")
         return mytime
 
-    def command(self, length: int = 0):
+    def command(self):
         """
         params:
             None
@@ -266,14 +256,14 @@ class SyncPart(Types):
                 data = response.json()  # Parse the JSON response
 
                 # Write the JSON data to a file
-                with open(filename, "w") as f:
+                with open(filename, "w", encoding="UTF-8") as f:
                     json.dump(data, f)
             except requests.RequestException as e:
                 return f"Error fetching data: {e}"
         else:
             try:
                 # Read the JSON data from the file
-                with open(filename, "r") as f:
+                with open(filename, "r", encoding="UTF-8") as f:
                     data = json.load(f)
             except (IOError, json.JSONDecodeError) as e:
                 return f"Error reading data: {e}"
@@ -397,7 +387,7 @@ class SyncPart(Types):
         modules = []
         modules.clear()
 
-        check_mark = u'\u2713'
+        check_mark = "\u2713"
 
         for x in os.listdir(path):
             if x.endswith(".py"):

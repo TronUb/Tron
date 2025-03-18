@@ -22,7 +22,7 @@ async def plugins_page_callback(_, cb: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(btn)
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # plugins next page
@@ -36,7 +36,7 @@ async def plugins_next_page_callback(_, cb: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(btn)
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # plugins previous page
@@ -50,7 +50,7 @@ async def plugins_prev_page_callback(_, cb: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(btn)
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # back from plugins page to home page
@@ -65,7 +65,7 @@ async def back_to_home_page_callback(_, cb: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(btn)
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # plugin commands information
@@ -74,7 +74,7 @@ async def back_to_home_page_callback(_, cb: CallbackQuery):
 async def plugin_info_page_callback(_, cb: CallbackQuery):
     try:
         plugin_name, page_number = cb.matches[0].group(1).split("|", 1)
-        plugs = await app.PluginData(plugin_name)
+        plugs = await app.get_plugin_info(plugin_name)
         cmd_string = f"**PLUGIN:** {plugin_name}\n\n" + "".join(plugs)
         await cb.edit_message_text(
             cmd_string,
@@ -83,4 +83,4 @@ async def plugin_info_page_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

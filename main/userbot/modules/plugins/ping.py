@@ -63,11 +63,11 @@ async def ping_handler(_, m: Message):
                     await app.send_edit("".join(pings))
                     pings.clear()
                 except Exception as e:
-                    await app.error(e)
+                    await log_error(e)
         else:
             return await app.send_edit("Something went wrong in ping module.", delme=2)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 # function to create lots of pings

@@ -24,7 +24,9 @@ def to_seconds(format, number): # number: int, format: s, m, h, d
 
 
 async def delete_reply(reply, command, start):
-    if reply and await app.IsAdmin(privileges="delete_messages"):
+    if reply and await app.is_admin(
+        reply.chat.id, app.id, privileges="delete_messages"
+    ):
         if start and command.startswith(start):
             return await reply.delete()
 
@@ -44,7 +46,7 @@ async def delete_reply(reply, command, start):
 async def ban_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -60,7 +62,7 @@ async def ban_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin here or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -113,7 +115,7 @@ async def ban_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -125,10 +127,10 @@ async def ban_handler(_, m: Message):
 async def banall_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -158,7 +160,7 @@ async def banall_handler(_, m: Message):
             )
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -170,7 +172,7 @@ async def banall_handler(_, m: Message):
 async def unban_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -184,7 +186,7 @@ async def unban_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -241,7 +243,7 @@ async def unban_handler(_, m: Message):
             delme=4
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 async def mute_user(chat_id, user_id, duration=datetime.now()):
@@ -281,7 +283,7 @@ async def mute_handler(_, m: Message):
             None
     """
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -297,7 +299,7 @@ async def mute_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -351,7 +353,7 @@ async def mute_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -362,7 +364,7 @@ async def mute_handler(_, m: Message):
 async def unmute_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -376,7 +378,7 @@ async def unmute_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not an admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -434,7 +436,7 @@ async def unmute_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -446,7 +448,7 @@ async def unmute_handler(_, m: Message):
 async def kick_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -460,7 +462,7 @@ async def kick_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="ban_users") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="ban_users") is False:
             return await app.send_edit(
                 "You're not admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -501,7 +503,7 @@ async def kick_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -532,7 +534,7 @@ async def pin_handler(_, m: Message):
             )
 
         # Check if user has pin privileges
-        if not await app.IsAdmin(privileges="pin_messages"):
+        if not await app.is_admin(m.chat.id, app.id, privileges="pin_messages"):
             return await app.send_edit(
                 "You're not an admin or lack pin privileges.",
                 text_type=["mono"],
@@ -556,7 +558,7 @@ async def pin_handler(_, m: Message):
         )
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -606,7 +608,7 @@ async def unpin_handler(_, m: Message):
             else:
                 await app.send_edit("Failed to unpin all messages.", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -618,7 +620,7 @@ async def unpin_handler(_, m: Message):
 async def promote_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
@@ -632,7 +634,7 @@ async def promote_handler(_, m: Message):
                 delme=4
             )
 
-        if await app.IsAdmin(privileges="add_admins") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="add_admins") is False:
             return await app.send_edit(
                 "You're not admin or you don't have enough admin rights.",
                 text_type=["mono"],
@@ -685,7 +687,7 @@ async def promote_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -697,14 +699,14 @@ async def promote_handler(_, m: Message):
 async def demote_handler(_, m: Message):
 
     try:
-        if await app.check_private():
+        if await app.is_command_used_in_private():
             return
 
         sm = m.sudo_message
         reply = m.reply_to_message or sm.reply_to_messageNone if sm else None
         user = False
 
-        if await app.IsAdmin(privileges="add_admins") is False:
+        if await app.is_admin(m.chat.id, app.id, privileges="add_admins") is False:
             return await app.send_edit(
                 "You're not an admin here or you don't have enough rights.",
                 text_type=["mono"],
@@ -759,4 +761,4 @@ async def demote_handler(_, m: Message):
     except UserNotParticipant:
         await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

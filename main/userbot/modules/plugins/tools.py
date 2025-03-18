@@ -51,7 +51,7 @@ async def wordlink_handler(_, m: Message):
 
             await app.send_edit(f"**FOUND LINKS FOR:** `{query}`\n\n" + "\n".join(links))
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -74,7 +74,7 @@ async def currency_handler(_, m: Message):
         text = f"`{value}` `{cur1}` = `{conv:,.2f}` `{cur2}`"
         await app.send_edit(text)
     except ValueError as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -99,7 +99,7 @@ async def temperature_handler(_, m: Message):
         else:
             await app.send_edit("Unknown type {}".format(temp2))
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -175,7 +175,7 @@ async def forward_handler(_, m: Message):
             await m.delete()
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -253,4 +253,4 @@ async def commonchat_handler(_, m):
         else:
             await app.send_edit("Please reply to someone . . .", text_type=["mono"], delme=4)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

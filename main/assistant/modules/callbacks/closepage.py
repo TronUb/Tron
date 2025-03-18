@@ -12,9 +12,6 @@ from pyrogram.types import (
 from main.userbot.client import app
 
 
-
-
-
 @app.bot.on_callback_query(filters.regex("close-tab"))
 @app.alert_user
 async def close_helpmenu_callback(_, cb: CallbackQuery):
@@ -30,4 +27,4 @@ async def close_helpmenu_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

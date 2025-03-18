@@ -8,9 +8,6 @@ from pyrogram.types import CallbackQuery
 from main.userbot.client import app
 
 
-
-
-
 @app.bot.on_callback_query(filters.regex("settings-tab"))
 @app.alert_user
 async def settings_callback(_, cb: CallbackQuery):
@@ -28,4 +25,4 @@ async def settings_callback(_, cb: CallbackQuery):
             )
         )
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

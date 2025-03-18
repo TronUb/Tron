@@ -7,7 +7,6 @@ from main import app, gen
 from main.core.enums import UserType
 
 
-
 @app.on_cmd(
     commands="clone",
     usage="Change your account avatar to someone's else.",
@@ -69,10 +68,7 @@ async def clone_handler(_, m: Message):
         await app.send_edit("Clone Completed !", text_type=["mono"], delme=3)
 
     except Exception as e:
-        await app.error(e)
-
-
-
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -142,4 +138,4 @@ async def revert_handler(_, m: Message):
         app.deldv("PROFILE_DATA") # delete for another use
 
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

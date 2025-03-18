@@ -27,7 +27,7 @@ async def paste_handler(_, m: Message):
 
     await app.send_edit("Pasting to pastebin . . .", text_type=["mono"])
 
-    url = await app.HasteBinPaste(text)
+    url = await app.paste_to_bin(text)
     if not url:
         return await app.send_edit(
             "Failed to paste: No URL returned.", text_type=["mono"], delme=4

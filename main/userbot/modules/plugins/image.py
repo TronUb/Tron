@@ -127,7 +127,7 @@ async def qrcode_handler(_, m):
 
         await m.delete()
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -166,7 +166,7 @@ async def colourtemplate_handler(_, m: Message):
             if os.path.exists(picname):
                 os.remove(picname)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
 
 
 @app.on_cmd(
@@ -174,14 +174,31 @@ async def colourtemplate_handler(_, m: Message):
     usage="Get cat images."
 )
 async def catpic_handler(_, m):
+    """Fetch and send a random cat image."""
     try:
-        await m.delete()
+        # Delete command message (if bot has permission)
+        try:
+            await m.delete()
+        except Exception:
+            pass  # Ignore if deletion fails
 
-        res = await app.GetRequest("https://api.thecatapi.com/v1/images/search")
-        img = res[0]["url"]
-        await app.send_photo(m.chat.id, img)
+        # Fetch cat image
+        response = await app.fetch_url("https://api.thecatapi.com/v1/images/search")
+
+        if response and response.get("status") == 200:
+            cat_data = response.get("data", [])
+            cat_img = cat_data[0].get("url") if cat_data else None
+
+            if cat_img:
+                await app.send_photo(m.chat.id, cat_img)
+            else:
+                await app.send_edit("Sorry, No cat pic found!", delme=3)
+        else:
+            await app.send_edit("Failed to fetch cat image. Try again later!", delme=3)
+
     except Exception as e:
-        await app.send_edit("Sorry, No cat pic found !")
+        await app.send_edit("Error fetching cat image. Try again later!", delme=3)
+        await log_error(f"Cat API error: {str(e)}")
 
 
 @app.on_cmd(
@@ -189,39 +206,39 @@ async def catpic_handler(_, m):
     usage="Get waifu images."
 )
 async def waifupic_handler(_, m):
-    text = "Finding waifu . . ."
+    """Fetch and send a random waifu image."""
     try:
         url = "https://api.waifu.pics/sfw/waifu"
 
-        if app.command() > 1 and m.command[1] == "nsfw":
+        # Check if the command has an argument (for NSFW mode)
+        if len(m.command) > 1 and m.command[1].lower() == "nsfw":
             url = "https://api.waifu.pics/nsfw/waifu"
 
-        await app.send_edit(text, text_type=["mono"])
-        res = await app.GetRequest(url)
-        photo = res.get("url")
+        await app.send_edit("Finding waifu . . .", text_type=["mono"])
 
-        if photo:
-            if ("nsfw" in url):
-                await app.send_photo("me", photo)
-                await app.send_edit("The pic was sent in your saved message . . .")
+        # Fetch waifu image
+        response = await app.fetch_url(url)
+
+        if response and response.get("status") == 200:
+            photo_url = response.get("data", {}).get("url")
+
+            if photo_url:
+                if "nsfw" in url:
+                    await app.send_photo("me", photo_url)
+                    await app.send_edit("The pic was sent to your saved messages.")
+                else:
+                    await app.send_photo(m.chat.id, photo_url)
+                    await m.delete()
             else:
-                await app.send_photo(m.chat.id, photo)
-                await m.delete()
+                await app.send_edit("No waifu found!", delme=3)
         else:
-            await app.send_edit("No waifu found !", delme=3)
+            await app.send_edit(
+                "Failed to fetch waifu image. Try again later!", delme=3
+            )
 
     except Exception as e:
-        await app.error(e)
-
-
-@app.on_cmd(
-    commands="pfp",
-    usage="Get profile pictures."
-)
-async def profilepic_handler(_, m):
-    msg = await app.send_edit("Getting profile pic . . .", text_type=["mono"])
-    await send_profile_pic(m)
-    await msg.delete()
+        await app.send_edit("Error fetching waifu image. Try again later!", delme=3)
+        await log_error(f"Waifu API error: {str(e)}")
 
 
 @app.on_cmd(
@@ -229,13 +246,26 @@ async def profilepic_handler(_, m):
     usage="Get dog images."
 )
 async def dogpic_handler(_, m):
+    """Fetch and send a random dog image."""
     try:
-        res = await app.GetRequest("https://dog.ceo/api/breeds/image/random")
-        img_url = res.get("message")
-        if img_url:
-            await app.send_photo(m.chat.id, img_url)
+        response = await app.fetch_url("https://dog.ceo/api/breeds/image/random")
+
+        if response and response.get("status") == 200:
+            img_url = response.get("data", {}).get("message")
+
+            if img_url:
+                await app.send_photo(m.chat.id, img_url)
+            else:
+                await app.send_edit("No dog pics found!", text_type=["mono"], delme=3)
         else:
-            await app.send_edit("No dog pics found !", text_type=["mono"])
+            await app.send_edit(
+                "Failed to fetch dog image. Try again later!",
+                text_type=["mono"],
+                delme=3,
+            )
+
     except Exception as e:
-        await app.send_edit("No dog pics found !", text_type=["mono"])
-        await app.error(e)
+        await app.send_edit(
+            "Error fetching dog image. Try again later!", text_type=["mono"], delme=3
+        )
+        await log_error(f"Dog API error: {str(e)}")

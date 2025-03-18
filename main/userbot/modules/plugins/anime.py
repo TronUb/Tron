@@ -27,7 +27,7 @@ async def send_gif(m: Message, gif_data):
         try:
             await app.send_video(m.chat.id, gif_data[0], caption=gif_data[1])
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit("Failed to fetch the anime GIF.")
 
@@ -49,9 +49,9 @@ async def nekopic_handler(_, m: Message):
         )
         await m.delete()
     except requests.RequestException as e:
-        await app.error(f"API request failed: {e}")
+        await log_error(f"API request failed: {e}")
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(commands="animegif", usage="Get anime GIFs.")
@@ -71,4 +71,4 @@ async def animegif_handler(_, m: Message):
         else:
             await app.send_edit("Invalid action! Use these actions:\n" + anime_suffix)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

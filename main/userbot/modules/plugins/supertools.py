@@ -97,37 +97,50 @@ async def tts_handler(_, m: Message):
         else:
             await app.send_edit("Something went wrong !", text_type=["mono"])
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
-@app.on_cmd(
-    commands="ud",
-    usage="Get meaning of a word on urban dictionary."
-)
-async def ud_handler(_, m:Message):
-    """ ud_handler for supertools plugin """
-    if app.command() == 1:
-        return await app.send_edit(f"Use: `{app.PREFIX}ud cats`")
+import urllib.parse
+
+
+@app.on_cmd(commands="ud", usage="Get meaning of a word on Urban Dictionary.")
+async def ud_handler(_, m: Message):
+    """Urban Dictionary handler for supertools plugin"""
+    if len(m.command) == 1:
+        return await app.send_edit(f"Use: `{app.PREFIX}ud <word>`")
 
     try:
-        await app.send_edit(f"Searching for `{m.text.split(None, 1)[1]}`")
-        text = m.text.split(None, 1)[1]
-        response = await app.GetRequest(
-            f"http://api.urbandictionary.com/v0/define?term={text}"
+        word = m.text.split(None, 1)[1]
+        encoded_word = urllib.parse.quote(word)  # Properly encode URL
+        await app.send_edit(f"Searching for `{word}`...")
+
+        # Fetch definition
+        response = await app.fetch_url(
+            f"http://api.urbandictionary.com/v0/define?term={encoded_word}"
         )
-        word = response["list"][0]["word"]
-        definition = response["list"][0]["definition"]
-        example = response["list"][0]["example"]
+
+        definitions = response.get("data", {}).get("list", [])
+
+        if not definitions:
+            return await app.send_edit("No Results Found!", text_type=["mono"], delme=3)
+
+        word = definitions[0].get("word", "Unknown")
+        definition = definitions[0].get("definition", "No definition available.")
+        example = definitions[0].get("example", "No example available.")
+
         resp = (
-            f"**Text**: __`{replace_text(word)}`__\n\n"
+            f"**Text:** __`{replace_text(word)}`__\n\n"
             f"**Meaning:**\n\n`{replace_text(definition)}`\n\n"
             f"**Example:**\n\n`{replace_text(example)}` "
         )
+
         await app.send_edit(resp)
-    except IndexError:
-        await app.send_edit("No Results Found !", text_type=["mono"], delme=3)
+
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
+        await app.send_edit(
+            "Something went wrong, please try again later!", text_type=["mono"], delme=3
+        )
 
 
 @app.on_cmd(
@@ -153,7 +166,7 @@ async def shortlink_handler(_, m: Message):
             text = reply.text
             await shorten_link(m, text)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -183,7 +196,7 @@ async def unshortlink_handler(_, m: Message):
         else:
             await app.send_edit("Something went wrong, try again later !", text_type=["mono"])
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
 
 
 @app.on_cmd(
@@ -238,7 +251,7 @@ async def webshot_handler(_, m: Message):
             await m.delete()
             os.remove(path)
         except Exception as e:
-            await app.error(e)
+            await log_error(e)
     else:
         await app.send_edit("Give me the link pro . . .", text_type=["mono"])
 
@@ -266,4 +279,4 @@ async def undlt_handler(_, m: Message):
                 collect.append(f"**Message:** `{x.text}`\n\n")
         await app.send_edit("".join(collect))
     except Exception as e:
-        await app.error(e)
+        await log_error(e)

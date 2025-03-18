@@ -101,4 +101,4 @@ async def del_handler(_, m: Message):
     try:
         await app.delete_messages(m.chat.id, msg_ids)
     except Exception as e:
-        await app.error(e)
+        await log_error(e)
