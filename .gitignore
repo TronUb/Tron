@@ -15,8 +15,7 @@ installed_dependencies.txt
 tron.db
 
 # 🔹 Configuration & Settings
-config.text
-config.txt
+.env
 .anvil_editor.yaml
 anvil.yaml
 
