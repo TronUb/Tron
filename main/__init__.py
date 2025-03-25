@@ -16,7 +16,7 @@ class Config:
 
 def is_local_host():
     """Check if the script is running locally."""
-    return os.path.exists("config.txt")
+    return os.path.exists(".env")
 
 
 class Tools:
@@ -36,7 +36,7 @@ class Tools:
         count = 1
         self.clear_screen
 
-        config_file = "config.txt"
+        config_file = ".env"
 
         if os.path.exists(config_file):
             print(f"{Colors.block}Config file found: Yes{Colors.reset}\n")

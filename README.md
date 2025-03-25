@@ -92,7 +92,7 @@ BOT_TOKEN
 
 6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
 
-7. change directory ```cd Tron``` & create config.txt file ```notepad config.txt``` & fill all details.
+7. change directory ```cd Tron``` & create .env file ```notepad .env``` & fill all details.
 
 8. Start the tronuserbot installation setup ```python3 -m main```
 
@@ -111,16 +111,16 @@ BOT_TOKEN
 
 6. Clone tronuserbot repo ```git clone https://github.com/TronUb/Tron```
 
-7. Change directory ```cd Tron``` & create a config.txt file
+7. Change directory ```cd Tron``` & create a .env file
 
-8. Paste your keys and values in config.text file ```nano config.txt``` & fill all details.
+8. Paste your keys and values in config.text file ```nano .env``` & fill all details.
 
 9. After pasting all of your information, use <b>Ctrl + X</b> and enter <b>Y</b> and again hit enter button.
 
 10. Start the tronuserbot installation setup ```python3 -m main```
 
 
-<b>Note:</b> You have to add keys & values in config.txt file same as given below 👇
+<b>Note:</b> You have to add keys & values in .env file same as given below 👇
 
 ```API_ID=1234567```<br />
 ```API_HASH=ad2gb7h9jd99jdu9bdid9djd9jsh8s7h7eo9kbopz```<br />
