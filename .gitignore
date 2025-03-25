@@ -21,8 +21,8 @@ anvil.yaml
 
 # 🔹 Logs & Temporary Files
 temp.info
-.cache
-.vscode
+.cache/
+.vscode/
 
 # 🔹 Downloads & Generated Files
-downloads
+downloads/

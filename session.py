@@ -64,10 +64,10 @@ with Client(
     session = app.export_session_string()
     app.send_message(
         "me",
-        f"""This Is Your Tron Userbot • [ `SESSION` ]\n\n{session}
+        f"""This Is Your Tron Userbot • [ `SESSION` ]\n\n```{session}```
         ⚠️• Don't share this with anyone !!
         Create session online • [ Press Here ](https://replit.com/@beastzx18/Tron-Userbot-Session)""",
-        disable_web_page_preview=True
+        disable_web_page_preview=True,
     )
     print(session)
     print("\n\nYour String Session Is Successfully Saved In Telegram Saved (Cloud) Messages !! Don't Share It With Anyone!! Anyone having your session can use (Hack) your Telegram Account !")
