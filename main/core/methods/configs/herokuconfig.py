@@ -5,8 +5,7 @@ HEROKUDV = [
     "HEROKU_APP_NAME"
     ]
 
-
-
+# pylint: disable=no-member
 
 class HerokuConfig(object):
     @property

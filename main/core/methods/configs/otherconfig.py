@@ -9,7 +9,7 @@ OTHERDV = [
     "SPOTIFY_TOKEN"
     ]
 
-
+# pylint: disable=no-member
 
 class OtherConfig(object):
     @property

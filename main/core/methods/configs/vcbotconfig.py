@@ -1,12 +1,11 @@
 """ bot configuration module """
 
 
-
 VCBOTDV = [
     "VCBOT",
     "VC_ACCESS"
 ]
-
+# pylint: disable=no-member
 
 class VcBotConfig(object):
     """ bot configuration module """

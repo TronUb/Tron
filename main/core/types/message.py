@@ -1,18 +1,20 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, TYPE_CHECKING
 from pyrogram.types import Message as PyMessage
 from pyrogram import raw
 from .superparser import SuperParser
 
+if TYPE_CHECKING:
+    from pyrogram.client import Client
+
 
 class Message(PyMessage):
-
-    def __init__(self):
-        """Custom Message class inheriting Pyrogram's Message"""
-        super().__init__(id=id)
+    """
+    Custom wrapper over Pyrogram's Message with an extended static parser.
+    """
 
     @staticmethod
     async def parse(
-        client: "pyrogram.Client",
+        client: "Client",
         message: raw.base.Message,
         users: Optional[Dict] = None,
         chats: Optional[Dict] = None,
@@ -20,22 +22,22 @@ class Message(PyMessage):
         replies: int = 1,
     ) -> Optional[PyMessage]:
         """
-        Custom message parsing method.
+        Parse a raw Telegram message into a Pyrogram Message, with user parsing.
 
-        Parameters:
-            client (pyrogram.Client): Pyrogram client instance.
-            message (raw.base.Message): Raw Telegram message data.
-            users (dict, optional): Dictionary of users.
-            chats (dict, optional): Dictionary of chats.
-            is_scheduled (bool, optional): If the message is scheduled.
-            replies (int, optional): Number of replies.
+        Args:
+            client (Client): Pyrogram client instance.
+            message (raw.base.Message): Raw Telegram message object.
+            users (dict, optional): Users dictionary.
+            chats (dict, optional): Chats dictionary.
+            is_scheduled (bool, optional): Whether the message is scheduled.
+            replies (int, optional): Reply count.
 
         Returns:
-            Optional[PyMessage]: Parsed message or None if parsing fails.
+            Optional[PyMessage]: The fully parsed Pyrogram message object.
         """
         try:
-            # Parse the raw message
-            r = await PyMessage._parse(
+            # Attempt to parse the raw message using Pyrogram internals
+            parsed = await PyMessage._parse(
                 client=client,
                 message=message,
                 users=users or {},
@@ -44,15 +46,13 @@ class Message(PyMessage):
                 replies=replies,
             )
 
-            if r:
-                # Further parse user details
-                parsed_message = SuperParser.parse_user(client, r)
-                client.message = parsed_message  # Store in client for global access
-                return parsed_message
+            if parsed:
+                # Add user-level metadata (your custom logic)
+                parsed = SuperParser.parse_user(client, parsed)
+                return parsed
 
-            return None  # Return None if parsing fails
+            return None
 
         except Exception as e:
-            # Log errors if any
-            print(f"Error parsing message: {e}")
+            print(f"[TronMessageParser] Failed to parse message: {e}")
             return None

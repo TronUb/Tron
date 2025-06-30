@@ -1,22 +1,34 @@
+# pylint: disable=E1101
+
 import functools
+from typing import Callable, Awaitable, Any
+
 from pyrogram.types import CallbackQuery
 from pyrogram.errors import MessageNotModified
 
 
-# pylint: disable=E1101
 class AlertUser:
-    def alert_user(self, func):
+    """
+    Decorator class to restrict callback query interactions
+    to the userbot owner or authorized sudo users.
+    """
+
+    def alert_user(
+        self, func: Callable[..., Awaitable[Any]]
+    ) -> Callable[..., Awaitable[None]]:
 
         @functools.wraps(func)
         async def wrapper(_, cb: CallbackQuery):
             user = cb.from_user
 
             if not user:
-                return  # Ignore callbacks from non-user sources
+                return  # Ignore anonymous callbacks
 
-            if user.id != self.id and user.id not in getattr(self, "SudoUsersList", []):
+            # Sudo access check
+            sudo_list = getattr(self, "SudoUsersList", [])
+            if user.id != self.id and user.id not in sudo_list:
                 await cb.answer(
-                    "Sorry, but you can't use this userbot! Make your own userbot at @tronuserbot",
+                    "🚫 You're not allowed to use this userbot.\nBuild your own from @tronuserbot.",
                     show_alert=True,
                 )
                 return
@@ -24,6 +36,6 @@ class AlertUser:
             try:
                 await func(_, cb)
             except MessageNotModified:
-                pass  # Ignore this specific error
+                pass  # Silently ignore this specific benign error
 
         return wrapper
