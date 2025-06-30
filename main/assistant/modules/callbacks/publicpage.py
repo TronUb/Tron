@@ -4,44 +4,37 @@ This file creates global commands for public users.
 
 from pyrogram import filters
 from pyrogram.types import CallbackQuery
-
 from main.userbot.client import app
 
 
-
-
-@app.bot.on_callback_query(filters.regex("ubpublic-commands-tab"))
-@app.alert_user
-async def ubpublic_commands_callback(_, cb: CallbackQuery):
+@app.bot.on_callback_query(filters.regex(r"public-commands-tab(?:-back)?"))
+async def public_commands_callback(_, cb: CallbackQuery):
     try:
-        await cb.edit_message_text(
-            text=app.public_tab_string,
-            reply_markup=app.buildMarkup(
-                [app.buildButton("Back", "extra-tab")]
+        pattern = cb.matches[0].group(0) if cb.matches else ""
+        is_back = pattern.endswith("-back")
+
+        if is_back:
+            text = (
+                "**🛠 Public Commands Panel**\n\n"
+                "You're back at the main panel!\n"
+                "Tap the button below to explore available features and tools 🚀"
             )
-        )
-    except Exception as e:
-        await app.error(e)
-
-
-
-@app.bot.on_callback_query(filters.regex(r"public-commands-tab(.[a-z]+)?"))
-async def public_commands_callback(_, cb):
-    try:
-        if cb.matches[0].group(0) == "public-commands-tab-back":
-            text = "You can use these public commands, check below."
-            keyboard_text = "• View commands •"
-            keyboard_callback_data = "public-commands-tab"
+            button_text = "• View Commands •"
+            callback_data = "public-commands-tab"
         else:
-            text = app.public_tab_string
-            keyboard_text = "Back"
-            keyboard_callback_data = "public-commands-tab-back"
-    
+            text = (
+                "**📖 List of Public Commands**\n\n"
+                "Here are all the commands you can use as a regular user:\n\n"
+                f"{app.public_tab_string}\n\n"
+                "Want to go back? Tap below."
+            )
+            button_text = "⬅️ Back"
+            callback_data = "public-commands-tab-back"
+
         await cb.edit_message_text(
             text=text,
-            reply_markup=app.buildMarkup(
-                [app.buildButton(text, callback_data)]
-            )
+            reply_markup=app.buildMarkup([app.buildButton(button_text, callback_data)]),
+            disable_web_page_preview=True,
         )
     except Exception as e:
         await app.error(e)

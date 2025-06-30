@@ -1,14 +1,11 @@
 from pyrogram import filters
 
 from pyrogram.types import (
-    InlineKeyboardMarkup, 
+    InlineKeyboardMarkup,
     Message,
 )
 
 from main.userbot.client import app
-
-
-
 
 
 emoji = app.HelpEmoji or "•"
@@ -18,9 +15,6 @@ extra = app.BuildKeyboard(([f"{emoji} Extra {emoji}", "extra-tab"], [f"{emoji} S
 about = app.BuildKeyboard(([["Assistant", "assistant-tab"]]))
 close = app.BuildKeyboard(([["Close", "close-tab"]]))
 public = app.BuildKeyboard(([[f"{emoji} Public Commands {emoji}", "public-commands-tab"]]))
-
-
-
 
 
 # /help command for bot
