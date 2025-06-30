@@ -2,14 +2,13 @@ import inspect
 from typing import Callable, List, Optional, Union
 
 import pyrogram
-from pyrogram.handlers import MessageHandler
 
 from main.core.enums import UserType, ChatType, ReplyType
 from main.core.filters import gen
 
-
 # pylint: disable=E1101
 class OnCmd:
+
     def on_cmd(
         self: "pyrogram.Client",
         commands: Union[str, List[str]],
@@ -25,23 +24,23 @@ class OnCmd:
         group: int = 0,
     ) -> Callable:
         """
-        Register a command handler with detailed control over behavior.
+        Decorator for handling command-based message handlers in Pyrogram.
 
-        Args:
-            commands: Command(s) to trigger.
-            prefixes: Allowed command prefixes (defaults to client.Trigger).
-            module: Module name for help documentation.
-            usage: Help string for this command.
-            case_sensitive: Whether command matching is case sensitive.
-            reply: Require a reply to the message.
-            reply_type: Enforce the type of reply (e.g., TEXT, PHOTO).
-            disable_in: Disables this command in specific chat types.
-            disable_for: Disables this command for user types.
-            argcount: Minimum number of required arguments.
-            group: Handler group.
+        Parameters:
+            commands (str | List[str]): Command names.
+            prefixes (str | List[str], optional): Command prefixes.
+            module (str, optional): Module name.
+            usage (str, optional): Command usage information.
+            case_sensitive (bool, optional): If True, commands are case-sensitive.
+            reply (bool, optional): Whether the command should send a reply.
+            reply_type (ReplyType, optional): The type of reply.
+            disable_in (ChatType | List[ChatType], optional): Chat types where command is disabled.
+            disable_for (UserType | List[UserType], optional): User types for which the command is disabled.
+            argcount (int, optional): Number of arguments the command expects.
+            group (int, optional): Group number for handler execution.
 
         Returns:
-            Callable: A decorator for the command function.
+            Callable: The decorated function.
         """
         if isinstance(commands, str):
             commands = [commands]
@@ -49,18 +48,22 @@ class OnCmd:
         if not commands:
             raise ValueError("At least one command must be provided.")
 
-        # Update CMD_HELP registry
-        cmd_help_key = (
-            module
-            or inspect.stack()[1]
-            .frame.f_globals.get("__name__", "unknown")
-            .split(".")[-1]
-        )
-        self.CMD_HELP.setdefault(cmd_help_key, {}).update(
-            {commands[0]: usage or "No description provided."}
-        )
+        command_info = {commands[0]: usage}
 
-        # Normalize inputs
+        # Update command help documentation
+        if module:
+            self.CMD_HELP.setdefault(module, {}).update(command_info)
+        else:
+            frame = inspect.currentframe().f_back
+            module_name = frame.f_locals.get("__name__")
+
+            if module_name:
+                module_key = module_name.split(".")[-1]
+                self.CMD_HELP.setdefault(module_key, {}).update(command_info)
+            else:
+                raise RuntimeError("Failed to determine the module name.")
+
+        # Ensure disable_in and disable_for are lists
         disable_in = (
             [disable_in] if isinstance(disable_in, ChatType) else (disable_in or [])
         )
@@ -70,26 +73,23 @@ class OnCmd:
 
         def decorator(func: Callable) -> Callable:
             if not isinstance(self, pyrogram.Client):
-                raise TypeError(
-                    "Decorator can only be used on pyrogram.Client instances."
-                )
+                raise TypeError("Instance must be pyrogram.Client in on_cmd decorator.")
 
-            self.add_handler(
-                MessageHandler(
-                    func,
-                    gen(
-                        commands=commands,
-                        prefixes=prefixes,
-                        case_sensitive=case_sensitive,
-                        reply=reply,
-                        reply_type=reply_type,
-                        disable_in=disable_in,
-                        disable_for=disable_for,
-                        argcount=argcount,
-                    ),
+            handler = pyrogram.handlers.MessageHandler(
+                func,
+                gen(
+                    commands=commands,
+                    prefixes=prefixes,
+                    disable_in=disable_in,
+                    disable_for=disable_for,
+                    case_sensitive=case_sensitive,
+                    reply=reply,
+                    reply_type=reply_type,
+                    argcount=argcount,
                 ),
-                group=group,
             )
+
+            self.add_handler(handler, group)
             return func
 
         return decorator

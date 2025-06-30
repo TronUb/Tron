@@ -1,74 +1,86 @@
-# pylint: disable=no-member
-
 import threading
-from sqlalchemy import Column, String
+
+from sqlalchemy import (
+    Column, 
+    String, 
+    Integer
+)
+
 from . import SESSION, BASE
+
+
+
 
 class WELCOME(BASE):
     __tablename__ = "welcome"
-
+    
     chat_id = Column(String, primary_key=True)
     file_id = Column(String)
     text = Column(String)
-
+    
     def __init__(self, chat_id, file_id, text):
         self.chat_id = chat_id
         self.file_id = file_id
         self.text = text
 
-# Create table if not exists
+
+
+
 WELCOME.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
 
-class WELCOMESQL:
-    """Provides SQL operations for welcome settings"""
 
-    def set_welcome(self, chat_id: str, file_id: str, text: str = None):
+
+class WELCOMESQL(object):
+    """ setwelcome, getwelcome, delwelcome, get_welcome_ids """
+    def set_welcome(self, chat_id, file_id, text=None):
         with INSERTION_LOCK:
+            it_exists = SESSION.query(WELCOME).get(chat_id)
             try:
-                existing = SESSION.query(WELCOME).get(chat_id)
-                if existing:
-                    SESSION.delete(existing)
-
+                if it_exists:
+                    SESSION.delete(it_exists)
                 new_data = WELCOME(chat_id, file_id, text)
                 SESSION.add(new_data)
                 SESSION.commit()
-                return {"chat_id": chat_id, "file_id": file_id, "text": text}
             finally:
                 SESSION.close()
+        return (chat_id, file_id, text)
 
-    def del_welcome(self, chat_id: str) -> bool:
+
+    def del_welcome(self, chat_id):
         with INSERTION_LOCK:
+            it_exists = SESSION.query(WELCOME).get(chat_id)
             try:
-                record = SESSION.query(WELCOME).get(chat_id)
-                if record:
-                    SESSION.delete(record)
+                if it_exists:
+                    SESSION.delete(it_exists)
                     SESSION.commit()
+                    SESSION.close()
                     return True
-                return False
             except Exception as e:
-                print(f"Error deleting welcome: {e}")
-                return False
-            finally:
                 SESSION.close()
+                print(e)
+                return False
 
-    def get_welcome(self, chat_id: str) -> dict:
-        try:
-            record = SESSION.query(WELCOME).get(chat_id)
-            return {
-                "file_id": str(record.file_id) if record else None,
-                "caption": record.text if record else None,
-            }
-        finally:
-            SESSION.close()
 
-    def get_welcome_ids(self) -> list[int]:
-        try:
-            all_welcomes = SESSION.query(WELCOME).distinct().all()
-            return [
-                int(entry.chat_id) for entry in all_welcomes if entry.chat_id.isdigit()
-            ]
-        finally:
-            SESSION.close()
+    def get_welcome(self, chat_id):
+        it_exists = SESSION.query(WELCOME).get(chat_id)
+        rep = None
+        repx = None
+        if it_exists:
+            rep = str(it_exists.file_id)
+            repx = it_exists.text
+        SESSION.close()
+        return {"file_id" : rep, "caption" : repx}
+
+
+    def get_welcome_ids(self):
+        chat_ids = []
+        all_welcome = SESSION.query(WELCOME).distinct().all()
+        for x in all_welcome:
+            if not (int(x.chat_id) in chat_ids):
+                chat_ids.append(int(x.chat_id))
+        SESSION.close()
+        return chat_ids
+        

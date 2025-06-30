@@ -1,23 +1,16 @@
 from pyrogram.types import User as PyUser, Message
-from pyrogram import Client
 from main.core.enums import UserType
+from pyrogram import Client
 
 
 class SuperParser(PyUser):
-    """
-    Utilities to enhance and parse incoming message/user data.
-    """
-
     @staticmethod
     def parse_user(client: Client, message: Message) -> Message:
-        """
-        Assigns a custom user type to the message sender based on their role.
-        """
+        """Parses user type based on sender information."""
         if not message or not message.from_user:
-            return message
+            return message  # Return message unchanged if invalid
 
         user = message.from_user
-
         if user.is_self:
             user.type = UserType.OWNER
         elif user.id in getattr(client, "SudoUsersList", []):
@@ -29,25 +22,22 @@ class SuperParser(PyUser):
 
     @staticmethod
     def parse_combined_args(message: Message) -> Message:
-        """
-        Adds `.combined_args` to the message, consolidating reply and command data.
-        Useful for simplified plugin logic.
-        """
+        """Parses additional arguments for message processing."""
         if not message or not hasattr(message, "from_user"):
-            return message
+            return message  # Return if message is invalid
 
-        sudo_msg = getattr(message, "sudo_message", None)
+        message.combined_args = {}
+
+        # Retrieve attributes safely with a fallback to sudo_message
+        sm = getattr(message, "sudo_message", None)
         reply = getattr(message, "reply_to_message", None) or getattr(
-            sudo_msg, "reply_to_message", None
+            sm, "reply_to_message", None
         )
-        command = getattr(message, "command", None) or getattr(
-            sudo_msg, "command", None
-        )
+        command = getattr(message, "command", None) or getattr(sm, "command", None)
 
-        message.combined_args = {
-            "reply": reply,
-            "reply_to_message": reply,
-            "command": command,
-        }
+        # Update dictionary in one step for better performance
+        message.combined_args.update(
+            {"reply": reply, "reply_to_message": reply, "command": command}
+        )
 
         return message

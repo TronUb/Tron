@@ -5,12 +5,11 @@ SUDOUSERSDV = [
     "SUDO_CMDS"
 ]
 
-# pylint: disable=no-member
 
 class SudoUsersConfig(object):
     @property
     def SudoAccess(self):
-        return self.getdv("SUDO_ACCESS") or self.SUDO_ACCESS
+        return self.getdv("SUDO_ACCESS") or self.SUDO_ACCESS 
 
     @property
     def SudoUsers(self):

@@ -8,7 +8,6 @@ BOTDV = [
     "BOT_PIC"
     ]
 
-# pylint: disable=no-member
 
 class BotConfig(object):
     """ bot configuration module """

@@ -7,7 +7,8 @@ PMPERMITDV = [
     "PMPERMIT_TEXT"
     ]
 
-# pylint: disable=no-member
+
+
 
 class PmpermitConfig(object):
     @property

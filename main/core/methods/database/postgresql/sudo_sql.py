@@ -1,79 +1,81 @@
-# pylint: disable=no-member
+from sqlalchemy import (
+    Column, 
+    String, 
+    Integer
+)
 
-import json
-from sqlalchemy import Column, String, Integer
 from . import BASE, SESSION
 
+
+
 class SUDOTABLE(BASE):
-    __tablename__ = "sudo_table"  # Avoid space in table name
+    __tablename__ = "SUDO TABLE"
 
     sudo_id = Column(Integer, primary_key=True)
-    sudo_name = Column(String(50), nullable=False)
-    sudo_cmds = Column(String, default="[]")  # Store commands as JSON string
+    sudo_name = Column(String(10), default=False)
+    sudo_cmds = Column(String, default=False)
 
     def __init__(self, sudo_id, sudo_name, sudo_cmds):
         self.sudo_id = sudo_id
         self.sudo_name = sudo_name
-        self.sudo_cmds = json.dumps(list(sudo_cmds))  # Store as JSON
+        self.sudo_cmds = sudo_cmds
 
 
-# Create the table if it doesn't exist
 SUDOTABLE.__table__.create(checkfirst=True)
 
 
-class SUDOSQL:
-    """Sudo command management SQL class"""
 
-    @staticmethod
-    def set_sudo(sudo_id: int, sudo_name: str, sudo_cmds: set) -> None:
-        """Add or update a sudo user and their allowed commands"""
+
+class SUDOSQL(object):
+    def set_sudo(self, sudo_id: int, sudo_name: str, sudo_cmds: set):
         try:
-            existing = SESSION.query(SUDOTABLE).get(sudo_id)
-            if existing:
-                SESSION.delete(existing)
+            r = SESSION.query(SUDOTABLE).get(sudo_id)
+            if r:
+                SESSION.delete(r)
 
-            entry = SUDOTABLE(sudo_id, sudo_name, sudo_cmds)
-            SESSION.add(entry)
+            r = SUDOTABLE(
+                int(sudo_id),
+                str(sudo_name),
+                str(sudo_cmds)
+            )
+            SESSION.add(r)
             SESSION.commit()
         finally:
             SESSION.close()
 
-    @staticmethod
-    def get_sudo(sudo_id: int) -> dict:
-        """Get sudo details for a specific user"""
+
+    def get_sudo(self, sudo_id: int):
         try:
-            return SUDOSQL.all_sudo().get(sudo_id, {})
+            return self.all_sudo().get(sudo_id)
         finally:
             SESSION.close()
 
-    @staticmethod
-    def del_sudo(sudo_id: int) -> bool:
-        """Remove a sudo user"""
+
+    def del_sudo(self, sudo_id: int):
         try:
-            entry = SESSION.query(SUDOTABLE).get(sudo_id)
-            if entry:
-                SESSION.delete(entry)
-                SESSION.commit()
-                return True
-            return False
+            r = SESSION.query(SUDOTABLE).get(sudo_id)
+            if r:
+                SESSION.delete(r)
+
+            SESSION.commit()
+            return True
         finally:
             SESSION.close()
 
-    @staticmethod
-    def all_sudo() -> dict:
-        """Retrieve all sudo users and their command sets"""
+
+    def all_sudo(self):
         try:
-            all_entries = {}
-            rows = SESSION.query(SUDOTABLE).all()
-            for entry in rows:
-                try:
-                    cmds = json.loads(entry.sudo_cmds)
-                except Exception:
-                    cmds = []
-                all_entries[entry.sudo_id] = {
-                    "sudo_name": entry.sudo_name,
-                    "sudo_cmds": cmds,
-                }
-            return all_entries
+            ALL_SUDO = {}
+            r = SESSION.query(SUDOTABLE).all()
+            for x in r:
+                ALL_SUDO.update(
+                    {
+                        x.sudo_id : {
+                            "sudo_name" : x.sudo_name,
+                            "sudo_cmds" : eval(x.sudo_cmds)
+                        }
+                    }
+                )
+            return ALL_SUDO
         finally:
             SESSION.close()

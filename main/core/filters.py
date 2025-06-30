@@ -4,22 +4,25 @@ import traceback
 from typing import List, Union, Optional
 
 from pyrogram import Client
-from pyrogram.filters import create
+from pyrogram.filters import *
 from pyrogram.types import CallbackQuery, InlineQuery, Message, Update, User
 
 from main.core.enums import ChatType, SudoType, UserType
+
 from .types.superparser import SuperParser
 
 
-# --- Reply check ---
-async def is_reply(client, message, reply_required, reply_type):
-    if reply_required and not message.replied:
+# gen reply checker
+async def is_reply(client, message, reply, reply_type):
+    if reply and not message.replied:
         await client.send_edit("Reply to something . . .", text_type=["mono"], delme=3)
         return False
+    elif reply and message.replied:
+        if not reply_type:
+            return True
 
-    if reply_required and reply_type:
         reply_attr = getattr(message.replied, reply_type, None)
-        if not reply_attr:
+        if reply_type and not reply_attr:
             await client.send_edit(
                 f"Reply to {reply_type}", text_type=["mono"], delme=3
             )
@@ -28,12 +31,28 @@ async def is_reply(client, message, reply_required, reply_type):
     return True
 
 
-# --- Argument count check ---
-async def max_argcount(client: Client, message: Message, argc: int = 0) -> bool:
-    if argc <= 0:
-        return True
+async def max_argcount(
+    client: Client, message: Message, argc: Optional[int] = None
+) -> bool:
+    """
+    Checks if the message contains at least `argc` number of words.
 
+    Parameters:
+        client (Client): Pyrogram client instance.
+        message (Message): Incoming message object.
+        argc (Optional[int]): Minimum number of arguments required.
+
+    Returns:
+        bool: True if the message contains enough arguments, else False.
+    """
+    argc = argc or 0  # Ensure argc is an integer (default to 0)
+
+    if argc <= 0:
+        return True  # No argument limit, always return True
+
+    # Check if the message has enough words
     words = message.text.split() if message.text else []
+
     if len(words) < argc:
         await client.send_edit(
             "Give me more arguments . . .", text_type=["mono"], delme=3
@@ -43,15 +62,15 @@ async def max_argcount(client: Client, message: Message, argc: int = 0) -> bool:
     return True
 
 
-# --- Main custom command filter ---
+# custom command filter
 def gen(
     commands: Union[str, List[str]],
     prefixes: Union[str, List[str]] = [],
     case_sensitive: bool = True,
-    reply: Optional[bool] = None,
+    reply: bool = None,
     reply_type: str = "",
-    disable_in: Optional[List[int]] = None,
-    disable_for: Optional[List[int]] = None,
+    disable_in: list = None,
+    disable_for: list = None,
     sudo_type: "SudoType" = SudoType.COMMON,
     argcount: int = 0,
     **kwargs,
@@ -66,54 +85,54 @@ def gen(
             message.replied = message.reply_to_message
             user = getattr(message, "from_user", None)
 
-            if not user or message.forward_date:
-                return False  # Ignore forwards or invalid sender
+            if not user or message.forward_date:  # Ignore forwarded messages
+                return False
 
             if message.chat.id in flt.disable_in or user.id in flt.disable_for:
                 return False
 
-            flt.prefixes = client.Trigger or ["."]
+            flt.prefixes = client.Trigger or ["."]  # Workaround for missing trigger
 
             for prefix in flt.prefixes:
                 if not text.startswith(prefix):
                     continue
 
-                raw_command = text.split()[0][len(prefix) :]
+                without_prefix = text.split()[0][len(prefix):]
 
                 for cmd in flt.commands:
                     if not re.match(
                         rf"\b{cmd}\b",
-                        raw_command,
+                        without_prefix,
                         flags=re.IGNORECASE if not flt.case_sensitive else 0,
                     ):
                         continue
 
-                    # OWNER
                     if user.type == UserType.OWNER:
                         message.command = [cmd] + text.split()[1:]
                         message.sudo_message = None
 
-                    # SUDO
                     elif user.type == UserType.SUDO:
-                        sudo_data = client.get_sudo(user.id)
-                        if cmd not in sudo_data.get("sudo_cmds", []):
+                        if cmd not in client.get_sudo(user.id).get("sudo_cmds", []):
                             return False
 
-                        sudo_msg = await client.send_message(
+                        new_message = await client.send_message(
                             message.chat.id, "Hold on . . ."
                         )
-                        sudo_msg.from_user = sudo_msg.from_user or User(id=client.id)
+                        new_message.from_user = new_message.from_user or User(
+                            id=client.id
+                        )
+                        setattr(new_message.from_user, "type", UserType.OWNER)
+                        setattr(new_message, "sudo_message", copy.copy(message))
 
-                        setattr(sudo_msg.from_user, "type", UserType.OWNER)
-                        setattr(sudo_msg, "sudo_message", copy.copy(message))
+                        message.__dict__ = new_message.__dict__
 
-                        message.__dict__ = sudo_msg.__dict__
+                        SuperParser.parse_combined_args(message)
+                        return True
 
-                    # Not sudo or owner
                     else:
                         return False
 
-                    client.m = client.bot.m = message  # Optional shared context
+                    client.m = client.bot.m = message  # Remove later if unnecessary
 
                     if not await is_reply(client, message, flt.reply, flt.reply_type):
                         return False
@@ -129,15 +148,22 @@ def gen(
         except Exception:
             print(traceback.format_exc())
 
-    # Normalize filter attributes
     commands = {
         c.lower() if not case_sensitive else c
         for c in (commands if isinstance(commands, list) else [commands])
     }
-    disable_in = set(disable_in or [])
-    disable_for = set(disable_for or [])
+    disable_in = set(
+        disable_in
+        if isinstance(disable_in, list)
+        else [disable_in] if disable_in else [""]
+    )
+    disable_for = set(
+        disable_for
+        if isinstance(disable_for, list)
+        else [disable_for] if disable_for else [""]
+    )
     prefixes = set(
-        prefixes if isinstance(prefixes, list) else [prefixes] if prefixes else []
+        prefixes if isinstance(prefixes, list) else [prefixes] if prefixes else [""]
     )
 
     return create(

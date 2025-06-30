@@ -37,7 +37,6 @@ from pySmartDL import SmartDL
 
 from youtube_dl import YoutubeDL
 
-# pylint: disable=E1101
 
 def messageobject(anydict: dict):
     message = None
